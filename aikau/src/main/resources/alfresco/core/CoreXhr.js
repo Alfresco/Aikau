@@ -104,8 +104,9 @@ define(["dojo/_base/declare",
        *
        * @typedef {Object} serviceXhrConfig
        * @property {String} url - Where should we send the request to.
-       * @property {Object} [headers={'Content-Type': 'application/json'}] headers - Request headers to send (overrides default)
+       * @property {Object} [headers] headers - Request headers to send (replaces [the default headers]{@link module:alfresco/core/CoreXhr#getDefaultHeaders} if specified)
        * @property {Object} [data=null] - data for the request body
+       * @property {boolean} [doNotCleanData=false] Pass true to SUPPRESS cleaning of the "data" object to [remove framework attributes]{@link module:alfresco/core/Core#alfCleanFrameworkAttributes} from it.
        * @property {String} [query=null] - data for the query string
        * @property {String} [handleAs=text] - TODO - document this feature.
        * @property {String} [method=POST] - HTTP method to use for XHR
@@ -113,11 +114,11 @@ define(["dojo/_base/declare",
        * @property {function} [successCallback] - overrides the default success callback
        * @property {function} [failureCallback] - overrides the default failure callback
        * @property {function} [progressCallback] - overrides the default progress callback
+       * @property {function} [authenticationFailureCallback] - overrides the default authentication failure behaviour
        * @property {function} [callbackScope=_this] - the scope to pass to the overridden callback function
        * @property {string} [alfTopic] - The topic to by published by the default request callbacks.
        * @property {string} [alfResponseScope=""] - The scope to use when publishing in the default request callbacks.
        * Appended with "_PROGRESS", "_FAILURE" or "_SUCCESS" depending on response status code.
-       *
        *
        * @instance
        * @callable
@@ -135,29 +136,31 @@ define(["dojo/_base/declare",
             }
             else
             {
-               var headers = (config.headers) ? config.headers : { "Content-Type": "application/json" };
+               var headers = (config.headers) ? config.headers : this.getDefaultHeaders();
                if (this.isCsrfFilterEnabled())
                {
                   headers[this.getCsrfHeader()] = this.getCsrfToken();
                }
 
                // Attempt to parse the data, but reset to null if not possible...
-               var data;
+               var data = config.data;
+
+               // Clean the data prior to sending, unless specifically told not to
+               if (data && !config.doNotCleanData) {
+                  data = this.alfCleanFrameworkAttributes(data);
+               }
+
                if (headers["Content-Type"] === "application/json")
                {
                   try
                   {
-                     data = (config.data && JSON.stringify(config.data)) || null;
+                     data = (data && JSON.stringify(data)) || null;
                   }
                   catch (e)
                   {
                      this.alfLog("warn", "Could not stringify XHR JSON data", data);
                      data = null;
                   }
-               }
-               else
-               {
-                  data = config.data;
                }
 
                var options = {
@@ -195,7 +198,6 @@ define(["dojo/_base/declare",
                      {
                         _this.alfLog("error", "An error occurred parsing an XHR JSON success response", response, this);
                      }
-
                   }
                   if (typeof config.successCallback === "function")
                   {
@@ -209,24 +211,34 @@ define(["dojo/_base/declare",
 
                }, function(response) {
 
-                  // HANDLE SESSION TIMEOUT
+                  // Handle authentication failure (401) or Session timeout
                   if (response.response && response.response.status === 401)
                   {
-                     var redirect = response.response.getHeader("Location");
-                     if (redirect)
+                     if (typeof config.authenticationFailureCallback === "function")
                      {
-                        if (redirect.indexOf("http://") === 0 || redirect.indexOf("https://") === 0 ) {
-                           window.location.href = redirect;
-                        }
-                        else {
-                           window.location.href = window.location.protocol + "//" + window.location.host + redirect;
-                        }
-                        return;
+                        var callbackScope = config.failureCallbackScope || config.callbackScope || _this;
+                        config.authenticationFailureCallback.call(callbackScope, response, config);
                      }
                      else
                      {
-                        window.location.reload(true);
-                        return;
+                        var redirect = response.response.getHeader("Location");
+                        if (redirect)
+                        {
+                           if (redirect.indexOf("http://") === 0 || redirect.indexOf("https://") === 0 )
+                           {
+                              window.location.href = redirect;
+                           }
+                           else
+                           {
+                              window.location.href = window.location.protocol + "//" + window.location.host + redirect;
+                           }
+                           return;
+                        }
+                        else
+                        {
+                           window.location.reload(true);
+                           return;
+                        }
                      }
                   }
 
@@ -313,7 +325,13 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_SUCCESS", {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.alfResponseScope);
+         }
+         else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
+            this.alfPublish(requestConfig.data.alfResponseTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.data.alfResponseScope);
          }
          else
          {
@@ -335,7 +353,13 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_FAILURE", {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.alfResponseScope);
+         }
+         else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
+            this.alfPublish(requestConfig.data.alfResponseTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.data.alfResponseScope);
          }
          if (typeof this.displayMessage === "function" && response.response.text)
          {
@@ -378,8 +402,44 @@ define(["dojo/_base/declare",
             this.alfPublish(requestConfig.alfTopic + "_PROGRESS", {
                requestConfig: requestConfig,
                response: response
-            }, false, false, requestConfig.alfResponseScope || this.pubSubScope);
+            }, false, false, requestConfig.alfResponseScope);
          }
+         else if (requestConfig.data && requestConfig.data.alfResponseTopic) {
+            this.alfPublish(requestConfig.data.alfResponseTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.data.alfResponseScope);
+         }
+      },
+
+      /**
+       * <p>Get the default headers. Currently these are:</p>
+       * <ul>
+       *    <li>Content-Type: application/json</li>
+       *    <li>Accept-Language: [uses browser provided languages]</li>
+       * </ul>
+       *
+       * @instance
+       * @returns {object} The default headers
+       */
+      getDefaultHeaders: function alfresco_core_CoreXhr___getDefaultHeaders() {
+
+         // Build up the Accept-Language header value
+         var languages = navigator.languages;
+         if (languages) {
+            languages = array.map(languages, function(lang) {
+               return lang.toLowerCase();
+            }).join(", ");
+         } else {
+            languages = (navigator.language || navigator.userLanguage).toLowerCase();
+         }
+
+         // Construct and return the headers
+         var defaultHeaders = {
+            "Content-Type": "application/json",
+            "Accept-Language": languages
+         };
+         return defaultHeaders;
       },
 
       /**

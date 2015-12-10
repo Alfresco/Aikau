@@ -1,3 +1,5 @@
+var noDataMessage = "No data found. This page no longer works without hash parameters. By default, try /FixedHeaderFooter#currentItem";
+
 model.jsonModel = {
    services: [
       {
@@ -43,7 +45,40 @@ model.jsonModel = {
                                  {
                                     label: "Heaven"
                                  }
-                              ]
+                              ],
+                              visibilityConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       topic: "HEADER_VISIBILITY",
+                                       attribute: "value",
+                                       isNot: ["HIDE"]
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/layout/Twister",
+                           id: "HEADER_TWISTER",
+                           config: {
+                              label: "Toggle me to change header size",
+                              initiallyOpen: false,
+                              widgets: [
+                                 {
+                                    name: "alfresco/logo/Logo"
+                                 }
+                              ],
+                              visibilityConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       topic: "HEADER_VISIBILITY",
+                                       attribute: "value",
+                                       isNot: ["HIDE"]
+                                    }
+                                 ]
+                              }
                            }
                         }
                      ],
@@ -52,6 +87,7 @@ model.jsonModel = {
                            id: "LIST",
                            name: "alfresco/documentlibrary/AlfDocumentList",
                            config: {
+                              noDataMessage: noDataMessage,
                               useHash: true,
                               widgets: [
                                  {
@@ -93,13 +129,67 @@ model.jsonModel = {
                            config: {
                               useHash: false,
                               documentsPerPage: 10,
-                              pageSizes: [5,10,20]
+                              pageSizes: [5,10,20],
+                              visibilityConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       topic: "FOOTER_VISIBILITY",
+                                       attribute: "value",
+                                       isNot: ["HIDE"]
+                                    }
+                                 ]
+                              }
                            }
                         }
                      ]
                   }
                }
             ]
+         }
+      },
+      {
+         id: "HIDE_HEADER",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Hide header",
+            publishTopic: "HEADER_VISIBILITY",
+            publishPayload: {
+               value: "HIDE"
+            }
+         }
+      },
+      {
+         id: "SHOW_HEADER",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show header",
+            publishTopic: "HEADER_VISIBILITY",
+            publishPayload: {
+               value: "SHOW"
+            }
+         }
+      },
+      {
+         id: "HIDE_FOOTER",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Hide footer",
+            publishTopic: "FOOTER_VISIBILITY",
+            publishPayload: {
+               value: "HIDE"
+            }
+         }
+      },
+      {
+         id: "SHOW_FOOTER",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show footer",
+            publishTopic: "FOOTER_VISIBILITY",
+            publishPayload: {
+               value: "SHOW"
+            }
          }
       },
       {

@@ -24,6 +24,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
+        "alfresco/enums/urlTypes",
         "alfresco/renderers/Property",
         "alfresco/services/_NavigationServiceTopicMixin",
         "dojo/text!./templates/Category.html",
@@ -31,7 +32,7 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "alfresco/navigation/Link",
         "dojo/dom-construct"], 
-        function(declare, Property, _NavigationServiceTopicMixin, template, lang, array, Link, domConstruct) {
+        function(declare, urlTypes, Property, _NavigationServiceTopicMixin, template, lang, array, Link, domConstruct) {
 
    return declare([Property, _NavigationServiceTopicMixin], {
       
@@ -92,7 +93,7 @@ define(["dojo/_base/declare",
             title: this.message("category.filter.title", {"0": category.name}),
             publishTopic: this.navigateToPageTopic,
             publishPayload: {
-               type: this.hashPath,
+               type: urlTypes.HASH,
                url: "filter=category|" + category.path + "/" + category.name
             }
          });

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Download</shortname>
+  <description>A test page for verifying the Download action</description>
+  <family>aikau-unit-tests</family>
+  <url>/Download</url>
+</webscript>

@@ -70,6 +70,11 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      siteDetailsTemplate]);
+            this.server.respondWith("POST",
+                                    "/aikau/proxy/alfresco/api/people/admin/preferences",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     ""]);
          }
          catch(e)
          {

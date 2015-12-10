@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,10 +33,8 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/menus/AlfMenuItemWrapper",
         "dojo/_base/array",
-        "dojo/dom-class",
-        "dojo/_base/event",
-        "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, Menu, AlfCore, CoreWidgetProcessing, AlfMenuItemWrapper, array, domClass, event, on) {
+        "dojo/dom-class"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, Menu, AlfCore, CoreWidgetProcessing, AlfMenuItemWrapper, array, domClass) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -72,8 +70,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfContextMenu__postCreate() {
-         
-         if (this.targetNodeIds == null)
+         if (!this.targetNodeIds)
          {
             this._contextMenu = new Menu({
                targetNodeIds: [this.domNode.parentNode]
@@ -107,7 +104,7 @@ define(["dojo/_base/declare",
        * @param {array} widgets An array of the instantiated widgets (as defined by the widgets instance property).
        */
       allWidgetsProcessed: function alfresco_menus_AlfContextMenu__allWidgetsProcessed(widgets) {
-         array.forEach(widgets, function(widget, i) {
+         array.forEach(widgets, function(widget) {
              // Add the widget to the drop down menu...
              this._contextMenu.addChild(widget);
          }, this);

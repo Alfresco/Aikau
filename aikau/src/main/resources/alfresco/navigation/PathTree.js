@@ -30,8 +30,11 @@ define(["dojo/_base/declare",
         "alfresco/navigation/Tree",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "dojo/_base/lang",
-        "dojo/_base/array"], 
-        function(declare, Tree, _AlfDocumentListTopicMixin, lang, array) {
+        "dojo/_base/array",
+        "dojo/dom-class",
+        "dojo/query",
+        "dojo/NodeList-dom"], 
+        function(declare, Tree, _AlfDocumentListTopicMixin, lang, array, domClass, query) {
    
    return declare([Tree, _AlfDocumentListTopicMixin], {
       
@@ -127,8 +130,16 @@ define(["dojo/_base/declare",
                // at least an invalid path (e.g. to a deleted or moved folder) will not
                // be processed. There should never be more than 1 result!
                var targetChildNode = filteredNodes[0];
+               query(".dijitTreeRowSelected", this.tree.domNode).removeClass("dijitTreeRowSelected");
+               domClass.add(targetChildNode.rowNode, "dijitTreeRowSelected");
                this.tree._expandNode(targetChildNode);
                this.expandPathElement(targetChildNode, pathElements);
+            }
+            else
+            {
+               // Select the last expanded node
+               query(".dijitTreeRowSelected", this.tree.domNode).removeClass("dijitTreeRowSelected");
+               domClass.add(node.rowNode, "dijitTreeRowSelected");
             }
          }
       }

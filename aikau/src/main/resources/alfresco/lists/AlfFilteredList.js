@@ -82,7 +82,9 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_lists_AlfFilteredList__postCreate() {
          domClass.add(this.domNode, "alfresco-lists-AlfFilteredList");
-         this.filtersNode = domConstruct.create("div", {}, this.domNode, "first");
+         this.filtersNode = domConstruct.create("div", {
+            className: "alfresco-lists-AlfFilteredList__filters"
+         }, this.domNode, "first");
 
          // We need a promise here to address the scenario where XHR requests are made for filtering widgets
          // that have not had there dependencies correctly analysed by Surf. This is the case for the ComboBox
@@ -111,7 +113,11 @@ define(["dojo/_base/declare",
        * @since 1.0.34
        */
       allWidgetsProcessed: function alfresco_lists_AlfFilteredList__allWidgetsProcessed(widgets, processWidgetsId) {
-         if (processWidgetsId === this.filterWidgetsMappingId)
+         if (processWidgetsId === "NEW_VIEW_INSTANCE")
+         {
+            this.handleNewViewInstances(widgets);
+         }
+         else if (processWidgetsId === this.filterWidgetsMappingId)
          {
             this._storeFilterWidgets(widgets);
             this._updateFilterFieldsFromHash();
@@ -139,7 +145,10 @@ define(["dojo/_base/declare",
        */
       hideChildren: function alfresco_lists_AlfFilteredList__hideChildren(/*jshint unused:false*/targetNode) {
          this.inherited(arguments);
-         domClass.remove(this.filtersNode, "share-hidden");
+         if (this.filtersNode)
+         {
+            domClass.remove(this.filtersNode, "share-hidden");
+         }
       },
 
       /**

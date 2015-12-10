@@ -117,8 +117,8 @@ define(["dojo/_base/declare",
             payload.alfResponseTopic = responseTopic;
             var resultsProperty = this.publishPayload.resultsProperty || "response";
             this._getOptionsHandle = [];
-            this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onGetOptions", response, resultsProperty, id), true));
-            this.alfPublish(this.publishTopic, payload, true);
+            this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onGetOptions", response, resultsProperty, id)));
+            this.alfPublish(this.publishTopic, payload, this.publishGlobal);
          }
          else if (this.fixed)
          {
@@ -281,7 +281,7 @@ define(["dojo/_base/declare",
        * @param {object} options The optional arguments to apply to the resultset.
        * @returns {object} The results of the query, extended with iterative methods.
        */
-      queryXhrOptions: function alfresco_forms_controls_utilities_ServiceStore__query(query, /*jshint unused:false*/ options) {
+      queryXhrOptions: function alfresco_forms_controls_utilities_ServiceStore__queryXhrOptions(query, /*jshint unused:false*/ options) {
          var response = new Deferred();
          var responseTopic = this.generateUuid();
          var payload = lang.clone(this.publishPayload);
@@ -300,9 +300,9 @@ define(["dojo/_base/declare",
          payload.query = query[this.queryAttribute || "name"];
 
          var optionsHandle = [];
-         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), true));
-         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, "onQueryOptions", response, query, resultsProperty, optionsHandle), true));
-         this.alfPublish(this.publishTopic, payload, true);
+         optionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onQueryOptions, response, query, resultsProperty, optionsHandle)));
+         optionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, this.onQueryOptions, response, query, resultsProperty, optionsHandle)));
+         this.alfPublish(this.publishTopic, payload, this.publishGlobal);
          return response;
       },
 

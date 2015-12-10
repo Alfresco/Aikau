@@ -177,7 +177,9 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string} 
-       * @default
+       * @default [DOCUMENT_SELECTION_UPDATE]{@link module:alfresco/core/topics#DOCUMENT_SELECTION_UPDATE}
+       * @event
+       * @property {object[]} selectedItems The selected items
        */
       documentSelectionTopic: topics.DOCUMENT_SELECTION_UPDATE,
       
@@ -187,6 +189,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {object} value The item selected
        */
       documentSelectedTopic: topics.DOCUMENT_SELECTED,
       
@@ -196,6 +200,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {object[]} selectedItems The items selected
        */
       selectedDocumentsChangeTopic: topics.SELECTED_DOCUMENTS_CHANGED,
       
@@ -205,6 +211,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string} 
        * @default
+       * @event
+       * @property {object} value The item de-selected
        */
       documentDeselectedTopic: topics.DOCUMENT_DESELECTED,
       
@@ -269,6 +277,8 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default [topics.DOCUMENT_TAGGED]{@link module:alfresco/core/topics#DOCUMENT_TAGGED}
+       * @listens module:alfresco/core/topics#DOCUMENT_TAGGED
+       * @event
        */
       documentTaggedTopic: topics.DOCUMENT_TAGGED,
          

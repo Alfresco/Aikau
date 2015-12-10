@@ -35,7 +35,7 @@ model.jsonModel = {
                },
                document: {
                   node: {
-                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
+                     nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d"
                   },
                   displayName: "Some Node Title"
                }
@@ -60,7 +60,7 @@ model.jsonModel = {
                   {
                      displayName: "Node 2",
                      node: {
-                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f"
                      }
                   }
                ]

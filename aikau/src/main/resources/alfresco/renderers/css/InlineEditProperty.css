@@ -50,9 +50,16 @@
    > .editor {
       display: inline-block;
       height: 40px;
+      line-height: 40px;
       > .alfresco-forms-Form {
          display: inline-block;
-         vertical-align: bottom;
+      }
+   }
+   &--hide-save-cancel-actions {
+      > .editor {
+         > .action {
+            display: none;
+         }
       }
    }
 }

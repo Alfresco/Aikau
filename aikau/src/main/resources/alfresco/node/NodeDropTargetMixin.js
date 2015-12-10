@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,14 +27,14 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
+        "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/mouse",
         "dojo/on",
         "dojo/_base/lang",
         "dojo/dom-class"],
-        function(declare, AlfCore, mouse, on, lang, domClass) {
+        function(declare, _AlfDndDocumentUploadMixin, mouse, on, lang) {
    
-   return declare([AlfCore], {
+   return declare([_AlfDndDocumentUploadMixin], {
       
       /**
        * The DOM node to be set as target. If this is left as null then the "domNode" attribute will be used (assuming
@@ -66,23 +66,6 @@ define(["dojo/_base/declare",
       dropTargetEnabled: false,
       
       /**
-       * Sets up the supplied node as a drop target.
-       * 
-       * @instance
-       */
-      addNodeDropTarget: function alfresco_node_NodeDropTargetMixin__addNodeDropTarget(node) {
-         this.inherited(arguments);
-
-         this.targetNode = node;
-         
-         // When a move starts, listen for mouseover events...
-         this.mouseEnterHandle = on(this.targetNode, mouse.enter, lang.hitch(this, "onMouseEnter"));
-         this.mouseLeaveHandle = on(this.targetNode, mouse.leave, lang.hitch(this, "onMouseLeave"));
-         this.alfSubscribe("/dnd/move/start", lang.hitch(this, "onMoveStarted"));
-         this.alfSubscribe("/dnd/move/stop", lang.hitch(this, "onMoveStopped"));
-      },
-      
-      /**
        * Indicates whether or not the drop target is able to process a drop event that occurs. This
        * attribute is set to true by the [onMouseEnter function]{@link module:alfresco/node/NodeDropTargetMixin#onMouseEnter}
        * and set to false by the [onMouseLeave function]{@link module:alfresco/node/NodeDropTargetMixin#onMouseLeave}
@@ -94,6 +77,24 @@ define(["dojo/_base/declare",
       shouldProcessDrop: false,
       
       /**
+       * Sets up the supplied node as a drop target.
+       * 
+       * @instance
+       */
+      addNodeDropTarget: function alfresco_node_NodeDropTargetMixin__addNodeDropTarget(node) {
+         this.inherited(arguments);
+
+         this.targetNode = node;
+         this.dragAndDropNode = node;
+         
+         // When a move starts, listen for mouseover events...
+         this.mouseEnterHandle = on(this.targetNode, mouse.enter, lang.hitch(this, this.onMouseEnter));
+         this.mouseLeaveHandle = on(this.targetNode, mouse.leave, lang.hitch(this, this.onMouseLeave));
+         this.alfSubscribe("/dnd/move/start", lang.hitch(this, this.onMoveStarted));
+         this.alfSubscribe("/dnd/move/stop", lang.hitch(this, this.onMoveStopped));
+      },
+      
+      /**
        * Handler for the mouse entering the [dropTarget]{@link module:alfresco/node/NodeDropTargetMixin#dropTarget} element.
        * This sets the [shouldProcessDrop]{@link module:alfresco/node/NodeDropTargetMixin#shouldProcessDrop} attribute to true
        * so that if a drop occurs this target will process it.
@@ -101,7 +102,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt
        */
-      onMouseEnter: function alfresco_node_NodeDropTargetMixin__onMouseEnter(evt) {
+      onMouseEnter: function alfresco_node_NodeDropTargetMixin__onMouseEnter(/*jshint unused:false*/ evt) {
          this.shouldProcessDrop = true && this.dropTargetEnabled;
          if (this.shouldProcessDrop)
          {
@@ -117,7 +118,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt
        */
-      onMouseLeave: function alfresco_node_NodeDropTargetMixin__onMouseLeave(evt) {
+      onMouseLeave: function alfresco_node_NodeDropTargetMixin__onMouseLeave(/*jshint unused:false*/ evt) {
          this.shouldProcessDrop = false;
          if (!this.shouldProcessDrop || !this.dropTargetEnabled)
          {
@@ -133,7 +134,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} mover The dojo/dnd/Mover object representing the moved element
        */
-      onMoveStarted: function alfresco_node_NodeDropTargetMixin__onMoveStarted(mover) {
+      onMoveStarted: function alfresco_node_NodeDropTargetMixin__onMoveStarted(/*jshint unused:false*/ mover) {
          this.dropTargetEnabled = true; 
       },
       
@@ -146,7 +147,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} mover
        */
-      onMoveStopped: function alfresco_node_NodeDropTargetMixin__onMoveStopped(mover) {
+      onMoveStopped: function alfresco_node_NodeDropTargetMixin__onMoveStopped(/*jshint unused:false*/ mover) {
          // When a move stops, cease listening for mouseover events...
          this.dropTargetEnabled = false;
          if (this.shouldProcessDrop)
@@ -154,7 +155,7 @@ define(["dojo/_base/declare",
             var sourceNodeRef = null;
             
             // Get the nodeRef of the item to be moved...
-            if (mover.alfCurrentItem != null && lang.exists("jsNode.nodeRef.nodeRef", mover.alfCurrentItem))
+            if (mover.alfCurrentItem  && lang.exists("jsNode.nodeRef.nodeRef", mover.alfCurrentItem))
             {
                sourceNodeRef = lang.getObject("jsNode.nodeRef.nodeRef", false, mover.alfCurrentItem);
             }
@@ -162,7 +163,7 @@ define(["dojo/_base/declare",
             var targetNodeRefUri = this.getDropTargetNodeRefUri(),
                 targetPath = this.getDropTargetPath();
             
-            if (sourceNodeRef != null && (targetNodeRefUri != null || targetPath != null))
+            if (sourceNodeRef && (targetNodeRefUri || targetPath))
             {
                mover.alfNodeDropClaimed = true;
                this.alfPublish("ALF_MOVE_DOCUMENTS", {
@@ -193,30 +194,11 @@ define(["dojo/_base/declare",
        */
       getDropTargetPath: function alfresco_node_NodeDropTargetMixin__getDropTargetPath() {
          var path = null;
-         if (this.path != null)
+         if (this.path)
          {
             path = this.path;
          }
          return path;
-      },
-      
-      /**
-       * This should be overridden to add highlighting when an item is dragged over the target.
-       * 
-       * @instance
-       */
-      addDndHighlight: function alfresco_node_NodeDropTargetMixin__addDragEnterHighlight() {
-         domClass.add(this.domNode, "dndHighlight");
-      },
-      
-      /**
-       * This should be overridden to remove highlighting when an item is dragged out of the target
-       * 
-       * @instance
-       */
-      removeDndHighlight: function alfresco_node_NodeDropTargetMixin__addDragEnterHighlight() {
-         // No action by default
-         domClass.remove(this.domNode, "dndHighlight");
       }
    });
 });

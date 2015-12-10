@@ -1,22 +1,23 @@
-Aikau 1.0.36 Release Notes
+Aikau 1.0.47 Release Notes
 ===
-
-New deprecations: 
----
-None
 
 Previous deprecations:
 ---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
+* alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
 * alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
 * alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
+* alfresco/dialogs/AlfDialogService                              (use: alfresco/services/Dialog) 
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
-* alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
-* alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
+* alfresco/documentlibrary/AlfSearchList                         (use: alfresco/search/AlfSearchList)
 * alfresco/documentlibrary/views/_AlfAdditionalViewControlMixin  (use: alfresco/lists/views/_AlfAdditionalViewControlMixin)
+* alfresco/documentlibrary/views/AlfDocumentListView             (use: alfresco/lists/views/AlfListView)
+* alfresco/documentlibrary/views/AlfSearchListView               (use: alfresco/search/AlfSearchListView)
+* alfresco/documentlibrary/views/DocumentListRenderer            (use: alfresco/lists/views/ListRenderer)
+* alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin (use: alfresco/lists/views/layouts/_MultiItemRendererMixin)
 * alfresco/documentlibrary/views/layouts/Carousel                (use: alfresco/lists/views/layouts/Carousel)
 * alfresco/documentlibrary/views/layouts/Cell                    (use: alfresco/lists/views/layouts/Cell)
 * alfresco/documentlibrary/views/layouts/Column                  (use: alfresco/lists/views/layouts/Column)
@@ -26,22 +27,141 @@ Previous deprecations:
 * alfresco/documentlibrary/views/layouts/Row                     (use: alfresco/lists/views/layouts/Row)
 * alfresco/documentlibrary/views/layouts/Table                   (use: alfresco/lists/views/layouts/Table)
 * alfresco/documentlibrary/views/layouts/XhrLayout               (use: alfresco/lists/views/layouts/XhrLayout)
-* alfresco/documentlibrary/views/layouts/_MultiItemRendererMixin (use: alfresco/lists/views/layouts/_MultiItemRendererMixin)
-* alfresco/documentlibrary/AlfSearchList                         (use: alfresco/search/AlfSearchList)
-* alfresco/documentlibrary/views/AlfSearchListView               (use: alfresco/search/AlfSearchListView)
-* alfresco/renderers/SearchResultPropertyLink                    (use: alfresco/search/SearchResultPropertyLink)
-* alfresco/renderers/SearchThumbnail                             (use: alfresco/search/SearchThumbnail)
-* alfresco/upload/AlfUpload                                      (use: alfresco/services/UploadService)
-* alfresco/dialogs/AlfDialogService                              (use: alfresco/services/Dialog) 
-* alfresco/forms/controls/DojoValidationTextBox                  (use: alfresco/forms/controls/TextBox)
 * alfresco/forms/controls/DojoCheckBox                           (use: alfresco/forms/controls/CheckBox)
 * alfresco/forms/controls/DojoDateTextBox                        (use: alfresco/forms/controls/DateTextBox)
 * alfresco/forms/controls/DojoRadioButtons                       (use: alfresco/forms/controls/RadioButtons)
 * alfresco/forms/controls/DojoSelect                             (use: alfresco/forms/controls/Select)
 * alfresco/forms/controls/DojoTextarea                           (use: alfresco/forms/controls/TextArea)
+* alfresco/forms/controls/DojoValidationTextBox                  (use: alfresco/forms/controls/TextBox)
+* alfresco/renderers/SearchResultPropertyLink                    (use: alfresco/search/SearchResultPropertyLink)
+* alfresco/renderers/SearchThumbnail                             (use: alfresco/search/SearchThumbnail)
+* alfresco/services/_PreferenceServiceTopicMixin.js              (use alfresco/core/topics)
+* alfresco/services/actions/SimpleWorkflowService.js             (use alfresco/services/actions/WorkflowService)
+* alfresco/upload/AlfUpload                                      (use: alfresco/services/UploadService)
 
 Resolved issues:
 ---
+1.0.47:
+* [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Ensure form elementrs pass Wave accessibility checks
+* [AKU-703](https://issues.alfresco.com/jira/browse/AKU-703)       - Added config option for full-width FacetFilters
+* [AKU-715](https://issues.alfresco.com/jira/browse/AKU-715)       - Added config option to hide Save/Cancel links in Tag renderer
+* [AKU-717](https://issues.alfresco.com/jira/browse/AKU-717)       - Added config option to auto-resize TinyMCE editor
+* [AKU-723](https://issues.alfresco.com/jira/browse/AKU-723)       - Prevent double encoding in InlineEditProperty
+* [AKU-725](https://issues.alfresco.com/jira/browse/AKU-725)       - Fix TypeError in ActionService (Edit Offline action)
+* [AKU-734](https://issues.alfresco.com/jira/browse/AKU-734)       - Ensure selected items retained on sort order change
+* [AKU-736](https://issues.alfresco.com/jira/browse/AKU-736)       - Prevent double encoding in SearchBox results
+* [AKU-737](https://issues.alfresco.com/jira/browse/AKU-737)       - Fix NavigationService page relative site handling
+* [AKU-738](https://issues.alfresco.com/jira/browse/AKU-738)       - Fix scoping on ContentService requests
+* [AKU-743](https://issues.alfresco.com/jira/browse/AKU-743)       - Tooltip delegates resize requests
+
+1.0.46:
+* [AKU-692](https://issues.alfresco.com/jira/browse/AKU-692)       - Resolved iframe in Firefox issues
+* [AKU-706](https://issues.alfresco.com/jira/browse/AKU-706)       - Ensure actions menu items are visible
+* [AKU-707](https://issues.alfresco.com/jira/browse/AKU-707)       - Improve AlfSideBarContainer height calculations
+* [AKU-711](https://issues.alfresco.com/jira/browse/AKU-711)       - Ensure carat appears in TinyMCE editor in dialogs
+* [AKU-713](https://issues.alfresco.com/jira/browse/AKU-713)       - Fix thumbnail height/width issues
+* [AKU-714](https://issues.alfresco.com/jira/browse/AKU-714)       - Verify thumbnail margin configuration
+* [AKU-719](https://issues.alfresco.com/jira/browse/AKU-719)       - Update preferences key for CommentsList
+* [AKU-721](https://issues.alfresco.com/jira/browse/AKU-721)       - Prevent double encoding in AlfDocumentFilters
+* [AKU-727](https://issues.alfresco.com/jira/browse/AKU-727)       - Hide IE10/11 "X" in input fields
+* [AKU-731](https://issues.alfresco.com/jira/browse/AKU-731)       - Prevent double-escaping of hash by updateHash function
+
+1.0.45:
+* [AKU-665](https://issues.alfresco.com/jira/browse/AKU-665)       - Clean Aikau internal attributes from payload before XHR requests
+* [AKU-694](https://issues.alfresco.com/jira/browse/AKU-694)       - Ensure that generation of download zip can be cancelled
+* [AKU-695](https://issues.alfresco.com/jira/browse/AKU-695)       - Ensure list is refreshed on partial upload
+* [AKU-696](https://issues.alfresco.com/jira/browse/AKU-696)       - Ensure page cannot be scrolled when dialogs are displayed
+* [AKU-698](https://issues.alfresco.com/jira/browse/AKU-698)       - Ensure placeholder text is not shown with auto-complete
+* [AKU-701](https://issues.alfresco.com/jira/browse/AKU-701)       - Allow TextBox to configure "autocomplete" attribute
+* [AKU-704](https://issues.alfresco.com/jira/browse/AKU-704)       - Grid should only resize root widgets
+* [AKU-718](https://issues.alfresco.com/jira/browse/AKU-718)       - Ensure long dialogs can be scrolled in IE8/IE9
+* [AKU-724](https://issues.alfresco.com/jira/browse/AKU-724)       - Correction to function name
+
+1.0.44:
+* [AKU-670](https://issues.alfresco.com/jira/browse/AKU-670)       - Ensure twister supports resizing
+* [AKU-674](https://issues.alfresco.com/jira/browse/AKU-674)       - Appendix support for AlfListView
+* [AKU-675](https://issues.alfresco.com/jira/browse/AKU-675)       - Support for expandable panel in grids
+* [AKU-682](https://issues.alfresco.com/jira/browse/AKU-682)       - Added alfresco/forms/controls/PushButtons widget
+* [AKU-683](https://issues.alfresco.com/jira/browse/AKU-683)       - Support for disabling/re-labelling button on form submit
+* [AKU-689](https://issues.alfresco.com/jira/browse/AKU-689)       - Gallery view cell resizing fix
+* [AKU-693](https://issues.alfresco.com/jira/browse/AKU-693)       - Fixed suggestions scoping in SearchService
+* [AKU-697](https://issues.alfresco.com/jira/browse/AKU-697)       - Ensure consistent preview heigh in SearchFilmStripView
+
+1.0.43:
+* [AKU-416](https://issues.alfresco.com/jira/browse/AKU-416)       - Added download action definition
+* [AKU-663](https://issues.alfresco.com/jira/browse/AKU-663)       - Updated PathTree to highlight current path
+* [AKU-664](https://issues.alfresco.com/jira/browse/AKU-664)       - Updated SearchService to support non-hash based sorting
+* [AKU-668](https://issues.alfresco.com/jira/browse/AKU-668)       - Updated UploadService to use dialog with single, label changing button
+* [AKU-671](https://issues.alfresco.com/jira/browse/AKU-671)       - Re-center dialogs on dimension change
+* [AKU-672](https://issues.alfresco.com/jira/browse/AKU-672)       - Fit TinyMCE form control into comment dialog
+* [AKU-673](https://issues.alfresco.com/jira/browse/AKU-673)       - Support full screen dialogs in CommentsList
+* [AKU-677](https://issues.alfresco.com/jira/browse/AKU-677)       - Added "smart" download capabilities
+* [AKU-678](https://issues.alfresco.com/jira/browse/AKU-678)       - Fixed AlfButton accessibility issues
+* [AKU-680](https://issues.alfresco.com/jira/browse/AKU-680)       - Support encoded facet filter selection
+* [AKU-681](https://issues.alfresco.com/jira/browse/AKU-681)       - Update renderFilter config to support token substitution
+* [AKU-685](https://issues.alfresco.com/jira/browse/AKU-685)       - Prevent encoding display error when setting browser title bar
+* [AKU-690](https://issues.alfresco.com/jira/browse/AKU-690)       - Keyboard navigation support for widgets in grid with no focus function
+
+1.0.42:
+* [AKU-647](https://issues.alfresco.com/jira/browse/AKU-647)       - AlfDocumentList extends AlfFilteredList
+* [AKU-652](https://issues.alfresco.com/jira/browse/AKU-652)       - Ensure Logo title generates correctly
+* [AKU-653](https://issues.alfresco.com/jira/browse/AKU-653)       - Row mixes _AlfDndDocumentUploadMixin
+* [AKU-654](https://issues.alfresco.com/jira/browse/AKU-654)       - Added alfresco/layout/UploadContainer
+* [AKU-655](https://issues.alfresco.com/jira/browse/AKU-655)       - Ensure delete actions triggers reload
+* [AKU-657](https://issues.alfresco.com/jira/browse/AKU-657)       - Resize detection moved to ResizeMixin
+* [AKU-658](https://issues.alfresco.com/jira/browse/AKU-658)       - Ensure CrudService uses responseScope
+* [AKU-659](https://issues.alfresco.com/jira/browse/AKU-659)       - Ensure full screen dialogs have fixed position
+* [AKU-660](https://issues.alfresco.com/jira/browse/AKU-660)       - Ensure MultiSelectInput supports fixed options
+* [AKU-661](https://issues.alfresco.com/jira/browse/AKU-661)       - Encode username on leave site
+* [AKU-662](https://issues.alfresco.com/jira/browse/AKU-662)       - Ensure Logo uses either class or image source
+* [AKU-666](https://issues.alfresco.com/jira/browse/AKU-666)       - Ensure upload file selection is required
+* [AKU-667](https://issues.alfresco.com/jira/browse/AKU-667)       - Ensure UploadService cancel aborts requests
+* [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Remove superfluous title attributes from BaseFormControl
+
+1.0.41:
+* [AKU-632](https://issues.alfresco.com/jira/browse/AKU-632)       - Support configurable images in Carousel
+* [AKU-637](https://issues.alfresco.com/jira/browse/AKU-637)       - Disable draggable thumbnails in AlfFilmStripView
+* [AKU-638](https://issues.alfresco.com/jira/browse/AKU-638)       - Support configurable height in AlfFilmStripView
+* [AKU-642](https://issues.alfresco.com/jira/browse/AKU-642)       - Updated drag-and-drop upload highlighting
+* [AKU-643](https://issues.alfresco.com/jira/browse/AKU-643)       - Added simple clickable icon widget
+* [AKU-644](https://issues.alfresco.com/jira/browse/AKU-644)       - Prevent ClassicWindow overflowing content
+* [AKU-646](https://issues.alfresco.com/jira/browse/AKU-646)       - Capture resize events in FixedHeaderFooter
+* [AKU-648](https://issues.alfresco.com/jira/browse/AKU-648)       - Override default itemKeyProperty in AlfSearchList
+
+1.0.40:
+* [AKU-626](https://issues.alfresco.com/jira/browse/AKU-626)       - Thumbnail highlighting on selection
+* [AKU-627](https://issues.alfresco.com/jira/browse/AKU-627)       - Thumbnail click to select support
+* [AKU-628](https://issues.alfresco.com/jira/browse/AKU-628)       - Gallery view thumbnail resizing
+* [AKU-629](https://issues.alfresco.com/jira/browse/AKU-629)       - Gallery view layout fixes
+* [AKU-630](https://issues.alfresco.com/jira/browse/AKU-630)       - Truncate display name on GalleryThumbnail
+* [AKU-631](https://issues.alfresco.com/jira/browse/AKU-631)       - Configurable Thumbnail rendering
+* [AKU-633](https://issues.alfresco.com/jira/browse/AKU-633)       - Link support for Logo
+* [AKU-634](https://issues.alfresco.com/jira/browse/AKU-634)       - Disable resizing in sidebar
+
+1.0.39:
+* [AKU-548](https://issues.alfresco.com/jira/browse/AKU-548)       - New bulk action support (sync to cloud)
+* [AKU-605](https://issues.alfresco.com/jira/browse/AKU-605)       - Fix horizontal scrollbars in IE and possibly address dialog width-change on hover issue (IE only)
+* [AKU-610](https://issues.alfresco.com/jira/browse/AKU-610)       - AlfFilteredList hash ignored on load in non-English locales
+* [AKU-611](https://issues.alfresco.com/jira/browse/AKU-611)       - Navigation target/type now configurable in _SearchResultLinkMixin
+* [AKU-612](https://issues.alfresco.com/jira/browse/AKU-612)       - Send Accept-Language header with all XHR requests
+* [AKU-614](https://issues.alfresco.com/jira/browse/AKU-614)       - Dialogs should now resize larger on browser resize, where apropriate
+* [AKU-615](https://issues.alfresco.com/jira/browse/AKU-615)       - Selection now retained when changing number of displayed columns in search results
+* [AKU-617](https://issues.alfresco.com/jira/browse/AKU-617)       - Request to join a site now correctly returns user to their home page (defaults to their dashboard)
+* [AKU-619](https://issues.alfresco.com/jira/browse/AKU-619)       - "Advanced Search with name, title or description is not working"
+* [AKU-622](https://issues.alfresco.com/jira/browse/AKU-622)       - Remove default drag/drop capability within faceted search results
+* [AKU-623](https://issues.alfresco.com/jira/browse/AKU-623)       - Make user home page configurable in SiteService and default to /dashboard
+
+1.0.38:
+* [AKU-559](https://issues.alfresco.com/jira/browse/AKU-559)       - Widget instantiation order different in non English languages
+* [AKU-590](https://issues.alfresco.com/jira/browse/AKU-590)       - Correct Dojo locale initialisation problems
+* [AKU-598](https://issues.alfresco.com/jira/browse/AKU-598)       - Properly handle ALF_DOCUMENT_TAGGED topic
+* [AKU-600](https://issues.alfresco.com/jira/browse/AKU-600)       - Resize FixedHeaderFooter widget when header/footer children visibility is altered
+* [AKU-604](https://issues.alfresco.com/jira/browse/AKU-604)       - Field focus order incorrect in non English languages
+* [AKU-606](https://issues.alfresco.com/jira/browse/AKU-606)       - Site landing page now configurable (still defaults to /dashboard)
+* [AKU-607](https://issues.alfresco.com/jira/browse/AKU-607)       - Aikau actions now work properly in a search result list
+* [AKU-608](https://issues.alfresco.com/jira/browse/AKU-608)       - XhrActions now supports widgetsForActions
+* [AKU-609](https://issues.alfresco.com/jira/browse/AKU-609)       - Support multiple nodes when adding/removing favourites
+
 1.0.37:
 * [AKU-586](https://issues.alfresco.com/jira/browse/AKU-586)       - Ensure AlfTagFilters publish to correct scope
 * [AKU-591](https://issues.alfresco.com/jira/browse/AKU-591)       - Ensure delete action issues reload request on completion

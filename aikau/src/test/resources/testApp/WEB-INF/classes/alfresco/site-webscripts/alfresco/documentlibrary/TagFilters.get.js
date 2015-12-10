@@ -15,6 +15,15 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "PUBLISH_TAGGED_BUTTON",
+         config: {
+            label: "Publish document-tagged event",
+            publishTopic: "ALF_DOCUMENT_TAGGED",
+            pubSubScope: "SCOPED_"
+         }
+      },
+      {
          name: "alfresco/layout/HorizontalWidgets",
          config: {
             widgets: [
@@ -35,6 +44,15 @@ model.jsonModel = {
                      siteId: "eng",
                      containerId: "documentLibrary",
                      pubSubScope: "SCOPED_"
+                  }
+               },
+               {
+                  name: "alfresco/documentlibrary/AlfTagFilters",
+                  id: "TAG_FILTERS_ROOT_NODE",
+                  config: {
+                     label: "Tags (Root Node - none expected)",
+                     rootNode: "some://fake/node",
+                     pubSubScope: "ROOT_NODE_SCOPE_"
                   }
                }
             ]

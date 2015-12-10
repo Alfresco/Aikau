@@ -32,10 +32,11 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
-      "src/test/resources/alfresco/lists/AlfHashListTest",
-      "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
-      "src/test/resources/alfresco/search/SearchSuggestionsTest"
+      // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
+      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
+      // "src/test/resources/alfresco/dnd/NestedConfigurationTest",
+      // "src/test/resources/alfresco/layout/AlfTabContainerTest",
+      // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
    ],
 
    /**
@@ -54,7 +55,9 @@ define({
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
+      "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
+      "src/test/resources/alfresco/core/ObjectProcessingMixinTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
       "src/test/resources/alfresco/core/ResponseScopeTest",
@@ -77,12 +80,15 @@ define({
       "src/test/resources/alfresco/dnd/NestedConfigurationTest",
       "src/test/resources/alfresco/dnd/NestedReorderTest",
 
+      "src/test/resources/alfresco/documentlibrary/AlfDocumentTest",
+      "src/test/resources/alfresco/documentlibrary/AlfDocumentFiltersTest",
       "src/test/resources/alfresco/documentlibrary/AlfGalleryViewSliderTest",
       "src/test/resources/alfresco/documentlibrary/BreadcrumbTrailTest",
       "src/test/resources/alfresco/documentlibrary/CreateContentTest",
       "src/test/resources/alfresco/documentlibrary/DocumentLibraryTest",
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
       "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
+      "src/test/resources/alfresco/documentlibrary/FilteredDocumentListTest",
       "src/test/resources/alfresco/documentlibrary/PaginationTest",
       "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
       "src/test/resources/alfresco/documentlibrary/SearchListTest",
@@ -94,6 +100,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
+      "src/test/resources/alfresco/documentlibrary/views/GalleryViewThumbnailSizingTest",
 
       "src/test/resources/alfresco/footer/FooterTest",
 
@@ -101,6 +108,7 @@ define({
       "src/test/resources/alfresco/forms/ControlRowTest",
       "src/test/resources/alfresco/forms/CrudFormTest",
       "src/test/resources/alfresco/forms/DynamicFormTest",
+      "src/test/resources/alfresco/forms/FormFieldFocusOrderTest",
       "src/test/resources/alfresco/forms/FormWarningsTest",
       "src/test/resources/alfresco/forms/FormsTest",
       "src/test/resources/alfresco/forms/FormValidationTest",
@@ -116,12 +124,15 @@ define({
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
       "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
       "src/test/resources/alfresco/forms/controls/DateTextBoxTest",
+      "src/test/resources/alfresco/forms/controls/DisablingSubmitFormTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerTest",
       "src/test/resources/alfresco/forms/controls/DocumentPickerSingleItemTest",
       "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
       "src/test/resources/alfresco/forms/controls/MultipleEntryFormControlTest",
       "src/test/resources/alfresco/forms/controls/MultiSelectInputTest",
       "src/test/resources/alfresco/forms/controls/NumberSpinnerTest",
+      "src/test/resources/alfresco/forms/controls/PushButtonsTest",
+      "src/test/resources/alfresco/forms/controls/RadioButtonsTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/SitePickerTest",
@@ -138,20 +149,25 @@ define({
       "src/test/resources/alfresco/header/WarningTest",
 
       "src/test/resources/alfresco/html/HeadingTest",
+      "src/test/resources/alfresco/html/ImageTest",
       "src/test/resources/alfresco/html/LabelTest",
 
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",
       "src/test/resources/alfresco/layout/AlfStackContainerTest",
       "src/test/resources/alfresco/layout/AlfTabContainerTest",
       "src/test/resources/alfresco/layout/BasicLayoutTest",
+      "src/test/resources/alfresco/layout/ClassicWindowTest",
       "src/test/resources/alfresco/layout/DynamicHorizontalLayoutTest",
       "src/test/resources/alfresco/layout/DynamicWidgetsTest",
       "src/test/resources/alfresco/layout/FixedHeaderFooterTest",
       "src/test/resources/alfresco/layout/FullScreenWidgetsTest",
       "src/test/resources/alfresco/layout/HeightMixinTest",
+      "src/test/resources/alfresco/layout/IFramedTabContainerTest",
       "src/test/resources/alfresco/layout/StripedContentTest",
       "src/test/resources/alfresco/layout/TwisterTest",
       "src/test/resources/alfresco/layout/VerticalRevealTest",
+
+      "src/test/resources/alfresco/login/LoginFormTest",
 
       "src/test/resources/alfresco/lists/AlfHashListTest",
       "src/test/resources/alfresco/lists/AlfSortablePaginatedListTest",
@@ -160,7 +176,11 @@ define({
       "src/test/resources/alfresco/lists/InfiniteScrollTest",
       "src/test/resources/alfresco/lists/LocalStorageFallbackTest",
       "src/test/resources/alfresco/lists/PaginatorVisibilityTest",
+      "src/test/resources/alfresco/lists/views/AddableViewTest",
       "src/test/resources/alfresco/lists/views/AlfListViewTest",
+      "src/test/resources/alfresco/lists/views/ExpandableGalleryTest",
+      "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
+      "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
@@ -208,6 +228,7 @@ define({
       "src/test/resources/alfresco/renderers/IndicatorsTest",
       "src/test/resources/alfresco/renderers/InlineEditPropertyLinkTest",
       "src/test/resources/alfresco/renderers/InlineEditPropertyTest",
+      "src/test/resources/alfresco/renderers/MultiFavouriteTest",
       "src/test/resources/alfresco/renderers/ProgressTest",
       "src/test/resources/alfresco/renderers/PropertyLinkTest",
       "src/test/resources/alfresco/renderers/PropertyTest",
@@ -218,6 +239,7 @@ define({
       "src/test/resources/alfresco/renderers/SocialRenderersTest",
       "src/test/resources/alfresco/renderers/TagsTest",
       "src/test/resources/alfresco/renderers/ThumbnailTest",
+      "src/test/resources/alfresco/renderers/ThumbnailAspectAndSizeTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
       "src/test/resources/alfresco/renderers/actions/CopyToActionTest",
@@ -230,13 +252,16 @@ define({
       "src/test/resources/alfresco/search/CustomSearchResultTest",
       "src/test/resources/alfresco/search/FacetFiltersTest",
       "src/test/resources/alfresco/search/NoHashSearchingTest",
+      "src/test/resources/alfresco/search/SearchFilmStripViewTest",
       "src/test/resources/alfresco/search/SearchSuggestionsTest",
 
       "src/test/resources/alfresco/services/ActionServiceTest",
+      "src/test/resources/alfresco/services/CloudSyncServiceTest",
       "src/test/resources/alfresco/services/ContentServiceTest",
       "src/test/resources/alfresco/services/CrudServiceTest",
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
+      "src/test/resources/alfresco/services/DocumentServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
       "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",
@@ -245,10 +270,11 @@ define({
       "src/test/resources/alfresco/services/ServiceFilteringTest",
       "src/test/resources/alfresco/services/ServiceRegistryTest",
 
-      // "src/test/resources/alfresco/services/SiteServiceTest", - NO TESTS IN THIS SUITE THAT DO ANYTHING!
+      "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
+      "src/test/resources/alfresco/services/actions/DownloadTest",
       "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
       "src/test/resources/alfresco/services/actions/ManageAspectsTest",
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
@@ -258,6 +284,7 @@ define({
       "src/test/resources/alfresco/upload/UploadTargetTest",
 
       "src/test/resources/alfresco/util/functionUtilsTest",
+      "src/test/resources/alfresco/util/hashUtilsTest",
       "src/test/resources/alfresco/util/urlUtilsTest"
    ],
 

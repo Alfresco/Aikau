@@ -81,6 +81,10 @@ define(["./config/Suites"],
             }, {
                name: "dojo",
                location: "./node_modules/intern/node_modules/dojo"
+            }, {
+               name: "lodash",
+               location: "./src/test/resources/lib/lodash",
+               main: "lodash.compat"
             }]
          },
 

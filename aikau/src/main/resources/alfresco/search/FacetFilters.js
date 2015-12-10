@@ -52,6 +52,18 @@ define(["dojo/_base/declare",
       facetQName: null,
 
       /**
+       * Indicates whether or not the full width of the [child filters]{@link module:alfresco/search/FacetFilter}
+       * (including the count and the white space) can be clicked to toggle the filter. The corresponding 
+       * [attribute]{@link module:alfresco/search/FacetFilter#fullWidthClick} will be set on each filter.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      fullWidthClick: false,
+
+      /**
        * The number of filters that should be shown for each facet. If this is null then there is no maximum
        *
        * @instance
@@ -174,7 +186,11 @@ define(["dojo/_base/declare",
          var activeFilters = [];
          if (payload.activeFilters)
          {
-            activeFilters = payload.activeFilters.split(",");
+            var encodedActiveFilters = payload.activeFilters.split(",");
+            for(var i = 0; i < encodedActiveFilters.length; i++)
+            {
+               activeFilters.push(decodeURIComponent(encodedActiveFilters[i]));
+            }
          }
 
          // Create a new array and populate with the the facet filters...
@@ -221,7 +237,8 @@ define(["dojo/_base/declare",
                   facet: this.facetQName,
                   applied: applied,
                   useHash: this.useHash,
-                  pubSubScope: this.pubSubScope
+                  pubSubScope: this.pubSubScope,
+                  fullWidthClick: this.fullWidthClick
                });
 
                if ((filtersToAdd || filtersToAdd === 0) && filtersToAdd <= 0 && !applied)

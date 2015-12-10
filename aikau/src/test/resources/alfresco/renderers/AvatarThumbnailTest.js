@@ -42,7 +42,7 @@ registerSuite(function(){
       },
 
       "Image src is correct": function() {
-         return browser.findByCssSelector("#ADMIN_THUMBNAIL .inner img")
+         return browser.findByCssSelector("#ADMIN_THUMBNAIL .alfresco-renderers-Thumbnail__image")
             .getAttribute("src")
             .then(function(src) {
                assert.match(src, /\/aikau\/proxy\/alfresco\/slingshot\/profile\/avatar\/silly%25userid\/thumbnail\/avatar/, "Avatar thumbnail src incorrect");
@@ -50,7 +50,7 @@ registerSuite(function(){
       },
 
       "Publishes topic when clicked": function() {
-         return browser.findByCssSelector("#GUEST_THUMBNAIL .inner")
+         return browser.findByCssSelector("#GUEST_THUMBNAIL .alfresco-renderers-Thumbnail__frame")
             .click()
             .getLastPublish("ALF_DISPLAY_NOTIFICATION", true, "Did not publish correct topic when clicked")
             .then(function(payload) {

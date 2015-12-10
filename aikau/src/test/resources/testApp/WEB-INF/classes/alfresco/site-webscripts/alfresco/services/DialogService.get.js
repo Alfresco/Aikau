@@ -556,6 +556,7 @@ model.jsonModel = {
                ],
                widgetsButtons: [
                   {
+                     id: "FULL_SCREEN_DIALOG_CLOSE",
                      name: "alfresco/buttons/AlfButton",
                      config: {
                         label: "OK",
@@ -589,6 +590,109 @@ model.jsonModel = {
                         name: "text",
                         label: "Enter some text",
                         value: "This is some sample text"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         id: "RESIZING_DIALOG_BUTTON",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create Resizing Form Dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "RESIZING_DIALOG",
+               dialogTitle: "Resizing Form Dialog",
+               formSubmissionTopic: "RESIZING_DIALOG_SUBMISSION",
+               widgets: [
+                  {
+                     name: "alfresco/forms/controls/Select",
+                     config: {
+                        fieldId: "DISPLAY_MORE",
+                        label: "Display more fields",
+                        name: "displayMore",
+                        optionsConfig: {
+                           fixed: [
+                              {
+                                 value: "NO",
+                                 label: "No"
+                              },
+                              {
+                                 value: "YES",
+                                 label: "Yes"
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        fieldId: "OPTION_1",
+                        label: "Option 1 value",
+                        name: "option1",
+                        visibilityConfig: {
+                           initialValue: false,
+                           rules: [
+                              {
+                                 targetId: "DISPLAY_MORE",
+                                 is: ["YES"]
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        fieldId: "OPTION_2",
+                        label: "Option 2 value",
+                        name: "option2",
+                        visibilityConfig: {
+                           initialValue: false,
+                           rules: [
+                              {
+                                 targetId: "DISPLAY_MORE",
+                                 is: ["YES"]
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        fieldId: "OPTION_3",
+                        label: "Option 3 value",
+                        name: "option3",
+                        visibilityConfig: {
+                           initialValue: false,
+                           rules: [
+                              {
+                                 targetId: "DISPLAY_MORE",
+                                 is: ["YES"]
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        fieldId: "OPTION_4",
+                        label: "Option 4 value",
+                        name: "option4",
+                        visibilityConfig: {
+                           initialValue: false,
+                           rules: [
+                              {
+                                 targetId: "DISPLAY_MORE",
+                                 is: ["YES"]
+                              }
+                           ]
+                        }
                      }
                   }
                ]

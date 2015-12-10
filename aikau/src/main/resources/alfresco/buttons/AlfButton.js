@@ -18,10 +18,16 @@
  */
 
 /**
- * This extends the default Dojo button to provide Alfresco specific styling. It also overrides
+ * <p>This extends the default Dojo button to provide Alfresco specific styling. It also overrides
  * the [onClick]{@link module:alfresco/buttons/AlfButton#onClick} function to publish the
  * [publishPayload]{@link module:alfresco/buttons/AlfButton#publishPayload} on the
- * [publishTopic]{@link module:alfresco/buttons/AlfButton#publishTopic}
+ * [publishTopic]{@link module:alfresco/buttons/AlfButton#publishTopic}</p>
+ * <p>The following additionalCssClasses are built in and can be included if required:</p>
+ * <ul>
+ * <li><strong>call-to-action</strong>: The AlfButton is rendered in call-to-action colours</li>
+ * <li><strong>primary-call-to-action</strong>: The AlfButton is rendered in primary-call-to-action colours</li>
+ * <li><strong>biggerBolder</strong>: The AlfButton is rendered with a bigger, bold font</li>
+ * </ul>
  *
  * @module alfresco/buttons/AlfButton
  * @extends module:dijit/form/Button
@@ -132,6 +138,10 @@ define(["dojo/_base/declare",
             this.invalidControls = [];
             this.alfSubscribe(this.invalidTopic, lang.hitch(this, "onInvalidControl"));
             this.alfSubscribe(this.validTopic, lang.hitch(this, "onValidControl"));
+         }
+
+         if (!this.value && this.publishTopic) {
+            this.valueNode.setAttribute("value", this.publishTopic);
          }
       },
 

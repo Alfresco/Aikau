@@ -171,15 +171,14 @@ define(["dojo/_base/declare",
       preferencePrefix: "org.alfresco.share.twisters.",
       
       /**
-       * The width to make the twister. This is null by default and the standard width of a twister is controlled
-       * by the "@sidebar-component-width" LESS variable. However, this can be overridden by configuring this
-       * attribute to be a specific width. Units such as "px" should be included.
+       * The width to make the twister. Units such as "px" should be included. By default all available
+       * horizontal width will be used.
        *
        * @instance
        * @type {string}
        * @default
        */
-      width: null,
+      width: "auto",
 
       /**
        * @instance

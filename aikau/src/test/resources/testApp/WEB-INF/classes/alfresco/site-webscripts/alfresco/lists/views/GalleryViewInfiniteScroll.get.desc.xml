@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Gallery View (infinite scrolling)</shortname>
+  <description>This shows a gallery view with infinite scrolling enabled.</description>
+  <family>aikau-unit-tests</family>
+  <url>/GalleryViewInfiniteScroll</url>
+</webscript>

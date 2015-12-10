@@ -159,6 +159,48 @@ define(["intern!object",
             .end();
          },
 
+         "Show full screen dialog with no buttons": function() {
+            return browser.findById("FULL_SCREEN_DIALOG_NO_BUTTON_label")
+               .click()
+            .end()
+            .findByCssSelector("#FSDNB.dialogDisplayed")
+            .end()
+            .findByCssSelector("#FSDNB .alfresco-layout-FixedHeaderFooter")
+               .getSize()
+               .then(function(size) {
+                  // NOTE: target height is client height minus dialog "margin", padding and title
+                  var target = windowHeight - 80 - 24 - 39; 
+                  assert.closeTo(size.height, target, 10, "Height not calculated correctly");
+               })
+            .end()
+            .findByCssSelector("#FSDNB .dijitDialogCloseIcon")
+               .click()
+            .end()
+            .findByCssSelector("#FSDNB.dialogHidden")
+            .end();
+         },
+
+         "Show full screen dialog with buttons bar": function() {
+            return browser.findById("FULL_SCREEN_DIALOG_label")
+               .click()
+            .end()
+            .findByCssSelector("#FSD.dialogDisplayed")
+            .end()
+            .findByCssSelector("#FSD .alfresco-layout-FixedHeaderFooter")
+               .getSize()
+               .then(function(size) {
+                  // NOTE: target height is client height minus dialog "margin", padding, title and button bars
+                  var target = windowHeight - 80 - 24 - 39 - 44; 
+                  assert.closeTo(size.height, target, 10, "Height not calculated correctly");
+               })
+            .end()
+            .findByCssSelector("#FSD .dijitDialogCloseIcon")
+               .click()
+            .end()
+            .findByCssSelector("#FSD.dialogHidden")
+            .end();
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

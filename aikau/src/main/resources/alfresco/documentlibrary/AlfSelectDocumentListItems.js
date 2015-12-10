@@ -118,7 +118,7 @@ define(["dojo/_base/declare",
             this.documentsSelected = this.documentsAvailable;
          }
          this.determineSelection({
-            selectedFiles: {
+            selectedItems: {
                length: this.documentsSelected
             }
          });
@@ -137,7 +137,7 @@ define(["dojo/_base/declare",
             this.documentsSelected = 0;
          }
          this.determineSelection({
-            selectedFiles: {
+            selectedItems: {
                length: this.documentsSelected
             }
          });
@@ -165,18 +165,18 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication of the selected item change.
        */
       determineSelection: function alfresco_menus_AlfMenuBarSelectItems__determineSelection(payload) {
-         if (payload.selectedFiles && (payload.selectedFiles.length || payload.selectedFiles.length === 0))
+         if (payload.selectedItems && (payload.selectedItems.length || payload.selectedItems.length === 0))
          {
-            if (this.documentsAvailable === 0 || payload.selectedFiles.length === 0)
+            if (this.documentsAvailable === 0 || payload.selectedItems.length === 0)
             {
                this.renderNoneSelected();
                this.documentsSelected = 0;
             }
-            else if (this.documentsAvailable > payload.selectedFiles.length)
+            else if (this.documentsAvailable > payload.selectedItems.length)
             {
                this.renderSomeSelected();
             }
-            else if (this.documentsAvailable === payload.selectedFiles.length)
+            else if (this.documentsAvailable === payload.selectedItems.length)
             {
                this.renderAllSelected();
                this.documentsSelected = this.documentsAvailable;

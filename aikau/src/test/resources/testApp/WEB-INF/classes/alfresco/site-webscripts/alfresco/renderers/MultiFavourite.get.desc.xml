@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Multiple Favouriting</shortname>
+  <description>Shows an example of being able to publish a request to add or remove multiple nodes from the user favourites. Demonstrates the alfresco/renderers/Favourite widget automatically updates on bulk changes.</description>
+  <family>aikau-unit-tests</family>
+  <url>/MultiFavourite</url>
+</webscript>

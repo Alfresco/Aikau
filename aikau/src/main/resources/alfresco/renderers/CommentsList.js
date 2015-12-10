@@ -49,7 +49,28 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/CommentsList.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/CommentsList.properties"}],
-      
+
+      /**
+       * Whether to use a full-screen dialog when adding comments.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.43
+       */
+      addCommentsFullScreen: false,
+
+      /**
+       * When [addCommentsFullScreen]{@link module:alfresco/renderers/CommentsList#addCommentsFullScreen} is
+       * set to true, then this will permit overriding the padding that this full-screen mode specifies by default.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.43
+       */
+      addCommentsPadding: 0,
+
       /**
        * Widget has been started, but not necessarily any sub-widgets.
        * 
@@ -73,6 +94,7 @@ define(["dojo/_base/declare",
             config: {
                documentsLoadedTopic: "ALF_GET_COMMENTS_SUCCESS",
                documentsPerPage: 5,
+               pageSizePreferenceName: "org.alfresco.share.documentList.commentsPerPage",
                pageSizes: [5, 10, 20],
                widgetsBefore: [
                   {
@@ -91,14 +113,17 @@ define(["dojo/_base/declare",
                               url: "api/node/{node.nodeRef}/comments",
                               pubSubScope: "{pubSubScope}"
                            },
-                           additionalCssClasses: "no-padding",
+                           fullScreenMode: "{addCommentsFullScreen}",
+                           fullScreenPadding: "{addCommentsPadding}",
+                           additionalCssClasses: "no-padding tinymce-dialog",
                            fixedWidth: true,
-                           dialogWidth: "545px",
+                           dialogWidth: "540px",
                            widgets: [
                               {
                                  name: "alfresco/forms/controls/TinyMCE",
                                  config: {
-                                    name: "content"
+                                    name: "content",
+                                    autoResize: "{addCommentsFullScreen}"
                                  }
                               }
                            ]
@@ -156,6 +181,7 @@ define(["dojo/_base/declare",
                loadDataPublishPayload: {
                   nodeRef: "{node.nodeRef}"
                },
+               pageSizePreferenceName: "org.alfresco.share.documentList.commentsPerPage",
                currentPageSize: 5,
                documentsLoadedTopic: "ALF_COMMENTS_LOADED",
                widgets: [

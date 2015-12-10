@@ -11,7 +11,7 @@
 
 // Header widget colours
 // These are used for the "alfresco/header" packaged widgets which are primarily extensions
-// to the "alfresc/menus" widgets. You can override these variables to make theme specific header
+// to the "alfresco/menus" widgets. You can override these variables to make theme specific header
 // changes
 @header-primary-background-color: @header-background-color;
 @header-primary-font-color: @header-font-color;
@@ -91,7 +91,7 @@
 // Font Colours
 @general-font-color: #333;
 @emphasized-font-color: #000;
-@de-emphasized-font-color: #999;
+@de-emphasized-font-color: #767676;
 @highlighted-font-color: #fff;
 
 // Link colours and decoration
@@ -120,6 +120,7 @@
 @hover-border-color: #d3d3d3;
 @focused-border-color: #8dc63f;
 @thick-border-width: 3px;
+@upload-highlight-border: 3px dashed #6ba969;
 
 // Button (colours)
 @button-color-background: #fff;
@@ -127,6 +128,9 @@
 @button-color-hover: #135fa3;
 @button-color-active: #125380;
 @button-color-disabled: #b8b8b8;
+@primary-call-to-action-default: #47aa42;
+@primary-call-to-action-hover: #358032;
+@primary-call-to-action-active: #2c6a29;
 @legacy-button-color: #ccc;
 @legacy-button-color-text: @general-font-color;
 @legacy-action-button-color: #8dc63f;
@@ -152,7 +156,7 @@
 @standard-button-font-weight: normal;
 @standard-button-height: 28px;
 @standard-button-line-height: @standard-button-font-size * 1.2;
-@standard-button-padding-vertical: (@standard-button-height - (@standard-button-border-width * 2) - @standard-button-line-height) / 2;
+@standard-button-padding-vertical: (@standard-button-height - (@standard-button-border-width * 2) - @standard-button-line-height * 1.2) / 2;
 @standard-button-padding-horizontal: @standard-button-font-size;
 @standard-button-padding: @standard-button-padding-vertical @standard-button-padding-horizontal;
 @standard-button-margin: 0 @standard-column-width 0 0;
@@ -178,10 +182,21 @@
 @call-to-action-button-font-weight: @standard-button-font-weight;
 @call-to-action-button-height: @standard-button-height;
 @call-to-action-button-line-height: @standard-button-line-height;
-@call-to-action-button-padding-vertical: (@call-to-action-button-height - (@call-to-action-button-border-width * 2) - @call-to-action-button-line-height) / 2;
+@call-to-action-button-padding-vertical: (@call-to-action-button-height - (@call-to-action-button-border-width * 2) - @call-to-action-button-line-height * 1.2) / 2;
 @call-to-action-button-padding-horizontal: @standard-button-padding-horizontal;
 @call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
 @call-to-action-button-margin: @standard-button-margin;
+
+// "Primary call-to-action" buttons are first among equals
+@primary-call-to-action-button-background: @primary-call-to-action-default;
+@primary-call-to-action-button-background-focus: @primary-call-to-action-hover;
+@primary-call-to-action-button-background-active: @primary-call-to-action-active;
+@primary-call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style @primary-call-to-action-default;
+@primary-call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @primary-call-to-action-hover;
+@primary-call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style @primary-call-to-action-active;
+
+// The radius textbox is a modifier to the standard textbox
+@radius-textbox-border-radius: 3px;
 
 // Update the variables for legacy buttons
 @use-legacy-buttons: true;
@@ -204,6 +219,16 @@
 // Shadows
 @standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);
 @inset-box-shadow: 1px 1px 3px #ccc inset;
+@selection-box-shadow: 0px 0px 25px 5px #fa0;
+
+// Thumbnails
+@thumbnail-width: 100px;
+@thumbnail-height: 100px;
+@thumbnail-margin: 5px;
+@thumbnail-border-width: 0;
+@thumbnail-border-style: @standard-border-style;
+@thumbnail-border-color: @standard-border-color;
+@thumbnail-box-shadow: @standard-box-shadow;
 
 // Dashlets
 @dashlet-background: @primary-background-color;
@@ -217,6 +242,13 @@
 @dashlet-toolbar-border-bottom: @standard-border;
 @dashlet-body-background: @primary-background-color;
 @dashlet-body-border-radius: 0; // This gives rounding at the top of the dashlet only
+
+// Layout containers
+@sidebar-container-sidebar-background-color: @primary-background-color;
+@sidebar-container-main-background-color: @primary-background-color;
+@sidebar-container-resize-handle-background-color: @primary-background-color;
+@sidebar-container-resize-handle-background-color-active: @primary-background-color;
+@sidebar-container-borders: @standard-border;
 
 // Notifications
 @notification-background: #666;
@@ -241,6 +273,17 @@
 @list-zebra-color-even: #f8f8f8;
 @list-border-color: #e5e5e5;
 @list-dnd-hover-outline: 2px solid #0082ca;
+@list-loading-message-background: rgba(255,255,255,.8);
+@list-loading-message-border: 1px solid #666;
+@list-loading-message-border-radius: 5px;
+@list-loading-message-line-height: 30px;
+@list-loading-message-padding: 0 15px;
+@list-loading-message-transition: opacity .3s ease;
+@list-loading-message-top: 40%;
+@list-loading-message-left: 40%;
+@list-rendering-message-left: 30%;
+@list-loading-overlay-background: rgba(0, 0, 0, .03);
+@list-loading-overlay-transition: all 0;
 
 // Tabs
 @tab-border: @standard-form-border;
@@ -255,6 +298,9 @@
 @breadcrumb-background-color: white;
 @breadcrumb-border-color: @standard-border-color;
 @breadcrumb-hover-color: #eee;
+
+// Filters
+@filter-hover-color: @list-hover-color;
 
 // Generic colours for displaying collections of items
 @collectionColour1: #f1e695;

@@ -31,6 +31,19 @@ define([],function() {
    return {
 
       /**
+       * This can be published to request to add a node or nodes as a favourite.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.38
+       * @event
+       * @property {object} node - The node to add as a favourite
+       * @property {object[]} nodes - An array of nodes to add as a favourites
+       */
+      ADD_FAVOURITE_NODE: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE",
+
+      /**
        * Triggered when the progress request has failed
        *
        * @instance
@@ -84,6 +97,34 @@ define([],function() {
        * @since 1.0.33
        */
       CLEAR_SELECTED_ITEMS: "ALF_CLEAR_SELECTED_ITEMS",
+
+      /**
+       * This can be published to request authentication to the Cloud for the purposes of sync'ing
+       * Alfresco Repository content with the Alfresc Cloud.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       * @property {string} username The username to authenticate (this should be the e-mail address associated with the Cloud)
+       * @property {string} password The password to authenticate with
+       */
+      CLOUD_AUTHENTICATION_REQUEST: "ALF_CLOUD_AUTHENTICATION_REQUEST",
+
+      /**
+       * This can be published to indicate that authentication to the Cloud for the purposes of sync'ing
+       * Alfresco Repository content with the Alfresc Cloud has completed successfully.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       */
+      CLOUD_AUTHENTICATION_SUCCESS: "ALF_CLOUD_AUTHENTICATION_SUCCESS",
 
       /**
        * This topic is published to launch the copying or moving of a node (or nodes) to another location.
@@ -171,10 +212,37 @@ define([],function() {
        * @event module:alfresco/core/topics~DELETE_SITE
        * @property {object} [redirect] - The redirect data to use after successfully deleting the site
        * @property {string} [redirect.url] - The URL to navigate to
-       * @property {string} [redirect.type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
+       * @property {string} [redirect.type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @property {string} [redirect.target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        */
       DELETE_SITE: "ALF_DELETE_SITE",
+
+      /**
+       * This topic can be published to request that a notification be displayed. It is subscribed to 
+       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed
+       * @property {string} [publishTopic] A topic to be published after the notification has closed
+       * @property {object} [publishPayload] The payload to be published after the notification has closed
+       * @property {boolean} [publishGlobal] Whether to publish the topic globally
+       * @property {boolean} [publishToParent] Whether to publish the topic on the parent scope
+       */
+      DISPLAY_NOTIFICATION: "ALF_DISPLAY_NOTIFICATION",
+
+      /**
+       * This topic can be published to request that a prompt be displayed. It is subscribed to 
+       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
 
       /**
        * Publish this to indicate the de-selection of an individual item
@@ -246,6 +314,20 @@ define([],function() {
       DOCUMENTLIST_TAG_CHANGED: "ALF_DOCUMENTLIST_TAG_CHANGED",
       
       /**
+       * This topic is published to request the download of a single document
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object} [node] - An object containing the node data.
+       * @property {string} [node.contentURL] - The URL to use for the node to download
+       */
+      DOWNLOAD: "ALF_DOWNLOAD",
+
+      /**
        * This topic is published to request either the download of a single document or folder (or a selection
        * of documents and folder) as a ZIP file.
        * 
@@ -267,31 +349,63 @@ define([],function() {
       DOWNLOAD_NODE: "ALF_DOWNLOAD_FILE",
 
       /**
-       * This topic can be published to request that a notification be displayed. It is subscribed to 
-       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       * This topic subscribed to by the [DocumentService]{@link module:alfresco/services/DocumentService}
+       * in order to trigger a download of a node that has just had its full metadata successfully
+       * retrieved. This is not intended to be used by widgets or services other than the 
+       * [DocumentService]{@link module:alfresco/services/DocumentService}.
        *
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.43
        *
        * @event
-       * @property {string} message The message to be displayed
-       * @property {string} [publishTopic] A topic to be published after the notification has closed
-       * @property {object} [publishPayload] The payload to be published after the notification has closed
-       * @property {boolean} [publishGlobal] Whether to publish the topic globally
-       * @property {boolean} [publishToParent] Whether to publish the topic on the parent scope
+       * @property {object} response The reponse from the XHR request to retrieve the node metadata
+       * @property {object} response.item The metadata for the requested node
        */
-      DISPLAY_NOTIFICATION: "ALF_DISPLAY_NOTIFICATION",
+      DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
 
       /**
-       * This topic can be published to request that a prompt be displayed. It is subscribed to 
-       * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       * This topic can be used to request Cloud specific paths to use in an
+       * [Tree form control]{@link module:alfresco/forms/controls/Tree}.
        *
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.39
+       * @event
+       * @property {string} remoteSiteId The site on the Cloud tenant from which to retrieve path data
+       * @property {string} remoteTenantId The tenant on the Cloud on which the remoteSiteId can be found
        */
-      DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
+      GET_CLOUD_PATH: "ALF_GET_CLOUD_PATH",
+
+      /**
+       * This topic can be used from a [form control]{@link module:alfresco/form/controls/BaseFormControl}
+       * such as a [Select]{@link module:alfresco/forms/controls/Select} as the optionsConfig.publishTopic
+       * for retrieving the sites on a specified Cloud tenant (network) that the user has access to.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       * @property {string} username The username to request site data for
+       * @property {string} remoteTenantId The tenant on which to look for sites
+       */
+      GET_CLOUD_SITES: "ALF_GET_CLOUD_SITES",
+
+      /**
+       * This topic can be used from a [form control]{@link module:alfresco/form/controls/BaseFormControl}
+       * such as a [Select]{@link module:alfresco/forms/controls/Select} as the optionsConfig.publishTopic
+       * for retrieving the Cloud tenants (networks) that the user has access to.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       */
+      GET_CLOUD_TENANTS: "ALF_GET_CLOUD_TENANTS",
 
       /**
        * This topic can be published to request the data for a list of documents at the location
@@ -327,6 +441,21 @@ define([],function() {
       GET_DOCUMENT: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
       /**
+       * This topic can be published by a [form control]{@link module:alfresco/forms/controls/BaseFormControl}
+       * when it needs to retrieve options that can only be determined from other values containined within the
+       * form. This allows options to be dynamically requested that change as other form values are updated.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * 
+       * @event
+       * @property {string} publishTopic The topic publish the payload once augmented with the form value.
+       */
+      GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
+
+      /**
        * This topic can be published to request a user preference be returned. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *
@@ -343,6 +472,33 @@ define([],function() {
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
       /**
+       * Can be published to initialise the creation of a synchronization between an on-premise node and
+       * a location on the Alfresco Cloud.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       */
+      INIT_CLOUD_SYNC: "ALF_INIT_CLOUD_SYNC",
+
+      /**
+       * This can be published to request that an action be performed on multiple selected items. The 
+       * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
+       * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
+       * 
+       * @instance
+       * @type {string}
+       * @since 1.0.38
+       *
+       * @event
+       * @property {string} action The action to perform (this should map to a function in the [ActionService]{@link module:alfresco/services/ActionService})
+       * @property {string} actionTopic A topic to forward the action request on to. 
+       */
+      MULTIPLE_ITEM_ACTION_REQUEST: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
+
+      /**
        * This topic can be published to request navigation to another URL.
        *
        * @instance
@@ -352,7 +508,7 @@ define([],function() {
        *
        * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
        * @property {string} url - The URL to navigate to
-       * @property {string} [type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
+       * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
@@ -415,7 +571,7 @@ define([],function() {
        *
        * @event module:alfresco/core/topics~POST_TO_PAGE
        * @property {string} url - The URL to navigate to
-       * @property {string} [type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
+       * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        * @property {object} [parameters={}] - The parameters to include in the POST
        */
@@ -443,6 +599,20 @@ define([],function() {
        * @event module:alfresco/core/topics~RELOAD_PAGE
        */
       RELOAD_PAGE: "ALF_RELOAD_PAGE",
+
+      /**
+       * This can be published to request to remove a node or nodes from the list of favourites.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.38
+       * 
+       * @event
+       * @property {object} node - The node to remove from favourites
+       * @property {object[]} nodes - An array of nodes to remove from favourites
+       */
+      REMOVE_FAVOURITE_NODE: "ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE",
 
       /**
        * Called to start off the archiving process.
@@ -521,6 +691,23 @@ define([],function() {
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
+       * This topic should be published by [menu items]{@link module:alfresco/menus/AlfMenuItem} contained within
+       * a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup} to
+       * be forwarded onto the [ActionService]{@link module:alfresco/services/ActionService} in order to request
+       * that the configured action be performed on the currently selected items.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       *
+       * @event
+       * @property {string} [action] The action to perform
+       * @property {string} [actionTopic] The topic to re-publish the action request on
+       */
+      SELECTED_DOCUMENTS_ACTION: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
+
+      /**
        * Used to indicate the list of currently selected documents has changed and provides the details of those items.
        * 
        * @instance
@@ -534,6 +721,21 @@ define([],function() {
       SELECTED_DOCUMENTS_CHANGED: "ALF_SELECTED_FILES_CHANGED",
 
       /**
+       * Use by the [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/AlfGalleryViewSlider}
+       * to publish changes in the number of columns that should be shown in the 
+       * [AlfGalleryView]{@link module:alfresco/documentlibrary/views/AlfGalleryView}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       *
+       * @event
+       * @property {number} value - The number of columns to display.
+       */
+      SET_COLUMNS: "ALF_DOCLIST_SET_GALLERY_COLUMNS",
+
+      /**
        * This topic can be published to set a user preference. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *
@@ -543,6 +745,56 @@ define([],function() {
        * @since 1.0.34
        */
       SET_PREFERENCE: "ALF_PREFERENCE_SET",
+
+      /**
+       * Use by the [ThumbnailSizeSlider]{@link module:alfresco/documentlibrary/ThumbnailSizeSlider}
+       * to publish changes to the size of the thumbnails that are shown in the 
+       * [AlfGalleryView]{@link module:alfresco/documentlibrary/views/AlfGalleryView}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       *
+       * @event
+       * @property {number} value - The size (in pixels) to make the thumbnails.
+       */
+      SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
+
+      /**
+       * This can be published to request a "smart" download. It is smart because it will determine whether
+       * or not to download a single item individually or multiple items as a ZIP.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       * @property {object[]} nodes The node or nodes to download.
+       */
+      SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
+
+      /**
+       * This topic is published in order to make the actual request to sync a node or nodes
+       * with the Cloud.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      SYNC_TO_CLOUD: "ALF_SYNC_TO_CLOUD",
+
+      /**
+       * This topic is published when a Cloud sync is successfully created.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       */
+      SYNC_TO_CLOUD_SUCCESS: "ALF_SYNC_TO_CLOUD_SUCCESS",
 
       /**
        * This topic is used to request tags for a node and its descendants. The payload must container either siteId and containerId, or rootNode.
@@ -562,6 +814,18 @@ define([],function() {
       TAG_QUERY: "ALF_TAG_QUERY",
 
       /**
+       * This topic is fired when a [TinyMCE editor]{@link module:alfresco/editors/TinyMCE} is given focus.
+       * This is primarily used for testing purposes.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.46
+       * @event
+       */
+      TINYMCE_EDITOR_FOCUSED: "ALF_TINYMCE_EDITOR_FOCUSED",
+
+      /**
        * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
        * [Title widget]{@link module:alfresco/header/Title} and published by the 
        * [SetTitle widget]{@link module:alfresco/header/SetTitle}
@@ -571,6 +835,31 @@ define([],function() {
        * @default
        */
       UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
+
+      /**
+       * This topic is published when the user acknowledges the completion of uploading files to the
+       * repository
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       */
+      UPLOAD_COMPLETION_ACKNOWLEDGEMENT: "ALF_UPLOAD_DIALOG_OK_CLICK",
+
+      /**
+       * This topic is published to cancel any file uploads that are currently in progress.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.43
+       *
+       * @event
+       */
+      UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
 
       /**
        * This topic can be published to display a dialog that allows users to select one or more files

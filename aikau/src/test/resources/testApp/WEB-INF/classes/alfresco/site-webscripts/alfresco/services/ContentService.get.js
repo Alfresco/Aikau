@@ -108,8 +108,8 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/buttons/AlfButton",
          id: "UPLOAD_NEW_FILE",
+         name: "alfresco/buttons/AlfButton",
          config: {
             label: "Launch upload dialog",
             publishTopic: "ALF_SHOW_UPLOADER",
@@ -118,6 +118,56 @@ model.jsonModel = {
                   nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
                }
             }
+         }
+      },
+      {
+         id: "UPDATE_FILE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Launch upload new version dialog",
+            publishTopic: "ALF_SHOW_UPLOADER",
+            publishPayload: {
+               parent: {
+                  nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+               },
+               node: {
+                  nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+               }
+            }
+         }
+      },
+      {
+         id: "CREATE_CONTENT",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create new content",
+            publishTopic: "ALF_CREATE_CONTENT_REQUEST",
+            publishPayload: {
+               currentNode: {
+                  parent: {
+                     nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+                  }
+               },
+               type: "cm:folder"
+            }
+         }
+      },
+      {
+         id: "CREATE_CONTENT_SCOPED",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create new content (scoped)",
+            publishTopic: "ALF_CREATE_CONTENT_REQUEST",
+            publishPayload: {
+               currentNode: {
+                  parent: {
+                     nodeRef: "workspace/SpacesStore/f3aefe19-4436-44f1-9733-d22ffede037d"
+                  }
+               },
+               type: "cm:folder"
+            },
+            publishGlobal: true,
+            pubSubScope: "SCOPED_"
          }
       },
       {

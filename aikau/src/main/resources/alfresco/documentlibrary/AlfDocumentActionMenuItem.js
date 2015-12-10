@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
       /**
        * This implements the filter function extension point to check the current menu items configuration
        * against the user permissions and aspects as provided in the publication payload. This code is based
-       * on the second half of the "onSelectedFilesChanged" function from the "toolbar.js" file. It should 
+       * on the second half of the "onselectedItemsChanged" function from the "toolbar.js" file. It should 
        * be kept in-sync with any updates made to that file. 
        * 
        * @instance

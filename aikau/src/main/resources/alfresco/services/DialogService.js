@@ -148,6 +148,7 @@
  * @property {string} [hideTopic=null] - Topic to subscribe to to trigger a dialog hide. If this is set
  * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
  * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
+ * @property {boolean} [showValidationErrorsImmediately=true] Indicates whether or not to display form errors immediately
  */
 
 /**
@@ -178,11 +179,12 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/aspect",
+        "dojo/dom-class",
         "dojo/on",
         "dojo/keys",
         "dojo/when",
         "jquery"],
-        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, aspect, on, keys, when, $) {
+        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, aspect, domClass, on, keys, when, $) {
 
    return declare([BaseService], {
 
@@ -435,7 +437,7 @@ define(["dojo/_base/declare",
             content: payload.textContent,
             duration: payload.duration || 0,
             fullScreenMode: payload.fullScreenMode || false,
-            fullScreenPadding: payload.fullScreenPadding || 10,
+            fullScreenPadding: !isNaN(payload.fullScreenPadding) ? payload.fullScreenPadding : 10,
             widgetsContent: payload.widgetsContent,
             widgetsButtons: payload.widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
@@ -664,7 +666,7 @@ define(["dojo/_base/declare",
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
             fullScreenMode: config.fullScreenMode || false,
-            fullScreenPadding: config.fullScreenPadding || 10,
+            fullScreenPadding: !isNaN(config.fullScreenPadding) ? config.fullScreenPadding : 10,
             parentPubSubScope: config.parentPubSubScope,
             additionalCssClasses: config.additionalCssClasses ? config.additionalCssClasses : "",
             suppressCloseClasses: suppressCloseClasses,
@@ -816,6 +818,10 @@ define(["dojo/_base/declare",
          // Add to the stack of active dialogs
          this._activeDialogs.push(dialog);
 
+         // Ensure the dialogs-showing CSS state is "true"
+         // NOTE: This selector is used in AlfDialog.css as this service has no CSS file itself
+         domClass.add(document.documentElement, "alfresco-dialog-AlfDialog--dialogs-visible");
+
          // Handle cancelling
          this._handleCancellation(payload, dialog);
 
@@ -832,6 +838,11 @@ define(["dojo/_base/declare",
             this._activeDialogs = array.filter(this._activeDialogs, function(activeDialog) {
                return activeDialog !== dialog;
             });
+
+            // If there are no dialogs "left" then set the dialogs-showing CSS state to "false"
+            if(this._activeDialogs.length === 0) {
+               domClass.remove(document.documentElement, "alfresco-dialog-AlfDialog--dialogs-visible");
+            }
          }));
       },
 

@@ -87,6 +87,17 @@ define(["dojo/_base/declare",
       hideFacets: true,
 
       /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/SelectedItemStateMixin#itemKeyProperty}
+       * to set a property more applicable to search APIs.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      itemKeyProperty: "nodeRef",
+
+      /**
        * The current term to search on
        *
        * @instance
@@ -202,7 +213,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDisplayMessages: function alfresco_search_AlfSearchList__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message("searchlist.no.view.message");
          this.noDataMessage = this.message("searchlist.no.data.message");
          this.fetchingDataMessage = this.message("searchlist.loading.data.message");
          this.renderingViewMessage = this.message("searchlist.rendering.data.message");
@@ -605,8 +615,8 @@ define(["dojo/_base/declare",
                   // Unfortunately we made the error of using "scope" on the URL hash and
                   // "selectedScope" as the widget attribute. This means that we have to special
                   // case useHash being set to true to use the appropriate value for the mode being used...
-                  siteId = (this.scope === "repo" || this.scope === "all_sites") ? "" : this.scope;
-                  scope = this.scope;
+                  siteId = (this.scope === "repo" || this.scope === "all_sites") ? "" : scope;
+                  scope = this.scope || scope.toLowerCase();
                }
                
                this.currentRequestId = this.generateUuid();
@@ -628,7 +638,7 @@ define(["dojo/_base/declare",
 
                if (this.query)
                {
-                  this.alfDeleteFrameworkAttributes(this.query);
+                  this.alfCleanFrameworkAttributes(this.query, true);
 
                   if(typeof this.query === "string")
                   {
@@ -694,7 +704,7 @@ define(["dojo/_base/declare",
 
          // TODO: This should probably be in the SearchService... but will leave here for now...
          var facets = lang.getObject("response.facets", false, payload);
-         var filters = lang.getObject("requestConfig.query.filters", false, payload);
+         var filters = lang.getObject("requestConfig.query.encodedFilters", false, payload);
          if (facets !== null && facets !== undefined)
          {
             for (var key in facets)

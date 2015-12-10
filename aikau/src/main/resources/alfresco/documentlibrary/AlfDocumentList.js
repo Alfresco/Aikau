@@ -20,18 +20,19 @@
 /**
  *
  * @module alfresco/documentlibrary/AlfDocumentList
- * @extends module:alfresco/lists/AlfSortablePaginatedList
+ * @extends module:alfresco/lists/AlfFilteredList
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/AlfSortablePaginatedList",
+        "alfresco/lists/AlfFilteredList",
         "alfresco/core/JsNode",
         "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/util/hashUtils",
-        "dojo/io-query"],
-        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery) {
+        "dojo/io-query",
+        "dojo/dom-class"],
+        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery, domClass) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -43,15 +44,6 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/AlfDocumentList.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/AlfDocumentList.properties"}],
-
-      /**
-       * An array of the CSS files to use with this widget.
-       *
-       * @instance cssRequirements {Array}
-       * @type {object[]}
-       * @default [{cssFile:"./css/AlfDocumentList.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/AlfDocumentList.css"}],
 
       /**
        * Indicates whether or not folders should be shown in the document library.
@@ -101,6 +93,17 @@ define(["dojo/_base/declare",
       parentNavTopic: "ALF_DOCLIST_PARENT_NAV",
 
       /**
+       * Overrides the [default configuration]{@link module:alfresco/lists/AlfList#suppressDndUploading}
+       * to ensure that document lists support drag-and-drop uploading (unless otherwise configured).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      suppressDndUploading: false,
+    
+      /**
        * Overrides the [inherited default]{@link module:alfresco/lists/AlfHashList#updateInstanceValues}
        * to ensure that instance values should be updated from the hash. This only appliees when
        * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} is configured to be true.
@@ -132,6 +135,18 @@ define(["dojo/_base/declare",
                path: "/"
             };
          }
+      },
+
+      /**
+       * Run after widget created
+       *
+       * @instance
+       * @override
+       * @since 1.0.48
+       */
+      postCreate: function alfrescdo_documentlibrary_AlfDocumentList__postCreate() {
+         this.inherited(arguments);
+         domClass.add(this.domNode, "alfresco-documentlibrary-AlfDocumentList");
       },
 
       /**
@@ -557,6 +572,17 @@ define(["dojo/_base/declare",
                this.loadData();
             }
          }
-      }
+      },
+
+      /**
+       * Overrides the [default filters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} as 
+       * there should be no filters for document lists unless explicitly configured.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.42
+       */
+      widgetsForFilters: null
    });
 });

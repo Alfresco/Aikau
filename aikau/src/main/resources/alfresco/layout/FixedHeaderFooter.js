@@ -94,6 +94,7 @@
 define(["alfresco/core/ProcessWidgets",
         "alfresco/core/ResizeMixin",
         "alfresco/layout/HeightMixin",
+        "alfresco/layout/DynamicVisibilityResizingMixin",
         "dojo/_base/array",
         "dojo/_base/declare",
         "dojo/_base/lang",
@@ -103,9 +104,10 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/dom-style",
         "dojo/topic",
         "dojo/text!./templates/FixedHeaderFooter.html"],
-        function(ProcessWidgets, ResizeMixin, HeightMixin, array, declare, lang, aspect, domClass, domConstruct, domStyle, topic, template) {
+        function(ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin, array, declare, lang, aspect, 
+                 domClass, domConstruct, domStyle, topic, template) {
 
-   return declare([ProcessWidgets, ResizeMixin, HeightMixin], {
+   return declare([ProcessWidgets, ResizeMixin, HeightMixin, DynamicVisibilityResizingMixin], {
 
       /**
        * The base class for the widget
@@ -128,6 +130,20 @@ define(["alfresco/core/ProcessWidgets",
       }],
 
       /**
+       * If this widget is placed into a widget that has padding then this allowance can be configured which
+       * will be substituted from the calculated height to take padding into account so that an outer scroll
+       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
+       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
+       * is set to "auto" (which is also the default).
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
+       */
+      autoHeightPaddingAllowance: 0,
+
+      /**
        * The height of the widget (in CSS units). The default value is "auto" which means that the
        * height of the widget will automatically be set to take up the available space from its current
        * position to the bottom of the window or document (whichever is smallest) so that the entire
@@ -141,20 +157,6 @@ define(["alfresco/core/ProcessWidgets",
        * @deprecated Since 1.0.36 use [heightMode]{@link module:alfresco/layout/HeightMixin#heightMode} instead
        */
       height: "AUTO",
-
-      /**
-       * If this widget is placed into a widget that has padding then this allowance can be configured which
-       * will be substituted from the calculated height to take padding into account so that an outer scroll
-       * bar is not required on the page. This defaults to 0 and has only been provided for potential 
-       * convenience. This value will only be used on when [height]{@link module:alfresco/layout/FixedHeaderFooter#height}
-       * is set to "auto" (which is also the default).
-       *
-       * @instance
-       * @type {number}
-       * @default
-       * @deprecated Since 1.0.36 use [heightAdjustment]{@link module:alfresco/layout/HeightMixin#heightAdjustment} instead
-       */
-      autoHeightPaddingAllowance: 0,
 
       /**
        * If this is configured to be true the the height of the widget will be reset as the browser window is resized.
@@ -181,6 +183,19 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       postCreate: function alfresco_layout_FixedHeaderFooter__postCreate() {
+         // Get the details of the header and footer widgets that needs to iterate over looking
+         // for visibility configuration topics to subscribe to...
+         var widgets = [];
+         if (this.widgetsForHeader && typeof this.widgetsForHeader.concat === "function")
+         {
+            widgets = this.widgetsForHeader.concat(widgets);
+         }
+         if (this.widgetsForFooter && typeof this.widgetsForFooter.concat === "function")
+         {
+            widgets = this.widgetsForFooter.concat(widgets);
+         }
+         this.visibilityRuleTopics = this.getVisibilityRuleTopics(widgets);
+
          // We need to potentially resize sometimes ... use these triggers
          this.alfSetupResizeSubscriptions(this.onResize, this);
 
@@ -222,6 +237,43 @@ define(["alfresco/core/ProcessWidgets",
          // Do the resize
          this.onResize();
          this.alfPublishResizeEvent(this.domNode);
+
+         // Setup the header resize listener
+         this.own(this.addResizeListener(this.header));
+      },
+
+      /**
+       * <p>Setup a listener that will call [alfPublishResizeEvent]{@link module:alfresco/core/ResizeMixin#alfPublishResizeEvent}
+       * whenever a resize is detected in the header.</p>
+       *
+       * <p><strong>NOTE:</strong> This method is no longer called by the postCreate method, and will be removed in a future version</p>
+       *
+       * @instance
+       * @since 1.0.41
+       * @deprecated Since 1.0.42 - use [ResizeMixin.addResizeListener]{@link module:alfresco/core/ResizeMixin#addResizeListener} instead.
+       */
+      addHeaderResizeListener: function alfresco_layout_FixedHeaderFooter__addHeaderResizeListener() {
+         this.addResizeListener(this.header, this.domNode);
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed}
+       * to set up subscriptions for the [visibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#visibilityRuleTopics}
+       * that are returned by calling [getVisibilityRuleTopics]{@link module:alfresco/layout/DynamicVisibilityResizingMixin#getVisibilityRuleTopics}.
+       * The subscriptions need to be created after the widgets have been created in order that their visibility 
+       * is adjusted before the [onResize]{@link module:alfresco/layout/FixedHeaderFooter#onResize} function that is bound 
+       * to is called.
+       *
+       * @instance
+       * @param {object[]} widgets The widgets that have been created
+       * @since 1.0.38
+       */
+      allWidgetsProcessed: function alfresco_layout_FixedHeaderFooter__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+         this._allWidgetsProcessedCount--;
+         if (this._allWidgetsProcessedCount === 0)
+         {
+            this.subscribeToVisibilityRuleTopics(this.onResize);
+         }
       },
 
       /**
@@ -231,6 +283,7 @@ define(["alfresco/core/ProcessWidgets",
        * @param {object[]} widgetInfos The widget information as objects with 'widgets' and 'node' properties
        */
       _doProcessWidgets: function alfresco_layout_FixedHeaderFooter___doProcessWidgets(widgetInfos) {
+         this._allWidgetsProcessedCount = widgetInfos.length;
          array.forEach(widgetInfos, function(widgetInfo) {
             var widgets = widgetInfo.widgets,
                node = widgetInfo.node;

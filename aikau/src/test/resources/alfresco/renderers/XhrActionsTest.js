@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -21,51 +21,77 @@
  * @author David Webster
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"],
-       function (registerSuite, expect, assert, require, TestCommon) {
+       function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "XHR Actions Renderer Tests",
+      return {
+         name: "XHR Actions Renderer Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/XhrActions", "XHR Actions Renderer Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/XhrActions", "XHR Actions Renderer Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-     "Check Actions menu was rendered": function () {
-         // Test spec:
-         // 1: Check dropdown element exists
-         return browser.findByCssSelector(".alfresco-menus-AlfMenuBar span:first-child")
-            .getVisibleText()
-            .then(function(resultText) {
-               assert(resultText === "Actions", "Actions should be rendered as a menu: " + resultText);
-            });
-      },
+        "Check Actions menu was rendered": function () {
+            // Test spec:
+            // 1: Check dropdown element exists
+            return browser.findById("XHR_ACTIONS_ITEM_0_MENU_text");
+         },
 
-      "Check that document request event was triggered": function() {
-         // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
-         return browser.findByCssSelector(".alfresco-menus-AlfMenuBar span:first-child")
-            .click()
+         "Check that document request event was triggered": function() {
+            // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
+            return browser.findById("XHR_ACTIONS_ITEM_0_MENU_text")
+               .click()
             .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Retrieve single doc request not triggered");
-            });
-      },
+            .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", "Retrieve single doc request not triggered");
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Check default behaviour to render 'legacy' document actions": function() {
+            return browser.findById("XHR_ACTIONS_ITEM_0_document-download")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-view-content")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-edit-properties")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-upload-new-version")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-edit-offline")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-copy-to")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-move-to")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-delete")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-assign-workflow")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-assign-workflow")
+               .end()
+               .findById("XHR_ACTIONS_ITEM_0_document-manage-granular-permissions");
+         },
+
+         "Check merged and filtered actions": function() {
+            return browser.findById("MERGED_XHR_ACTIONS_ITEM_0_MENU_text")
+               .click()
+            .end()
+            .findById("MERGED_XHR_ACTIONS_ITEM_0_document-delete")
+            .end()
+            .findById("MERGED_XHR_ACTIONS_ITEM_0_CUSTOM3")
+            .end()
+            .findById("MERGED_XHR_ACTIONS_ITEM_0_MANAGE_ASPECTS");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

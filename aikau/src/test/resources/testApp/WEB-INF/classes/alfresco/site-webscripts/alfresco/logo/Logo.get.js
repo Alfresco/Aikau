@@ -23,7 +23,23 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "LOGO_WITH_TOPIC",
+         name: "alfresco/logo/Logo",
+         config: {
+            logoClasses: "surf-logo-small",
+            publishTopic: "LOGO_TOPIC_PUBLISHED"
+         }
+      },
+      {
+         id: "LOGO_WITH_URL",
+         name: "alfresco/logo/Logo",
+         config: {
+            logoClasses: "surf-logo-large",
+            targetUrl: "tp/ws/Index"
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

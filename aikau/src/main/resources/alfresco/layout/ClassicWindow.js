@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,8 +18,14 @@
  */
 
 /**
- * This is a simple layout structure that allows for a title and description to be specified as properties and for the
- * configured widgets to be placed underneath. 
+ * <p>This is a simple layout structure that creates a window panel with a title and the configured widgets 
+ * placed inside.</p>
+ * <p>The following additionalCssClasses are built in and can be included if required:</p>
+ * <ul>
+ * <li><strong>shadow</strong>: A standard shadow is applied around the ClassicWindow</li>
+ * <li><strong>bottomBorderRadius</strong>: The bottom border of the ClassicWindow is given radius corners</li>
+ * <li><strong>borderLess</strong>: The border on the ClassicWindow is removed</li>
+ * </ul>
  * 
  * @module alfresco/layout/ClassicWindow
  * @extends external:dijit/_WidgetBase
@@ -34,8 +40,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/ClassicWindow.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass) {
+        "dojo/dom-class",
+        "dojo/dom-construct"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, domClass, domConstruct) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -65,7 +72,17 @@ define(["dojo/_base/declare",
       title: "",
 
       /**
-       * Ensures that the title and description are converted from key to localised message.
+       * Hide the title?
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      hideTitle: false,
+
+      /**
+       * Ensures that the title is converted from key to localised message.
        * 
        * @instance
        */
@@ -82,10 +99,13 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_ClassicWindow__postCreate() {
-         domClass.add(this.domNode, (this.additionalCssClasses != null ? this.additionalCssClasses : ""));
-         if (this.widgets != null)
+         if (this.widgets)
          {
             this.processWidgets(this.widgets, this.contentNode);
+         }
+         if (this.hideTitle)
+         {
+            domConstruct.destroy(this.titleBarNode);
          }
       }
    });

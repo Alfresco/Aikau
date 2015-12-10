@@ -20,18 +20,17 @@
 /**
  * This test generates some variations on AlfSearchResult to test the various if statements in the rendering widgets involved
  *
- * @author Richard Smith
+ * @author Dave Draper
  */
 define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon"
-   ],
+        "intern/chai!assert",
+        "alfresco/TestCommon"],
    function(registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
+      return {
          name: "AlfSearchResult Tests",
 
          setup: function() {
@@ -54,13 +53,13 @@ registerSuite(function(){
             var activeElementId;
             return browser.findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
                .click()
-               .end()
+            .end()
 
             .getActiveElement()
                .then(function(element) {
                   activeElementId = element.elementId;
                })
-               .end()
+            .end()
 
             .findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
 
@@ -102,9 +101,98 @@ registerSuite(function(){
                });
          },
 
+         "Site link uses correct landing page URL": function() {
+            return browser.findByCssSelector("#SEARCH_RESULTS_ITEMS .alfresco-search-AlfSearchResult:last-child .siteCell .alfresco-renderers-PropertyLink .inner")
+               .clearLog()
+               .click()
+               .end()
+
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE", true)
+               .then(function(payload) {
+                  assert.propertyVal(payload, "url", "site/eventResult/landing");
+               });
+         },
+
+         "Check merged actions": function() {
+            return browser.findById("SR_ACTIONS_MENU_text")
+               .moveMouseTo(1, 1)
+               .click()
+               .end()
+
+            .findById("SR_ACTIONS_CUSTOM3")
+               .end()
+
+            .findById("SR_ACTIONS_MANAGE_ASPECTS");
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
       };
-      });
    });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "AlfSearchResult Tests (navigation overrides)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AlfSearchResult?override=navigation", "AlfSearchResult Tests (navigation overrides)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Name goes to new target": function() {
+            return browser.findByCssSelector("#SR_DISPLAY_NAME .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Site goes to new target": function() {
+            return browser.findByCssSelector("#SR_SITE .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Path goes to new target": function() {
+            return browser.findByCssSelector("#SR_PATH .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Date goes to new target": function() {
+            return browser.findByCssSelector("#SR_DATE .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+});

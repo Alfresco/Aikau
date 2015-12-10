@@ -316,6 +316,23 @@ registerSuite(function(){
                });
          },
 
+         "Rendered value is not double-encoded": function() {
+            return browser.findById("LIST_UMLAUTS_ITEMS")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "test äöü test");
+               });
+         },
+
+         "Cannot inject XSS code": function() {
+            return browser.execute(function() {
+                  return !!window.hackedProperty;
+               })
+               .then(function(isHacked) {
+                  assert.isFalse(isHacked);
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

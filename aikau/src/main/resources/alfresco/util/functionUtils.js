@@ -24,8 +24,27 @@
  * @module alfresco/util/functionUtils
  * @author Martin Doyle
  */
-define(["dojo/_base/lang"],
-   function(lang) {
+define([
+      "dojo/_base/array",
+      "dojo/_base/lang"
+   ],
+   function(array, lang) {
+
+      // Define the repeating periods variables.
+      var REPEATING_PERIODS = {
+         "SHORT": {
+            delay: 100,
+            funcs: {}
+         },
+         "MEDIUM": {
+            delay: 1000,
+            funcs: {}
+         },
+         "LONG": {
+            delay: 10000,
+            funcs: {}
+         }
+      };
 
       // The private container for the functionality and properties of the util
       var util = {
@@ -36,16 +55,65 @@ define(["dojo/_base/lang"],
          // See API below
          defaultThrottleMs: 250,
 
-         // A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the limiting function
+         // A holder for the debounce-functionality pointers/variables
+         // 
+         // EXAMPLE:
+         // debounceVars: {
+         //   lastExecutions: {
+         //     foo: [{
+         //       filter: "", <-- DEFAULT
+         //       value: [Timeout pointer]
+         //     }, {
+         //       filter: [Object],
+         //       value: [Timeout pointer]
+         //     }]
+         //   },
+         //   timeouts: {
+         //     foo: [{
+         //       filter: "", <-- DEFAULT
+         //       value: [Function]
+         //     }, {
+         //       filter: [Object],
+         //       value: [Function]
+         //     }]
+         //   }
+         // }
          debounceVars: {
             lastExecutions: {},
             timeouts: {}
          },
 
-         // A holder for the debounce-functionality pointers/variables, where the keys are the names provided to the limiting function
+         // A holder for the debounce-functionality pointers/variables (format as debounceVars)
          throttleVars: {
             lastExecutions: {},
             timeouts: {}
+         },
+
+         // See API below
+         addRepeatingFunction: function alfresco_util_functionUtils__addRepeatingFunction(newFunc, periodType) {
+
+            // Put the new function into the appropriate collection
+            var period = REPEATING_PERIODS[periodType],
+               currentFuncs = period.funcs,
+               newFuncKey = Date.now();
+            if (currentFuncs) {
+               while (currentFuncs.hasOwnProperty(newFuncKey)) {
+                  newFuncKey = Date.now();
+               }
+               currentFuncs[newFuncKey] = newFunc;
+            }
+
+            // Make sure the period's functions are running
+            if (!period.running) {
+               this._startRepeatingTimeout(period);
+            }
+
+            // Pass back the removal object
+            return {
+               remove: function() {
+                  delete currentFuncs[newFuncKey];
+               }
+            };
          },
 
          // See API below
@@ -58,19 +126,57 @@ define(["dojo/_base/lang"],
             return this._limit("throttle", args);
          },
 
+         // Helper to get the value for a name and filter
+         _getFilteredValue: function alfresco_util_functionUtils___getFilteredValue(collection, name, filter, defaultValue) {
+            var items = collection[name] || [],
+               valueFound = false,
+               value;
+            array.some(items, function(item) {
+               if (item.filter === filter) {
+                  value = item.value;
+                  valueFound = true;
+               }
+               return valueFound;
+            });
+
+            return valueFound ? value : defaultValue;
+         },
+
+         // Helper to set the value for a name and filter
+         _setFilteredValue: function alfresco_util_functionUtils___setFilteredValue(collection, name, filter, value) {
+            var items = collection[name] || [],
+               updatedValue = array.some(items, function(item) {
+                  if (item.filter === filter) {
+                     item.value = value;
+                     return true;
+                  }
+                  return false;
+               });
+            if (!updatedValue) {
+               items.push({
+                  filter: filter,
+                  value: value
+               });
+               collection[name] = items;
+            }
+         },
+
          // Implements the functionality of the debounce and throttle methods
          _limit: function alfresco_util_functionUtils___limit(type, args) {
 
             // Setup variables
             var pointers = this[type + "Vars"],
-               timeouts = pointers.timeouts,
                lastExecutions = pointers.lastExecutions,
+               timeouts = pointers.timeouts,
                name = args.name,
-               currentTimeout = timeouts[name],
-               lastExecutionTime = lastExecutions[name] || 0,
+               filter = args.filter || "",
                execFirst = (args.execFirst === true),
                ignoreFirst = (args.ignoreFirst === true),
-               timeoutMs = args.timeoutMs || (type === "throttle" ? this.defaultThrottleMs : this.defaultDebounceMs),
+               timeoutMs = args.timeoutMs || (type === "throttle" ? this.defaultThrottleMs : this.defaultDebounceMs);
+
+            // Retrieve the specific info using name and filter
+            var currentTimeout = this._getFilteredValue(timeouts, name, filter),
+               lastExecutionTime = this._getFilteredValue(lastExecutions, name, filter, 0),
                timeSinceLastExec = Date.now() - lastExecutionTime,
                lastExecWithinTimePeriod = timeSinceLastExec < timeoutMs;
 
@@ -83,41 +189,69 @@ define(["dojo/_base/lang"],
                // Debounce logic
                if (execFirst) { // Should we run at start of debounce
                   !lastExecWithinTimePeriod && args.func(); // If first run then exec now
-                  lastExecutions[name] = Date.now(); // Whether first run or within run-period, update last-exec time
+                  this._setFilteredValue(lastExecutions, name, filter, Date.now()); // Whether first run or within run-period, update last-exec time
                } else {
-                  timeouts[name] = setTimeout(function() { // Not in run-at-start mode, so setTimeout
-                     args.func(); // Execute the function
-                     lastExecutions[name] = 0; // Reset last-exec time
-                  }, timeoutMs); // Defer by defined timeout period
+                  // Not in run-at-start mode, so setTimeout
+                  this._setFilteredValue(timeouts, name, filter, setTimeout(lang.hitch(this, function() {
+                        args.func(); // Execute the function
+                        this._setFilteredValue(lastExecutions, name, filter, 0); // Reset last-exec time
+                     }), timeoutMs) // Defer by defined timeout period
+                  );
                }
 
             } else {
 
                // Throttle logic
                if (lastExecWithinTimePeriod) { // Within a throttle "period"?
-                  timeouts[name] = setTimeout(function() { // Defer execution
-                     args.func(); // Execute the function
-                     lastExecutions[name] = Date.now(); // Update the last-run time
-                  }, (timeoutMs - timeSinceLastExec)); // Defer until this period ends
+                  // Defer execution
+                  this._setFilteredValue(timeouts, name, filter, setTimeout(lang.hitch(this, function() {
+                        args.func(); // Execute the function
+                        this._setFilteredValue(lastExecutions, name, filter, Date.now()); // Update the last-run time
+                     }), (timeoutMs - timeSinceLastExec)) // Defer until this period ends
+                  );
                } else { // Not been run recently
                   if (ignoreFirst) { // Should we ignore the first execution call?
-                     timeouts[name] = setTimeout(function() { // Ignore, so defer execution
-                        args.func(); // Execute the function
-                        lastExecutions[name] = Date.now(); // Update the last-run time
-                     }, timeoutMs); // Defer until period ends
+                     // Ignore, so defer execution
+                     this._setFilteredValue(timeouts, name, filter, setTimeout(lang.hitch(this, function() {
+                           args.func(); // Execute the function
+                           this._setFilteredValue(lastExecutions, name, filter, Date.now()); // Update the last-run time
+                        }), timeoutMs) // Defer until period ends
+                     );
                   } else { // Do not ignore first calling
                      args.func(); // Execute the function
                   }
-                  lastExecutions[name] = Date.now(); // Update the last execution (request) time
+                  this._setFilteredValue(lastExecutions, name, filter, Date.now()); // Update the last execution (request) time
                }
             }
 
             // Pass back a remove-object for cancelling the queued function
+            currentTimeout = this._getFilteredValue(timeouts, name, filter);
             return {
                remove: function() {
                   clearTimeout(currentTimeout);
                }
-            }
+            };
+         },
+
+         // Start calling a repeating function
+         _startRepeatingTimeout: function alfresco_util_functionUtils___startRepeatingTimeout(period) {
+            setTimeout(function alfresco_util_functionUtils___timeoutFunc() {
+               var funcKeys = Object.keys(period.funcs);
+               if (funcKeys.length) {
+                  array.forEach(funcKeys, function(funcKey) {
+                     /*jshint devel:true*/
+                     try {
+                        period.funcs[funcKey]();
+                     } catch (e) {
+                        console.error("Removing erroring periodic function: " + period.funcs[funcKey]);
+                        delete period.funcs[funcKey];
+                     }
+                  });
+                  setTimeout(alfresco_util_functionUtils___timeoutFunc, period.delay);
+               } else {
+                  delete period.running;
+               }
+            }, period.delay);
          }
       };
 
@@ -147,6 +281,17 @@ define(["dojo/_base/lang"],
          defaultThrottleMs: util.defaultThrottleMs,
 
          /**
+          * Register a new repeating function.
+          *
+          * @instance
+          * @function
+          * @param {function} func The function to be added
+          * @param {string} period One of "SHORT" (100ms), "MEDIUM" (1000ms) or "LONG" (10000ms), to determine how often the function is called
+          * @returns {object} An object with a remove method on it, which will de-register this function
+          */
+         addRepeatingFunction: lang.hitch(util, util.addRepeatingFunction),
+
+         /**
           * <p>Debounce the supplied function.</p>
           * 
           * <p>This means that repeated calls to execute a function will be batched up,
@@ -166,6 +311,9 @@ define(["dojo/_base/lang"],
           *                                      function received within that period extending it by the debounce timeout.
           * @param {int} [args.timeoutMs] The length of the debounce, if different from the
           *                               [default]{@link module:alfresco/util/functionUtils#defaultDebounceMs}
+          * @param {*} [args.filter] An optional parameter which is used in conjunction with the name to give further
+          *                          context to the debounce: i.e. will debounce only when name AND filter match. The
+          *                          filter can be any value, and will use a strict-equality check to make the comparison.
           * @return {Object} An object containing a remove() function which will clear any outstanding timeout
           */
          debounce: lang.hitch(util, util.debounce),
@@ -193,6 +341,9 @@ define(["dojo/_base/lang"],
           *                                        be executed.
           * @param {int} [args.timeoutMs] The length of the throttle, if different from the
           *                               [default]{@link module:alfresco/util/functionUtils#defaultThrottleMs}
+          * @param {*} [args.filter] An optional parameter which is used in conjunction with the name to give further
+          *                          context to the throttle: i.e. will throttle only when name AND filter match. The
+          *                          filter can be any value, and will use a strict-equality check to make the comparison.
           * @return {Object} An object containing a remove() function which will clear any outstanding timeout
           */
          throttle: lang.hitch(util, util.throttle)

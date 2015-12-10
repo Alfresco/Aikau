@@ -18,15 +18,42 @@
  */
 
 /**
- * This layout widget provides a resizeable sidebar that can be snapped open and closed into which widgets
+ * <p>This layout widget provides a resizeable sidebar that can be snapped open and closed into which widgets
  * can be placed. Each widget in the <b>widgets</b> array can given an optional <b>align</b> attribute that if set to
  * <b>"sidebar"</b> will result in that widget being placed into the sidebar (widgets without an <b>align</b> attribute
- * or with the <b>align</b> attribute set to any other value will be placed into the main panel).
+ * or with the <b>align</b> attribute set to any other value will be placed into the main panel).</p>
+ * <p>If you don't want the sidebar to be resizeable then you can set the 
+ * [isResizable]{@link module:alfresco/layout/AlfSideBarContainer#isResizable} to be false. This will result in a simple
+ * border separating the sidebar and main areas.</p>
  *
  * @example <caption>Example configuration placing one widget in the sidebar and the other in the main panel</caption>
  * {
  *    name: "alfresco/layout/AlfSideBarContainer",
  *    config: {
+ *       widgets: [
+ *          {
+ *             name: "alfresco/html/Label",
+ *             align: "sidebar",
+ *             config: {
+ *                label: "This is in the sidebar"
+ *             }
+ *          },
+ *          {
+ *             name: "alfresco/html/Label",
+ *             config: {
+ *                label: "This is in the main panel"
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
+ *
+ * @example <caption>Example configuration where the sidebar cannot be resized (with custom width)</caption>
+ * {
+ *    name: "alfresco/layout/AlfSideBarContainer",
+ *    config: {
+ *       isResizable: false,
+ *       initialSidebarWidth: 250,
  *       widgets: [
  *          {
  *             name: "alfresco/html/Label",
@@ -128,6 +155,16 @@ define(["dojo/_base/declare",
        * @default
        */
       initialSidebarWidth: 350,
+
+      /**
+       * Indicates whether or not the sidebar should be resizable or not.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      isResizable: true,
       
       /**
        * The last registered width (in pixels) of the sidebar (needed for window resize events)
@@ -227,17 +264,24 @@ define(["dojo/_base/declare",
             max = null;
          }
          
-         $(this.sidebarNode).resizable({
-            handles: {
-               "e": ".resize-handle"
-            },
-            minWidth: this.minSidebarWidth,
-            maxWidth: max,
-            resize: lang.hitch(this, this.resizeHandler),
-            stop: lang.hitch(this, this.endResizing)
-         });
-         
-         on(this.resizeHandlerButtonNode, "click", lang.hitch(this, this.onResizeHandlerClick));
+         if (this.isResizable)
+         {
+            $(this.sidebarNode).resizable({
+               handles: {
+                  "e": ".resize-handle"
+               },
+               minWidth: this.minSidebarWidth,
+               maxWidth: max,
+               resize: lang.hitch(this, this.resizeHandler),
+               stop: lang.hitch(this, this.endResizing)
+            });
+
+            on(this.resizeHandlerButtonNode, "click", lang.hitch(this, this.onResizeHandlerClick));
+         }
+         else
+         {
+            domClass.add(this.domNode, "alfresco-layout-AlfSideBarContainer--resize-disabled");
+         }
          
          // We need to subscribe after the resize widget has been created...
          this.alfSubscribe("ALF_DOCLIST_SHOW_SIDEBAR", lang.hitch(this, this.showEventListener));
@@ -252,6 +296,8 @@ define(["dojo/_base/declare",
          
          // Keep track of the overall browser window changing in size...
          this.alfSetupResizeSubscriptions(this.resizeHandler, this);
+         this.addResizeListener(this.mainWidgets, this.domNode.parentNode);         
+         this.addResizeListener(this.sidebarWidgets, this.domNode.parentNode);         
          
          // Perform the initial rendering...
          this.lastSidebarWidth = this.initialSidebarWidth;
@@ -269,11 +315,11 @@ define(["dojo/_base/declare",
          var domNode = null;
          if (widget.align === "sidebar")
          {
-            domNode = this.createWidgetDomNode(widget, this.sidebarNode);
+            domNode = this.createWidgetDomNode(widget, this.sidebarWidgets);
          }
          else
          {
-            domNode = this.createWidgetDomNode(widget, this.mainNode);
+            domNode = this.createWidgetDomNode(widget, this.mainWidgets);
          }
          this.createWidget(widget, domNode);
       },
@@ -285,39 +331,36 @@ define(["dojo/_base/declare",
        * @param {object} ui The data about the resize
        */
       resizeHandler: function alfresco_layout_AlfSideBarContainer__resizeHandler(evt, ui) {
+
+         // Adjust the widths
          var size = parseInt(domStyle.get(this.domNode, "width"), 10);
-         var w = this.lastSidebarWidth; // Initialise to last known width of the sidebar (needed for window resize events)
-         var tmp = lang.getObject("size.width", false, ui);
-         if (tmp || tmp === 0)
+         var newWidth = this.lastSidebarWidth; // Initialise to last known width of the sidebar (needed for window resize events)
+         var passedInWidth = lang.getObject("size.width", false, ui);
+         if (passedInWidth || passedInWidth === 0)
          {
-            w = tmp;
-            this.lastSidebarWidth = w;
+            newWidth = passedInWidth;
+            this.lastSidebarWidth = newWidth;
          }
-         
-         // Get the position of the DOM node and the available view port height...
-         var winBox = win.getBox();
+         domStyle.set(this.mainNode, "width", (size - newWidth - 16) + "px");
+         if (!this.isResizable)
+         {
+            domStyle.set(this.sidebarNode, "width", newWidth + "px");
+         }
 
-         // We're using JQuery here to get the offset as it has proved more reliable than either the Dojo margin box
-         // or native browser offsetTop options...
-         var offset = $(this.domNode).offset().top;
-         var availableHeight = winBox.h - offset - this.footerHeight;
-         
-         // Get the height of the content...
-         // NOTE: When we get the sizebar height we want to ignore the first child element as this will be the resizer
-         //       bar and will always be the previously set height, if we include this then we skew the results and
-         //       the container height can never shrink (see AKU-506)
-         var sidebarContentHeight = this.calculateHeight(this.sidebarNode, 1, this.sidebarNode.children.length - 1);
-         var mainContentHeight = this.calculateHeight(this.mainNode, 0, this.mainNode.children.length);
-         
-         // Work out the max height for the side bar...
-         var c = (sidebarContentHeight > mainContentHeight) ? sidebarContentHeight : mainContentHeight;
-         var h = (c > availableHeight) ? c : availableHeight;
-
-         domStyle.set(this.sidebarNode, "height", h + "px");
-         domStyle.set(this.mainNode, "width", (size - w - 16) + "px");
+         // Calculate the min-heights
+         var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0,
+            widgetRect = this.domNode.getBoundingClientRect(),
+            offsetTop = widgetRect.top + scrollTop,
+            minHeight = window.innerHeight - offsetTop - this.footerHeight,
+            newHeight = Math.max(minHeight, this.sidebarWidgets.offsetHeight, this.mainWidgets.offsetHeight),
+            nodes = [this.sidebarNode, this.mainNode];
+         array.forEach(nodes, function(node) {
+            domStyle.set(node, "minHeight", newHeight + "px");
+         });
          
          // Fire a custom event to let contained objects know that the node has been resized.
          this.alfPublishResizeEvent(this.mainNode);
+         this.alfPublishResizeEvent(this.sidebarNode);
       },
       
       /**
@@ -334,19 +377,6 @@ define(["dojo/_base/declare",
             value: this.lastSidebarWidth
          }, true);
          this.hiddenSidebarWidth = this.lastSidebarWidth;
-      },
-      
-      /**
-       * @instance
-       * @param {element} node The element to calculate the height of
-       */
-      calculateHeight: function alfresco_layout_AlfSidebarContainer__calculateHeight(node, start, end) {
-         var h = 0;
-         for (var i=start; i<end; i++)
-         {
-            h = h + parseInt(domStyle.get(node.children[i], "height"), 10);
-         }
-         return h;
       },
       
       /**
@@ -403,7 +433,11 @@ define(["dojo/_base/declare",
             }
             
             // Show the sidebar...
-            $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
+            if (this.isResizable)
+            {
+               $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
+            }
+            
             var width = (this.hiddenSidebarWidth) ? this.hiddenSidebarWidth : this.initialSidebarWidth;
             domStyle.set(this.sidebarNode, "width", width + "px");
 

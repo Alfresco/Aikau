@@ -33,6 +33,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Tree.html",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/core/Core",
+        "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -43,10 +44,25 @@ define(["dojo/_base/declare",
         "alfresco/navigation/TreeStore",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree"], 
-        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, topics, AlfConstants, _AlfDocumentListTopicMixin, 
+        function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, topics, AlfConstants, _AlfDocumentListTopicMixin, 
                  _NavigationServiceTopicMixin, domConstruct, lang, array, TreeStore, ObjectStoreModel, Tree) {
    
-   return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
+   // Extend the standard Dijit tree to support better identification of nodes (primarily for the purpose of unit testing)...
+   var AikauTree = declare([Tree], {
+      _createTreeNode: function alfresco_navigation_Tree_AikauTree___createTreeNode(){
+         var id = lang.getObject("item.id", false, arguments[0]);
+         if (id)
+         {
+            declare.safeMixin(arguments[0], {
+               id: this.id + "_" + id.replace("://", "_").replace("/", "_") // Clean up NodeRef IDs
+            });
+         }
+         return this.inherited(arguments);
+      }
+   });
+
+
+   return declare([_Widget, _Templated, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _NavigationServiceTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -153,6 +169,39 @@ define(["dojo/_base/declare",
       showRoot: true,
       
       /**
+       * This is a topic that can be published to request child data.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.39
+       * @event
+       */
+      childRequestPublishTopic: null,
+
+      /**
+       * This is the payload that will be published to request child data when a
+       * [publishTopic]{@link module:alfresco/navigation/Tree#childRequestPublishTopic} has been configured.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.39
+       */
+      childRequestPublishPayload: null,
+
+      /**
+       * Indicates whether or not requests to get child data will be published globally using the 
+       * [publishTopic]{@link module:alfresco/navigation/Tree#childRequestPublishTopic} that has been configured.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      childRequestPublishGlobal: true,
+
+      /**
        * @instance
        * @return {string} The root of the URL to use when requesting child nodes.
        */
@@ -166,7 +215,7 @@ define(["dojo/_base/declare",
          {
             url = AlfConstants.PROXY_URI + "slingshot/doclib/treenode/node/alfresco/company/home";
          }
-         else
+         else if (!this.childRequestPublishTopic)
          {
             this.alfLog("error", "Cannot create a tree without 'siteId' and 'containerId' or 'rootNode' attributes", this);
          }
@@ -210,10 +259,16 @@ define(["dojo/_base/declare",
          this.showRoot = this.showRoot !== null ? this.showRoot : true;
 
          // Create a new tree store using the the siteId as part of the URL
-         this.treeStore = new TreeStore({
-            target: this.getTargetUrl(),
-            targetQueryObject: this.getTargetQueryObject(),
-            filterPaths: this.filterPaths
+         this.treeStore = this.createWidget({
+            name: "alfresco/navigation/TreeStore",
+            config: {
+               publishTopic: this.childRequestPublishTopic,
+               publishPayload: this.childRequestPublishPayload,
+               publishGlobal: this.childRequestPublishGlobal,
+               target: this.getTargetUrl(),
+               targetQueryObject: this.getTargetQueryObject(),
+               filterPaths: this.filterPaths
+            }
          });
          
          // Create the object store...
@@ -231,7 +286,8 @@ define(["dojo/_base/declare",
          });
          
          // Create the tree and add it to our widget...
-         this.tree = new Tree({
+         this.tree = new AikauTree({
+            id: this.id + "_TREE",
             model: this.treeModel,
             showRoot: this.showRoot,
             onClick: lang.hitch(this, this.onClick),

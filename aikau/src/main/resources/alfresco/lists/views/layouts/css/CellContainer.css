@@ -1,0 +1,10 @@
+.alfresco-lists-views-layouts-CellContainer {
+   
+   padding: @standard-column-spacing;
+   box-sizing: border-box;
+   outline: none;
+
+   &__widgets {
+      overflow: hidden;
+   }
+}

@@ -35,6 +35,7 @@ define(["dojo/_base/declare",
       constructor: function alfresco_testing_mockservices_SearchService__constructor(args) {
          lang.mixin(this, args);
          this.alfSubscribe("ALF_SEARCH_REQUEST", lang.hitch(this, this.onSearchRequest));
+         this.alfSubscribe("ALF_AUTO_SUGGEST_SEARCH", lang.hitch(this, this.onAutoSuggest));
       },
 
       /**

@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Full-screen CommentsList Test</shortname>
+  <description>This shows the alfresco/renderers/CommentsList widget with full-screen flags turned on</description>
+  <description></description>
+  <family>aikau-unit-tests</family>
+  <url>/FullScreenCommentsList</url>
+</webscript>

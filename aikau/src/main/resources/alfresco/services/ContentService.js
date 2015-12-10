@@ -96,9 +96,12 @@ define(["dojo/_base/declare",
          {
             type = payload.type;
          }
-         var url = AlfConstants.PROXY_URI + "api/type/" + type + "/formprocessor";
+         var url = AlfConstants.PROXY_URI + "api/type/" + type + "/formprocessor",
+            data = lang.clone(payload);
+         delete data.currentNode;
+         delete data.type;
          this.serviceXhr({url : url,
-                          data: payload,
+                          data: data,
                           method: "POST",
                           successCallback: this.onContentCreationSuccess,
                           callbackScope: this});
@@ -326,7 +329,10 @@ define(["dojo/_base/declare",
             name: "alfresco/forms/controls/FileSelect",
             config: {
                label: "contentService.uploader.dialog.fileSelect.label",
-               name: "files"
+               name: "files",
+               requirementConfig: {
+                  initialValue: true
+               }
             }
          }
       ],
@@ -343,7 +349,10 @@ define(["dojo/_base/declare",
             name: "alfresco/forms/controls/FileSelect",
             config: {
                label: "contentService.updater.dialog.fileSelect.label",
-               name: "files"
+               name: "files",
+               requirementConfig: {
+                  initialValue: true
+               }
             }
          },
          {

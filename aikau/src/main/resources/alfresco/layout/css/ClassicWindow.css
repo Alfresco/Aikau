@@ -1,28 +1,32 @@
 .alfresco-layout-ClassicWindow {
-   border: 1px solid #CCC;
+   border: @standard-border;
    margin: 10px;
    border-top-left-radius: 6px;
    border-top-right-radius: 6px;
-}
 
-.alfresco-layout-ClassicWindow > div.titlebar {
-   background-color: #EEEEEE;
-   border-bottom: 1px solid #CCC;
-   padding: 5px;
-   border-top-left-radius: 6px;
-   border-top-right-radius: 6px;
-}
+   &__titlebar {
+      background-color: #EEEEEE;
+      border-bottom: @standard-border;
+      padding: 5px;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+   }
 
-.alfresco-layout-ClassicWindow > div.content {
-   margin: 10px 0;
-   padding: 10px;
-}
+   &__content {
+      overflow: auto;
+      padding: 10px;
+   }
 
-.alfresco-layout-ClassicWindow.shadow {
-   box-shadow: @standard-box-shadow;
-}
+   &.shadow {
+      box-shadow: @standard-box-shadow;
+   }
 
-.alfresco-layout-ClassicWindow.bottomBorderRadius {
-   border-bottom-left-radius: 6px;
-   border-bottom-right-radius: 6px;
+   &.bottomBorderRadius {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+   }
+
+   .borderLess {
+      border: none;
+   }
 }

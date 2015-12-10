@@ -114,7 +114,8 @@ define(["alfresco/lists/views/layouts/Row",
             name: "alfresco/renderers/Selector",
             config: {
                publishGlobal: false,
-               publishToParent: true
+               publishToParent: true,
+               itemKey: "node.nodeRef"
             }
          }, {
             _attachPoint: "indicators",
@@ -257,7 +258,10 @@ define(["alfresco/lists/views/layouts/Row",
          }, {
             _attachPoint: "actions",
             id: "DETAILED_VIEW_ACTIONS",
-            name: "alfresco/renderers/Actions"
+            name: "alfresco/renderers/Actions",
+            config: {
+               publishToParent: true
+            }
          }]
       });
    });

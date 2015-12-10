@@ -68,11 +68,26 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create the widgets. An optional rootNode argument can
-       * be passed to provide a destination for the created widgets.
+       * be passed to provide a destination for the created widgets. If a caller argument
+       * is provided then key data from it will be extracted for the creation of the widgets
+       * (such as pubSubScope, dataScope, etc).
        * 
        * @instance
+       * @param {element} rootNode The node to bind the root widgets to
+       * @param {object} [caller] The calling widget or service.
        */
-      buildWidgets: function alfresco_core_WidgetsCreator__buildWidgets(rootNode) {
+      buildWidgets: function alfresco_core_WidgetsCreator__buildWidgets(rootNode, caller) {
+         if (caller)
+         {
+            // If a caller has passed itself then we want to extract all the core data that
+            // would otherwise be extracted in CoreWidgetProcessing...
+            this.pubSubScope = caller.pubSubScope;
+            this.parentPubSubScope = caller.parentPubSubScope;
+            this.dataScope = caller.dataScope;
+            this.currentItem = caller.currentItem;
+            this.currentMetadata = caller.currentMetadata;
+            this.groupMemberships = caller.groupMemberships;
+         }
          this.processWidgets(this.widgets, rootNode);
       },
 

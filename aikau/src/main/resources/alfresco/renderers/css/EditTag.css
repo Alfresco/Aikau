@@ -1,9 +1,11 @@
 .alfresco-renderers-EditTag {
    font-size: 93%;
    margin-right: 0.5em;
-   padding: 2px 8px;
+   padding: 1px 8px 3px 8px;
    background-color: @primary-theme-color;
    color: @general-font-color;
+   display: inline-block;
+   line-height: 22px;
 }
 
 .alfresco-renderers-EditTag.highlight {

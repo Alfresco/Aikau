@@ -67,11 +67,25 @@ define(["dojo/_base/declare",
          var startIndex = (page - 1) * pageSize;
          var stopIndex = startIndex + pageSize;
          stopIndex = stopIndex > totalRecords ? totalRecords : stopIndex;
-         for (var i=startIndex; i<stopIndex; i++)
+         
+         var i;
+         if (payload.sortAscending === "false")
          {
-            items.push({
-               index: i+1
-            });
+            for (i=stopIndex; i>startIndex; i--)
+            {
+               items.push({
+                  index: i
+               });
+            }
+         }
+         else
+         {
+            for (i=startIndex; i<stopIndex; i++)
+            {
+               items.push({
+                  index: i+1
+               });
+            }
          }
          var responsePayload = {
             response: {

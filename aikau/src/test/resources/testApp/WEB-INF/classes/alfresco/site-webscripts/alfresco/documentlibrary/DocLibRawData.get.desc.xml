@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Document Library Example (raw data)</shortname>
+  <description>This provides an example of building the standard Document Library using the doclib.lib.js library file but data is sourced directly from the repository rather than via Share</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocLibRawData</url>
+</webscript>

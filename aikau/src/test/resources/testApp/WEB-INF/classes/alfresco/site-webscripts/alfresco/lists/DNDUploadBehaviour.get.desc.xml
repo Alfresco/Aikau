@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop upload highlighting</shortname>
+  <description>This page is used for testing various configurations for drag-and-drop upload highlighting and thumbnail dragging.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DNDUploadBehaviour</url>
+</webscript>

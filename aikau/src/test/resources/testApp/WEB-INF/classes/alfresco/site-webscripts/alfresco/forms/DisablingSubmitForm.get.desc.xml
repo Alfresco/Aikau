@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Disabling submit button Form Test</shortname>
+  <description>This WebScript exercises the auto-disabling of the submit button in the alfresco/forms/Form control</description>
+  <family>aikau-unit-tests</family>
+  <url>/DisablingSubmitForm</url>
+</webscript>

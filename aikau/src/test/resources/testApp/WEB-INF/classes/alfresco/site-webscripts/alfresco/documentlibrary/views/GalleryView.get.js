@@ -31,6 +31,7 @@ model.jsonModel = {
                   config: {
                      pubSubScope: "HAS_ITEMS_",
                      useHash: false,
+                     itemKeyProperty: "nodeRef",
                      additionalControlsTarget: "TOOLBAR",
                      currentData: {
                         items: [
@@ -60,7 +61,7 @@ model.jsonModel = {
                               type: "wikipage"
                            },
                            {
-                              displayName: "Link",
+                              displayName: "Link with a really, really long title that won't fit properly",
                               nodeRef: "dummy://nodeRef/6",
                               type: "link"
                            },
@@ -118,6 +119,7 @@ model.jsonModel = {
                   name: "alfresco/lists/AlfList",
                   config: {
                      pubSubScope: "NO_ITEMS_",
+                     itemKeyProperty: "nodeRef",
                      useHash: false,
                      additionalControlsTarget: "TOOLBAR_NO_ITEMS",
                      additionalViewControlVisibilityConfig: {

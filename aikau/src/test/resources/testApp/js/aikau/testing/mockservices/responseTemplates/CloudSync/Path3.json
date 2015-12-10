@@ -1,0 +1,77 @@
+{
+   "totalResults": 4,
+   "resultsTrimmed": false,
+   "parent": {
+      "nodeRef": "workspace://SpacesStore/e3073965-2163-48c7-93db-c63accf68e1b",
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      }
+   },
+   "items": [{
+      "nodeRef": "workspace://SpacesStore/07c43c85-63f2-4deb-86d4-27527060ebbd",
+      "name": "Release 31-40",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:titled",
+         "cm:auditable"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/5fad30fa-f59d-41fd-944b-1658e5496f27",
+      "name": "Releases 1-10",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:titled",
+         "cm:auditable"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/9e52313c-e1e8-4fb5-bf30-812ef11400e8",
+      "name": "Releases 11-20",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:titled",
+         "cm:auditable"
+      ]
+   }, {
+      "nodeRef": "workspace://SpacesStore/d719c21a-f4fb-474b-87cd-02c734dc06d3",
+      "name": "Releases 21-30",
+      "description": "",
+      "hasChildren": false,
+      "userAccess": {
+         "create": true,
+         "edit": true,
+         "delete": false
+      },
+      "aspects": [
+         "sys:localized",
+         "sys:referenceable",
+         "cm:titled",
+         "cm:auditable"
+      ]
+   }]
+}

@@ -1,0 +1,41 @@
+[{
+      "url": "\/alfresco\/a\/alfresco.com\/api\/sites\/site1",
+      "sitePreset": "site-dashboard",
+      "shortName": "site1",
+      "title": "Site 1",
+      "description": "",
+      "node": "\/alfresco\/a\/alfresco.com\/api\/node\/workspace\/SpacesStore\/2ad1e745-b955-4a76-a7c2-6cc7c665caf9",
+      "tagScope": "\/alfresco\/a\/alfresco.com\/api\/tagscopes\/workspace\/SpacesStore\/2ad1e745-b955-4a76-a7c2-6cc7c665caf9",
+      "siteManagers": [
+         "bob@alfresco.com"
+      ],
+      "isPublic": true,
+      "visibility": "PUBLIC"
+   }, {
+      "url": "\/alfresco\/a\/alfresco.com\/api\/sites\/anothersite",
+      "sitePreset": "site-dashboard",
+      "shortName": "anothersite",
+      "title": "Another site",
+      "description": "",
+      "node": "\/alfresco\/a\/alfresco.com\/api\/node\/workspace\/SpacesStore\/a082947b-7e68-4ba5-9bb3-bf7b8867ba27",
+      "tagScope": "\/alfresco\/a\/alfresco.com\/api\/tagscopes\/workspace\/SpacesStore\/a082947b-7e68-4ba5-9bb3-bf7b8867ba27",
+      "siteManagers": [
+         "gwen@alfresco.com"
+      ],
+      "isPublic": false,
+      "visibility": "PRIVATE"
+   }, {
+      "url": "\/alfresco\/a\/alfresco.com\/api\/sites\/thirdsite",
+      "sitePreset": "site-dashboard",
+      "shortName": "thirdsite",
+      "title": "A third site",
+      "description": "",
+      "node": "\/alfresco\/a\/alfresco.com\/api\/node\/workspace\/SpacesStore\/1232ee3c-3fa8-488a-8c48-f36b3bc92e8c",
+      "tagScope": "\/alfresco\/a\/alfresco.com\/api\/tagscopes\/workspace\/SpacesStore\/1232ee3c-3fa8-488a-8c48-f36b3bc92e8c",
+      "siteManagers": [
+         "tony@alfresco.com"
+      ],
+      "isPublic": false,
+      "visibility": "MODERATED"
+   }
+]

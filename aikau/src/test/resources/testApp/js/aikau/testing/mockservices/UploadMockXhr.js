@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,9 +23,8 @@
  * @author Richard Smith
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
-        "dojo/text!./responseTemplates/SearchTest/XhrSearchResponse.json"], 
-        function(declare, MockXhr, xhrSearchResponse) {
+        "aikauTesting/MockXhr"], 
+        function(declare, MockXhr) {
    
    return declare([MockXhr], {
 
@@ -54,7 +53,7 @@ define(["dojo/_base/declare",
                });
                request.respond(responseCode, 
                               {"Content-Type":"application/json;charset=UTF-8"},
-                              '{"nodeRef":"bob","fileName":"moomin"}');
+                               "{\"nodeRef\":\"bob\",\"fileName\":\"moomin\"}");
             });
          }
          catch(e)

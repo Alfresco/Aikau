@@ -9,12 +9,14 @@ model.jsonModel = {
             }
          }
       },
+      "alfresco/services/SiteService",
       "alfresco/services/ErrorReporter"
    ],
    widgets:[
       {
          name: "alfresco/layout/VerticalWidgets",
          config: {
+            pubSubScope: "SCOPED_",
             widgets: [
                {
                   name: "alfresco/header/Header",
@@ -29,7 +31,9 @@ model.jsonModel = {
                                     name: "alfresco/header/AlfSitesMenu",
                                     config: {
                                        currentSite: "site1",
-                                       currentUser: "admin"
+                                       currentUser: "admin",
+                                       currentSiteTitle: "Site One",
+                                       siteLandingPage: "wibble"
                                     }
                                  }
                               ]
@@ -54,10 +58,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

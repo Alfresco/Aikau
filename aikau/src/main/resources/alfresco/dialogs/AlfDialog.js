@@ -56,10 +56,11 @@ define(["dojo/_base/declare",
         "dojo/html",
         "dojo/aspect",
         "dojo/on",
+        "dojo/when",
         "jquery",
         "alfresco/layout/SimplePanel"], 
         function(declare, Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, topics, _FocusMixin, lang, sniff, array,
-                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, $) {
+                 domConstruct, domClass, domStyle, domGeom, html, aspect, on, when, $) {
    
    return declare([Dialog, AlfCore, CoreWidgetProcessing, ResizeMixin, _FocusMixin], {
       
@@ -163,6 +164,17 @@ define(["dojo/_base/declare",
        * @default
        */
       handleOverflow: true,
+
+      /**
+       * A placeholder for the resize-listener that's enabled while the dialog is visible. This
+       * value is set automatically.
+       *
+       * @instance
+       * @readonly
+       * @type {object}
+       * @since 1.0.43
+       */
+      resizeListener: null,
 
       /**
        * Widgets to be processed into the main node
@@ -370,6 +382,26 @@ define(["dojo/_base/declare",
                return returnVal;
             }));
          }
+
+         // Listen to resize events
+         this.resizeListener = this.addResizeListener(this.containerNode, this.domNode.parentNode);
+
+         // See AKU-604 - ensure that first item in dialog is focused...
+         // Moved for AKU-711 because _onFocus was not always being called...
+         if (this._dialogPanel)
+         {
+            when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
+               array.some(children, function(child) {
+                  var focused = false;
+                  if (typeof child.focus === "function")
+                  {
+                     child.focus();
+                     focused = true;
+                  }
+                  return focused;
+               });
+            }));
+         }
       },
 
       /**
@@ -393,9 +425,12 @@ define(["dojo/_base/declare",
        */
       onHide: function alfresco_dialogs_AlfDialog__onHide() {
          this.inherited(arguments);
-         domStyle.set(document.documentElement, "overflow", "");
          domClass.remove(this.domNode, "dialogDisplayed");
          domClass.add(this.domNode, "dialogHidden");
+         if (this.resizeListener) {
+            this.resizeListener.remove();
+            this.resizeListener = null;
+         }
       },
 
       /**
@@ -407,13 +442,14 @@ define(["dojo/_base/declare",
        */
       onWindowResize: function alfresco_dialogs_AlfDialog__onWindowResize() {
          var calculatedHeights = this.calculateHeights();
-         if (calculatedHeights.maxBodyHeight)
+         if (calculatedHeights.maxBodyHeight && !this.fullScreenMode)
          {
-            // Don't set a max-height when it's 0...
+            // Don't set a max-height when it's 0 or when in full screen mode...
             domStyle.set(this.bodyNode, {
                "max-height": calculatedHeights.maxBodyHeight + "px"
             });
          }
+         this.resize();
       },
 
       /**
@@ -449,6 +485,27 @@ define(["dojo/_base/declare",
          
          // Publish the widgets ready
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
+
+         // NOTE: This is duplicated from the onShow function to absolutely be sure that focus 
+         //       is given to child widgets. It was found in development that in particular
+         //       when attempting to focus on the TinyMCE editor that the carat was not being
+         //       displayed for Chrome without this additional code. It was noted that Firefox,
+         //       Chrome and IE all behaved slightly differently with regards to this function
+         //       being called. Although inefficient, it is at least reliable.
+         if (this._dialogPanel)
+         {
+            when(this._dialogPanel.getProcessedWidgets(), lang.hitch(this, function(children) {
+               array.some(children, function(child) {
+                  var focused = false;
+                  if (typeof child.focus === "function")
+                  {
+                     child.focus();
+                     focused = true;
+                  }
+                  return focused;
+               });
+            }));
+         }
       },
 
       /**
@@ -468,6 +525,23 @@ define(["dojo/_base/declare",
                w: $(window).width() - dimensionAdjustment,
                h: $(window).height() - dimensionAdjustment
             }]);
+
+            // When in full screen mode it is also necessary to take care of the inner dimensions
+            // of the dialog...
+            var calculatedHeights = this.calculateHeights();
+            var containerHeight = $(this.containerNode).height();
+            var bodyHeight = containerHeight;
+            if (this.widgetsButtons)
+            {
+               // Deduct height for the widgets buttons if present
+               bodyHeight = bodyHeight - 44;
+            }
+            $(this.bodyNode).height(bodyHeight);
+            $(this.bodyNode).css("max-height", bodyHeight); // NOTE: This is necessary to override the default max-height
+            if (this._dialogPanel)
+            {
+               $(this._dialogPanel.domNode).height(bodyHeight - calculatedHeights.paddingAdjustment);
+            }
          }
          else
          {
@@ -485,7 +559,6 @@ define(["dojo/_base/declare",
          // jshint unused:false
          if (this.domNode)
          {
-            this.resize();
             this.onWindowResize();
          }
       },

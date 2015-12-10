@@ -165,9 +165,9 @@ define(["dojo/_base/declare",
        */
       onSearchRequest: function alfresco_services_SearchService__onSearchRequest(payload) {
          // jshint maxlen:300, maxcomplexity:false
-         if (!payload || !payload.term)
+         if (!payload)
          {
-            this.alfLog("warn", "A request was made to perform a search but no 'term' attribute was provided", payload, this);
+            this.alfLog("warn", "A request was made to perform a search but no payload was provided", payload, this);
             this.alfPublish(payload.alfResponseTopic + "_FAILURE", {}, false, false, payload.alfResponseScope);
          }
          else
@@ -229,13 +229,14 @@ define(["dojo/_base/declare",
             }
             else
             {
-               sort = (payload.sortField || this.sort) + "|" + (payload.sortAscending || this.sortAscending);
+               var sortAscending = (payload.sortAscending !== null && typeof payload.sortAscending !== "undefined") ? payload.sortAscending : this.sortAscending;
+               sort = (payload.sortField || this.sort) + "|" + sortAscending;
             }
 
             var data = {
                facetFields: payload.facetFields || "",
-               filters: payload.filters || "",
-               term: payload.term,
+               filters: decodeURIComponent(payload.filters) || "",
+               encodedFilters: payload.filters || "",term: payload.term,
                tag: payload.tag || this.tag,
                startIndex: (payload.startIndex || payload.startIndex === 0) ? payload.startIndex : this.startIndex,
                sort: sort,
@@ -281,6 +282,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url: url,
                              query: options,
                              alfTopic: (payload.alfResponseTopic ? payload.alfResponseTopic : null),
+                             alfResponseScope: payload.alfResponseScope,
                              method: "GET"});
          }
       }

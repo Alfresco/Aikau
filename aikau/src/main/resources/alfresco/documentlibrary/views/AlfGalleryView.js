@@ -18,24 +18,48 @@
  */
 
 /**
- * This defines the widget model for rendering the gallery view. This is a grid based layout of thumbnails
- * that can be scaled using a slider control.
+ * <p>This defines the widget model for rendering the gallery view. By default this is a grid based layout 
+ * of thumbnails that can be scaled using a slider control. There are a number of ways in which this can
+ * be configured to obtain alternative rendering.</p>
+ * <p>By default the thumbnail size will be determined by the
+ * available horizontal space for the configured number of 
+ * [columns]{@link module:alfresco/documentlibrary/AlfGalleryView#columns} however it is possible to 
+ * configure [resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+ * to be false such that the thumbnails will have a constant width defined by the configured
+ * [thumbnailSize]{@link module:alfresco/documentlibrary/AlfGalleryView#thumbnailSize}.</p>
+ * <p>When used in a [list]{@link module:alfresco/lists/AlfList} that is configured for
+ * [infinite scrolling]{@link module:alfresco/lists/AlfList#useInfiniteScroll} it is sensible to
+ * configure [showNextLink]{@link module:alfresco/documentlibrary/AlfGalleryView#showNextLink} to be true
+ * such that a link is provided when the scrolling is not available when the thumbnails are so small
+ * that an entire page of data fits within the browser window.</p>
+ * <p>If something other than [thumbnails]{@link module:alfresco/renderers/GalleryThumbnail} needs to be
+ * displayed then it is possible to 
+ * [enable highlighting]{@link module:alfresco/documentlibrary/AlfGalleryView#enableHighlighting} so that
+ * it is clear what item is currently focused - this will help greatly with keyboard navigation.</p>
+ * <p>If more information needs to be displayed for an individual cell then it is possible to configure
+ * one or more [expandTopics]{@link module:alfresco/documentlibrary/AlfGalleryView#expandTopics} that 
+ * when published will reveal a panel in which additional data can be rendered.</p>
  * 
  * @module alfresco/documentlibrary/views/AlfGalleryView
  * @extends module:alfresco/lists/views/AlfListView
- * @mixes module:alfresco/lists/views/layouts/Grid
+ * @mixes module:alfresco/lists/SelectedItemStateMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",
+        "alfresco/lists/SelectedItemStateMixin",
         "dojo/text!./templates/AlfGalleryView.html",
         "alfresco/lists/views/layouts/Grid",
         "alfresco/documentlibrary/AlfGalleryViewSlider",
+        "alfresco/documentlibrary/ThumbnailSizeSlider",
         "dojo/_base/lang",
+        "dojo/dom-style",
+        "dojo/dom-geometry",
         "alfresco/core/topics"], 
-        function(declare, AlfDocumentListView, template, Grid, AlfGalleryViewSlider, lang, topics) {
+        function(declare, AlfListView, SelectedItemStateMixin, template, Grid, AlfGalleryViewSlider, ThumbnailSizeSlider, 
+                 lang, domStyle, domGeom, topics) {
    
-   return declare([AlfDocumentListView], {
+   return declare([AlfListView, SelectedItemStateMixin], {
       
       /**
        * The HTML template to use for the widget.
@@ -43,6 +67,149 @@ define(["dojo/_base/declare",
        * @type {String}
        */
       templateString: template,
+
+      /**
+       * This is the number of columns to use in the grid.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       */
+      columns: 4,
+
+      /**
+       * The preference property to use for retrieving and setting the users preferred number of columns
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.35
+       */
+      columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
+
+      /**
+       * Indicates whether or not highlighting should be enabled. If this is configured to be
+       * true then highlighting of focus and expansion will be handled.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.44
+       */
+      enableHighlighting: false,
+
+      /**
+       * This is an array of optional topics that can be subscribed to to create a panel within the 
+       * [grid]{@link module:alfresco/lists/views/layouts/Grid} for showing additional data about a 
+       * particular cell in the grid. The payload should contain a "widgets" attribute that represents the model 
+       * to render within the panel.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.44
+       */
+      expandTopics: null,
+
+      /**
+       * This is the property that is used to uniquely identify each 
+       * [item]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} rendered in the
+       * [grid]{@link module:alfresco/lists/views/layouts/Grid}. It is used
+       * as the key in the [gridCellMapping]{@link module:alfresco/lists/views/layouts/Grid#gridCellMapping}
+       * to map each item to the cell that it is rendered in. This is required in order to know where to 
+       * exand the grid when the 
+       * [expandTopics]{@link module:alfresco/lists/views/layouts/Grid#expandTopics} is
+       * published.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.44
+       */
+      itemKeyProperty: null,
+
+      /**
+       * This enables the mixed in [SelectedItemStateMixin]{@link module:alfresco/lists/SelectedItemStateMixin}
+       * capabilities to track items as they are selected and deselected. This should only be changed from the
+       * default when the view is not used within a [list]{@link module:alfresco/lists/AlfList} (as lists will
+       * track selected items). This also ensures that when used outside of a list that the selected item 
+       * state will be maintained when the thumbnails are resized.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      manageSelectedItemState: false,
+
+      /**
+       * The label to use for the next link. This defaults to null, so MUST be set for the next link to be displayed.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      nextLinkLabel: null,
+
+      /**
+       * The topic to publish when the next link is clicked.
+       * 
+       * @instance
+       * @type {string}
+       * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
+       * @event
+       */
+      nextLinkPublishTopic: topics.SCROLL_NEAR_BOTTOM,
+
+      /**
+       * Indicates whether resizing of thumbnails should be done by setting the number of columns to be
+       * displayed (the number of columns will remain constant and the thumbnail size will change as
+       * the size of the view changes). If this is configured to be false then a 
+       * [thumbnailSize]{@link module:alfresco/documentlibrary/views/AlfGalleryView#thumbnailSize}
+       * will be used and the number of columns will change as the size of the view changes.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      resizeByColumnCount: true,
+
+      /**
+       * When set to true this will show a link for requesting more data (if available). This should be used when
+       * the grid is rendering data in an infinite scroll view. It is required because when the grid cells are small
+       * the data may not be sufficient to allow the scrolling events to occur that will request more data.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showNextLink: false,
+
+      /**
+       * This is the size in pixels to set thumbnails initially. This only applies when 
+       * [resizeByColumnCount]{@link module:alfresco/documentlibrary/views/AlfGalleryView#resizeByColumnCount}
+       * is configured to be false.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.40
+       */
+      thumbnailSize: 400,
+
+      /**
+       * The preference property to use for retrieving and setting the users preferred 
+       * thumbnail size. This only applies when 
+       * [resizeByColumnCount]{@link module:alfresco/documentlibrary/views/AlfGalleryView#resizeByColumnCount}
+       * is configured to be false.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       */
+      thumbnailSizePreferenceProperty: "org.alfresco.share.documentList.thumbnailSize",
 
       /**
        * Returns the name of the view that is used when saving user view preferences.
@@ -67,35 +234,39 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Subscribes to a topic to that sets the number of columns for the gallery. This topic is
-       * published on by the slider control and which calls the 
-       * [updateColumns]{@link module:alfresco/documentlibrary/views/AlfGalleryView#updateColumns} function
+       * <p>If [resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+       * is configured to be true this will subscribe to the
+       * [SET_COLUMNS]{@link module:alfresco/core/topics#SET_COLUMNS} topic and each time the column count
+       * is changed the [updateColumns]{@link module:alfresco/documentlibrary/AlfGalleryView#updateColumns}
+       * function will be called.</p>
+       * <p>If resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+       * is configured to be false this will subscribe to the
+       * [SET_THUMBNAIL_SIZE]{@link module:alfresco/core/topics#SET_THUMBNAIL_SIZE} topic and each time the 
+       * thumbnail size is changed the 
+       * [updateThumbnailSize]{@link module:alfresco/documentlibrary/AlfGalleryView#updateThumbnailSize} function 
+       * will be called.</p>
        * 
        * @instance
+       * @listens module:alfresco/core/topics#SET_COLUMNS
+       * @listens module:alfresco/core/topics#SET_THUMBNAIL_SIZE
        */
       postCreate: function alfresco_documentlibrary_views_AlfGalleryView__postCreate() {
          this.inherited(arguments);
-         this.alfSubscribe("ALF_DOCLIST_SET_GALLERY_COLUMNS", lang.hitch(this, this.updateColumns));
+
+         if (this.resizeByColumnCount)
+         {
+            this.alfSubscribe(topics.SET_COLUMNS, lang.hitch(this, this.updateColumns));
+         }
+         else
+         {
+            this.alfSubscribe(topics.SET_THUMBNAIL_SIZE, lang.hitch(this, this.updateThumbnailSize));
+         }
+         
+         if (this.manageSelectedItemState)
+         {
+            this.createSelectedItemSubscriptions();
+         }
       },
-
-      /**
-       * This is the number of columns to use in the grid.
-       * 
-       * @instance
-       * @type {number}
-       * @default
-       */
-      columns: 4,
-
-       /**
-       * The preference property to use for retrieving and setting the users preferred number of columns
-       *
-       * @instance
-       * @type {string}
-       * @default
-       * @since 1.0.35
-       */
-      columnsPreferenceProperty: "org.alfresco.share.documentList.galleryColumns",
 
       /**
        * This function updates the [columns]{@link module:alfresco/documentlibrary/views/AlfGalleryView#columns}
@@ -123,6 +294,32 @@ define(["dojo/_base/declare",
             }
          }
       },
+
+      /**
+       * Updates the [thumbnailSize]{@link module:alfresco/documentlibrary/views/AlfGalleryView#thumbnailSize}
+       * to of each displayed item.
+       * 
+       * @instance
+       * @param  {object} payload A payload where the value is the new thumbnail size.
+       * @since 1.0.40
+       */
+      updateThumbnailSize: function alfresco_documentlibrary_views_AlfGalleryView__updateThumbnailSize(payload) {
+         var thumbnailSize = payload && !isNaN(payload.value) && payload.value;
+         if (thumbnailSize && thumbnailSize !== this.thumbnailSize)
+         {
+            this.thumbnailSize = thumbnailSize;
+            if (this.docListRenderer)
+            {
+               // In the case of infinite scroll, we need to ensure that we reset the count for rendering
+               // data so that all the items are re-rendered and sized appropriately...
+               if (lang.exists("docListRenderer.currentData.previousItemCount"), this)
+               {
+                  this.docListRenderer.currentData.previousItemCount = 0;
+               }
+               this.renderView(false);
+            }
+         }
+      },
       
       /**
        * Overridden to return a new instance of "alfresco/documentlibrary/AlfGalleryViewSlider" to control the 
@@ -132,13 +329,29 @@ define(["dojo/_base/declare",
        * @returns {object} A new slider control {@link module:alfresco/documentlibrary/AlfGalleryViewSlider}
        */
       getAdditionalControls: function alfresco_documentlibrary_views_AlfGalleryView__getAdditionalControls() {
-         return [new AlfGalleryViewSlider({
-            relatedViewName: this.getViewName(),
-            pubSubScope: this.pubSubScope,
-            parentPubSubScope: this.parentPubSubScope,
-            columns: this.columns,
-            columnsPreferenceProperty: this.columnsPreferenceProperty
-         })];
+         if (this.resizeByColumnCount)
+         {
+            // NOTE: Can't call createWidget because it is overridden by the MultiItemMixinRenderer...
+            return [new AlfGalleryViewSlider({
+               relatedViewName: this.getViewName(),
+               pubSubScope: this.pubSubScope,
+               parentPubSubScope: this.parentPubSubScope,
+               columns: this.columns,
+               columnsPreferenceProperty: this.columnsPreferenceProperty
+            })];
+            
+         }
+         else
+         {
+            // NOTE: Can't call createWidget because it is overridden by the MultiItemMixinRenderer...
+            return [new ThumbnailSizeSlider({
+               relatedViewName: this.getViewName(),
+               pubSubScope: this.pubSubScope,
+               parentPubSubScope: this.parentPubSubScope,
+               value: this.thumbnailSize,
+               preferenceProperty: this.thumbnailSizePreferenceProperty
+            })];
+         }
       },
       
       /**
@@ -167,6 +380,10 @@ define(["dojo/_base/declare",
             {
                this.docListRenderer.resizeCells();
             }
+            if (this.manageSelectedItemState)
+            {
+               this.publishSelectedItems();
+            }
             this._renderingView = false;
 
             // Once the current render has finished, check to see if there is pending render request to fulfil...
@@ -178,36 +395,6 @@ define(["dojo/_base/declare",
          }
       },
       
-      /**
-       * When set to true this will show a link for requesting more data (if available). This should be used when
-       * the grid is rendering data in an infinite scroll view. It is required because when the grid cells are small
-       * the data may not be sufficient to allow the scrolling events to occur that will request more data.
-       * 
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      showNextLink: false,
-
-      /**
-       * The label to use for the next link. This defaults to null, so MUST be set for the next link to be displayed.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      nextLinkLabel: null,
-
-      /**
-       * The topic to publish when the next link is clicked.
-       * 
-       * @event nextLinkPublishTopic
-       * @instance
-       * @type {string}
-       * @default [topics.SCROLL_NEAR_BOTTOM]{@link module:alfresco/core/topics#SCROLL_NEAR_BOTTOM}
-       */
-      nextLinkPublishTopic: topics.SCROLL_NEAR_BOTTOM,
-
       /**
        * Creates a new [ListRenderer]{@link module:alfresco/lists/views/ListRenderer}
        * which is used to render the actual items in the view. This function can be overridden by extending views
@@ -225,9 +412,15 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
             columns: this.columns,
+            fixedColumns: this.resizeByColumnCount,
             showNextLink: this.showNextLink,
             nextLinkLabel: this.nextLinkLabel,
-            nextLinkPublishTopic: this.nextLinkPublishTopic
+            nextLinkPublishTopic: this.nextLinkPublishTopic,
+            thumbnailSize: this.thumbnailSize,
+            itemKeyProperty: this.itemKeyProperty,
+            expandTopics: this.expandTopics,
+            enableHighlighting: this.enableHighlighting,
+            widgetsForAppendix: this.widgetsForAppendix
          });
          return dlr;
       },

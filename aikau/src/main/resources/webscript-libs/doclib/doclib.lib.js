@@ -26,7 +26,7 @@ function getSyncMode() {
 function getUserDocLibPreferences() {
 
    // Initialise some default preferences...
-   var docLibPrefrences = {
+   var docLibPreferences = {
       viewRendererName: "detailed",
       sortField: "cm:name",
       sortAscending: true,
@@ -60,32 +60,32 @@ function getUserDocLibPreferences() {
           prefs.org.alfresco.share.documentList)
       {
          var dlp = prefs.org.alfresco.share.documentList;
-         docLibPrefrences.viewRendererName = dlp.viewRendererName || "detailed";
-         docLibPrefrences.sortField = dlp.sortField || "cm:name";
-         docLibPrefrences.sortAscending = dlp.sortAscending !== false;
-         docLibPrefrences.showFolders = dlp.showFolders !== false;
-         docLibPrefrences.hideBreadcrumbTrail = dlp.hideNavBar === true;
-         docLibPrefrences.showSidebar = dlp.showSidebar !== false;
-         docLibPrefrences.galleryColumns = dlp.galleryColumns || 4;
-         docLibPrefrences.sideBarWidth = prefs.org.alfresco.sideBarWidth || 350;
+         docLibPreferences.viewRendererName = dlp.viewRendererName || "detailed";
+         docLibPreferences.sortField = dlp.sortField || "cm:name";
+         docLibPreferences.sortAscending = dlp.sortAscending !== false;
+         docLibPreferences.showFolders = dlp.showFolders !== false;
+         docLibPreferences.hideBreadcrumbTrail = dlp.hideNavBar === true;
+         docLibPreferences.showSidebar = dlp.showSidebar !== false;
+         docLibPreferences.galleryColumns = dlp.galleryColumns || 4;
+         docLibPreferences.sideBarWidth = prefs.org.alfresco.sideBarWidth || 350;
       }
    }
-   return docLibPrefrences;
+   return docLibPreferences;
 }
 
 function setupDocLibPreferences(options) {
-   if (options.docLibPrefrences)
+   if (options.docLibPreferences)
    {
       // Preferences have already been setup - no action required.
    }
    else if (options.getUserPreferences !== false)
    {
-      options.docLibPrefrences = getUserDocLibPreferences();
+      options.docLibPreferences = getUserDocLibPreferences();
    }
    else
    {
       // ...otherwise just define some sensible defaults
-      options.docLibPrefrences = {
+      options.docLibPreferences = {
          viewRendererName: "detailed",
          sortField: "cm:name",
          sortAscending: true,
@@ -485,6 +485,7 @@ function getDocLibFilters(options) {
       config: {
          label: "filter.label.documents",
          additionalCssClasses: "no-borders",
+         width: "auto",
          widgets: [
             {
                name: "alfresco/documentlibrary/AlfDocumentFilter",
@@ -571,6 +572,7 @@ function getDocLibTree(options) {
       config: {
          label: "twister.library.label",
          additionalCssClasses: "no-borders",
+         width: "auto",
          widgets: [
             {
                name: "alfresco/navigation/PathTree",
@@ -594,6 +596,7 @@ function getDocLibTags(options) {
       name: "alfresco/documentlibrary/AlfTagFilters",
       config: {
          label: "filter.label.tags",
+         width: "auto",
          additionalCssClasses: "no-borders",
          siteId: options.siteId,
          containerId: options.containerId,
@@ -609,6 +612,7 @@ function getDocLibCategories(options) {
       name: "alfresco/layout/Twister",
       config: {
          label: "twister.categories.label",
+         width: "auto",
          additionalCssClasses: "no-borders",
          widgets: [
             {
@@ -787,6 +791,7 @@ function getSelectedItemsActions(selectedItemsActions) {
                notAspect: (action.notAspect || "").toString(),
                publishTopic: "ALF_SELECTED_DOCUMENTS_ACTION_REQUEST",
                publishPayload: {
+                  actionTopic: (action.actionTopic || "").toString(),
                   action: (action.id || "").toString()
                }
             }
@@ -816,7 +821,7 @@ function getDocLibSelectedItemActions(options) {
                id: (options.idPrefix || "") + "DOCLIB_SELECTED_ITEMS_MENU_GROUP1",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
-                  widgets: getSelectedItemsActions()
+                  widgets: getSelectedItemsActions(options.selectedItemsActions)
                }
             }
          ]
@@ -849,7 +854,12 @@ function getDocLibSortOptions(options, sortingConfigItems) {
       for (var i = 0; i < xmlSortConfig.size(); i++)
       {
          var xmlSortItem = xmlSortConfig.get(i);
-         sortingConfigItems.push(xmlSortItem.attributes);
+         var label = xmlSortItem.getAttribute("label");
+         var value = xmlSortItem.getValue();
+         sortingConfigItems.push({
+            label: label,
+            value: value
+         });
       }
    }
    else
@@ -918,7 +928,7 @@ function getDocLibSortOptions(options, sortingConfigItems) {
                value: valueTokens[0],
                group: "DOCUMENT_LIBRARY_SORT_FIELD",
                publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
-               checked: options.docLibPrefrences.sortField === valueTokens[0],
+               checked: options.docLibPreferences.sortField === valueTokens[0],
                publishPayload: {
                   label: msg.get(sortLabel),
                   direction: valueTokens[1] || null
@@ -993,7 +1003,7 @@ function getDocLibConfigMenu(options) {
                         config: {
                            label: msg.get("show-folders.label"),
                            iconClass: "alf-showfolders-icon",
-                           checked: options.docLibPrefrences.showFolders,
+                           checked: options.docLibPreferences.showFolders,
                            publishTopic: "ALF_DOCLIST_SHOW_FOLDERS"
                         }
                      },
@@ -1002,7 +1012,7 @@ function getDocLibConfigMenu(options) {
                         name: "alfresco/menus/AlfCheckableMenuItem",
                         config: {
                            label: msg.get("show-path.label"),
-                           checked: !options.docLibPrefrences.hideBreadcrumbTrail,
+                           checked: !options.docLibPreferences.hideBreadcrumbTrail,
                            iconClass: "alf-showpath-icon",
                            publishTopic: "ALF_DOCLIST_SHOW_PATH"
                         }
@@ -1013,7 +1023,7 @@ function getDocLibConfigMenu(options) {
                         config: {
                            label: msg.get("show-sidebar.label"),
                            iconClass: "alf-showsidebar-icon",
-                           checked: options.docLibPrefrences.showSidebar,
+                           checked: options.docLibPreferences.showSidebar,
                            publishTopic: "ALF_DOCLIST_SHOW_SIDEBAR"
                         }
                      }
@@ -1049,28 +1059,36 @@ function getDocLibList(options) {
          containerId: options.containerId,
          rootNode: options.rootNode,
          usePagination: true,
-         showFolders: options.docLibPrefrences.showFolders,
-         sortAscending: options.docLibPrefrences.sortAscending,
-         sortField: options.docLibPrefrences.sortField,
-         view: options.docLibPrefrences.viewRendererName,
+         showFolders: options.docLibPreferences.showFolders,
+         sortAscending: options.docLibPreferences.sortAscending,
+         sortField: options.docLibPreferences.sortField,
+         view: options.docLibPreferences.viewRendererName,
          widgets: [
             {
+               id: (options.idPrefix || "") + "DOCLIB_SIMPLE_VIEW",
                name: "alfresco/documentlibrary/views/AlfSimpleView"
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_DETAILED_VIEW",
                name: "alfresco/documentlibrary/views/AlfDetailedView"
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_GALLERY_VIEW",
                name: "alfresco/documentlibrary/views/AlfGalleryView",
                config: {
-                  columns: options.docLibPrefrences.galleryColumns
+                  columns: options.docLibPreferences.galleryColumns || 4
                }
             },
             {
+               id: (options.idPrefix || "") + "DOCLIB_TABLE_VIEW",
                name: "alfresco/documentlibrary/views/AlfTableView"
             },
             {
-               name: "alfresco/documentlibrary/views/AlfFilmStripView"
+               name: "alfresco/documentlibrary/views/AlfFilmStripView",
+               config: {
+                  heightAdjustment: 0,
+                  heightMode: 400
+               }
             }
          ]
       }
@@ -1127,7 +1145,7 @@ function getDocLibToolbar(options) {
                         id: (options.idPrefix || "") + "DOCLIB_SORT_ORDER_TOGGLE",
                         name: "alfresco/menus/AlfMenuBarToggle",
                         config: {
-                           checked: options.docLibPrefrences.sortAscending,
+                           checked: options.docLibPreferences.sortAscending,
                            onConfig: {
                               iconClass: "alf-sort-ascending-icon",
                               publishTopic: "ALF_DOCLIST_SORT",
@@ -1177,7 +1195,7 @@ function getDocLibBreadcrumbTrail(options) {
       id: (options.idPrefix || "") + "DOCLIB_BREADCRUMB_TRAIL",
       name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
       config: {
-         hide: options.docLibPrefrences.hideBreadcrumbTrail,
+         hide: options.docLibPreferences.hideBreadcrumbTrail,
          rootLabel: options.rootLabel || "root.label",
          lastBreadcrumbIsCurrentNode: true,
          useHash: (options.useHash !== false),
@@ -1241,7 +1259,7 @@ function getDocLib(options) {
       id: (options.idPrefix || "") + "DOCLIB_SIDEBAR",
       name: "alfresco/layout/AlfSideBarContainer",
       config: {
-         showSidebar: options.docLibPrefrences.showSidebar,
+         showSidebar: options.docLibPreferences.showSidebar,
          customResizeTopics: ["ALF_DOCLIST_READY","ALF_RESIZE_SIDEBAR"],
          footerHeight: 50,
          widgets: [

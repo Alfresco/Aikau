@@ -19,21 +19,32 @@
 
 /**
  * Extends the [AlfMenuBarPopup]{@link module:alfresco/menus/AlfMenuBarPopup} widget to listen to publications
- * that indicate that documents have been selected and disables the menu bar if nothing is selected.
+ * that indicate that documents have been selected and disables the menu bar if nothing is selected. This widget
+ * actively monitors the state of selected items so that any 
+ * [menu items]{@link modulealfresco/documentlibrary/AlfDocumentActionMenuItem} contained in the pop-up menu that
+ * are used will have the selected nodes "attached" to their payload by the 
+ * [onSelectedDocumentsAction]{@link module:alfresco/menus/AlfMenuBarPopup#onSelectedDocumentsAction} function. If
+ * [processActionPayloads]{@link module:alfresco/menus/AlfMenuBarPopup#processActionPayloads} is configured to be true then 
+ * this function will also process the action payload and swap out any "{nodes}" tokens with the array of selected
+ * nodes.
  * 
  * @module alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup
  * @extends module:alfresco/menus/AlfMenuBarPopup
+ * @mixes module:alfresco/lists/SelectedItemStateMixin
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarPopup",
+        "alfresco/lists/SelectedItemStateMixin",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/topics",
         "dojo/_base/lang"], 
-        function(declare, AlfMenuBarPopup, _AlfDocumentListTopicMixin, topics, lang) {
+        function(declare, AlfMenuBarPopup, SelectedItemStateMixin, ObjectProcessingMixin, _AlfDocumentListTopicMixin, topics, lang) {
    
-   return declare([AlfMenuBarPopup, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBarPopup, SelectedItemStateMixin, ObjectProcessingMixin, _AlfDocumentListTopicMixin], {
       
       /**
        * Controls whether or not this widget actively tracks the selected items or passively subscribes
@@ -43,7 +54,7 @@ define(["dojo/_base/declare",
        * @type {boolean}
        * @default
        */
-      passive: false,
+      passive: true,
 
       /**
        * Overrides the default to initialise as disabled.
@@ -53,38 +64,28 @@ define(["dojo/_base/declare",
        * @default
        */
       disabled: true,
+
+      /**
+       * Overrides the [inherited default]{@link module:alfresco/lists/SelectedItemStateMixin#disableWhenNothingSelected}
+       * to ensure that the popup is disabled when no items are selected.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.39
+       */
+      disableWhenNothingSelected: true,
       
       /**
-       * This is used to keep track of the documents that are currently selected. It is initialised to an empty
-       * array in the constructor, the onItemSelected function adds elements and the onItemDeselected
-       * function removes them.
-       *
+       * This can be configured so that action payloads are processed for the existence of a "{nodes}" token. If
+       * one is found then it will be swapped out with the array of selected nodes.
+       * 
        * @instance
-       * @type {object}
+       * @type {boolean}
        * @default
+       * @since 1.0.38
        */
-      currentlySelectedItems: null,
-
-      /**
-       * This is used to keep a reference to a timeout that is started on the publication of a selected document
-       * topic. It is important that multiple selection events can be captured so that only one publication of
-       * selected items occurs.
-       *
-       * @instance
-       * @type {timeout}
-       * @default
-       */
-      selectionTimeout: null,
-
-      /**
-       * This is the dot-notation addressed property within the selection/de-selection publication payload that
-       * uniquely identifies the item.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      itemKeyProperty: "node.nodeRef",
+      processActionPayloads: false,
 
       /**
        * Extends the [superclass function]{@link module:alfresco/menus/AlfMenuBarPopup#postCreate} to subscribe to
@@ -92,7 +93,9 @@ define(["dojo/_base/declare",
        * topic which is handled by [onFilesSelected]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#onFilesSelected}.
        * However, when [passive]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#passive} is configured as false
        * then it subscribes to the topics to track item selection and deselection
+       * 
        * @instance
+       * @listens module:alfresco/core/topics#SELECTED_DOCUMENTS_ACTION
        */
       postCreate: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__postCreate() {
          if (this.passive === true)
@@ -101,115 +104,11 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.currentlySelectedItems = {};
-            this.alfSubscribe(this.documentSelectedTopic, lang.hitch(this, this.onItemSelected));
-            this.alfSubscribe(this.documentDeselectedTopic, lang.hitch(this, this.onItemDeselected));
-            this.alfSubscribe(topics.CLEAR_SELECTED_ITEMS, lang.hitch(this, this.onItemSelectionCleared));
-            this.alfSubscribe("ALF_SELECTED_DOCUMENTS_ACTION_REQUEST", lang.hitch(this, this.onSelectedDocumentsAction));
+            this.createSelectedItemSubscriptions();
          }
+
+         this.alfSubscribe(topics.SELECTED_DOCUMENTS_ACTION, lang.hitch(this, this.onSelectedDocumentsAction));
          this.inherited(arguments);
-      },
-
-      /**
-       * Updates the aray of documents that are currently selected.
-       * @instance
-       * @param {object} payload The details of the document selected
-       */
-      onItemSelected: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onItemSelected(payload) {
-         if (payload && payload.value)
-         {
-            var itemKey = lang.getObject(this.itemKeyProperty, false, payload.value);
-            if (itemKey)
-            {
-               this.currentlySelectedItems[itemKey] = payload.value;
-               if (this.selectionTimeout)
-               {
-                  clearTimeout(this.selectionTimeout);
-               }
-               this.selectionTimeout = setTimeout(lang.hitch(this, this.deferredSelectionHandler), 50);
-            }
-            else
-            {
-               this.alfLog("warn", "Could not find item key property: '" + this.itemKeyProperty + "' in selected item value", payload, this);
-            }
-         }
-      },
-
-      /**
-       * This is called from [onItemSelected]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#onItemSelected}
-       * when the [selectionTimeout]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#selectionTimeout} times out. It
-       * rests the [selectionTimeout]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#selectionTimeout} to null and
-       * calls [onSelectedFilesChanged]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#deselectionTimeout}
-       *
-       * @instance
-       */
-      deferredSelectionHandler: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__deferredSelectionHandler() {
-         var selectedItems = [];
-         for (var key in this.currentlySelectedItems)
-         {
-            if (this.currentlySelectedItems.hasOwnProperty(key)) {
-               selectedItems.push(this.currentlySelectedItems[key]);
-            }
-         }
-         this.set("disabled", (selectedItems.length === 0));
-         this.publishSelectedItems(selectedItems);
-         this.selectionTimeout = null;
-      },
-
-      /**
-       * This is called from the [deferredSelectionHandler]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup#deferredSelectionHandler}
-       * function and publishes on the [selectedDocumentsChangeTopic]
-       * {@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#selectedDocumentsChangeTopic}.
-       *
-       * @instance
-       */
-      publishSelectedItems: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__publishSelectedItems(selectedItems) {
-         this.alfPublish(this.selectedDocumentsChangeTopic, {
-            selectedItems: selectedItems
-         });
-      },
-
-      /**
-       * Updates the array of documents that are currently selected.
-       *
-       * @instance
-       * @param {object} payload The details of the document selected
-       */
-      onItemDeselected: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onItemDeselected(payload) {
-         if (payload && payload.value)
-         {
-            var itemKey = lang.getObject(this.itemKeyProperty, false, payload.value);
-            if (itemKey)
-            {
-               delete this.currentlySelectedItems[itemKey];
-               if (this.selectionTimeout)
-               {
-                  clearTimeout(this.selectionTimeout);
-               }
-               this.selectionTimeout = setTimeout(lang.hitch(this, this.deferredSelectionHandler), 50);
-            }
-            else
-            {
-               this.alfLog("warn", "Could not find item key property: '" + this.itemKeyProperty + "' in deselected item value", payload, this);
-            }
-         }
-      },
-
-      /**
-       * This clears the currently selected items. It it bound to the 
-       * [CLEAR_SELECTED_ITEMS topic]{@link module:alfresco/core/topics#CLEAR_SELECTED_ITEMS} that is published
-       * by the [AlfSelectedItemsMenuItem]{@link module:alfresco/menus/AlfSelectedItemsMenuItem} when clicked.
-       *
-       * @instance
-       * @param {object} payload This is not expected to contain any usable data.
-       */
-      onItemSelectionCleared: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onItemSelectionCleared(/*jshint unused:false*/ payload) {
-         this.currentlySelectedItems = {};
-         if (this.selectionTimeout)
-         {
-            clearTimeout(this.selectionTimeout);
-         }
-         this.selectionTimeout = setTimeout(lang.hitch(this, this.deferredSelectionHandler), 50);
       },
       
       /**
@@ -220,7 +119,8 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the selected files.
        */
       onFilesSelected: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onFilesSelected(payload) {
-         this.set("disabled", (payload && payload.selectedFiles && payload.selectedFiles.length === 0));
+         this.set("disabled", (payload && payload.selectedItems && payload.selectedItems.length === 0));
+         this.selectedItems = payload.selectedItems;
       },
 
       /**
@@ -229,18 +129,26 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload containing the details of the action being requested
+       * @fires alfresco/core/topics#MULTIPLE_ITEM_ACTION_REQUEST
        */
       onSelectedDocumentsAction: function alfresco_documentlibrary_AlfSelectedItemsMenuBarPopup__onSelectedDocumentsAction(payload) {
-         var selectedItems = [];
-         for (var nodeRef in this.currentlySelectedItems)
+         payload.documents = this.selectedItems;
+         if (this.processActionPayloads)
          {
-            if (this.currentlySelectedItems.hasOwnProperty(nodeRef))
-            {
-               selectedItems.push(this.currentlySelectedItems[nodeRef]);
-            }
+            // There are circumstances where the requested action might need access to the selected nodes *within*
+            // the payload. This can be achieved by referencing the {nodes} token with the payload and using the standard
+            // object processing mixin.
+            this.currentItem = {
+               nodes: this.selectedItems
+            };
+            var clonedPayload = lang.clone(payload);
+            this.processObject(["processCurrentItemTokens"], clonedPayload);
+            this.alfServicePublish(topics.MULTIPLE_ITEM_ACTION_REQUEST, clonedPayload);
          }
-         payload.documents = selectedItems;
-         this.alfServicePublish("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", payload);
+         else
+         {
+            this.alfServicePublish(topics.MULTIPLE_ITEM_ACTION_REQUEST, payload);
+         }
       }
    });
 });

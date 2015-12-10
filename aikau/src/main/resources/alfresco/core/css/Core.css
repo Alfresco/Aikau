@@ -48,3 +48,8 @@ body {
 {
    display: none !important;
 }
+
+/* See AKU-707: Hide the "X" on input fields on IE11 */
+input::-ms-clear {
+   display: none;
+}

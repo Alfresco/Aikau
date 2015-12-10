@@ -22,24 +22,27 @@
  *
  * @module alfresco/core/CoreWidgetProcessing
  * @extends module:alfresco/core/Core
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @mixinSafe
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/ObjectTypeUtils",
         "dijit/registry",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/dom-attr",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
-   return declare([AlfCore], {
+   return declare([AlfCore, ObjectProcessingMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -49,6 +52,15 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/CoreWidgetProcessing.css"}]
        */
       cssRequirements: [{cssFile:"./css/CoreWidgetProcessing.css"}],
+
+      /**
+       * The current item to act upon
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      currentItem: null,
 
       /**
        * This string is used to identify locations of counts of widgets that are being processed.
@@ -330,11 +342,47 @@ define(["dojo/_base/declare",
                       useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
                   if (topic && attribute && (is || isNot))
                   {
-                     widget.alfSubscribe(topic, lang.hitch(this, "processVisibility", widget, is, isNot, attribute, negate, strict, useCurrentItem));
+                     var rulesObj = {
+                           attribute: attribute,
+                           lookupObject: useCurrentItem && widget.currentItem,
+                           is: is,
+                           isNot: isNot,
+                           negate: negate,
+                           strict: strict
+                        },
+                        successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
+                        failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
+                     widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
                   }
                }, this);
             }
          }
+      },
+
+      /**
+       * Called when visibility config on a widget has passed rule-evaluation.
+       *
+       * @instance
+       * @param {object} widget The widget under test
+       * @since 1.0.44
+       */
+      onVisibilityProcessedSuccess: function alfresco_core_CoreWidgetProcessing__onVisibilityProcessedSuccess(widget) {
+         domStyle.set(widget.domNode, "display", "");
+         if (typeof widget.alfPublishResizeEvent === "function")
+         {
+            widget.alfPublishResizeEvent(widget.domNode);
+         }
+      },
+
+      /**
+       * Called when visibility config on a widget has failed rule-evaluation.
+       *
+       * @instance
+       * @param {object} widget The widget under test
+       * @since 1.0.44
+       */
+      onVisibilityProcessedFailure: function alfresco_core_CoreWidgetProcessing__onVisibilityProcessedFailure(widget) {
+         domStyle.set(widget.domNode, "display", "none");
       },
 
       /**
@@ -349,6 +397,7 @@ define(["dojo/_base/declare",
        * @param {string} attribute The dot-notation attribute to retrieve from the payload
        * @param {boolean} negate Whether or not the to negate the evaluated rule (e.g evaluated visible become invisible)
        * @param {object} payload The publication payload triggering the visibility processing
+       * @deprecated Since 1.0.44 - See [setupVisibilityConfigProcessing]{@link module:alfresco/core/CoreWidgetProcessing#setupVisibilityConfigProcessing} source code for current technique for evaluating visibility
        */
       processVisibility: function alfresco_core_CoreWidgetProcessing__processVisibility(widget, is, isNot, attribute, negate, strict, useCurrentItem, payload) {
          var target = lang.getObject(attribute, false, payload);
@@ -419,6 +468,7 @@ define(["dojo/_base/declare",
        * @param {boolean} useCurrentItem Indicates whether or not the values to check are attributes of the "currentItem"
        * @param {string} currValue The value from the current rule being processed
        * @returns {boolean} true if the values match and false otherwise
+       * @deprecated Since 1.0.44 - See [setupVisibilityConfigProcessing]{@link module:alfresco/core/CoreWidgetProcessing#setupVisibilityConfigProcessing} source code for current technique for evaluating visibility
        */
       visibilityRuleComparator: function alfresco_core_CoreWidgetProcessing__visibilityRuleComparator(targetValue, widget, useCurrentItem, currValue) {
          if (targetValue == null && currValue == null)
@@ -625,8 +675,10 @@ define(["dojo/_base/declare",
             {
                try
                {
+                  var preferredDomNodeId;
                   if (registry.byId(initArgs.id))
                   {
+                     preferredDomNodeId = initArgs.id;
                      initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
                   }
 
@@ -638,8 +690,19 @@ define(["dojo/_base/declare",
                      _this.widgetsToDestroy = [];
                      _this.widgetsToDestroy.push(widget);
                   }
+
+                  if (preferredDomNodeId)
+                  {
+                     domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                     instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
+                  }
+
                   _this.alfLog("log", "Created widget", instantiatedWidget);
-                  instantiatedWidget.startup();
+                  if (typeof instantiatedWidget.startup === "function")
+                  {
+                     instantiatedWidget.startup();
+                  }
+               
                   if (widget.assignTo)
                   {
                      _this[widget.assignTo] = instantiatedWidget;
@@ -879,7 +942,13 @@ define(["dojo/_base/declare",
             {
                currValue = currValue.toString();
             }
-            foundCurrValue = array.some(targetArray, lang.hitch(this, this.processFilterArrayCompare, currValue));
+
+            // Substitute any tokens in the current value to search for...
+            if (renderFilterConfig.substituteTokens === true)
+            {
+               currValue = this.substituteFilterTokens(currValue);
+            }
+            
             foundCurrValue = array.some(targetArray, function(arrayValue) {
                if (typeof arrayValue === "boolean")
                {
@@ -889,6 +958,29 @@ define(["dojo/_base/declare",
             });
          }
          return foundCurrValue;
+      },
+
+      /**
+       * This function is called from both [processFilter]{@link module:alfresco/core/CoreWidgetProcessing#processFilter}
+       * and [processFilterArray]{@link module:alfresco/core/CoreWidgetProcessing#processFilterArray} to substitute
+       * any tokens found in the target values with matching dot-notation properties found in the currentItem and
+       * currentMetadata objects if they are available.
+       * 
+       * @instance
+       * @param  {*} value The value to look for tokens in
+       * @return {string} The value with any tokens substituted
+       * @since 1.0.43
+       */
+      substituteFilterTokens: function alfresco_core_CoreWidgetProcessing__substituteFilterTokens(value) {
+         if (this.currentItem)
+         {
+            value = this.processCurrentItemTokens(value);
+         }
+         if (this.currentMetadata)
+         {
+            value = this.processCurrentMetadataTokens(value);
+         }
+         return value;
       },
 
       /**
@@ -906,6 +998,12 @@ define(["dojo/_base/declare",
             currValue = lang.trim(currValue);
          }
 
+         // Substitute any tokens in the current value to search for...
+         if (renderFilterConfig.substituteTokens === true)
+         {
+            currValue = this.substituteFilterTokens(currValue);
+         }
+         
          // Convert booleans to strings for simple comparison...
          // This is necessary because when creating pages dynamically the boolean values
          // will end up as strings so the comparison won't work.

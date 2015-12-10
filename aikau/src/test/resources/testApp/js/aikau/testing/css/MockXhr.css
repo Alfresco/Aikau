@@ -20,6 +20,14 @@
    th, td, caption {
       border: 1px solid #808080;
       padding: 4px;
+      text-align: left;
+      vertical-align: top;
+   }
+   th, td {
+      word-break: break-word;
+   }
+   th {
+      font-family: @bold-font;
    }
    td > table {
       border: none;
@@ -52,6 +60,9 @@
          top: 1px;
       }
    }
+   .mx-request-body {
+      white-space: pre-wrap;
+   }
    .mx-response {
       position: relative;
       &__info {
@@ -63,8 +74,8 @@
          padding: 10px;
          position: absolute;
          right: 105%;
-         text-align: right;
          top: 8px;
+         width: 500px;
          z-index: 1;
          dt, dd {
             display: block;
@@ -80,9 +91,7 @@
             }
          }
          dd {
-            .nowrap {
-               white-space: nowrap;
-            }
+            white-space: pre-wrap;
          }
       }
       &:hover {
@@ -90,6 +99,9 @@
             display: block;
          }
       }
+   }
+   .nowrap {
+      white-space: nowrap;
    }
    &--hide-body {
       opacity: .3;
@@ -100,4 +112,7 @@
          display: none;
       }
    }
+}
+strong {
+   font-family: @bold-font;
 }

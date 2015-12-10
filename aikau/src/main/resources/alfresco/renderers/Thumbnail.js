@@ -26,38 +26,71 @@
  * requests to display the content of that folder and clicking on a document links to the details
  * page that renders the document) it is also possible to configure custom actions along with the
  * ability to request a preview of the node be displayed.</p>
+ * <p>A thumbnail can also be configured to perform selection/de-selection action when clicked through
+ * the configuration of the [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
+ * and [onlySelectOnClick]{@link module:alfresco/renderers/Thumbnail#onlySelectOnClick} attributes.</p>
+ * <p>It is possible to configure thumbnails so that images are 
+ * [cropped to fit]{@link module:alfresco/renderers/Thumbnail#cropToFit} or 
+ * [stretched to fit]{@link module:alfresco/renderers/Thumbnail#stretchToFit} so that no white space
+ * is shown within the thumbnail. When images are not cropped or stretched the position of the image
+ * can be controlled by configuring the [horizontal]{@link module:alfresco/renderers/Thumbnail#horizontalAlignment}
+ * and [vertical]{@link module:alfresco/renderers/Thumbnail#verticallAlignment} to control where the
+ * whitespace around the image appears.</p>
  *
  * @example <caption>Example configuration for use in Document Library:</caption>
  * {
- *    "name": "alfresco/renderers/Thumbnail"
+ *    name: "alfresco/renderers/Thumbnail"
  * }
  *
  * @example <caption>Example setting a fixed width for the imgpreview rendition:</caption>
  * {
- *    "name": "alfresco/renderers/Thumbnail",
- *    "config": {
- *       "renditionName": "imgpreview",
- *       "width": "200px"
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       renditionName: "imgpreview",
+ *       width: "200px"
  *    }
  * }
  *
  * @example <caption>Example requesting a preview when only nodeRef available:</caption>
  * {
- *    "name": "alfresco/renderers/Thumbnail",
- *    "config": {
- *       "assumeRendition": true,
- *       "showDocumentPreview": true
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       assumeRendition: true,
+ *       showDocumentPreview: true
+ *    }
+ * }
+ *
+ * @example <caption>Example thumbnail that only performs selection/deselection actions when clicked:</caption>
+ * {
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       selectOnClick: true,
+ *       onlySelectOnClick: true
+ *    }
+ * }
+ * 
+ * @example <caption>Example configuring full dimensions with a cropped image:</caption>
+ * {
+ *    name: "alfresco/renderers/Thumbnail",
+ *    config: {
+ *       dimensions: {
+ *          w: "150px",
+ *          h: "150px",
+ *          margins: "5px"
+ *       },
+ *       cropToFit: true
  *    }
  * }
  * 
  * @module alfresco/renderers/Thumbnail
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
+ * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/node/DraggableNodeMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/node/NodeDropTargetMixin
- * @mixes module:dijit/_OnDijitClickMixin
+ * @mixes module:alfresco/node/ItemSelectionMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -68,23 +101,25 @@ define(["dojo/_base/declare",
         "alfresco/node/NodeDropTargetMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dijit/_OnDijitClickMixin",
+        "alfresco/lists/ItemSelectionMixin",
         "dojo/text!./templates/Thumbnail.html",
         "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
-        "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/event",
+        "dojo/dom-class",
         "dojo/dom-style",
         "alfresco/core/NodeUtils",
         "dojo/window",
         "dojo/Deferred",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                 _PublishPayloadMixin, _OnDijitClickMixin, template, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, 
-                 AlfConstants, lang, event, domStyle, NodeUtils, win, Deferred, when) {
+                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, template, AlfCore, _ItemLinkMixin,
+                 AlfConstants, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, AlfCore, _ItemLinkMixin, _AlfDndDocumentUploadMixin, _PublishPayloadMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
+                   AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -113,6 +148,31 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * Some APIs provide very little information other than the nodeRef, however if we really
+       * believe that the thumbnails are only going to be of something that has a rendition then
+       * we can just "go for it" (all bets are really off though as to what we get back though
+       * so this should only set to true when you're confident that a valid thumbnail rendition
+       * will be available.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      assumeRendition: false,
+
+      /**
+       * If this is configured to be true then the image will be cropped within the thumbnail.
+       * It does mean that aspect ratio of the image will be maintained but that not all of
+       * the image will be visible.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      cropToFit: false,
+
+      /**
        * Additional CSS classes to apply to the main DOM node defined in the template
        * 
        * @instance
@@ -121,6 +181,246 @@ define(["dojo/_base/declare",
        */
       customClasses: "",
       
+      /**
+       * The Dimensions object that defines the dimension attributes of the thumbnail. This will override
+       * the default CSS styling.
+       * 
+       * @typedef {Dimensions}
+       * @property {string} [w] The width of the thumbnail
+       * @property {string} [h] The height of the thumbnail
+       * @property {string} [margin] The padding around the image
+       */
+
+      /**
+       * This should be set to an object containing the starting dimensions of the thumbnail as well as optional
+       * information on padding and whether the aspect ratio of the image should be maintained.
+       *  
+       * @instance
+       * @type {Dimensions}
+       * @default
+       * @since 1.0.40
+       */
+      dimensions: null,
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadHighLightImage}
+       * to use the smaller image.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      dndUploadHighlightImage: "elipse-cross.png",
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadText}
+       * to hide the upload message.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.41
+       */
+      dndUploadHighlightText: "",
+
+      /**
+       * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
+       * and "folder-256.png".
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      folderImage: "folder-64.png",
+
+      /**
+       * Indicates whether or not the thumbnail image should be given a shadow effect.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      hasShadow: false,
+
+      /**
+       * Indicates how the thumbnail image should be aligned horizontally, the options are "LEFT",
+       * "MIDDLE" and "RIGHT".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       */
+      horizontalAlignment: "MIDDLE",
+
+      /**
+       * The property to use for the image id.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      imageIdProperty: "jsNode.nodeRef.nodeRef",
+
+      /**
+       * This will be set to the height of the image node.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.40
+       */
+      imageNodeHeight: null,
+
+      /**
+       * This will be set to the width of the image node.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.40
+       */
+      imageNodeWidth: null,
+
+      /**
+       * The property to use for the image title.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      imageTitleProperty: "displayName",
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#itemKey} to
+       * set a value suitable for use with standard Alfresco Repository APIs (the default remains the
+       * same for backwards compatibility).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      itemKey: "node.nodeRef",
+
+      /**
+       * This property is used to determine whether or not a new version of the thumbnail needs
+       * to be generated or if the cached version can be used.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
+
+      /**
+       * This will be set to the natural height of the displayed image.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @readonly
+       * @since 1.0.40
+       */
+      naturalImageHeight: null,
+
+      /**
+       * This will be set to the natural width of the displayed image.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @readonly
+       * @since 1.0.40
+       */
+      naturalImageWidth: null,
+
+      /**
+       * If this is configured to be true then this will ensure that click actions only perform a
+       * selection action. However, this also requires that the 
+       * [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick} attribute also 
+       * be configured to be true. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      onlySelectOnClick: false,
+
+      /**
+       * The type of rendition to use for the thumbnail.
+       * 
+       * @instance
+       * @type {string} 
+       * @default
+       */
+      renditionName: "doclib",
+      
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#selectOnClick} to 
+       * disable selection on click by default.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      selectOnClick: false,
+
+      /**
+       * Indicates whether or not selection publication and subscriptions are made using the global scope.
+       * This is only used when either [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
+       * or [updateOnSelection]{@link module:alfresco/renderers/Thumbnail#updateOnSelection} are configured
+       * to be true.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      selectionPublishGlobal: false,
+
+      /**
+       * Indicates whether or not selection publication and subscriptions are made using the parent scope.
+       * This is only used when either [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
+       * or [updateOnSelection]{@link module:alfresco/renderers/Thumbnail#updateOnSelection} are configured
+       * to be true.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      selectionPublishToParent: false,
+
+      /**
+       * Indicates whether or not a preview of the node represented by the thumbnail should be
+       * displayed when it is clicked. If this is set to true and there is not enough information
+       * to determine whether or not the the node can be previewed then a request will be published
+       * to retrieve that information.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showDocumentPreview: false,
+
+      /**
+       * This indicates whether or not the aspect ratio of the thumbnail will be retained. This means that
+       * for images will be stretched to ensure that there is no white-space visible. However unlike 
+       * [cropToFit]{@link module:alfresco/renderers/Thumbnail#cropToFit} the entire image will be visible
+       * although possible distorted. If no [dimensions]{@link module:alfresco/renderers/Thumbnail#dimensions}
+       * are provided then the aspect ratio will always be maintained and the image will not be stretched.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      stretchToFit: false,
+
       /**
        * This allows a tokenized template to be defined where the tokens will be populated from
        * values in the "currentItem" attribute using the 
@@ -133,6 +433,67 @@ define(["dojo/_base/declare",
        * @default
        */
       thumbnailUrlTemplate: null,
+
+      /**
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#updateOnSelection} to 
+       * not set up the item selection listeners. If this is configured to be true then the thumbnail will be
+       * highlighted when the item it represents is selected.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.40
+       */
+      updateOnSelection: false,
+
+      /**
+       * Indicates how the thumbnail image should be aligned vertically, the options are "TOP",
+       * "MIDDLE" and "BOTTOM".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.40
+       */
+      verticalAlignment: "TOP",
+
+      /**
+       * The width to render the thumbnail. Units of measurement need to be provided, e.g.
+       * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
+       * be rendered at the original image size. This is shorthand configuration when not 
+       * providing full [dimensions]{@link module:alfresco/renderers/Thumbnail#dimensions}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      width: null,
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/lists/ItemSelectionMixin#getSelectionPublishGlobal}
+       * to return [selectionPublishGlobal]{@link module:alfresco/renderers/Thumbnail#selectionPublishGlobal} to
+       * avoid conflicts with scope configuration for other events (such as linking and showing previews).
+       *
+       * @instance
+       * @overridable
+       * @return {boolean} A boolean indicating whether or not to publish and subscribe to selection topics globally.
+       */
+      getSelectionPublishGlobal: function alfresco_lists_ItemSelectionMixin__getSelectionPublishGlobal() {
+         return this.selectionPublishGlobal;
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/lists/ItemSelectionMixin#getSelectionPublishToParent}
+       * to return [selectionPublishToParent]{@link module:alfresco/renderers/Thumbnail#selectionPublishToParent} to
+       * avoid conflicts with scope configuration for other events (such as linking and showing previews).
+       *
+       * @instance
+       * @overridable
+       * @return {boolean}  A boolean indicating whether or not to publish and subscribe to selection topics to the parent scope.
+       */
+      getSelectionPublishToParent: function alfresco_lists_ItemSelectionMixin__getSelectionPublishToParent() {
+         return this.selectionPublishToParent;
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.
@@ -200,60 +561,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The property to use for the image title. Defaults to "displayName"
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      imageTitleProperty: "displayName",
-
-      /**
-       * The property to use for the image id. Defaults to "jsNode.nodeRef.nodeRef"
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      imageIdProperty: "jsNode.nodeRef.nodeRef",
-
-      /**
-       * Indicates whether or not a preview of the node represented by the thumbnail should be
-       * displayed when it is clicked. If this is set to true and there is not enough information
-       * to determine whether or not the the node can be previewed then a request will be published
-       * to retrieve that information.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      showDocumentPreview: false,
-
-      /**
-       * Some APIs provide very little information other than the nodeRef, however if we really
-       * believe that the thumbnails are only going to be of something that has a rendition then
-       * we can just "go for it" (all bets are really off though as to what we get back though
-       * so this should only set to true when you're confident that a valid thumbnail rendition
-       * will be available.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      assumeRendition: false,
-
-      /**
-       * The width to render the thumbnail. Units of measurement need to be provided, e.g.
-       * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
-       * be rendered at the original image size.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      width: null,
-
-      /**
        * Sets the title to display over the thumbnail
        *
        * @instance
@@ -283,16 +590,6 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
-       * and "folder-256.png". The default is "folder-64.png".
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      folderImage: "folder-64.png",
-
-      /**
        * Returns a URL to the image to use when rendering a folder
        * 
        * @instance
@@ -301,25 +598,6 @@ define(["dojo/_base/declare",
          return require.toUrl("alfresco/renderers") + "/css/images/" + this.folderImage;
       },
       
-      /**
-       * The type of rendition to use for the thumbnail.
-       * 
-       * @instance
-       * @type {string} 
-       * @default
-       */
-      renditionName: "doclib",
-      
-      /**
-       * This property is used to determine whether or not a new version of the thumbnail needs
-       * to be generated or if the cached version can be used.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      lastThumbnailModificationProperty: "jsNode.properties.cm:lastThumbnailModification",
-
       /**
        * Generates the URL to use as the source of the thumbnail.
        * 
@@ -385,15 +663,190 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_Thumbnail__postCreate() {
          this.inherited(arguments);
+         this.createItemSelectionSubscriptions();
          if (this.width)
          {
             domStyle.set(this.imgNode, "width", this.width);
          }
          if (this.hasUploadPermissions() === true)
          {
-            this.addUploadDragAndDrop(this.imgNode);
-            this.addNodeDropTarget(this.imgNode);
+            this.addUploadDragAndDrop(this.frameNode);
+            this.addNodeDropTarget(this.frameNode);
             this._currentNode = this.currentItem.node;
+         }
+         // If no full dimensions have been provided but a simple width has then
+         // just use that to derive the full thumbnail dimensions...
+         if (!this.dimensions && this.width)
+         {
+            this.dimensions = {
+               w: this.width
+            };
+         }
+         this.resize(this.dimensions);
+
+         // Apply some additional styling...
+         if (this.hasShadow)
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--shadow");
+         }
+         if (this.horizontalAlignment === "LEFT")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--left");
+         }
+         if (this.horizontalAlignment === "RIGHT")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--right");
+         }
+         if (this.verticalAlignment === "MIDDLE")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--middle");
+         }
+         if (this.verticalAlignment === "BOTTOM")
+         {
+            domClass.add(this.domNode, "alfresco-renderers-Thumbnail--bottom");
+         }
+      },
+
+      /**
+       * This sizes the thumbnail based on the dimensions that have been provided. It is
+       * entirely possible to size the thumbnail with just a width (dimensions.w) however
+       * a height (dimensions.h) and margin (dimensions.margin) can also be provided.
+       * 
+       * @instance
+       * @param {Dimensions} dimensions
+       * @since 1.0.40
+       */
+      resize: function alfresco_renderers_Thumbnail__resize(dimensions) {
+         if (this.imgNode && dimensions && dimensions.w)
+         {
+            // Get the height and width for the outer thumbnail frame...
+            var thumbnailWidth = parseInt(dimensions.w, 10);
+            var thumbnailHeight = thumbnailWidth;
+            if (dimensions.h)
+            {
+               thumbnailHeight = parseInt(dimensions.h, 10);
+            }
+
+            // Get the margin and border (in order to calculate the appropriate
+            // inner image size)...
+            var margin = 0;
+            if (dimensions.margin)
+            {
+               margin = parseInt(dimensions.margin, 10);
+            }
+
+            // Calcuate the image dimensions...
+            var borderThickness = parseInt(domStyle.get(this.imgNode, "borderWidth"), 10);
+            this.imageNodeHeight = thumbnailHeight - ((margin * 2) + borderThickness);
+            this.imageNodeWidth = thumbnailWidth - ((margin * 2) + borderThickness);
+            
+            // Update the thumbnail nodes...
+            domStyle.set(this.thumbnailNode, {
+               "width": thumbnailWidth + "px",
+               "height": thumbnailHeight + "px"
+            });
+            domStyle.set(this.frameNode, {
+               "width": thumbnailWidth + "px",
+               "height": thumbnailHeight + "px",
+               "lineHeight": thumbnailHeight + "px"
+            });
+            domStyle.set(this.imgNode, "margin", margin + "px");
+
+            if (this.cropToFit)
+            {
+               // If cropping to fit we require the natural image width and height to be available
+               // (which are set on image load)...
+               this.naturalImageWidth && this.naturalImageHeight && this.cropImage();
+            }
+            else if (this.stretchToFit)
+            {
+               // If stretching we use the width as the minimum height, this will stretch landscape
+               // images vertically...
+               domStyle.set(this.imgNode, {
+                  "width": this.imageNodeWidth + "px",
+                  "minHeight": this.imageNodeWidth + "px",
+                  "maxHeight": "none",
+                  "maxWidth": "none"
+               });
+            }
+            else
+            {
+               // Otherwise just allow the image to maintain its natural aspect ratio with white
+               // space showing...
+               domStyle.set(this.imgNode, {
+                  "maxWidth": this.imageNodeWidth + "px",
+                  "maxHeight": this.imageNodeHeight + "px"
+               });
+            }
+         }
+      },
+
+      /**
+       * This function is used to configure the thumbnail DOM model so that the image is cropped and
+       * centered within the thumbnail. It relies on 
+       * [getNaturalImageSize]{@link module:alfresco/renderers/Thumbnail#getNaturalImageSize} 
+       * having been called to establish the orientation of the image. Therefore it is important that
+       * this is only called when the natural image dimensions have been established.
+       *
+       * @instance
+       * @since 1.0.40
+       */
+      cropImage: function alfresco_renderers_Thumbnail__cropImage() {
+         domStyle.set(this.frameNode, {
+            position: "relative",
+            overflow: "hidden",
+            textAlign: "left"
+         });
+
+         // When cropping the image we need to know whether we want to crop off the top and bottom (if the image
+         // is in portrait) or off the sides (if the image is in landscape)...
+         if (this.naturalImageHeight > this.naturalImageWidth)
+         {
+            // For portrait images...
+            // The offset is the half of the amount that that the image is taller than it is wide...
+            var vOffset = ((this.imageNodeWidth / (this.naturalImageWidth / this.naturalImageHeight)) - this.imageNodeWidth) / 2;
+            domStyle.set(this.imgNode, {
+               "width": this.imageNodeWidth + "px",
+               "position": "absolute",
+               "margin": "auto",
+               "maxHeight": "none",
+               "maxWidth": "none",
+               "top": "-" + vOffset + "px"
+            });
+         }
+         else
+         {
+            // For landscape images...
+            // The offset is half the amount that the image is wider than it is tall...
+            var hOffset = ((this.imageNodeHeight / (this.naturalImageHeight / this.naturalImageWidth)) - this.imageNodeHeight) / 2;
+            domStyle.set(this.imgNode, {
+               "height": this.imageNodeHeight + "px",
+               "position": "absolute",
+               "margin": "auto",
+               "maxHeight": "none",
+               "maxWidth": "none",
+               "left": "-" + hOffset + "px"
+            });
+         }
+         this.croppedToFit = true;
+      },
+
+      /**
+       * This function is called when the thumbnail image has been loaded and is used to store the 
+       * natural height and width of the image. This allows us to work out whether or not the image
+       * is in portrait or landscape and allows [cropImage]{@link module:alfresco/renderers/Thumbnail#cropImage}
+       * to determine the position and size of the image.
+       * 
+       * @instance
+       * @since 1.0.40
+       */
+      getNaturalImageSize: function alfresco_renderers_Thumbnail__getNaturalImageSize() {
+         this.naturalImageHeight = this.imgNode.naturalHeight;
+         this.naturalImageWidth = this.imgNode.naturalWidth;
+         if (this.cropToFit === true && !this.croppedToFit)
+         {
+            this.alfLog("info", "Cropping on image load");
+            this.cropImage();
          }
       },
 
@@ -408,31 +861,40 @@ define(["dojo/_base/declare",
       onLinkClick: function alfresco_renderers_Thumbnail__onLinkClick(evt) {
          event.stop(evt);
 
-         // TODO: Need to use a nodeRef property attribute that can be configured
-         var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
-         if (!nodeRef)
-         {
-            nodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
-         }
+         // Delegate to the ItemSelectionMixin - this will check if select on click is supported...
+         this.onSelectionClick();
 
-         // Check to see if the thumbnail is configured to display previews when clicked,
-         // this particular type of action could require an XHR request of the full node
-         // data so it needs to be handled in a specific way...
-         if (this.showDocumentPreview)
+         // Check whether or not the thumbnail should ONLY support selection on click (because in 
+         // some circumstances, e.g. film strip view carousel we might want to select AND perform
+         // an additinal action)...
+         if (!this.onlySelectOnClick)
          {
-            this.nodePromise = this.currentItem;
-            var type = lang.getObject("node.type", false, this.currentItem),
-                mimetype = lang.getObject("node.mimetype", false, this.currentItem);
-            if (!type || !mimetype)
+            // TODO: Need to use a nodeRef property attribute that can be configured
+            var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
+            if (!nodeRef)
             {
-               this.nodePromise = new Deferred();
-               this.onLoadNode(nodeRef);
+               nodeRef = lang.getObject("node.nodeRef", false, this.currentItem);
             }
-            when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
-         }
-         else
-         {
-            this.onNonPreviewAction();
+
+            // Check to see if the thumbnail is configured to display previews when clicked,
+            // this particular type of action could require an XHR request of the full node
+            // data so it needs to be handled in a specific way...
+            if (this.showDocumentPreview)
+            {
+               this.nodePromise = this.currentItem;
+               var type = lang.getObject("node.type", false, this.currentItem),
+                   mimetype = lang.getObject("node.mimetype", false, this.currentItem);
+               if (!type || !mimetype)
+               {
+                  this.nodePromise = new Deferred();
+                  this.onLoadNode(nodeRef);
+               }
+               when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
+            }
+            else
+            {
+               this.onNonPreviewAction();
+            }
          }
       },
 

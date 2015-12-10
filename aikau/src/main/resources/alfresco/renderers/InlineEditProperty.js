@@ -187,7 +187,18 @@ define(["dojo/_base/declare",
        */
       saveLabel: "inline-edit.save.label",
 
-       /**
+      /**
+       * If configured to be false then "Save" and "Cancel" actions will not be displayed when editing
+       * the property. It will still be possible to save changes by using the ENTER key.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.47
+       */
+      showOkCancelActions: true,
+
+      /**
        * The topic to publish when a property edit should be persisted. For convenience it is assumed that document
        * or folder properties are being edited so this function is called whenever a 'publishTopic' attribute
        * has not been set. The defaults are to publish on the "ALF_CRUD_CREATE" topic which will publish a payload
@@ -266,6 +277,12 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_renderers_InlineEditProperty__postCreate() {
          this.inherited(arguments);
+
+         if (!this.showOkCancelActions)
+         {
+            domClass.add(this.domNode, "alfresco-renderers-InlineEditProperty--hide-save-cancel-actions");
+         }
+
          if (this.permissionProperty)
          {
             var hasEditPermission = lang.getObject(this.permissionProperty, false, this.currentItem);
