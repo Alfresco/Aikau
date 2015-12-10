@@ -46,14 +46,8 @@ define(["dojo/_base/array",
       },
 
       // See API below
-      setHash: function alfresco_util_hashUtils__setHash(hashObj, replace) {
-         var hashObjToUse = lang.clone(hashObj),
-            hashString = ioQuery.objectToQuery(hashObjToUse);
-         this.setHashString(hashString, replace);
-      },
-
-      // See API below
-      setHashString: function alfresco_util_hashUtils__setHashString(hashString, replace) {
+      setHash: function alfresco_util_hashUtils__setHash(newHash, replace) {
+         var hashString = (typeof newHash === "string") ? newHash : ioQuery.objectToQuery(newHash);
          hash(hashString, replace);
       },
 
@@ -61,13 +55,14 @@ define(["dojo/_base/array",
       updateHash: function alfresco_util_hashUtils__updateHash(newValues, replace, force) {
          var currHash = this.getHash(),
             newHash = lang.mixin({}, currHash),
+            valuesToUse = typeof newValues === "string" ? ioQuery.queryToObject(newValues) : newValues,
             hashName,
             newHashValue,
             currHashValue,
             hashChanged;
-         for (hashName in newValues) {
-            if (newValues.hasOwnProperty(hashName)) {
-               newHashValue = newValues[hashName];
+         for (hashName in valuesToUse) {
+            if (valuesToUse.hasOwnProperty(hashName)) {
+               newHashValue = valuesToUse[hashName];
                currHashValue = currHash[hashName];
                if (typeof newHashValue === "undefined" || newHashValue === null) {
                   delete newHash[hashName];
@@ -121,7 +116,7 @@ define(["dojo/_base/array",
        *
        * @instance
        * @function
-       * @param {Object} hashObj The new hash object
+       * @param {object|string} hash The new hash
        * @param {boolean} [replace] Replace the current hash, rather than changing
        *                            (i.e. do not add to the history)
        */
@@ -135,8 +130,9 @@ define(["dojo/_base/array",
        * @param {string} hashString The new hash string
        * @param {boolean} [replace] Replace the current hash, rather than changing
        *                            (i.e. do not add to the history)
+       * @deprecated Since 1.0.48 - Use [hashUtils.setHash()]@{link module:alfresco/util/hashUtils#setHash} instead
        */
-      setHashString: lang.hitch(util, util.setHashString),
+      setHashString: lang.hitch(util, util.setHash),
 
       /**
        * Update the current hash (by default, this will not do the update if the

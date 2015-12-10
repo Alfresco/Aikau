@@ -541,6 +541,7 @@ define([],function() {
        * @property {string} url - The URL to navigate to
        * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {string} [modifyCurrent=false] Whether to modify the current hash (default is to completely replace it)
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
 

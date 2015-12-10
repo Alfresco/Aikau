@@ -51,6 +51,20 @@ model.jsonModel = {
          }
       },
       {
+         id: "MODIFY_HASH",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Modify a hash",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayload: {
+               url: "hash3=fred/barney",
+               type: "HASH",
+               target: "CURRENT",
+               modifyCurrent: true
+            }
+         }
+      },
+      {
          id: "POST_TO_CURRENT_PAGE",
          name: "alfresco/buttons/AlfButton",
          config: {

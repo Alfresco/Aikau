@@ -183,6 +183,7 @@ define(["intern!object",
             .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not found")
                .then(function(payload){
                   assert.propertyVal(payload, "url", "path=/different", "Navigation payload URL incorrect");
+                  assert.propertyVal(payload, "modifyCurrent", true, "Did not request to modify current hash");
                });
          },
 
