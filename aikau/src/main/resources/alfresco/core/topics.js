@@ -126,8 +126,10 @@ define([],function() {
        */
       CLOUD_AUTHENTICATION_SUCCESS: "ALF_CLOUD_AUTHENTICATION_SUCCESS",
 
-
       /**
+       * This is fired when content is created (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content creation.
        * 
        * @instance
        * @type {string}
@@ -135,6 +137,8 @@ define([],function() {
        * @since 1.0.48
        *
        * @event
+       * @property {string} parentNodeRef The nodeRef of the parent that the content was created within
+       * @property {string} nodeRef The nodeRef of the created content
        */
       CONTENT_CREATED: "ALF_CONTENT_CREATED",
 
