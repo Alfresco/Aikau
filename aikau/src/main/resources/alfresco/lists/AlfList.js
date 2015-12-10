@@ -157,6 +157,16 @@ define(["dojo/_base/declare",
       filteringTopics: null,
 
       /**
+       * Permit the loading indicators to remain on screen for a few milliseconds after the page loads
+       * in order to prevent "flashing" of the loading message.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      hideLoadingDelay: 250,
+
+      /**
        * Specifies how long to wait (in ms) before forcing removal of the loading message
        *
        * @instance
@@ -990,7 +1000,7 @@ define(["dojo/_base/declare",
       hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
          setTimeout(lang.hitch(this, function() {
             domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering"]);
-         }), 250);
+         }), this.hideLoadingDelay);
       },
 
       /**
