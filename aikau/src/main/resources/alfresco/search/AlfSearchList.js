@@ -808,6 +808,8 @@ define(["dojo/_base/declare",
             this.startIndex = 0;
             this.currentPage = 1;
          }
+         this.hideChildren(this.domNode);
+         this.clearViews();
       },
 
       /**
