@@ -85,6 +85,36 @@ model.jsonModel = {
          }
       },
       {
+         id: "PUBLISH_DATA",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Fake Data",
+            publishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
+            publishPayload: {
+               response: {
+                  totalRecords: 3,
+                  totalRecordsUpper: 3,
+                  startIndex: 0,
+                  numberFound: 3,
+                  items: [
+                     {
+                        name: "Res1",
+                        title: "Result 1"
+                     },
+                     {
+                        name: "Res2",
+                        title: "Result 2"
+                     },
+                     {
+                        name: "Res3",
+                        title: "Result 2"
+                     }
+                  ]
+               }
+            }
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

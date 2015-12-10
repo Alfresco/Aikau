@@ -565,8 +565,11 @@ define(["intern!object",
       return function() {
          return browser.end()
             .findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+            .clearLog()
             .click()
-            .end();
+         .end()
+
+         .getLastPublish("CUSTOM_ALF_DOCLIST_REQUEST_FINISHED");
       };
    }
 
