@@ -119,6 +119,58 @@ model.jsonModel = {
                   }
                },
                {
+                  name: "alfresco/layout/HorizontalWidgets",
+                  config: {
+                     widgets: [
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              additionalCssClasses: "primary-call-to-action",
+                              label: "Default",
+                              publishTopic: "BUTTON_TOPIC",
+                              publishPayload: {
+                                 foo: "bar"
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              additionalCssClasses: "primary-call-to-action dijitButtonHover",
+                              label: "Hover",
+                              publishTopic: "BUTTON_TOPIC",
+                              publishPayload: {
+                                 foo: "bar"
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              additionalCssClasses: "primary-call-to-action dijitButtonActive",
+                              label: "Pressed",
+                              publishTopic: "BUTTON_TOPIC",
+                              publishPayload: {
+                                 foo: "bar"
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              additionalCssClasses: "primary-call-to-action",
+                              label: "Disabled",
+                              disabled: true,
+                              publishTopic: "BUTTON_TOPIC",
+                              publishPayload: {
+                                 foo: "bar"
+                              }
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
                   name: "alfresco/forms/SingleTextFieldForm",
                   config: {
                      okButtonLabel: "Search",

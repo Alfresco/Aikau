@@ -25,6 +25,7 @@
  * <p>The following additionalCssClasses are built in and can be included if required:</p>
  * <ul>
  * <li><strong>call-to-action</strong>: The AlfButton is rendered in call-to-action colours</li>
+ * <li><strong>primary-call-to-action</strong>: The AlfButton is rendered in primary-call-to-action colours</li>
  * <li><strong>biggerBolder</strong>: The AlfButton is rendered with a bigger, bold font</li>
  * </ul>
  *
