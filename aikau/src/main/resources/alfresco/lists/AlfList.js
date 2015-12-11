@@ -36,6 +36,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/topics",
+        "alfresco/core/WidgetsCreator",
         "alfresco/lists/SelectedItemStateMixin",
         "alfresco/core/DynamicWidgetProcessingTopics",
         "alfresco/lists/views/AlfListView",
@@ -46,7 +47,7 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/io-query"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, SelectedItemStateMixin,
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
                  DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct, 
                  domClass, ioQuery) {
 
@@ -360,6 +361,17 @@ define(["dojo/_base/declare",
       widgets: null,
 
       /**
+       * An optional JSON model defining the widgets to display when an error occurs attempting to
+       * load data to display.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.48
+       */
+      widgetsForDataFailureDisplay: null,
+
+      /**
        * Use to keeps track of the [view]{@link module:alfresco/lists/views/AlfListView} that is currently selected.
        *
        * @instance
@@ -367,6 +379,19 @@ define(["dojo/_base/declare",
        * @default
        */
       _currentlySelectedView: null,
+
+      /**
+       * A flag to indicate whether or not the 
+       * [widgetsForDataFailureDisplay]{@link module:alfresco/lists/AlfList#widgetsForDataFailureDisplay}
+       * have been rendered. This prevents them from being repeatedly set. It should not be explicitly
+       * configured in the list - it is for internal use only.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.48
+       */
+      _dataFailureWidgetsRendered: false,
 
       /**
        * @instance
@@ -968,6 +993,16 @@ define(["dojo/_base/declare",
       showDataLoadFailure: function alfresco_lists_AlfList__showDataLoadFailure() {
          this.hideChildren(this.domNode);
          domClass.remove(this.dataFailureNode, "share-hidden");
+
+         if (this.widgetsForDataFailureDisplay && !this._dataFailureWidgetsRendered)
+         {
+            var wc = new WidgetsCreator({
+               widgets: this.widgetsForDataFailureDisplay
+            });
+            domConstruct.empty(this.dataFailureNode);
+            wc.buildWidgets(this.dataFailureNode);
+            this._dataFailureWidgetsRendered = true;
+         }
       },
 
       /**
@@ -1206,8 +1241,6 @@ define(["dojo/_base/declare",
          // Hide any messages
          this.hideLoadingMessage();
       },
-
-      
 
       /**
        * Publishes the details of the documents that have been loaded (primarily for multi-selection purposes)

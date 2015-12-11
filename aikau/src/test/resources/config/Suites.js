@@ -185,6 +185,7 @@ define({
       "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
       "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
+      "src/test/resources/alfresco/lists/views/ViewNoDataWidgetsTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
