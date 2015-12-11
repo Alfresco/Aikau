@@ -29,159 +29,167 @@ define(["alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
         function(TestCommon, registerSuite, assert, keys) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "ComboBox Tests (mouse)",
+      return {
+         name: "ComboBox Tests (mouse)",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/ComboBox", "ComboBox Tests (mouse)").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/ComboBox", "ComboBox Tests (mouse)").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Check that mouse selection of option updates value": function() {
-         return browser.findByCssSelector("#PROPERTIES label.label")
-            .click()
-         .end()
+         "Check place holder text": function() {
+            return browser.findDisplayedByCssSelector("#TAGS .dijitPlaceHolder")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Add or select tag", "Place holder text not correct");
+               });
+         },
 
-         .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
-            .click()
-         .end()
-         .findByCssSelector("#PROPERTIES_CONTROL_popup0")
-            .click()
-         .end()
-
-         .findByCssSelector(".confirmationButton > span")
-            .click()
+         "Check that mouse selection of option updates value": function() {
+            return browser.findByCssSelector("#PROPERTIES label.label")
+               .click()
             .end()
 
-         .getLastPublish("POST_FORM")
-            .then(function(payload) {
-               assert.propertyVal(payload, "property", "act:actionExecutionTitle", "Property value not set from mouse selection");
-            });
-      },
-
-      "Checking the number of tag options...": function() {
-         return browser.findByCssSelector("#TAGS .dijitArrowButtonInner")
-            .click()
+            .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
+               .click()
+            .end()
+            .findByCssSelector("#PROPERTIES_CONTROL_popup0")
+               .click()
             .end()
 
-         .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
-            .then(function(elements) {
-               assert.lengthOf(elements, 4, "Didn't display full list of tags");
-            });
-      },
+            .findByCssSelector(".confirmationButton > span")
+               .click()
+               .end()
 
-      "Checking the number of properties options": function() {
-         return browser.findByCssSelector("#TAGS label.label")
-            .click()
-            .end()
+            .getLastPublish("POST_FORM")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "property", "act:actionExecutionTitle", "Property value not set from mouse selection");
+               });
+         },
 
-         .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
-            .click()
-            .end()
+         "Checking the number of tag options...": function() {
+            return browser.findByCssSelector("#TAGS .dijitArrowButtonInner")
+               .click()
+               .end()
 
-         .findAllByCssSelector("#PROPERTIES_CONTROL_popup .dijitMenuItem[item]")
-            .then(function(elements) {
-               assert.lengthOf(elements, 5, "Didn't display full list of properties");
-            });
-      },
+            .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4, "Didn't display full list of tags");
+               });
+         },
 
-      "Checking tag options are reduced": function() {
-         return browser.findByCssSelector("#TAGS_CONTROL")
-            .clearLog()
-            .type("t")
-            .end()
+         "Checking the number of properties options": function() {
+            return browser.findByCssSelector("#TAGS label.label")
+               .click()
+               .end()
 
-         .getLastPublish("_SUCCESS")
+            .findByCssSelector("#PROPERTIES .dijitArrowButtonInner")
+               .click()
+               .end()
 
-         .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
-            .then(function(elements) {
-               assert.lengthOf(elements, 4, "Did not expect 't' to reduce elements list");
-            });
-      },
+            .findAllByCssSelector("#PROPERTIES_CONTROL_popup .dijitMenuItem[item]")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 5, "Didn't display full list of properties");
+               });
+         },
 
-      "Checking tag options are further reduced": function() {
-         return browser.findByCssSelector("#TAGS_CONTROL")
-            .clearLog()
-            .type("ag1")
-            .end()
+         "Checking tag options are reduced": function() {
+            return browser.findByCssSelector("#TAGS_CONTROL")
+               .clearLog()
+               .type("t")
+               .end()
 
-         .getLastPublish("_SUCCESS")
+            .getLastPublish("_SUCCESS")
 
-         .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "List was not filtered correctly for search 'tag1'");
-            });
-      },
+            .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4, "Did not expect 't' to reduce elements list");
+               });
+         },
 
-      "Check that tag value gets auto-completed and posted": function() {
-         return browser.findByCssSelector("#TAGS_CONTROL")
-            .click()
-            .pressKeys(keys.RETURN)
-            .end()
+         "Checking tag options are further reduced": function() {
+            return browser.findByCssSelector("#TAGS_CONTROL")
+               .clearLog()
+               .type("ag1")
+               .end()
 
-         .findByCssSelector(".confirmationButton > span")
-            .click()
-            .end()
+            .getLastPublish("_SUCCESS")
 
-         .getLastPublish("POST_FORM")
-            .then(function(payload) {
-               assert.propertyVal(payload, "tag", "tag1", "Tag value was not auto-completed and posted");
-            });
-      },
+            .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "List was not filtered correctly for search 'tag1'");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Check that tag value gets auto-completed and posted": function() {
+            return browser.findByCssSelector("#TAGS_CONTROL")
+               .click()
+               .pressKeys(keys.RETURN)
+               .end()
+
+            .findByCssSelector(".confirmationButton > span")
+               .click()
+               .end()
+
+            .getLastPublish("POST_FORM")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "tag", "tag1", "Tag value was not auto-completed and posted");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "ComboBox Tests (keyboard)",
+      return {
+         name: "ComboBox Tests (keyboard)",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/ComboBox", "ComboBox Tests (keyboard)").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/ComboBox", "ComboBox Tests (keyboard)").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Down arrow test": function() {
-         // Slightly convoluted way to leave a result stem in the #TAGS_CONTROL
-         return browser.pressKeys(keys.TAB)
-            .pressKeys("g1")
-            .sleep(500)
-            .pressKeys(keys.TAB)
-            .sleep(500)
+         "Down arrow test": function() {
+            // Slightly convoluted way to leave a result stem in the #TAGS_CONTROL
+            return browser.pressKeys(keys.TAB)
+               .pressKeys("g1")
+               .sleep(500)
+               .pressKeys(keys.TAB)
+               .sleep(500)
+               .pressKeys([keys.SHIFT, keys.TAB])
+               .pressKeys(keys.ARROW_DOWN)
+               .sleep(500)
+               .end()
+
+            // Release SHIFT and TAB before assertion...
             .pressKeys([keys.SHIFT, keys.TAB])
-            .pressKeys(keys.ARROW_DOWN)
-            .sleep(500)
-            .end()
 
-         // Release SHIFT and TAB before assertion...
-         .pressKeys([keys.SHIFT, keys.TAB])
+            // Test that clicking the down arrow gives results based on the stem left above
+            .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2, "Wrong number of results for search string 'g1'");
+               });
+         },
 
-         // Test that clicking the down arrow gives results based on the stem left above
-         .findAllByCssSelector("#TAGS_CONTROL_popup .dijitMenuItem[item]")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "Wrong number of results for search string 'g1'");
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
