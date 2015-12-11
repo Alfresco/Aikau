@@ -67,6 +67,7 @@ model.jsonModel = {
                                           dialogTitle: "{id}",
                                           dialogConfirmationButtonTitle: "Update",
                                           dialogCancellationButtonTitle: "Close",
+                                          fixedWidth: true,
                                           formSubmissionTopic: "ALF_CRUD_UPDATE",
                                           widgets: [
                                              {
