@@ -60,7 +60,11 @@ define(["dojo/_base/declare",
          {
             // This is a document so we can subscribe to the expected request to display content
             this.widgets = [{
-               name: "alfresco/preview/AlfDocumentPreview"
+               name: "alfresco/preview/AlfDocumentPreview",
+               config: {
+                  heightMode: this.heightMode,
+                  heightAdjustment: this.heightAdjustment
+               }
             }];
             this.alfSubscribe("ALF_FILMSTRIP_DOCUMENT_REQUEST__" + this.nodeRef, lang.hitch(this, this.requestDocument, this.nodeRef));
          }
