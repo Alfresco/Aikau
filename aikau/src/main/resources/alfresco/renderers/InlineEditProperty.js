@@ -248,7 +248,7 @@ define(["dojo/_base/declare",
 
          if (!this.editIconImageSrc)
          {
-            this.editIconImageSrc = require.toUrl("alfresco/renderers") + "/css/images/edit-16.png";
+            this.editIconImageSrc = require.toUrl("alfresco/renderers/css/images/edit-16.png");
          }
 
          // Localize the labels and alt-text...

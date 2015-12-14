@@ -1007,7 +1007,7 @@ define(["dojo/_base/declare",
 
          if (!this.validationInProgressImgSrc)
          {
-            this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
+            this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationInProgressImg);
          }
          this.validationInProgressAltText = this.message(this.validationInProgressAltText, {
             0: this.message(this.label)
@@ -1015,7 +1015,7 @@ define(["dojo/_base/declare",
 
          if (!this.validationErrorImgSrc)
          {
-            this.validationErrorImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationErrorImg;
+            this.validationErrorImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationErrorImg);
          }
          this.validationErrorAltText = this.message(this.validationErrorAltText, {
             0: this.message(this.label)
@@ -1023,7 +1023,7 @@ define(["dojo/_base/declare",
 
          if (!this.inlineHelpImgSrc)
          {
-            this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.inlineHelpImg;
+            this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.inlineHelpImg);
          }
          this.inlineHelpAltText = this.message(this.inlineHelpAltText, {
             0: this.message(this.label)

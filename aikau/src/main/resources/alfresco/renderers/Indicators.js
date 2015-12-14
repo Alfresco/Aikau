@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
             classes.push("has-action");
          }
          var img = domConstruct.create("img", {
-            "src": require.toUrl("alfresco/renderers") + "/css/images/indicators/" + indicator.icon,
+            "src": require.toUrl("alfresco/renderers/css/images/indicators/" + indicator.icon),
             "title": label,
             "alt": indicator.id,
             "class": classes.join(" ")
