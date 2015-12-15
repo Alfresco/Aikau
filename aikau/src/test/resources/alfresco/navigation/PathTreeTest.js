@@ -159,6 +159,34 @@ define(["intern!object",
             return browser.findByCssSelector("#TREE2_TREE_workspace_SpacesStore_d56afdc3-0174-4f8c-bce8-977cafd712ab > .dijitTreeRowSelected");
          },
 
+         // See AKU-739 - Updates have been made to ensure that tree nodes can be refreshed on folder creation/deletion
+         //               The thing is to check that XHR requests are made to get the latest data
+         "Check tree node refresh on folder add": function() {
+            return browser.findById("ADD_FOLDER_label")
+                  .clearXhrLog()
+                  .click()
+               .end()
+
+               .getLastXhr()
+                  .then(function(xhr) {
+                     /* jshint maxlen:500*/
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                  });
+         },
+
+         "Check tree node refresh on folder delete": function() {
+            return browser.findById("DELETE_FOLDER_label")
+                  .clearXhrLog()
+                  .click()
+               .end()
+
+               .getLastXhr()
+                  .then(function(xhr) {
+                     /* jshint maxlen:500*/
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                  });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

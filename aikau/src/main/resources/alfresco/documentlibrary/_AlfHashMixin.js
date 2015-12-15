@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * @param {string} hashString An optional string to use as the hash. If not provided the current hash will be
        */
       initialiseFilter: function alfresco_documentlibrary_AlfHashMixin__intialiseFilter(hashString) {
-         hashString && hashUtils.setHashString(hashString);
+         hashString && hashUtils.setHash(hashString);
          this.onHashChange(hashUtils.getHashString());
       },
       

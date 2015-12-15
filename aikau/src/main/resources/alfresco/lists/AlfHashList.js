@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
 
                if (hashString)
                {
-                  hashUtils.setHashString(hashString);
+                  hashUtils.setHash(hashString);
                }
                else if (this.currentFilter)
                {

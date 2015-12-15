@@ -379,7 +379,8 @@ define(["dojo/_base/declare",
                config.publishPayload = {
                   url: "path=" + (path || "/"),
                   type: "HASH",
-                  target: "CURRENT"
+                  target: "CURRENT",
+                  modifyCurrent: true
                };
                config.publishGlobal = true;
             }

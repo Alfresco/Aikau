@@ -18,11 +18,14 @@
  */
 
 /**
- * This module provides a way in which [form controls]{@link module:alfresco/forms/controls/BaseFormControl}
+ * <p>This module provides a way in which [form controls]{@link module:alfresco/forms/controls/BaseFormControl}
  * can be horizontally aligned within a [form]{@link module:alfresco/forms/Form}. It extends the
  * [horizontal widgets layout widget]{@link module:alfresco/layout/HorizontalWidgets} to gain the layout, dimensions
  * and resizing capabilities and aliases the expected functions to iterate over all the
- * [form controls]{@link module:alfresco/forms/controls/BaseFormControl} that it may have processed.
+ * [form controls]{@link module:alfresco/forms/controls/BaseFormControl} that it may have processed.</p>
+ * <p>When using this widget in a dialog you should make sure to configure it to have
+ * a [fixedWidth]{@link module:alfresco/dialogs/AlfDialog#fixedWidth} - this can also be configured in the
+ * when using the [DialogService]{@link module:alfresco/services/DialogService}.</p>
  * 
  * @module alfresco/forms/ControlRow
  * @extends module:alfresco/layout/HorizontalWidgets,
