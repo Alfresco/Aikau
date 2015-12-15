@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
        */
       getPages: function alfresco_services_PageService__loadPages(/*jshint unused:false */ payload) {
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "remote-share/pages",
+            url: AlfConstants.PROXY_URI + "horizon3/pages",
             method: "GET",
             alfTopic: payload.alfResponseTopic,
             successCallback: this.getPagesForPaletteSuccess,
