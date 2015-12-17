@@ -173,6 +173,25 @@ function getFormControlConfigWidgets() {
                               description: "dnd.model.forms.noValueUpdateWhenHiddenOrDisabled.description",
                               value: false
                            }
+                        },
+                        {
+                           name: "alfresco/forms/controls/MultipleEntryFormControl",
+                           config: {
+                              name: "config.noPostWhenValueIs",
+                              value: "",
+                              label: "Don't include if value is...",
+                              description: "An array of values that if matched to the form value will prevent it from being submitted.",
+                              useSimpleValues: true,
+                              widgets: [
+                                 {
+                                    name: "alfresco/forms/controls/TextBox",
+                                    config: {
+                                       name: "value",
+                                       label: "Value"
+                                    }
+                                 }
+                              ]
+                           }
                         }
                      ]
                   }
