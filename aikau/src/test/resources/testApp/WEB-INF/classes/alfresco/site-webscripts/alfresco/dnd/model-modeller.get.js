@@ -1,8 +1,6 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/TabbedFormControls.lib.js">
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/FormControlTab.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/DocumentList.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/HtmlListView.lib.js">
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/dnd.lib.js">
 
 model.jsonModel = {
@@ -26,9 +24,7 @@ model.jsonModel = {
                getDefaultDragAndDropTargetModel(),
                getDefaultDroppedNestingItemWrapperModel(),
                getDefaultTabbedFormControlsModel(),
-               getDefaultFormControlTabModel(),
-               getDefaultDocumentListModel(),
-               getDefaultHtmlListViewModel()
+               getDefaultFormControlTabModel()
             ]
          }
       },
@@ -93,30 +89,6 @@ model.jsonModel = {
                                     name: "alfresco/dnd/DragAndDropItems",
                                     config: {
                                        items: [
-                                          {
-                                             type: [ "widget" ],
-                                             label: "Document List",
-                                             value: {
-                                                name: "alfresco/documentlibrary/AlfDocumentList",
-                                                config: {
-                                                   useModellingService: true,
-                                                   label: "Widgets",
-                                                   targetProperty: "config.widgets"
-                                                }
-                                             }
-                                          },
-                                          {
-                                             type: [ "widget" ],
-                                             label: "HTML List View",
-                                             value: {
-                                                name: "alfresco/lists/views/HtmlListView",
-                                                config: {
-                                                   useModellingService: true,
-                                                   label: "Widgets",
-                                                   targetProperty: "config.widgets"
-                                                }
-                                             }
-                                          },
                                           {
                                              type: [ "widget" ],
                                              label: "Tabbed Form Controls",
