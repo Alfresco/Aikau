@@ -226,7 +226,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_DragAndDropTargetControl__setupChangeEvents() {
-         on(this.domNode, Constants.updateItemsEvent, lang.hitch(this, this.onDragAndDropTargetUpdated));
+         this.own(on(this.domNode, Constants.updateItemsEvent, lang.hitch(this, this.onDragAndDropTargetUpdated)));
       },
 
       /**
