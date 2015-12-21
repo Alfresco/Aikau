@@ -118,29 +118,31 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The details of the notification.
+       * @since 1.0.48
        */
       onDisplayStickyPanel: function alfresco_services_NotificationService__onDisplayStickyPanel(payload) {
+         var panelOpts = {},
+            closeSubscription;
          if (theStickyPanel) {
-            this.alfLog("warn", "It was not possible to display the StickyPanel because one is already displayed", payload);
+            this.alfLog("warn", "It was not possible to display a StickyPanel because one is already displayed", payload);
             return;
          }
          if (payload.widgets) {
-            var panelOpts = {
-               widgets: payload.widgets
-            };
+            panelOpts.widgets = payload.widgets
             if(payload.title) {
                panelOpts.title = payload.title;
             }
             if(payload.width) {
-               panelOpts.width = payload.width;
+               panelOpts.panelWidth = payload.width;
             }
-            if(payload.padding || payload.padding === 0 || payload.padding === "0") {
-               panelOpts.padding = payload.padding;
+            if(payload.padding || payload.padding === 0) {
+               panelOpts.widgetsPadding = payload.padding;
             }
             theStickyPanel = new StickyPanel(panelOpts);
-            on(theStickyPanel, "destroy", function() {
+            closeSubscription = this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, function() {
                theStickyPanel = null;
-            });
+               this.alfUnsubscribe(closeSubscription);
+            }));
          } else {
             this.alfLog("warn", "It was not possible to display the StickyPanel because no suitable 'widgets' attribute was provided", payload);
          }

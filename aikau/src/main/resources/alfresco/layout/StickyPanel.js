@@ -137,9 +137,11 @@ define(["alfresco/core/Core",
          this.inherited(arguments);
          this.setupSubscriptions();
          document.body.appendChild(this.domNode);
-         this.titleNode.textContent = this.title;
+         this.setTitle();
          this.widgets && this.processWidgets(this.widgets, this.widgetsNode);
-         this.widgetsPadding && domStyle.set(this.widgetsNode, "padding", this.widgetsPadding + "px");
+         if(this.widgetsPadding || this.widgetsPadding === 0) {
+            domStyle.set(this.widgetsNode, "padding", this.widgetsPadding + "px");
+         }
          this.sizePanel();
       },
 
@@ -185,15 +187,16 @@ define(["alfresco/core/Core",
       },
 
       /**
-       * Set the title of the panel.
+       * Set the title of the panel. If no payload or title is provided, then it will use
+       * the [title property]{@link module:alfresco/layout/StickyPanel#title}.
        *
        * @instance
        * @param {object} payload The payload containing the new title
        * @param {string} payload.title The new title
        */
       setTitle: function alfresco_layout_StickyPanel__setTitle(payload) {
-         var newTitle = (payload && payload.title && this.message(payload.title)) || "";
-         this.titleNode.textContent = newTitle;
+         var newTitle = (payload && payload.title) || this.title;
+         this.titleNode.textContent = this.message(newTitle);
       },
 
       /**

@@ -294,7 +294,7 @@ define([],function() {
        * @property {number} [padding=10] The padding to be applied to the widgets area
        * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
        */
-      DISPLAY_STICKY_PANEL: "DISPLAY_STICKY_PANEL",
+      DISPLAY_STICKY_PANEL: "ALF_DISPLAY_STICKY_PANEL",
 
       /**
        * Publish this to indicate the de-selection of an individual item
@@ -835,6 +835,8 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.48
+       *
+       * @event
        */
       STICKY_PANEL_CLOSE: "STICKY_PANEL_CLOSE",
 
@@ -845,6 +847,8 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.48
+       *
+       * @event
        */
       STICKY_PANEL_CLOSED: "STICKY_PANEL_CLOSED",
 
@@ -855,6 +859,9 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.48
+       *
+       * @event
+       * @property {string} title The new title to use
        */
       STICKY_PANEL_SET_TITLE: "STICKY_PANEL_SET_TITLE",
 
