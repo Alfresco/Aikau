@@ -56,7 +56,7 @@
          opacity: .5;
       }
    }
-   &.call-to-action {
+   &.call-to-action, &.primary-call-to-action {
       background: @call-to-action-button-background;
       border: @call-to-action-button-border;
       border-radius: @call-to-action-button-border-radius;
@@ -93,9 +93,21 @@
          }
       }
    }
+   &.primary-call-to-action {
+      background: @primary-call-to-action-button-background;
+      border: @primary-call-to-action-button-border;
+      &.dijitButtonFocused, &.dijitButtonHover {
+         background: @primary-call-to-action-button-background-focus;
+         border: @primary-call-to-action-button-border-focus;
+      }
+      &.dijitButtonActive {
+         background: @primary-call-to-action-button-background-active;
+         border: @primary-call-to-action-button-border-active;
+      }
+   }
    &.biggerBolder .dijitButtonText {
       font-family: @bold-font;
-      font-weight: @standard-button-font-weight;
       font-size: @large-font-size;
+      font-weight: @standard-button-font-weight;
    }
 }

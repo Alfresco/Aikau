@@ -219,6 +219,7 @@ model.jsonModel = {
                                              }
                                           },
                                           {
+                                             id: "PDM",
                                              name: "alfresco/renderers/PublishingDropDownMenu",
                                              config: {
                                                 publishTopic: "RM_USER_SECURITY_CLEARANCE_SET",

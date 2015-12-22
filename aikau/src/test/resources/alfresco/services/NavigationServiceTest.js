@@ -50,6 +50,15 @@ define(["intern!object",
                });
          },
 
+         "Modify a hash": function() {
+            return browser.findByCssSelector("#MODIFY_HASH_label")
+               .click()
+               .execute("return window.location.hash.toString()")
+               .then(function(hash) {
+                  assert.equal(hash, "#hash1=bob&hash2=ted&hash3=fred%2Fbarney", "Modifying a hash didn't work");
+               });
+         },
+
          "Post to current page": function() {
             return browser.findAllByCssSelector("#NOTHING_POSTED")
                   .then(function(elements) {

@@ -81,6 +81,39 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "STICKY_PANEL_BUTTON",
+         config: {
+            label: "Display sticky panel",
+            publishTopic: "ALF_DISPLAY_STICKY_PANEL",
+            publishPayload: {
+               title: "My sticky panel title",
+               width: 500,
+               padding: 0,
+               widgets: [
+                  {
+                     name: "alfresco/html/Heading",
+                     config: {
+                        label: "This is some text to go inside the sticky panel",
+                        level: 3
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "UPDATE_PANEL_TITLE_BUTTON",
+         config: {
+            label: "Update panel title (and check XSS)",
+            publishTopic: "ALF_STICKY_PANEL_SET_TITLE",
+            publishPayload: {
+               title: "<img src=\"1\" onerror=\"window.hackedPanel=true\">"
+            }
+         }
+      },
+      {
          name: "alfresco/html/Spacer",
          config: {
             height: "500px"
@@ -99,9 +132,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/DebugLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

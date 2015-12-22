@@ -1,3 +1,16 @@
+/* global page */
+/* jshint sub:true */
+
+var heightMode, heightAdjustment;
+if (page.url.args["heightMode"])
+{
+   heightMode = page.url.args["heightMode"];
+}
+if (page.url.args["heightAdjustment"])
+{
+   heightAdjustment = page.url.args["heightAdjustment"];
+}
+
 model.jsonModel = {
    services: [
       {
@@ -13,9 +26,17 @@ model.jsonModel = {
    ],
    widgets:[
       {
+         name: "alfresco/html/Label",
+         config: {
+            label: "Use 'heightMode' and 'heightAdjustment' request parameters to alter the preview height"
+         }
+      },
+      {
+         id: "SEARCH_RESULTS",
          name: "alfresco/search/SearchFilmStripView",
          config: {
-            id: "SEARCH_RESULTS",
+            heightMode: heightMode,
+            heightAdjustment: heightAdjustment,
             currentData: {
                items: [
                   {

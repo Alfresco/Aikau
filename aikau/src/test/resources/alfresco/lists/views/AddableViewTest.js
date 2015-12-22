@@ -118,7 +118,10 @@ define(["alfresco/TestCommon",
          },
 
          "Create an item from the list view": function() {
-            return browser.findById("CREATE_BUTTON_2_ITEM_0_label")
+            return browser.waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+            .end()
+
+            .findById("CREATE_BUTTON_2_ITEM_0_label")
                .click()
             .end()
 

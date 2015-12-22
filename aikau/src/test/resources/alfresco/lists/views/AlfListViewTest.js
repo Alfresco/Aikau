@@ -41,10 +41,6 @@ registerSuite(function(){
             browser.end();
          },
 
-         "Can find loading message": function() {
-            return browser.findByCssSelector("#LOADING .alfresco-lists-AlfList > .data-loading");
-         },
-
          "Can find data-load failure message": function() {
             return browser.findByCssSelector("#DATA_LOAD_FAILURE .alfresco-lists-AlfList > .data-failure");
          },

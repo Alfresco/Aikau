@@ -1,9 +1,6 @@
 <div class="alfresco-lists-AlfList">
-   <div data-dojo-attach-point="noViewSelectedNode" class="info no-view-selected share-hidden">${noViewSelectedMessage}</div>
-   <div data-dojo-attach-point="noDataNode" class="info no-data share-hidden">${noDataMessage}</div>
-   <div data-dojo-attach-point="dataFailureNode" class="info data-failure share-hidden">${dataFailureMessage}</div>
-   <div data-dojo-attach-point="dataLoadingNode" class="info data-loading share-hidden">${fetchingDataMessage}</div>
-   <div data-dojo-attach-point="renderingViewNode" class="info rendering-view share-hidden">${renderingViewMessage}</div>
-   <div data-dojo-attach-point="viewsNode" class="info rendered-view share-hidden"></div>
-   <div data-dojo-attach-point="dataLoadingMoreNode" class="info data-loading-more share-hidden">${fetchingMoreDataMessage}</div>
+   <div data-dojo-attach-point="noDataNode" class="share-hidden no-data">${noDataMessage}</div>
+   <div data-dojo-attach-point="dataFailureNode" class="share-hidden data-failure">${dataFailureMessage}</div>
+   <div data-dojo-attach-point="viewsNode" data-aikau-loading-message="${fetchingDataMessage}" data-aikau-rendering-message="${renderingViewMessage}" class="alfresco-lists-AlfList__views share-hidden rendered-view"></div>
+   <div data-dojo-attach-point="dataLoadingMoreNode" class="share-hidden data-loading-more">${fetchingMoreDataMessage}</div>
 </div>

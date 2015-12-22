@@ -168,7 +168,7 @@ define(["dojo/_base/declare",
                // Determine the location of the URL...
                if (data.type === urlTypes.HASH)
                {
-                  hashUtils.setHashString(url);
+                  hashUtils[data.modifyCurrent ? "updateHash" : "setHash"](url);
                }
                else if (!data.target || data.target === this.currentTarget)
                {

@@ -32,7 +32,7 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/login/LoginFormTest"
+      "src/test/resources/alfresco/services/NotificationServiceTest"
 
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
@@ -184,6 +184,7 @@ define({
       "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
       "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
+      "src/test/resources/alfresco/lists/views/ViewNoDataWidgetsTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 

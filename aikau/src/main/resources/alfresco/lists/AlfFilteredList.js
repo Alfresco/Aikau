@@ -113,7 +113,11 @@ define(["dojo/_base/declare",
        * @since 1.0.34
        */
       allWidgetsProcessed: function alfresco_lists_AlfFilteredList__allWidgetsProcessed(widgets, processWidgetsId) {
-         if (processWidgetsId === this.filterWidgetsMappingId)
+         if (processWidgetsId === "NEW_VIEW_INSTANCE")
+         {
+            this.handleNewViewInstances(widgets);
+         }
+         else if (processWidgetsId === this.filterWidgetsMappingId)
          {
             this._storeFilterWidgets(widgets);
             this._updateFilterFieldsFromHash();

@@ -80,4 +80,39 @@ define(["intern!object",
          }
       };
    });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "SearchFilmStripView Tests (height config)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/SearchFilmStripView?heightMode=400", "SearchFilmStripView Tests  (height config)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         // See AKU-744...
+         "Height configuration is applied": function() {
+            return browser.findByCssSelector("body")
+
+               // Last publish on page render completion...
+               .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
+               
+               .findDisplayedById("SEARCH_RESULTS_PREVIEWS")
+                  .getSize()
+                  .then(function(size) {
+                     assert.equal(size.height, 400, "Height configuration not used");
+                  });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
 });

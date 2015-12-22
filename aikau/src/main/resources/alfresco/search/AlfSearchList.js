@@ -213,7 +213,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDisplayMessages: function alfresco_search_AlfSearchList__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message("searchlist.no.view.message");
          this.noDataMessage = this.message("searchlist.no.data.message");
          this.fetchingDataMessage = this.message("searchlist.loading.data.message");
          this.renderingViewMessage = this.message("searchlist.rendering.data.message");
@@ -734,7 +733,7 @@ define(["dojo/_base/declare",
             // Publish the number of search results found...
             this.alfPublish("ALF_SEARCH_RESULTS_COUNT", {
                count: resultsCount,
-               label: this.message("faceted-search.results-menu.results-found", {
+               label: this.message("faceted-search.results-menu.results-found-patch", {
                   0: resultsCount
                })
             });

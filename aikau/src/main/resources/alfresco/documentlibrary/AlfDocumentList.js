@@ -30,8 +30,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/util/hashUtils",
-        "dojo/io-query"],
-        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery) {
+        "dojo/io-query",
+        "dojo/dom-class"],
+        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery, domClass) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -43,15 +44,6 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/AlfDocumentList.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/AlfDocumentList.properties"}],
-
-      /**
-       * An array of the CSS files to use with this widget.
-       *
-       * @instance cssRequirements {Array}
-       * @type {object[]}
-       * @default [{cssFile:"./css/AlfDocumentList.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/AlfDocumentList.css"}],
 
       /**
        * Indicates whether or not folders should be shown in the document library.
@@ -143,6 +135,18 @@ define(["dojo/_base/declare",
                path: "/"
             };
          }
+      },
+
+      /**
+       * Run after widget created
+       *
+       * @instance
+       * @override
+       * @since 1.0.48
+       */
+      postCreate: function alfrescdo_documentlibrary_AlfDocumentList__postCreate() {
+         this.inherited(arguments);
+         domClass.add(this.domNode, "alfresco-documentlibrary-AlfDocumentList");
       },
 
       /**

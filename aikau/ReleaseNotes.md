@@ -1,4 +1,4 @@
-Aikau 1.0.47 Release Notes
+Aikau 1.0.48 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,19 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.48:
+* [AKU-687](https://issues.alfresco.com/jira/browse/AKU-687)       - Add "primary-call-to-action" CSS class for AlfButton
+* [AKU-700](https://issues.alfresco.com/jira/browse/AKU-700)       - Improve list loading to make "smoother"
+* [AKU-732](https://issues.alfresco.com/jira/browse/AKU-732)       - Add hash update support for AlfBreadcrumbTrail
+* [AKU-739](https://issues.alfresco.com/jira/browse/AKU-739)       - Make PathTree respond to creation/deletion
+* [AKU-742](https://issues.alfresco.com/jira/browse/AKU-742)       - Placeholder support for ComboBox
+* [AKU-744](https://issues.alfresco.com/jira/browse/AKU-744)       - Height config support for FilmStripViewSearchResult
+* [AKU-745](https://issues.alfresco.com/jira/browse/AKU-745)       - Escaping of variables in AlfBreadcrumbTrail
+* [AKU-747](https://issues.alfresco.com/jira/browse/AKU-747)       - Created StickyPanel widget
+* [AKU-749](https://issues.alfresco.com/jira/browse/AKU-749)       - Removed HTML from search count label
+* [AKU-754](https://issues.alfresco.com/jira/browse/AKU-754)       - Dutch date format correction
+* [AKU-759](https://issues.alfresco.com/jira/browse/AKU-759)       - AlfShareFooter copyright correction
+
 1.0.47:
 * [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Ensure form elementrs pass Wave accessibility checks
 * [AKU-703](https://issues.alfresco.com/jira/browse/AKU-703)       - Added config option for full-width FacetFilters

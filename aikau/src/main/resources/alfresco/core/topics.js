@@ -127,6 +127,37 @@ define([],function() {
       CLOUD_AUTHENTICATION_SUCCESS: "ALF_CLOUD_AUTHENTICATION_SUCCESS",
 
       /**
+       * This is fired when content is created (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content creation.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string} parentNodeRef The nodeRef of the parent that the content was created within
+       * @property {string} nodeRef The nodeRef of the created content
+       */
+      CONTENT_CREATED: "ALF_CONTENT_CREATED",
+
+      /**
+       * This is fired when content is deleted (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content deletion.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string[]} nodeRef The nodeRefs of the content that has been deleted.
+       */
+      CONTENT_DELETED: "ALF_CONTENT_DELETED",
+
+      /**
        * This topic is published to launch the copying or moving of a node (or nodes) to another location.
        *
        * @instance
@@ -241,8 +272,29 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed in the prompt
+       * @property {string} [title] The title of the prompt
        */
       DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
+
+      /**
+       * This topic can be published to request that a [StickyPanel]{@link module:alfresco/layout/StickyPanel} be
+       * displayed. It is subscribed to by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {object[]} widgets The widgets to appear in the panel
+       * @property {string} [title=default.title] The title to display (uses i18n)
+       * @property {number} [padding=10] The padding to be applied to the widgets area
+       * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
+       */
+      DISPLAY_STICKY_PANEL: "ALF_DISPLAY_STICKY_PANEL",
 
       /**
        * Publish this to indicate the de-selection of an individual item
@@ -510,6 +562,7 @@ define([],function() {
        * @property {string} url - The URL to navigate to
        * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {string} [modifyCurrent=false] Whether to modify the current hash (default is to completely replace it)
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
 
@@ -774,6 +827,43 @@ define([],function() {
        * @property {object[]} nodes The node or nodes to download.
        */
       SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
+
+      /**
+       * This can be called to close the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       */
+      STICKY_PANEL_CLOSE: "ALF_STICKY_PANEL_CLOSE",
+
+      /**
+       * This is fired when the StickyPanel has been closed.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       */
+      STICKY_PANEL_CLOSED: "ALF_STICKY_PANEL_CLOSED",
+
+      /**
+       * This can be called to set the title of the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string} title The new title to use
+       */
+      STICKY_PANEL_SET_TITLE: "ALF_STICKY_PANEL_SET_TITLE",
 
       /**
        * This topic is published in order to make the actual request to sync a node or nodes
