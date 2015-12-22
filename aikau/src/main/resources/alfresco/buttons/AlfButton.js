@@ -109,6 +109,16 @@ define(["dojo/_base/declare",
       invalidTopic: "ALF_INVALID_CONTROL",
 
       /**
+       * An optional title attribute to be added to the button.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.49
+       */
+      title: null,
+
+      /**
        * Extends the default implementation to check that the [publishPayload]{@link module:alfresco/buttons/AlfButton#publishPayload} attribute has been set
        * to something other null and if it hasn't initialises it to a new (empty) object.
        *
@@ -142,6 +152,10 @@ define(["dojo/_base/declare",
 
          if (!this.value && this.publishTopic) {
             this.valueNode.setAttribute("value", this.publishTopic);
+         }
+
+         if (this.title) {
+            this.focusNode.setAttribute("title", this.message(this.title));
          }
       },
 
