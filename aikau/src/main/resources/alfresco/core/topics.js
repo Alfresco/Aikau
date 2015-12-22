@@ -838,7 +838,7 @@ define([],function() {
        *
        * @event
        */
-      STICKY_PANEL_CLOSE: "STICKY_PANEL_CLOSE",
+      STICKY_PANEL_CLOSE: "ALF_STICKY_PANEL_CLOSE",
 
       /**
        * This is fired when the StickyPanel has been closed.
@@ -850,7 +850,7 @@ define([],function() {
        *
        * @event
        */
-      STICKY_PANEL_CLOSED: "STICKY_PANEL_CLOSED",
+      STICKY_PANEL_CLOSED: "ALF_STICKY_PANEL_CLOSED",
 
       /**
        * This can be called to set the title of the StickyPanel.
@@ -863,7 +863,7 @@ define([],function() {
        * @event
        * @property {string} title The new title to use
        */
-      STICKY_PANEL_SET_TITLE: "STICKY_PANEL_SET_TITLE",
+      STICKY_PANEL_SET_TITLE: "ALF_STICKY_PANEL_SET_TITLE",
 
       /**
        * This topic is published in order to make the actual request to sync a node or nodes

@@ -135,7 +135,7 @@ registerSuite(function(){
             .click()
             .end()
 
-         .getLastPublish("STICKY_PANEL_CLOSED")
+         .getLastPublish("ALF_STICKY_PANEL_CLOSED")
 
          .findAllByCssSelector(".alfresco-layout-StickyPanel")
             .then(function(elements) {

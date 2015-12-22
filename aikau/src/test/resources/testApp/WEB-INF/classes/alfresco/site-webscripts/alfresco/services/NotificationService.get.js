@@ -107,7 +107,7 @@ model.jsonModel = {
          id: "UPDATE_PANEL_TITLE_BUTTON",
          config: {
             label: "Update panel title (and check XSS)",
-            publishTopic: "STICKY_PANEL_SET_TITLE",
+            publishTopic: "ALF_STICKY_PANEL_SET_TITLE",
             publishPayload: {
                title: "<img src=\"1\" onerror=\"window.hackedPanel=true\">"
             }
