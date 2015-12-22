@@ -70,6 +70,12 @@ define(["dojo/_base/declare",
        */
       templateString: template,
 
+      /**
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       */
       pageDefinition: null,
       
       /**
@@ -113,13 +119,22 @@ define(["dojo/_base/declare",
          pageDefinition = dojoJson.stringify(pageDefinition);
          return pageDefinition;
       },
-
       
-
+      /**
+       * Make a request to load all the remote pages.
+       * 
+       * @instance
+       * @returns {object} Returns a promise of the XHR result to get the pages.
+       * @since 1.0.49
+       */
       loadAllTemplates: function alfresco_prototyping_Preview__loadAllTemplates() {
+         // PLEASE NOTE: There is an underlying issue with the original remote-share/pages
+         //              REST API in that it will *not* return the contents of the pages when
+         //              there are more than one. This needs to be swapped out with an improved
+         //              API when one is available (most likely via an AMP)
          var promise = new Deferred();
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "horizon3/pages",
+            url: AlfConstants.PROXY_URI + "remote-share/pages",
             method: "GET",
             promise: promise,
             successCallback: this.loadAllTemplatesSuccess,
@@ -128,47 +143,61 @@ define(["dojo/_base/declare",
          return promise;
       },
 
+      /**
+       * Success handler for [loadAllTemplates]{@link module:alfresco/prototyping/Preview#loadAllTemplates}.
+       * Resolves the promise originally returned.
+       * 
+       * @instance
+       * @since 1.0.49
+       */
       loadAllTemplatesSuccess: function alfresco_prototyping_Preview__loadTemplateSuccess(response, originalRequestConfig) {
          originalRequestConfig.promise.resolve(response.items);
       },
 
+      /**
+       * Configures a template that has been referenced in a model with the configuration defined for the 
+       * template in that model.
+       * 
+       * @instance
+       * @since 1.0.49
+       */
       setTemplateConfiguration: function alfresco_prototyping_Preview__setTemplateConfiguration(parameters) {
-         if (Array.isArray(parameters.object)  &&
+         if (Array.isArray(parameters.object) &&
              parameters.config &&
              parameters.ancestors)
          {
-            var parent = parameters.ancestors[parameters.ancestors.length-2]; 
-            parameters.object.forEach(function(templateMapping) {
-               if (templateMapping.property)
+            var parent = parameters.ancestors[parameters.ancestors.length-2];
+            array.forEach(parameters.object, function(templateMapping) {
+               if (templateMapping.property && templateMapping.id)
                {
                   // Get the last ancestor as this will be the "config" object of a widget in the 
                   // template that has a property to be set...
-                  if (typeof templateMapping.id !== undefined)
-                  {
-                     // parent[templateMapping.property] = parameters.config[templateMapping.id];
-                     lang.setObject(templateMapping.property, parameters.config[templateMapping.id], parent);
-                     // delete parent["_alfTemplateMapping_" + valueProperty];
-                  }
-                  else
-                  {
-                     // TODO: Log missing value attribute (e.g. the attribute to get the value from to set in the template)
-                  }
+                  lang.setObject(templateMapping.property, parameters.config[templateMapping.id], parent);
                }
                else
                {
-                  // TODO: Log incorrect parameters argument - missing some attributes
+                  this.alfLog("warn", "Template mapping id or property was missing", templateMapping, parameters, this);
                }
-            });
+            }, this);
 
             delete parent._alfTemplateMappings;
             delete parent._alfIncludeInTemplate;
          }
          else
          {
-            // TODO: Log incorrect parameters
+            this.alfLog("warn", "Cannot set template configuration without 'object', 'config' and 'ancestors' attributes", parameters, this);
          }
       },
 
+      /**
+       * Process a model to swap out any nested templates references that are contained within that 
+       * model with the actual model of the referenced template. This will call the 
+       * [setTemplateConfiguration]{@link module:alfresco/prototyping/Preview#setTemplateConfiguration}
+       * function to update the processed template with any configuration that has been provided for it.
+       * 
+       * @instance
+       * @since 1.0.49
+       */
       processTemplate: function alfresco_prototyping_Preview__processTemplate(parameters) {
          // The object should actually be a string (i.e. the name or nodeRef of the template)...
          if (typeof parameters.object === "string" &&
@@ -189,7 +218,6 @@ define(["dojo/_base/declare",
             if (parent.config)
             {
                // Set the template configuration points...
-               // findObject(loadedTemplate, "_alfTemplateMapping_", parent.config, null, setTemplateConfiguration);
                objectProcessingUtil.findObject(loadedTemplate, {
                   prefix: "_alfTemplateMappings", 
                   config: parent.config,
@@ -203,16 +231,22 @@ define(["dojo/_base/declare",
             }
             else
             {
-               // TODO: Log missing config (not able to set configure template without values!)
+               this.alfLog("warn", "No 'config' attribute provided in parent of template.", parent, parameters, this);
             }
          }
          else
          {
-            // TODO: Log incorrect object type - string expected for template name/nodeRef
+            this.alfLog("warn", "Incorrect parameters - 'object' was missing or was not a string, no 'ancestors' provided", parameters, this);
          }
       },
 
-      // TODO: This should be in mixin module...
+      /**
+       * Removes unnecessary attributes from a template before it is passed for previewing.
+       * 
+       * @instance
+       * @param {object} parameters
+       * @since 1.0.49
+       */
       cleanUpTemplateConfig: function alfresco_services_PageService__cleanUpTemplateConfig(parameters) {
          if (parameters.object === true)
          {
@@ -288,11 +322,6 @@ define(["dojo/_base/declare",
                   this.alfLog("error", "An error occurred parsing the JSON", e, this);
                }
             }));
-
-            // // Clear out any previous preview...
-            // domConstruct.empty(this.previewNode);
-            
-            
          }
          else
          {

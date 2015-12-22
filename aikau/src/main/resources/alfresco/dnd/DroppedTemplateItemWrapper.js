@@ -18,11 +18,14 @@
  */
 
 /**
- * 
+ * Extends the [DroppedNestingItemWrapper]{@link module:alfresco/dnd/DroppedNestingItemWrapper}
+ * to provide support for templates - where a template is a model that can expose nested internal
+ * attributes for external configuration.
  * 
  * @module alfresco/dnd/DroppedTemplateItemWrapper
  * @extends module:alfresco/dnd/DroppedNestingItemWrapper
  * @author Dave Draper
+ * @since 1.0.49
  */
 define(["dojo/_base/declare",
         "alfresco/dnd/DroppedNestingItemWrapper"], 
@@ -43,7 +46,6 @@ define(["dojo/_base/declare",
             {
                this.value._alfTemplateName = this.value.name;
                delete this.value.name;
-               // delete this.value.templateModel; // NEED TO KEEP THIS
                delete this.value.isTemplate;
             }
             widget.setValue(this.value);
