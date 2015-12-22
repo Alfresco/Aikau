@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
       loadAllTemplates: function alfresco_prototyping_Preview__loadAllTemplates() {
          var promise = new Deferred();
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "remote-share/pages",
+            url: AlfConstants.PROXY_URI + "horizon3/pages",
             method: "GET",
             promise: promise,
             successCallback: this.loadAllTemplatesSuccess,

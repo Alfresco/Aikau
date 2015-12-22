@@ -24,6 +24,31 @@ function addCommonConfigTabs(model, attributes) {
 
       model[0].config.widgets.push({
          name: "alfresco/forms/ControlColumn",
+         title: "Common",
+         config: {
+            widgets: [
+               {
+                  name: "alfresco/forms/controls/CheckBox",
+                  config: {
+                     name: "config.generatePubSubScope",
+                     label: "Generate pub/sub scope?",
+                     description: "Optionally generates a new pub/sub scope for the widget",
+                     value: false
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     label: "Pub/Sub Scope",
+                     name: "config.pubSubScope",
+                     description: "Set an optional publication/subscription scope for the widget"
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/forms/ControlColumn",
          title: "Template Attributes",
          config: {
             widgets: [
