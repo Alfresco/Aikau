@@ -121,20 +121,16 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Make a request to load all the remote pages.
+       * PLEASE NOTE: This only works with the Horizon3-Repo-AMP REST APIs
        * 
        * @instance
        * @returns {object} Returns a promise of the XHR result to get the pages.
        * @since 1.0.49
        */
       loadAllTemplates: function alfresco_prototyping_Preview__loadAllTemplates() {
-         // PLEASE NOTE: There is an underlying issue with the original remote-share/pages
-         //              REST API in that it will *not* return the contents of the pages when
-         //              there are more than one. This needs to be swapped out with an improved
-         //              API when one is available (most likely via an AMP)
          var promise = new Deferred();
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "remote-share/pages",
+            url: AlfConstants.PROXY_URI + "horizon3/pages",
             method: "GET",
             promise: promise,
             successCallback: this.loadAllTemplatesSuccess,

@@ -213,11 +213,13 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       * Find the drop targets in a template and ensure that they are have the appropriate
+       * template configuration applied to them (i.e. that when they are displayed they are
+       * shown with the externalised template label and set the appropriate property).
        *
        * @instance
-       * @param  {[type]} parameters [description]
-       * @return {[type]}            [description]
+       * @param  {object} parameters The template processing parameters
+       * @return {boolean} An indication as to whether or not a template was processed.
        * @since 1.0.49
        */
       findDropTargets: function alfresco_services_DragAndDropModellingService__findDropTargets(parameters) {
@@ -263,6 +265,7 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Add the externalised configuration defined for a template to the model for displaying it.
        * 
        * @instance
        * @param {object} parameters

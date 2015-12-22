@@ -18,9 +18,11 @@
  */
 
 /**
- *
+ * Provides a function for recursing through objects and processing data within them.
+ * 
  * @module alfresco/util/objectProcessingUtil
  * @author Dave Draper
+ * @since 1.0.49
  */
 define(["dojo/_base/lang"],
    function(lang) {
@@ -67,10 +69,6 @@ define(["dojo/_base/lang"],
                            config: parameters.config,
                            ancestors: parameters.ancestors
                         });
-                     }
-                     else
-                     {
-                        // TODO: Log that the processFunction was not defined or was not a function
                      }
                   }
                   else

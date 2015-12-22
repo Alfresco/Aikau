@@ -110,37 +110,35 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       * 
-       * @param  {[type]} payload [description]
-       * @return {[type]}         [description]
+       * PLEASE NOTE: This only works with the Horizon3-Repo-AMP REST APIs
+       *
+       * @instance
+       * @param {object} payload The payload for the page request
+       * @since 1.0.49
        */
       getPages: function alfresco_services_PageService__loadPages(/*jshint unused:false */ payload) {
          this.serviceXhr({
             url: AlfConstants.PROXY_URI + "horizon3/pages",
             method: "GET",
             alfTopic: payload.alfResponseTopic,
-            successCallback: this.getPagesForPaletteSuccess,
+            successCallback: this.getPagesSuccess,
             callbackScope: this
          });
       },
 
-      getPagesForPaletteSuccess: function alfresco_services_PageService__getPagesForPaletteSuccess(response, originalRequestConfig) {
+      /**
+       * Success handler for [getPages]{@link module:alfresco/services/PageService#getPages}.
+       *
+       * @instance
+       * @param {object} response
+       * @param {object} originalRequestConfig
+       * @since 1.0.49
+       */
+      getPagesSuccess: function alfresco_services_PageService__getPagesSuccess(response, originalRequestConfig) {
          if (response && response.items && ObjectTypeUtils.isArray(response.items))
          {
             var pageDefs = [];
             array.forEach(response.items, lang.hitch(this, function(item) {
-               // if (item.content)
-               // {
-                  
-               //    var parsedContent = JSON.parse(item.content);
-               //    if (ObjectTypeUtils.isArray(parsedContent.widgets))
-               //    {
-               //       array.forEach(parsedContent.widgets)
-               //    }
-               // }
-               
-
                pageDefs.push(
                   {
                      type: [ "widget"],
@@ -165,7 +163,6 @@ define(["dojo/_base/declare",
             this.alfLog("error", "The request to retrieve available page definitions returned a response that could not be interpreted", response, originalRequestConfig, this);
          }
       },
-
 
       /**
        * Makes an XHR request to retrieve the pages that are available. The pages returned are those
@@ -279,13 +276,17 @@ define(["dojo/_base/declare",
          return pageDefinition;
       },
 
-
+      /**
+       * Removes unnecessary attributes from a template before it is passed for previewing.
+       * 
+       * @instance
+       * @param {object} parameters
+       * @since 1.0.49
+       */
       cleanUpTemplateConfig: function alfresco_services_PageService__cleanUpTemplateConfig(parameters) {
          if (parameters.object === true)
          {
-            // Found a template object...
             var parent = parameters.ancestors[parameters.ancestors.length-1];
-
             objectProcessingUtil.findObject(parent.config, {
                prefix: "isTemplate",
                processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
@@ -313,8 +314,7 @@ define(["dojo/_base/declare",
                json: this.getPageDefinitionFromPayload(payload)
             };
 
-            // TODO: Clean up template data to set "_alfTemplateName" and remove superfluous attributes...
-            // 
+            // Clean up template data to set "_alfTemplateName" and remove superfluous attributes...
             objectProcessingUtil.findObject(data, {
                prefix: "isTemplate",
                processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
