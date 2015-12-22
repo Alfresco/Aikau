@@ -22,8 +22,10 @@ model.jsonModel = {
                      widgets: [
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "DEFAULT_BUTTON",
                            config: {
                               label: "Default",
+                              title: "Custom title",
                               publishTopic: "BUTTON_TOPIC",
                               publishPayload: {
                                  foo: "bar"
@@ -32,6 +34,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "DEFAULT_BUTTON_HOVER",
                            config: {
                               additionalCssClasses: "dijitButtonHover",
                               label: "Hover",
@@ -43,6 +46,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "DEFAULT_BUTTON_ACTIVE",
                            config: {
                               additionalCssClasses: "dijitButtonActive",
                               label: "Pressed",
@@ -54,6 +58,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "DEFAULT_BUTTON_DISABLED",
                            config: {
                               label: "Disabled",
                               disabled: true,
@@ -72,6 +77,7 @@ model.jsonModel = {
                      widgets: [
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "CALL_TO_ACTION_BUTTON",
                            config: {
                               additionalCssClasses: "call-to-action",
                               label: "Default",
@@ -83,6 +89,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "CALL_TO_ACTION_BUTTON_HOVER",
                            config: {
                               additionalCssClasses: "call-to-action dijitButtonHover",
                               label: "Hover",
@@ -94,6 +101,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "CALL_TO_ACTION_BUTTON_ACTIVE",
                            config: {
                               additionalCssClasses: "call-to-action dijitButtonActive",
                               label: "Pressed",
@@ -105,6 +113,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "CALL_TO_ACTION_BUTTON_DISABLED",
                            config: {
                               additionalCssClasses: "call-to-action",
                               label: "Disabled",
@@ -124,6 +133,7 @@ model.jsonModel = {
                      widgets: [
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "PRIMARY_CALL_TO_ACTION_BUTTON",
                            config: {
                               additionalCssClasses: "primary-call-to-action",
                               label: "Default",
@@ -135,6 +145,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "PRIMARY_CALL_TO_ACTION_BUTTON_HOVER",
                            config: {
                               additionalCssClasses: "primary-call-to-action dijitButtonHover",
                               label: "Hover",
@@ -146,6 +157,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "PRIMARY_CALL_TO_ACTION_BUTTON_ACTIVE",
                            config: {
                               additionalCssClasses: "primary-call-to-action dijitButtonActive",
                               label: "Pressed",
@@ -157,6 +169,7 @@ model.jsonModel = {
                         },
                         {
                            name: "alfresco/buttons/AlfButton",
+                           id: "PRIMARY_CALL_TO_ACTION_BUTTON_DISABLED",
                            config: {
                               additionalCssClasses: "primary-call-to-action",
                               label: "Disabled",
