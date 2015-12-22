@@ -21,54 +21,48 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Footer Tests",
+      return {
+         name: "Footer Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/TestFooter", "Footer Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/TestFooter", "Footer Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      // teardown: function() {
-      //    browser.end();
-      // },
-     
-      "Check copyright text": function () {
-         // This isn't the most comprehenive set of tests...
-         // 1) It's not obvious how to test that the footer is stuck to the bottom without visually checking
-         // 2) Some of the config could be further tested
-         // It's good enough as a starting point though.
-         return browser.findByCssSelector(".alfresco-footer-AlfShareFooter span.copyright span:last-child")
-            .getVisibleText()
-            .then(function (text) {
-               expect(text).to.equal("SOME COPYRIGHT LABEL", "The copyright has not been set correctly");
-            });
-      },
+         "Check copyright text": function () {
+            // This isn't the most comprehenive set of tests...
+            // 1) It's not obvious how to test that the footer is stuck to the bottom without visually checking
+            // 2) Some of the config could be further tested
+            // It's good enough as a starting point though.
+            return browser.findByCssSelector(".alfresco-footer-AlfShareFooter span.copyright span:last-child")
+               .getVisibleText()
+               .then(function (text) {
+                  assert.equal(text, "SOME COPYRIGHT LABEL", "The copyright has not been set correctly");
+               });
+         },
 
-      "Check license text": function() {
-         return browser.findByCssSelector(".alfresco-footer-AlfShareFooter .licenseHolder")
-            .getVisibleText()
-            .then(function (text) {
-               expect(text).to.equal("Licensed To: SOME LICENSE LABEL", "The license label was not set correctly");
-            });
-      },
+         "Check license text": function() {
+            return browser.findByCssSelector(".alfresco-footer-AlfShareFooter .licenseHolder")
+               .getVisibleText()
+               .then(function (text) {
+                  assert.equal(text, "Licensed To: SOME LICENSE LABEL", "The license label was not set correctly");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
