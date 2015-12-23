@@ -185,10 +185,10 @@ define(["dojo/_base/declare",
          this.downAltText = this.encodeHTML(this.message(this.downAltText));
          this.deleteAltText = this.encodeHTML(this.message(this.deleteAltText));
          this.editAltText = this.encodeHTML(this.message(this.editAltText));
-         this.upImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.upImg;
-         this.downImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.downImg;
-         this.editImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.editImg;
-         this.deleteImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.deleteImg;
+         this.upImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.upImg);
+         this.downImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.downImg);
+         this.editImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.editImg);
+         this.deleteImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.deleteImg);
       },
 
       /**

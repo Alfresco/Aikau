@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_forms_controls_MultipleEntryCreator__postMixInProperties() {
          if (this.addEntryImageSrc == null || this.addEntryImageSrc == "")
          {
-            this.addEntryImageSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.addEntryImage;
+            this.addEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.addEntryImage);
          }
          this.addEntryAltText = this.message(this.addEntryAltText);
       },

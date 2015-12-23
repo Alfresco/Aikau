@@ -532,7 +532,7 @@ define(["dojo/_base/declare",
             var nodeRef = NodeUtils.processNodeRef(this.currentItem.nodeRef);
             if (this.currentItem.type === "folder")
             {
-               this.thumbnailUrl = require.toUrl("alfresco/renderers") + "/css/images/" + this.folderImage;
+               this.thumbnailUrl = require.toUrl("alfresco/renderers/css/images/" + this.folderImage);
             }
             else if (this.currentItem.type === "document" && nodeRef.uri)
             {

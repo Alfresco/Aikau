@@ -75,8 +75,8 @@ define(["dojo/_base/declare",
             Alfresco.AikauLightbox.show({
                src: src,
                title: title,
-               loadingImage: require.toUrl("alfresco/services") + "/css/images/loading.gif",
-               closeButton: require.toUrl("alfresco/services") + "/css/images/close.gif"
+               loadingImage: require.toUrl("alfresco/services/css/images/loading.gif"),
+               closeButton: require.toUrl("alfresco/services/css/images/close.gif")
             });
          }
       }

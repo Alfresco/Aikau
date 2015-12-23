@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * @returns {boolean}
        */
       getFolderImage: function alfresco_renderers_GalleryThumbnail__getDefaultFolderImage() {
-         return require.toUrl("alfresco/renderers") + "/css/images/folder-256.png";
+         return require.toUrl("alfresco/renderers/css/images/folder-256.png");
       },
       
       /**

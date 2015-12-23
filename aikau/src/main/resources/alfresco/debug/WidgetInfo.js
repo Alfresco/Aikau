@@ -71,7 +71,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_debug_WidgetInfo__postMixInProperties() {
-         this.imgSrc = require.toUrl("alfresco/debug") + "/css/images/info-16.png";
+         this.imgSrc = require.toUrl("alfresco/debug/css/images/info-16.png");
          if (this.displayId)
          {
             this.altText = this.message("widgetInfo.alt.text", {
