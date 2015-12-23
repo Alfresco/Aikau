@@ -177,7 +177,20 @@ define(["dojo/_base/declare",
        * @default
        */
       convertFormToJsonString: false,
-      
+
+      /**
+       * <p>Should the first field in the form be focused when the form is loaded?</p>
+       *
+       * <p><strong>NOTE:</strong> If more than one form on a page has this setting,
+       * then the order in which the fields are focused cannot be guaranteed.</p>
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.49
+       */
+      firstFieldFocusOnLoad: false,
+
       /**
        * This will be instantiated as an array and used to keep track of any controls that report themselves as being
        * in an invalid state. The "OK" button for submitting the form should only be enabled when this list is empty.
@@ -1037,6 +1050,11 @@ define(["dojo/_base/declare",
                this.publishValidValue();
             }
             this._formSetupComplete = true;
+
+            // If configured, focus the first field in the form
+            if (this.firstFieldFocusOnLoad) {
+               setTimeout(lang.hitch(this, this.focus));
+            }
          }
       },
       

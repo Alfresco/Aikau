@@ -41,6 +41,23 @@ registerSuite(function(){
          browser.end();
       },
 
+      "Check that first field of second form is focused initially": function() {
+         var focusedId;
+
+         return browser.getActiveElement()
+            .getAttribute("id")
+            .then(function(id) {
+               focusedId = id;
+            })
+            .end()
+
+         .findByCssSelector("#TB3 .dijitInputInner")
+            .getAttribute("id")
+            .then(function(id) {
+               assert.equal(focusedId, id);
+            });
+      },
+
       "Check that first form is NOT displayed as invalid on load": function() {
          return browser.findAllByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
