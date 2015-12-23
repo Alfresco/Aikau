@@ -418,6 +418,18 @@ define([],function() {
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
 
       /**
+       * This topic can be fired when the enter key is pressed (but normally is not by default).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.49
+       *
+       * @event
+       */
+      ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
+
+      /**
        * This topic can be used to request Cloud specific paths to use in an
        * [Tree form control]{@link module:alfresco/forms/controls/Tree}.
        *
