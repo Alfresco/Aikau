@@ -79,6 +79,17 @@ define(["dojo/_base/declare",
       pageDefinition: null,
       
       /**
+       * Indicates whether or not templates stored on the Alfresco Repository should be retrieved so that
+       * they can be processed within the generated preview.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.49
+       */
+      processTemplates: false,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_prototyping_Preview__postCreate() {
@@ -275,54 +286,73 @@ define(["dojo/_base/declare",
                this.rootPreviewWidget.destroyRecursive(false);
             }
 
-            var templateReponse = this.loadAllTemplates();
-            when(templateReponse, lang.hitch(this, function(templates) {
+            var pageDefinition = this.getPageDefinitionFromPayload(payload);
+            var pageDefObject = dojoJson.parse(pageDefinition);
 
-               try
-               {
-                  var pageDefinition = this.getPageDefinitionFromPayload(payload);
-                  var pageDefObject = dojoJson.parse(pageDefinition);
+            var data = {
+               jsonContent: pageDefObject
+            };
 
-                  var data = {
-                     jsonContent: pageDefObject
-                  };
+            if (this.processTemplates)
+            {
+               var templateReponse = this.loadAllTemplates();
+               when(templateReponse, lang.hitch(this, function(templates) {
+                  try
+                  {
+                     objectProcessingUtil.findObject(data, {
+                        prefix: "isTemplate",
+                        processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+                        config: null
+                     });
 
-                  objectProcessingUtil.findObject(data, {
-                     prefix: "isTemplate",
-                     processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
-                     config: null
-                  });
+                     // Find all templates and swap them out for the actual widget models...
+                     objectProcessingUtil.findObject(data, {
+                        prefix: "_alfTemplateName",
+                        processFunction: lang.hitch(this, this.processTemplate),
+                        config: {
+                           templates: templates
+                        }
+                     });
 
-                  // Find all templates and swap them out for the actual widget models...
-                  objectProcessingUtil.findObject(data, {
-                     prefix: "_alfTemplateName",
-                     processFunction: lang.hitch(this, this.processTemplate),
-                     config: {
-                        templates: templates
-                     }
-                  });
-
-                  data.widgets = JSON.stringify(data.jsonContent);
-
-                  this.serviceXhr({
-                     url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
-                     data: data,
-                     method: "POST",
-                     successCallback: this.updatePage,
-                     failureCallback: this.onDependencyFailure,
-                     callbackScope: this
-                  });
-               }
-               catch(e)
-               {
-                  this.alfLog("error", "An error occurred parsing the JSON", e, this);
-               }
-            }));
+                     this.requestPreviewDependencies(data);
+                  }
+                  catch(e)
+                  {
+                     this.alfLog("error", "An error occurred parsing the JSON", e, this);
+                  }
+               }));
+            }
+            else
+            {
+               // No need to load or process remote templates...
+               this.requestPreviewDependencies(data);
+            }
          }
          else
          {
             this.alfLog("warn", "A request was made to preview a page definition, but no 'pageDefinition' was provided", payload, this);
          }
+      },
+
+      /**
+       * Makes an XHR request to retrieve the dependencies for the supplied page model. When the
+       * request returns [updatePage]{@link module:alfresco/prototyping/Preview#updatePage} will be called
+       * to render the preview.
+       * 
+       * @instance
+       * @param {object} data The data for the preview.
+       * @since 1.0.49
+       */
+      requestPreviewDependencies: function alfresco_prototyping_Preview__requestPreviewDependencies(data) {
+         data.widgets = JSON.stringify(data.jsonContent);
+         this.serviceXhr({
+            url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
+            data: data,
+            method: "POST",
+            successCallback: this.updatePage,
+            failureCallback: this.onDependencyFailure,
+            callbackScope: this
+         });
       },
       
       /**
