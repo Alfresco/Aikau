@@ -1053,6 +1053,8 @@ define(["dojo/_base/declare",
 
             // If configured, focus the first field in the form
             if (this.firstFieldFocusOnLoad) {
+               // Use setTimeout to allow other synchronous processes to complete first, as this
+               // has a much greater chance of successfully focusing on the field
                setTimeout(lang.hitch(this, this.focus));
             }
          }
