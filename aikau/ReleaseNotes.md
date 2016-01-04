@@ -1,4 +1,4 @@
-Aikau 1.0.48 Release Notes
+Aikau 1.0.49 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,13 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.49:
+* [AKU-750](https://issues.alfresco.com/jira/browse/AKU-750)       - Support for form submission from textbox on enter key
+* [AKU-751](https://issues.alfresco.com/jira/browse/AKU-751)       - Support to configure forms to focus first field
+* [AKU-752](https://issues.alfresco.com/jira/browse/AKU-752)       - Support for title on AlfButton
+* [AKU-761](https://issues.alfresco.com/jira/browse/AKU-761)       - Support showValidationErrorsImmediately for form fields within ControlRow
+* [AKU-765](https://issues.alfresco.com/jira/browse/AKU-765)       - Update shims to support textContent use in IE8
+
 1.0.48:
 * [AKU-687](https://issues.alfresco.com/jira/browse/AKU-687)       - Add "primary-call-to-action" CSS class for AlfButton
 * [AKU-700](https://issues.alfresco.com/jira/browse/AKU-700)       - Improve list loading to make "smoother"
