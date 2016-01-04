@@ -179,6 +179,33 @@ model.jsonModel = {
          }
       },
       {
+         "name": "alfresco/layout/HorizontalWidgets",
+         "config": {
+            "widgets": [
+               {
+                  name: "alfresco/forms/Form",
+                  id: "ENTER_FORM",
+                  config: {
+                     okButtonPublishTopic: "FORM_PUBLISH",
+                     cancelButtonPublishTopic: "FORM_CANCEL",
+                     publishValueSubscriptions: ["ALF_ENTER_KEY_PRESSED"],
+                     widgets: [
+                        {
+                           id: "ENTER_TEXT_FIELD",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              name: "control",
+                              label: "Textbox",
+                              description: "Pressing ENTER will submit this form"
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "alfresco/html/Spacer",
          config: {
             height: "20px"
