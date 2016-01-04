@@ -37,10 +37,13 @@ define(["alfresco/forms/controls/DojoValidationTextBox",
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_RandomValueGenerator__getWidgetConfig() {
+         if (!this.initialValue)
+         {
+            this.initialValue = this.generateUuid();
+         }
          return {
             id : this.generateUuid(),
-            name: this.name,
-            value: this.value || this.generateUuid()
+            name: this.name
          };
       }
    });

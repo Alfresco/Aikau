@@ -73,8 +73,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/dnd/Constants",
-        "alfresco/core/ObjectTypeUtils"],
-        function(declare, BaseService, lang, array, Constants, ObjectTypeUtils) {
+        "alfresco/core/ObjectTypeUtils",
+        "alfresco/util/objectProcessingUtil"],
+        function(declare, BaseService, lang, array, Constants, ObjectTypeUtils, objectProcessingUtil) {
    
    return declare([BaseService], {
       
@@ -212,6 +213,83 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Find the drop targets in a template and ensure that they are have the appropriate
+       * template configuration applied to them (i.e. that when they are displayed they are
+       * shown with the externalised template label and set the appropriate property).
+       *
+       * @instance
+       * @param  {object} parameters The template processing parameters
+       * @return {boolean} An indication as to whether or not a template was processed.
+       * @since 1.0.49
+       */
+      findDropTargets: function alfresco_services_DragAndDropModellingService__findDropTargets(parameters) {
+         if (parameters.object === "alfresco/dnd/DragAndDropNestedTarget")
+         {
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+            var targetProperty = lang.getObject("config.targetProperty", false, parent);
+            if (targetProperty)
+            {
+               // See if the target property of the DragAndDropNestedTarget is a mapped in
+               // the template...
+               array.some(parameters.config.templateMappings, function(mapping) {
+                  var found = (mapping.property === targetProperty);
+                  if (found)
+                  {
+                     var clonedParent = lang.clone(parent);
+
+                     // We need to swap the actual targetProperty and label for the template mapped versions...
+                     clonedParent.config.targetProperty = "config." + mapping.id;
+                     clonedParent.config.label = mapping.label;
+                     parameters.config.data.push(clonedParent);
+                  }
+                  return found;
+               });
+            } 
+         }
+         else
+         {
+            var configParent = parameters.ancestors[parameters.ancestors.length-2];
+            array.some(parameters.config.templateMappings, function(mapping) {
+               var found = (mapping.property === parameters.object);
+               if (found)
+               {
+                  var clonedParent = lang.clone(configParent);
+                  clonedParent.config.name = "config." + mapping.id;
+                  clonedParent.config.label = mapping.label;
+                  clonedParent.config.description = mapping.description;
+                  parameters.config.data.push(clonedParent);
+               }
+               return found;
+            });
+         }
+      },
+
+      /**
+       * Add the externalised configuration defined for a template to the model for displaying it.
+       * 
+       * @instance
+       * @param {object} parameters
+       * @since 1.0.49
+       */
+      addConfig: function alfresco_services_DragAndDropModellingService__addConfig(parameters) {
+         var parent = parameters.ancestors[parameters.ancestors.length-2];
+         var templateResponse = {};
+         array.some(parameters.config.models, lang.hitch(this, this.processModel, parameters.config.configAttribute, templateResponse, parent));
+         
+         // The problem with widgetsForDisplay is knowing what to filter and what to display.
+         // There could be multiple nested config...
+         // We should just have the drop targets (DragAndDropNestedTarget) where the "targetProperty" matches an exposed property (e.g. config.widgets)
+         objectProcessingUtil.findObject(templateResponse, {
+            prefix: "name",
+            processFunction: lang.hitch(this, this.findDropTargets),
+            config: {
+               templateMappings: parameters.object,
+               data: parameters.config.data
+            }
+         });
+      },
+
+      /**
        * Inspects the supplied model with data provided to see whether or not the model matches the data.
        * 
        * @instance
@@ -223,7 +301,53 @@ define(["dojo/_base/declare",
        */
       processModel: function alfresco_services_DragAndDropModellingService__processModel(configAttribute, response, value, model) {
          var modelMatchFound = false;
-         if (model.property && model.targetValues && value[model.property]) 
+
+         if ((value.isTemplate === true || value._alfTemplateName) && value.templateModel)
+         {
+            // The dropped item is a template, it will be necessary to construct the data from the data it contains...
+            var templateModel = value.templateModel;
+            var config = {
+               models: this.models,
+               data: [],
+               configAttribute: configAttribute
+            };
+
+            // Working through the template model to find all the "_alfTemplateMappings" attributes - these
+            // define how nested configuration within the template should be exposed as configuration attributes
+            // of the template itself. For each mapping the addConfig function will be called to add this to
+            // the configuration for display (either in the edit form or as a drop target)...
+            objectProcessingUtil.findObject(templateModel, {
+               prefix: "_alfTemplateMappings",
+               processFunction: lang.hitch(this, this.addConfig),
+               config: config
+            });
+
+            // Depending upon the configAttribute requested (either configuration for editing or configuration
+            // for rendering the dropped item) the response should be constructed. For display it will be necessary
+            // to place the model in a wrapper...
+            modelMatchFound = true;
+            if (configAttribute === "widgetsForDisplay")
+            {
+               response.widgets = [
+                  {
+                     name: "alfresco/dnd/DroppedTemplateItemWrapper",
+                     label: "Nested item wrapper",
+                     responseScope: "",
+                     config: {
+                        value: "{value}",
+                        widgets: config.data,
+                        label: "{label}",
+                        showEditButton: "false"
+                     }
+                  }
+               ];
+            }
+            else
+            {
+               response.widgets = config.data;
+            }
+         }
+         else if (model.property && model.targetValues && value[model.property]) 
          {
             // The model has a property to check for, and the value contains the property
             // We're going to want to test this value against the configured RegularExpression target

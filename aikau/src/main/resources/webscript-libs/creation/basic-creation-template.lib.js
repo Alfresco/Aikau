@@ -1,7 +1,11 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
+/* This library file is provides the basic template for creation of pages and templates
+ * for saving back to the Alfresco Repository
+ */
 
-model.jsonModel = {
-   services: [
+/*jshint unused:false*/
+
+function getBasicCreationTemplateServices() {
+   return [
       {
          name: "alfresco/services/LoggingService",
          config: {
@@ -13,20 +17,14 @@ model.jsonModel = {
             }
          }
       },
-      {
-         name: "alfresco/services/DragAndDropModellingService",
-         config: {
-            models: [
-               getDefaultFormModel(),
-               getDefaultFormControlModel()
-            ]
-         }
-      },
       "alfresco/services/DialogService",
       "alfresco/services/PageService",
       "alfresco/services/OptionsService"
-   ],
-   widgets: [
+   ];
+}
+
+function getBasicCreationTemplateWidgets(paletteWidgets) {
+   return [
       {
          name: "alfresco/layout/VerticalWidgets",
          config: {
@@ -51,37 +49,7 @@ model.jsonModel = {
                            widthPx: 300,
                            config: {
                               title: "Widget Palette",
-                              widgets: [
-                                 {
-                                    id: "DRAG_PALETTE",
-                                    name: "alfresco/dnd/DragAndDropItems",
-                                    config: {
-                                       items: [
-                                          {
-                                             type: [ "widget" ],
-                                             label: "Form Control",
-                                             value: {
-                                                name: "alfresco/forms/controls/TextBox",
-                                                config: {
-                                                   label: "No Label",
-                                                   description: "No description",
-                                                   value: ""
-                                                }
-                                             }
-                                          },
-                                          {
-                                             type: [ "widget" ],
-                                             label: "Form",
-                                             value: {
-                                                name: "alfresco/forms/Form",
-                                                config: {
-                                                }
-                                             }
-                                          }
-                                       ]
-                                    }
-                                 }
-                              ]
+                              widgets: paletteWidgets
                            }
                         },
                         {
@@ -95,10 +63,22 @@ model.jsonModel = {
                                     config: {
                                        scopeFormControls: false,
                                        okButtonLabel: "Save",
-                                       okButtonPublishTopic: "FORM1_POST",
+                                       okButtonPublishTopic: "ALF_CREATE_PAGE_DEFINITION",
                                        okButtonPublishGlobal: true,
                                        showCancelButton: false,
                                        widgets: [
+                                          {
+                                             name: "alfresco/forms/controls/TextBox",
+                                             config: {
+                                                name: "pageName",
+                                                label: "Template Name",
+                                                description: "This is the name of the page as it will be saved on the repository",
+                                                placeHolder: "Name...",
+                                                requirementConfig: {
+                                                   initialValue: true
+                                                }
+                                             }
+                                          },
                                           {
                                              id: "ROOT_DROPPED_ITEMS1",
                                              name: "alfresco/forms/controls/DragAndDropTargetControl",
@@ -138,9 +118,6 @@ model.jsonModel = {
                }
             ]
          }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
-   ]
-};
+   ];
+}

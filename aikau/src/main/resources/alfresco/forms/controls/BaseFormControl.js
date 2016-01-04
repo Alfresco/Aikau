@@ -309,6 +309,17 @@ define(["dojo/_base/declare",
       _visible: true,
 
       /**
+       * Indicates whether or not the form control has been added into the main browser document. This
+       * should not be configured or used by any extending widgets.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.49
+       */
+      ___addedToDocument: false,
+
+      /**
        * Used to toggle visibility of the field.
        *
        * @instance
@@ -1135,9 +1146,9 @@ define(["dojo/_base/declare",
        */
       onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(/*jshint unused:false*/ payload) {
          // jshint maxstatements:false
-         if ($.contains(document.body, this.domNode))
+         if (!this.___addedToDocument && $.contains(document.body, this.domNode))
          {
-            this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
+            this.___addedToDocument = true;
 
             // Update the flag to indicate that we're no longer deferring value assignment, this needs to be
             // done before setting the initial value or processing all the deferred values as otherwise they'll
