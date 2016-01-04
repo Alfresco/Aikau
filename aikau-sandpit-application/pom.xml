@@ -9,9 +9,9 @@
       <relativePath>../pom.xml</relativePath>
    </parent>
    
-   <artifactId>aikau-playground-application</artifactId>
+   <artifactId>aikau-sandpit-application</artifactId>
    <packaging>war</packaging>
-   <name>Aikau PlayGround Application</name>
+   <name>Aikau Sandpit Application</name>
 
    <dependencies>
       <dependency>
@@ -38,7 +38,7 @@
    </dependencies>
    
    <build>
-      <finalName>aikau-playground-application</finalName>
+      <finalName>aikau-sandpit-application</finalName>
       
       <plugins>
          <plugin>

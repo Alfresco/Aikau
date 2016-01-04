@@ -148,7 +148,7 @@
       <module>aikau</module>
       <module>aikau-archetype</module>
       <module>aikau-additional-languages</module>
-      <module>aikau-playground-application</module>
+      <module>aikau-sandpit-application</module>
    </modules>
 
 </project>
