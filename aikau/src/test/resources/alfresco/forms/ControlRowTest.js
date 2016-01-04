@@ -59,6 +59,14 @@ registerSuite(function(){
             });
       },
 
+      "Ensure showValidationErrorsImmediately is respected": function() {
+         return browser.findByCssSelector("#TB1 .validation-message")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
