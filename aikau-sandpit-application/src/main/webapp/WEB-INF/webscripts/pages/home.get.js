@@ -39,8 +39,8 @@ model.jsonModel = {
                            name: "alfresco/header/Title",
                            align: "left",
                            config: {
-                              label: "Aikau Playground",
-                              setBrowserTitle: "Aikau Playground"
+                              label: "Aikau Sandpit",
+                              setBrowserTitle: "Aikau Sandpit"
                            }
                         }
                      ]
