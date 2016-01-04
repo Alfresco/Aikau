@@ -103,6 +103,7 @@ model.jsonModel = {
                   config: {
                      okButtonPublishTopic: "PUBLISH_FORM_DATA",
                      cancelButtonPublishTopic: "CANCEL_FORM_DATA",
+                     firstFieldFocusOnLoad: true,
                      pubSubScope: "FORM2_",
                      showValidationErrorsImmediately: true,
                      widgets: [

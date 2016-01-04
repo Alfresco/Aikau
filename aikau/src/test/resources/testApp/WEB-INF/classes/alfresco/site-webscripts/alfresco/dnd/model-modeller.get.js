@@ -1,4 +1,6 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
+<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/TabbedFormControls.lib.js">
+<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/FormControlTab.lib.js">
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/dnd.lib.js">
 
 model.jsonModel = {
@@ -20,7 +22,9 @@ model.jsonModel = {
             models: [
                getDefaultFormControlModel(),
                getDefaultDragAndDropTargetModel(),
-               getDefaultDroppedNestingItemWrapperModel()
+               getDefaultDroppedNestingItemWrapperModel(),
+               getDefaultTabbedFormControlsModel(),
+               getDefaultFormControlTabModel()
             ]
          }
       },
@@ -85,6 +89,30 @@ model.jsonModel = {
                                     name: "alfresco/dnd/DragAndDropItems",
                                     config: {
                                        items: [
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Tabbed Form Controls",
+                                             value: {
+                                                name: "alfresco/forms/TabbedControls",
+                                                config: {
+                                                   useModellingService: true,
+                                                   label: "Widgets",
+                                                   targetProperty: "config.widgets"
+                                                }
+                                             }
+                                          },
+                                          {
+                                             type: [ "widget" ],
+                                             label: "Form Control Tab",
+                                             value: {
+                                                name: "alfresco/forms/ControlColumn",
+                                                config: {
+                                                   useModellingService: true,
+                                                   label: "Widgets",
+                                                   targetProperty: "config.widgets"
+                                                }
+                                             }
+                                          },
                                           {
                                              type: [ "widget" ],
                                              label: "Form Control",

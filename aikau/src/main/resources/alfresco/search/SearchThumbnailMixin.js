@@ -94,35 +94,35 @@ define(["dojo/_base/declare",
          switch (this.currentItem.type)
          {
             case "blogpost":
-               url = require.toUrl("alfresco/search") + "/css/images/blog-post.png";
+               url = require.toUrl("alfresco/search/css/images/blog-post.png");
                break;
-   
+
             case "forumpost":
-               url = require.toUrl("alfresco/search") + "/css/images/topic-post.png";
+               url = require.toUrl("alfresco/search/css/images/topic-post.png");
                break;
-   
+
             case "calendarevent":
-               url = require.toUrl("alfresco/search") + "/css/images/calendar-event.png";
+               url = require.toUrl("alfresco/search/css/images/calendar-event.png");
                break;
-   
+
             case "wikipage":
-               url = require.toUrl("alfresco/search") + "/css/images/wiki-page.png";
+               url = require.toUrl("alfresco/search/css/images/wiki-page.png");
                break;
-   
+
             case "link":
-               url = require.toUrl("alfresco/search") + "/css/images/link.png";
+               url = require.toUrl("alfresco/search/css/images/link.png");
                break;
-   
+
             case "datalist":
-               url = require.toUrl("alfresco/search") + "/css/images/datalist.png";
+               url = require.toUrl("alfresco/search/css/images/datalist.png");
                break;
-   
+
             case "datalistitem":
-               url = require.toUrl("alfresco/search") + "/css/images/datalistitem.png";
+               url = require.toUrl("alfresco/search/css/images/datalistitem.png");
                break;
-   
+
             default:
-               url = require.toUrl("alfresco/search") + "/css/images/generic-result.png";
+               url = require.toUrl("alfresco/search/css/images/generic-result.png");
                break;
          }
          return url;

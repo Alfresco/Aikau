@@ -123,9 +123,9 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_menus_AlfMenuBarPopup__postCreate() {
          if (this.iconClass && this.iconClass !== "dijitNoIcon")
          {
-            this.iconNode = domConstruct.create("img", { 
-               className: this.iconClass, 
-               src: (this.iconSrc ? this.iconSrc : require.toUrl("alfresco/menus") + "/css/images/transparent-20.png"),
+            this.iconNode = domConstruct.create("img", {
+               className: this.iconClass,
+               src: (this.iconSrc ? this.iconSrc : require.toUrl("alfresco/menus/css/images/transparent-20.png")),
                title: this.message(this.iconAltText),
                alt: this.message(this.iconAltText),
                tabIndex: 0

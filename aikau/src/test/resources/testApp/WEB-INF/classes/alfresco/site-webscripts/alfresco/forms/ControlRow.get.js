@@ -58,6 +58,12 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "10px"
+         }
+      },
+      {
          id: "DB1",
          name: "alfresco/buttons/AlfDynamicPayloadButton",
          config: {
@@ -69,6 +75,47 @@ model.jsonModel = {
                   topic: "_valueChangeOf_SELECT1",
                   dataMapping: {
                      value: "selected"
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "30px"
+         }
+      },
+      {
+         id: "FORM2",
+         name: "alfresco/forms/Form",
+         config: {
+            pubSubScope: "FORM2_",
+            showValidationErrorsImmediately: false,
+            widgets: [
+               {
+                  id: "CR1",
+                  name: "alfresco/forms/ControlRow",
+                  config: {
+                     widgets: [
+                        {
+                           id: "TB1",
+                           name: "alfresco/forms/controls/DojoValidationTextBox",
+                           config: {
+                              label: "Field 1",
+                              name: "field1",
+                              description: "Needs to be 3 characters or more",
+                              value: "a",
+                              validationConfig: [
+                                 {
+                                    validation: "minLength",
+                                    length: 3,
+                                    errorMessage: "Too short"
+                                 }
+                              ]
+                           }
+                        }
+                     ]
                   }
                }
             ]

@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
          {
             this.iconNode = domConstruct.create("img", {
                className: this.iconClass,
-               src: require.toUrl("alfresco/menus") + "/css/images/transparent-20.png",
+               src: require.toUrl("alfresco/menus/css/images/transparent-20.png"),
                alt: this.message(this.iconAltText),
                title: this.message(this.iconAltText),
                tabIndex: 0,

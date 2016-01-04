@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
              this.logoImageSrc === "alfresco-share-logo-team.png" ||
              this.logoImageSrc === "alfresco-share-logo.png")
          {
-            this.logoImageSrc = require.toUrl("alfresco/footer") + "/css/images/" + this.logoImageSrc;
+            this.logoImageSrc = require.toUrl("alfresco/footer/css/images/" + this.logoImageSrc);
          }
          else
          {

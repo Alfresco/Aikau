@@ -101,6 +101,15 @@ define(["alfresco/layout/HorizontalWidgets",
        * @instance
        */
       postCreate: function alfresco_forms_ControlRow__postCreate() {
+         // Before calling inherited (which will process the widgets), ensure
+         // they are populated with the showValidationErrorsImmediately value
+         if (this.widgets) {
+            array.forEach(this.widgets, function(widget) {
+               if (widget && widget.config) {
+                  widget.config.showValidationErrorsImmediately = this.showValidationErrorsImmediately;
+               }
+            }, this);
+         }
          this.inherited(arguments);
          domClass.add(this.domNode, "alfresco-forms-ControlRow");
          var hasDescription = false;

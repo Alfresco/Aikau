@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/site-webscripts/imports/playground.lib.js">
+<import resource="classpath:alfresco/site-webscripts/imports/sandpit.lib.js">
 
 buildPageModel({
    title: "alfresco/logo/Logo",
