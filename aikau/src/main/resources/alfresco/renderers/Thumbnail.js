@@ -930,7 +930,7 @@ define(["dojo/_base/declare",
          {
             var publishGlobal = this.publishGlobal || false;
             var publishToParent = this.publishToParent || false;
-            this.checkForMiddleClick(evt, this.publishTopic, this.publishPayload);
+            this.processMiddleOrCtrlClick(evt, this.publishTopic, this.publishPayload);
             this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
          }
       },

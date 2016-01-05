@@ -18,15 +18,9 @@
  */
 
 /**
- * <p>This mixin can be used to wrap HTML elements in a widget with an anchor element that allows users
- * to use the browser context-menu to copy or open the link in a new tab or window. This works around
- * the fact that all Aikau navigation is achieved via publishing requests to be handled by the 
- * [Navigation Service]{@link module:alfresco/services/NavigationService}.</p>
- * <p>This should be mixed into a widget and then the [makeAnchor]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor}
- * function should be called by the postCreate function (or any function called after the widgets DOM
- * has been created). In order for this to work the [getAnchorTargetSelectors]{@link module:alfresco/navigation/_HtmlAnchorMixin#getAnchorTargetSelectors}
- * should be overridden to return an array of the CSS selectors needed to identify the elements to be wrapped
- * with an anchor element.</p>
+ * This mixin can be used for widgets that support mouse clicks and provides the ability to support 
+ * clicks with the middle mouse button or the control key depressed to open navigation requests
+ * in a new browser tab.
  *
  * @module alfresco/navigation/LinkClickMixin
  * @extends module:alfresco/core/Core
@@ -41,32 +35,41 @@ define(["dojo/_base/declare",
    return declare([_NavigationServiceTopicMixin], {
 
       /**
-       * Indicates whether or not a middle-button mouse click on the link should result in the link
-       * being opened in a new browser tab. If this is configured to be true then the a "target" attribute
-       * of "NEW" will be configured on the payload.
+       * Indicates whether or not a middle-button or control key depresssed mouse click on the link should 
+       * result in the link being opened in a new browser tab. If this is configured to be true then the a "target" 
+       * attribute of "NEW" will be configured on the payload.
        * 
        * @instance
        * @type {boolean}
        * @default
-       * @since 1.0.50
        */
-      newTabOnMiddleMouseClick: false,
+      newTabOnMiddleOrCtrlClick: false,
+
+      /**
+       * The default navigation target to use in 
+       * [processMiddleOrCtrlClick]{@link module:alfresco/navigation/LinkClickMixin#processMiddleOrCtrlClick}
+       * if a middle click or control-click is not detected.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      defaultNavigationTarget: "CURRENT",
 
       /**
        * For [navigation topics]{@link module:alfresco/services/_NavigationServiceTopicMixin#navigateToPageTopic}
-       * the click action is checked for a middle mouse click action if the payload does not request that the
-       * navigation target is a new browser tab then it will be added. No change will be made if 
-       * [newTabOnMiddleMouseClick]{@link module:alfresco/navigation/LinkClickMixin#newTabOnMiddleMouseClick}
+       * the click action is checked for a middle mouse click or control key depressed mouse click if the payload 
+       * does not request that the navigation target is a new browser tab then it will be added. No change will be 
+       * made if [newTabOnMiddleOrCtrlClick]{@link module:alfresco/navigation/LinkClickMixin#newTabOnMiddleOrCtrlClick}
        * is not configured to be true.
        * 
        * @instance
        * @param {object} evt The link click event
        * @param {string} publishTopic The topic to be published as a result of the click
        * @param {object} publishPayload The payload to be published as a result of the click
-       * @since 1.0.50
        */
-      checkForMiddleClick: function alfresco_navigation_LinkClickMixin__checkForMiddleClick(evt, publishTopic, publishPayload) {
-         if (this.newTabOnMiddleMouseClick && publishTopic === this.navigateToPageTopic) 
+      processMiddleOrCtrlClick: function alfresco_navigation_LinkClickMixin__processMiddleOrCtrlClick(evt, publishTopic, publishPayload) {
+         if (this.newTabOnMiddleOrCtrlClick && publishTopic === this.navigateToPageTopic) 
          {
             if ((evt.which === 2 || (evt.which === 1 && evt.ctrlKey)) && publishPayload.target !== this.newTarget)
             {
@@ -74,7 +77,7 @@ define(["dojo/_base/declare",
             }
             else if (evt.which === 1 && publishPayload.target !== this.currentTarget)
             {
-               publishPayload.target = this.currentTarget;
+               publishPayload.target = this.defaultNavigationTarget || this.currentTarget;
             }
          }
       }

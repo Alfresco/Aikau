@@ -157,16 +157,16 @@ define(["dojo/_base/declare",
       navigationTarget: "CURRENT",
 
       /**
-       * Indicates whether or not a middle-button mouse click on the link should result in links
-       * being opened in a new browser tab. If this is configured to be true then the a "target" attribute
-       * of "NEW" will be configured on the payload.
+       * Indicates whether or not a middle-button mouse click (or left click with the control key depressed)
+       * on the link should result in links being opened in a new browser tab. If this is configured to be true 
+       * then the a "target" attribute of "NEW" will be configured on the payload.
        * 
        * @instance
        * @type {boolean}
        * @default
        * @since 1.0.50
        */
-      newTabOnMiddleMouseClick: true,
+      newTabOnMiddleOrCtrlClick: true,
 
       /**
        * This can be configured to override the default filter for the actions that are applicable to 
@@ -369,7 +369,8 @@ define(["dojo/_base/declare",
                type: urlTypes.PAGE_RELATIVE,
                target: this.navigationTarget
             },
-            newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
+            newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+            defaultNavigationTarget: this.navigationTarget
          }, this.dateNode);
       },
 
@@ -389,7 +390,8 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             propertyToRender: "displayName",
             renderSize: "large",
-            newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
+            newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+            defaultNavigationTarget: this.navigationTarget
          };
          if (this.navigationTarget)
          {
@@ -470,7 +472,8 @@ define(["dojo/_base/declare",
                   type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
                },
-               newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
+               newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+               defaultNavigationTarget: this.navigationTarget
             }, this.pathNode);
          }
       },
@@ -536,7 +539,8 @@ define(["dojo/_base/declare",
                   type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
                },
-               newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
+               newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+               defaultNavigationTarget: this.navigationTarget
             }, this.siteNode);
          }
       },
@@ -580,7 +584,8 @@ define(["dojo/_base/declare",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             showDocumentPreview: true,
-            newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
+            newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+            defaultNavigationTarget: this.navigationTarget
          };
          if (this.navigationTarget)
          {

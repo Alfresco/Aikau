@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
          else
          {
             var payload = this.getPublishPayload();
-            this.checkForMiddleClick(evt, publishTopic, payload);
+            this.processMiddleOrCtrlClick(evt, publishTopic, payload);
             var publishGlobal = this.publishGlobal || false;
             var publishToParent = this.publishToParent || false;
             this.alfPublish(publishTopic, payload, publishGlobal, publishToParent);
