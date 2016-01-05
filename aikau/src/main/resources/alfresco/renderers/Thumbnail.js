@@ -102,6 +102,7 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_PublishPayloadMixin",
         "dijit/_OnDijitClickMixin",
         "alfresco/lists/ItemSelectionMixin",
+        "alfresco/navigation/LinkClickMixin",
         "dojo/text!./templates/Thumbnail.html",
         "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
@@ -115,11 +116,11 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, template, AlfCore, _ItemLinkMixin,
+                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, template, AlfCore, _ItemLinkMixin,
                  AlfConstants, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                   AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin], {
+                   AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -893,7 +894,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               this.onNonPreviewAction();
+               this.onNonPreviewAction(evt);
             }
          }
       },
@@ -904,8 +905,9 @@ define(["dojo/_base/declare",
        * full node data reveals that a preview cannot be supported.
        *
        * @instance
+       * @param {object} evt The click event
        */
-      onNonPreviewAction: function alfresco_renderers_Thumbnail__onNonPreviewAction() {
+      onNonPreviewAction: function alfresco_renderers_Thumbnail__onNonPreviewAction(evt) {
          if (!this.publishTopic)
          {
             // If no topic has been provided then set up a default one (presumed to be for use
@@ -916,7 +918,7 @@ define(["dojo/_base/declare",
          else if (this.publishPayload)
          {
             // If a payload has been provided then use it...
-            this.publishPayload = this.getGeneratedPayload(false, null);
+            this.publishPayload = this.getGeneratedPayload(true, null);
          }
 
          // ...then do it.
@@ -928,6 +930,7 @@ define(["dojo/_base/declare",
          {
             var publishGlobal = this.publishGlobal || false;
             var publishToParent = this.publishToParent || false;
+            this.processMiddleOrCtrlClick(evt, this.publishTopic, this.publishPayload);
             this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
          }
       },
