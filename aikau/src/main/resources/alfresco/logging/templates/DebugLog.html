@@ -13,15 +13,15 @@
    <label for="display-subscriptions" class="${rootClass}__label ${rootClass}__label-subscriptions">Subscriptions</label>
 
    <!-- Filter to only show specific topics -->
-   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="includeFilter" data-dojo-attach-event="keyup:_applyIncludeFilter" placeholder="Only show ..." value="" />
-   <input type="checkbox" id="include-filter-regex" data-dojo-attach-point="includeFilterRegex" class="${rootClass}__checkbox ${rootClass}__checkbox-include-filter-regex" />
-   <label for="include-filter-regex" class="${rootClass}__label ${rootClass}__label-include-filter-regex" data-dojo-attach-event="click:_applyIncludeFilter">Regex</label>
+   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="includeFilter" data-dojo-attach-event="keyup:_applyFilters" placeholder="Only show..." value="" />
+   <input type="checkbox" id="include-filter-regex" data-dojo-attach-point="includeFilterRegex" class="${rootClass}__checkbox ${rootClass}__checkbox-include-filter-regex" data-dojo-attach-event="change:_applyFilters" />
+   <label for="include-filter-regex" class="${rootClass}__label ${rootClass}__label-include-filter-regex">Use regex</label>
    <button class="${rootClass}__filter-button" data-dojo-attach-event="click:_clearIncludeFilter">Clear</button>
 
    <!-- Filter to hide certain topics -->
-   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="excludeFilter" data-dojo-attach-event="keyup:_applyExcludeFilter" placeholder="Hide all ..." value="" />
-   <input type="checkbox" id="exclude-filter-regex" data-dojo-attach-point="excludeFilterRegex" class="${rootClass}__checkbox ${rootClass}__checkbox-exclude-filter-regex" />
-   <label for="exclude-filter-regex" class="${rootClass}__label ${rootClass}__label-exclude-filter-regex" data-dojo-attach-event="click:_applyExcludeFilter">Regex</label>
+   <input type="text" class="${rootClass}__filter" data-dojo-attach-point="excludeFilter" data-dojo-attach-event="keyup:_applyFilters" placeholder="Exclude..." value="" />
+   <input type="checkbox" id="exclude-filter-regex" data-dojo-attach-point="excludeFilterRegex" class="${rootClass}__checkbox ${rootClass}__checkbox-exclude-filter-regex" data-dojo-attach-event="change:_applyFilters" />
+   <label for="exclude-filter-regex" class="${rootClass}__label ${rootClass}__label-exclude-filter-regex">Use regex</label>
    <button class="${rootClass}__filter-button" data-dojo-attach-event="click:_clearExcludeFilter">Clear</button>
 
    <!-- The log! -->
