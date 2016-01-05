@@ -558,6 +558,12 @@ define(["dojo/_base/declare",
          else if (this.tabContainerWidget && typeof this.tabContainerWidget.resize === "function")
          {
             this.tabContainerWidget.resize();
+
+            // See AKU-766 - absolutely make sure that the selected child really is selected!
+            if (this.tabContainerWidget.selectedChildWidget)
+            {
+               this.tabContainerWidget._showChild(this.tabContainerWidget.selectedChildWidget);
+            }
          }
       },
 
