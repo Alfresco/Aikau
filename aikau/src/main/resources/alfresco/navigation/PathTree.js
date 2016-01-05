@@ -125,6 +125,17 @@ define(["dojo/_base/declare",
                parentTreeNode = parentTreeNode[0];
                this.refreshTreeNode(parentTreeNode);
             }
+            else
+            {
+               // For the root node, the supplied parentNoderef will be undefined - therefore
+               // we need to use the ROOT id (which is known)...
+               parentTreeNode = this.tree._itemNodesMap[this.id + "_ROOT"];
+               if (parentTreeNode && parentTreeNode.length)
+               {
+                  parentTreeNode = parentTreeNode[0];
+                  this.refreshTreeNode(parentTreeNode);
+               }
+            }
          }
          else
          {
