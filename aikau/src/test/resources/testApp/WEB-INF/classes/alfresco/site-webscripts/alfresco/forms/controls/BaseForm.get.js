@@ -75,13 +75,14 @@ model.jsonModel = {
          name: "alfresco/html/HR"
       },
       {
-         "name": "alfresco/layout/HorizontalWidgets",
-         "config": {
-            "widgets": [
+         name: "alfresco/layout/HorizontalWidgets",
+         config: {
+            widgets: [
                {
-                  name: "alfresco/forms/Form",
                   id: "BASIC_FORM",
+                  name: "alfresco/forms/Form",
                   config: {
+                     pubSubScope: "TEST_SCOPE_",
                      okButtonPublishTopic: "OK",
                      cancelButtonPublishTopic: "CANCEL",
                      widgets: [
@@ -89,7 +90,6 @@ model.jsonModel = {
                            id: "FORM_FIELD",
                            name: "alfresco/forms/controls/TextBox",
                            config: {
-                              pubSubScope: "TEST_SCOPE_",
                               valueSubscriptionTopic: "SET_FORM_CONTROL_VALUE",
                               name: "control",
                               label: "Basic form control"
@@ -99,12 +99,12 @@ model.jsonModel = {
                   }
                },
                {
-                  "name": "alfresco/layout/VerticalWidgets",
-                  "config": {
-                     "widgets": [
+                  name: "alfresco/layout/VerticalWidgets",
+                  config: {
+                     widgets: [
                         {
-                           name: "alfresco/forms/Form",
                            id: "AUTOSAVE_FORM",
+                           name: "alfresco/forms/Form",
                            config: {
                               autoSavePublishTopic: "AUTOSAVE_FORM_1",
                               autoSavePublishGlobal: true,
@@ -133,8 +133,8 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/buttons/AlfButton",
                            id: "CLEAR_AUTOSAVE_1",
+                           name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Clear autosave text box",
                               publishTopic: "SET_FORM_CONTROL_VALUE",
@@ -148,8 +148,8 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/forms/Form",
                   id: "AUTOSAVE_FORM_INVALID",
+                  name: "alfresco/forms/Form",
                   config: {
                      autoSavePublishTopic: "AUTOSAVE_FORM_2",
                      autoSavePublishGlobal: true,
@@ -179,12 +179,12 @@ model.jsonModel = {
          }
       },
       {
-         "name": "alfresco/layout/HorizontalWidgets",
-         "config": {
-            "widgets": [
+         name: "alfresco/layout/HorizontalWidgets",
+         config: {
+            widgets: [
                {
-                  name: "alfresco/forms/Form",
                   id: "ENTER_FORM",
+                  name: "alfresco/forms/Form",
                   config: {
                      okButtonPublishTopic: "FORM_PUBLISH",
                      cancelButtonPublishTopic: "FORM_CANCEL",
