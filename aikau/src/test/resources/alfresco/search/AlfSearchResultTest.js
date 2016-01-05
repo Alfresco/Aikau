@@ -24,8 +24,9 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "alfresco/TestCommon"],
-   function(registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+   function(registerSuite, assert, TestCommon, keys) {
 
    registerSuite(function(){
       var browser;
@@ -123,6 +124,106 @@ define(["intern!object",
                .end()
 
             .findById("SR_ACTIONS_MANAGE_ASPECTS");
+         },
+
+         // See AKU-769 - Need to check left mouse clicks and left mouse clicks with control key depressed...
+         // Middle button clicks SHOULD be tested but Leadfoot API is failing to generate correct event (manually
+         // verified testing shows it working though)...
+
+         "Left click name goes to current target": function() {
+            return browser.findByCssSelector("#SR_DISPLAY_NAME .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "CURRENT", "Name link should use CURRENT target");
+               })
+            .clearLog();
+         },
+
+         "Left click site goes to current target": function() {
+            return browser.findByCssSelector("#SR_SITE .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "CURRENT", "Site link should use CURRENT target");
+               })
+            .clearLog();
+         },
+
+         "Left click path goes to current target": function() {
+            return browser.findByCssSelector("#SR_PATH .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "CURRENT", "Path link should use CURRENT target");
+               })
+            .clearLog();
+         },
+
+         "Left click date goes to current target": function() {
+            return browser.findByCssSelector("#SR_DATE .value")
+               .click()
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "CURRENT", "Date link should use CURRENT target");
+               })
+            .clearLog();
+         },
+
+         "Control click name goes to new target": function() {
+            return browser.findByCssSelector("#SR_DISPLAY_NAME .value")
+               .pressKeys([keys.CONTROL])
+               .click()
+               .pressKeys(keys.NULL)
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Control click name link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Control click site goes to new target": function() {
+            return browser.findByCssSelector("#SR_SITE .value")
+               .pressKeys([keys.CONTROL])
+               .click()
+               .pressKeys(keys.NULL)
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Control click site link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Control click path goes to new target": function() {
+            return browser.findByCssSelector("#SR_PATH .value")
+               .pressKeys([keys.CONTROL])
+               .click()
+               .pressKeys(keys.NULL)
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Control click path link should use NEW target");
+               })
+            .clearLog();
+         },
+
+         "Control click date goes to new target": function() {
+            return browser.findByCssSelector("#SR_DATE .value")
+               .pressKeys([keys.CONTROL])
+               .click()
+               .pressKeys(keys.NULL)
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "target", "NEW", "Control click date link should use NEW target");
+               })
+            .clearLog();
          },
 
          "Post Coverage Results": function() {

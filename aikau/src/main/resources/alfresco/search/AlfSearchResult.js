@@ -157,6 +157,18 @@ define(["dojo/_base/declare",
       navigationTarget: "CURRENT",
 
       /**
+       * Indicates whether or not a middle-button mouse click on the link should result in links
+       * being opened in a new browser tab. If this is configured to be true then the a "target" attribute
+       * of "NEW" will be configured on the payload.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.50
+       */
+      newTabOnMiddleMouseClick: true,
+
+      /**
        * This can be configured to override the default filter for the actions that are applicable to 
        * all nodes that are neither folders nor documents. Actions need to be filtered as Aikau does not 
        * currently support all of the actions that can be configured in Alfresco Share. However, if custom 
@@ -356,7 +368,8 @@ define(["dojo/_base/declare",
                url: "user/{modifiedByUser}/profile",
                type: urlTypes.PAGE_RELATIVE,
                target: this.navigationTarget
-            }
+            },
+            newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
          }, this.dateNode);
       },
 
@@ -375,7 +388,8 @@ define(["dojo/_base/declare",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             propertyToRender: "displayName",
-            renderSize: "large"
+            renderSize: "large",
+            newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
          };
          if (this.navigationTarget)
          {
@@ -455,7 +469,8 @@ define(["dojo/_base/declare",
                   url: isRepo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
                   type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
-               }
+               },
+               newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
             }, this.pathNode);
          }
       },
@@ -520,7 +535,8 @@ define(["dojo/_base/declare",
                   url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
                   type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
-               }
+               },
+               newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
             }, this.siteNode);
          }
       },
@@ -563,7 +579,8 @@ define(["dojo/_base/declare",
             id: this.id + "_THUMBNAIL",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
-            showDocumentPreview: true
+            showDocumentPreview: true,
+            newTabOnMiddleMouseClick: this.newTabOnMiddleMouseClick
          };
          if (this.navigationTarget)
          {
