@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,18 +22,17 @@
  * @author Martin Doyle
  */
 define(["intern!object",
-      "intern/chai!expect",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, expect, assert, require, TestCommon, keys) {
+        "intern/chai!assert",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(registerSuite, assert, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
+   /* global window */
 
-   return {
+   registerSuite(function(){
+      var browser;
+
+      return {
          name: "InlineEditPropertyLink",
 
          setup: function() {
@@ -102,7 +101,7 @@ registerSuite(function(){
          "Icon appears on mouseover": function() {
             return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                .moveMouseTo()
-               .end()
+            .end()
 
             .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
                .isDisplayed()
@@ -127,7 +126,7 @@ registerSuite(function(){
          "Edit widgets are created on edit": function() {
             return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
                .click()
-               .end()
+            .end()
 
             .findByCssSelector("#INLINE_EDIT_ITEM_0 .alfresco-forms-Form");
          },
@@ -146,7 +145,7 @@ registerSuite(function(){
                .then(function(result) {
                   assert.isTrue(result, "Save button not visible when editing");
                })
-               .end()
+            .end()
 
             .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
                .isDisplayed()
@@ -158,7 +157,7 @@ registerSuite(function(){
          "Escape key cancels editing": function() {
             return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
                .pressKeys([keys.ESCAPE])
-               .end()
+            .end()
 
             .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                .isDisplayed()
@@ -170,7 +169,7 @@ registerSuite(function(){
          "Clicking on property fires topic": function() {
             return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                .click()
-               .end()
+            .end()
 
             .getLastPublish("TEST_PROPERTY_LINK_CLICK", "Property link topic not published on click");
          },
@@ -190,18 +189,18 @@ registerSuite(function(){
                   return browser.end()
                      .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
                      .click()
-                     .end()
+                  .end()
 
                   .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                      .isDisplayed()
                      .then(function(result) {
                         assert.isFalse(result, "Edit mode not entered when clicking on icon");
                      })
-                     .end()
+                  .end()
 
                   .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
                      .click()
-                     .end()
+                  .end()
 
                   .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                      .isDisplayed()
@@ -215,7 +214,7 @@ registerSuite(function(){
             return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
                .pressKeys([keys.CONTROL, "e"])
                .pressKeys(keys.NULL)
-               .end()
+            .end()
 
             .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
                .isDisplayed()
@@ -230,16 +229,16 @@ registerSuite(function(){
                .then(function(result) {
                   assert.isTrue(result, "Edit box not visible");
                })
-               .end()
+            .end()
 
             .findByCssSelector("#INLINE_EDIT_ITEM_0 .dijitInputContainer input")
                .clearValue()
                .type("New")
-               .end()
+            .end()
 
             .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_CRUD_UPDATE", true, "Property update not requested")
                .then(function(payload) {
@@ -265,16 +264,16 @@ registerSuite(function(){
          "Scoped property link update has response scoped": function() {
             return browser.findByCssSelector("#LIST_TOPIC_SCOPED .editIcon")
                .click()
-               .end()
+            .end()
 
             .findByCssSelector("#LIST_TOPIC_SCOPED .alfresco-forms-controls-TextBox:first-child .dijitInputContainer input")
                .type("New2")
-               .end()
+            .end()
 
             .findByCssSelector("#LIST_TOPIC_SCOPED .save")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_CRUD_UPDATE", true, "Property update not requested")
                .then(function(payload) {
@@ -286,29 +285,29 @@ registerSuite(function(){
             return browser.findByCssSelector("#LIST_TOPIC_NOSCOPE .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("TEST_PROPERTY_LINK_CLICK", true, "'Test item (topic, no scope)' did not publish correct topic")
                .then(function(payload) {
                   assert.propertyVal(payload, "alfResponseScope", "", "'Test item (topic, no scope)' generated incorrect alfResponseScope");
                })
-               .end()
+            .end()
 
             .findByCssSelector("#LIST_TOPIC_SCOPED .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("SCOPED_TEST_PROPERTY_LINK_CLICK", true, "'Test item (topic, scoped)' did not publish correct topic")
                .then(function(payload) {
                   assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (topic, scoped)' generated incorrect alfResponseScope");
                })
-               .end()
+            .end()
 
             .findByCssSelector("#LIST_NOTOPIC_SCOPED .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("SCOPED_ALF_NAVIGATE_TO_PAGE", true, "'Test item (no topic, scoped)' did not publish correct topic")
                .then(function(payload) {
@@ -333,9 +332,48 @@ registerSuite(function(){
                });
          },
 
+         "Edit encoded value": function() {
+            // Move the mouse over the hidden edit icon...
+            return browser.findByCssSelector("#LIST_XSS_ITEMS .editIcon")
+               .moveMouseTo()
+            .end()
+
+            // Wait for it to appear and clikc it...
+            .findDisplayedByCssSelector("#LIST_XSS_ITEMS .editIcon")
+               .click()
+            .end()
+
+            // Check that the edit value isn't encoded...
+            .findDisplayedByCssSelector("#LIST_XSS_ITEMS .alfresco-forms-controls-TextBox .dijitInputContainer input")
+               .getProperty("value")
+               .then(function(value) {
+                  assert.equal(value, "<img src=\"1\" onerror=\"window.hackedProperty=true\">", "Incorrect edit field value");
+               });
+         },
+
+         "Save value and check XSS is not injected": function() {
+            return browser.findByCssSelector("#LIST_XSS_ITEMS .action.save")
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector("#LIST_XSS_ITEMS #INLINE_EDIT_ITEM_0 .inlineEditValue")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "<img src=\"1\" onerror=\"window.hackedProperty=true\">");
+               })
+            .end()
+
+            .execute(function() {
+                  return !!window.hackedProperty;
+               })
+               .then(function(isHacked) {
+                  assert.isFalse(isHacked);
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
       };
-      });
    });
+});
