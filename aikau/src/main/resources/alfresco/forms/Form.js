@@ -401,7 +401,7 @@ define(["dojo/_base/declare",
                   widget.config.showValidationErrorsImmediately = this.showValidationErrorsImmediately;
                   if (widget.config.pubSubScope)
                   {
-                     this.alfLog("warn", "It is not recommended to set a pubSubScope attribute on a form control nested within a form - the pubSubScope should be inherited!", this, widget);
+                     this.alfLog("warn", "It is not recommended to set a pubSubScope attribute on a form control nested within a form, the value of the form control will not be included in the published form value", this, widget);
                   }
                }
             }, this);
