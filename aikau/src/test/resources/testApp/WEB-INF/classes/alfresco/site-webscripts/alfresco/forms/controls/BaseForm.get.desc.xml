@@ -1,6 +1,6 @@
 <webscript>
-  <shortname>BasicForm Test</shortname>
-  <description>This WebScript defines the BasicForm page test</description>
+  <shortname>Basic Forms Test</shortname>
+  <description>Demonstrates the basic capabilities of the alfresco/forms/Form widget</description>
   <family>aikau-unit-tests</family>
   <url>/BaseForm</url>
 </webscript>
