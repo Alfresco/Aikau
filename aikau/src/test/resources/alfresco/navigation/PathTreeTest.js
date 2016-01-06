@@ -170,7 +170,7 @@ define(["intern!object",
                .getLastXhr()
                   .then(function(xhr) {
                      /* jshint maxlen:500*/
-                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
                   });
          },
 
@@ -183,7 +183,34 @@ define(["intern!object",
                .getLastXhr()
                   .then(function(xhr) {
                      /* jshint maxlen:500*/
-                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
+                  });
+         },
+
+         // See AKU-770 - As with previous two tests, but in this case checking at the root node which wasn't previously working
+         "Check root node refresh on folder add": function() {
+            return browser.findById("ADD_FOLDER_AT_ROOT_label")
+                  .clearXhrLog()
+                  .click()
+               .end()
+
+               .getLastXhr()
+                  .then(function(xhr) {
+                     /* jshint maxlen:500*/
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
+                  });
+         },
+
+         "Check root node refresh on folder delete": function() {
+            return browser.findById("DELETE_FOLDER_AT_ROOT_label")
+                  .clearXhrLog()
+                  .click()
+               .end()
+
+               .getLastXhr()
+                  .then(function(xhr) {
+                     /* jshint maxlen:500*/
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
                   });
          },
 
