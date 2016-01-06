@@ -182,6 +182,19 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function can be called to decode strings that have previously been encoded using 
+       * [encodeHTML]{@link module:alfresco/core/Core#encodeHTML}.
+       *
+       * @callable
+       * @instance
+       * @returns The decoded input string
+       * @since 1.0.50
+       */
+      decodeHTML: function alfresco_core_Core__encodeHTML(textIn) {
+         return htmlEntities.decode(textIn);
+      },
+
+      /**
        * Use this function to ensure that all text added to the HTML page is encoded to prevent XSS style
        * attacks. This wraps the dojox/html/entities encode function. It is intentionally wrapped so that
        * if we need to make a change (e.g. change the encoding handling) we can make it in one place
