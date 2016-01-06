@@ -170,7 +170,7 @@ define(["intern!object",
                .getLastXhr()
                   .then(function(xhr) {
                      /* jshint maxlen:500*/
-                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
                   });
          },
 
@@ -183,7 +183,7 @@ define(["intern!object",
                .getLastXhr()
                   .then(function(xhr) {
                      /* jshint maxlen:500*/
-                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/Budget Files/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
                   });
          },
 
@@ -197,7 +197,7 @@ define(["intern!object",
                .getLastXhr()
                   .then(function(xhr) {
                      /* jshint maxlen:500*/
-                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/documentLibrary/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
                   });
          },
 
@@ -210,7 +210,7 @@ define(["intern!object",
                .getLastXhr()
                   .then(function(xhr) {
                      /* jshint maxlen:500*/
-                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319", "Node refresh not requested");
+                     assert.include(xhr.request.url, "/slingshot/doclib/treenode/node/alfresco/company/home/?perms=false&children=false&max=500&libraryRoot=workspace%3A%2F%2FSpacesStore%2Fb4cff62a-664d-4d45-9302-98723eac1319");
                   });
          },
 
