@@ -177,7 +177,20 @@ define(["dojo/_base/declare",
        * @default
        */
       convertFormToJsonString: false,
-      
+
+      /**
+       * <p>Should the first field in the form be focused when the form is loaded?</p>
+       *
+       * <p><strong>NOTE:</strong> If more than one form on a page has this setting,
+       * then the order in which the fields are focused cannot be guaranteed.</p>
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.49
+       */
+      firstFieldFocusOnLoad: false,
+
       /**
        * This will be instantiated as an array and used to keep track of any controls that report themselves as being
        * in an invalid state. The "OK" button for submitting the form should only be enabled when this list is empty.
@@ -353,6 +366,13 @@ define(["dojo/_base/declare",
          if (this.scopeFormControls === true && this.pubSubScope === "")
          {
             this.pubSubScope = this.generateUuid();
+         }
+
+         // When any of these topics are published, submit the form
+         if (this.publishValueSubscriptions && this.publishValueSubscriptions.length) {
+            array.forEach(this.publishValueSubscriptions, function(subscriptionTopic) {
+               this.alfSubscribe(subscriptionTopic, lang.hitch(this, this.submitOkButton));
+            }, this);
          }
          
          this._form = new Form({
@@ -718,6 +738,19 @@ define(["dojo/_base/declare",
       okButtonEnablementTopics: null,
 
       /**
+       * If any of these topics are published then publish this form using the
+       * [okButtonPublishTopic]{@link module:alfresco/forms/Form#okButtonPublishTopic}.
+       * One may often wish to use [topics.ENTER_KEY_PRESSED]{@link module:alfresco/core/topics#ENTER_KEY_PRESSED}
+       * as a value in this array, to cause the form to submit when ENTER is pressed.
+       *
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.49
+       */
+      publishValueSubscriptions: null,
+
+      /**
        * The label that will be used for the "Cancel" button. This value can either be an explicit
        * localised value or an properties key that will be used to retrieve a localised value.
        *
@@ -962,6 +995,20 @@ define(["dojo/_base/declare",
             }
          });
       },
+
+      /**
+       * Execute a form publish as defined by the OK button.
+       *
+       * @instance
+       * @since 1.0.49
+       */
+      submitOkButton: function alfresco_forms_Form__submitOkButton() {
+         if(!this.okButton) {
+            this.alfLog("warn", "Cannot submit OK button as button not defined");
+         } else {
+            this.okButton.activate();
+         }
+      },
       
       /**
        * Makes a call to the [validate]{@link module:alfresco/forms/Form#validate} function to check the initial
@@ -1037,6 +1084,13 @@ define(["dojo/_base/declare",
                this.publishValidValue();
             }
             this._formSetupComplete = true;
+
+            // If configured, focus the first field in the form
+            if (this.firstFieldFocusOnLoad) {
+               // Use setTimeout to allow other synchronous processes to complete first, as this
+               // has a much greater chance of successfully focusing on the field
+               setTimeout(lang.hitch(this, this.focus));
+            }
          }
       },
       
@@ -1217,15 +1271,15 @@ define(["dojo/_base/declare",
        * @param {string|string[]} [is] The possible value/values that will re-enable the OK button if matching the specified attribute
        * @param {string|string[]} [isNot] The disallowed value/values that will re-enable the OK button if the attribute does not match it/them
        */
-      setupOkButtonEnablementSubscription: function alfresco_forms_Form__setupOkButtonEnablementSubscription(topics) {
+      setupOkButtonEnablementSubscription: function alfresco_forms_Form__setupOkButtonEnablementSubscription(topic) {
          var topicName,
             rulesObj;
-         if (typeof topics === "string") {
-            topicName = topics;
+         if (typeof topic === "string") {
+            topicName = topic;
             rulesObj = {};
          } else {
-            topicName = topics.topic;
-            rulesObj = lang.clone(topics);
+            topicName = topic.topic;
+            rulesObj = lang.clone(topic);
             delete rulesObj.topic;
          }
          this.alfConditionalSubscribe(topicName, rulesObj, lang.hitch(this, this.reenableOkButton));

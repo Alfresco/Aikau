@@ -520,7 +520,7 @@ define(["dojo/_base/declare",
                }
                domConstruct.create("img", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info__icon",
-                  src: require.toUrl("alfresco/documentlibrary/css/images/") + this.dndUploadHighlightImage
+                  src: require.toUrl("alfresco/documentlibrary/css/images/" + this.dndUploadHighlightImage)
                }, pNode);
             }
             

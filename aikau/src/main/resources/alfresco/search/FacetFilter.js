@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
             this.appliedFilterAltText = this.message(this.appliedFilterAltText, {0: this.label});
 
             // Set the source for the image to use to indicate that a filter is applied...
-            this.appliedFilterImageSrc = require.toUrl("alfresco/search") + "/css/images/" + this.appliedFilterImageSrc;
+            this.appliedFilterImageSrc = require.toUrl("alfresco/search/css/images/" + this.appliedFilterImageSrc);
          }
          else
          {

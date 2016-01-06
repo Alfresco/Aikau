@@ -272,8 +272,29 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed in the prompt
+       * @property {string} [title] The title of the prompt
        */
       DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
+
+      /**
+       * This topic can be published to request that a [StickyPanel]{@link module:alfresco/layout/StickyPanel} be
+       * displayed. It is subscribed to by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {object[]} widgets The widgets to appear in the panel
+       * @property {string} [title=default.title] The title to display (uses i18n)
+       * @property {number} [padding=10] The padding to be applied to the widgets area
+       * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
+       */
+      DISPLAY_STICKY_PANEL: "ALF_DISPLAY_STICKY_PANEL",
 
       /**
        * Publish this to indicate the de-selection of an individual item
@@ -395,6 +416,18 @@ define([],function() {
        * @property {object} response.item The metadata for the requested node
        */
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
+
+      /**
+       * This topic can be fired when the enter key is pressed (but normally is not by default).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.49
+       *
+       * @event
+       */
+      ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
 
       /**
        * This topic can be used to request Cloud specific paths to use in an
@@ -806,6 +839,43 @@ define([],function() {
        * @property {object[]} nodes The node or nodes to download.
        */
       SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
+
+      /**
+       * This can be called to close the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       */
+      STICKY_PANEL_CLOSE: "ALF_STICKY_PANEL_CLOSE",
+
+      /**
+       * This is fired when the StickyPanel has been closed.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       */
+      STICKY_PANEL_CLOSED: "ALF_STICKY_PANEL_CLOSED",
+
+      /**
+       * This can be called to set the title of the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string} title The new title to use
+       */
+      STICKY_PANEL_SET_TITLE: "ALF_STICKY_PANEL_SET_TITLE",
 
       /**
        * This topic is published in order to make the actual request to sync a node or nodes

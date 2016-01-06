@@ -24,11 +24,23 @@
  * @module alfresco/forms/controls/utilities/TextBoxValueChangeMixin
  * @author Dave Draper
  */
-define(["dojo/_base/declare",
-        "dojo/_base/lang"], 
-        function(declare, lang) {
+define(["alfresco/core/topics",
+        "dojo/_base/declare",
+        "dojo/_base/lang",
+        "dojo/keys"], 
+        function(topics, declare, lang, keys) {
 
    return declare([], {
+
+      /**
+       * The topic to publish on when the ENTER key is pressed (optional).
+       *
+       * @instance
+       * @type {string}
+       * @default module:alfresco/core/topics#ENTER_KEY_PRESSED
+       * @since 1.0.49
+       */
+      publishTopicOnEnter: topics.ENTER_KEY_PRESSED,
 
       /**
        * This will be set to the last known value of the text box before the current keyup event.
@@ -49,6 +61,44 @@ define(["dojo/_base/declare",
       __oldValue: null,
 
       /**
+       * Handle key-up events.
+       *
+       * @instance
+       * @param {object} evt Dojo-normalised event object
+       * @since 1.0.49
+       */
+      handleKeyUp: function alfresco_forms_controls_TextBox__handleKeyUp(evt) {
+         if (this.publishTopicOnEnter && evt.keyCode === keys.ENTER) {
+            this.alfPublish(this.publishTopicOnEnter, {
+               fieldId: this.id
+            });
+            evt.preventDefault();
+         } else {
+            this._oldValue = this.__oldValue; // Set the old value as the last buffer...
+            this.__oldValue = this.getValue(); // Make the last buffer the current value being set
+
+            this.alfLog("log", "keyup - OLD value: " + this._oldValue + ", NEW value: " + this.getValue());
+            this.formControlValueChange(this.name, this._oldValue, this.getValue());
+            this.validate();
+         }
+      },
+
+      /**
+       * Fires a change event if necessary.
+       *
+       * @instance
+       * @param {string} name The name of the changing property
+       * @param {*} oldValue The old value
+       * @param {*} newValue The new value
+       * @since 1.0.49
+       */
+      fireChangeEvent: function alfresco_forms_controls_TextBox__fireChangeEvent(name, oldValue, newValue) {
+         if (this.__oldValue !== newValue) {
+            this.onValueChangeEvent(name, oldValue, newValue);
+         }
+      },
+
+      /**
        * Overrides the default change events to use blur events on the text box. This is done so that we can validate
        * on every single keypress. However, we need to keep track of old values as this information is not readily
        * available from the text box itself.
@@ -56,24 +106,12 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_TextBox__setupChangeEvents() {
-         var _this = this;
          if (this.wrappedWidget)
          {
-            this.wrappedWidget.on("keyup", function() {
-               _this._oldValue = _this.__oldValue; // Set the old value as the last buffer...
-               _this.__oldValue = this.getValue(); // Make the last buffer the current value being set
-               
-               _this.alfLog("log", "keyup - OLD value: " + _this._oldValue + ", NEW value: " + this.getValue());
-               _this.formControlValueChange(_this.name, _this._oldValue, this.getValue());
-               _this.validate();
-            });
+            this.wrappedWidget.on("keyup", lang.hitch(this, this.handleKeyUp));
             if (typeof this.wrappedWidget.watch === "function")
             {
-               this.own(this.wrappedWidget.watch("value", lang.hitch(this, function(name, oldValue, newValue){
-                  if(this.__oldValue !== newValue) {
-                     this.onValueChangeEvent(name, oldValue, newValue);
-                  }
-               })));
+               this.own(this.wrappedWidget.watch("value", lang.hitch(this, this.fireChangeEvent)));
             } 
          }
       }

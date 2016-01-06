@@ -181,6 +181,31 @@ registerSuite(function(){
             });
       },
 
+      "Enter key can submit form": function() {
+         var firstPublish;
+
+         return browser.findByCssSelector("#ENTER_TEXT_FIELD .dijitInputInner")
+            .clearLog()
+            .type("wibble")
+            .pressKeys(keys.ENTER)
+            .end()
+
+         .getLastPublish("FORM_PUBLISH")
+            .then(function(payload) {
+               firstPublish = payload;
+            })
+
+         .findByCssSelector("#ENTER_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("FORM_PUBLISH")
+            .then(function(payload) {
+               assert.deepEqual(payload, firstPublish, "ENTER publish did not match button-click publish");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }

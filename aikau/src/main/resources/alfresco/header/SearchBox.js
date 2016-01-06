@@ -725,7 +725,7 @@ define(["dojo/_base/declare",
                         id: this.id + "_DROPDOWN_MENU",
                         showArrow: false,
                         label: "",
-                        iconSrc: require.toUrl("alfresco/header") + "/css/images/search-16-gray.png",
+                        iconSrc: require.toUrl("alfresco/header/css/images/search-16-gray.png"),
                         iconClass: "alf-search-icon",
                         widgets: [
                            {

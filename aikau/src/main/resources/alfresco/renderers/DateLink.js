@@ -28,12 +28,13 @@ define(["dojo/_base/declare",
         "alfresco/renderers/Date",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_PublishPayloadMixin",
+        "alfresco/navigation/LinkClickMixin",
         "dojo/text!./templates/DateLink.html",
         "dojo/_base/event",
         "dojo/_base/lang"], 
-        function(declare, Date, _OnDijitClickMixin, _PublishPayloadMixin, template, event, lang) {
+        function(declare, Date, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin, template, event, lang) {
 
-   return declare([Date, _OnDijitClickMixin, _PublishPayloadMixin], {
+   return declare([Date, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin], {
 
       /**
        * Overriddes the default HTML template to use for the widget.
@@ -69,9 +70,11 @@ define(["dojo/_base/declare",
          }
          else
          {
+            var payload = this.getPublishPayload();
+            this.processMiddleOrCtrlClick(evt, publishTopic, payload);
             var publishGlobal = this.publishGlobal || false;
             var publishToParent = this.publishToParent || false;
-            this.alfPublish(publishTopic, this.getPublishPayload(), publishGlobal, publishToParent);
+            this.alfPublish(publishTopic, payload, publishGlobal, publishToParent);
          }
       },
 
