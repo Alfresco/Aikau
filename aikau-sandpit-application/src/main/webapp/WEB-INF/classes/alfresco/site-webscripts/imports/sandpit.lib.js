@@ -181,7 +181,7 @@ function buildPageModel(data) {
                               },
                               {
                                  title: "Mock XHR Logging",
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/layout/FixedHeaderFooter",
                                  delayProcessing: false,
                                  config: {
                                     widgets: data.mockXhrWidgets || defaultMockXhrWidgets
