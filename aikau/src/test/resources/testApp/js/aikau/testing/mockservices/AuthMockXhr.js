@@ -25,7 +25,7 @@
  * @author Kevin Roast
  */
 define([
-      "aikauTesting/MockXhr",
+      "alfresco/testing/MockXhr",
       "dojo/_base/declare",
       "dojo/_base/lang",
       "alfresco/core/CoreXhr"],

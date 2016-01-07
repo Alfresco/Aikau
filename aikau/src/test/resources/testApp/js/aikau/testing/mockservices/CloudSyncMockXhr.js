@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/CloudSync/Unauthenticated.json",
         "dojo/text!./responseTemplates/CloudSync/Tenants.json",
         "dojo/text!./responseTemplates/CloudSync/Sites.json",

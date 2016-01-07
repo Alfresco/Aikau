@@ -26,7 +26,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/previews/Image.json",
         "dojo/text!./responseTemplates/previews/Video.json",
         "dojo/text!./responseTemplates/previews/Audio.json"], 

@@ -26,7 +26,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/io-query",
-        "aikauTesting/MockXhr"], 
+        "alfresco/testing/MockXhr"], 
         function(declare, lang, array, ioQuery, MockXhr) {
    
    return declare([MockXhr], {

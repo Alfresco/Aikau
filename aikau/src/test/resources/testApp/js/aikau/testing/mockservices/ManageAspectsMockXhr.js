@@ -22,7 +22,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/ManageAspects/ConfiguredAspects.json",
         "dojo/text!./responseTemplates/ManageAspects/UpdateSuccess.json"], 
         function(declare, MockXhr, ConfiguredAspects, UpdateSuccess) {

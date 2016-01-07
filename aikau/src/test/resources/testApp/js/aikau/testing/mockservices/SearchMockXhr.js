@@ -23,7 +23,7 @@
  * @author Richard Smith
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/_base/lang",
         "dojo/io-query",
         "dojo/text!./responseTemplates/SearchService/alternative.json",

@@ -22,7 +22,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/Thumbnails/doclib.json",
         "dojo/text!./responseTemplates/Thumbnails/search.json",
         "dojo/text!./responseTemplates/Thumbnails/tasks.json",

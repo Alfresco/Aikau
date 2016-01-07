@@ -26,7 +26,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/Document/DocumentAsObject.json"], 
         function(declare, MockXhr, DocumentAsObject) {
    

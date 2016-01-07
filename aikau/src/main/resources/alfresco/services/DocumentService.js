@@ -259,7 +259,7 @@ define(["dojo/_base/declare",
 
          // Build the URI stem
          var params = lang.replace(uriPart, {
-            type: encodeURIComponent(payload.type),
+            type: encodeURIComponent(payload.type || "all"),
             site: encodeURIComponent(payload.site),
             container: encodeURIComponent(payload.container)
          });

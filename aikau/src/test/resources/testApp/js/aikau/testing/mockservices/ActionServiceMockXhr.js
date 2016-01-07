@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/ActionService/EditOfflineSuccess.json",
         "dojo/text!./responseTemplates/ActionService/EditOfflineFailure.json"],
         function(declare, MockXhr, EditOfflineSuccess, EditOfflineFailure) {

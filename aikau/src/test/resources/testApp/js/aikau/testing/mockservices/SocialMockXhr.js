@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr"], 
+        "alfresco/testing/MockXhr"], 
         function(declare, MockXhr) {
    
    return declare([MockXhr], {

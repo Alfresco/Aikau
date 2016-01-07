@@ -19,9 +19,14 @@
 
 /*globals sinon*/
 /**
- * @module aikauTesting/MockXhr
+ * This can be extended for creating widgets that provide Mock XHR responses. It is provided for use
+ * in testing and will replace the standard browser XMLHttpRequest rendering all standard XHR requests
+ * impossible when included on a page.
+ * 
+ * @module alfresco/testing/MockXhr
  * @author Dave Draper
  * @author Martin Doyle
+ * @since 1.0.50
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
@@ -29,11 +34,12 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/MockXhr.html", 
         "alfresco/core/Core", 
         "dojo/_base/lang", 
+        "dojo/_base/array",
         "dojo/dom-class", 
         "dojo/dom-construct", 
         "dojo/aspect", 
         "dojo/Deferred"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, domConstruct, aspect, Deferred) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, array, domClass, domConstruct, aspect, Deferred) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -73,14 +79,19 @@ define(["dojo/_base/declare",
          this.loadBinaryData();
 
          // Set-up a fake server to handle all the responses...
-         this.server = sinon.fakeServer.create();
-         this.server.autoRespond = true;
-         this.setupServer();
-
+         var server = this.server = sinon.fakeServer.create();
          if (this.respondAfter)
          {
             this.server.autoRespondAfter = this.respondAfter;
          }
+         server.autoRespond = true;
+         server.xhr.useFilters = true;
+
+         // Adds a filter to allow dynamic dependency requests to be processed normally...
+         server.xhr.addFilter(function(method, url) {
+           return !!url.match(/surf\/dojo\/xhr\/dependencies/);
+         });
+         this.setupServer();
 
          // Capture each request and log it...
          this.requests = [];
@@ -122,7 +133,7 @@ define(["dojo/_base/declare",
                headersHtmlBuffer.push("<span class='nowrap'><strong>" + headerName + ":</strong> " + headerValue + "</span>");
             }
          }
-         return (headersHtmlBuffer.length && headersHtmlBuffer.join("<br />")) || "N/A"
+         return (headersHtmlBuffer.length && headersHtmlBuffer.join("<br />")) || "N/A";
       },
 
       /**
@@ -176,6 +187,7 @@ define(["dojo/_base/declare",
        */
       setupServer: function alfresco_testing_MockXhr__setupServer() {
          // Extension point - no action required.
+         this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
       },
 
       /**
@@ -202,7 +214,7 @@ define(["dojo/_base/declare",
             "data-aikau-xhr-method": xhrRequest.method || "",
             "data-aikau-xhr-url": xhrRequest.url || "",
             "data-aikau-xhr-request-headers": (xhrRequest.requestHeaders && JSON.stringify(xhrRequest.requestHeaders)) || "",
-            "data-aikau-xhr-request-body": xhrRequest.requestBody || "",
+            "data-aikau-xhr-request-body": xhrRequest.requestBody || ""
          }, this.logNode, "first");
          domConstruct.create("td", {
             className: "mx-method",
@@ -235,7 +247,7 @@ define(["dojo/_base/declare",
             // Construct headers HTML and tidy response text
             var headersHtml = this.buildHeadersHTML(xhrRequest.responseHeaders),
                responseHeaders = (xhrRequest.responseHeaders && JSON.stringify(xhrRequest.responseHeaders)) || "";
-            responseBody = (xhrRequest.responseText && lang.trim(xhrRequest.responseText)) || "N/A";
+            var responseBody = (xhrRequest.responseText && lang.trim(xhrRequest.responseText)) || "N/A";
 
             // Build response info
             var responseHtml = xhrRequest.status + " (" + xhrRequest.statusText + ")<br />";

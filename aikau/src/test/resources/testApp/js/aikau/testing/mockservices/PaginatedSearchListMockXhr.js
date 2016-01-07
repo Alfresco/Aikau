@@ -25,7 +25,7 @@
  */
 define(["dojo/_base/declare",
       "dojo/json",
-      "aikauTesting/MockXhr",
+      "alfresco/testing/MockXhr",
       "dojo/text!./responseTemplates/PaginatedSearchList/results.json"
    ],
    function(declare, JSON, MockXhr, itemsJson) {

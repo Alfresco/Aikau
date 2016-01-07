@@ -18,9 +18,14 @@
  */
 
 /**
- * @module aikauTesting/WaitForMockXhrService
+ * This widget is provided for testing purposes. Any child widgets configured within it will
+ * not be created until a topic has been published indicating that a 
+ * [MockXhr widget]{@link module:alfresco/testing/MockXhr} is ready for handling requests.
+ * 
+ * @module alfresco/testing/WaitForMockXhrService
  * @extends module:alfresco/core/ProcessWidgets
  * @author Dave Draper
+ * @since 1.0.50
  */
 define(["dojo/_base/declare",
         "alfresco/core/ProcessWidgets",
@@ -46,30 +51,33 @@ define(["dojo/_base/declare",
        * @instance
        */
       onMockXhrServiceReady: function alfresco_testing_WaitForMockXhrService__onMockXhrServiceReady() {
-         if (this.services)
+         if (!this._processedWidgets)
          {
-            array.forEach(this.services, function(service) {
-               var dep = null,
-                   serviceConfig = {};
-               if (typeof service === "string")
-               {
-                  dep = service;
-               }
-               else if (typeof service === "object" && service.name)
-               {
-                  dep = service.name;
-                  serviceConfig = service.config || {};
-               }
-               var requires = [dep];
-               require(requires, function(ServiceType) {
-                  // jshint nonew:false
-                  new ServiceType(serviceConfig);
+            if (this.services)
+            {
+               array.forEach(this.services, function(service) {
+                  var dep = null,
+                      serviceConfig = {};
+                  if (typeof service === "string")
+                  {
+                     dep = service;
+                  }
+                  else if (typeof service === "object" && service.name)
+                  {
+                     dep = service.name;
+                     serviceConfig = service.config || {};
+                  }
+                  var requires = [dep];
+                  require(requires, function(ServiceType) {
+                     // jshint nonew:false
+                     new ServiceType(serviceConfig);
+                  });
                });
-            });
-         }
-         if (this.widgets)
-         {
-            this.processWidgets(this.widgets, this.containerNode);
+            }
+            if (this.widgets)
+            {
+               this.processWidgets(this.widgets, this.containerNode);
+            }
          }
       }
    });
