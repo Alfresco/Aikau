@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
             this.appliedFilterAltText = this.message(this.appliedFilterAltText, {0: this.label});
 
             // Set the source for the image to use to indicate that a filter is applied...
-            this.appliedFilterImageSrc = require.toUrl("alfresco/search") + "/css/images/" + this.appliedFilterImageSrc;
+            this.appliedFilterImageSrc = require.toUrl("alfresco/search/css/images/" + this.appliedFilterImageSrc);
          }
          else
          {

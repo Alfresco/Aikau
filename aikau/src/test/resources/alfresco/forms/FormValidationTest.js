@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -39,6 +39,23 @@ registerSuite(function(){
 
       beforeEach: function() {
          browser.end();
+      },
+
+      "Check that first field of second form is focused initially": function() {
+         var focusedId;
+
+         return browser.getActiveElement()
+            .getAttribute("id")
+            .then(function(id) {
+               focusedId = id;
+            })
+            .end()
+
+         .findByCssSelector("#TB3 .dijitInputInner")
+            .getAttribute("id")
+            .then(function(id) {
+               assert.equal(focusedId, id);
+            });
       },
 
       "Check that first form is NOT displayed as invalid on load": function() {

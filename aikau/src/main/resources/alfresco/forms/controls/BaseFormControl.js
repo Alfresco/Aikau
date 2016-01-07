@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -307,6 +307,17 @@ define(["dojo/_base/declare",
        * @default
        */
       _visible: true,
+
+      /**
+       * Indicates whether or not the form control has been added into the main browser document. This
+       * should not be configured or used by any extending widgets.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.49
+       */
+      ___addedToDocument: false,
 
       /**
        * Used to toggle visibility of the field.
@@ -1007,7 +1018,7 @@ define(["dojo/_base/declare",
 
          if (!this.validationInProgressImgSrc)
          {
-            this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationInProgressImg;
+            this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationInProgressImg);
          }
          this.validationInProgressAltText = this.message(this.validationInProgressAltText, {
             0: this.message(this.label)
@@ -1015,7 +1026,7 @@ define(["dojo/_base/declare",
 
          if (!this.validationErrorImgSrc)
          {
-            this.validationErrorImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.validationErrorImg;
+            this.validationErrorImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationErrorImg);
          }
          this.validationErrorAltText = this.message(this.validationErrorAltText, {
             0: this.message(this.label)
@@ -1023,7 +1034,7 @@ define(["dojo/_base/declare",
 
          if (!this.inlineHelpImgSrc)
          {
-            this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.inlineHelpImg;
+            this.inlineHelpImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.inlineHelpImg);
          }
          this.inlineHelpAltText = this.message(this.inlineHelpAltText, {
             0: this.message(this.label)
@@ -1135,9 +1146,9 @@ define(["dojo/_base/declare",
        */
       onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(/*jshint unused:false*/ payload) {
          // jshint maxstatements:false
-         if ($.contains(document.body, this.domNode))
+         if (!this.___addedToDocument && $.contains(document.body, this.domNode))
          {
-            this.alfUnsubscribe(this.widgetProcessingCompleteSubscription);
+            this.___addedToDocument = true;
 
             // Update the flag to indicate that we're no longer deferring value assignment, this needs to be
             // done before setting the initial value or processing all the deferred values as otherwise they'll

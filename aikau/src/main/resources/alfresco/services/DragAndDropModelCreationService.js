@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -184,7 +184,7 @@ define(["dojo/_base/declare",
             "   return {\n" + 
             "      property: \"" + property + "\",\n" + 
             "      targetValues: " + targetValues + ",\n" + 
-            "      widgetsForConfig: get" + name + configWidgetsSuffix + "(),\n" +
+            "      widgetsForConfig: addCommonConfigTabs(get" + name + configWidgetsSuffix + "(),[]),\n" +
             "      widgetsForNestedConfig: get" + name + nestedWidgetsSuffix + "(),\n" + 
             "      widgetsForDisplay: get" + name + displayWidgetsSuffix + "()\n" + 
             "   };\n" + 

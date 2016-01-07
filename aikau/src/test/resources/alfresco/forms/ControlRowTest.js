@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -56,6 +56,14 @@ registerSuite(function(){
          .getLastPublish("FORM1_TEST")
             .then(function(payload) {
                assert.equal(payload.selected, "ONE", "The dynamic payload button didn't get the published update");
+            });
+      },
+
+      "Ensure showValidationErrorsImmediately is respected": function() {
+         return browser.findByCssSelector("#TB1 .validation-message")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "");
             });
       },
 

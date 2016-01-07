@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,13 +33,17 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreXhr",
         "service/constants/Default",
         "alfresco/core/Page",
+        "alfresco/util/objectProcessingUtil",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/Deferred",
+        "dojo/when",
         "dojo/json",
         "dojo/query",
         "dojo/NodeList-manipulate"], 
-        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, domConstruct, lang, array, dojoJson, query) {
+        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, objectProcessingUtil, 
+                 domConstruct, lang, array, Deferred, when, dojoJson, query) {
    
    return declare([_Widget, _Templated, AlfCore, CoreXhr], {
       
@@ -66,8 +70,25 @@ define(["dojo/_base/declare",
        */
       templateString: template,
 
+      /**
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       */
       pageDefinition: null,
       
+      /**
+       * Indicates whether or not templates stored on the Alfresco Repository should be retrieved so that
+       * they can be processed within the generated preview.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.49
+       */
+      processTemplates: false,
+
       /**
        * @instance
        */
@@ -109,6 +130,149 @@ define(["dojo/_base/declare",
          pageDefinition = dojoJson.stringify(pageDefinition);
          return pageDefinition;
       },
+      
+      /**
+       * PLEASE NOTE: This only works with the Horizon3-Repo-AMP REST APIs
+       * 
+       * @instance
+       * @returns {object} Returns a promise of the XHR result to get the pages.
+       * @since 1.0.49
+       */
+      loadAllTemplates: function alfresco_prototyping_Preview__loadAllTemplates() {
+         var promise = new Deferred();
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "horizon3/pages",
+            method: "GET",
+            promise: promise,
+            successCallback: this.loadAllTemplatesSuccess,
+            callbackScope: this
+         });
+         return promise;
+      },
+
+      /**
+       * Success handler for [loadAllTemplates]{@link module:alfresco/prototyping/Preview#loadAllTemplates}.
+       * Resolves the promise originally returned.
+       * 
+       * @instance
+       * @since 1.0.49
+       */
+      loadAllTemplatesSuccess: function alfresco_prototyping_Preview__loadTemplateSuccess(response, originalRequestConfig) {
+         originalRequestConfig.promise.resolve(response.items);
+      },
+
+      /**
+       * Configures a template that has been referenced in a model with the configuration defined for the 
+       * template in that model.
+       * 
+       * @instance
+       * @since 1.0.49
+       */
+      setTemplateConfiguration: function alfresco_prototyping_Preview__setTemplateConfiguration(parameters) {
+         if (Array.isArray(parameters.object) &&
+             parameters.config &&
+             parameters.ancestors)
+         {
+            var parent = parameters.ancestors[parameters.ancestors.length-2];
+            array.forEach(parameters.object, function(templateMapping) {
+               if (templateMapping.property && templateMapping.id)
+               {
+                  // Get the last ancestor as this will be the "config" object of a widget in the 
+                  // template that has a property to be set...
+                  lang.setObject(templateMapping.property, parameters.config[templateMapping.id], parent);
+               }
+               else
+               {
+                  this.alfLog("warn", "Template mapping id or property was missing", templateMapping, parameters, this);
+               }
+            }, this);
+
+            delete parent._alfTemplateMappings;
+            delete parent._alfIncludeInTemplate;
+         }
+         else
+         {
+            this.alfLog("warn", "Cannot set template configuration without 'object', 'config' and 'ancestors' attributes", parameters, this);
+         }
+      },
+
+      /**
+       * Process a model to swap out any nested templates references that are contained within that 
+       * model with the actual model of the referenced template. This will call the 
+       * [setTemplateConfiguration]{@link module:alfresco/prototyping/Preview#setTemplateConfiguration}
+       * function to update the processed template with any configuration that has been provided for it.
+       * 
+       * @instance
+       * @since 1.0.49
+       */
+      processTemplate: function alfresco_prototyping_Preview__processTemplate(parameters) {
+         // The object should actually be a string (i.e. the name or nodeRef of the template)...
+         if (typeof parameters.object === "string" &&
+             parameters.ancestors)
+         {
+            // Find the the template...
+            var loadedTemplate;
+            array.forEach(parameters.config.templates, function(template) {
+               if (template.name === parameters.object)
+               {
+                  var parsedContent = JSON.parse(template.content);
+                  loadedTemplate = parsedContent.widgets[0];
+               }
+            });
+
+            // Get the parent in order to get the "config" to apply to the template...
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+            if (parent.config)
+            {
+               // Set the template configuration points...
+               objectProcessingUtil.findObject(loadedTemplate, {
+                  prefix: "_alfTemplateMappings", 
+                  config: parent.config,
+                  processFunction: lang.hitch(this, this.setTemplateConfiguration)
+               });
+
+               // Swap the loaded template back into the correct location...
+               var arrayToUpdate = parameters.ancestors[parameters.ancestors.length-3];
+               var indexToSwapForTemplate = parameters.ancestors[parameters.ancestors.length-2];
+               arrayToUpdate.splice(indexToSwapForTemplate, 1, loadedTemplate);
+            }
+            else
+            {
+               this.alfLog("warn", "No 'config' attribute provided in parent of template.", parent, parameters, this);
+            }
+         }
+         else
+         {
+            this.alfLog("warn", "Incorrect parameters - 'object' was missing or was not a string, no 'ancestors' provided", parameters, this);
+         }
+      },
+
+      /**
+       * Removes unnecessary attributes from a template before it is passed for previewing.
+       * 
+       * @instance
+       * @param {object} parameters
+       * @since 1.0.49
+       */
+      cleanUpTemplateConfig: function alfresco_services_PageService__cleanUpTemplateConfig(parameters) {
+         if (parameters.object === true)
+         {
+            // Found a template object...
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+
+            objectProcessingUtil.findObject(parent.config, {
+               prefix: "isTemplate",
+               processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+               config: null
+            });
+
+            parent._alfTemplateName = parent.label;
+            delete parent.label;
+            delete parent.isTemplate;
+            delete parent.templateModel;
+            delete parent.type;
+         }
+      },
 
       /**
        * @instance
@@ -122,35 +286,73 @@ define(["dojo/_base/declare",
                this.rootPreviewWidget.destroyRecursive(false);
             }
 
-            // // Clear out any previous preview...
-            // domConstruct.empty(this.previewNode);
-            
-            try
+            var pageDefinition = this.getPageDefinitionFromPayload(payload);
+            var pageDefObject = dojoJson.parse(pageDefinition);
+
+            var data = {
+               jsonContent: pageDefObject
+            };
+
+            if (this.processTemplates)
             {
-               var pageDefinition = this.getPageDefinitionFromPayload(payload);
-               var pageDefObject = dojoJson.parse(pageDefinition);
-               var data = {
-                  jsonContent: pageDefObject,
-                  widgets: pageDefinition
-               };
-               this.serviceXhr({
-                  url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
-                  data: data,
-                  method: "POST",
-                  successCallback: this.updatePage,
-                  failureCallback: this.onDependencyFailure,
-                  callbackScope: this
-               });
+               var templateReponse = this.loadAllTemplates();
+               when(templateReponse, lang.hitch(this, function(templates) {
+                  try
+                  {
+                     objectProcessingUtil.findObject(data, {
+                        prefix: "isTemplate",
+                        processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+                        config: null
+                     });
+
+                     // Find all templates and swap them out for the actual widget models...
+                     objectProcessingUtil.findObject(data, {
+                        prefix: "_alfTemplateName",
+                        processFunction: lang.hitch(this, this.processTemplate),
+                        config: {
+                           templates: templates
+                        }
+                     });
+
+                     this.requestPreviewDependencies(data);
+                  }
+                  catch(e)
+                  {
+                     this.alfLog("error", "An error occurred parsing the JSON", e, this);
+                  }
+               }));
             }
-            catch(e)
+            else
             {
-               this.alfLog("error", "An error occurred parsing the JSON", e, this);
+               // No need to load or process remote templates...
+               this.requestPreviewDependencies(data);
             }
          }
          else
          {
             this.alfLog("warn", "A request was made to preview a page definition, but no 'pageDefinition' was provided", payload, this);
          }
+      },
+
+      /**
+       * Makes an XHR request to retrieve the dependencies for the supplied page model. When the
+       * request returns [updatePage]{@link module:alfresco/prototyping/Preview#updatePage} will be called
+       * to render the preview.
+       * 
+       * @instance
+       * @param {object} data The data for the preview.
+       * @since 1.0.49
+       */
+      requestPreviewDependencies: function alfresco_prototyping_Preview__requestPreviewDependencies(data) {
+         data.widgets = JSON.stringify(data.jsonContent);
+         this.serviceXhr({
+            url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
+            data: data,
+            method: "POST",
+            successCallback: this.updatePage,
+            failureCallback: this.onDependencyFailure,
+            callbackScope: this
+         });
       },
       
       /**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -44,6 +44,7 @@ define([], function() {
          }
          this._addObjectKeys();
          this._addDateNow();
+         this._addTextContent();
          _applied = true;
       },
 
@@ -112,6 +113,30 @@ define([], function() {
                   return result;
                };
             }());
+         }
+      },
+
+      /**
+       * Allow setting of textContent on elements in IE8
+       * From https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
+       *
+       * @protected
+       * @instance
+       * @since 1.0.49
+       */
+      _addTextContent: function alfresco_core_shim___addTextContent() {
+         if (Object.defineProperty && Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(Element.prototype, "textContent") && !Object.getOwnPropertyDescriptor(Element.prototype, "textContent").get) {
+            (function() {
+               var innerText = Object.getOwnPropertyDescriptor(Element.prototype, "innerText");
+               Object.defineProperty(Element.prototype, "textContent", {
+                  get: function() {
+                     return innerText.get.call(this);
+                  },
+                  set: function(s) {
+                     return innerText.set.call(this, s);
+                  }
+               });
+            })();
          }
       }
    };

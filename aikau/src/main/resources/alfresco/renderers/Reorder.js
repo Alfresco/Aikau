@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -170,11 +170,11 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_renderers_Reorder__postMixInProperties() {
          if (this.upArrowImageSrc == null || this.upArrowImageSrc == "")
          {
-            this.upArrowImageSrc = require.toUrl("alfresco/renderers") + "/css/images/" + this.upArrowImg;
+            this.upArrowImageSrc = require.toUrl("alfresco/renderers/css/images/" + this.upArrowImg);
          }
          if (this.downArrowImageSrc == null || this.downArrowImageSrc == "")
          {
-            this.downArrowImageSrc = require.toUrl("alfresco/renderers") + "/css/images/" + this.downArrowImg;
+            this.downArrowImageSrc = require.toUrl("alfresco/renderers/css/images/" + this.downArrowImg);
          }
 
          // Localize the alt text...

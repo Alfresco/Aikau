@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -75,8 +75,8 @@ define(["dojo/_base/declare",
             Alfresco.AikauLightbox.show({
                src: src,
                title: title,
-               loadingImage: require.toUrl("alfresco/services") + "/css/images/loading.gif",
-               closeButton: require.toUrl("alfresco/services") + "/css/images/close.gif"
+               loadingImage: require.toUrl("alfresco/services/css/images/loading.gif"),
+               closeButton: require.toUrl("alfresco/services/css/images/close.gif")
             });
          }
       }

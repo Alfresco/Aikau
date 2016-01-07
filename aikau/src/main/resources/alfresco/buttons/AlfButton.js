@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -64,6 +64,44 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/AlfButton.properties"}],
 
       /**
+       * Additional classes to be applied to the root DOM element.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      additionalCssClasses: "",
+
+      /**
+       * Indicates whether or not the button should disable itself if any controls publish information indicating that
+       * they are in an invalid state.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      disableOnInvalidControls: false,
+
+      /**
+       * This will be instantiated as an array and used to keep track of any controls that report themselves as being
+       * in an invalid state. The button should only be enabled when this list is empty.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      invalidControls: null,
+
+      /**
+       * The topic to listen to to determine when the button should be disabled
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      invalidTopic: "ALF_INVALID_CONTROL",
+
+      /**
        * The topic to publish when the button is clicked
        *
        * @instance
@@ -82,13 +120,14 @@ define(["dojo/_base/declare",
       publishPayload: null,
 
       /**
-       * Additional classes to be applied to the root DOM element.
+       * An optional title attribute to be added to the button.
        *
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.49
        */
-      additionalCssClasses: "",
+      title: null,
 
       /**
        * The topic to listen to to determine when the button should be enabled
@@ -98,15 +137,6 @@ define(["dojo/_base/declare",
        * @default
        */
       validTopic: "ALF_VALID_CONTROL",
-
-      /**
-       * The topic to listen to to determine when the button should be disabled
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      invalidTopic: "ALF_INVALID_CONTROL",
 
       /**
        * Extends the default implementation to check that the [publishPayload]{@link module:alfresco/buttons/AlfButton#publishPayload} attribute has been set
@@ -143,27 +173,21 @@ define(["dojo/_base/declare",
          if (!this.value && this.publishTopic) {
             this.valueNode.setAttribute("value", this.publishTopic);
          }
+
+         if (this.title) {
+            this.focusNode.setAttribute("title", this.message(this.title));
+         }
       },
 
       /**
-       * Indicates whether or not the button should disable itself if any controls publish information indicating that
-       * they are in an invalid state.
+       * Cause this button to respond as if it had been clicked.
        *
        * @instance
-       * @type {boolean}
-       * @default
+       * @since 1.0.49
        */
-      disableOnInvalidControls: false,
-
-      /**
-       * This will be instantiated as an array and used to keep track of any controls that report themselves as being
-       * in an invalid state. The button should only be enabled when this list is empty.
-       *
-       * @instance
-       * @type {object[]}
-       * @default
-       */
-      invalidControls: null,
+      activate: function alfresco_buttons_AlfButton__activate() {
+         this.onClick();
+      },
 
       /**
        * Handles the reporting of an invalid field. This will disable the button to prevent users from clicking it.

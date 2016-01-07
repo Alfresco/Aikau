@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -520,7 +520,7 @@ define(["dojo/_base/declare",
                }
                domConstruct.create("img", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info__icon",
-                  src: require.toUrl("alfresco/documentlibrary/css/images/") + this.dndUploadHighlightImage
+                  src: require.toUrl("alfresco/documentlibrary/css/images/" + this.dndUploadHighlightImage)
                }, pNode);
             }
             

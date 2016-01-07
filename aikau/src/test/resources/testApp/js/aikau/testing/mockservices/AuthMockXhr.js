@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,7 +25,7 @@
  * @author Kevin Roast
  */
 define([
-      "aikauTesting/MockXhr",
+      "alfresco/testing/MockXhr",
       "dojo/_base/declare",
       "dojo/_base/lang",
       "alfresco/core/CoreXhr"],

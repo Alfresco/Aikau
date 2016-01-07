@@ -1,1 +1,0 @@
-// This file was included so that the Maven Archetype would build the correct directory structure. It can now be deleted.

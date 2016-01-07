@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -183,6 +183,7 @@ define(["intern!object",
             .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Navigation publication not found")
                .then(function(payload){
                   assert.propertyVal(payload, "url", "path=/different", "Navigation payload URL incorrect");
+                  assert.propertyVal(payload, "modifyCurrent", true, "Did not request to modify current hash");
                });
          },
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -109,7 +109,9 @@ define(["dojo/_base/declare",
 
       /**
        * This can be set to be a custom message that is displayed when there are no items to
-       * be displayed in the current view.
+       * be displayed in the current view. This will not be used if 
+       * [widgetsForNoDataDisplay]{@link module alfresco/lists/views/ListRenderer#widgetsForNoDataDisplay}
+       * is configured.
        *
        * @instance
        * @type {string}

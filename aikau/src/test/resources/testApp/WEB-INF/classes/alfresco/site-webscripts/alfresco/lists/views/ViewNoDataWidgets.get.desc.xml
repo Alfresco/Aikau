@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfListView (widgetsForNoDataDisplay)</shortname>
+  <description>This shows how a view can include a custom model to render when there is no data</description>
+  <family>aikau-unit-tests</family>
+  <url>/ViewNoDataWidgets</url>
+</webscript>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -725,7 +725,7 @@ define(["dojo/_base/declare",
                         id: this.id + "_DROPDOWN_MENU",
                         showArrow: false,
                         label: "",
-                        iconSrc: require.toUrl("alfresco/header") + "/css/images/search-16-gray.png",
+                        iconSrc: require.toUrl("alfresco/header/css/images/search-16-gray.png"),
                         iconClass: "alf-search-icon",
                         widgets: [
                            {

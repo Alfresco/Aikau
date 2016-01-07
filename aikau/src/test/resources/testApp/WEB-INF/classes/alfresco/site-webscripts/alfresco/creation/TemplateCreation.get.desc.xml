@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Template Creation</shortname>
+  <description>This is a test page for the template creation capabilities</description>
+  <family>aikau-unit-tests</family>
+  <url>/TemplateCreation</url>
+</webscript>

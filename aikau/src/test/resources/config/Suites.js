@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,6 +32,8 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
+      "src/test/resources/alfresco/forms/controls/BaseFormTest"
+
       // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
       // "src/test/resources/alfresco/dnd/NestedConfigurationTest",
@@ -119,6 +121,7 @@ define({
       "src/test/resources/alfresco/forms/controls/AsyncFormControlLoadingTest",
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
+      "src/test/resources/alfresco/forms/controls/ButtonsTest",
       "src/test/resources/alfresco/forms/controls/CheckBoxTest",
       "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
@@ -182,6 +185,7 @@ define({
       "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
       "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
+      "src/test/resources/alfresco/lists/views/ViewNoDataWidgetsTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -37,10 +37,13 @@ define(["alfresco/forms/controls/DojoValidationTextBox",
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_RandomValueGenerator__getWidgetConfig() {
+         if (!this.initialValue)
+         {
+            this.initialValue = this.generateUuid();
+         }
          return {
             id : this.generateUuid(),
-            name: this.name,
-            value: this.value || this.generateUuid()
+            name: this.name
          };
       }
    });

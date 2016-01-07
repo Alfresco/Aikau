@@ -98,7 +98,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/NodesMockXhr",
+         name: "alfresco/testing/NodesMockXhr",
          config: {
             totalItems: 40,
             folderRatio: [100]

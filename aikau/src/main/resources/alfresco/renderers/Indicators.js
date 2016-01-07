@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
             classes.push("has-action");
          }
          var img = domConstruct.create("img", {
-            "src": require.toUrl("alfresco/renderers") + "/css/images/indicators/" + indicator.icon,
+            "src": require.toUrl("alfresco/renderers/css/images/indicators/" + indicator.icon),
             "title": label,
             "alt": indicator.id,
             "class": classes.join(" ")

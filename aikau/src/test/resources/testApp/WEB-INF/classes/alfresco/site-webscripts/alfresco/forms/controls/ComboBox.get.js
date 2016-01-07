@@ -30,6 +30,7 @@ model.jsonModel = {
                      label: "Tags",
                      name: "tag",
                      value: "",
+                     placeHolder: "Add or select tag",
                      optionsConfig: {
                         queryAttribute: "name",
                         publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",

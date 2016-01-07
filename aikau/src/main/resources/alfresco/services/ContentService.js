@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -114,9 +114,17 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
+       *
+       * @fires module:alfresco/core/topics#CONTENT_CREATED
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
       onContentCreationSuccess: function alfresco_services_ContentService__onContentCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          var responseScope = lang.getObject("data.alfResponseScope", false, originalRequestConfig) || "";
+
+         this.alfPublish(topics.CONTENT_CREATED, {
+            parentNodeRef: originalRequestConfig.data.alf_destination,
+            nodeRef: response.persistedObject
+         }, false, false, responseScope);
          this.alfPublish(this.reloadDataTopic, {}, false, false, responseScope);
       },
 
@@ -279,6 +287,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       * @fires module:alfresco/core/topics#CONTENT_DELETED
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
       onActionDeleteSuccess: function alfresco_services_ContentService__onActionDeleteSuccess(payload) {
          var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
@@ -289,7 +299,10 @@ define(["dojo/_base/declare",
          this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
             message: this.message("contentService.delete.success.message")
          });
-         this.alfPublish("ALF_DOCLIST_RELOAD_DATA", {}, false, false, payload.requestConfig.responseScope);
+         this.alfPublish(topics.CONTENT_DELETED, {
+            nodeRefs: lang.getObject("requestConfig.data.nodeRefs", false, payload)
+         }, false, false, payload.requestConfig.responseScope);
+         this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, payload.requestConfig.responseScope);
       },
 
       /**
