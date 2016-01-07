@@ -23,7 +23,7 @@
  * @author Richard Smith
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/UserTest/XhrUserStatusResponseGood.json"], 
         function(declare, MockXhr, xhrUserStatusResponseGood) {
 

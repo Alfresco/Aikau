@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/Preferences/Preferences.json",
         "alfresco/services/PreferenceService"], 
         function(declare, MockXhr, Preferences, PreferenceService) {

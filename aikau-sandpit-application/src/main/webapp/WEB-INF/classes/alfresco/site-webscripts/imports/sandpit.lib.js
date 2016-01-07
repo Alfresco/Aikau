@@ -91,6 +91,15 @@ function outputExamples(examples) {
 function buildPageModel(data) {
    if (data.title && data.description && data.examples)
    {
+      // This defines a model fragment that will be used if explicit MockXhr widgets
+      // are not provided. It is necessary for an empty MockXhr widget instance to 
+      // be provided to ensure that the WaitForMockXhrService processes its child widgets
+      var defaultMockXhrWidgets = [
+         {
+            name: "alfresco/testing/MockXhr"
+         }
+      ];
+
       model.jsonModel = {
          services: [
             {
@@ -107,7 +116,7 @@ function buildPageModel(data) {
             "alfresco/services/DialogService",
             "alfresco/services/PageService",
             "alfresco/services/OptionsService"
-         ],
+         ].concat(data.services || []),
          widgets: [
             {
                name: "alfresco/layout/StripedContent",
@@ -161,14 +170,22 @@ function buildPageModel(data) {
                            widgets: [
                               {
                                  title: "Examples",
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/testing/WaitForMockXhrService",
                                  config: {
                                     widgets: outputExamples(data.examples)
                                  }
                               },
                               {
-                                 title: "Logging",
+                                 title: "Pub/Sub Logging",
                                  name: "alfresco/logging/DebugLog"
+                              },
+                              {
+                                 title: "Mock XHR Logging",
+                                 name: "alfresco/layout/VerticalWidgets",
+                                 delayProcessing: false,
+                                 config: {
+                                    widgets: data.mockXhrWidgets || defaultMockXhrWidgets
+                                 }
                               },
                               {
                                  title: "JSDoc",

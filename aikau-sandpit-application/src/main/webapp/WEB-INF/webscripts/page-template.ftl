@@ -12,6 +12,10 @@
    <title>Aikau Sample Client</title>
    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
    
+   <#-- Note that it's necessary to import the Sinon libs synchronously because version 1.10.3 does not support AMD and
+        breaks when used with the Aikau widgets. This ensures that the global "sinon" object is available when required -->
+   <script type="text/javascript" src="${url.context}/res/js/lib/sinon-1.10.3/lib/sinon-server-1.10.3.js"></script> 
+
    <@generateMessages type="text/javascript" src="${url.context}/service/messages.js" locale="${locale}"/>
    
    <#-- Bootstrap Dojo -->

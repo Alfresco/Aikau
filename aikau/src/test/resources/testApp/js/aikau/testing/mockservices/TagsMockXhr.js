@@ -25,7 +25,7 @@
  * @author Martin Doyle
  */
 define([
-      "aikauTesting/MockXhr",
+      "alfresco/testing/MockXhr",
       "dojo/_base/declare",
       "dojo/_base/lang"
    ],

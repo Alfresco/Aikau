@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/PaginationTest/page1.json",
         "dojo/text!./responseTemplates/PaginationTest/page2.json"], 
         function(declare, MockXhr, page1, page2) {

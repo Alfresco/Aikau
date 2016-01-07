@@ -22,7 +22,7 @@
  * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr", 
+        "alfresco/testing/MockXhr", 
         "dojo/text!./responseTemplates/DocumentLibrary/detailedView.json"], 
         function(declare, MockXhr, detailedView) {
 

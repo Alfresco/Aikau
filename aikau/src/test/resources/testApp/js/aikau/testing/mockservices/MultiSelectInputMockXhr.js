@@ -22,7 +22,7 @@
  * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/MultiSelectInputTest/tags.json"], 
         function(declare, MockXhr, tags, properties) {
 

@@ -22,7 +22,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/ContainerListPicker/RecentSites.json",
         "dojo/text!./responseTemplates/ContainerListPicker/Site.json",
         "dojo/text!./responseTemplates/ContainerListPicker/DocumentLibrary.json"], 
