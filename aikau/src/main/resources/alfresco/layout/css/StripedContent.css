@@ -7,11 +7,14 @@
       &--header {
          background: @header-stripe-background-color;
          box-shadow: inset 0 0 2px 0 rgba(0,0,0,.75);
-         color: @header-stripe-font-color;
+         color: @header-stripe-font-color !important;
 
-         /* Special handling for title widgets in header, important is sadly required here! :( */
-         h1.alfresco-header-Title > .text {
-            color: @header-stripe-font-color !important;
+         h1.alfresco-header-Title {
+
+            .alfresco-header-Title__text {
+               /* Special handling for title widgets in header, important is sadly required here! :( */
+               color: @header-stripe-font-color !important;
+            }
          }
       }
       &--sub-header {
