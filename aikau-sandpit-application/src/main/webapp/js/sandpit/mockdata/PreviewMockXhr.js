@@ -30,7 +30,7 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/video.json",
         "dojo/text!./responseTemplates/audio.json",
         "dojo/text!./responseTemplates/pdf.json"], 
-        function(declare, MockXhr, imageNode, videoNode, audioNode, pdfNode) {
+        function(declare, MockXhr, imageNode, videoNode, audioNode, pdfNode, pdfContent) {
    
    return declare([MockXhr], {
 
@@ -70,6 +70,7 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      pdfNode]);
+            
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }
          catch(e)

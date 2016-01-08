@@ -12,20 +12,29 @@ buildPageModel({
    ],
    examples: [
       {
-         title: "Image Preview",
-         description: "This instance is configured to use the nodeRef that is mocked against an image node",
+         title: "PDF Preview",
+         description: "The nodeRef used here is matched to a PDF node.",
          model: [
             {
-               name: "alfresco/preview/AlfDocumentPreview",
+               name: "alfresco/documentlibrary/AlfDocument",
                config: {
-                  nodeRef: "some://dummy/nodeRef"
+                  pubSubScope: "PDF_",
+                  nodeRef: "workspace://SpacesStore/pdf",
+                  widgets: [
+                     {
+                        name: "alfresco/preview/AlfDocumentPreview",
+                        config: {
+                           heightMode: 400
+                        }
+                     }
+                  ]
                }
             }
          ]
       },
       {
          title: "Image Preview",
-         description: "Wrap the AlfDocumentPreview in an AlfDocument to retrieve the metadata for the node with just a nodeRef. The nodeRef used here is not representative of a real nodeRef but is matched via data mocking to fetch the metadata for an image.",
+         description: "Wrap the AlfDocumentPreview in an AlfDocument to retrieve the metadata for the node with just a nodeRef. The nodeRef used here is not representative of a real nodeRef but is matched via data mocking to fetch the metadata for an image. Try experimenting with the 'heightMode' configuration to adjust the size of the image.",
          model: [
             {
                name: "alfresco/documentlibrary/AlfDocument",
@@ -34,7 +43,10 @@ buildPageModel({
                   nodeRef: "workspace://SpacesStore/image",
                   widgets: [
                      {
-                        name: "alfresco/preview/AlfDocumentPreview"
+                        name: "alfresco/preview/AlfDocumentPreview",
+                        config: {
+                           heightMode: 400
+                        }
                      }
                   ]
                }
@@ -71,27 +83,6 @@ buildPageModel({
                   widgets: [
                      {
                         name: "alfresco/preview/AlfDocumentPreview"
-                     }
-                  ]
-               }
-            }
-         ]
-      },
-      {
-         title: "PDF Preview",
-         description: "The nodeRef used here is matched to a PDF node.",
-         model: [
-            {
-               name: "alfresco/documentlibrary/AlfDocument",
-               config: {
-                  pubSubScope: "PDF_",
-                  nodeRef: "workspace://SpacesStore/pdf",
-                  widgets: [
-                     {
-                        name: "alfresco/preview/AlfDocumentPreview",
-                        config: {
-                           heightMode: 400
-                        }
                      }
                   ]
                }
