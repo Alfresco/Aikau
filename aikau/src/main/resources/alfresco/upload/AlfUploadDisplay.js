@@ -22,24 +22,21 @@
  * file uploads in separate sections along with a displayed value of the overall upload progress. 
  *
  * @module alfresco/upload/AlfUploadDisplay
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends alfresco/upload/_UploadsDisplayMixin
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
         "dojo/text!./templates/AlfUploadDisplay.html",
-        "alfresco/core/Core",
+        "alfresco/upload/_UploadsDisplayMixin",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
         "dojo/dom-construct",
         "dojo/json"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, array, on, domConstruct, dojoJson) {
+        function(declare, template, _UploadsDisplayMixin, lang, array, on, domConstruct, dojoJson) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([_UploadsDisplayMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -178,6 +175,7 @@ define(["dojo/_base/declare",
        * will handle updating the upload progress.
        *
        * @instance
+       * @override
        * @param {string} fileId The unique id of the file
        * @pararm {object} file The file requested to be uploaded
        */
@@ -206,6 +204,7 @@ define(["dojo/_base/declare",
        * was identified before any attempt was made to start uploading the file).
        *
        * @instance
+       * @override
        * @param {string} fileName The name of the file that could not be uploaded
        * @param {object} error The details of why the file could not be uploaded.
        */
@@ -227,6 +226,7 @@ define(["dojo/_base/declare",
        * Updates the displayed progress for an individual file upload.
        *
        * @instance
+       * @override
        * @param {string} fileId The unique id of the file
        * @param {number} percentageComplete The current upload progress as a percentage
        * @param {object} progressEvt The progress event
@@ -242,6 +242,7 @@ define(["dojo/_base/declare",
        * Displays the overall upload progress of all the files.
        *
        * @instance
+       * @override
        * @param {number} aggregateProgress The aggregate progress as a decimal of 1.
        */
       updateAggregateProgress: function alfresco_upload_AlfUploadDisplay__updateAggregateProgress(aggregateProgress) {
@@ -253,6 +254,7 @@ define(["dojo/_base/declare",
        * displayed file from the "In progress" section to the "Completed" section.
        * 
        * @instance
+       * @override
        * @param {string} fileId The unique id of the file
        * @param {object} completionEvt The upload completions event
        * @param {object} request The request object used to attempt to upload the file
@@ -284,6 +286,7 @@ define(["dojo/_base/declare",
        * from the "In Progress" section to the "Failed" section.
        *
        * @instance
+       * @override
        * @param {string} fileId The unique id of the file
        * @param {object} completionEvt The upload completions event
        * @param {object} request The request object used to attempt to upload the file
