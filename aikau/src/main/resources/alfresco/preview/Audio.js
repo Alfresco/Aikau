@@ -18,7 +18,7 @@
  */
 
 /**
- * This module is currently a BETA
+ * This plugin will render the HTML5 audio element to preview the content of an audio node.
  *
  * @module alfresco/preview/Audio
  * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
