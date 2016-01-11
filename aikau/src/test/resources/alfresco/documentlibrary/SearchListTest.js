@@ -57,6 +57,14 @@ define(["intern!object",
                assert.lengthOf(payloads, 0, "Search request made unexpectedly");
             });
          },
+
+         "No data message is displayed": function() {
+            return browser.findByCssSelector(".alfresco-lists-AlfList .no-data")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed, "The no data message should not be hidden until a search request is made");
+               });
+         },
          
          "Test setting empty search term": function() {
             // Click the button to set a search term (but don't actually provide one)
