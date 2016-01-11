@@ -1096,6 +1096,8 @@ define(["dojo/_base/declare",
       loadData: function alfresco_lists_AlfList__loadData() {
          if (!this.requestInProgress)
          {
+            // Ensure any no data node is hidden...
+            domClass.add(this.noDataNode, "share-hidden");
             this.showLoadingMessage();
 
             var payload;
