@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
                                     lang.hitch(this, this.getTags));
             this.server.respondWith("POST",
                                     /.*\/aikau\/proxy\/alfresco\/api\/node\/.*\/formprocessor/,
-                                    "OK");
+                                    "{}");
          }
          catch(e)
          {
