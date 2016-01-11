@@ -1,7 +1,7 @@
 /* global page */
 /* jshint sub:true */
 
-var heightMode, heightAdjustment;
+var heightMode = "AUTO", heightAdjustment = 0;
 if (page.url.args["heightMode"])
 {
    heightMode = page.url.args["heightMode"];
