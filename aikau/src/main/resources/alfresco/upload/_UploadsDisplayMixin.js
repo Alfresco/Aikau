@@ -87,6 +87,15 @@ define(["alfresco/core/Core",
       },
 
       /**
+       * Resets the display.
+       *
+       * @instance
+       */
+      reset: function alfresco_upload__UploadsDisplayMixin__reset() {
+         this.alfLog("warn", "Method not overridden in implementing class");
+      },
+
+      /**
        * Displays the overall upload progress of all the files.
        *
        * @instance

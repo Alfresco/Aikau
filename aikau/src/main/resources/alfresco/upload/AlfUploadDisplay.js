@@ -139,6 +139,7 @@ define(["dojo/_base/declare",
        * Resets the display.
        *
        * @instance
+       * @override
        */
       reset: function alfresco_upload_AlfUploadDisplay__reset() {
          this.inProgressFiles = {};

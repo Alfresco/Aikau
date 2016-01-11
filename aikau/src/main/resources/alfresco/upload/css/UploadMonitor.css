@@ -17,6 +17,14 @@
       line-height: 28px;
       > * {
          border-top: 1px solid #ccc;
+         vertical-align: top;
+      }
+      &__name__error {
+         color: #c00;
+         display: none;
+         line-height: 18px;
+         position: relative;
+         top: -7px;
       }
       &__progress {
          width: 50px;
@@ -34,6 +42,13 @@
          }
          &__unsuccessful {
             color: #c00;
+         }
+      }
+      &--has-error {
+         .alfresco-upload-UploadMonitor {
+            &__item__name__error {
+               display: block;
+            }
          }
       }
    }

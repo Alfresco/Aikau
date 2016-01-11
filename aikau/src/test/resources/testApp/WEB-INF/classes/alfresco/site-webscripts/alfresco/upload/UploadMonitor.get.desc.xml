@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UploadMonitor Test</shortname>
+  <description>This test page exercises the UploadMonitor control</description>
+  <family>aikau-unit-tests</family>
+  <url>/UploadMonitor</url>
+</webscript>
