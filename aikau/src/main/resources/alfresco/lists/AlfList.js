@@ -981,7 +981,10 @@ define(["dojo/_base/declare",
        */
       showNoDataMessage: function alfresco_lists_AlfList__showNoDataMessage() {
          this.hideChildren(this.domNode);
-         domClass.remove(this.noDataNode, "share-hidden");
+         if (this._readyToLoad)
+         {
+            domClass.remove(this.noDataNode, "share-hidden");
+         }
       },
 
       /**
@@ -1096,6 +1099,8 @@ define(["dojo/_base/declare",
       loadData: function alfresco_lists_AlfList__loadData() {
          if (!this.requestInProgress)
          {
+            // Ensure any no data node is hidden...
+            domClass.add(this.noDataNode, "share-hidden");
             this.showLoadingMessage();
 
             var payload;

@@ -82,6 +82,14 @@ define(["intern!object",
             });
          },
 
+         "No data message is hidden": function() {
+            return browser.findByCssSelector(".alfresco-lists-AlfList .no-data")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed, "The no data message should have been hidden when loading data");
+               });
+         },
+
          "Test that setting different search term does not issues new search request when current request is ongoing": function() {
             // Click the button to set a DIFFERENT search term (a new request SHOULD NOT be issued because a request is in progress)...
             return browser.findByCssSelector("#SET_SEARCH_TERM_3")
