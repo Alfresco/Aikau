@@ -981,7 +981,7 @@ define(["dojo/_base/declare",
        */
       showNoDataMessage: function alfresco_lists_AlfList__showNoDataMessage() {
          this.hideChildren(this.domNode);
-         if (this._readyToLoad)
+         if (!this.requestInProgress)
          {
             domClass.remove(this.noDataNode, "share-hidden");
          }
