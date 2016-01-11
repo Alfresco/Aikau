@@ -44,6 +44,7 @@ define(["dojo/_base/declare",
       setupServer: function alfresco_testing_mockservices_CloudSyncMockXhr__setupServer() {
          try
          {
+            this.server.respondImmediately = true;
             this.server.respondWith("GET",
                                     "/aikau/proxy/alfresco/cloud/person/credentials",
                                     [200,

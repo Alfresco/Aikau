@@ -107,7 +107,7 @@
                <loader-trace-enabled>false</loader-trace-enabled>
                <messages-object>Alfresco</messages-object>
                <packages>
-                   <!-- Add custom packages here -->
+                   <package name="sandpit" location="js/sandpit"/>
                </packages>
             </dojo-pages>
         </web-framework>

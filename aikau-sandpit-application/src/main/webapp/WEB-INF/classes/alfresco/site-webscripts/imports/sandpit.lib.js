@@ -115,7 +115,8 @@ function buildPageModel(data) {
             },
             "alfresco/services/DialogService",
             "alfresco/services/PageService",
-            "alfresco/services/OptionsService"
+            "alfresco/services/OptionsService",
+            "alfresco/services/NavigationService"
          ].concat(data.services || []),
          widgets: [
             {
@@ -144,6 +145,22 @@ function buildPageModel(data) {
                                  config: {
                                     label: "Aikau Sandpit - " + data.title,
                                     setBrowserTitle: "Aikau Sandpit"
+                                 }
+                              },
+                              {
+                                 name: "alfresco/buttons/AlfButton",
+                                 align: "right",
+                                 config:
+                                 {
+                                    label: "Back to Examples List",
+                                    additionalCssClasses: "primary-call-to-action",
+                                    publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                                    publishPayload: {
+                                       url: "na/ws/home"
+                                    },
+                                    style: {
+                                       marginTop: "19px"
+                                    }
                                  }
                               }
                            ]
@@ -181,7 +198,7 @@ function buildPageModel(data) {
                               },
                               {
                                  title: "Mock XHR Logging",
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/layout/FixedHeaderFooter",
                                  delayProcessing: false,
                                  config: {
                                     widgets: data.mockXhrWidgets || defaultMockXhrWidgets

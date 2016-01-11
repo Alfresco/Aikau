@@ -67,7 +67,8 @@ define(["dojo/_base/declare",
             this.server.respondWith("POST",
                                     "/aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete",
                                     [200,
-                                     {"Content-Type":"application/json;charset=UTF-8"}]);
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     ""]);
 
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }

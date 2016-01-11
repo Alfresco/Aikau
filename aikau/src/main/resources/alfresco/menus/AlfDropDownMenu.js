@@ -206,42 +206,50 @@ define(["dojo/_base/declare",
        * @instance
        */
       setFirstAndLastMarkerClasses: function alfresco_menus_AlfDropDownMenu__setFirstAndLastMarkerClasses() {
-         var noOfChildren = this.getChildren().length;
-         if (noOfChildren > 0)
+         // See AKU-766 - it is necessary to place this code inside a try/catch block when used inside an iframe
+         try
          {
-            // Remove any previous first/last class markers...
-            array.forEach(this.getChildren(), function(child) {
-               domClass.remove(child.domNode, "first-focusable-entry");
-               domClass.remove(child.domNode, "last-focusable-entry");
-            });
-            
-            // Add the "first-focusable-entry" marker class to the first child that is focusable...
-            array.some(this.getChildren(), function(child){
-               if (child.isFocusable())
-               {
-                  domClass.add(child.domNode, "first-focusable-entry");
-                  return true;
-               }
-            });
-
-            // Add the "last-focusable-entry" marker class to the last child that is focusable...
-            var index = noOfChildren - 1,
-                children = this.getChildren(),
-                setLast = false;
-            while (index >= 0 && !setLast)
+            var noOfChildren = this.getChildren().length;
+            if (noOfChildren > 0)
             {
-               if (children[index].isFocusable())
+               // Remove any previous first/last class markers...
+               array.forEach(this.getChildren(), function(child) {
+                  domClass.remove(child.domNode, "first-focusable-entry");
+                  domClass.remove(child.domNode, "last-focusable-entry");
+               });
+               
+               // Add the "first-focusable-entry" marker class to the first child that is focusable...
+               array.some(this.getChildren(), function(child){
+                  if (child.isFocusable())
+                  {
+                     domClass.add(child.domNode, "first-focusable-entry");
+                     return true;
+                  }
+               });
+
+               // Add the "last-focusable-entry" marker class to the last child that is focusable...
+               var index = noOfChildren - 1,
+                   children = this.getChildren(),
+                   setLast = false;
+               while (index >= 0 && !setLast)
                {
-                  domClass.add(children[index].domNode, "last-focusable-entry");
-                  setLast = true;
+                  if (children[index].isFocusable())
+                  {
+                     domClass.add(children[index].domNode, "last-focusable-entry");
+                     setLast = true;
+                  }
+                  index--;
                }
-               index--;
+               
+               // Add the "first-entry" and "last-entry" markers (these can be used for styling purposes, e.g.
+               // not underlining the last menu item, etc
+               domClass.add(children[0].domNode, "first-entry");
+               domClass.add(children[noOfChildren-1].domNode, "last-entry");
             }
-            
-            // Add the "first-entry" and "last-entry" markers (these can be used for styling purposes, e.g.
-            // not underlining the last menu item, etc
-            domClass.add(children[0].domNode, "first-entry");
-            domClass.add(children[noOfChildren-1].domNode, "last-entry");
+         }
+         catch(e)
+         {
+            this.alfLog("warn", "It was not possible to set the first and last marker classes", this, e);
          }
       }
    });
