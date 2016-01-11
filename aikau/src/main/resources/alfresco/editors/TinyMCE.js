@@ -390,7 +390,8 @@ define(["dojo/_base/declare",
          }
          if (this._resizeWhenInitialized)
          {
-            this.onResize();
+            // See AKU-775 - adding a short timeout here allows everything to complete initialization before resizing
+            setTimeout(lang.hitch(this, this.onResize), 100);
          }
          this.setDisabled(this.initiallyDisabled);
 
