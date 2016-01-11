@@ -203,7 +203,6 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_REMOVE_FACET_FILTER", lang.hitch(this, this.onRemoveFacetFilter));
          this.alfSubscribe("ALF_SEARCHLIST_SCOPE_SELECTION", lang.hitch(this, this.onScopeSelection));
          this.alfSubscribe("ALF_ADVANCED_SEARCH", lang.hitch(this, this.onAdvancedSearch));
-         this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.onReloadData));
       },
 
       /**
