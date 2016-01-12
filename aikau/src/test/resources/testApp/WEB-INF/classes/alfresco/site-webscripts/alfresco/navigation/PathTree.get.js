@@ -15,7 +15,7 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "aikauTesting/WaitForMockXhrService",
+         name: "alfresco/testing/WaitForMockXhrService",
          config: {
             widgets: [
                {
@@ -26,7 +26,7 @@ model.jsonModel = {
                      widgets: [
                         {
                            name: "alfresco/layout/VerticalWidgets",
-                           widthPx: "100",
+                           widthPx: "150",
                            config: {
                               widgetMarginBottom: 10,
                               widgets: [
@@ -73,7 +73,30 @@ model.jsonModel = {
                                           nodeRefs: ["workspace://SpacesStore/d56afdc3-0174-4f8c-bce8-977cafd712ab"] 
                                        }
                                     }
+                                 },
+                                 {
+                                    id: "ADD_FOLDER_AT_ROOT",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Add Folder (at root)",
+                                       publishTopic: "ALF_CONTENT_CREATED",
+                                       publishPayload: {
+                                          parentNodeRef: "workspace://SpacesStore/8f2105b4-daaf-4874-9e8a-2152569d109b"
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "DELETE_FOLDER_AT_ROOT",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Delete Folder (at root)",
+                                       publishTopic: "ALF_CONTENT_DELETED",
+                                       publishPayload: {
+                                          nodeRefs: ["workspace://SpacesStore/8f2105b4-daaf-4874-9e8a-2152569d109b"] 
+                                       }
+                                    }
                                  }
+
                               ]
                            }
                         },

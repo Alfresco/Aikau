@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -709,12 +709,13 @@ define(["intern!object",
             .findDisplayedById("ADDED_LIST_2")
             .end()
             
-            // ...and check that it is loading (this will be a result of the reload publication)...
-            .findByCssSelector("#ADDED_LIST_2 .info.data-loading")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "The list should be attempting to load data");
-               });
+            // Switch back to the debug log...
+            .findById("TC1_TABCONTAINER_tablist_TC1_DEBUG_TAB")
+               .click()
+            .end()
+
+            // ...and check that it is loading request is published (this will be a result of the reload publication)...
+            .getLastPublish("LIST_2_SCOPE_ALF_DOCLIST_RELOAD_DATA", "Follow publication not made");
          },
 
          "Post Coverage Results": function() {

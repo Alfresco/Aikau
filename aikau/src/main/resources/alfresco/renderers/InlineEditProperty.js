@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -438,7 +438,7 @@ define(["dojo/_base/declare",
             this.suppressContainerKeyboardNavigation(true);
             var formWidget = this.getFormWidget();
             var o = {};
-            lang.setObject(this.postParam, this.originalRenderedValue, o);
+            lang.setObject(this.postParam, this.decodeHTML(this.originalRenderedValue), o);
             formWidget.setValue(o);
             domClass.toggle(this.renderedValueNode, "hidden");
             domClass.toggle(this.editNode, "hidden");
@@ -487,7 +487,7 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
 
          this.alfLog("log", "Property '" + this.propertyToRender + "' successfully updated for node: ", this.currentItem);
-         this.originalRenderedValue = this.getFormWidget().getValue()[this.postParam];
+         this.originalRenderedValue = this.encodeHTML(this.getFormWidget().getValue()[this.postParam]);
          this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
 
          // If requested, update the currentItem with the updated value. This is done in the

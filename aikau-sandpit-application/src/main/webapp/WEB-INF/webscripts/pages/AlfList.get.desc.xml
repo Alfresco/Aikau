@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>alfresco/lists/AlfList</shortname>
+  <description>The most basic type of list.</description>
+  <family>ExamplePage</family>
+  <url>/alflist</url>
+</webscript>

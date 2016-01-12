@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,7 +25,7 @@
  */
 define(["dojo/_base/declare",
       "dojo/json",
-      "aikauTesting/MockXhr",
+      "alfresco/testing/MockXhr",
       "dojo/text!./responseTemplates/PaginatedSearchList/results.json"
    ],
    function(declare, JSON, MockXhr, itemsJson) {

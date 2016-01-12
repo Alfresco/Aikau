@@ -1,0 +1,149 @@
+{
+   "metadata": {
+      "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http://dave-Latitude-E6530:8080/alfresco/aos"
+         }
+      },
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "http:\/\/localhost:8081\/share",
+      "serverURL": "http:\/\/localhost:8080"
+   },
+
+   "item": {
+      "thumbnailDefinitions": [],
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "sys:referenceable", "cm:titled", "cm:author", "cm:taggable", "sys:localized", "audio:audio", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 07 13:26:54 GMT 2016",
+               "iso8601": "2016-01-07T13:26:54.450Z"
+            },
+            "cm:taggable": null,
+            "cm:content": null,
+            "sys:node-uuid": null,
+            "cm:name": "Video.mp4",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:autoVersion": "true",
+            "audio:sampleRate": "1000",
+            "sys:node-dbid": null,
+            "cm:initialVersion": "true",
+            "cm:description": "A screen capture of using the Aikau unit tests",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:created": {
+               "value": "Thu Jan 07 13:20:16 GMT 2016",
+               "iso8601": "2016-01-07T13:20:16.413Z"
+            },
+            "cm:versionLabel": "1.0",
+            "cm:title": "Screen capture recording",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 3075623,
+         "mimetypeDisplayName": "MPEG4 Video",
+         "mimetype": "video\/mp4",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/49db6f0d-8d1c-4881-b4f6-d5959fd83e78",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/49db6f0d-8d1c-4881-b4f6-d5959fd83e78\/Video.mp4"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["app:uifacets", "cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;DIRECT"],
+            "inherited": false,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/f3b17e12-740a-4395-8bb2-f637c69d0246",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 07 13:20:56 GMT 2016",
+               "iso8601": "2016-01-07T13:20:56.371Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "Folder to store shared stuff ",
+            "cm:creator": {
+               "lastName": "User",
+               "userName": "System",
+               "displayName": "System User",
+               "firstName": "System"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Mon Sep 14 10:52:47 BST 2015",
+               "iso8601": "2015-09-14T09:52:47.017Z"
+            },
+            "cm:name": "Shared",
+            "cm:title": "Shared Folder",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "app:icon": "space-icon-default"
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Shared\/Video.mp4",
+
+      "isFavourite": false,
+
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+         "path": "\/Shared",
+         "repoPath": "\/Shared",
+         "file": "Video.mp4",
+         "parent": {}
+      }
+   }
+}

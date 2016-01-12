@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -124,6 +124,17 @@ define(["dojo/_base/declare",
             {
                parentTreeNode = parentTreeNode[0];
                this.refreshTreeNode(parentTreeNode);
+            }
+            else
+            {
+               // For the root node, the supplied parentNoderef will be undefined - therefore
+               // we need to use the ROOT id (which is known)...
+               parentTreeNode = this.tree._itemNodesMap[this.id + "_ROOT"];
+               if (parentTreeNode && parentTreeNode.length)
+               {
+                  parentTreeNode = parentTreeNode[0];
+                  this.refreshTreeNode(parentTreeNode);
+               }
             }
          }
          else

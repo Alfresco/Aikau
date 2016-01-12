@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -259,7 +259,7 @@ define(["dojo/_base/declare",
 
          // Build the URI stem
          var params = lang.replace(uriPart, {
-            type: encodeURIComponent(payload.type),
+            type: encodeURIComponent(payload.type || "all"),
             site: encodeURIComponent(payload.site),
             container: encodeURIComponent(payload.container)
          });

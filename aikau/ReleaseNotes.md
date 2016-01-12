@@ -1,4 +1,4 @@
-Aikau 1.0.49 Release Notes
+Aikau 1.0.50 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,17 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.50:
+* [AKU-764](https://issues.alfresco.com/jira/browse/AKU-764)       - Added warnings for scoped form controls
+* [AKU-766](https://issues.alfresco.com/jira/browse/AKU-766)       - Resolve Firefox iframe rendering issues
+* [AKU-768](https://issues.alfresco.com/jira/browse/AKU-768)       - Added alfresco/upload/UploadMonitor widget
+* [AKU-769](https://issues.alfresco.com/jira/browse/AKU-769)       - Add mouse middle/control click support for search links
+* [AKU-770](https://issues.alfresco.com/jira/browse/AKU-770)       - PathTree refresh on root node additions
+* [AKU-771](https://issues.alfresco.com/jira/browse/AKU-771)       - InlineEditProperty edit value encoding correction
+* [AKU-774](https://issues.alfresco.com/jira/browse/AKU-774)       - Fixed DebugLog filtering issue
+* [AKU-775](https://issues.alfresco.com/jira/browse/AKU-775)       - Ensure TinyMCE editor resizes correctly on first use
+* [AKU-776](https://issues.alfresco.com/jira/browse/AKU-776)       - Ensure "No Data" message is not displayed in lists when loading data
+
 1.0.49:
 * [AKU-750](https://issues.alfresco.com/jira/browse/AKU-750)       - Support for form submission from textbox on enter key
 * [AKU-751](https://issues.alfresco.com/jira/browse/AKU-751)       - Support to configure forms to focus first field

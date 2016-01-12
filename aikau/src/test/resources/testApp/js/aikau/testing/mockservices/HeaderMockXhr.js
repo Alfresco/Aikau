@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/HeaderTest/SitesRequest_NonSite.json",
         "dojo/text!./responseTemplates/HeaderTest/SitesRequest_FavouriteSite.json",
         "dojo/text!./responseTemplates/HeaderTest/SitesRequest_NonFavouriteSite.json",

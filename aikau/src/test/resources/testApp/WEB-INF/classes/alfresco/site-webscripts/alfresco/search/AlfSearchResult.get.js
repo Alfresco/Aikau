@@ -31,6 +31,7 @@ function getSearchResult() {
    if (page.url.args["override"])
    {
       searchResult.config.navigationTarget = "NEW";
+      searchResult.config.newTabOnMiddleOrCtrlClick = false;
    }
 
    return searchResult;

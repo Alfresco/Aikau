@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -155,6 +155,18 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       navigationTarget: "CURRENT",
+
+      /**
+       * Indicates whether or not a middle-button mouse click (or left click with the control key depressed)
+       * on the link should result in links being opened in a new browser tab. If this is configured to be true 
+       * then the a "target" attribute of "NEW" will be configured on the payload.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.50
+       */
+      newTabOnMiddleOrCtrlClick: true,
 
       /**
        * This can be configured to override the default filter for the actions that are applicable to 
@@ -356,7 +368,9 @@ define(["dojo/_base/declare",
                url: "user/{modifiedByUser}/profile",
                type: urlTypes.PAGE_RELATIVE,
                target: this.navigationTarget
-            }
+            },
+            newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+            defaultNavigationTarget: this.navigationTarget
          }, this.dateNode);
       },
 
@@ -375,7 +389,9 @@ define(["dojo/_base/declare",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
             propertyToRender: "displayName",
-            renderSize: "large"
+            renderSize: "large",
+            newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+            defaultNavigationTarget: this.navigationTarget
          };
          if (this.navigationTarget)
          {
@@ -455,7 +471,9 @@ define(["dojo/_base/declare",
                   url: isRepo ? "repository?path={pathLink}" : "site/{site.shortName}/documentlibrary?path={pathLink}",
                   type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
-               }
+               },
+               newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+               defaultNavigationTarget: this.navigationTarget
             }, this.pathNode);
          }
       },
@@ -520,7 +538,9 @@ define(["dojo/_base/declare",
                   url: "site/{site.shortName}" + this.siteLandingPage.replace(/^\/*/, "/"),
                   type: urlTypes.PAGE_RELATIVE,
                   target: this.navigationTarget
-               }
+               },
+               newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+               defaultNavigationTarget: this.navigationTarget
             }, this.siteNode);
          }
       },
@@ -563,7 +583,9 @@ define(["dojo/_base/declare",
             id: this.id + "_THUMBNAIL",
             currentItem: this.currentItem,
             pubSubScope: this.pubSubScope,
-            showDocumentPreview: true
+            showDocumentPreview: true,
+            newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
+            defaultNavigationTarget: this.navigationTarget
          };
          if (this.navigationTarget)
          {

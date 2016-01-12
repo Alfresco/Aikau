@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -558,6 +558,12 @@ define(["dojo/_base/declare",
          else if (this.tabContainerWidget && typeof this.tabContainerWidget.resize === "function")
          {
             this.tabContainerWidget.resize();
+
+            // See AKU-766 - absolutely make sure that the selected child really is selected!
+            if (this.tabContainerWidget.selectedChildWidget)
+            {
+               this.tabContainerWidget._showChild(this.tabContainerWidget.selectedChildWidget);
+            }
          }
       },
 
