@@ -14,11 +14,7 @@ model.jsonModel = {
       },
       {
          name: "alfresco/services/NavigationService"
-      },
-      {
-         name: "alfresco/services/SearchService"
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets: [
       {
@@ -210,6 +206,22 @@ model.jsonModel = {
                   }
                }
             ]
+         }
+      },
+      {
+         id: "SIM_SEARCH_REQUEST",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Simulate Search Request",
+            publishTopic: "ALF_SEARCH_REQUEST"
+         }
+      },
+      {
+         id: "SIM_SEARCH_RESULTS",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Simulate Search Results",
+            publishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS"
          }
       },
       {
