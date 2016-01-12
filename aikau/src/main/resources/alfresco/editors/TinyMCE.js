@@ -391,7 +391,8 @@ define(["dojo/_base/declare",
          if (this._resizeWhenInitialized)
          {
             // See AKU-775 - adding a short timeout here allows everything to complete initialization before resizing
-            setTimeout(lang.hitch(this, this.onResize), 100);
+            //               by using timeout without a time we can delay until all synchronous processes have completed.
+            setTimeout(lang.hitch(this, this.onResize));
          }
          this.setDisabled(this.initiallyDisabled);
 
