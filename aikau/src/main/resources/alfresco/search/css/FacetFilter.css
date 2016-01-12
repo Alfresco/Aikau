@@ -1,4 +1,5 @@
 .alfresco-search-FacetFilter {
+
    overflow: hidden;
    line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
    font-size: @small-font-size;
@@ -42,4 +43,13 @@
 
 .alfresco-search-FacetFilter .status .remove.hidden {
    display: none;
+}
+
+.alfresco-search-FacetFilter--block-requests,
+.alfresco-search-FacetFilter--block-requests .details,
+.alfresco-search-FacetFilter--block-requests .filterLabel,
+.alfresco-search-FacetFilter--block-requests .status .remove,
+
+{
+   cursor: default;
 }
