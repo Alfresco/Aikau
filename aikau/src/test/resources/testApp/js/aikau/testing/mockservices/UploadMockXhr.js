@@ -79,6 +79,14 @@ define(["dojo/_base/declare",
          }
       },
 
+      /**
+       * Send a progress response asynchronously.
+       *
+       * @instance
+       * @param {object} request The request object
+       * @param {number} percent The percentage progress to send
+       * @param {number} delay The delay, in milliseconds, until the progress is sent
+       */
       sendProgress: function(request, percent, delay) {
          setTimeout(function() {
             request.uploadProgress({

@@ -23,19 +23,20 @@
  *
  * @module alfresco/upload/UploadMonitor
  * @extends alfresco/upload/_UploadsDisplayMixin
+ * @mixes alfresco/core/FileSizeMixin
  * @author Martin Doyle
+ * @since 1.0.50
  */
-define(["alfresco/upload/_UploadsDisplayMixin", 
-        "alfresco/upload/UploadMonitorItem", 
-        "alfresco/util/formatUtils", 
+define(["alfresco/core/FileSizeMixin",
+        "alfresco/upload/_UploadsDisplayMixin", 
         "dojo/_base/declare", 
         "dojo/_base/lang", 
         "dojo/dom-class", 
         "dojo/dom-construct", 
         "dojo/text!./templates/UploadMonitor.html"], 
-        function(_UploadsDisplayMixin, UploadMonitorItem, formatUtils, declare, lang, domClass, domConstruct, template) {
+        function(FileSizeMixin, _UploadsDisplayMixin, declare, lang, domClass, domConstruct, template) {
 
-   return declare([_UploadsDisplayMixin], {
+   return declare([FileSizeMixin, _UploadsDisplayMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -209,7 +210,7 @@ define(["alfresco/upload/_UploadsDisplayMixin",
 
          // Create upload name as "filename.ext, xxx kB"
          var filename = file.name,
-            filesize = formatUtils.formatFileSize(file.size || 0),
+            filesize = this.formatFileSize(file.size || 0, 1),
             separator = ", ",
             uploadName = filename + separator + filesize;
 
