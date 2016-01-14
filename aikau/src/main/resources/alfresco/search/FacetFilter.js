@@ -32,6 +32,7 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "dojo/text!./templates/FacetFilter.html",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
@@ -40,7 +41,8 @@ define(["dojo/_base/declare",
         "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/core/ArrayUtils"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, lang, array, domConstruct, domClass, on, hashUtils, ioQuery, arrayUtils) {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, topics, 
+                 lang, array, domConstruct, domClass, on, hashUtils, ioQuery, arrayUtils) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
       
@@ -210,8 +212,8 @@ define(["dojo/_base/declare",
          }
 
          // See AKU-782 - Ensure that filters cannot be applied when search requests are in progress...
-         this.alfSubscribe("ALF_SEARCH_REQUEST", lang.hitch(this, this.onSearchRequestStart));
-         this.alfSubscribe("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", lang.hitch(this, this.onSearchRequestEnd));
+         this.alfSubscribe(topics.SEARCH_REQUEST, lang.hitch(this, this.onSearchRequestStart));
+         this.alfSubscribe(topics.GET_DOCUMENT_LIST_SUCCESS, lang.hitch(this, this.onSearchRequestEnd));
       },
       
       /**
