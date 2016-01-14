@@ -948,9 +948,8 @@ define(["dojo/_base/declare",
          this.currentItem = nodeData;
 
          // Now check to see whether or not the preview can be shown...
-         var type = lang.getObject("node.type", false, this.currentItem),
-             mimetype = lang.getObject("node.mimetype", false, this.currentItem);
-         if (type === "cm:content")
+         var mimetype = lang.getObject("node.mimetype", false, this.currentItem);
+         if (mimetype)
          {
             this.onShowPreview(nodeRef, mimetype);
          }
