@@ -18,7 +18,7 @@
  */
 
 /**
- * This module is currently a BETA
+ * This plugin will render the HTML5 video element to preview the content of a video node.
  *
  * @module alfresco/preview/Video
  * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
@@ -98,11 +98,11 @@ define(["dojo/_base/declare",
          this._setPreviewerElementHeight();
 
          var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
-            mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
-         var str = '';
-         str += '<video controls alt="' + this.previewManager.name  + '" title="' + this.previewManager.name  + '">';
-         str += '   <source src="' + src + '"  type=\'' + mimeType + '\'>';
-         str += '</video>';
+             mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
+         var str = "";
+         str += "<video controls alt=\"" + this.previewManager.name  + "\" title=\"" + this.previewManager.name  + "\">";
+         str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
+         str += "</video>";
          return str;
       }
    });

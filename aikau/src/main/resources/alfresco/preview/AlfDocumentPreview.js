@@ -73,15 +73,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfDocumentPreview.css"}],
 
       /**
-       * These files need to be included from the "web-preview-js-dependencies.lib.ftl" file. These
-       * are the original dependencies that were used in Share previously. These can hopefully be 
-       * removed as necessary as we move away from Flash previewing?
-       * 
-       * @instance
-       */
-      nonAmdDependencies: ["/js/flash/extMouseWheel.js"],
-
-      /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
@@ -231,30 +222,7 @@ define(["dojo/_base/declare",
             this.thumbnailModification = [];
          }
          this.plugins = {};
-
-         // SWFObject patch to help flash plugins, will ensure all flashvars are URI encoded
-         // TODO: Do we really need this still for Aikau???
-         // if (window.YAHOO != null && window.YAHOO.deconcept != null)
-         // {
-         //    window.YAHOO.deconcept.SWFObject.prototype.getVariablePairs = function()
-         //    {
-         //       var variablePairs = [],
-         //          key,
-         //          variables = this.getVariables();
-         //       for (key in variables)
-         //       {
-         //          if (variables.hasOwnProperty(key))
-         //          {
-         //             variablePairs[variablePairs.length] = key + "=" + encodeURIComponent(variables[key]);
-         //          }
-         //       }
-         //       return variablePairs;
-         //    };
-         // }
-
          this.setupPlugins();
-
-         // Setup web preview
          this.setupPreview(false);
       },
 
@@ -286,14 +254,6 @@ define(["dojo/_base/declare",
          {
             id: "Audio",
             name: "alfresco/preview/Audio"
-         },
-         {
-            id: "Flash",
-            name: "alfresco/preview/Flash"
-         },
-         {
-            id: "StrobeMediaPlayback",
-            name: "alfresco/preview/StrobeMediaPlayback"
          }
       ],
 
@@ -689,25 +649,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Refreshes component by metadataRefresh event
-       *
-       * @instance
-       * @param {int} reqMajorVer
-       * @param {int} reqMinorVer
-       * @param {int} reqRevision
-       * @return {boolean} Returns true if a flash player of the required version is installed
-       */
-      hasRequiredFlashPlayer: function alfresco_preview_AlfDocumentPreview__hasRequiredFlashPlayer(reqMajorVer, reqMinorVer, reqRevision) {
-         // jshint unused:false, ignore:start
-         if (typeof DetectFlashVer === "function")
-         {
-            return DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision);
-         }
-         // jshint ignore:end
-         return false;
-      },
-
-      /**
        * A json representation of the .get.config.xml file.
        * This is evaluated on the client side since we need the plugins to make sure it is supported
        * the user's browser and browser plugins.
@@ -750,13 +691,6 @@ define(["dojo/_base/declare",
             },
             plugins: [
                {
-                  name: "StrobeMediaPlayback",
-                  attributes: {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               },
-               {
                   name: "Video",
                   attributes: {
                      poster: "imgpreview",
@@ -773,49 +707,7 @@ define(["dojo/_base/declare",
             },
             plugins: [
                {
-                  name: "StrobeMediaPlayback",
-                  attributes:
-                  {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               },
-               {
                   name: "Video",
-                  attributes:
-                  {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "imgpreview",
-               mimeType: "video/x-flv"
-            },
-            plugins: [
-               {
-                  name: "StrobeMediaPlayback",
-                  attributes:
-                  {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "imgpreview",
-               mimeType: "video/quicktime"
-            },
-            plugins: [
-               {
-                  name: "StrobeMediaPlayback",
                   attributes:
                   {
                      poster: "imgpreview",
@@ -865,10 +757,6 @@ define(["dojo/_base/declare",
             },
             plugins: [
                {
-                  name: "StrobeMediaPlayback",
-                  attributes: {}
-               },
-               {
                   name: "Video",
                   attributes: {}
                }
@@ -881,35 +769,7 @@ define(["dojo/_base/declare",
             },
             plugins: [
                {
-                  name: "StrobeMediaPlayback",
-                  attributes:{}
-               },
-               {
                   name: "Video",
-                  attributes:{}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               mimeType: "video/x-flv"
-            },
-            plugins: [
-               {
-                  name: "StrobeMediaPlayback",
-                  attributes:{}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               mimeType: "video/quicktime"
-            },
-            plugins: [
-               {
-                  name: "StrobeMediaPlayback",
                   attributes:{}
                }
             ]
@@ -944,10 +804,6 @@ define(["dojo/_base/declare",
                mimeType: "audio/mpeg"
             },
             plugins: [
-               {
-                  name: "StrobeMediaPlayback",
-                  attributes: {}
-               },
                {
                   name: "Audio",
                   attributes: {}
