@@ -240,10 +240,6 @@ define(["dojo/_base/declare",
             name: "alfresco/preview/PdfJs/PdfJs"
          },
          {
-            id: "WebPreviewer",
-            name: "alfresco/preview/WebPreviewer"
-         },
-         {
             id: "Image",
             name: "alfresco/preview/Image"
          },
@@ -464,13 +460,6 @@ define(["dojo/_base/declare",
                      // Get plugin
                      plugin = this.plugins[pluginDescriptor.name];
                      plugin.setAttributes(pluginDescriptor.attributes);
-
-                     // Special case to ignore the WebPreviewer plugin on iOS - we don't want to report output either
-                     // as the output is simply an HTML message unhelpfully informing the user to install Adobe Flash
-                     if (sniff("ios") && pluginDescriptor.name === "WebPreviewer")
-                     {
-                        continue;
-                     }
 
                      // Make sure it may run in this browser...
                      var report = plugin.report();
@@ -819,22 +808,6 @@ define(["dojo/_base/declare",
                {
                   name: "Audio",
                   attributes: {}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "webpreview"
-            },
-            plugins: [
-               {
-                  name: "WebPreviewer",
-                  attributes:
-                  {
-                     paging: "true",
-                     src: "webpreview"
-                  }
                }
             ]
          },

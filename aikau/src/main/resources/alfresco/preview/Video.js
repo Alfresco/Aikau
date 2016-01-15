@@ -97,6 +97,8 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this._setPreviewerElementHeight();
 
+         this.alfSubscribe("DISPLAYED_CAROUSEL_ITEMS", lang.hitch(this, this.onCarouselDisplayChange));
+
          var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
              mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
          var str = "";
@@ -104,6 +106,10 @@ define(["dojo/_base/declare",
          str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
          str += "</video>";
          return str;
+      },
+
+      onCarouselDisplayChange: function alfresco_preview_Video__onCarouselDisplayChange(payload) {
+         this.alfLog("info", "Moomin", payload);
       }
    });
 });

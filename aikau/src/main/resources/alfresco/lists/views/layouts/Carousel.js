@@ -397,6 +397,10 @@ define(["dojo/_base/declare",
             }
          }
 
+         this.alfPublish("DISPLAYED_CAROUSEL_ITEMS", {
+            items: this.currentData.items.slice(this.firstDisplayedIndex, this.lastDisplayedIndex + 1)
+         });
+
          // Make sure the frame is aligned correctly...
          this.currentLeftPosition = (this.firstDisplayedIndex / this.numberOfItemsShown) * this.itemsNodeWidth;
          var left = "-" + this.currentLeftPosition + "px";
