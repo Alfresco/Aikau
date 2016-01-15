@@ -206,6 +206,7 @@ model.jsonModel = {
                               label: "Sweets (fixed options)",
                               name: "sweets",
                               width: "300px",
+                              value: "foam_strawberries",
                               optionsConfig: {
                                  fixed: [
                                     {

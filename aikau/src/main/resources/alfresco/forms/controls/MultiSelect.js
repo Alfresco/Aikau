@@ -622,7 +622,7 @@ define([
             // Setup the listeners
             var choiceObject = {},
                selectListener = on(choiceNode, "click", lang.hitch(this, this._onChoiceClick, choiceObject)),
-               closeListener = on(closeButton, "click", lang.hitch(this, this._onChoiceCloseClick, choiceObject));
+               closeListener = on(closeButton, "mousedown", lang.hitch(this, this._onChoiceCloseMouseDown, choiceObject));
             this.own(selectListener, closeListener);
             lang.mixin(choiceObject, {
                domNode: choiceNode,
@@ -760,7 +760,7 @@ define([
           * @instance
           */
          _deleteSelectedChoice: function alfresco_forms_controls_MultiSelect___deleteSelectedChoice() {
-            on.emit(this._selectedChoice.closeButton, "click", {
+            on.emit(this._selectedChoice.closeButton, "mousedown", {
                bubbles: true,
                cancelable: true
             });
@@ -997,7 +997,7 @@ define([
           * @param    {object} choiceToRemove The choice object to remove
           * @param    {object} evt Dojo-normalised event object
           */
-         _onChoiceCloseClick: function alfresco_forms_controls_MultiSelect___onChoiceCloseClick(choiceToRemove, evt) {
+         _onChoiceCloseMouseDown: function alfresco_forms_controls_MultiSelect___onChoiceCloseMouseDown(choiceToRemove, evt) {
             this._removeChoice(choiceToRemove);
             evt.preventDefault();
             evt.stopPropagation();
@@ -1331,7 +1331,7 @@ define([
          _setupDisabling: function alfresco_forms_controls_MultiSelect___setupDisabling() {
             var methodsToDisable = [
                "_onChoiceClick",
-               "_onChoiceCloseClick",
+               "_onChoiceCloseMouseDown",
                "_onControlClick",
                "_onFocus",
                "_onResultMousedown",
