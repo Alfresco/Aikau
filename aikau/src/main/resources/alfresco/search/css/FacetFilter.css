@@ -1,4 +1,5 @@
 .alfresco-search-FacetFilter {
+
    overflow: hidden;
    line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
    font-size: @small-font-size;
@@ -49,6 +50,41 @@
 
          &:hover {
             background-color: @filter-hover-color;
+         }
+      }
+   }
+
+   &--full-width-click {
+      .details {
+         cursor: pointer;
+
+         &:hover {
+            background-color: @filter-hover-color;
+         }
+      }
+   }
+
+   /* See AKU-782 - If a search request is in-flight we want to prevent further facet filtering
+                    the JS in the widget prevents additional requests from being made but these
+                    selectors ensure it doesn't appear to the user as though they can further filter */
+   &--block-requests {
+      cursor: default;
+
+      .status {
+         .remove {
+            cursor: default;
+         }
+      }
+
+      .details {
+         cursor: default;
+
+         &:hover {
+            background-color: inherit;
+         }
+
+         .filterLabel {
+            cursor: default;
          }
       }
    }

@@ -27,6 +27,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/AlfSortablePaginatedList",
+        "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-class",
@@ -35,7 +36,7 @@ define(["dojo/_base/declare",
         "alfresco/core/ArrayUtils",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/search/AlfSearchListView"],
-        function(declare, AlfSortablePaginatedList, array, lang, domClass, hashUtils, ioQuery, arrayUtils, ObjectTypeUtils) {
+        function(declare, AlfSortablePaginatedList, topics, array, lang, domClass, hashUtils, ioQuery, arrayUtils, ObjectTypeUtils) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -660,7 +661,7 @@ define(["dojo/_base/declare",
 
                // Set a response topic that is scoped to this widget...
                searchPayload.alfResponseTopic = this.pubSubScope + "ALF_RETRIEVE_DOCUMENTS_REQUEST";
-               this.alfPublish("ALF_SEARCH_REQUEST", searchPayload, true);
+               this.alfPublish(topics.SEARCH_REQUEST, searchPayload, true);
             }
             else
             {

@@ -484,6 +484,18 @@ define([],function() {
       GET_DOCUMENT_LIST: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
 
       /**
+       * This topic is typically published as a result of request to load documents by publishing
+       * [GET_DOCUMENT_LIST]{@link module:alfresco/core/topics#GET_DOCUMENT_LIST}. It will contain
+       * the results of the request and can have a varying payload depending upon the API being used.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.51
+       */
+      GET_DOCUMENT_LIST_SUCCESS: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
+
+      /**
        * Get the node ref for the current node's parent.
        *
        * @instance
@@ -754,6 +766,30 @@ define([],function() {
        * @since 1.0.32
        */
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
+
+      /**
+       * This topic can be used to publish a request to perform a search.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.51
+       *
+       * @event module:alfresco/core/topics~SEARCH_REQUEST
+       * @property {string} term The term to search for
+       * @property {number} [startIndex] The index in the search results to start the page of data from
+       * @property {number} [pageSize] The number of results to include in the page of data
+       * @property {string} [site] The shortName of a site to search within
+       * @property {string} rootNode The nodeRef of the node to search within
+       * @property {boolean} [repo] Indicates whether or not so search within the entire Alfresco Repository or just sites
+       * @property {string} [facetFields] Comma delimited fields to facet on in the search
+       * @property {string} [filters] Comma delimited facet filters to apply to the search
+       * @property {boolean} [spellcheck] Indicates whether or not to perform alternative searches based on better spelling
+       * @property {object} [query] Additinal query parameters to apply to the search
+       * @property {string} [sortField] The field to sort the search results on
+       * @property {boolean} [sortAscending] Indicates whether or not to sort the search results in ascending order
+       */
+      SEARCH_REQUEST: "ALF_SEARCH_REQUEST",
 
       /**
        * This topic should be published by [menu items]{@link module:alfresco/menus/AlfMenuItem} contained within
