@@ -483,6 +483,13 @@ define([
                item[this.store.queryAttribute] = itemName;
                item[this.store.labelAttribute] = itemLabel;
                item[this.store.valueAttribute] = itemValue;
+            } else if (!this.inferMissingProperties) {
+               array.forEach(["query", "label", "value"], function(attrType) {
+                  var attrName = this.store[attrType + "Attribute"];
+                  if (!item[attrName]) {
+                     this.alfLog("warn", "Missing \"" + attrName + "\" property on retrieved item: ", item);
+                  }
+               }, this);
             }
 
             // Items MUST have values for the widget to work
