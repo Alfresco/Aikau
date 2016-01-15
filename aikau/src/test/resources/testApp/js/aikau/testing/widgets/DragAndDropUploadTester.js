@@ -25,7 +25,7 @@
  * @mixes module:alfresco/layout/HeightMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
- * @since 1.0.50.1
+ * @since 1.0.51
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 

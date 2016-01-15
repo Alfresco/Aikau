@@ -654,7 +654,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @extendable
-       * @since 1.0.50.1
+       * @since 1.0.51
        */
       copyViewData: function alfresco_lists_AlfList__copyViewData(oldView, newView) {
          // Set the current data...
