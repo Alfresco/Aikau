@@ -106,7 +106,8 @@ define(["intern!object",
                .findDisplayedById("SEARCH_RESULTS_PREVIEWS")
                   .getSize()
                   .then(function(size) {
-                     assert.equal(size.height, 400, "Height configuration not used");
+                     // The height should be the requested height, minus the item carousel...
+                     assert.equal(size.height, 288, "Height configuration not used");
                   });
          },
 
