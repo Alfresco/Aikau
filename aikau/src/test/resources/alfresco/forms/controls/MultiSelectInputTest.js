@@ -774,6 +774,20 @@ define([
                browser.end();
             },
 
+            "Removing option from unfocused control does not induce dropdown": function() {
+               return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect__choice__close-button")
+                  .click()
+                  .end()
+
+               .waitForDeletedByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect__choice")
+
+               .findById("MULTISELECT_4_CONTROL_RESULTS")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed);
+                  });
+            },
+
             "Can click on control and choose an option": function() {
                return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect")
                   .click()
