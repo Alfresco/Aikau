@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        * is called.
        * 
        * @instance
-       * @since 1.0.50.1
+       * @since 1.0.51
        */
       copyViewData: function alfresco_lists_AlfList__copyViewData(/*jshint unused:false*/oldView, newView) {
          this.inherited(arguments);
