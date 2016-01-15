@@ -27,8 +27,9 @@
 define(["dojo/_base/declare",
         "alfresco/preview/AlfDocumentPreviewPlugin", 
         "dojo/_base/lang",
+        "dojo/_base/array",
         "dojo/has"], 
-        function(declare, AlfDocumentPreviewPlugin, lang, has) {
+        function(declare, AlfDocumentPreviewPlugin, lang, array, has) {
    
    return declare([AlfDocumentPreviewPlugin], {
 
@@ -109,7 +110,11 @@ define(["dojo/_base/declare",
       },
 
       onCarouselDisplayChange: function alfresco_preview_Video__onCarouselDisplayChange(payload) {
-         this.alfLog("info", "Moomin", payload);
+         var displayed = array.some(payload.items, function(item) {
+            return item.nodeRef === this.previewManager.nodeRef;
+         }, this);
+
+         this.alfLog("info", "I am displayed", displayed);
       }
    });
 });

@@ -39,18 +39,18 @@ model.jsonModel = {
                      }
                   },
                   {
-                     nodeRef: "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5",
-                     fileName: "Video Test Binary.mp4",
-                     displayName: "Video Test Binary.mp4",
+                     nodeRef: "workspace://SpacesStore/3db19b32-6d92-45ef-b5b1-5bda34dd5728",
+                     fileName: "Demo 3.mp3",
+                     displayName: "Demo 3.mp3",
                      node: {
                         properties: {
-                           "cm:name": "Video Test Binary.mp4"
+                           "cm:name": "Demo 3.mp3"
                         },
-                        mimetypeDisplayName: "MPEG4 Video",
-                        mimetype: "video/mp4",
-                        nodeRef: "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5",
+                        mimetypeDisplayName: "MPEG Audio",
+                        mimetype: "audio/mpeg",
+                        nodeRef: "workspace://SpacesStore/3db19b32-6d92-45ef-b5b1-5bda34dd5728",
                         isContainer: false,
-                        contentURL: "/slingshot/node/content/workspace/SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5/Video%20Test%20Binary.mp4"
+                        contentURL: "/slingshot/node/content/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/Demo%203.mp3"
                      }
                   }
                ]
