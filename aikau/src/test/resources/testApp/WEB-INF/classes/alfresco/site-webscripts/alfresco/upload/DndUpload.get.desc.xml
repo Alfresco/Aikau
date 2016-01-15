@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop File Upload Test</shortname>
+  <description>This test page is used to simulate drag-and-drop file upload to verify that target node data is included in upload requsts</description>
+  <family>aikau-unit-tests</family>
+  <url>/dnd-upload</url>
+</webscript>

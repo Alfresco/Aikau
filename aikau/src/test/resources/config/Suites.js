@@ -284,6 +284,7 @@ define({
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
       "src/test/resources/alfresco/services/actions/WorkflowTest",
 
+      "src/test/resources/alfresco/upload/DndUploadTest",
       "src/test/resources/alfresco/upload/UploadMonitorTest",
       "src/test/resources/alfresco/upload/UploadTest",
       "src/test/resources/alfresco/upload/UploadTargetTest",

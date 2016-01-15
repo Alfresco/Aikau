@@ -414,6 +414,7 @@ define(["dojo/_base/declare",
        * @since 1.0.41
        */
       removeDndUploadHandlers: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeDndUploadHandlers() {
+         this.dndUploadEnabled = false;
          if (this.dndUploadEventHandlers)
          {
             array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });
