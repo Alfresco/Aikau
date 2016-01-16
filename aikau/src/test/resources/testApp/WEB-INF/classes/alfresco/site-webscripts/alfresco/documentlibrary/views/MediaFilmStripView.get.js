@@ -39,7 +39,7 @@ model.jsonModel = {
                      }
                   },
                   {
-                     nodeRef: "workspace://SpacesStore/3db19b32-6d92-45ef-b5b1-5bda34dd5728",
+                     nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
                      fileName: "Demo 3.mp3",
                      displayName: "Demo 3.mp3",
                      node: {
@@ -48,9 +48,9 @@ model.jsonModel = {
                         },
                         mimetypeDisplayName: "MPEG Audio",
                         mimetype: "audio/mpeg",
-                        nodeRef: "workspace://SpacesStore/3db19b32-6d92-45ef-b5b1-5bda34dd5728",
+                        nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
                         isContainer: false,
-                        contentURL: "/slingshot/node/content/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/Demo%203.mp3"
+                        contentURL: "/slingshot/node/content/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/content/Demo%203.mp3"
                      }
                   }
                ]

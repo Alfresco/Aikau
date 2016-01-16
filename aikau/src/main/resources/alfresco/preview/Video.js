@@ -109,12 +109,21 @@ define(["dojo/_base/declare",
          return str;
       },
 
+      /**
+       * 
+       * @instance
+       * @param  {object} payload The list of items that are currently displayed.
+       * @since 1.0.51
+       */
       onCarouselDisplayChange: function alfresco_preview_Video__onCarouselDisplayChange(payload) {
          var displayed = array.some(payload.items, function(item) {
             return item.nodeRef === this.previewManager.nodeRef;
          }, this);
 
-         this.alfLog("info", "I am displayed", displayed);
+         if (!displayed)
+         {
+            this.previewManager.getPreviewerElement().firstChild.pause();
+         }
       }
    });
 });

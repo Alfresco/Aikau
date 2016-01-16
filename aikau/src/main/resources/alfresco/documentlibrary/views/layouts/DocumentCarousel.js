@@ -147,6 +147,20 @@ define(["dojo/_base/declare",
          this.alfPublish("ALF_FILMSTRIP_ITEM_CHANGED", {
             index: this.firstDisplayedIndex
          });
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/Carousel#renderDisplayedItems}
+       * to publish a topic indicating that the items being played should be stopped.
+       * 
+       * @instance
+       * @since 1.0.51
+       */
+      renderDisplayedItems: function alfresco_documentlibrary_views_layouts_DocumentCarousel__renderDisplayedItems() {
+         this.inherited(arguments);
+         this.alfPublish("DISPLAYED_CAROUSEL_ITEMS", {
+            items: this.currentData.items.slice(this.firstDisplayedIndex, this.lastDisplayedIndex + 1)
+         });
       }
    });
 });
