@@ -483,6 +483,8 @@ define(["dojo/_base/declare",
                            {
                               // Insert markup if plugin provided it
                               this.previewerNode.innerHTML = markup;
+
+                              plugin._setPreviewerElementHeight();
                            }
 
                            // Finally! We found a plugin that works and didn't crash

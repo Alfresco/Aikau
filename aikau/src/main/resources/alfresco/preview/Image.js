@@ -103,6 +103,7 @@ define(["dojo/_base/declare",
                // At this point, there's no error.
                this.previewManager.previewerNode.innerHTML = "";
                this.previewManager.previewerNode.appendChild(image);
+               this.previewManager.plugin._setPreviewerElementHeight();
             };
             image.onerror = function()
             {

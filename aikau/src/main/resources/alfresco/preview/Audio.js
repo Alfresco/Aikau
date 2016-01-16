@@ -92,10 +92,10 @@ define(["dojo/_base/declare",
       display: function alfresco_preview_Audio__display() {
          var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
          mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
-         var str = '';
-         str += '<audio width="100%" height="100%" controls alt="' + this.previewManager.name  + '" title="' + this.previewManager.name  + '">';
-         str += '   <source src="' + src + '"  type=\'' + mimeType + '\'>';
-         str += '</audio>';
+         var str = "";
+         str += "<audio width=\"100%\" height=\"100%\" controls alt=\"" + this.previewManager.name  + "\" title=\"" + this.previewManager.name  + "\">";
+         str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
+         str += "</audio>";
          return str;
       }
    });

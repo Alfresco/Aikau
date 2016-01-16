@@ -52,6 +52,21 @@ model.jsonModel = {
                         isContainer: false,
                         contentURL: "/slingshot/node/content/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/content/Demo%203.mp3"
                      }
+                  },
+                  {
+                     nodeRef: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4",
+                     fileName: "2013-12-29 09.58.43.jpg",
+                     displayName: "2013-12-29 09.58.43.jpg",
+                     node: {
+                        properties: {
+                           "cm:name": "2013-12-29 09.58.43.jpg"
+                        },
+                        mimetypeDisplayName: "JPEG Image",
+                        mimetype: "image/jpeg",
+                        nodeRef: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4",
+                        isContainer: false,
+                        contentURL: "/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/content/2013-12-29 09.58.43.jpg"
+                     }
                   }
                ]
             },
@@ -60,7 +75,7 @@ model.jsonModel = {
                   id: "FILMSTRIP_VIEW",
                   name: "alfresco/documentlibrary/views/AlfFilmStripView",
                   config: {
-                     heightMode: 400
+                     heightMode: 600
                   }
                }
             ]
