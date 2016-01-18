@@ -3,7 +3,7 @@
    <config replace="true">
       <flags>
          <!--  Ensure that we're running in debug mode for unit testing -->
-         <client-debug>true</client-debug>
+         <client-debug>false</client-debug>
          <client-debug-autologging>false</client-debug-autologging>
       </flags>
    </config>
@@ -28,7 +28,7 @@
                 <runtime>webapp</runtime>
 
                 <!-- Pick the mode: development, preview, production -->
-                <mode>development</mode>
+                <mode>production</mode>
             </autowire>
 
             <persisters>
