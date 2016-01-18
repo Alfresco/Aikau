@@ -52,13 +52,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/UploadService.properties"}],
 
       /**
-       * @instance
-       * @type {string}
-       * @default
-       */
-      _ALF_UPLOAD_TOPIC: "ALF_UPLOAD_REQUEST",
-      
-            /**
        * The user is browsing and adding files to the file list
        *
        * @instance
@@ -114,6 +107,24 @@ define(["dojo/_base/declare",
       STATE_SUCCESS: 6,
 
       /**
+       * The current amount of data that has been uploaded.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      aggregateUploadCurrentSize: 0,
+
+      /**
+       * This is the total size of data expected to be uploaded
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      aggregateUploadTargetSize: 0,
+
+      /**
        * Stores references and state for each file that is in the file list.
        * The fileId parameter from the YAHOO.widget.Uploader is used as the key
        * and the value is an object that stores the state and references.
@@ -136,22 +147,20 @@ define(["dojo/_base/declare",
       fileStore: null,
 
       /**
-       * This is the total size of data expected to be uploaded
+       * Holds a reference to an [AlfDialog]{@link module:alfresco/dialogs/AlfDialog} used to display
+       * the upload progress. This is initialised to null and created the first time it is required.
        *
        * @instance
-       * @type {number}
+       * @type {object}
        * @default
        */
-      aggregateUploadTargetSize: 0,
+      progressDialog: null,
 
       /**
-       * The current amount of data that has been uploaded.
-       *
+       * This is the default title key for the progress dialog.
        * @instance
-       * @type {number}
-       * @default
        */
-      aggregateUploadCurrentSize: 0,
+      progressDialogTitleKey: "progress-dialog.title",
 
       /**
        * This will be populated with the NodeRefs of the last few locations that the user has previously
@@ -189,6 +198,61 @@ define(["dojo/_base/declare",
       uploadHistorySize: 3,
 
       /**
+       * @instance
+       * @type {string}
+       * @default
+       */
+      uploadTopic: topics.UPLOAD_REQUEST,
+      
+      /**
+       * This defines the JSON structure for the widgets to be displayed in the progress dialog. This
+       * can be overridden by extending widgets to render a different display in the dialog
+       *
+       * @instance
+       * @type {object}
+       */
+      widgetsForProgressDialog: [
+         {
+            name: "alfresco/upload/AlfUploadDisplay",
+            assignTo: "uploadDisplayWidget"
+         }
+      ],
+
+      /**
+       * Ensure the uploads progress monitor is initialised.
+       *
+       * @instance
+       * @since 1.0.51
+       */
+      initProgressMonitor: function alfresco_services_UploadService__initProgressMonitor() {
+
+         // Set up template?
+         if (this.progressDialog === null || this.progressDialog === undefined)
+         {
+            // Create a new dialog... the content is variable, but the widgets are fixed...
+            this.alfServicePublish(topics.CREATE_DIALOG, {})
+            this.progressDialog = new AlfDialog({
+               dialogId: "ALF_UPLOAD_PROGRESS_DIALOG",
+               dialogTitle: this.createProgressDialogTitle(),
+               widgetsContent: this.widgetsForProgressDialog,
+               widgetsButtons: [
+                  {
+                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
+                     name: "alfresco/buttons/AlfButton",
+                     assignTo: "_uploadDialogButton",
+                     config: {
+                        label: this.message("progress-dialog.cancel-button.label"),
+                        publishTopic: topics.UPLOAD_CANCELLATION,
+                        additionalCssClasses: "call-to-action"
+                     }
+                  }
+               ]
+            });
+            this.getUploadDisplayWidget();
+         }
+      },
+
+      /**
        * Resets the widget
        *
        * @instance
@@ -218,10 +282,11 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        * @listens module:alfresco/core/topics#UPLOAD_COMPLETION_ACKNOWLEDGEMENT
        * @listens module:alfresco/core/topics#UPLOAD_CANCELLATION
+       * @listens module:alfresco/core/topics#UPLOAD_REQUEST
        */
       registerSubscriptions: function alfresco_services_UploadService__registerSubscriptions() {
          this.reset();
-         this.alfSubscribe(this._ALF_UPLOAD_TOPIC, lang.hitch(this, this.onUploadRequest));
+         this.alfSubscribe(this.uploadTopic, lang.hitch(this, this.onUploadRequest));
 
          // Set up the upload history array from the user preferences
          this.uploadHistory = [];
@@ -230,35 +295,14 @@ define(["dojo/_base/declare",
             callback: this.setUploadHistory,
             callbackScope: this
          });
-         
-         // Set up template?
-         if (this.progressDialog === null || this.progressDialog === undefined)
-         {
-            // Create topics to give to the dialog buttons, then subscribe to them to handle the
-            // events...
-            this.alfSubscribe(topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT, lang.hitch(this, this.onProgressDialogOkClick));
-            this.alfSubscribe(topics.UPLOAD_CANCELLATION, lang.hitch(this, this.onProgressDialogCancelClick));
 
-            // Create a new dialog... the content is variable, but the widgets are fixed...
-            this.progressDialog = new AlfDialog({
-               id: "ALF_UPLOAD_PROGRESS_DIALOG",
-               title: this.createProgressDialogTitle(),
-               widgetsContent: this.widgetsForProgressDialog,
-               widgetsButtons: [
-                  {
-                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
-                     name: "alfresco/buttons/AlfButton",
-                     assignTo: "_uploadDialogButton",
-                     config: {
-                        label: this.message("progress-dialog.cancel-button.label"),
-                        publishTopic: topics.UPLOAD_CANCELLATION,
-                        additionalCssClasses: "call-to-action"
-                     }
-                  }
-               ]
-            });
-            this.getUploadDisplayWidget();
-         }
+         // Create topics to give to the dialog buttons, then subscribe to them to handle the
+         // events...
+         this.alfSubscribe(topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT, lang.hitch(this, this.onProgressDialogOkClick));
+         this.alfSubscribe(topics.UPLOAD_CANCELLATION, lang.hitch(this, this.onProgressDialogCancelClick));
+
+         // Ensure progress monitor setup
+         this.initProgressMonitor();
       },
       
       /**
@@ -850,22 +894,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Holds a reference to an [AlfDialog]{@link module:alfresco/dialogs/AlfDialog} used to display
-       * the upload progress. This is initialised to null and created the first time it is required.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      progressDialog: null,
-
-      /**
-       * This is the default title key for the progress dialog.
-       * @instance
-       */
-      progressDialogTitleKey: "progress-dialog.title",
-
-      /**
        * This function generates the title for the progress dialog. By default it simply displays the
        * localized value of the [progressDialogTitleKey]{@link module:alfresco/upload/AlfUpload#progressDialogTitleKey}
        *
@@ -875,23 +903,6 @@ define(["dojo/_base/declare",
       createProgressDialogTitle: function alfresco_services_UploadService__createProgressDialogTitle() {
          return this.message(this.progressDialogTitleKey);
       },
-
-      /**
-       * This defines the JSON structure for the widgets to be displayed in the progress dialog. This
-       * can be overridden by extending widgets to render a different display in the dialog
-       *
-       * @instance
-       * @type {object}
-       */
-      widgetsForProgressDialog: [
-         {
-            name: "alfresco/upload/AlfUploadDisplay",
-            assignTo: "uploadDisplayWidget",
-            config: {
-
-            }
-         }
-      ],
 
       /**
        * Sets the 'uploadDisplayWidget' attribute with a reference to the uploadDisplayWidget from the
