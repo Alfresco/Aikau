@@ -101,6 +101,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
+      "src/test/resources/alfresco/documentlibrary/views/MediaFilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewThumbnailSizingTest",
 
