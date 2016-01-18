@@ -56,6 +56,7 @@ define({
       "src/test/resources/alfresco/charts/ccc/PieChartTest",
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
+      "src/test/resources/alfresco/core/ClientPropRenderFilterTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
       "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
