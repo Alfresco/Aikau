@@ -1,3 +1,12 @@
+/* global page */
+/* jshint sub:true */
+
+var autoPlay = true;
+if (page.url.args["autoPlay"])
+{
+   autoPlay = page.url.args["autoPlay"] === "true";
+}
+
 model.jsonModel = {
    services: [
       {
@@ -75,7 +84,23 @@ model.jsonModel = {
                   id: "FILMSTRIP_VIEW",
                   name: "alfresco/documentlibrary/views/AlfFilmStripView",
                   config: {
-                     heightMode: 600
+                     heightMode: 600,
+                     previewerPluginOverrides: [
+                        {
+                           id: "Video",
+                           name: "alfresco/preview/Video",
+                           config: {
+                              autoPlay: autoPlay
+                           }
+                        },
+                        {
+                           id: "Audio",
+                           name: "alfresco/preview/Audio",
+                           config: {
+                              autoPlay: autoPlay
+                           }
+                        }
+                     ]
                   }
                }
             ]

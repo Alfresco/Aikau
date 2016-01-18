@@ -21,17 +21,17 @@
  * This plugin will render the HTML5 video element to preview the content of a video node.
  *
  * @module alfresco/preview/Video
- * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
+ * @extends module:alfresco/preview/AVPlugin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/preview/AlfDocumentPreviewPlugin", 
+        "alfresco/preview/AVPlugin", 
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/has"], 
-        function(declare, AlfDocumentPreviewPlugin, lang, array, has) {
+        function(declare, AVPlugin, lang, array, has) {
    
-   return declare([AlfDocumentPreviewPlugin], {
+   return declare([AVPlugin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -98,8 +98,6 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this._setPreviewerElementHeight();
 
-         this.alfSubscribe("DISPLAYED_CAROUSEL_ITEMS", lang.hitch(this, this.onCarouselDisplayChange));
-
          var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
              mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
          var str = "";
@@ -107,23 +105,6 @@ define(["dojo/_base/declare",
          str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
          str += "</video>";
          return str;
-      },
-
-      /**
-       * 
-       * @instance
-       * @param  {object} payload The list of items that are currently displayed.
-       * @since 1.0.51
-       */
-      onCarouselDisplayChange: function alfresco_preview_Video__onCarouselDisplayChange(payload) {
-         var displayed = array.some(payload.items, function(item) {
-            return item.nodeRef === this.previewManager.nodeRef;
-         }, this);
-
-         if (!displayed)
-         {
-            this.previewManager.getPreviewerElement().firstChild.pause();
-         }
       }
    });
 });
