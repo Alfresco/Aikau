@@ -61,7 +61,6 @@ define(["dojo/_base/declare",
        * to start playing the preview if [autoPlay]{@link module:alfresco/preview/AVPlugin#autoPlay} is true.
        * 
        * @instance
-       * @since 1.0.51
        */
       onMarkupAdded: function alfresco_preview_AlfDocumentPreviewPlugin__onMarkupAdded() {
          this.inherited(arguments);
@@ -78,7 +77,6 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param  {object} payload The list of items that are currently displayed.
-       * @since 1.0.51
        */
       onPreviewDisplayChange: function alfresco_preview_AVPlugin__onPreviewDisplayChange(payload) {
          var displayed = array.some(payload.items, function(item) {

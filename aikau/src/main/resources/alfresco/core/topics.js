@@ -665,7 +665,7 @@ define([],function() {
        * @default
        * @since 1.0.51
        *
-       * @event module:alfresco/core/topics~PREVIEWS_SHOWN
+       * @event
        * @property {object[]} items An array of the items that have been displayed.
        */
       PREVIEWS_SHOWN: "ALF_PREVIEWS_SHOWN",

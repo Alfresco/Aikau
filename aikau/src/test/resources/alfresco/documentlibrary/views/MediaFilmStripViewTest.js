@@ -50,14 +50,14 @@ define(["alfresco/TestCommon",
             return browser.findDisplayedByCssSelector("video")
                .execute("return document.querySelector('video').paused")
                .then(function(paused) {
-                  assert.isFalse(paused, "The video is not playing");
+                  assert.isFalse(paused);
                });
          },
 
          "Check that audio preview has not been created": function() {
             return browser.findAllByCssSelector("audio")
                .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Audio previews shouldn't exist yet");
+                  assert.lengthOf(elements, 0);
                });
          },
 
@@ -69,7 +69,7 @@ define(["alfresco/TestCommon",
             .findDisplayedByCssSelector("video")
                .execute("return document.querySelector('video').paused")
                .then(function(paused) {
-                  assert.isTrue(paused, "The video is not paused");
+                  assert.isTrue(paused);
                });
          },
 
@@ -77,7 +77,7 @@ define(["alfresco/TestCommon",
             return browser.findDisplayedByCssSelector("audio")
                .execute("return document.querySelector('audio').paused")
                .then(function(paused) {
-                  assert.isFalse(paused, "The audio is not playing");
+                  assert.isFalse(paused);
                });
          },
 
@@ -89,7 +89,7 @@ define(["alfresco/TestCommon",
             .findDisplayedByCssSelector("audio")
                .execute("return document.querySelector('audio').paused")
                .then(function(paused) {
-                  assert.isTrue(paused, "The audio is not paused");
+                  assert.isTrue(paused);
                });
          },
 
@@ -97,7 +97,7 @@ define(["alfresco/TestCommon",
             return browser.findDisplayedByCssSelector("video")
                .execute("return document.querySelector('video').paused")
                .then(function(paused) {
-                  assert.isFalse(paused, "The video is not playing");
+                  assert.isFalse(paused);
                });
          },
 
@@ -122,11 +122,11 @@ define(["alfresco/TestCommon",
             browser.end();
          },
 
-         "Check that video is playing": function() {
+         "Check that video is NOT playing": function() {
             return browser.findDisplayedByCssSelector("video")
                .execute("return document.querySelector('video').paused")
                .then(function(paused) {
-                  assert.isTrue(paused, "The video should not be playing");
+                  assert.isTrue(paused);
                });
          },
 
