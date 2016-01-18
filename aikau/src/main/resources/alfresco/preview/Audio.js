@@ -21,16 +21,16 @@
  * This plugin will render the HTML5 audio element to preview the content of an audio node.
  *
  * @module alfresco/preview/Audio
- * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
+ * @extends module:alfresco/preview/AVPlugin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/preview/AlfDocumentPreviewPlugin", 
+        "alfresco/preview/AVPlugin", 
         "dojo/_base/lang",
         "dojo/has"], 
-        function(declare, AlfDocumentPreviewPlugin, lang, has) {
+        function(declare, AVPlugin, lang, has) {
    
-   return declare([AlfDocumentPreviewPlugin], {
+   return declare([AVPlugin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -72,8 +72,7 @@ define(["dojo/_base/declare",
        * @return {String} Returns nothing if the plugin may be used, otherwise returns a message containing the reason
        *         it cant be used as a string.
        */
-      report: function alfresco_preview_Audio__report()
-      {
+      report: function alfresco_preview_Audio__report() {
          // Should ideally use a future proof algorithm for testing if the browsers video element can display video of the current mimetype
          if ((has("ie") > 0 && has("ie") < 9) || // IE 9
              (has("ff") > 0 && has("ff") < 1.91) || // FireFox 3.5
@@ -90,12 +89,13 @@ define(["dojo/_base/declare",
        * @instance
        */
       display: function alfresco_preview_Audio__display() {
+         this.inherited(arguments);
          var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
          mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
-         var str = '';
-         str += '<audio width="100%" height="100%" controls alt="' + this.previewManager.name  + '" title="' + this.previewManager.name  + '">';
-         str += '   <source src="' + src + '"  type=\'' + mimeType + '\'>';
-         str += '</audio>';
+         var str = "";
+         str += "<audio width=\"100%\" height=\"100%\" controls alt=\"" + this.previewManager.name  + "\" title=\"" + this.previewManager.name  + "\">";
+         str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
+         str += "</audio>";
          return str;
       }
    });

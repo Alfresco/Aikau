@@ -2,9 +2,10 @@
    line-height: 325px;
 }
 
-.alfresco-preview-AlfDocumentPreview .previewer .Audio audio
-{
+.alfresco-preview-AlfDocumentPreview .previewer.Audio audio {
    max-height: 100%;
    max-width: 100%;
    overflow: auto;
+   display: block;
+   margin: 0 auto;
 }

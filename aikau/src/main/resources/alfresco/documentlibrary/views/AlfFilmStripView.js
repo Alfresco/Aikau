@@ -27,6 +27,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",
+        "alfresco/core/ObjectProcessingMixin",
         "dojo/text!./templates/AlfFilmStripView.html",
         "alfresco/documentlibrary/AlfDocument",
         "alfresco/preview/AlfDocumentPreview",
@@ -34,10 +35,10 @@ define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/Carousel",
         "dojo/_base/lang",
         "dojo/dom-construct"], 
-        function(declare, AlfDocumentListView, template, AlfDocument, AlfDocumentPreview, DocumentCarousel, Carousel, 
-                 lang, domConstruct) {
+        function(declare, AlfListView, ObjectProcessingMixin, template, AlfDocument, AlfDocumentPreview, 
+                 DocumentCarousel, Carousel, lang, domConstruct) {
    
-   return declare([AlfDocumentListView], {
+   return declare([AlfListView, ObjectProcessingMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -127,6 +128,23 @@ define(["dojo/_base/declare",
        * @since 1.0.51
        */
       itemCarouselHeight: 112,
+
+      /**
+       * The value configured is passed to the 
+       * [previewerPluginOverrides]{@link module:alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument#previewerPluginOverrides}
+       * which is then passed to the 
+       * [widgetsForPluginsOverrides]{@link module:alfresco/preview/AlfDocumentPreview#widgetsForPluginsOverrides}
+       * of the [widgetsForPluginsOverrides]{@link module:alfresco/preview/AlfDocumentPreview} that is rendered
+       * by default. Configuring or overriding 
+       * [widgetsForContent]{@link module:alfresco/documentlibrary/views/AlfFilmStripView#widgetsForContent}
+       * can potentially change this depending upon the change made.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.51
+       */
+      previewerPluginOverrides: null,
 
       /**
        * The configuration for selecting the view (configured the menu item)
@@ -224,6 +242,7 @@ define(["dojo/_base/declare",
          }
 
          var clonedWidgetsForContent = lang.clone(this.widgetsForContent);
+         this.processObject(["processInstanceTokens"], clonedWidgetsForContent);
          this.contentCarousel = this.createWidget({
             id: (this._alfPreferredWidgetId || this.id) + "_PREVIEWS",
             name: "alfresco/documentlibrary/views/layouts/DocumentCarousel",
@@ -311,7 +330,8 @@ define(["dojo/_base/declare",
             name: "alfresco/documentlibrary/views/layouts/AlfFilmStripViewDocument",
             config: {
                heightAdjustment: 0,
-               heightMode: "PARENT"
+               heightMode: "PARENT",
+               previewerPluginOverrides: "{previewerPluginOverrides}"
             }
          }
       ],

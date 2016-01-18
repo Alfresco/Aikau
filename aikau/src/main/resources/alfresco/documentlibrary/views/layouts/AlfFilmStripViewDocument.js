@@ -65,6 +65,19 @@ define(["dojo/_base/declare",
       heightMode: "AUTO",
 
       /**
+       * The value configured is passed to the
+       * [widgetsForPluginsOverrides]{@link module:alfresco/preview/AlfDocumentPreview#widgetsForPluginsOverrides}
+       * of the [widgetsForPluginsOverrides]{@link module:alfresco/preview/AlfDocumentPreview} that is rendered
+       * by default.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.51
+       */
+      previewerPluginOverrides: null,
+
+      /**
        * Overrides the [inherited function]{@link module:alfresco/documentlibrary/AlfDocument#postMixInProperties}
        * to prevent the subscription to the standard document request from being created.
        * 
@@ -102,7 +115,8 @@ define(["dojo/_base/declare",
                name: "alfresco/preview/AlfDocumentPreview",
                config: {
                   heightMode: this.heightMode,
-                  heightAdjustment: this.heightAdjustment
+                  heightAdjustment: this.heightAdjustment,
+                  widgetsForPluginsOverrides: this.previewerPluginOverrides
                }
             }];
             this.alfSubscribe("ALF_FILMSTRIP_DOCUMENT_REQUEST__" + this.nodeRef, lang.hitch(this, this.requestDocument, this.nodeRef));

@@ -21,16 +21,17 @@
  * This plugin will render the HTML5 video element to preview the content of a video node.
  *
  * @module alfresco/preview/Video
- * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
+ * @extends module:alfresco/preview/AVPlugin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/preview/AlfDocumentPreviewPlugin", 
+        "alfresco/preview/AVPlugin", 
         "dojo/_base/lang",
+        "dojo/_base/array",
         "dojo/has"], 
-        function(declare, AlfDocumentPreviewPlugin, lang, has) {
+        function(declare, AVPlugin, lang, array, has) {
    
-   return declare([AlfDocumentPreviewPlugin], {
+   return declare([AVPlugin], {
 
       /**
        * An array of the CSS files to use with this widget.

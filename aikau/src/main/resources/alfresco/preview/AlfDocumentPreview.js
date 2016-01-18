@@ -228,8 +228,9 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default set of plugins for the previewer. These can be overridden in their entirety
-       * or changes to a subset can be made through configuration of the [widgetsForPluginsOverrides]
-       * {@link module:alfresco/preview/AlfDocumentPreview#widgetsForPluginsOverrides} attribute.
+       * or changes to a subset can be made through configuration of the 
+       * [widgetsForPluginsOverrides]{@link module:alfresco/preview/AlfDocumentPreview#widgetsForPluginsOverrides} 
+       * attribute.
        * 
        * @instance
        * @type {object[]}
@@ -238,10 +239,6 @@ define(["dojo/_base/declare",
          {
             id: "PdfJs",
             name: "alfresco/preview/PdfJs/PdfJs"
-         },
-         {
-            id: "WebPreviewer",
-            name: "alfresco/preview/WebPreviewer"
          },
          {
             id: "Image",
@@ -465,13 +462,6 @@ define(["dojo/_base/declare",
                      plugin = this.plugins[pluginDescriptor.name];
                      plugin.setAttributes(pluginDescriptor.attributes);
 
-                     // Special case to ignore the WebPreviewer plugin on iOS - we don't want to report output either
-                     // as the output is simply an HTML message unhelpfully informing the user to install Adobe Flash
-                     if (sniff("ios") && pluginDescriptor.name === "WebPreviewer")
-                     {
-                        continue;
-                     }
-
                      // Make sure it may run in this browser...
                      var report = plugin.report();
                      if (report)
@@ -494,6 +484,8 @@ define(["dojo/_base/declare",
                            {
                               // Insert markup if plugin provided it
                               this.previewerNode.innerHTML = markup;
+                              plugin._setPreviewerElementHeight();
+                              plugin.onMarkupAdded();
                            }
 
                            // Finally! We found a plugin that works and didn't crash
@@ -819,22 +811,6 @@ define(["dojo/_base/declare",
                {
                   name: "Audio",
                   attributes: {}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "webpreview"
-            },
-            plugins: [
-               {
-                  name: "WebPreviewer",
-                  attributes:
-                  {
-                     paging: "true",
-                     src: "webpreview"
-                  }
                }
             ]
          },

@@ -655,6 +655,22 @@ define([],function() {
       POST_TO_PAGE: "ALF_POST_TO_PAGE",
 
       /**
+       * This topic should be published when indicating what [previewers]{@link module:alfresco/preview/AlfDocumentPreview}
+       * are currently displayed. This has been added to support the 
+       * [DocumentCarousel]{@link module:alfresco/documentlibrary/views/layouts/DocumentCarousel} so that audio and video
+       * previewers can automatically be stopped and started as they leave are hidden and displayed.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.51
+       *
+       * @event
+       * @property {object[]} items An array of the items that have been displayed.
+       */
+      PREVIEWS_SHOWN: "ALF_PREVIEWS_SHOWN",
+
+      /**
        * This topic is published to indicate that data needs to be uploaded. This is typically list based data but can
        * be used by other widgets.
        *

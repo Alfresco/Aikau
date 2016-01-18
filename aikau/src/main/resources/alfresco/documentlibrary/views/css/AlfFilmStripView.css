@@ -13,7 +13,9 @@
                padding: 10px 0;
                text-shadow: 1px 1px #333;
                .alfresco-renderers-Property {
-                  color: #fff;
+                  span {
+                     color: #fff;
+                  }
                }
             }
          }
