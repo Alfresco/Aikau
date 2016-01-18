@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
             dialogTitle: "upload.target.dialog.title",
             dialogConfirmationButtonTitle: "upload.target.dialog.confirmation",
             dialogCancellationButtonTitle: "upload.target.dialog.cancellation",
-            formSubmissionTopic: "ALF_UPLOAD_REQUEST",
+            formSubmissionTopic: topics.UPLOAD_REQUEST,
             formSubmissionPayloadMixin: {
                alfResponseTopic: responseTopic,
                filesRefs: filesRef,

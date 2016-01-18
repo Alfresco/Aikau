@@ -1030,6 +1030,22 @@ define([],function() {
       UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
 
       /**
+       * This topic is published to request an upload.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.51
+       *
+       * @event
+       * @property {object[]} files The files to upload
+       * @property {object} targetData An object describing where to upload the files to
+       * @property {string} [fileRefs] A dot-notation reference to the files in the context of
+       *                               [alfGetData]{@link module:alfresco/core/Core#alfGetData}
+       */
+      UPLOAD_REQUEST: "ALF_UPLOAD_REQUEST",
+
+      /**
        * This topic can be published to display a dialog that allows users to select one or more files
        * to upload and the location to upload them to. This is typically handled by the 
        * [ContentService]{@link module:alfresco/services/ContentService}.

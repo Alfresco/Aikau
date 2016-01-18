@@ -9,17 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      {
-         name: "alfresco/services/UploadService",
-         config: {
-            widgetsForProgressDialog: [
-               {
-                  name: "alfresco/upload/UploadMonitor",
-                  assignTo: "uploadDisplayWidget"
-               }
-            ]
-         }
-      }
+      "alfresco/services/PanelUploadService"
    ],
    widgets: [
       {
