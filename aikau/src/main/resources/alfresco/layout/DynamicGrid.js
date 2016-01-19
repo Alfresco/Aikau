@@ -32,11 +32,12 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
         "service/constants/Default",
+        "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/dom-construct",
         "jquery"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, AlfConstants,
-                 domClass, domConstruct, $) {
+                 lang, domClass, domConstruct, $) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -51,42 +52,43 @@ define(["dojo/_base/declare",
                         {cssFile:"/js/lib/gridster/dist/jquery.gridster.css"}],
 
       /**
-       * Make sure Gridster.js is included on the page.
-       *
-       * @instance
-       * @type {String[]}
-       */
-      // nonAmdDependencies: ["/js/lib/gridster/dist/jquery.gridster.js"],
-      
-      /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
       
+      _gridManager: null,
+
+      buildGrid: function alfresco_layout_DynamicGrid__buildGrid() {
+         this._gridManager = $(".gridster").gridster({
+            widget_base_dimensions: [100, 55],
+            widget_margins: [5, 5],
+            autogrow_cols: true,
+            resize: {
+               enabled: true
+            }
+         }).data("gridster");
+
+         if (this.widgets)
+         {
+            this.processWidgets(this.widgets);
+         }
+      },
+
+      createWidgetDomNode: function alfresco_core_CoreWidgetProcessing__createWidgetDomNode(widget, rootNode, rootClassName) {
+         var addedElements = this._gridManager.add_widget("<div></div>",3,3);
+         var domNode = addedElements[0];
+         return domConstruct.create("div", {}, domNode);
+      },
+
       /**
        * Processes the widgets into the content node.
        * 
        * @instance
        */
       postCreate: function alfresco_layout_DynamicGrid__postCreate() {
-         
-         
-         require([AlfConstants.URL_RESCONTEXT + "js/lib/gridster/dist/jquery.gridster.js"], function(type) {
-            var gridster;
-            $(function(){
-              // var log = document.getElementById("log");
-              gridster = $(".gridster ul").gridster({
-                widget_base_dimensions: [100, 55],
-                widget_margins: [5, 5],
-                autogrow_cols: true,
-                resize: {
-                  enabled: true
-                }
-              }).data("gridster");
-            });
-         });
+         require([AlfConstants.URL_RESCONTEXT + "js/lib/gridster/dist/jquery.gridster.js"], lang.hitch(this, this.buildGrid));
       }
    });
 });
