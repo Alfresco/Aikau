@@ -22,3 +22,13 @@
     border: none!important;
     background: red!important;
 }
+
+.alfresco-layout-DynamicGrid {
+   .gridster {
+
+      .alfresco-layout-DynamicGrid__cell > div {
+         height: 100%;
+         margin: 0;
+      }
+   }
+}

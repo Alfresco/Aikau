@@ -77,7 +77,7 @@ define(["dojo/_base/declare",
       },
 
       createWidgetDomNode: function alfresco_core_CoreWidgetProcessing__createWidgetDomNode(widget, rootNode, rootClassName) {
-         var addedElements = this._gridManager.add_widget("<div></div>",3,3);
+         var addedElements = this._gridManager.add_widget("<div class='alfresco-layout-DynamicGrid__cell'></div>",3,3);
          var domNode = addedElements[0];
          return domConstruct.create("div", {}, domNode);
       },
