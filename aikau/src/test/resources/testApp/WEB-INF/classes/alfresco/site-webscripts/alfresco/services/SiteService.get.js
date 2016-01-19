@@ -238,7 +238,6 @@ model.jsonModel = {
             }
          }
       },
-
       {
          name: "alfresco/buttons/AlfButton",
          config: {
@@ -288,7 +287,19 @@ model.jsonModel = {
             }
          }
       },
-
+      {
+         id: "BECOME_SITE_MANAGER_PAGE_RELOAD",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Become Site Manager (reload page)",
+            publishTopic: "ALF_BECOME_SITE_MANAGER",
+            publishPayload: {
+               site: "swsdp",
+               role: "SiteCollaborator",
+               reloadPage: true
+            }
+         }
+      },
       {
          name: "alfresco/buttons/AlfButton",
          config: {
