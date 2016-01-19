@@ -58,8 +58,20 @@ define(["dojo/_base/declare",
        */
       templateString: template,
       
+      /**
+       * 
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
       _gridManager: null,
 
+      /**
+       * 
+       * 
+       * @instance
+       */
       buildGrid: function alfresco_layout_DynamicGrid__buildGrid() {
          this._gridManager = $(".gridster").gridster({
             widget_base_dimensions: [100, 55],
@@ -76,8 +88,15 @@ define(["dojo/_base/declare",
          }
       },
 
-      createWidgetDomNode: function alfresco_core_CoreWidgetProcessing__createWidgetDomNode(widget, rootNode, rootClassName) {
-         var addedElements = this._gridManager.add_widget("<div class='alfresco-layout-DynamicGrid__cell'></div>",3,3);
+      /**
+       * 
+       * 
+       * @instance
+       */
+      createWidgetDomNode: function alfresco_core_CoreWidgetProcessing__createWidgetDomNode(widget, /*jshint unused:false*/ rootNode, rootClassName) {
+         var addedElements = this._gridManager.add_widget("<div class='alfresco-layout-DynamicGrid__cell'></div>",
+                                                          widget.gridWidth || 3,
+                                                          widget.gridHeight || 3);
          var domNode = addedElements[0];
          return domConstruct.create("div", {}, domNode);
       },

@@ -16,6 +16,8 @@ model.jsonModel = {
          config: {
             widgets: [
                {
+                  gridWidth: 3,
+                  gridHeight: 4,
                   name: "alfresco/layout/ClassicWindow",
                   config: {
                      title: "Dashlet 1",
@@ -30,6 +32,8 @@ model.jsonModel = {
                   }
                },
                {
+                  gridWidth: 5,
+                  gridHeight: 2,
                   name: "alfresco/layout/ClassicWindow",
                   config: {
                      title: "Dashlet 2",
