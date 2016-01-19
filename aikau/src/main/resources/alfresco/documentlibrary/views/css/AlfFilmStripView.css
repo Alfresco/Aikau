@@ -1,12 +1,8 @@
 .alfresco-documentlibrary-views-layouts-AlfFilmStripView {
    position: relative;
    > div {
-      /* This makes the content items overlay the main preview */
       &.items {
-         bottom: 0;
-         position: absolute;
          width: 100%;
-         z-index: 4;
       }
       &.preview {
          .alfresco-lists-views-layouts-Carousel {
@@ -17,7 +13,9 @@
                padding: 10px 0;
                text-shadow: 1px 1px #333;
                .alfresco-renderers-Property {
-                  color: #fff;
+                  span {
+                     color: #fff;
+                  }
                }
             }
          }

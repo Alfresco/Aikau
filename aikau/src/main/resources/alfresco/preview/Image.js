@@ -18,18 +18,19 @@
  */
 
 /**
- * This module is currently a BETA
+ * This plugin will render an HTML img element to preview the content of an image.
  *
  * @module alfresco/preview/Image
  * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/preview/AlfDocumentPreviewPlugin", 
+        "alfresco/preview/AlfDocumentPreviewPlugin",
+        "alfresco/core/FileSizeMixin",
         "dojo/_base/lang"], 
-        function(declare, AlfDocumentPreviewPlugin, lang) {
+        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, lang) {
    
-   return declare([AlfDocumentPreviewPlugin], {
+   return declare([AlfDocumentPreviewPlugin, FileSizeMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -64,20 +65,20 @@ define(["dojo/_base/declare",
          this._setPreviewerElementHeight();
 
          var srcMaxSize = this.attributes.srcMaxSize;
-         if (!this.attributes.src && srcMaxSize.match(/^\d+$/) && this.previewManager.size > parseInt(srcMaxSize))
+         if (!this.attributes.src && srcMaxSize.match(/^\d+$/) && this.previewManager.size > parseInt(srcMaxSize, 10))
          {
             // The node's content was about to be used and its to big to display
-            var msg = '';
-            msg += this.previewManager.message("Image.tooLargeFile", this.previewManager.name, Alfresco.util.formatFileSize(this.previewManager.size));
-            msg += '<br/>';
-            msg += '<a class="theme-color-1" href="' + this.previewManager.getContentUrl(true) + '">';
+            var msg = "";
+            msg += this.previewManager.message("Image.tooLargeFile", this.previewManager.name, this.formatFileSize(this.previewManager.size));
+            msg += "<br/>";
+            msg += "<a class=\"theme-color-1\" href=\"" + this.previewManager.getContentUrl(true) + "\">";
             msg += this.previewManager.message("Image.downloadLargeFile");
-            msg += '</a>';
-            msg += '<br/>';
-            msg += '<a style="cursor: pointer;" class="theme-color-1" onclick="javascript: this.parentNode.parentNode.innerHTML = \'<img src=' + this.previewManager.getContentUrl(false) + '>\';">';
+            msg += "</a>";
+            msg += "<br/>";
+            msg += "<a style=\"cursor: pointer;\" class=\"theme-color-1\" onclick=\"javascript: this.parentNode.parentNode.innerHTML = '<img src=" + this.previewManager.getContentUrl(false) + ">';\">";
             msg += this.previewManager.message("Image.viewLargeFile");
-            msg += '</a>';
-            return '<div class="message">' + msg + '</div>';
+            msg += "</a>";
+            return "<div class=\"message\">" + msg + "</div>";
          }
          else
          {
@@ -86,7 +87,7 @@ define(["dojo/_base/declare",
             var image = new Image();
             image.onload = function()
             {
-               if ('naturalHeight' in this)
+               if ("naturalHeight" in this)
                {
                   if (this.naturalHeight + this.naturalWidth === 0)
                   {
@@ -100,18 +101,18 @@ define(["dojo/_base/declare",
                   return;
                }
                // At this point, there's no error.
-               this.previewManager.previewerNode.innerHTML = '';
+               this.previewManager.previewerNode.innerHTML = "";
                this.previewManager.previewerNode.appendChild(image);
+               this.previewManager.plugin._setPreviewerElementHeight();
             };
             image.onerror = function()
             {
                //display error
-               this.previewManager.previewerNode.innerHTML = '<div class="message">' + 
-                  this.previewManager.message("label.noPreview", this.previewManager.getContentUrl(true)) + '</div>';
+               this.previewManager.previewerNode.innerHTML = "<div class=\"message\">" + 
+                  this.previewManager.message("label.noPreview", this.previewManager.getContentUrl(true)) + "</div>";
             };
             image.previewManager = this.previewManager;
             image.src = src;
-
             return null;
          }
       }

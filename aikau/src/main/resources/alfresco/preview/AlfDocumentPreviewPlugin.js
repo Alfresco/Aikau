@@ -71,6 +71,18 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * If [display]{@link module:alfresco/preview/AlfDocumentPreview#display} returns HTML to be
+       * added as the preview then this function will be called after it has been added to the document.
+       * This provides an opportunity for the plugin to perform any additional initialisation.
+       * 
+       * @instance
+       * @since 1.0.51
+       */
+      onMarkupAdded: function alfresco_preview_AlfDocumentPreviewPlugin__onMarkupAdded() {
+         // By default don't report anything.
+      },
+
+      /**
        * Tests if the plugin can be used in the users browser.
        *
        * @instance

@@ -179,7 +179,16 @@ define(["alfresco/testing/MockXhr",
          var response = {
             totalRecords: filteredItems.length,
             startIndex: startIndex,
-            items: responseData
+            items: responseData,
+            // TODO: Add metadata from seed data, this is sufficient for current testing requirements 
+            metadata: {
+               parent: {
+                  nodeRef: "parent://node/ref",
+                  node: {
+                     nodeRef: "parent://node/ref"
+                  }
+               }
+            }
          };
 
          // Send the response

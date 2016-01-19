@@ -206,25 +206,31 @@ model.jsonModel = {
                               label: "Sweets (fixed options)",
                               name: "sweets",
                               width: "300px",
+                              value: "foam_strawberries",
                               optionsConfig: {
                                  fixed: [
                                     {
+                                       name: "Foam Strawberries",
                                        label: "Foam Strawberries",
                                        value: "foam_strawberries"
                                     },
                                     {
+                                       name: "Sherbert Lemons",
                                        label: "Sherbert Lemons",
                                        value: "sherbert_lemons"
                                     },
                                     {
+                                       name: "White Chocolate Mice",
                                        label: "White Chocolate Mice",
                                        value: "white_chocolate_mice"
                                     },
                                     {
+                                       name: "Refreshers",
                                        label: "Refreshers",
                                        value: "refreshers"
                                     },
                                     {
+                                       name: "Flying Saucers",
                                        label: "Flying Saucers",
                                        value: "flying_saucers"
                                     }

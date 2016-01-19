@@ -633,8 +633,7 @@ define(["dojo/_base/declare",
                var newAspect = aspect.after(newView, "renderView", lang.hitch(this, this.publishSelectedItems));
                this.viewAspectHandles[this._currentlySelectedView] = newAspect;
 
-               // Set the current data...
-               newView.setData(this.currentData);
+               this.copyViewData(oldView, newView);
                newView.renderView(this.useInfiniteScroll);
 
                // Clear up the old view...
@@ -646,7 +645,22 @@ define(["dojo/_base/declare",
                this.showView(newView);
             }
         }
-     },
+      },
+
+      /**
+       * This is called from [handleNewViewInstances]{@link module:alfresco/lists/AlfList#handleNewViewInstances}
+       * when a new view is created to replace the existing view. It allows all relevant data to be copied from
+       * the old view to the new view.
+       * 
+       * @instance
+       * @extendable
+       * @since 1.0.51
+       */
+      copyViewData: function alfresco_lists_AlfList__copyViewData(oldView, newView) {
+         // Set the current data...
+         newView.setData(this.currentData);
+         newView._currentNode = oldView._currentNode;
+      },
 
       /**
        * Create the subscriptions for the [filteringTopics]{@link module:alfresco/lists/AlfList#filteringTopics}. This is

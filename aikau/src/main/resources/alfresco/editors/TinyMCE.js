@@ -297,11 +297,9 @@ define(["dojo/_base/declare",
                $(this.domNode).height(height - 10); // Deduct 10 to compensate for margin
 
                // We need to handle the height manually, and it needs to be set on the
-               // .mce-edit-area node. Since we know that this is going to appear below
-               // a menu bar we need to get it's offset in order to prevent overflow.
+               // .mce-edit-area node. We need to compensate for the toolbar when 
                var editAreaNode = $(this.domNode).find(".mce-edit-area");
-               var offset = $(editAreaNode).offset().top;
-               $(editAreaNode).height(height - offset);
+               $(editAreaNode).height(height - 42); // Deduct 42 to compenstate for toolbar and margin
                $(this.domNode).width(width - 2); // Deduct 2 to compensate for border
             }
             else
@@ -390,9 +388,8 @@ define(["dojo/_base/declare",
          }
          if (this._resizeWhenInitialized)
          {
-            // See AKU-775 - adding a short timeout here allows everything to complete initialization before resizing
-            //               by using timeout without a time we can delay until all synchronous processes have completed.
-            setTimeout(lang.hitch(this, this.onResize));
+            // See AKU-775 - adding a short timeout here allows everything to complete initialization before resizing.
+            setTimeout(lang.hitch(this, this.onResize), 100);
          }
          this.setDisabled(this.initiallyDisabled);
 

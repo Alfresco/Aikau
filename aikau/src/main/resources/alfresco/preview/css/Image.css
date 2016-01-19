@@ -1,8 +1,18 @@
-.alfresco-preview-AlfDocumentPreview .previewer .Image img
-{
-   max-height: 100%;
-   max-width: 100%;
-   overflow: auto;
-   width: auto;
-   height: auto;
+.alfresco-preview-AlfDocumentPreview {
+   
+   .previewer {
+      
+      &.Image {
+         text-align: center;
+         
+         img {
+            max-height: 100%;
+            max-width: 100%;
+            overflow: auto;
+            width: auto;
+            height: auto;
+         }
+      }
+   }
+   
 }
