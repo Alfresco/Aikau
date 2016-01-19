@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Dynamic Grid</shortname>
+  <description>Prototype of gridster implementation</description>
+  <family>aikau-unit-tests</family>
+  <url>/DynamicGrid</url>
+</webscript>
