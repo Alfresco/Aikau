@@ -189,7 +189,22 @@ define(["intern!object",
          },
          
          "Test Multi-File Upload (successful)": function () {
-            return browser.findAllByCssSelector(successfulUploadsSelector)
+            return browser.findByCssSelector(successfulUploadsSelector + ":nth-child(1)")
+            .sleep(2000)
+            .end()
+
+            .findByCssSelector(successfulUploadsSelector + ":nth-child(2)")
+            .sleep(2000)
+            .end()
+
+            .findByCssSelector(successfulUploadsSelector + ":nth-child(3)")
+            .sleep(2000)
+            .end()
+
+            .findByCssSelector(successfulUploadsSelector + ":nth-child(4)")
+            .end()
+
+            .findAllByCssSelector(successfulUploadsSelector)
                .then(function(elements) {
                   assert.lengthOf(elements, 4, "Wrong number of successful uploads");
                })

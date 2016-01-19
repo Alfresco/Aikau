@@ -80,7 +80,11 @@ define(["dojo/_base/declare",
             }
          },
          {
-            name: "alfresco/search/FilmStripViewSearchResult"
+            name: "alfresco/search/FilmStripViewSearchResult",
+            config: {
+               heightAdjustment: 0,
+               heightMode: "PARENT"
+            }
          }
       ],
 

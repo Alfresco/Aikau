@@ -886,7 +886,21 @@ define(["dojo/_base/declare",
          {
             // Compare the property value against the applicable values...
             var renderFilterProperty = this.getRenderFilterPropertyValue(renderFilterConfig);
-            if (renderFilterConfig.values)
+            if (renderFilterConfig.value)
+            {
+               // See AKU-781 - We now allow client-side properties to be compared...
+               switch (renderFilterConfig.comparator) {
+                  case "lessThan":
+                     passesFilter = renderFilterProperty < renderFilterConfig.value;
+                     break;
+                  case "greaterThan":
+                     passesFilter = renderFilterProperty > renderFilterConfig.value;
+                     break;
+                  default:
+                     passesFilter = renderFilterProperty === renderFilterConfig.value;
+               }
+            }
+            else if (renderFilterConfig.values)
             {
                // Check that the target property matches one of the supplied values...
                var renderFilterValues = this.getRenderFilterValues(renderFilterConfig);
@@ -1048,7 +1062,11 @@ define(["dojo/_base/declare",
        */
       getRenderFilterPropertyValue: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterPropertyValue(renderFilterConfig) {
          var targetObject = this.currentItem;
-         if (renderFilterConfig.target && this[renderFilterConfig.target])
+         if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
+         {
+            targetObject = lang.getObject(renderFilterConfig.target);
+         }
+         else if (renderFilterConfig.target && this[renderFilterConfig.target])
          {
             targetObject = this[renderFilterConfig.target];
          }

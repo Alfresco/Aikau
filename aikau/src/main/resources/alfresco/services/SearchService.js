@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_SearchService__registerSubscriptions() {
-         this.alfSubscribe("ALF_SEARCH_REQUEST", lang.hitch(this, this.onSearchRequest));
+         this.alfSubscribe(topics.SEARCH_REQUEST, lang.hitch(this, this.onSearchRequest));
          this.alfSubscribe("ALF_STOP_SEARCH_REQUEST", lang.hitch(this, this.onStopRequest));
          this.alfSubscribe("ALF_AUTO_SUGGEST_SEARCH", lang.hitch(this, this.onAutoSuggest));
       },
@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
          else
          {
             // Check to see whether or not a success topic has been provided...
-            var alfTopic = (payload.alfResponseTopic) ? payload.alfResponseTopic : "ALF_SEARCH_REQUEST";
+            var alfTopic = (payload.alfResponseTopic) ? payload.alfResponseTopic : topics.SEARCH_REQUEST;
             var url = this.searchAPI;
 
             // Use any unexpected attributes as a query attribute...

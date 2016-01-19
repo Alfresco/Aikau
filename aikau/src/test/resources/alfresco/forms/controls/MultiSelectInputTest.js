@@ -774,6 +774,20 @@ define([
                browser.end();
             },
 
+            "Removing option from unfocused control does not induce dropdown": function() {
+               return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect__choice__close-button")
+                  .click()
+                  .end()
+
+               .waitForDeletedByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect__choice")
+
+               .findById("MULTISELECT_4_CONTROL_RESULTS")
+                  .isDisplayed()
+                  .then(function(isDisplayed) {
+                     assert.isFalse(isDisplayed);
+                  });
+            },
+
             "Can click on control and choose an option": function() {
                return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect")
                   .click()
@@ -790,25 +804,26 @@ define([
                   });
             },
 
-            "Can click on control again and choose a second option": function() {
-               return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect")
+            "Can filter options and select second option": function() {
+               return browser.findById("MULTISELECT_4_CONTROL")
                   .click()
+                  .pressKeys("mi")
                   .end()
 
-               .findByCssSelector("#MULTISELECT_4_CONTROL_RESULTS [title=\"Refreshers\"]")
-                  .click()
-                  .end()
-
-               .findAllByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect__choice")
+               .findAllByCssSelector("#MULTISELECT_4_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
                   .then(function(elements) {
-                     assert.lengthOf(elements, 2);
+                     assert.lengthOf(elements, 1);
                   })
+                  .end()
+
+               .findByCssSelector("#MULTISELECT_4_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+                  .click()
                   .end()
 
                .findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect__choice:nth-child(2) .alfresco-forms-controls-MultiSelect__choice__content")
                   .getVisibleText()
                   .then(function(visibleText) {
-                     assert.equal(visibleText, "Refreshers");
+                     assert.equal(visibleText, "White Chocolate Mice");
                   });
             },
 
