@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        * @listens ALF_SHOW_DATA_MODEL
        * @listens ALF_TOGGLE_DEVELOPER_MODE
        *
-       * @fires module:alfresco/core/topics~event#GET_PREFERENCE
+       * @fires module:alfresco/core/topics#GET_PREFERENCE
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_LoggingService__registerSubscriptions() {

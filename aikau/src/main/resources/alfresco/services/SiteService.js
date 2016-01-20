@@ -60,8 +60,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
-       * @listens module:alfresco/core/topics~event#DELETE_SITE
-       * @listens module:alfresco/core/topics~event#BECOME_SITE_MANAGER
+       * @listens module:alfresco/core/topics#DELETE_SITE
+       * @listens module:alfresco/core/topics#BECOME_SITE_MANAGER
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));
@@ -288,8 +288,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload
-       * @fires module:alfresco/core/topics~event#NAVIGATE_TO_PAGE
-       * @fires module:alfresco/core/topics~event#RELOAD_DATA_TOPIC
+       * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
       onActionDeleteSiteSuccess: function alfresco_services_SiteService__onActionDeleteSiteSuccess(payload) {
          var subscriptionHandle = lang.getObject("requestConfig.subscriptionHandle", false, payload);
@@ -738,7 +738,7 @@ define(["dojo/_base/declare",
        * referenced in the request. This method needs to be updated accordingly.
        *
        * @instance
-       * @fires module:alfresco/core/topics~event#RELOAD_PAGE
+       * @fires module:alfresco/core/topics#RELOAD_PAGE
        */
       reloadPage: function alfresco_services_SiteService__reloadPage(response, requestConfig) {
          /*jshint unused:false*/
@@ -750,7 +750,7 @@ define(["dojo/_base/declare",
        * This is a method that reloads DocList data
        *
        * @instance
-       * @fires module:alfresco/core/topics~event#RELOAD_DATA_TOPIC
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
       reloadData: function alfresco_services_SiteService__reloadData(response, requestConfig) {
          /*jshint unused:false*/
