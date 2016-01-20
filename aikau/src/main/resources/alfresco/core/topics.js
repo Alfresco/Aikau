@@ -78,6 +78,20 @@ define([],function() {
       ASSIGN_WORKFLOW: "ALF_ASSIGN_WORKFLOW",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {string} site The site shortname to change the user role in
+       * @property {string} [role=SiteManager] The role for the user to become
+       * @property {string} [user] The userid to change the role for
+       */
+      BECOME_SITE_MANAGER: "ALF_BECOME_SITE_MANAGER",
+
+      /**
        * Event topic to trigger the cancel the editing of a checkout document
        *
        * @instance

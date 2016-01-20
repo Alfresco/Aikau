@@ -78,6 +78,24 @@ define(["alfresco/TestCommon",
                });
          },
 
+         "Become site manager (and reload data)": function() {
+            return browser.findById("BECOME_SITE_MANAGER_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_DOCLIST_RELOAD_DATA");
+         },
+
+         "Become site manager (and reload page)": function() {
+            return browser.findById("BECOME_SITE_MANAGER_PAGE_RELOAD_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RELOAD_PAGE");
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

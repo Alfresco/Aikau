@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
-       * @listens module:alfresco/core/topics~event:DOCUMENT_SELECTION_UPDATE
+       * @listens module:alfresco/core/topics#DOCUMENT_SELECTION_UPDATE
        */
       postMixInProperties: function alfresco_renderers_Selector__postMixInProperties() {
          // Set up a subscription to handle file selection events, these will be along the lines of
