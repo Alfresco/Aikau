@@ -20,6 +20,7 @@ model.jsonModel = {
                   config: {
                      widgetsLeft: [
                         {
+                           id: "DDB1",
                            name: "alfresco/buttons/DropDownButton",
                            config: {
                               hideDropDownTopics: ["SAVE", "CANCEL"],
@@ -70,14 +71,29 @@ model.jsonModel = {
                      ],
                      widgetsRight: [
                         {
+                           id: "DDB2",
                            name: "alfresco/buttons/DropDownButton",
                            config: {
-                              label: "Drop down 2",
+                              label: "button.label.two",
                               widgets: [
                                  {
-                                    name: "alfresco/logo/Logo",
+                                    name: "alfresco/lists/AlfList",
                                     config: {
-                                       logoClasses: "surf-logo-large"
+                                       currentData: {
+                                          items: [
+                                             { displayName: "One" },
+                                             { displayName: "Two" },
+                                             { displayName: "Three" }
+                                          ]
+                                       },
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/HtmlListView",
+                                             config: {
+                                                listStyleType: "square"
+                                             }
+                                          }
+                                       ]
                                     }
                                  }
                               ]
