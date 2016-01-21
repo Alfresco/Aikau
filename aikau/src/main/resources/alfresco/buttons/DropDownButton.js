@@ -34,12 +34,14 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/DropDownButton.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/topics",
         "dojo/_base/array",
+        "dojo/_base/lang",
         "dojo/dom-construct",
         "dijit/form/DropDownButton",
         "dijit/TooltipDialog"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template,  AlfCore, CoreWidgetProcessing, array, 
-                 domConstruct, DropDownButton, TooltipDialog) {
+        function(declare, _WidgetBase, _TemplatedMixin, template,  AlfCore, CoreWidgetProcessing, topics, array, 
+                 lang, domConstruct, DropDownButton, TooltipDialog) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -59,6 +61,17 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * An array of topics that when published will call 
+       * [hideDropDown]{@link module:alfresco/buttons/DropDownButton#hideDropDown} to 
+       * hide the[drop down]{@link module:alfresco/buttons/DropDownButton#_dropDownDisplay} 
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       */
+      hideDropDownTopics: null,
+
+      /**
        * This is the label to display in the button.
        *
        * @instance
@@ -68,17 +81,64 @@ define(["dojo/_base/declare",
       label: "",
 
       /**
+       * This can be used to reference the widget that references the drop-down button. By default
+       * it will be a dijit/form/DropDownButton.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
+      _dropDownButton: null,
+
+      /**
+       * This can be used to reference the widget that references the drop-down display. By default
+       * it will be a dijit/TooltipDialog.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
+      _dropDownDisplay: null,
+
+      /**
+       * This function can be used to hide the [drop down]{@link module:alfresco/buttons/DropDownButton#_dropDownDisplay}.
+       * Will be called whenever any of the 
+       * [hideDropDownTopics]{@link module:alfresco/buttons/DropDownButton#hideDropDownTopics} are published.
+       * 
+       * @instance
+       */
+      hideDropDown: function alfresco_buttons_DropDownButton__hideDropDown() {
+         // NOTE: Tried this using dijit/popup dependency and it didn't work...
+         dijit.popup.close(this._dropDownDisplay)
+      },
+
+      /**
+       * This function is called whenever the [drop down]{@link module:alfresco/buttons/DropDownButton#_dropDownDisplay}
+       * is displayed. It is necessary to publish a 
+       * [WIDGET_PROCESSING_COMPLETE]{@link module:alfresco/core/topics#WIDGET_PROCESSING_COMPLETE} topic to ensure that
+       * widgets can complete any processing required once they've been added to the DOM. This is especially important
+       * for [form controls]{@link module:alfresco/forms/BaseFormControl}.
+       * 
+       * @instance
+       * @fires module:alfresco/core/topics#WIDGET_PROCESSING_COMPLETE
+       */
+      onDropDownDisplayShown: function alfresco_buttons_DropDownButton__onDropDownDisplayShown() {
+         this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE);
+      },
+
+      /**
        * Instantiates the MenuBar (a custom declared implementation) and processes the widgets assigned to ensure
        * that the labels are localized before being sent for processing.
        * 
        * @instance
        */
-      postCreate: function alfresco_menus_AlfMenuBar__postCreate() {
+      postCreate: function alfresco_buttons_DropDownButton__postCreate() {
          this._dropDownDisplay = new TooltipDialog({
             id: this.id + "_DROP_DOWN_DISPLAY",
-            "class": "alfresco-buttons-DropDownButton__drop-down-display"
+            "class": "alfresco-buttons-DropDownButton__drop-down-display",
+            onShow: lang.hitch(this, this.onDropDownDisplayShown)
          });
-
+         
          this._dropDownButton = new DropDownButton({
             id: this.id + "_DROP_DOWN_BUTTON",
             label: this.label ? this.message(this.label) : "",
@@ -96,6 +156,10 @@ define(["dojo/_base/declare",
          {
             this.processWidgets(this.widgets);
          }
+
+         array.forEach(this.hideDropDownTopics, function(topic) {
+            this.alfSubscribe(topic, lang.hitch(this, this.hideDropDown));
+         }, this);
       },
       
       /**
@@ -104,7 +168,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param widgets The widgets that have been successfully instantiated.
        */
-      allWidgetsProcessed: function alfresco_menus_AlfMenuBar__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_buttons_DropDownButton__allWidgetsProcessed(widgets) {
          array.forEach(widgets, function(entry) {
             this._dropDownDisplay.addChild(entry);
          }, this);
