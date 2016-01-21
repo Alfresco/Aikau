@@ -58,6 +58,7 @@ model.jsonModel = {
                                     id: "INLINE_EDIT",
                                     name: "alfresco/renderers/InlineEditProperty",
                                     config: {
+                                       label: "Label",
                                        propertyToRender: "name",
                                        permissionProperty: "node.permissions.user.Write",
                                        publishTopic: "ALF_CRUD_UPDATE",
