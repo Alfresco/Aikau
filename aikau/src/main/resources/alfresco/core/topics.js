@@ -1043,9 +1043,14 @@ define([],function() {
        *
        * @event
        * @property {object[]} files The files to upload
-       * @property {object} targetData An object describing where to upload the files to
        * @property {string} [fileRefs] A dot-notation reference to the files in the context of
        *                               [alfGetData]{@link module:alfresco/core/Core#alfGetData}
+       *                               which will override any included files
+       * @property {object} targetData An object describing where to upload the files to
+       * @property {string} alfResponseTopic The topic on which to respond after all files have
+       *                                     uploaded (successfully or unsuccessfully)
+       * @property {string} [responseScope] The scope of the response defined by the alfResponseTopic,
+       *                                    defaults to the scope of the publish caller
        */
       UPLOAD_REQUEST: "ALF_UPLOAD_REQUEST",
 
