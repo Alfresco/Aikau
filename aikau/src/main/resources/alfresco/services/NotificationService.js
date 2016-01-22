@@ -121,30 +121,49 @@ define(["dojo/_base/declare",
        * @since 1.0.48
        */
       onDisplayStickyPanel: function alfresco_services_NotificationService__onDisplayStickyPanel(payload) {
-         var panelOpts = {},
+
+         // Setup variables
+         var panelConfig = {},
             closeSubscription;
+
+         // Determine action
          if (theStickyPanel) {
-            this.alfLog("warn", "It was not possible to display a StickyPanel because one is already displayed", payload);
-            return;
-         }
-         if (payload.widgets) {
-            panelOpts.widgets = payload.widgets
-            if(payload.title) {
-               panelOpts.title = payload.title;
+
+            // Warn that panel aready exists if appropriate
+            payload.warnIfOpen && this.alfLog("warn", "It was not possible to display a StickyPanel because one is already displayed", payload);
+
+         } else if (payload.widgets) {
+
+            // Setup the panel-widget config
+            panelConfig.widgets = payload.widgets;
+            if (payload.title) {
+               panelConfig.title = payload.title;
             }
-            if(payload.width) {
-               panelOpts.panelWidth = payload.width;
+            if (payload.width) {
+               panelConfig.panelWidth = payload.width;
             }
-            if(payload.padding || payload.padding === 0) {
-               panelOpts.widgetsPadding = payload.padding;
+            if (payload.padding || payload.padding === 0) {
+               panelConfig.widgetsPadding = payload.padding;
             }
-            theStickyPanel = new StickyPanel(panelOpts);
+
+            // Create the panel
+            theStickyPanel = new StickyPanel(panelConfig);
+
+            // When the panel is closed, empty the static pointer to it
             closeSubscription = this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, function() {
                theStickyPanel = null;
                this.alfUnsubscribe(closeSubscription);
             }));
+
          } else {
+
+            // Cannot create panel
             this.alfLog("warn", "It was not possible to display the StickyPanel because no suitable 'widgets' attribute was provided", payload);
+         }
+
+         // If we've got a panel and a callback, use it
+         if (theStickyPanel && payload.callback) {
+            payload.callback(theStickyPanel);
          }
       },
 
