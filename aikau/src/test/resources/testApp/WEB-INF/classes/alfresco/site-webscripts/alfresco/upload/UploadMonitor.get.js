@@ -9,7 +9,13 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/PanelUploadService"
+      {
+         name: "alfresco/services/FileUploadService",
+         config: {
+            maxSimultaneousUploads: 3
+         }
+      },
+      "alfresco/services/NotificationService"
    ],
    widgets: [
       {
@@ -83,7 +89,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/UploadMockXhr"
+         name: "aikauTesting/mockservices/UploadMockXhr",
+         config: {
+            averageUploadTimeSecs: 3
+         }
       },
       {
          name: "alfresco/logging/DebugLog"
