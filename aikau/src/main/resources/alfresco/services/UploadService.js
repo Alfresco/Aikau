@@ -261,9 +261,10 @@ define(["dojo/_base/declare",
             callback: this.setUploadHistory,
             callbackScope: this
          });
-
+         
          // Set up template?
-         if (this.progressDialog === null || this.progressDialog === undefined) {
+         if (this.progressDialog === null || this.progressDialog === undefined)
+         {
             // Create topics to give to the dialog buttons, then subscribe to them to handle the
             // events...
             this.alfSubscribe(topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT, lang.hitch(this, this.onProgressDialogOkClick));
