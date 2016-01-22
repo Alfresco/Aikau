@@ -51,6 +51,7 @@ define({
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 
+      "src/test/resources/alfresco/buttons/DropDownButtonTest",
       "src/test/resources/alfresco/buttons/DynamicPayloadButtonTest",
 
       "src/test/resources/alfresco/charts/ccc/PieChartTest",
