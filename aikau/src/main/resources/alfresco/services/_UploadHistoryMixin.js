@@ -18,11 +18,11 @@
  */
 
 /**
- * This mixin acts to group the upload-history handling of the [UploadService]{@link module:alfresco/services/UploadService}.
+ * This mixin acts to group the upload-history handling of the [FileUploadService]{@link module:alfresco/services/FileUploadService}.
  * 
  * @module alfresco/services/_UploadHistoryMixin
  * @author Martin Doyle
- * @since 1.0.51
+ * @since 1.0.52
  */
 define(["dojo/_base/declare", 
         "alfresco/core/topics", 
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      constructor: function alfresco_services_FileUploadService__constructor() {
+      constructor: function alfresco_services__UploadHistoryMixin__constructor() {
          this.initHistory();
       },
 
@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        * @instance
        * @fires module:alfresco/core/topics#GET_PREFERENCE
        */
-      initHistory: function alfresco_services_FileUploadService__initHistory() {
+      initHistory: function alfresco_services__UploadHistoryMixin__initHistory() {
          this.history = [];
          this.alfPublish(topics.GET_PREFERENCE, {
             preference: this.historyPreferenceName,
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} value The preference value containing the nodeRefs last uploaded to
        */
-      setHistory: function alfresco_services_FileUploadService__setHistory(value) {
+      setHistory: function alfresco_services__UploadHistoryMixin__setHistory(value) {
          this.history = value && value.split(",");
       },
 
@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
        * @param {string} nodeRef The NodeRef to add to the upload history
        * @fires module:alfresco/core/topics#SET_PREFERENCE
        */
-      updateHistory: function alfresco_services_FileUploadService__updateHistory(nodeRef) {
+      updateHistory: function alfresco_services__UploadHistoryMixin__updateHistory(nodeRef) {
 
          // Iterate over the previous upload history and if the NodeRef being uploaded to already
          // exists in the history then move it to the first element.

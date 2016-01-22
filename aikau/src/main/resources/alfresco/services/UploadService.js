@@ -219,39 +219,6 @@ define(["dojo/_base/declare",
       ],
 
       /**
-       * Ensure the uploads progress monitor is initialised.
-       *
-       * @instance
-       * @since 1.0.51
-       */
-      initProgressMonitor: function alfresco_services_UploadService__initProgressMonitor() {
-
-         // Set up template?
-         if (this.progressDialog === null || this.progressDialog === undefined)
-         {
-            // Create a new dialog... the content is variable, but the widgets are fixed...
-            this.progressDialog = new AlfDialog({
-               id: "ALF_UPLOAD_PROGRESS_DIALOG",
-               title: this.createProgressDialogTitle(),
-               widgetsContent: this.widgetsForProgressDialog,
-               widgetsButtons: [
-                  {
-                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
-                     name: "alfresco/buttons/AlfButton",
-                     assignTo: "_uploadDialogButton",
-                     config: {
-                        label: this.message("progress-dialog.cancel-button.label"),
-                        publishTopic: topics.UPLOAD_CANCELLATION,
-                        additionalCssClasses: "call-to-action"
-                     }
-                  }
-               ]
-            });
-            this.getUploadDisplayWidget();
-         }
-      },
-
-      /**
        * Resets the widget
        *
        * @instance
@@ -295,13 +262,33 @@ define(["dojo/_base/declare",
             callbackScope: this
          });
 
-         // Create topics to give to the dialog buttons, then subscribe to them to handle the
-         // events...
-         this.alfSubscribe(topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT, lang.hitch(this, this.onProgressDialogOkClick));
-         this.alfSubscribe(topics.UPLOAD_CANCELLATION, lang.hitch(this, this.onProgressDialogCancelClick));
+         // Set up template?
+         if (this.progressDialog === null || this.progressDialog === undefined) {
+            // Create topics to give to the dialog buttons, then subscribe to them to handle the
+            // events...
+            this.alfSubscribe(topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT, lang.hitch(this, this.onProgressDialogOkClick));
+            this.alfSubscribe(topics.UPLOAD_CANCELLATION, lang.hitch(this, this.onProgressDialogCancelClick));
 
-         // Ensure progress monitor setup
-         this.initProgressMonitor();
+            // Create a new dialog... the content is variable, but the widgets are fixed...
+            this.progressDialog = new AlfDialog({
+               id: "ALF_UPLOAD_PROGRESS_DIALOG",
+               title: this.createProgressDialogTitle(),
+               widgetsContent: this.widgetsForProgressDialog,
+               widgetsButtons: [
+                  {
+                     id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
+                     name: "alfresco/buttons/AlfButton",
+                     assignTo: "_uploadDialogButton",
+                     config: {
+                        label: this.message("progress-dialog.cancel-button.label"),
+                        publishTopic: topics.UPLOAD_CANCELLATION,
+                        additionalCssClasses: "call-to-action"
+                     }
+                  }
+               ]
+            });
+            this.getUploadDisplayWidget();
+         }
       },
       
       /**
