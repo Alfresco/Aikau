@@ -18,7 +18,42 @@
  */
 
 /**
+ * This is a button that when clicked will reveal a drop-down display that can contain a 
+ * [widget model]{@link module:alfresco/buttons/DropDownButton#widgets}. The drop-down can
+ * be hidden by clicking on the button again, anywhere else on the page or through the 
+ * use of the ESC key. It is also possible to configure 
+ * [topics]{@link module:alfresco/buttons/DropDownButton#hideDropDownTopics} that when
+ * published will also hide the drop-down. For example, if the drop-down contains a 
+ * [form]{@link module:alfresco/forms/Form} it might be required to close the drop-down button
+ * when the [confirmation button topic]{@link module:/alfresco/forms/Form#okButtonPublishTopic}
+ * is published.
  *
+ * @example <caption>Drop-down containing a form that is hidden when confirmation button is clicked</caption>
+ * {
+ *   name: "alfresco/buttons/DropDownButton",
+ *   config: {
+ *     hideDropDownTopics: ["SAVE"],
+ *     label: "Show Form",
+ *     widgets: [
+ *        {
+ *           name: "alfresco/forms/Form",
+ *           config: {
+ *              okButtonPublishTopic: "SAVE",
+ *              okButtonPublishGlobal: true,
+ *              widgets: [
+ *                 {
+ *                    name: "alfresco/forms/controls/TextBox",
+ *                    config: {
+ *                       label: "Value",
+ *                       name: "value"
+ *                    }
+ *                 }
+ *              ]
+ *           }
+ *        }
+ *     ]
+ *   }
+ * }
  * 
  * @module alfresco/buttons/DropDownButton
  * @extends external:dijit/_WidgetBase
@@ -99,6 +134,15 @@ define(["dojo/_base/declare",
        * @default
        */
       _dropDownDisplay: null,
+
+      /**
+       * The widgets to render in the [drop down]{@link module:alfresco/buttons/DropDownButton#_dropDownDisplay}.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
+      widgets: null,
 
       /**
        * This function can be used to hide the [drop down]{@link module:alfresco/buttons/DropDownButton#_dropDownDisplay}.
