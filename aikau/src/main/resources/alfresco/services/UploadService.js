@@ -230,10 +230,9 @@ define(["dojo/_base/declare",
          if (this.progressDialog === null || this.progressDialog === undefined)
          {
             // Create a new dialog... the content is variable, but the widgets are fixed...
-            this.alfServicePublish(topics.CREATE_DIALOG, {})
             this.progressDialog = new AlfDialog({
-               dialogId: "ALF_UPLOAD_PROGRESS_DIALOG",
-               dialogTitle: this.createProgressDialogTitle(),
+               id: "ALF_UPLOAD_PROGRESS_DIALOG",
+               title: this.createProgressDialogTitle(),
                widgetsContent: this.widgetsForProgressDialog,
                widgetsButtons: [
                   {
