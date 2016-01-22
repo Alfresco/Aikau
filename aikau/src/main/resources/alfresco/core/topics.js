@@ -307,6 +307,10 @@ define([],function() {
        * @property {string} [title=default.title] The title to display (uses i18n)
        * @property {number} [padding=10] The padding to be applied to the widgets area
        * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
+       * @property {boolean} [warnIfOpen=true] Whether to put a warning in the console if the panel is
+       *                                       already visible
+       * @property {function} [callback] The function to call after panel created (or if it already exists)
+       *                                 with the panel instance as the first and only argument
        */
       DISPLAY_STICKY_PANEL: "ALF_DISPLAY_STICKY_PANEL",
 
