@@ -18,8 +18,6 @@
  */
 
 /**
- * <p><strong>BETA: Not yet suitable for production use</strong></p>
- * 
  * <p>This service can be used to control the uploading of content as well as
  * the updating the content of existing nodes on an Alfresco Repository.</p>
  * 
@@ -28,6 +26,7 @@
  * @mixes module:alfresco/core/CoreXhr
  * @mixes module:alfresco/services/_UploadHistoryMixin
  * @author Martin Doyle
+ * @since 1.0.52
  */
 define(["alfresco/buttons/AlfButton", 
         "alfresco/core/CoreXhr", 

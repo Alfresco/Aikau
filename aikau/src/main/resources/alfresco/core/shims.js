@@ -55,6 +55,7 @@ define([], function() {
        *
        * @protected
        * @instance
+       * @since 1.0.52
        */
       _addArrayReduce: function alfresco_core_shim___addArrayReduce() {
          /*jshint bitwise:false,freeze:false,eqnull:true*/

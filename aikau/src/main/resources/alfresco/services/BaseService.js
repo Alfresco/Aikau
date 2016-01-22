@@ -70,6 +70,7 @@ define(["dojo/_base/declare",
        * class lifecycle.
        *
        * @instance
+       * @since 1.0.52
        */
       initService: function alfresco_services_BaseService__initService() {
          // No action required

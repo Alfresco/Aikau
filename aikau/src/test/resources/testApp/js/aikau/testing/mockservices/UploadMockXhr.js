@@ -36,6 +36,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {number}
        * @default
+       * @since 1.0.52
        */
       averageUploadTimeSecs: 1,
 

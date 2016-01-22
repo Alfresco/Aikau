@@ -1039,7 +1039,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.51
+       * @since 1.0.52
        *
        * @event
        * @property {object[]} files The files to upload
