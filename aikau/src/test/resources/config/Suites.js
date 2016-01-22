@@ -34,11 +34,11 @@ define({
    xbaseFunctionalSuites: [
       "src/test/resources/alfresco/upload/UploadMonitorTest"
 
-      // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
-      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
+      // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/dnd/NestedConfigurationTest",
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
-      // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
+      // "src/test/resources/alfresco/preview/PdfJsPreviewTest",
+      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
    ],
 
    /**
