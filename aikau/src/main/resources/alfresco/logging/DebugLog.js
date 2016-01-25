@@ -254,7 +254,7 @@ define(["alfresco/core/ObjectTypeUtils",
             });
 
             // Re-apply the filters
-            this._applyFilters();
+            this._applyFilters(true);
          },
 
          /**
@@ -263,9 +263,10 @@ define(["alfresco/core/ObjectTypeUtils",
           * of the regular expression "checkbox".
           *
           * @instance
+          * @param {boolean} [force=false] Whether to force applying the current filters
           * @since 1.0.50
           */
-         _applyFilters: function alfresco_logging_DebugLog___applyFilters() {
+         _applyFilters: function alfresco_logging_DebugLog___applyFilters(force) {
             var filters = {
                   include: this.includeFilter.value,
                   exclude: this.excludeFilter.value,
@@ -277,9 +278,11 @@ define(["alfresco/core/ObjectTypeUtils",
                newInclude = prefix + filters.include + suffix,
                newExclude = prefix + filters.exclude + suffix,
                filtersChanged = newInclude !== this._lastIncludeFilter || newExclude !== this._lastExcludeFilter;
-            if (filtersChanged) {
-               this._lastIncludeFilter = newInclude;
-               this._lastExcludeFilter = newExclude;
+            if (filtersChanged || force) {
+               if (filtersChanged) {
+                  this._lastIncludeFilter = newInclude;
+                  this._lastExcludeFilter = newExclude;
+               }
                this._entries.forEach(lang.hitch(this, this._applyFilter, filters));
             }
          },

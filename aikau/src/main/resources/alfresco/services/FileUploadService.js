@@ -354,7 +354,7 @@ define(["alfresco/buttons/AlfButton",
        */
       onUploadCancelled: function alfresco_services_FileUploadService__onUploadCancelled( /*jshint unused:false*/ fileId, /*jshint unused:false*/ evt) {
          this.alfLog("warn", "Not yet implemented");
-         this.onUploadFinished();
+         this.onUploadFinished(fileId);
       },
 
       /**
@@ -384,7 +384,7 @@ define(["alfresco/buttons/AlfButton",
 
          // Resolve the deferred object on the file (used for firing requested topic when uploads complete)
          var fileInfo = this.fileStore[fileId],
-            dfd = fileInfo && lang.getObject("fileObj._dfd", false, fileInfo);
+            dfd = fileInfo && lang.getObject("uploadData.filedata._dfd", false, fileInfo);
          dfd && dfd.resolve();
 
          // Update the progress information in the UI
@@ -448,7 +448,7 @@ define(["alfresco/buttons/AlfButton",
        * @instance
        * @param {object} payload The publication payload
        */
-      onUploadRequest: function alfresco_services_UploadService(payload) {
+      onUploadRequest: function alfresco_services_FileUploadService__onUploadRequest(payload) {
 
          // A files reference will take precedence over actual files in the payload
          if (lang.exists("filesRefs", payload)) {
@@ -464,18 +464,18 @@ define(["alfresco/buttons/AlfButton",
             // Make sure the upload display widget is present
             this.showUploadsWidget().then(lang.hitch(this, function() {
 
-               // If a response is requested, set it up to fire after all uploads finish
+               // Validate the files
+               var filesToUpload = this.validateFiles(payload.files);
+
+               // If a response is requested, set it up to fire after all valid uploads finish
                if (payload.alfResponseTopic) {
-                  var filePromises = array.map(payload.files, function(file) {
+                  var filePromises = array.map(filesToUpload, function(file) {
                      return (file._dfd = new Deferred()).promise;
                   });
                   all(filePromises).then(lang.hitch(this, function() {
                      this.alfPublish(payload.alfResponseTopic, {}, false, false, payload.alfResponseScope);
                   }));
                }
-
-               // Validate the files
-               var filesToUpload = this.validateFiles(payload.files);
 
                // Update the total progress
                this.updateAggregateProgress();
@@ -526,7 +526,7 @@ define(["alfresco/buttons/AlfButton",
             this.uploadDisplayWidget.handleCompletedUpload(fileId, evt, fileInfo.request);
 
             // Execute post-upload actions
-            this.onUploadFinished();
+            this.onUploadFinished(fileId);
 
          } else {
             this.processUploadFailure(fileId, evt);
@@ -545,7 +545,7 @@ define(["alfresco/buttons/AlfButton",
          if (fileInfo) {
             fileInfo.state = this.state.FAILURE;
             this.uploadDisplayWidget.handleFailedUpload(fileId, evt, fileInfo.request);
-            this.onUploadFinished();
+            this.onUploadFinished(fileId);
          }
       },
 
