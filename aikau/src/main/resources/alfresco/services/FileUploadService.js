@@ -689,6 +689,18 @@ define(["alfresco/buttons/AlfButton",
       },
 
       /**
+       * Validate a single file, throwing an exception if it fails.
+       *
+       * @instance
+       * @param {object} file The file
+       */
+      validateFile: function alfresco_services_FileUploadService__validateFile(file) {
+         if (file.size === 0) {
+            throw new Error(this.message("upload.error.empty-file"));
+         }
+      },
+
+      /**
        * Validate the supplied collection of files, sending a notification of any invalid ones, and returning the valid ones.
        *
        * @instance
@@ -697,10 +709,11 @@ define(["alfresco/buttons/AlfButton",
        */
       validateFiles: function alfresco_services_FileUploadService__validateFiles(files) {
          return array.filter(files, function(file) {
-            if (file.size > 0) {
+            try {
+               this.validateFile(file);
                return true;
-            } else {
-               this.notifyOfInvalidFile(file, "0kb files cannot be uploaded");
+            } catch (e) {
+               this.notifyOfInvalidFile(file, e.message);
             }
          }, this);
       }
