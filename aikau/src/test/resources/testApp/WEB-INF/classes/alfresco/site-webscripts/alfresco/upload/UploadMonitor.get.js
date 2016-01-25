@@ -44,6 +44,7 @@ model.jsonModel = {
             label: "Single File Upload",
             publishTopic: "ALF_UPLOAD_REQUEST",
             publishPayload: {
+               alfResponseTopic: "UPLOAD_COMPLETE_OR_CANCELLED",
                files: [
                   {
                      size: 100,

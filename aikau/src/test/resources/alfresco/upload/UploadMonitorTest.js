@@ -106,6 +106,13 @@ define(["intern!object",
                .click();
          },
 
+         "Topic published after uploads finished": function() {
+            return browser.findByCssSelector("body")
+               .end()
+
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED");
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
