@@ -12,7 +12,7 @@ buildPageModel({
    ],
    examples: [
       {
-         title: "pdf.example..title",
+         title: "pdf.example.title",
          description: "pdf.example.description",
          model: [
             {
