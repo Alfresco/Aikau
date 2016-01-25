@@ -63,7 +63,6 @@ define(["intern!object",
          "Single file upload succeeds": function() {
             return browser.findById("SINGLE_UPLOAD_label")
                .click()
-               .sleep(1000)
                .end()
 
             .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
@@ -77,24 +76,13 @@ define(["intern!object",
 
          "Multiple file upload succeeds with one failure": function() {
             return browser.findById("MULTI_UPLOAD_label")
+               .clearLog()
                .click()
                .end()
 
             .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 10000)
 
             .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
-               .end()
-
-            .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items")
-
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item:nth-child(1)")
-               .end()
-
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item:nth-child(2)")
-               .end()
-
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item:nth-child(3)")
-               .end()
                .end()
 
             .findAllByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
@@ -105,13 +93,6 @@ define(["intern!object",
 
             .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
                .click();
-         },
-
-         "Topic published after uploads finished": function() {
-            return browser.findByCssSelector("body")
-               .end()
-
-            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED");
          },
 
          "Post Coverage Results": function() {
