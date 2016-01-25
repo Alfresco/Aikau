@@ -9,7 +9,7 @@ The example pages for the Sandpit can be found in the [/aikau-sandpit-applicatio
 ##### Create WebScript files
 Create the WebScript files in a suitable sub-folder for the widget type that you are creating the example for (i.e. and "alfresco/buttons/AlfButton" widget example should go in a "pages/buttons" folder). The four files you need to create are:
 
-###### Descriptor:
+###### Descriptor (example.get.desc.xml):
 ``` XML
 <webscript>
    <shortname>Example name</shortname>
@@ -19,12 +19,12 @@ Create the WebScript files in a suitable sub-folder for the widget type that you
 </webscript>
 ```
 
-###### Template:
+###### Template (example.get.html.ftl):
 ``` HTML
 <@processJsonModel/>
 ```
 
-###### Properties:
+###### Properties (example.get.properties):
 ``` JavaScript
 page.title=Example Page Title
 page.description=Example page description
@@ -32,7 +32,7 @@ example1.title=Title for individual example
 example1.description=Description of example
 ```
 
-###### Controller:
+###### Controller (example.get.js):
 ``` JavaScript
 <import resource="classpath:alfresco/site-webscripts/imports/sandpit.lib.js">
 
