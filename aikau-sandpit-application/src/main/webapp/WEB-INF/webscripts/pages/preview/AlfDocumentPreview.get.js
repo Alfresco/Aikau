@@ -1,8 +1,8 @@
 <import resource="classpath:alfresco/site-webscripts/imports/sandpit.lib.js">
 
 buildPageModel({
-   title: "alfresco/preview/AlfDocumentPreview",
-   description: "This widget allows you to preview the contents of a node.",
+   title: "page.title",
+   description: "page.description",
    jsdoc: "https://dev.alfresco.com/resource/docs/aikau-jsdoc/AlfDocumentPreview.html",
    services: ["alfresco/services/DocumentService"],
    mockXhrWidgets: [
@@ -12,8 +12,8 @@ buildPageModel({
    ],
    examples: [
       {
-         title: "PDF Preview",
-         description: "The nodeRef used here is matched to a PDF node.",
+         title: "pdf.example..title",
+         description: "pdf.example.description",
          model: [
             {
                name: "alfresco/documentlibrary/AlfDocument",
@@ -33,8 +33,8 @@ buildPageModel({
          ]
       },
       {
-         title: "Image Preview",
-         description: "Wrap the AlfDocumentPreview in an AlfDocument to retrieve the metadata for the node with just a nodeRef. The nodeRef used here is not representative of a real nodeRef but is matched via data mocking to fetch the metadata for an image. Try experimenting with the 'heightMode' configuration to adjust the size of the image.",
+         title: "image.example.title",
+         description: "image.example.description",
          model: [
             {
                name: "alfresco/documentlibrary/AlfDocument",
@@ -54,8 +54,8 @@ buildPageModel({
          ]
       },
       {
-         title: "Video Preview",
-         description: "The nodeRef used here is matched to a video node.",
+         title: "video.example.title",
+         description: "video.example.description",
          model: [
             {
                name: "alfresco/documentlibrary/AlfDocument",
@@ -72,8 +72,8 @@ buildPageModel({
          ]
       },
       {
-         title: "Audio Preview",
-         description: "The nodeRef used here is matched to a audio node.",
+         title: "audio.example.title",
+         description: "audio.example.description",
          model: [
             {
                name: "alfresco/documentlibrary/AlfDocument",
