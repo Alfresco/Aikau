@@ -28,7 +28,7 @@
  * @author Martin Doyle
  * @since 1.0.52
  */
-define(["alfresco/buttons/AlfButton", 
+define(["alfresco/buttons/AlfButton",
         "alfresco/core/CoreXhr", 
         "alfresco/core/ObjectTypeUtils", 
         "alfresco/core/topics", 
@@ -42,7 +42,8 @@ define(["alfresco/buttons/AlfButton",
         "dojo/on", 
         "dojo/promise/all", 
         "service/constants/Default"], 
-        function(AlfButton, CoreXhr, ObjectTypeUtils, topics, AlfDialog, _UploadHistoryMixin, BaseService, array, declare, lang, Deferred, on, all, AlfConstants) {
+        function(AlfButton, CoreXhr, ObjectTypeUtils, topics, AlfDialog, _UploadHistoryMixin, BaseService,
+                 array, declare, lang, Deferred, on, all, AlfConstants) {
 
    // Declare and return the class
    return declare([BaseService, CoreXhr, _UploadHistoryMixin], {
@@ -127,14 +128,15 @@ define(["alfresco/buttons/AlfButton",
 
       /**
        * This state-variable is used to track the current overall progress, and is equal to
-       * the number of queued uploads multiplied by 100. This is reset to zero every time
-       * all of the queued uploads complete.
+       * the number of "in progress" uploads. This is incremented by the number of files in
+       * an upload-request, and reset once all of the files have either been uploaded or
+       * failed to upload.
        *
        * @instance
        * @type {number}
        * @default
        */
-      totalProgressPercent: 0,
+      totalNewUploads: 0,
 
       /**
        * The widget that displays the uploads' progress.
@@ -303,9 +305,6 @@ define(["alfresco/buttons/AlfButton",
 
             // Update the display widget with the details of the file that will be uploaded
             this.uploadDisplayWidget.addInProgressFile(fileId, nextFile);
-
-            // Update the total progress percentage
-            this.totalProgressPercent += 100;
          }
 
          // Start uploads
@@ -477,11 +476,14 @@ define(["alfresco/buttons/AlfButton",
                   }));
                }
 
-               // Update the total progress
-               this.updateAggregateProgress();
+               // Update the total number of in-progress files
+               this.totalNewUploads += filesToUpload.length;
 
                // Start the uploads
                this.createFileUploadRequests(filesToUpload, payload.targetData);
+
+               // Update the total progress
+               this.updateAggregateProgress();
             }));
 
          } else {
@@ -650,32 +652,29 @@ define(["alfresco/buttons/AlfButton",
 
          // Setup variables
          var fileIds = Object.keys(this.fileStore),
-            stillUploading = false,
-            cumulativeProgress = 0;
+            totalPercent = this.totalNewUploads * 100,
+            cumulativeProgress = 0,
+            inProgressFiles = 0;
 
          // Run through all uploads, calculating total and current progress
-         // NOTE: We don't include failed/completed uploads
          array.forEach(fileIds, function(fileId) {
             var fileInfo = this.fileStore[fileId];
-            switch (fileInfo.state) {
-               case this.state.ADDED:
-               case this.state.UPLOADING:
-                  cumulativeProgress += fileInfo.progress;
-                  stillUploading = true;
-                  break;
-               default:
-                  cumulativeProgress += 100;
+            if (fileInfo.state === this.state.ADDED || fileInfo.state === this.state.UPLOADING) {
+               cumulativeProgress += fileInfo.progress;
+               inProgressFiles++;
             }
          }, this);
 
+         // Add completed files to the cumulative total
+         cumulativeProgress += (this.totalNewUploads - inProgressFiles) * 100;
+
          // Calculate total percentage and send to widget
-         var currentProgress = (cumulativeProgress / this.totalProgressPercent * 100) % 100, // Using modulus to cope with multiple batches
-            currentProgressPercent = stillUploading ? Math.round(currentProgress) : 100;
+         var currentProgressPercent = inProgressFiles ? Math.floor(cumulativeProgress / totalPercent * 100) : 100;
          this.uploadDisplayWidget.updateAggregateProgress(currentProgressPercent);
 
-         // If no longer have uploads pending, reset the total progress counter
-         if (!stillUploading) {
-            this.totalProgressPercent = 0;
+         // If no longer have uploads pending, update the total-completed variable
+         if (currentProgressPercent === 100) {
+            this.totalNewUploads = 0;
          }
 
          // Update the container title with the aggregate progress if possible
