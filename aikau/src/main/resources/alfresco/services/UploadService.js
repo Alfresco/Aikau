@@ -30,6 +30,7 @@ define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
         "alfresco/core/topics",
+        "alfresco/services/_UploadHistoryServiceMixin", 
         "dojo/json",
         "dojo/_base/lang",
         "dojo/_base/array",
@@ -38,9 +39,10 @@ define(["dojo/_base/declare",
         "alfresco/buttons/AlfButton",
         "service/constants/Default",
         "alfresco/core/ObjectTypeUtils"], 
-        function(declare, BaseService, CoreXhr, topics, dojoJson, lang, array, on, AlfDialog, AlfButton, AlfConstants, ObjectTypeUtils) {
+        function(declare, BaseService, CoreXhr, topics, _UploadHistoryServiceMixin, dojoJson, lang, array,
+                 on, AlfDialog, AlfButton, AlfConstants, ObjectTypeUtils) {
    
-   return declare([BaseService, CoreXhr], {
+   return declare([BaseService, CoreXhr, _UploadHistoryServiceMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -163,41 +165,6 @@ define(["dojo/_base/declare",
       progressDialogTitleKey: "progress-dialog.title",
 
       /**
-       * This will be populated with the NodeRefs of the last few locations that the user has previously
-       * uploaded to. The number of NodeRefs that are stored are determined by the 
-       * [uploadHistorySize]{@link module:alfresco/services/UploadService#uploadHistorySize}.
-       * 
-       * @instance
-       * @type {string[]}
-       * @default
-       * @since 1.0.34
-       */
-      uploadHistory: null,
-
-      /**
-       * The preference name to use for storing and retrieving upload location history.
-       * In order for this preference to be used it will also be necessary to ensure that the 
-       * [PreferenceService]{@link module:alfresco/services/PreferenceService} is included on the page.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       * @since 1.0.34
-       */
-      uploadHistoryPreferenceName: "org.alfresco.share.upload.destination.history",
-
-      /**
-       * The number of nodes previously uploaded to that should be stored in the user preferences as their 
-       * upload history. This defaults to 3 but can be overridden through configuration if required.
-       *
-       * @instance
-       * @type {number}
-       * @default
-       * @since 1.0.34
-       */
-      uploadHistorySize: 3,
-
-      /**
        * @instance
        * @type {string}
        * @default
@@ -231,19 +198,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       * @instance
-       * @param {string} value The preference value containing the nodeRefs last uploaded to
-       * @since 1.0.34
-       */
-      setUploadHistory: function alfresco_services_UploadService__setUploadHistory(value) {
-         if (value)
-         {
-            this.uploadHistory = value.split(",");
-         }
-      },
-
-      /**
        * @instance
        * @since 1.0.32
        * @listens module:alfresco/core/topics#UPLOAD_COMPLETION_ACKNOWLEDGEMENT
@@ -254,14 +208,6 @@ define(["dojo/_base/declare",
          this.reset();
          this.alfSubscribe(this.uploadTopic, lang.hitch(this, this.onUploadRequest));
 
-         // Set up the upload history array from the user preferences
-         this.uploadHistory = [];
-         this.alfPublish(topics.GET_PREFERENCE, {
-            preference: this.uploadHistoryPreferenceName,
-            callback: this.setUploadHistory,
-            callbackScope: this
-         });
-         
          // Set up template?
          if (this.progressDialog === null || this.progressDialog === undefined)
          {
@@ -470,50 +416,6 @@ define(["dojo/_base/declare",
          // Start uploads
          this.spawnFileUploads();
          this.progressDialog.show();
-      },
-
-      /**
-       * This updates the [upload history]{@link module:alfresco/services/UploadService#uploadHistory} with the
-       * supplied NodeRef. If the NodeRef is already in the history then it will not be added again. If the history
-       * already contains the [maximum number of entries]{@link module:alfresco/services/UploadService#uploadHistorySize}
-       * then the earliest used NodeRef in the history will be removed and the latest added.
-       *
-       * @instance
-       * @param {string} nodeRef The NodeRef to add to the upload history
-       * @since 1.0.34
-       */
-      updateUploadHistory: function alfresco_services_UploadService__updateUploadHistory(nodeRef) {
-         // Iterate over the previous upload history and if the NodeRef being uploaded to already
-         // exists in the history then move it to the first element.
-         var alreadyInHistory = false;
-         var processedUploadHistory = [];
-         array.forEach(this.uploadHistory, function(d) {
-            if (d === nodeRef)
-            {
-               processedUploadHistory.unshift(d);
-               alreadyInHistory = true;
-            }
-            else
-            {
-               processedUploadHistory.push(d);
-            }
-         });
-         this.uploadHistory = processedUploadHistory;
-
-         if (!alreadyInHistory)
-         {
-            if (this.uploadHistory.length === this.uploadHistorySize)
-            {
-               this.uploadHistory.pop();
-            }
-            this.uploadHistory.unshift(nodeRef);
-         }
-         // Always update the latest history, even if no new NodeRef has been added then the previous
-         // NodeRefs may have been re-ordered...
-         this.alfPublish(topics.SET_PREFERENCE, {
-            preference: this.uploadHistoryPreferenceName,
-            value: this.uploadHistory.join(",")
-         });
       },
 
       /**

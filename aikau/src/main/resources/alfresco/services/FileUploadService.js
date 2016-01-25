@@ -24,7 +24,7 @@
  * @module alfresco/services/FileUploadService
  * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
- * @mixes module:alfresco/services/_UploadHistoryMixin
+ * @mixes module:alfresco/services/_UploadHistoryServiceMixin
  * @author Martin Doyle
  * @since 1.0.52
  */
@@ -33,7 +33,7 @@ define(["alfresco/buttons/AlfButton",
         "alfresco/core/ObjectTypeUtils", 
         "alfresco/core/topics", 
         "alfresco/dialogs/AlfDialog", 
-        "alfresco/services/_UploadHistoryMixin", 
+        "alfresco/services/_UploadHistoryServiceMixin", 
         "alfresco/services/BaseService", 
         "dojo/_base/array", 
         "dojo/_base/declare", 
@@ -42,11 +42,11 @@ define(["alfresco/buttons/AlfButton",
         "dojo/on", 
         "dojo/promise/all", 
         "service/constants/Default"], 
-        function(AlfButton, CoreXhr, ObjectTypeUtils, topics, AlfDialog, _UploadHistoryMixin, BaseService,
+        function(AlfButton, CoreXhr, ObjectTypeUtils, topics, AlfDialog, _UploadHistoryServiceMixin, BaseService,
                  array, declare, lang, Deferred, on, all, AlfConstants) {
 
    // Declare and return the class
-   return declare([BaseService, CoreXhr, _UploadHistoryMixin], {
+   return declare([BaseService, CoreXhr, _UploadHistoryServiceMixin], {
 
       /**
        * The File object (referenced in other JSDoc comments)
@@ -207,6 +207,28 @@ define(["alfresco/buttons/AlfButton",
       }],
 
       /**
+       * If a service needs to act upon its post-mixed-in state before registering subscriptions then
+       * this is where it should be done. It is comparable to postMixInProperties in a widget in the
+       * class lifecycle.
+       *
+       * @instance
+       * @override
+       */
+      initService: function alfresco_services_FileUploadService__initService() {
+         this.inherited(arguments);
+         var widgets = this.widgetsForUploadDisplay;
+         if (widgets && widgets.constructor === Array && widgets.length === 1) {
+            lang.mixin(widgets[0], {
+               assignTo: "uploadDisplayWidget",
+               assignToScope: this
+            });
+         } else {
+            this.alfLog("error", "Must define a widget for displaying upload progress in property 'widgetsForUploadDisplay'");
+         }
+         this.reset();
+      },
+
+      /**
        * Check to see whether there are any waiting uploads that can be started (up to the
        * [maxSimultaneousUploads]{@link module:alfresco/services/FileUploadService#maxSimultaneousUploads}).
        *
@@ -239,7 +261,7 @@ define(["alfresco/buttons/AlfButton",
          if (destination.constructor === Array) {
             destination = destination[0];
          }
-         this.updateHistory(destination);
+         this.updateUploadHistory(destination);
 
          // Create object using information defined in payload
          return {
@@ -309,27 +331,6 @@ define(["alfresco/buttons/AlfButton",
 
          // Start uploads
          this.checkForWaitingUploads();
-      },
-
-      /**
-       * If a service needs to act upon its post-mixed-in state before registering subscriptions then
-       * this is where it should be done. It is comparable to postMixInProperties in a widget in the
-       * class lifecycle.
-       *
-       * @instance
-       * @override
-       */
-      initService: function alfresco_services_FileUploadService__initService() {
-         var widgets = this.widgetsForUploadDisplay;
-         if (widgets && widgets.constructor === Array && widgets.length === 1) {
-            lang.mixin(widgets[0], {
-               assignTo: "uploadDisplayWidget",
-               assignToScope: this
-            });
-         } else {
-            this.alfLog("error", "Must define a widget for displaying upload progress in property 'widgetsForUploadDisplay'");
-         }
-         this.reset();
       },
 
       /**
