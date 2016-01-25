@@ -1,6 +1,6 @@
 /*globals Alfresco*/
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -179,6 +179,19 @@ define(["dojo/_base/declare",
          // TODO: Need to check this works with old Share strings...
          msg = lang.replace(msg, tokens);
          return msg;
+      },
+
+      /**
+       * This function can be called to decode strings that have previously been encoded using 
+       * [encodeHTML]{@link module:alfresco/core/Core#encodeHTML}.
+       *
+       * @callable
+       * @instance
+       * @returns The decoded input string
+       * @since 1.0.50
+       */
+      decodeHTML: function alfresco_core_Core__encodeHTML(textIn) {
+         return htmlEntities.decode(textIn);
       },
 
       /**

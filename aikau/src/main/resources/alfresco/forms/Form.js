@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -399,6 +399,10 @@ define(["dojo/_base/declare",
                if (widget && widget.config)
                {
                   widget.config.showValidationErrorsImmediately = this.showValidationErrorsImmediately;
+                  if (widget.config.pubSubScope)
+                  {
+                     this.alfLog("warn", "It is not recommended to set a pubSubScope attribute on a form control nested within a form, the value of the form control will not be included in the published form value", this, widget);
+                  }
                }
             }, this);
 

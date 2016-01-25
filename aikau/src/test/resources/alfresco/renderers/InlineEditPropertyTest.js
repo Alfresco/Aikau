@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -22,12 +22,10 @@
  * @author Martin Doyle
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-   function(registerSuite, expect, assert, require, TestCommon, keys) {
+   function(registerSuite, assert, TestCommon, keys) {
 
 registerSuite(function(){
    var browser;
@@ -43,6 +41,10 @@ registerSuite(function(){
 
       beforeEach: function() {
          browser.end();
+      },
+
+      "Label is displayed": function() {
+         return browser.findDisplayedByCssSelector("#INLINE_EDIT_ITEM_0 .label");
       },
 
       "Property is rendered correctly": function() {

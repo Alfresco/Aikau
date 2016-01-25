@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,7 +23,7 @@
  * @author Richard Smith
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/_base/lang",
         "dojo/io-query",
         "dojo/text!./responseTemplates/SearchService/alternative.json",

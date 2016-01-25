@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drop-down buttons</shortname>
+  <description>Demonstrates various configurations of drop-down buttons.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DropDownButtons</url>
+</webscript>

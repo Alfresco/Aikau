@@ -1,0 +1,149 @@
+{
+   "metadata": {
+      "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http://dave-Latitude-E6530:8080/alfresco/aos"
+         }
+      },
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "http:\/\/localhost:8081\/share",
+      "serverURL": "http:\/\/localhost:8080"
+   },
+
+   "item": {
+      "thumbnailDefinitions": ["avatar32", "doclib", "webpreview", "avatar", "medium", "imgpreview"],
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:thumbnailModification", "sys:referenceable", "cm:titled", "cm:author", "rn:renditioned", "cm:taggable", "sys:localized", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 07 13:26:31 GMT 2016",
+               "iso8601": "2016-01-07T13:26:31.862Z"
+            },
+            "cm:taggable": null,
+            "cm:content": null,
+            "sys:node-uuid": null,
+            "cm:name": "PDF.pdf",
+            "cm:lastThumbnailModification": ["imgpreview:1452172572968", "doclib:1452172577065"],
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:autoVersion": "true",
+            "sys:node-dbid": null,
+            "cm:initialVersion": "true",
+            "cm:description": "A PDF file created for test purposes",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "cm:created": {
+               "value": "Thu Jan 07 13:16:11 GMT 2016",
+               "iso8601": "2016-01-07T13:16:11.897Z"
+            },
+            "cm:versionLabel": "1.0",
+            "cm:title": "A PDF file",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 29009,
+         "mimetypeDisplayName": "Adobe PDF Document",
+         "mimetype": "application\/pdf",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/72df08f7-f13d-4fda-93f9-8e8ce85998c5",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/72df08f7-f13d-4fda-93f9-8e8ce85998c5\/PDF.pdf"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["app:uifacets", "cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;DIRECT"],
+            "inherited": false,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/f3b17e12-740a-4395-8bb2-f637c69d0246",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 07 13:20:56 GMT 2016",
+               "iso8601": "2016-01-07T13:20:56.371Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "Folder to store shared stuff ",
+            "cm:creator": {
+               "lastName": "User",
+               "userName": "System",
+               "displayName": "System User",
+               "firstName": "System"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Mon Sep 14 10:52:47 BST 2015",
+               "iso8601": "2015-09-14T09:52:47.017Z"
+            },
+            "cm:name": "Shared",
+            "cm:title": "Shared Folder",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "app:icon": "space-icon-default"
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Shared\/PDF.pdf",
+
+      "isFavourite": false,
+
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+         "path": "\/Shared",
+         "repoPath": "\/Shared",
+         "file": "PDF.pdf",
+         "parent": {}
+      }
+   }
+}

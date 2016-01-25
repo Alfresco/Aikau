@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Render Filter (client properties)</shortname>
+  <description>This WebScript demonstrates how it is possible to control widget rendering based on client properties.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ClientPropRenderFilter</url>
+</webscript>

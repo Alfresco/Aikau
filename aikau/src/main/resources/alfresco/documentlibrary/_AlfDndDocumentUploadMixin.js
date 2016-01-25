@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -414,6 +414,7 @@ define(["dojo/_base/declare",
        * @since 1.0.41
        */
       removeDndUploadHandlers: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeDndUploadHandlers() {
+         this.dndUploadEnabled = false;
          if (this.dndUploadEventHandlers)
          {
             array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });

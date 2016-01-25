@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,8 +29,9 @@
  * @since 1.0.50
  */
 define(["dojo/_base/declare",
-        "alfresco/services/_NavigationServiceTopicMixin"], 
-        function(declare, _NavigationServiceTopicMixin) {
+        "alfresco/services/_NavigationServiceTopicMixin",
+        "dojo/has"], 
+        function(declare, _NavigationServiceTopicMixin, has) {
    
    return declare([_NavigationServiceTopicMixin], {
 
@@ -71,7 +72,9 @@ define(["dojo/_base/declare",
       processMiddleOrCtrlClick: function alfresco_navigation_LinkClickMixin__processMiddleOrCtrlClick(evt, publishTopic, publishPayload) {
          if (this.newTabOnMiddleOrCtrlClick && publishTopic === this.navigateToPageTopic) 
          {
-            if ((evt.which === 2 || (evt.which === 1 && evt.ctrlKey)) && publishPayload.target !== this.newTarget)
+            if ((evt.which === 2 || 
+                (evt.which === 1 && evt.ctrlKey) ||
+                (evt.which === 1 && has("mac") && evt.metaKey)) && publishPayload.target !== this.newTarget)
             {
                publishPayload.target = this.newTarget;
             }

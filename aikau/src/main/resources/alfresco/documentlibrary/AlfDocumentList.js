@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -113,6 +113,31 @@ define(["dojo/_base/declare",
        * @default
        */
       updateInstanceValues: true,
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#copyViewData} to set the
+       * drag-and-drop upload capabilities based on the 
+       * [currentFilter]{@link module:alfresco/documentlibrary/AlfDocumentList#currentFilter} value.
+       * If the filter has a path value then
+       * [addUploadDragAndDrop]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#addUploadDragAndDrop}
+       * is called, otherwise 
+       * [removeUploadDragAndDrop]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#removeUploadDragAndDrop}
+       * is called.
+       * 
+       * @instance
+       * @since 1.0.51
+       */
+      copyViewData: function alfresco_lists_AlfList__copyViewData(/*jshint unused:false*/oldView, newView) {
+         this.inherited(arguments);
+         if (this.currentFilter && this.currentFilter.path)
+         {
+            newView.addUploadDragAndDrop(newView.dragAndDropNode);
+         }
+         else
+         {
+            newView.removeUploadDragAndDrop(newView.dragAndDropNode);
+         }
+      },
 
       /**
        * Extends the [inherited function]{@link module:alfresco/lists/AlfSortablePaginatedListt#postMixInProperties}

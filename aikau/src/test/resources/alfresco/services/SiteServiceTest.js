@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -76,6 +76,24 @@ define(["alfresco/TestCommon",
                .then(function(payload){
                   assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not generate URL with correct user home page");
                });
+         },
+
+         "Become site manager (and reload data)": function() {
+            return browser.findById("BECOME_SITE_MANAGER_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_DOCLIST_RELOAD_DATA");
+         },
+
+         "Become site manager (and reload page)": function() {
+            return browser.findById("BECOME_SITE_MANAGER_PAGE_RELOAD_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RELOAD_PAGE");
          },
 
          "Post Coverage Results": function() {

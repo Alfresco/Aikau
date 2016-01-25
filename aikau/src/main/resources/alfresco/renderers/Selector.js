@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
-       * @listens module:alfresco/core/topics~event:DOCUMENT_SELECTION_UPDATE
+       * @listens module:alfresco/core/topics#DOCUMENT_SELECTION_UPDATE
        */
       postMixInProperties: function alfresco_renderers_Selector__postMixInProperties() {
          // Set up a subscription to handle file selection events, these will be along the lines of

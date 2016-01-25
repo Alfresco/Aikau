@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -53,7 +53,7 @@ define(["dojo/_base/declare"],
        *
        * @instance
        * @param {number} fileSize File size in bytes
-       * @param {int} decimalPlaces number of decimal places
+       * @param {int} [decimalPlaces=0] number of decimal places
        * @return {string} The file size in a readable form, i.e 1.2mb
        */
       formatFileSize: function alfresco_core_FileSizeMixin__formatFileSize(fileSize, decimalPlaces) {

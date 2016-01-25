@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -48,7 +48,7 @@ define(["alfresco/core/ObjectTypeUtils",
       "dojo/on",
       "dojo/text!./templates/DebugLog.html"
    ],
-   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template, ZeroClipboard) {
+   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template) {
       /*jshint devel:true*/
 
       return declare([SubscriptionLog], {
@@ -189,8 +189,7 @@ define(["alfresco/core/ObjectTypeUtils",
                source,
                entryNode,
                infoNode,
-               dataNode,
-               copyToClipboardNode;
+               dataNode;
 
             // Create the new entry
             entryNode = domConstruct.create("li", {
@@ -270,11 +269,13 @@ define(["alfresco/core/ObjectTypeUtils",
             var filters = {
                   include: this.includeFilter.value,
                   exclude: this.excludeFilter.value,
-                  includeRegex: this.includeFilterRegex.checked,
-                  excludeRegex: this.excludeFilterRegex.checked
+                  regex: this.filterUsesRegex.checked,
+                  includePayload: this.includePayload.checked
                },
-               newInclude = (filters.include && filters.includeRegex ? "REGEXP_" : "") + filters.include,
-               newExclude = (filters.exclude && filters.excludeRegex ? "REGEXP_" : "") + filters.exclude,
+               prefix = filters.regex ? "REGEXP_" : "",
+               suffix = filters.includePayload ? "_INCLUDE-PAYLOAD" : "",
+               newInclude = prefix + filters.include + suffix,
+               newExclude = prefix + filters.exclude + suffix,
                filtersChanged = newInclude !== this._lastIncludeFilter || newExclude !== this._lastExcludeFilter;
             if (filtersChanged) {
                this._lastIncludeFilter = newInclude;
@@ -308,12 +309,15 @@ define(["alfresco/core/ObjectTypeUtils",
             // Clean up the data, to ensure we have suitable data (and not a string containing two quotes!)
             data = (data === "undefined") ? undefined : JSON.parse(data);
             data = data ? JSON.stringify(data) : "";
-            testValue = topic + data;
+            testValue = topic;
+            if (filters.includePayload) {
+               testValue += data;
+            }
 
             // Determine whether to hide this node
             if (filters.include || filters.exclude) {
-               hiddenByInclude = filters.include && !this._matchesFilter(testValue, filters.include, filters.includeRegex);
-               hiddenByExclude = filters.exclude && this._matchesFilter(testValue, filters.exclude, filters.excludeRegex);
+               hiddenByInclude = filters.include && !this._matchesFilter(testValue, "include", filters);
+               hiddenByExclude = filters.exclude && this._matchesFilter(testValue, "exclude", filters);
                hide = hiddenByInclude || hiddenByExclude;
             }
 
@@ -325,19 +329,11 @@ define(["alfresco/core/ObjectTypeUtils",
           * Clear the exclude filter
           *
           * @instance
+          * @since 1.0.51
           */
-         _clearExcludeFilter: function alfresco_logging_DebugLog___clearExcludeFilter() {
-            this.excludeFilter.value = "";
-            this._applyFilters();
-         },
-
-         /**
-          * Clear the include filter
-          *
-          * @instance
-          */
-         _clearIncludeFilter: function alfresco_logging_DebugLog___clearIncludeFilter() {
+         _clearFilters: function alfresco_logging_DebugLog___clearFilters() {
             this.includeFilter.value = "";
+            this.excludeFilter.value = "";
             this._applyFilters();
          },
 
@@ -347,19 +343,21 @@ define(["alfresco/core/ObjectTypeUtils",
           * @instance
           * @param {string} testString The text to match against
           * @param {string} filter The filter to apply
-          * @param {boolean} useRegex Whether to use regular expressions
           * @returns {boolean} Whether the filter matches the test string
           * @since 1.0.50
           */
-         _matchesFilter: function alfresco_logging_DebugLog___matchesFilter(testString, filter, useRegex) {
+         _matchesFilter: function alfresco_logging_DebugLog___matchesFilter(testString, filterType, filters) {
+            var filter = filters[filterType];
             if (!filter) {
                return false;
             }
-            var filterToUse = useRegex ? new RegExp(filter, "i") : this._splitFilters(filter),
-               matches = false;
-            if (useRegex) {
+            var matches = false,
+               filterToUse;
+            if (filters.regex) {
+               filterToUse = new RegExp(filter, "i");
                matches = filterToUse.test(testString);
             } else {
+               filterToUse = this._splitFilters(filter);
                matches = filterToUse.some(function(filterTerm) {
                   return testString.toLowerCase().indexOf(filterTerm.toLowerCase()) !== -1;
                });

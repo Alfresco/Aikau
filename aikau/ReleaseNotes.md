@@ -1,4 +1,4 @@
-Aikau 1.0.49 Release Notes
+Aikau 1.0.51 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,28 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.51:
+* [AKU-775](https://issues.alfresco.com/jira/browse/AKU-775)       - Improve auto-resizing TinyMCE improvements
+* [AKU-777](https://issues.alfresco.com/jira/browse/AKU-777)       - Fixed MultiSelect options list expansion
+* [AKU-778](https://issues.alfresco.com/jira/browse/AKU-778)       - Fixed MultiSelect options filtering
+* [AKU-779](https://issues.alfresco.com/jira/browse/AKU-779)       - Ensure non-focused filmstrip view previews are paused
+* [AKU-780](https://issues.alfresco.com/jira/browse/AKU-780)       - Ensure videos in filmstrip view can be replayed
+* [AKU-781](https://issues.alfresco.com/jira/browse/AKU-781)       - Support client-side propety evaluation in renderFilter
+* [AKU-782](https://issues.alfresco.com/jira/browse/AKU-782)       - Prevent selection of facet filters when search in progress
+* [AKU-784](https://issues.alfresco.com/jira/browse/AKU-784)       - Fix drag-and-drop file upload
+* [AKU-786](https://issues.alfresco.com/jira/browse/AKU-786)       - Allow thumbnail preview of cm:content sub-type
+
+1.0.50:
+* [AKU-764](https://issues.alfresco.com/jira/browse/AKU-764)       - Added warnings for scoped form controls
+* [AKU-766](https://issues.alfresco.com/jira/browse/AKU-766)       - Resolve Firefox iframe rendering issues
+* [AKU-768](https://issues.alfresco.com/jira/browse/AKU-768)       - Added alfresco/upload/UploadMonitor widget
+* [AKU-769](https://issues.alfresco.com/jira/browse/AKU-769)       - Add mouse middle/control click support for search links
+* [AKU-770](https://issues.alfresco.com/jira/browse/AKU-770)       - PathTree refresh on root node additions
+* [AKU-771](https://issues.alfresco.com/jira/browse/AKU-771)       - InlineEditProperty edit value encoding correction
+* [AKU-774](https://issues.alfresco.com/jira/browse/AKU-774)       - Fixed DebugLog filtering issue
+* [AKU-775](https://issues.alfresco.com/jira/browse/AKU-775)       - Ensure TinyMCE editor resizes correctly on first use
+* [AKU-776](https://issues.alfresco.com/jira/browse/AKU-776)       - Ensure "No Data" message is not displayed in lists when loading data
+
 1.0.49:
 * [AKU-750](https://issues.alfresco.com/jira/browse/AKU-750)       - Support for form submission from textbox on enter key
 * [AKU-751](https://issues.alfresco.com/jira/browse/AKU-751)       - Support to configure forms to focus first field

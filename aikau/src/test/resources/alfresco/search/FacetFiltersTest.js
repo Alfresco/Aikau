@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,6 +29,60 @@ define(["intern!object",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, TestCommon, keys) {
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "FacetFilters Tests (Filter blocking)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (Filter blocking)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Simulate search request": function() {
+            return browser.findById("DO_FACET_BUTTON_1_label")
+               .click()
+            .end()
+
+            .findById("SIM_SEARCH_REQUEST_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .findByCssSelector("#FACET1 .alfresco-search-FacetFilter:first-child .details .filterLabel")
+               .click()
+            .end()
+
+            .getAllPublishes("ALF_APPLY_FACET_FILTER")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Filter click should not be applied");
+            });
+         },
+
+         "Simulate search results": function() {
+            return browser.findById("SIM_SEARCH_RESULTS_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .findByCssSelector("#FACET1 .alfresco-search-FacetFilter:first-child .details .filterLabel")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_APPLY_FACET_FILTER", "Filter click not applied");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
 
    registerSuite(function(){
       var browser;
@@ -228,7 +282,7 @@ define(["intern!object",
 
             .getLastPublish("ALF_REMOVE_FACET_FILTER");
          },
-
+        
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

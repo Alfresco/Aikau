@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -111,10 +111,7 @@ registerSuite(function(){
       },
 
       "Test non-legacy action version": function() {
-         return browser.findByCssSelector("#ACTIONS_ITEM_1_MENU_text")
-            .click()
-         .end()
-         .findAllByCssSelector("#ACTIONS_ITEM_1_DOWNLOAD_AS_ZIP")
+         return browser.findAllByCssSelector("#ACTIONS_ITEM_1_DOWNLOAD_AS_ZIP")
             .click()
          .end()
          .findAllByCssSelector("#ARCHIVING_DIALOG.dialogDisplayed")

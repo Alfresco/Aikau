@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,19 +18,20 @@
  */
 
 /**
- * This module is currently a BETA
+ * This plugin will render the HTML5 video element to preview the content of a video node.
  *
  * @module alfresco/preview/Video
- * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
+ * @extends module:alfresco/preview/AVPlugin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/preview/AlfDocumentPreviewPlugin", 
+        "alfresco/preview/AVPlugin", 
         "dojo/_base/lang",
+        "dojo/_base/array",
         "dojo/has"], 
-        function(declare, AlfDocumentPreviewPlugin, lang, has) {
+        function(declare, AVPlugin, lang, array, has) {
    
-   return declare([AlfDocumentPreviewPlugin], {
+   return declare([AVPlugin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -98,11 +99,11 @@ define(["dojo/_base/declare",
          this._setPreviewerElementHeight();
 
          var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
-            mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
-         var str = '';
-         str += '<video controls alt="' + this.previewManager.name  + '" title="' + this.previewManager.name  + '">';
-         str += '   <source src="' + src + '"  type=\'' + mimeType + '\'>';
-         str += '</video>';
+             mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
+         var str = "";
+         str += "<video controls alt=\"" + this.previewManager.name  + "\" title=\"" + this.previewManager.name  + "\">";
+         str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
+         str += "</video>";
          return str;
       }
    });

@@ -1,10 +1,19 @@
-.@{alfresco} .alf-menu-arrow {
-   margin-left: 3px;
-   width: 20px;
-   height: 20px;
-   padding-bottom: 2px;
-}
+.@{alfresco} {
+   .alfresco-menus-AlfMenuBarPopup__text-wrapper {
+      display: inline-block;
+      max-width: 130px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+   }
 
+   .alfresco-menus-AlfMenuBarPopup__arrow {
+      margin-left: 3px;
+      width: 20px;
+      padding-bottom: 2px;
+      vertical-align: super;
+   }
+}
 
 /* This overrides the default Dojo box shadow for popups. Our box shadow is defined elsewhere */
 .@{alfresco} div.dijitPopup.Popup {

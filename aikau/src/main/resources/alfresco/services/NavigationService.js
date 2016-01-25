@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -62,9 +62,9 @@ define(["dojo/_base/declare",
        * @listens reloadPageTopic
        * @listens postToPageTopic
        * @since 1.0.32
-       * @listens module:alfresco/core/topics~event:NAVIGATE_TO_PAGE
-       * @listens module:alfresco/core/topics~event:RELOAD_PAGE
-       * @listens module:alfresco/core/topics~event:POST_TO_PAGE
+       * @listens module:alfresco/core/topics#NAVIGATE_TO_PAGE
+       * @listens module:alfresco/core/topics#RELOAD_PAGE
+       * @listens module:alfresco/core/topics#POST_TO_PAGE
        */
       registerSubscriptions: function alfresco_services_NavigationService__registerSubscriptions() {
          this.alfSubscribe(this.navigateToPageTopic, lang.hitch(this, this.navigateToPage));

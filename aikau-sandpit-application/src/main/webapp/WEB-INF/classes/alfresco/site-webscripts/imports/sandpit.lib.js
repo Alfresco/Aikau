@@ -91,6 +91,15 @@ function outputExamples(examples) {
 function buildPageModel(data) {
    if (data.title && data.description && data.examples)
    {
+      // This defines a model fragment that will be used if explicit MockXhr widgets
+      // are not provided. It is necessary for an empty MockXhr widget instance to 
+      // be provided to ensure that the WaitForMockXhrService processes its child widgets
+      var defaultMockXhrWidgets = [
+         {
+            name: "alfresco/testing/MockXhr"
+         }
+      ];
+
       model.jsonModel = {
          services: [
             {
@@ -106,8 +115,9 @@ function buildPageModel(data) {
             },
             "alfresco/services/DialogService",
             "alfresco/services/PageService",
-            "alfresco/services/OptionsService"
-         ],
+            "alfresco/services/OptionsService",
+            "alfresco/services/NavigationService"
+         ].concat(data.services || []),
          widgets: [
             {
                name: "alfresco/layout/StripedContent",
@@ -136,6 +146,22 @@ function buildPageModel(data) {
                                     label: "Aikau Sandpit - " + data.title,
                                     setBrowserTitle: "Aikau Sandpit"
                                  }
+                              },
+                              {
+                                 name: "alfresco/buttons/AlfButton",
+                                 align: "right",
+                                 config:
+                                 {
+                                    label: "Back to Examples List",
+                                    additionalCssClasses: "primary-call-to-action",
+                                    publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                                    publishPayload: {
+                                       url: "na/ws/home"
+                                    },
+                                    style: {
+                                       marginTop: "19px"
+                                    }
+                                 }
                               }
                            ]
                         }
@@ -161,14 +187,22 @@ function buildPageModel(data) {
                            widgets: [
                               {
                                  title: "Examples",
-                                 name: "alfresco/layout/VerticalWidgets",
+                                 name: "alfresco/testing/WaitForMockXhrService",
                                  config: {
                                     widgets: outputExamples(data.examples)
                                  }
                               },
                               {
-                                 title: "Logging",
+                                 title: "Pub/Sub Logging",
                                  name: "alfresco/logging/DebugLog"
+                              },
+                              {
+                                 title: "Mock XHR Logging",
+                                 name: "alfresco/layout/FixedHeaderFooter",
+                                 delayProcessing: false,
+                                 config: {
+                                    widgets: data.mockXhrWidgets || defaultMockXhrWidgets
+                                 }
                               },
                               {
                                  title: "JSDoc",

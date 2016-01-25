@@ -17,7 +17,7 @@ model.jsonModel = {
       // NOTE: The WaitForMockXhrService is commented out because binary data is not being used currently
       //       there is an outstanding issue with host addresses that needs to be resolved so that both
       //       local and VM tests are consistent.
-      //    name: "aikauTesting/WaitForMockXhrService",
+      //    name: "alfresco/testing/WaitForMockXhrService",
       //    config: {
       //       widgets: [
                // {

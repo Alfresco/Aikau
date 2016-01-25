@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -26,7 +26,7 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/io-query",
-        "aikauTesting/MockXhr"], 
+        "alfresco/testing/MockXhr"], 
         function(declare, lang, array, ioQuery, MockXhr) {
    
    return declare([MockXhr], {
@@ -51,7 +51,7 @@ define(["dojo/_base/declare",
                                     lang.hitch(this, this.getTags));
             this.server.respondWith("POST",
                                     /.*\/aikau\/proxy\/alfresco\/api\/node\/.*\/formprocessor/,
-                                    "OK");
+                                    "{}");
          }
          catch(e)
          {

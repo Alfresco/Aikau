@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -57,6 +57,14 @@ define(["intern!object",
                assert.lengthOf(payloads, 0, "Search request made unexpectedly");
             });
          },
+
+         "No data message is displayed": function() {
+            return browser.findByCssSelector(".alfresco-lists-AlfList .no-data")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed, "The no data message should not be hidden until a search request is made");
+               });
+         },
          
          "Test setting empty search term": function() {
             // Click the button to set a search term (but don't actually provide one)
@@ -80,6 +88,14 @@ define(["intern!object",
                assert.propertyVal(payload, "term", "testTerm1", "Search term didn't request search");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from request");
             });
+         },
+
+         "No data message is hidden": function() {
+            return browser.findByCssSelector(".alfresco-lists-AlfList .no-data")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed, "The no data message should have been hidden when loading data");
+               });
          },
 
          "Test that setting different search term does not issues new search request when current request is ongoing": function() {
