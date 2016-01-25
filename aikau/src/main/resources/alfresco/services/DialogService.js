@@ -496,13 +496,13 @@ define(["dojo/_base/declare",
        */
       publishOnShow: function alfresco_services_DialogService__publishOnShow(publication) {
          // TODO: Defensive coding, global/parent scope arg handling...
-         if (publication.publishTopic && publication.publishPayload)
+         if (publication.publishTopic)
          {
             this.alfPublish(publication.publishTopic, publication.publishPayload);
          }
          else
          {
-            this.alfLog("warn", "A request was made to publish data when a dialog is loaded, but either the topic or payload was missing", publication, this);
+            this.alfLog("warn", "A request was made to publish data when a dialog is loaded, but the topic was missing", publication, this);
          }
       },
 
