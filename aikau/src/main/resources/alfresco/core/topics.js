@@ -263,6 +263,19 @@ define([],function() {
       DELETE_SITE: "ALF_DELETE_SITE",
 
       /**
+       * This topic is published to request a title change in the current, top-most dialog.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {string} title The new title
+       */
+      DIALOG_CHANGE_TITLE: "ALF_DIALOG_CHANGE_TITLE",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *

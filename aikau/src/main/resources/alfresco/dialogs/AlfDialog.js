@@ -660,6 +660,17 @@ define(["dojo/_base/declare",
                }
             }
          }
+      },
+
+      /**
+       * Set the title of the dialog. The Dojo way of doing it uses innerHTML, so this is the recommended, XSS-safe way of doing it.
+       *
+       * @instance
+       * @param {string} newTitle The new title
+       * @since 1.0.52
+       */
+      setTitle: function alfresco_dialogs_AlfDialog__setTitle(newTitle) {
+         this.titleNode.textContent = newTitle;
       }
    });
 });
