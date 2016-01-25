@@ -1,6 +1,4 @@
 .alfresco-lists-AlfList {
-   min-height: 100px;
-   min-width: 100px;
    > .rendered-view {
       overflow: hidden;
       position: relative;
