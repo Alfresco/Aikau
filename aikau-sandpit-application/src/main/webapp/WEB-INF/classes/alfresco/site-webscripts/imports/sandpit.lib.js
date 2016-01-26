@@ -143,7 +143,7 @@ function buildPageModel(data) {
                                  name: "alfresco/header/Title",
                                  align: "left",
                                  config: {
-                                    label: "Aikau Sandpit - " + data.title,
+                                    label: "Aikau Sandpit - " + msg.get(data.title),
                                     setBrowserTitle: "Aikau Sandpit"
                                  }
                               },

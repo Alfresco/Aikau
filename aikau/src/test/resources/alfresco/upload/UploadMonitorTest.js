@@ -46,7 +46,7 @@ define(["intern!object",
                .sleep(1000)
                .end()
 
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
+            .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
 
             .findByCssSelector(".alfresco-upload-UploadMonitor__item__name__error")
                .getVisibleText()
@@ -56,63 +56,43 @@ define(["intern!object",
                .end()
                .end() // Escape previous extra nesting
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
-               .click()
-               .end()
-
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click();
          },
 
          "Single file upload succeeds": function() {
             return browser.findById("SINGLE_UPLOAD_label")
                .click()
-               .sleep(1000)
                .end()
 
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
                .end()
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
-               .click()
-               .end()
-
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click();
          },
 
          "Multiple file upload succeeds with one failure": function() {
             return browser.findById("MULTI_UPLOAD_label")
+               .clearLog()
                .click()
-               .sleep(1000)
                .end()
 
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 10000)
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
                .end()
 
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed .alfresco-upload-UploadMonitor__successful-items")
-
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item:nth-child(1)")
-               .sleep(1000)
-               .end()
-
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item:nth-child(2)")
-               .sleep(1000)
-               .end()
-
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item:nth-child(3)")
-               .end()
-               .end()
-
-            .findAllByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogDisplayed .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
+            .findAllByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "Should be three successful uploads");
                })
                .end()
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
-               .click()
-               .end()
-
-            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG.dialogHidden");
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click();
          },
 
          "Post Coverage Results": function() {

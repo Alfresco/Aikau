@@ -1,4 +1,4 @@
-Aikau 1.0.51 Release Notes
+Aikau 1.0.52 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,14 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.52:
+* [AKU-676](https://issues.alfresco.com/jira/browse/AKU-676)       - Added alfresco/buttons/DropDownButton
+* [AKU-747](https://issues.alfresco.com/jira/browse/AKU-747)       - Added alfresco/services/FileUploadService
+* [AKU-769](https://issues.alfresco.com/jira/browse/AKU-769)       - Support Mac cmd-click to open new tab
+* [AKU-787](https://issues.alfresco.com/jira/browse/AKU-787)       - Added label node to InlineEditPropery template
+* [AKU-788](https://issues.alfresco.com/jira/browse/AKU-788)       - Ensure arrow is visible on ellipsis displayed AlfMenuBarPopup
+* [AKU-789](https://issues.alfresco.com/jira/browse/AKU-789)       - Support page reload option on become site manager
+
 1.0.51:
 * [AKU-775](https://issues.alfresco.com/jira/browse/AKU-775)       - Improve auto-resizing TinyMCE improvements
 * [AKU-777](https://issues.alfresco.com/jira/browse/AKU-777)       - Fixed MultiSelect options list expansion

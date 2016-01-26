@@ -10,16 +10,12 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/services/UploadService",
+         name: "alfresco/services/FileUploadService",
          config: {
-            widgetsForProgressDialog: [
-               {
-                  name: "alfresco/upload/UploadMonitor",
-                  assignTo: "uploadDisplayWidget"
-               }
-            ]
+            maxSimultaneousUploads: 3
          }
-      }
+      },
+      "alfresco/services/NotificationService"
    ],
    widgets: [
       {
@@ -48,6 +44,7 @@ model.jsonModel = {
             label: "Single File Upload",
             publishTopic: "ALF_UPLOAD_REQUEST",
             publishPayload: {
+               alfResponseTopic: "UPLOAD_COMPLETE_OR_CANCELLED",
                files: [
                   {
                      size: 100,
@@ -93,7 +90,10 @@ model.jsonModel = {
          }
       },
       {
-         name: "aikauTesting/mockservices/UploadMockXhr"
+         name: "aikauTesting/mockservices/UploadMockXhr",
+         config: {
+            averageUploadTimeSecs: 3
+         }
       },
       {
          name: "alfresco/logging/DebugLog"

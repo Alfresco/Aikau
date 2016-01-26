@@ -31,6 +31,16 @@ define(["dojo/_base/declare",
    return declare([MockXhr], {
 
       /**
+       * How long the average upload takes to complete
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.52
+       */
+      averageUploadTimeSecs: 1,
+
+      /**
        * The response code to return. Default to 200 but can be overridden to test failures
        *
        * @instance
@@ -61,17 +71,17 @@ define(["dojo/_base/declare",
                }
 
                // Randomly increment the progress every few moments until it's at 100 percent
-               var i;
+               var delay = (this.averageUploadTimeSecs * 1000) / 100;
                request.readyState = 4; // Set the response to pretend to be completed, so Sinon doesn't send its own responses and close it before we finish
-               for (i = 1; i < 100; i += Math.round(Math.random() * 10)) {
-                  this.sendProgress(request, i, i * 20);
+               for (var i = 1; i < 100; i += Math.round(Math.random() * 10)) {
+                  this.sendProgress(request, i, i * delay);
                }
 
                // After progress has finished, send the final response
                setTimeout(function() {
                   request.readyState = 1; // Sinon won't send response unless it thinks the response is clean and only just opened
                   request.respond(this.responseCode, headers, body);
-               }, i * 20);
+               }, i * delay);
 
             }));
          } catch (e) {

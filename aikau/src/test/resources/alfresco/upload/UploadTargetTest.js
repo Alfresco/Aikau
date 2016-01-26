@@ -83,7 +83,7 @@ define(["intern!object",
             .end()
 
             // Close the dialog...
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+            .findByCssSelector(".dialogDisplayed .footer .dijitButtonNode")
                .click()
             .end()
 

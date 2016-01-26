@@ -1,8 +1,8 @@
 <import resource="classpath:alfresco/site-webscripts/imports/sandpit.lib.js">
 
 buildPageModel({
-   title: "alfresco/lists/AlfList",
-   description: "This is the most basic list. It provides the ability to render data in multiple views but offers no sorting, filtering, pagination or hashing capabilities.",
+   title: "page.title",
+   description: "page.description",
    jsdoc: "https://dev.alfresco.com/resource/docs/aikau-jsdoc/AlfList.html",
    services: ["alfresco/services/DocumentService"],
    mockXhrWidgets: [
@@ -12,8 +12,8 @@ buildPageModel({
    ],
    examples: [
       {
-         title: "List with a single HTML list view using mock data",
-         description: "",
+         title: "example1.title",
+         description: "example1.description",
          model: [
             {
                name: "alfresco/lists/AlfList",

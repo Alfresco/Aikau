@@ -518,12 +518,13 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The file upload data payload to pass on
+       * @fires module:alfresco/core/topics#UPLOAD_REQUEST
        */
       onFileUploadRequest: function alfresco_services_ContentService__onFileUploadRequest(payload) {
          var responseTopic = this.generateUuid();
          this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
          payload.alfResponseTopic = responseTopic;
-         this.alfPublish("ALF_UPLOAD_REQUEST", payload);
+         this.alfPublish(topics.UPLOAD_REQUEST, payload);
       },
 
       /**

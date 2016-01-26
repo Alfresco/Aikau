@@ -78,6 +78,20 @@ define([],function() {
       ASSIGN_WORKFLOW: "ALF_ASSIGN_WORKFLOW",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {string} site The site shortname to change the user role in
+       * @property {string} [role=SiteManager] The role for the user to become
+       * @property {string} [user] The userid to change the role for
+       */
+      BECOME_SITE_MANAGER: "ALF_BECOME_SITE_MANAGER",
+
+      /**
        * Event topic to trigger the cancel the editing of a checkout document
        *
        * @instance
@@ -249,6 +263,19 @@ define([],function() {
       DELETE_SITE: "ALF_DELETE_SITE",
 
       /**
+       * This topic is published to request a title change in the current, top-most dialog.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {string} title The new title
+       */
+      DIALOG_CHANGE_TITLE: "ALF_DIALOG_CHANGE_TITLE",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *
@@ -293,6 +320,10 @@ define([],function() {
        * @property {string} [title=default.title] The title to display (uses i18n)
        * @property {number} [padding=10] The padding to be applied to the widgets area
        * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
+       * @property {boolean} [warnIfOpen=true] Whether to put a warning in the console if the panel is
+       *                                       already visible
+       * @property {function} [callback] The function to call after panel created (or if it already exists)
+       *                                 with the panel instance as the first and only argument
        */
       DISPLAY_STICKY_PANEL: "ALF_DISPLAY_STICKY_PANEL",
 
@@ -1014,6 +1045,27 @@ define([],function() {
        * @event
        */
       UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
+
+      /**
+       * This topic is published to request an upload.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {object[]} files The files to upload
+       * @property {string} [fileRefs] A dot-notation reference to the files in the context of
+       *                               [alfGetData]{@link module:alfresco/core/Core#alfGetData}
+       *                               which will override any included files
+       * @property {object} targetData An object describing where to upload the files to
+       * @property {string} alfResponseTopic The topic on which to respond after all files have
+       *                                     uploaded (successfully or unsuccessfully)
+       * @property {string} [responseScope] The scope of the response defined by the alfResponseTopic,
+       *                                    defaults to the scope of the publish caller
+       */
+      UPLOAD_REQUEST: "ALF_UPLOAD_REQUEST",
 
       /**
        * This topic can be published to display a dialog that allows users to select one or more files
