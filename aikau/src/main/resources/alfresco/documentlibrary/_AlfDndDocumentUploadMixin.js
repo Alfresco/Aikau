@@ -34,6 +34,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/PathUtils",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/mouse",
@@ -45,7 +46,7 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom",
         "dojo/_base/window"], 
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, lang, array, mouse, on, registry, domClass, 
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, topics, lang, array, mouse, on, registry, domClass, 
                  domConstruct, domGeom, domStyle, dom, win) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
@@ -575,6 +576,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} evt HTML5 drag and drop event
+       * @fires module:alfresco/core/topics#UPLOAD_REQUEST
        */
       onDndUploadDrop: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop(evt) {
          try
@@ -608,7 +610,7 @@ define(["dojo/_base/declare",
                   var responseTopic = this.generateUuid();
                   this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
 
-                  this.alfPublish("ALF_UPLOAD_REQUEST", {
+                  this.alfPublish(topics.UPLOAD_REQUEST, {
                      alfResponseTopic: responseTopic,
                      files: evt.dataTransfer.files,
                      targetData: updatedConfig
@@ -667,7 +669,7 @@ define(["dojo/_base/declare",
             dialogTitle: "Update",
             dialogConfirmationButtonTitle: "Continue Update",
             dialogCancellationButtonTitle: "Cancel",
-            formSubmissionTopic: "ALF_UPLOAD_REQUEST",
+            formSubmissionTopic: topics.UPLOAD_REQUEST,
             formSubmissionPayloadMixin: {
                alfResponseTopic: responseTopic,
                filesRefs: filesRef,

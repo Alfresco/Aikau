@@ -60,7 +60,7 @@ define(["intern!object",
                })
             .end()
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+            .findByCssSelector(".dialogDisplayed .footer .dijitButtonNode")
                .click()
             .end()
 
@@ -103,7 +103,7 @@ define(["intern!object",
                })
             .end()
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+            .findByCssSelector(".dialogDisplayed .footer .dijitButtonNode")
                .click()
             .end()
 

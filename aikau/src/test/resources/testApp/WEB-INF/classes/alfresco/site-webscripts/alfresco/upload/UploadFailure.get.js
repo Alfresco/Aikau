@@ -9,6 +9,7 @@ model.jsonModel = {
             }
          }
       },
+      "alfresco/services/DialogService",
       "alfresco/services/UploadService"
    ],
    widgets: [
