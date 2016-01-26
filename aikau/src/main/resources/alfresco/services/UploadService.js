@@ -82,6 +82,16 @@ define([
          uploadsContainerTitle: "progress-dialog.title",
 
          /**
+          * This is the topic on which to publish updates to the title container.
+          *
+          * @instance
+          * @override
+          * @type {string}
+          * @default
+          */
+         uploadsContainerTitleUpdateTopic: topics.DIALOG_CHANGE_TITLE,
+
+         /**
           * This defines the JSON structure for the widgets to be displayed in the progress dialog. This
           * can be overridden by extending widgets to render a different display in the dialog
           *
