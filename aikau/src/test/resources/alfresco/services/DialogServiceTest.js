@@ -248,6 +248,32 @@ define(["intern!object",
                });
          },
 
+         "Long form dialog controls are fully displayed": function() {
+            var getDimensions = function() {
+               var dialogPanel = document.querySelector("#LFD .alfresco-layout-SimplePanel");
+               return {
+                  scrollWidth: dialogPanel.scrollWidth,
+                  offsetWidth: dialogPanel.offsetWidth
+               };
+            };
+
+            return closeAllDialogs(browser)
+               .then(function() {
+
+                  return browser.findById("CREATE_LONG_FORM_DIALOG")
+                     .click()
+                  .end()
+
+                  .findByCssSelector("#LFD.dialogDisplayed")
+                  .end()
+
+                  .execute(getDimensions)
+                     .then(function(dimensions){
+                        assert.equal(dimensions.scrollWidth, dimensions.offsetWidth);
+                  });
+               });
+         },
+
          "Count golden path repeating dialog buttons": function() {
             return closeAllDialogs(browser)
                .then(function() {
