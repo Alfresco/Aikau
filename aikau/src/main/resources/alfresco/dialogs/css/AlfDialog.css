@@ -116,12 +116,7 @@
       text-align: center;
    }
    &--dialogs-visible {
-      &, body, .alfresco-core-Page {
-         height: 100%;
-      }
-      body, .alfresco-core-Page {
-         overflow: hidden;
-      }
+      overflow: hidden;
    }
 }
 
