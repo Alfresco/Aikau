@@ -285,6 +285,7 @@ define(["dojo/_base/declare",
             {
                this.rootPreviewWidget.destroyRecursive(false);
             }
+            this.previewNode.innerHTML = this.message("loading.preview.message");
 
             var pageDefinition = this.getPageDefinitionFromPayload(payload);
             var pageDefObject = dojoJson.parse(pageDefinition);
@@ -413,6 +414,8 @@ define(["dojo/_base/declare",
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
        */
       buildPreview: function alfresco_prototyping_Preview__buildPreview(config, rootNode) {
+         domConstruct.empty(this.previewNode);
+            
          var tmpNode = domConstruct.create("div", {}, rootNode);
          this.rootPreviewWidget = new Page({
             widgets: config.widgets,

@@ -144,7 +144,7 @@ function buildPageModel(data) {
                                  align: "left",
                                  config: {
                                     label: "Aikau Sandpit - " + msg.get(data.title),
-                                    setBrowserTitle: "Aikau Sandpit"
+                                    setBrowserTitle: true
                                  }
                               },
                               {
