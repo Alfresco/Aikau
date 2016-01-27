@@ -62,6 +62,12 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/html/Heading",
+         config: {
+            label: "For alignment"
+         }
+      },
+      {
          id: "HASHLIST1",
          name: "alfresco/lists/AlfHashList",
          config: {
@@ -87,6 +93,15 @@ model.jsonModel = {
                   config: {
                      additionalCssClasses: "bordered",
                      noItemsMessage: "No results",
+                     widgetsForHeader: [
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              id: "COLUMN1_HEADER",
+                              label: "Header"
+                           }
+                        }
+                     ],
                      widgets: [
                         {
                            name: "alfresco/lists/views/layouts/Row",
