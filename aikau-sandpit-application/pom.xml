@@ -5,7 +5,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.52-SNAPSHOT</version>
+      <version>1.0.53-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
    
@@ -47,7 +47,7 @@
             <version>2.2</version>
             <configuration>
                <port>8091</port>
-               <path>/aikau-sample</path>
+               <path>/aikau-sandpit</path>
                <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
             </configuration>
          </plugin>
@@ -69,7 +69,7 @@
 
                <webApp>
                   <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
-                  <contextPath>/aikau-sample</contextPath>
+                  <contextPath>/aikau-sandpit</contextPath>
                   <resourceBases>
                      <resourceBase>src/main/webapp</resourceBase>
                   </resourceBases>

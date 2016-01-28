@@ -47,6 +47,8 @@ define(["alfresco/core/FileSizeMixin",
        */
       i18nRequirements: [{
          i18nFile: "./i18n/UploadMonitor.properties"
+      }, {
+         i18nFile: "alfresco/renderers/i18n/Size.properties"
       }],
 
       /**

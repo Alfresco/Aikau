@@ -703,9 +703,10 @@ define(["dojo/_base/declare",
                      instantiatedWidget.startup();
                   }
                
+                  var assignToScope = widget.assignToScope || _this;
                   if (widget.assignTo)
                   {
-                     _this[widget.assignTo] = instantiatedWidget;
+                     assignToScope[widget.assignTo] = instantiatedWidget;
                   }
 
                   // Set any additional style attributes...

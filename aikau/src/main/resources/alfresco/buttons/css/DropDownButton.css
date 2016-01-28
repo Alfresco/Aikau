@@ -1,0 +1,52 @@
+.alfresco-buttons-DropDownButton {
+   .dijitDropDownButton {
+
+      /* This allows the blanking element to position itself */
+      position: relative;
+
+      .dijitButtonNode {
+         border-radius: 0;
+         background: none;
+         border: @standard-border;
+         box-shadow: none;
+      }
+   }
+
+   &__blanking {
+      position: absolute;
+      border-top: 1px #fff solid;
+      bottom: 0;
+      display: none;
+      width: ~"calc(100% - 2px)";
+      z-index: 1001;
+      margin: 0 1px;
+   }
+
+   .dijitDropDownButtonOpened {
+      .alfresco-buttons-DropDownButton__blanking {
+         display: block;
+      };
+   }
+}
+
+.alfresco-buttons-DropDownButton__drop-down-display {
+   padding: 0;
+   margin-top: -@standard-border-width;
+
+   .dijitTooltipContainer {
+      background: @primary-background-color;
+      border: @standard-border;
+      box-shadow: none;
+      border-radius: 0;
+   }
+
+   /* Hide the connector image */
+   .dijitTooltipConnector {
+      display: none;
+   }
+}
+
+/* Ensure that outline is not shown around the popup dialog otherwise it undoes the blanking element */;
+.dijitTooltipDialogPopup .alfresco-buttons-DropDownButton__drop-down-display {
+   outline: none;
+}

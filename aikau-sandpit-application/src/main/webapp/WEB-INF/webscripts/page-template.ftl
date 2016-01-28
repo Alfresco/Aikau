@@ -9,7 +9,7 @@
    </#if>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-   <title>Aikau Sample Client</title>
+   <title>Aikau Sandpit</title>
    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
    
    <#-- Note that it's necessary to import the Sinon libs synchronously because version 1.10.3 does not support AMD and

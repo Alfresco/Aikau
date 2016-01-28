@@ -53,6 +53,7 @@ define(["dojo/_base/declare",
          declare.safeMixin(this, args);
          if (serviceRegistry.register(this.alfServiceName, this.pubSubScope))
          {
+            this.initService();
             this.registerSubscriptions();
          }
          else
@@ -61,6 +62,18 @@ define(["dojo/_base/declare",
             var message = lang.replace("A service with the Module ID: '{alfServiceName}' configured to use the pubSubScope '{pubSubScope}' has already been registered so this instance will NOT call 'registerSubscriptions'. This is typically nothing to be concerned about", this);
             this.alfLog("info", message);
          }
+      },
+
+      /**
+       * If a service needs to act upon its post-mixed-in state before registering subscriptions then
+       * this is where it should be done. It is comparable to postMixInProperties in a widget in the
+       * class lifecycle.
+       *
+       * @instance
+       * @since 1.0.52
+       */
+      initService: function alfresco_services_BaseService__initService() {
+         // No action required
       },
       
       /**

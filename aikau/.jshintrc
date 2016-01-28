@@ -30,6 +30,7 @@
       "module": false,
       "model": false,
       "appContext": false,
+      "JSON": false,
       "PDFJS": false
    },
 

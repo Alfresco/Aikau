@@ -18,7 +18,8 @@
  */
 
 /**
- * This mixin acts as an interface for widgets displaying uploads' progress.
+ * This mixin acts as an interface for widgets displaying uploads' progress, and all widgets used for displaying
+ * uploads' progress through the [UploadService]{@link module:alfresco/services/UploadService} should extend it.
  *
  * @module alfresco/upload/_UploadsDisplayMixin
  * @extends external:dijit/_WidgetBase

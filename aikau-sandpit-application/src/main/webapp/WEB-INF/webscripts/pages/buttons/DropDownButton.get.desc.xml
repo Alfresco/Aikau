@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drop-down buttons</shortname>
+  <description>A button that when clicked reveals a drop-down display.</description>
+  <family>ExamplePage</family>
+  <url>/DropDownButtons</url>
+</webscript>

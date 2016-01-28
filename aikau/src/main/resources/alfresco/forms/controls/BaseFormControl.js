@@ -1266,7 +1266,7 @@ define(["dojo/_base/declare",
        */
       completeWidgetSetup: function alfresco_forms_controls_BaseFormControl__completeWidgetSetup() {
          this.placeWidget();
-         this.widgetProcessingCompleteSubscription = this.alfSubscribe("ALF_WIDGET_PROCESSING_COMPLETE", lang.hitch(this, this.onWidgetAddedToDocument), true);
+         this.widgetProcessingCompleteSubscription = this.alfSubscribe(topics.WIDGET_PROCESSING_COMPLETE, lang.hitch(this, this.onWidgetAddedToDocument), true);
       },
 
       /**

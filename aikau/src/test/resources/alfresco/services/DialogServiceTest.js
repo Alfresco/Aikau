@@ -248,6 +248,32 @@ define(["intern!object",
                });
          },
 
+         "Long form dialog controls are fully displayed": function() {
+            var getDimensions = function() {
+               var dialogPanel = document.querySelector("#LFD .alfresco-layout-SimplePanel");
+               return {
+                  scrollWidth: dialogPanel.scrollWidth,
+                  offsetWidth: dialogPanel.offsetWidth
+               };
+            };
+
+            return closeAllDialogs(browser)
+               .then(function() {
+
+                  return browser.findById("CREATE_LONG_FORM_DIALOG")
+                     .click()
+                  .end()
+
+                  .findByCssSelector("#LFD.dialogDisplayed")
+                  .end()
+
+                  .execute(getDimensions)
+                     .then(function(dimensions){
+                        assert.equal(dimensions.scrollWidth, dimensions.offsetWidth);
+                  });
+               });
+         },
+
          "Count golden path repeating dialog buttons": function() {
             return closeAllDialogs(browser)
                .then(function() {
@@ -404,30 +430,18 @@ define(["intern!object",
          },
 
          "Page does not scroll when dialogs present": function() {
-            var inital_y,
-               getScrollTop = function() {
-                  return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-               };
+            var documentHasScrollbar = function() {
+               return document.documentElement.scrollWidth !== window.innerWidth;
+            };
 
             return browser.findById("FULL_SCREEN_DIALOG_label")
                .click()
             .end()
 
             .findByCssSelector("#FSD1.dialogDisplayed")
-               .execute(getScrollTop)
-               .then(function(scrollTop) {
-                  initial_y = scrollTop;
-               })
-            .end()
-
-            // Scroll to the bottom of the page...
-            .execute("return window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight))")
-            .end()
-
-            .findById("FSD1")
-               .execute(getScrollTop)
-               .then(function(scrollTop) {
-                  assert.equal(scrollTop, initial_y, "The page scrolled with a dialog present");
+               .execute(documentHasScrollbar)
+               .then(function(hasScrollbar) {
+                  assert.isFalse(hasScrollbar);
                })
             .end()
 
