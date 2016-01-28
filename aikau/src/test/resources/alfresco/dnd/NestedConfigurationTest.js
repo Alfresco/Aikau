@@ -58,7 +58,7 @@ define(["intern!object",
                .tabToElement("#ROOT_DROPPED_ITEMS1 .previewPanel .action.edit")
                .pressKeys(keys.ENTER)
 
-               .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for the dialog to render
+               .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogDisplayed") // Wait for the dialog to render
                .end()
 
                // Now check that there are 2 form controls (should have inherited one additional configuration field)
@@ -74,7 +74,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for the dialog to be hidden
+            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden") // Wait for the dialog to be hidden
             .end()
             
             // Re-select the draggable item...
@@ -101,26 +101,14 @@ define(["intern!object",
                .click()
             .end()
             
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for the dialog to be hidden
+            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden") // Wait for the dialog to be hidden
             .end()
 
-            .pressKeys(keys.SHIFT) // Need to tab backwards to the outer edit action
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .pressKeys(keys.SHIFT)
+            .tabToElement("#ROOT_DROPPED_ITEMS1 .previewPanel .action.edit")
             .sleep(pause)
             .pressKeys(keys.ENTER)
 
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for the dialog to render
+            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogDisplayed") // Wait for the dialog to render
             .end()
 
             // Now tab to confirmation button and close the dialog
@@ -130,7 +118,7 @@ define(["intern!object",
             .sleep(pause)
             .pressKeys(keys.ENTER)
 
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for the dialog to be hidden
+            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden") // Wait for the dialog to be hidden
             .end()
 
             // Check that the label has been preserved...
@@ -142,12 +130,12 @@ define(["intern!object",
          },
 
          "Check prepopulated nested widget configuration": function() {
-            return browser.findByCssSelector(".vertical-widgets-wrapper .action.edit > img")
+            return browser.findDisplayedByCssSelector(".vertical-widgets-wrapper .action.edit > img")
                .click()
             .end()
 
             // Wait for dialog to be displayed...
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
+            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogDisplayed")
             .end()
 
             .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #MARGINS_TOP .dijitInputContainer input")
@@ -175,7 +163,7 @@ define(["intern!object",
             .end()
                
             // Wait for the dialog to be hidden...
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") 
+            .findAllByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden") 
             .end()
 
             // Post the form...
