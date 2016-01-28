@@ -297,6 +297,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {number}
        * @default
+       * @since 1.0.53
        */
       _scrollbarWidth: null,
 
@@ -881,6 +882,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @returns {number} The scrollbar width
+       * @since 1.0.53
        */
       _getScrollbarWidth: function alfresco_services_DialogService___getScrollbarWidth() {
          if (!this._scrollbarWidth) {
