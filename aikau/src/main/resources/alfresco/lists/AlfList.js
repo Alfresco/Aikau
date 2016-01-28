@@ -46,10 +46,11 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class",
-        "dojo/io-query"],
+        "dojo/io-query",
+        "dojo/sniff"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
                  DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct, 
-                 domClass, ioQuery) {
+                 domClass, ioQuery, sniff) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
 
@@ -939,10 +940,17 @@ define(["dojo/_base/declare",
                this._currentlySelectedView = payload.value;
                var newView = this.viewMap[payload.value];
                this.showRenderingMessage();
-               newView.setData(this.currentData);
-               newView.currentData.previousItemCount = 0;
-               newView.renderView(false);
-               this.showView(newView);
+
+               // See AKU-792 - We need to use setTimeout in order to ensure that the rendering message is displayed. The browser needs
+               //               to have a change to draw the message before starting the rendering process. But Firefox (poor old Firefox)
+               //               needs to have a "proper" break to give it a chance...
+               var delay = sniff("ff") ? 250 : 0;
+               setTimeout(lang.hitch(this, function() {
+                  newView.setData(this.currentData);
+                  newView.currentData.previousItemCount = 0;
+                  newView.renderView(false);
+                  this.showView(newView);
+               }), delay);
             }
             else
             {
@@ -1051,7 +1059,7 @@ define(["dojo/_base/declare",
        */
       hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
          setTimeout(lang.hitch(this, function() {
-            domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering"]);
+            domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading","alfresco-lists-AlfList--rendering"]);
          }), this.hideLoadingDelay);
       },
 
@@ -1064,9 +1072,10 @@ define(["dojo/_base/declare",
       showRenderingMessage: function alfresco_lists_AlfList__showRenderingMessage() {
          if (!this.useInfiniteScroll)
          {
-            (requestAnimationFrame || setTimeout)(lang.hitch(this, function() {
-               domClass.replace(this.domNode, "alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering");
-            }));
+            // See AKU-792 - we definitely don't want to use requestAnimationFrame here - we want the rendering message
+            //               to appear immediately. With requestAnimationFrame we won't see the message until *after*
+            //               the view has been rendered.
+            domClass.replace(this.domNode, "alfresco-lists-AlfList--rendering","alfresco-lists-AlfList--loading");
          }
       },
 
