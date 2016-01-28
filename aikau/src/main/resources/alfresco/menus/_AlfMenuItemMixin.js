@@ -293,11 +293,7 @@ define(["dojo/_base/declare",
             // TODO: DD: Not keen on the fact that somehow this "document" specific stuff has crept in here...
             //           Ideally it shouldn't be there...
             var payload = this.generatePayload((this.publishPayload) ? this.publishPayload : {document: this.currentItem}, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
-            
-            // Using setTimeout here to give popup menus a chance to close before the publish action begins..
-            setTimeout(lang.hitch(this, function(){
-               this.alfPublish(this.publishTopic, payload, publishGlobal, publishToParent);
-            }));
+            this.alfPublish(this.publishTopic, payload, publishGlobal, publishToParent);
          }
          else
          {

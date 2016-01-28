@@ -325,10 +325,7 @@ define(["dojo/_base/declare",
             this.publishPayload.value = this.value;
             this.publishPayload.label = this.label;
 
-            // Using setTimeout here to give popup menus a chance to close before the publish action begins..
-            setTimeout(lang.hitch(this, function(){
-               this.alfPublish(this.publishTopic, this.publishPayload);
-            }));
+            this.alfPublish(this.publishTopic, this.publishPayload);
          }
       },
 

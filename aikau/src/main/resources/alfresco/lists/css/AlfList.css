@@ -1,7 +1,5 @@
 .alfresco-lists-AlfList {
    > .rendered-view {
-
-      
       overflow: hidden;
       position: relative;
       &::before, &::after {
