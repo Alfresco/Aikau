@@ -28,6 +28,13 @@ define(["intern!object",
 registerSuite(function(){
    var browser;
 
+   function getWindowSize() {
+      return {
+         width: window.innerWidth,
+         height: window.innerHeight
+      }
+   };
+
    return {
 
       name: "Full Screen Dialog Tests",
@@ -43,16 +50,15 @@ registerSuite(function(){
 
       "Create full screen dialog": function() {
          var windowSize;
-         return browser.setWindowSize(null, 1024, 400).findByCssSelector("body")
-            .getSize()
-            .then(function(size) {
-               windowSize = size;
-            })
-         .end()
+         return browser.setWindowSize(null, 1024, 400)
          .findById("FULL_SCREEN_DIALOG_label")
             .click()
          .end()
          .findByCssSelector("#FSD1.dialogDisplayed")
+            .execute(getWindowSize)
+            .then(function(size) {
+               windowSize = size;
+            })
             .getSize()
             .then(function(size) {
                assert.equal(windowSize.height - 40, size.height, "Height wrong");
@@ -62,14 +68,12 @@ registerSuite(function(){
 
       "Resize window (1)": function() {
          var windowSize;
-         return browser.setWindowSize(null, 1024, 600).end()
-            .findByCssSelector("body")
-            .getSize()
+         return browser.setWindowSize(null, 1024, 600)
+         .findByCssSelector("#FSD1.dialogDisplayed")
+            .execute(getWindowSize)
             .then(function(size) {
                windowSize = size;
             })
-         .end()
-         .findByCssSelector("#FSD1.dialogDisplayed")
             .getSize()
             .then(function(size) {
                assert.equal(windowSize.height - 40, size.height, "Height wrong");
@@ -84,16 +88,14 @@ registerSuite(function(){
 
       "Create full screen form dialog": function() {
          var windowSize;
-         return browser.findByCssSelector("body")
-            .getSize()
-            .then(function(size) {
-               windowSize = size;
-            })
-         .end()
-         .findById("FULL_SCREEN_FORM_DIALOG_label")
+         return browser.findById("FULL_SCREEN_FORM_DIALOG_label")
             .click()
          .end()
          .findByCssSelector("#FSD2.dialogDisplayed")
+            .execute(getWindowSize)
+            .then(function(size) {
+               windowSize = size;
+            })
             .getSize()
             .then(function(size) {
                assert.equal(windowSize.height - 80, size.height, "Height wrong");
@@ -104,13 +106,11 @@ registerSuite(function(){
       "Resize window (2)": function() {
          var windowSize;
          return browser.setWindowSize(null, 1024, 700)
-            .findByCssSelector("body")
-            .getSize()
+         .findByCssSelector("#FSD2.dialogDisplayed")
+            .execute(getWindowSize)
             .then(function(size) {
                windowSize = size;
             })
-         .end()
-         .findByCssSelector("#FSD2.dialogDisplayed")
             .getSize()
             .then(function(size) {
                assert.equal(windowSize.height - 80, size.height, "Height wrong");
