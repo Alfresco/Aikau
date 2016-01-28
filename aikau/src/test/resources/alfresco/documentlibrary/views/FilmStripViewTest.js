@@ -307,7 +307,7 @@ define(["alfresco/TestCommon",
          },
 
          "First item is now displayed": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(1)")
+            return browser.findDisplayedByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(1)")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isTrue(displayed);
