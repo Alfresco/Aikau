@@ -264,9 +264,9 @@ define(["dojo/_base/declare",
       findScrollParent: function alfresco_lists_views_ListRenderer__findScrollParent(domNode) {
          var scrollParent = $(domNode).scrollParent();
          if (!scrollParent.is("html") &&
-             scrollParent.clientHeight === scrollParent.scrollHeight)
+             scrollParent[0].clientHeight === scrollParent[0].scrollHeight)
          {
-            scrollParent = this.findScrollParent(scrollParent);
+            scrollParent = this.findScrollParent(scrollParent[0]);
          }
          return scrollParent;
       }
