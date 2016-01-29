@@ -39,6 +39,10 @@
    }
    &--loading, &--rendering {
       > .rendered-view {
+
+         min-height: 200px;
+         display: block;
+
          &::before, &::after {
             opacity: 1;
          }
