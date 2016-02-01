@@ -78,7 +78,10 @@ define(["dojo/_base/declare",
             } ,this);
          }
          
-         this.converter = new showdown.Converter();
+         this.converter = new showdown.Converter({
+            strikethrough: true,
+            tables: true
+         });
          this._converterReady = true;
 
          // If we have initial markdown then ensure that it is safe to be used...
