@@ -56,7 +56,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>unitTestsGrid</id>
+            <id>unitTestsBStack</id>
             <build>
                 <plugins>
                     <plugin>
@@ -109,9 +109,9 @@
                               <exec executable="npm" dir="${project.basedir}">
                                 <arg line="install" />
                               </exec>
-                              <echo>Running grunt test_grid</echo>
+                              <echo>Running grunt test_bamboo</echo>
                               <exec executable="grunt" dir="${project.basedir}">
-                                <arg line="test_grid" />
+                                <arg line="test_bamboo" />
                               </exec>
                             </target>
                           </configuration>

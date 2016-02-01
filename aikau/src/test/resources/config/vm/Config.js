@@ -32,7 +32,6 @@ define({
     * @type {object}
     */
    urls: {
-      unitTestAppBaseUrl: "http://192.168.56.1:8089"
    },
 
    /**
