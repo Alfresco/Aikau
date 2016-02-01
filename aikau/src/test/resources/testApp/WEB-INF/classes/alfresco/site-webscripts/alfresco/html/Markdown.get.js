@@ -38,9 +38,6 @@ model.jsonModel = {
             markdown: "# H1\n## H2",
             subscriptionTopics: ["UPDATE_MARKDOWN"]
          }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
    ]
 };
