@@ -72,7 +72,7 @@ define([
    var CHARM = {
       Col: {
          Default: 3,
-         LastStarted: 75,
+         LastStarted: 76,
          MessageString: 3,
          MessageTitle: 3,
          ProgressBar: 3,
