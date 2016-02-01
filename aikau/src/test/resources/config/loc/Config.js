@@ -25,17 +25,6 @@
 define({
 
    /**
-    * This is a selection of urls for test purposes. They should ONLY be defined here so that
-    * pervasive changes can be made in this one file.
-    *
-    * @instance
-    * @type {object}
-    */
-   urls: {
-      unitTestAppBaseUrl: "http://localhost:8089"
-   },
-
-   /**
     * A selection of timeouts
     *
     * @instance
