@@ -1,0 +1,2 @@
+# Preserve directory for reports, but do not store reports in repo
+*.xml

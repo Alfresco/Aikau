@@ -14,6 +14,7 @@ module.exports = function(grunt) {
    grunt.registerTask("test_local", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:local"]);
    grunt.registerTask("test", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:dev"]);
    grunt.registerTask("test_bs", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:bs"]);
+   grunt.registerTask("test_bamboo", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:bamboo"]);
    grunt.registerTask("test_sl", ["startUnitTestApp", "waitServer", "clean:testScreenshots", "generate-require-everything", "intern:sl"]);
    grunt.registerTask("test_grid", ["waitServer", "clean:testScreenshots", "generate-require-everything", "intern:grid"]);
 
@@ -83,6 +84,13 @@ module.exports = function(grunt) {
             options: {
                runType: "runner",
                config: "src/test/resources/intern_bs",
+               useLocalhost: true
+            }
+         },
+         bamboo: {
+            options: {
+               runType: "runner",
+               config: "src/test/resources/intern_bamboo",
                useLocalhost: true
             }
          },

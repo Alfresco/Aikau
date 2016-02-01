@@ -19,20 +19,17 @@ define(["./config/Suites"],
       });
 
       // Define "constants"
-      var settings = {
+      var isoTimestamp = (new Date()).toISOString(),
+         settings = {
             project: "Aikau",
-            name: "[AKU] BrowserStack Tests @ " + (new Date()).toISOString(),
+            name: "[AKU] BrowserStack Tests @ " + isoTimestamp,
             "browserstack.debug": false
          },
          envData = [{
             browserName: "chrome",
-            platform: ["WINDOWS", "MAC"]
+            platform: "WINDOWS"
          }, {
             browserName: "firefox",
-            platform: ["WINDOWS", "MAC"]
-         }, {
-            browserName: "internet explorer",
-            version: "11",
             platform: "WINDOWS"
          }],
          environments = envData.map(function(env) {
@@ -97,9 +94,10 @@ define(["./config/Suites"],
          excludeInstrumentation: /^(?:tests|node_modules)\//,
 
          // An array of code coverage reporters to invoke
-         reporters: [
-            "reporters/AikauConcurrentReporter"
-         ]
+         reporters: [{
+            id: "JUnit",
+            filename: "test_reports/junit_" + isoTimestamp + ".xml"
+         }]
 
       };
    });
