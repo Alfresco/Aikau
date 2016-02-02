@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -49,8 +49,14 @@ define(["intern!object",
          },
 
          "Change filter": function() {
-            return browser.findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL input[value=\"DOCLIBS\"]")
-               .clearLog()
+            return browser.findById("PUBLISH_DATA_label")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+            .clearLog()
+
+            .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL input[value=\"DOCLIBS\"]")
                .click()
             .end()
 

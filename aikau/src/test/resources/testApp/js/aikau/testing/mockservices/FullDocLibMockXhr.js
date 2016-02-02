@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,7 +23,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr",
+        "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/FullDocLib/documents.json",
         "dojo/text!./responseTemplates/FullDocLib/rawDocuments.json",
         "dojo/text!./responseTemplates/FullDocLib/tree.json",
@@ -67,7 +67,8 @@ define(["dojo/_base/declare",
             this.server.respondWith("POST",
                                     "/aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete",
                                     [200,
-                                     {"Content-Type":"application/json;charset=UTF-8"}]);
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     ""]);
 
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }

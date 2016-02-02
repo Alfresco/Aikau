@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -33,13 +33,14 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/dom-attr",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
    return declare([AlfCore, ObjectProcessingMixin], {
 
@@ -674,8 +675,10 @@ define(["dojo/_base/declare",
             {
                try
                {
+                  var preferredDomNodeId;
                   if (registry.byId(initArgs.id))
                   {
+                     preferredDomNodeId = initArgs.id;
                      initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
                   }
 
@@ -687,15 +690,23 @@ define(["dojo/_base/declare",
                      _this.widgetsToDestroy = [];
                      _this.widgetsToDestroy.push(widget);
                   }
+
+                  if (preferredDomNodeId)
+                  {
+                     domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                     instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
+                  }
+
                   _this.alfLog("log", "Created widget", instantiatedWidget);
                   if (typeof instantiatedWidget.startup === "function")
                   {
                      instantiatedWidget.startup();
                   }
                
+                  var assignToScope = widget.assignToScope || _this;
                   if (widget.assignTo)
                   {
-                     _this[widget.assignTo] = instantiatedWidget;
+                     assignToScope[widget.assignTo] = instantiatedWidget;
                   }
 
                   // Set any additional style attributes...
@@ -876,7 +887,21 @@ define(["dojo/_base/declare",
          {
             // Compare the property value against the applicable values...
             var renderFilterProperty = this.getRenderFilterPropertyValue(renderFilterConfig);
-            if (renderFilterConfig.values)
+            if (renderFilterConfig.value)
+            {
+               // See AKU-781 - We now allow client-side properties to be compared...
+               switch (renderFilterConfig.comparator) {
+                  case "lessThan":
+                     passesFilter = renderFilterProperty < renderFilterConfig.value;
+                     break;
+                  case "greaterThan":
+                     passesFilter = renderFilterProperty > renderFilterConfig.value;
+                     break;
+                  default:
+                     passesFilter = renderFilterProperty === renderFilterConfig.value;
+               }
+            }
+            else if (renderFilterConfig.values)
             {
                // Check that the target property matches one of the supplied values...
                var renderFilterValues = this.getRenderFilterValues(renderFilterConfig);
@@ -1038,7 +1063,11 @@ define(["dojo/_base/declare",
        */
       getRenderFilterPropertyValue: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterPropertyValue(renderFilterConfig) {
          var targetObject = this.currentItem;
-         if (renderFilterConfig.target && this[renderFilterConfig.target])
+         if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
+         {
+            targetObject = lang.getObject(renderFilterConfig.target);
+         }
+         else if (renderFilterConfig.target && this[renderFilterConfig.target])
          {
             targetObject = this[renderFilterConfig.target];
          }

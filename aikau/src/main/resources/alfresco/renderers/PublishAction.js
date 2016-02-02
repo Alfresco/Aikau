@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -93,11 +93,11 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_renderers_PublishAction__postMixInProperties() {
          if (this.iconClass)
          {
-            this.imageSrc = require.toUrl("alfresco/renderers") + "/css/images/" + this.iconClass + ".png";
+            this.imageSrc = require.toUrl("alfresco/renderers/css/images/" + this.iconClass + ".png");
          }
          else
          {
-            this.imageSrc = require.toUrl("alfresco/renderers") + "/css/images/add-icon-16.png";
+            this.imageSrc = require.toUrl("alfresco/renderers/css/images/add-icon-16.png");
          }
 
          // Localize the alt text...

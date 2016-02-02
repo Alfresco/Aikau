@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -24,6 +24,7 @@
  * @extends alfresco/renderers/Property
  * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
+ * @mixes module:alfresco/services/_NavigationServiceTopicMixin
  * @author Dave Draper
  * @author Richard Smith
  */
@@ -31,12 +32,13 @@ define(["dojo/_base/declare",
         "alfresco/renderers/Property",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_PublishPayloadMixin",
+        "alfresco/navigation/LinkClickMixin",
         "dojo/text!./templates/PropertyLink.html",
         "dojo/_base/event",
         "dojo/_base/lang"], 
-        function(declare, Property, _OnDijitClickMixin, _PublishPayloadMixin, template, event, lang) {
+        function(declare, Property, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin, template, event, lang) {
 
-   return declare([Property, _OnDijitClickMixin, _PublishPayloadMixin], {
+   return declare([Property, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -81,9 +83,11 @@ define(["dojo/_base/declare",
          }
          else
          {
+            var payload = this.getPublishPayload();
+            this.processMiddleOrCtrlClick(evt, publishTopic, payload);
             var publishGlobal = this.publishGlobal || false;
             var publishToParent = this.publishToParent || false;
-            this.alfPublish(publishTopic, this.getPublishPayload(), publishGlobal, publishToParent);
+            this.alfPublish(publishTopic, payload, publishGlobal, publishToParent);
          }
       },
 

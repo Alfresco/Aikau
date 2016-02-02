@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -118,7 +118,10 @@ define(["alfresco/TestCommon",
          },
 
          "Create an item from the list view": function() {
-            return browser.findById("CREATE_BUTTON_2_ITEM_0_label")
+            return browser.waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+            .end()
+
+            .findById("CREATE_BUTTON_2_ITEM_0_label")
                .click()
             .end()
 

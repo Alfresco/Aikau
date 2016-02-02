@@ -120,7 +120,7 @@
 @hover-border-color: #d3d3d3;
 @focused-border-color: #8dc63f;
 @thick-border-width: 3px;
-@upload-highlight-border: 3px dashed #6BA969;
+@upload-highlight-border: 3px dashed #6ba969;
 
 // Button (colours)
 @button-color-background: #fff;
@@ -128,6 +128,9 @@
 @button-color-hover: #135fa3;
 @button-color-active: #125380;
 @button-color-disabled: #b8b8b8;
+@primary-call-to-action-default: #47aa42;
+@primary-call-to-action-hover: #358032;
+@primary-call-to-action-active: #2c6a29;
 @legacy-button-color: #ccc;
 @legacy-button-color-text: @general-font-color;
 @legacy-action-button-color: #8dc63f;
@@ -184,6 +187,14 @@
 @call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
 @call-to-action-button-margin: @standard-button-margin;
 
+// "Primary call-to-action" buttons are first among equals
+@primary-call-to-action-button-background: @primary-call-to-action-default;
+@primary-call-to-action-button-background-focus: @primary-call-to-action-hover;
+@primary-call-to-action-button-background-active: @primary-call-to-action-active;
+@primary-call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style @primary-call-to-action-default;
+@primary-call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @primary-call-to-action-hover;
+@primary-call-to-action-button-border-active: @call-to-action-button-border-width @call-to-action-button-border-style @primary-call-to-action-active;
+
 // The radius textbox is a modifier to the standard textbox
 @radius-textbox-border-radius: 3px;
 
@@ -208,7 +219,7 @@
 // Shadows
 @standard-box-shadow: .33px 2px 8px rgba(0, 0, 0, .3);
 @inset-box-shadow: 1px 1px 3px #ccc inset;
-@selection-box-shadow: 0px 0px 25px 5px #ffaa00;
+@selection-box-shadow: 0px 0px 25px 5px #fa0;
 
 // Thumbnails
 @thumbnail-width: 100px;
@@ -262,6 +273,17 @@
 @list-zebra-color-even: #f8f8f8;
 @list-border-color: #e5e5e5;
 @list-dnd-hover-outline: 2px solid #0082ca;
+@list-loading-message-background: rgba(255,255,255,.8);
+@list-loading-message-border: 1px solid #666;
+@list-loading-message-border-radius: 5px;
+@list-loading-message-line-height: 30px;
+@list-loading-message-padding: 0 15px;
+@list-loading-message-transition: opacity .3s ease;
+@list-loading-message-top: 40%;
+@list-loading-message-left: 40%;
+@list-rendering-message-left: 30%;
+@list-loading-overlay-background: rgba(0, 0, 0, .03);
+@list-loading-overlay-transition: all 0;
 
 // Tabs
 @tab-border: @standard-form-border;
@@ -279,6 +301,9 @@
 
 // Filters
 @filter-hover-color: @list-hover-color;
+
+// Previews
+@preview-background-color: #424242;
 
 // Generic colours for displaying collections of items
 @collectionColour1: #f1e695;

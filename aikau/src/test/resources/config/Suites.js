@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,13 +32,13 @@ define({
     */
    // Uncomment and add specific tests as necessary during development!
    xbaseFunctionalSuites: [
-      "src/test/resources/alfresco/login/LoginFormTest"
+      "src/test/resources/alfresco/upload/UploadMonitorTest"
 
-      // THESE SITES REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
-      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
+      // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/dnd/NestedConfigurationTest",
       // "src/test/resources/alfresco/layout/AlfTabContainerTest",
-      // "src/test/resources/alfresco/preview/PdfJsPreviewTest"
+      // "src/test/resources/alfresco/preview/PdfJsPreviewTest",
+      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
    ],
 
    /**
@@ -51,11 +51,13 @@ define({
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 
+      "src/test/resources/alfresco/buttons/DropDownButtonTest",
       "src/test/resources/alfresco/buttons/DynamicPayloadButtonTest",
 
       "src/test/resources/alfresco/charts/ccc/PieChartTest",
 
       "src/test/resources/alfresco/core/AdvancedVisibilityConfigTest",
+      "src/test/resources/alfresco/core/ClientPropRenderFilterTest",
       "src/test/resources/alfresco/core/CoreRwdTest",
       "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
@@ -101,6 +103,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/views/AlfDetailedViewTest",
       "src/test/resources/alfresco/documentlibrary/views/AlfDocumentListWithHeaderTest",
       "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
+      "src/test/resources/alfresco/documentlibrary/views/MediaFilmStripViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewTest",
       "src/test/resources/alfresco/documentlibrary/views/GalleryViewThumbnailSizingTest",
 
@@ -121,6 +124,7 @@ define({
       "src/test/resources/alfresco/forms/controls/AsyncFormControlLoadingTest",
       "src/test/resources/alfresco/forms/controls/AutoSetTest",
       "src/test/resources/alfresco/forms/controls/BaseFormTest",
+      "src/test/resources/alfresco/forms/controls/ButtonsTest",
       "src/test/resources/alfresco/forms/controls/CheckBoxTest",
       "src/test/resources/alfresco/forms/controls/CodeMirrorTest",
       "src/test/resources/alfresco/forms/controls/ComboBoxTest",
@@ -184,6 +188,7 @@ define({
       "src/test/resources/alfresco/lists/views/GalleryViewFocusTest",
       "src/test/resources/alfresco/lists/views/GalleryViewInfiniteScrollTest",
       "src/test/resources/alfresco/lists/views/HtmlListViewTest",
+      "src/test/resources/alfresco/lists/views/ViewNoDataWidgetsTest",
       "src/test/resources/alfresco/lists/views/layouts/EditableRowTest",
       "src/test/resources/alfresco/lists/views/layouts/RowTest",
 
@@ -282,6 +287,8 @@ define({
       "src/test/resources/alfresco/services/actions/NodeLocationTest",
       "src/test/resources/alfresco/services/actions/WorkflowTest",
 
+      "src/test/resources/alfresco/upload/DndUploadTest",
+      "src/test/resources/alfresco/upload/UploadMonitorTest",
       "src/test/resources/alfresco/upload/UploadTest",
       "src/test/resources/alfresco/upload/UploadTargetTest",
 

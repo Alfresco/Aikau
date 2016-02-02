@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,11 +18,14 @@
  */
 
 /**
- * This module provides a way in which [form controls]{@link module:alfresco/forms/controls/BaseFormControl}
+ * <p>This module provides a way in which [form controls]{@link module:alfresco/forms/controls/BaseFormControl}
  * can be horizontally aligned within a [form]{@link module:alfresco/forms/Form}. It extends the
  * [horizontal widgets layout widget]{@link module:alfresco/layout/HorizontalWidgets} to gain the layout, dimensions
  * and resizing capabilities and aliases the expected functions to iterate over all the
- * [form controls]{@link module:alfresco/forms/controls/BaseFormControl} that it may have processed.
+ * [form controls]{@link module:alfresco/forms/controls/BaseFormControl} that it may have processed.</p>
+ * <p>When using this widget in a dialog you should make sure to configure it to have
+ * a [fixedWidth]{@link module:alfresco/dialogs/AlfDialog#fixedWidth} - this can also be configured in the
+ * when using the [DialogService]{@link module:alfresco/services/DialogService}.</p>
  * 
  * @module alfresco/forms/ControlRow
  * @extends module:alfresco/layout/HorizontalWidgets,
@@ -98,6 +101,15 @@ define(["alfresco/layout/HorizontalWidgets",
        * @instance
        */
       postCreate: function alfresco_forms_ControlRow__postCreate() {
+         // Before calling inherited (which will process the widgets), ensure
+         // they are populated with the showValidationErrorsImmediately value
+         if (this.widgets) {
+            array.forEach(this.widgets, function(widget) {
+               if (widget && widget.config) {
+                  widget.config.showValidationErrorsImmediately = this.showValidationErrorsImmediately;
+               }
+            }, this);
+         }
          this.inherited(arguments);
          domClass.add(this.domNode, "alfresco-forms-ControlRow");
          var hasDescription = false;

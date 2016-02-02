@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -34,6 +34,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/core/PathUtils",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/mouse",
@@ -45,7 +46,7 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom",
         "dojo/_base/window"], 
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, lang, array, mouse, on, registry, domClass, 
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, topics, lang, array, mouse, on, registry, domClass, 
                  domConstruct, domGeom, domStyle, dom, win) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
@@ -414,6 +415,7 @@ define(["dojo/_base/declare",
        * @since 1.0.41
        */
       removeDndUploadHandlers: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeDndUploadHandlers() {
+         this.dndUploadEnabled = false;
          if (this.dndUploadEventHandlers)
          {
             array.forEach(this.dndUploadEventHandlers, function(handle){ handle.remove(); });
@@ -520,7 +522,7 @@ define(["dojo/_base/declare",
                }
                domConstruct.create("img", {
                   className: "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay__info__icon",
-                  src: require.toUrl("alfresco/documentlibrary/css/images/") + this.dndUploadHighlightImage
+                  src: require.toUrl("alfresco/documentlibrary/css/images/" + this.dndUploadHighlightImage)
                }, pNode);
             }
             
@@ -574,6 +576,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} evt HTML5 drag and drop event
+       * @fires module:alfresco/core/topics#UPLOAD_REQUEST
        */
       onDndUploadDrop: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop(evt) {
          try
@@ -607,7 +610,7 @@ define(["dojo/_base/declare",
                   var responseTopic = this.generateUuid();
                   this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
 
-                  this.alfPublish("ALF_UPLOAD_REQUEST", {
+                  this.alfPublish(topics.UPLOAD_REQUEST, {
                      alfResponseTopic: responseTopic,
                      files: evt.dataTransfer.files,
                      targetData: updatedConfig
@@ -666,7 +669,7 @@ define(["dojo/_base/declare",
             dialogTitle: "Update",
             dialogConfirmationButtonTitle: "Continue Update",
             dialogCancellationButtonTitle: "Cancel",
-            formSubmissionTopic: "ALF_UPLOAD_REQUEST",
+            formSubmissionTopic: topics.UPLOAD_REQUEST,
             formSubmissionPayloadMixin: {
                alfResponseTopic: responseTopic,
                filesRefs: filesRef,

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -48,7 +48,7 @@ define(["alfresco/core/ObjectTypeUtils",
       "dojo/on",
       "dojo/text!./templates/DebugLog.html"
    ],
-   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template, ZeroClipboard) {
+   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template) {
       /*jshint devel:true*/
 
       return declare([SubscriptionLog], {
@@ -118,8 +118,29 @@ define(["alfresco/core/ObjectTypeUtils",
           *
           * @instance
           * @type {Object[]}
+          * @default
           */
          _entries: null,
+
+         /**
+          * The previous value of the include-filter
+          *
+          * @instance
+          * @type {string}
+          * @since 1.0.50
+          * @default
+          */
+         _lastIncludeFilter: null,
+
+         /**
+          * The previous value of the exclude-filter
+          *
+          * @instance
+          * @type {string}
+          * @since 1.0.50
+          * @default
+          */
+         _lastExcludeFilter: null,
 
          /**
           * The constructor
@@ -168,8 +189,7 @@ define(["alfresco/core/ObjectTypeUtils",
                source,
                entryNode,
                infoNode,
-               dataNode,
-               copyToClipboardNode;
+               dataNode;
 
             // Create the new entry
             entryNode = domConstruct.create("li", {
@@ -234,74 +254,118 @@ define(["alfresco/core/ObjectTypeUtils",
             });
 
             // Re-apply the filters
-            this._applyIncludeFilter();
-            this._applyExcludeFilter();
+            this._applyFilters(true);
          },
 
          /**
-          * Update the exclude filter
+          * Apply the include and exclude filters to the log. Filter values are either
+          * comma-separated strings or a regular expression, as determined by the state
+          * of the regular expression "checkbox".
           *
           * @instance
+          * @param {boolean} [force=false] Whether to force applying the current filters
+          * @since 1.0.50
           */
-         _applyExcludeFilter: function alfresco_logging_DebugLog___applyExcludeFilter() {
-            this._applyFilter(this.excludeFilter, this.excludeFilterRegex, false);
-         },
-
-         /**
-          * Update the supplied filter
-          *
-          * @instance
-          */
-         _applyFilter: function alfresco_logging_DebugLog___applyFilter(filter, regexControl, include) {
-            var filterValue = filter.value,
-               useRegex = regexControl.checked,
-               matchRegex = new RegExp(filterValue, "i"),
-               hiddenClass = this.rootClass + "__log__entry--hidden";
-            array.forEach(this._entries, function(entry) {
-               var matchesTopic = false,
-                  currentlyHidden = domClass.contains(entry.node, hiddenClass),
-                  hideEntry = currentlyHidden;
-               if (useRegex) {
-                  matchesTopic = matchRegex.test(entry.topic);
-               } else {
-                  matchesTopic = entry.topic.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
+         _applyFilters: function alfresco_logging_DebugLog___applyFilters(force) {
+            var filters = {
+                  include: this.includeFilter.value,
+                  exclude: this.excludeFilter.value,
+                  regex: this.filterUsesRegex.checked,
+                  includePayload: this.includePayload.checked
+               },
+               prefix = filters.regex ? "REGEXP_" : "",
+               suffix = filters.includePayload ? "_INCLUDE-PAYLOAD" : "",
+               newInclude = prefix + filters.include + suffix,
+               newExclude = prefix + filters.exclude + suffix,
+               filtersChanged = newInclude !== this._lastIncludeFilter || newExclude !== this._lastExcludeFilter;
+            if (filtersChanged || force) {
+               if (filtersChanged) {
+                  this._lastIncludeFilter = newInclude;
+                  this._lastExcludeFilter = newExclude;
                }
-               if (include) {
-                  hideEntry = filterValue && !matchesTopic;
-               } else if (filterValue && matchesTopic) {
-                  hideEntry = false;
-               }
-               domClass[hideEntry ? "add" : "remove"](entry.node, hiddenClass);
-            }, this);
+               this._entries.forEach(lang.hitch(this, this._applyFilter, filters));
+            }
          },
 
          /**
-          * Update the include filter
+          * Set the visibility of the supplied log entry given the current filters
           *
           * @instance
+          * @param {object} filters The filters information
+          * @param {string} filters.include The value of the include-filter input
+          * @param {string} filters.exclude The value of the exclude-filter input
+          * @param {string} filters.includeRegex Whether the include-filter is a regular-expression
+          * @param {string} filters.excludeRegex Whether the include-filter is a regular-expression
+          * @param {object} entry The log entry
           */
-         _applyIncludeFilter: function alfresco_logging_DebugLog___applyIncludeFilter() {
-            this._applyFilter(this.includeFilter, this.includeFilterRegex, true);
+         _applyFilter: function alfresco_logging_DebugLog___applyFilter(filters, entry) {
+
+            // Setup variables
+            var topic = lang.getObject("node.dataset.aikauLogTopic", false, entry),
+               data = lang.getObject("node.dataset.aikauLogData", false, entry),
+               hiddenClass = this.rootClass + "__log__entry--hidden",
+               hide = false,
+               hiddenByInclude,
+               hiddenByExclude,
+               testValue;
+
+            // Clean up the data, to ensure we have suitable data (and not a string containing two quotes!)
+            data = (data === "undefined") ? undefined : JSON.parse(data);
+            data = data ? JSON.stringify(data) : "";
+            testValue = topic;
+            if (filters.includePayload) {
+               testValue += data;
+            }
+
+            // Determine whether to hide this node
+            if (filters.include || filters.exclude) {
+               hiddenByInclude = filters.include && !this._matchesFilter(testValue, "include", filters);
+               hiddenByExclude = filters.exclude && this._matchesFilter(testValue, "exclude", filters);
+               hide = hiddenByInclude || hiddenByExclude;
+            }
+
+            // Hide/show as appropriate
+            domClass[hide ? "add" : "remove"](entry.node, hiddenClass);
          },
 
          /**
           * Clear the exclude filter
           *
           * @instance
+          * @since 1.0.51
           */
-         _clearExcludeFilter: function alfresco_logging_DebugLog___clearExcludeFilter() {
+         _clearFilters: function alfresco_logging_DebugLog___clearFilters() {
+            this.includeFilter.value = "";
             this.excludeFilter.value = "";
-            this._applyExcludeFilter();
+            this._applyFilters();
          },
 
          /**
-          * Clear the include filter
+          * Apply the filter value to the test string and return match status
           *
           * @instance
+          * @param {string} testString The text to match against
+          * @param {string} filter The filter to apply
+          * @returns {boolean} Whether the filter matches the test string
+          * @since 1.0.50
           */
-         _clearIncludeFilter: function alfresco_logging_DebugLog___clearIncludeFilter() {
-            this.includeFilter.value = "";
-            this._applyIncludeFilter();
+         _matchesFilter: function alfresco_logging_DebugLog___matchesFilter(testString, filterType, filters) {
+            var filter = filters[filterType];
+            if (!filter) {
+               return false;
+            }
+            var matches = false,
+               filterToUse;
+            if (filters.regex) {
+               filterToUse = new RegExp(filter, "i");
+               matches = filterToUse.test(testString);
+            } else {
+               filterToUse = this._splitFilters(filter);
+               matches = filterToUse.some(function(filterTerm) {
+                  return testString.toLowerCase().indexOf(filterTerm.toLowerCase()) !== -1;
+               });
+            }
+            return matches;
          },
 
          /**
@@ -331,7 +395,7 @@ define(["alfresco/core/ObjectTypeUtils",
 
                   // Ignore functions
                   var functionName = unsafe.name && unsafe.name + "()";
-                  safeValue = "[" + (functionName || "function") + "]";
+                  safeValue = functionName || "function";
 
                } else if (!unsafe || typeof unsafe !== "object") {
 
@@ -454,6 +518,22 @@ define(["alfresco/core/ObjectTypeUtils",
             if (!clickedOnExpandedData && dataNode) {
                domClass.toggle(dataNode, collapsedClass);
             }
+         },
+
+         /**
+          * Split the terms in a filter string to create an array of filter values. Terms are
+          * comma-separated. To include a comma in a search term, double it up (use ,,) and
+          * it will be converted into a single comma after the terms have been split.
+          *
+          * @instance
+          * @param {string} filterString The filter string
+          * @returns {string[]} The filter values
+          * @since 1.0.50
+          */
+         _splitFilters: function alfresco_logging_DebugLog___splitFilters(filterString) {
+            return filterString.split(/,(?!,)/).map(function(filterValue) {
+               return filterValue.replace(/,,/, ",");
+            });
          }
       });
    });

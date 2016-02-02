@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -68,6 +68,18 @@ define(["dojo/_base/declare",
       setAttributes: function alfresco_preview_AlfDocumentPreviewPlugin__setAttributes(attributes) {
          var clonedAttributes = lang.clone(attributes);
          lang.mixin(this.attributes, clonedAttributes);
+      },
+
+      /**
+       * If [display]{@link module:alfresco/preview/AlfDocumentPreview#display} returns HTML to be
+       * added as the preview then this function will be called after it has been added to the document.
+       * This provides an opportunity for the plugin to perform any additional initialisation.
+       * 
+       * @instance
+       * @since 1.0.51
+       */
+      onMarkupAdded: function alfresco_preview_AlfDocumentPreviewPlugin__onMarkupAdded() {
+         // By default don't report anything.
       },
 
       /**

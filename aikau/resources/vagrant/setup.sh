@@ -1,15 +1,13 @@
 #!/bin/sh
 
 # Version numbers (change these)
-CHROMEDRIVER_VERSION="2.15"
-FIREFOX_VERSION="38.0"
-PHANTOMJS_VERSION="1.9.8"
-SELENIUM_VERSION="2.46"
+CHROMEDRIVER_VERSION="2.20"
+SELENIUM_VERSION="2.49"
+SELENIUM_REVISION="2.49.1"
 
 # Filenames (normally don't change these)
 CHROMEDRIVER_FILENAME="chromedriver_linux64.zip"
-PHANTOMJS_FILENAME="phantomjs-$PHANTOMJS_VERSION-linux-x86_64" # NOTE: Don't include .tar.bz2 extension here
-SELENIUM_FILENAME="selenium-server-standalone-$SELENIUM_VERSION.0.jar"
+SELENIUM_FILENAME="selenium-server-standalone-$SELENIUM_REVISION.jar"
 
 # Avoid re-downloading if already installed
 set -e
@@ -40,11 +38,6 @@ else
    unzip $CHROMEDRIVER_FILENAME
    mv chromedriver /usr/local/bin
 
-   # Download and copy Phantomjs to /usr/local/bin
-   wget "https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOMJS_FILENAME.tar.bz2"
-   tar -xjvf $PHANTOMJS_FILENAME.tar.bz2
-   mv $PHANTOMJS_FILENAME/bin/phantomjs /usr/local/bin
-
    # Download and copy Selenium to /usr/local/bin
    wget "http://selenium-release.storage.googleapis.com/$SELENIUM_VERSION/$SELENIUM_FILENAME"
    mv $SELENIUM_FILENAME /usr/local/bin
@@ -63,11 +56,8 @@ Xvfb :10 -screen 0 1366x768x24 -ac -extension RANDR &
 echo "Starting Google Chrome (v`dpkg -s google-chrome-stable| grep Version|cut -d: -f2` w/ Chrome Driver v$CHROMEDRIVER_VERSION)..."
 google-chrome --remote-debugging-port=9222 &
 
-echo "Starting Firefox (v$FIREFOX_VERSION)..."
+echo "Starting Firefox..."
 firefox &
-
-echo "Starting Phantomjs ($PHANTOMJS_VERSION)..."
-phantomjs --ignore-ssl-errors=true --web-security=false --webdriver=192.168.56.4:4444 &
 
 echo "Starting Selenium (v$SELENIUM_VERSION)..."
 nohup java -jar /usr/local/bin/$SELENIUM_FILENAME &

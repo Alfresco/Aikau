@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -62,7 +62,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDisplayMessages: function alfresco_pickers_PropertyPicker__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message("containerPicker.no.view.message");
          this.noDataMessage = this.message("containerPicker.no.data.message");
          this.fetchingDataMessage = this.message("containerPicker.loading.data.message");
          this.renderingViewMessage = this.message("containerPicker.rendering.data.message");

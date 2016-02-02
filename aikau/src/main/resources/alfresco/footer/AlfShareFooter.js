@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -89,12 +89,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_footer_AlfShareFooter__postMixInProperties() {
-
          // Set the 'licensed to' label
          this.licensedToLabel = this.message("label.licensedTo");
 
          // Get the correct license if available
-         if (this.licenseLabel != null && lang.trim(this.licenseLabel) != "" && this.licenseLabel != "UNKNOWN")
+         if (this.licenseLabel && lang.trim(this.licenseLabel) !== "" && this.licenseLabel !== "UNKNOWN")
          {
             this.licenseLabel = this.message(this.licenseLabel);
          }
@@ -104,7 +103,7 @@ define(["dojo/_base/declare",
          }
 
          // Set the appropriate copyright label
-         if (this.copyrightLabel != null && lang.trim(this.copyrightLabel) != "")
+         if (this.copyrightLabel && lang.trim(this.copyrightLabel) !== "")
          {
             this.copyrightLabel = this.message(this.copyrightLabel);
          }
@@ -114,7 +113,7 @@ define(["dojo/_base/declare",
          }
 
          // Set the appropriate alt-text for the logo image
-         if (this.altText != null && lang.trim(this.altText) != "")
+         if (this.altText && lang.trim(this.altText) !== "")
          {
             this.altText = this.message(this.altText);
          }
@@ -125,15 +124,15 @@ define(["dojo/_base/declare",
          }
 
          // Select the correct logo image - use the default if none is provided
-         if (this.logoImageSrc == null)
+         if (!this.logoImageSrc)
          {
             this.logoImageSrc = "alfresco-share-logo.png";
          }
-         if (this.logoImageSrc == "alfresco-share-logo-enterprise.png" ||
-             this.logoImageSrc == "alfresco-share-logo-team.png" ||
-             this.logoImageSrc == "alfresco-share-logo.png")
+         if (this.logoImageSrc === "alfresco-share-logo-enterprise.png" ||
+             this.logoImageSrc === "alfresco-share-logo-team.png" ||
+             this.logoImageSrc === "alfresco-share-logo.png")
          {
-            this.logoImageSrc = require.toUrl("alfresco/footer") + "/css/images/" + this.logoImageSrc;
+            this.logoImageSrc = require.toUrl("alfresco/footer/css/images/" + this.logoImageSrc);
          }
          else
          {
@@ -150,7 +149,7 @@ define(["dojo/_base/declare",
          domClass.add(this.footerParentNode, "footer");
 
          // Set the appropriate css class
-         if (this.cssClass != null && lang.trim(this.cssClass) != "")
+         if (this.cssClass && lang.trim(this.cssClass) !== "")
          {
             domClass.add(this.footerParentNode, this.cssClass);
          }
@@ -160,7 +159,7 @@ define(["dojo/_base/declare",
          }
 
          // Hide the license label if not available
-         if (this.licenseLabel == null || lang.trim(this.licenseLabel) == "" || this.licenseLabel == "UNKNOWN")
+         if (!this.licenseLabel || lang.trim(this.licenseLabel) === "" || this.licenseLabel === "UNKNOWN")
          {
             domClass.add(this.licenseHolderNode, "hidden");
          }

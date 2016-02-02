@@ -29,7 +29,7 @@ model.jsonModel = {
                                     id: "HEADER_POPUP",
                                     name: "alfresco/header/AlfMenuBarPopup",
                                     config: {
-                                       label: "Header Popup",
+                                       label: "Really, Really, Really Long Header Popup",
                                        widgets: [
                                           {
                                              id: "NO_STATUS",

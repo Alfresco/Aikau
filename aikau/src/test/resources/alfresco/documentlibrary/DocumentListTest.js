@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -56,10 +56,17 @@ registerSuite(function(){
       },
 
       "Test sort order toggles": function() {
-         return browser.findById("SORT_ASC_REQUEST_label")
-            .clearLog()
+         return browser.findById("PUBLISH_DATA_label")
             .click()
          .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .clearLog()
+
+         .findById("SORT_ASC_REQUEST_label")
+            .click()
+         .end()
+
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "sortAscending", true, "Sort direction not updated");
@@ -68,10 +75,17 @@ registerSuite(function(){
       },
       
       "Test sort field selection doesn't change sort order": function() {
-         return browser.findById("SORT_FIELD_SELECTION_label")
-            .clearLog()
+         return browser.findById("PUBLISH_DATA_label")
             .click()
          .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .clearLog()
+
+         .findById("SORT_FIELD_SELECTION_label")
+            .click()
+         .end()
+
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "sortField", "cm:title", "Sort field not updated");
@@ -82,10 +96,17 @@ registerSuite(function(){
       },
       
       "Test sort order toggle (to descending)": function() {
-         return browser.findById("SORT_DESC_REQUEST_label")
-            .clearLog()
+         return browser.findById("PUBLISH_DATA_label")
             .click()
          .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .clearLog()
+
+         .findById("SORT_DESC_REQUEST_label")
+            .click()
+         .end()
+
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "sortAscending", false, "Sort direction not updated");
@@ -96,10 +117,17 @@ registerSuite(function(){
       },
       
       "Test hide folder toggle": function() {
-         return browser.findByCssSelector("#HIDE_FOLDERS_label")
-            .clearLog()
+         return browser.findById("PUBLISH_DATA_label")
             .click()
          .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .clearLog()
+
+         .findByCssSelector("#HIDE_FOLDERS_label")
+            .click()
+         .end()
+
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "type", "documents", "Type not updated");
@@ -107,10 +135,17 @@ registerSuite(function(){
       },
       
       "Test show folder toggle": function() {
-         return browser.findByCssSelector("#SHOW_FOLDERS_label")
-            .clearLog()
+         return browser.findById("PUBLISH_DATA_label")
             .click()
          .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .clearLog()
+
+         .findByCssSelector("#SHOW_FOLDERS_label")
+            .click()
+         .end()
+
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "type", "all", "Type not updated");
@@ -118,10 +153,17 @@ registerSuite(function(){
       },
       
       "Test set page number": function() {
-         return browser.findByCssSelector("#SET_PAGE_label")
-            .clearLog()
+         return browser.findById("PUBLISH_DATA_label")
             .click()
          .end()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .clearLog()
+
+         .findByCssSelector("#SET_PAGE_label")
+            .click()
+         .end()
+         
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "page", 2, "Page not updated");
@@ -162,9 +204,14 @@ registerSuite(function(){
                assert.lengthOf(elements, 3, "Couldn't find select controls in PublishingDropDownMenu widgets");
             })
          .end()
-         .findByCssSelector(".alfresco-forms-controls-Select .dijitButtonContents")
+
+         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+         .end()
+
+         .findDisplayedById("PDM_ITEM_0_SELECT_CONTROL")
             .click()
          .end()
+
          .findAllByCssSelector(".dijitPopup tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "No options provided available");

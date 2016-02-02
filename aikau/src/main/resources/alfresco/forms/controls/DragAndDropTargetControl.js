@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -226,7 +226,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_DragAndDropTargetControl__setupChangeEvents() {
-         on(this.domNode, Constants.updateItemsEvent, lang.hitch(this, this.onDragAndDropTargetUpdated));
+         this.own(on(this.domNode, Constants.updateItemsEvent, lang.hitch(this, this.onDragAndDropTargetUpdated)));
       },
 
       /**

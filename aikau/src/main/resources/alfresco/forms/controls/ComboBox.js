@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -63,6 +63,16 @@ define(["dojo/_base/declare",
       autoComplete: false,
 
       /**
+       * The placeholder to be used
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       */
+      placeHolder: null,
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_ComboBox__getWidgetConfig() {
@@ -81,11 +91,13 @@ define(["dojo/_base/declare",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_ComboBox__createFormControl(/*jshint unused:false*/config, domNode) {
+         var placeHolder = (this.placeHolder) ? this.message(this.placeHolder) : "";
          var serviceStore = this.createServiceStore();
          var comboBox = new ComboBox({
             id: this.id + "_CONTROL",
             name: this.name,
             value: this.value,
+            placeHolder: placeHolder,
             store: serviceStore,
             searchAttr: serviceStore.queryAttribute,
             labelAttribute: serviceStore.labelAttribute,

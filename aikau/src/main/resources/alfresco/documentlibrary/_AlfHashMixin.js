@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -94,7 +94,7 @@ define(["dojo/_base/declare",
        * @param {string} hashString An optional string to use as the hash. If not provided the current hash will be
        */
       initialiseFilter: function alfresco_documentlibrary_AlfHashMixin__intialiseFilter(hashString) {
-         hashString && hashUtils.setHashString(hashString);
+         hashString && hashUtils.setHash(hashString);
          this.onHashChange(hashUtils.getHashString());
       },
       

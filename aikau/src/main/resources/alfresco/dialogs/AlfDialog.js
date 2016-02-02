@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -660,6 +660,17 @@ define(["dojo/_base/declare",
                }
             }
          }
+      },
+
+      /**
+       * Set the title of the dialog. The Dojo way of doing it uses innerHTML, so this is the recommended, XSS-safe way of doing it.
+       *
+       * @instance
+       * @param {string} newTitle The new title
+       * @since 1.0.52
+       */
+      setTitle: function alfresco_dialogs_AlfDialog__setTitle(newTitle) {
+         this.titleNode.textContent = newTitle;
       }
    });
 });

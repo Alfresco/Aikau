@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,14 +19,26 @@
 
 /**
  *
- * @module aikauTesting/SearchMockXhr
+ * @module aikauTesting/UploadMockXhr
  * @author Richard Smith
+ * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "aikauTesting/MockXhr"], 
-        function(declare, MockXhr) {
-   
+        "dojo/_base/lang", 
+        "alfresco/testing/MockXhr"], 
+        function(declare, lang, MockXhr) {
+
    return declare([MockXhr], {
+
+      /**
+       * How long the average upload takes to complete
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.52
+       */
+      averageUploadTimeSecs: 1,
 
       /**
        * The response code to return. Default to 200 but can be overridden to test failures
@@ -43,23 +55,55 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupServer: function alfresco_testing_MockXhr__setupServer() {
-         try
-         {
-            var responseCode = this.responseCode;
-            this.server.respondWith(function(request) {
-               request.uploadProgress({
-                  total: 100,
-                  loaded: 20
-               });
-               request.respond(responseCode, 
-                              {"Content-Type":"application/json;charset=UTF-8"},
-                               "{\"nodeRef\":\"bob\",\"fileName\":\"moomin\"}");
-            });
-         }
-         catch(e)
-         {
+         try {
+            this.server.respondWith(lang.hitch(this, function(request) {
+
+               // Setup headers/body for response                  
+               var headers = {
+                     "Content-Type": "application/json;charset=UTF-8"
+                  },
+                  body = "{\"nodeRef\":\"bob\",\"fileName\":\"moomin\"}";
+
+               // If response code isn't 200, respond immediately
+               if (this.responseCode !== 200) {
+                  request.respond(this.responseCode, headers, body);
+                  return;
+               }
+
+               // Randomly increment the progress every few moments until it's at 100 percent
+               var delay = (this.averageUploadTimeSecs * 1000) / 100;
+               request.readyState = 4; // Set the response to pretend to be completed, so Sinon doesn't send its own responses and close it before we finish
+               for (var i = 1; i < 100; i += Math.round(Math.random() * 10)) {
+                  this.sendProgress(request, i, i * delay);
+               }
+
+               // After progress has finished, send the final response
+               setTimeout(function() {
+                  request.readyState = 1; // Sinon won't send response unless it thinks the response is clean and only just opened
+                  request.respond(this.responseCode, headers, body);
+               }, i * delay);
+
+            }));
+         } catch (e) {
             this.alfLog("error", "The following error occurred setting up the mock server", e);
          }
+      },
+
+      /**
+       * Send a progress response asynchronously.
+       *
+       * @instance
+       * @param {object} request The request object
+       * @param {number} percent The percentage progress to send
+       * @param {number} delay The delay, in milliseconds, until the progress is sent
+       */
+      sendProgress: function(request, percent, delay) {
+         setTimeout(function() {
+            request.uploadProgress({
+               total: 100,
+               loaded: percent
+            });
+         }, delay);
       }
    });
 });

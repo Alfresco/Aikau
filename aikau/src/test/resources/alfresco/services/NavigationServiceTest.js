@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -47,6 +47,15 @@ define(["intern!object",
                .execute("return window.location.hash.toString()")
                .then(function(hash) {
                   assert.equal(hash, "#hash1=bob&hash2=ted", "Setting a hash didn't work");
+               });
+         },
+
+         "Modify a hash": function() {
+            return browser.findByCssSelector("#MODIFY_HASH_label")
+               .click()
+               .execute("return window.location.hash.toString()")
+               .then(function(hash) {
+                  assert.equal(hash, "#hash1=bob&hash2=ted&hash3=fred%2Fbarney", "Modifying a hash didn't work");
                });
          },
 

@@ -24,7 +24,7 @@
          margin: 0 2px;
       }
 
-      .alfresco-lists-AlfList > div.info,
+      .alfresco-lists-AlfList > *,
       .alfresco-documentlibrary-views-layouts-AlfDocumentListView {
          margin: 0;
          padding: 0;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -97,17 +97,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is the message to display when no view is selected. Message keys will be localized
-       * where possible.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      noViewSelectedMessage: "propPicker.no.view.message",
-
-      /**
-       * This is the message to display when no view is selected. Message keys will be localized
+       * This is the message to display when no data is available. Message keys will be localized
        * where possible.
        *
        * @instance
@@ -118,7 +108,7 @@ define(["dojo/_base/declare",
       noDataMessage: "propPicker.no.data.message",
 
       /**
-       * This is the message to display when no data is available. Message keys will be localized
+       * This is the message to display when data is loading. Message keys will be localized
        * where possible.
        *
        * @instance
@@ -129,7 +119,7 @@ define(["dojo/_base/declare",
       fetchingDataMessage: "propPicker.loading.data.message",
 
       /**
-       * This is the message to display whilst data is being loaded. Message keys will be localized
+       * This is the message to display whilst a view is being rendered. Message keys will be localized
        * where possible.
        *
        * @instance
@@ -140,7 +130,7 @@ define(["dojo/_base/declare",
       renderingViewMessage: "propPicker.rendering.data.message",
 
       /**
-       * This is the message to display when an error occurs rendering data. Message keys will be localized
+       * This is the message to display when fetching more data. Message keys will be localized
        * where possible.
        *
        * @instance

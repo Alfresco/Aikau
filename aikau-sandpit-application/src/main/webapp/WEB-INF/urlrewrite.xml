@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//www.tuckey.org//DTD UrlRewrite 3.0//EN" "http://www.tuckey.org/res/dtds/urlrewrite3.0.dtd">
+<urlrewrite use-query-string="true">
+
+   <!-- Video Preview -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/(.*)/content/(.*).mp4(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/previews/Video.mp4</to>
+   </rule>
+   <!-- Audio Preview -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/(.*)/content/(.*).mp3(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/previews/Audio.mp3</to>
+   </rule>
+   <!-- PDF Preview -->
+   <rule>
+     <from>/proxy/alfresco/api/node/workspace/SpacesStore/(.*)/content/(.*).pdf(.*)</from>
+     <to>/page/resource/js/sandpit/mockdata/previews/PDF.pdf</to>
+   </rule>
+   <!-- Image Preview -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/(.*)/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/previews/Image.jpg</to>
+   </rule>
+   
+
+   <!-- Spring Surf -->
+   <rule>
+        <from>/favicon.ico</from>
+        <to>/favicon.ico</to>
+    </rule>
+    <rule>
+      <from>/proxy/(.*)</from>
+      <to>/page/proxy/$1</to>
+   </rule>
+   <rule>
+      <from>/res/(.*)</from>
+      <to>/page/resource/$1</to>
+   </rule>     
+   <rule>
+      <from>/service/(.*)</from>
+      <to>/page/$1</to>
+   </rule>        
+   <rule>
+      <from>/system/(.*)</from>
+      <to>/page/system/$1</to>
+    </rule>
+    <rule>
+      <from>/(.*)</from>
+      <to>/page/$1</to>
+   </rule>
+   
+</urlrewrite>

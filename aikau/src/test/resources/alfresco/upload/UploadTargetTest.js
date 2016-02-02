@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -83,7 +83,7 @@ define(["intern!object",
             .end()
 
             // Close the dialog...
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+            .findByCssSelector(".dialogDisplayed .footer .dijitButtonNode")
                .click()
             .end()
 

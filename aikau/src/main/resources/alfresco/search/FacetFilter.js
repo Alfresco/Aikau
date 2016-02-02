@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,6 +32,7 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "dojo/text!./templates/FacetFilter.html",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
@@ -40,7 +41,8 @@ define(["dojo/_base/declare",
         "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/core/ArrayUtils"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, lang, array, domConstruct, domClass, on, hashUtils, ioQuery, arrayUtils) {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, template,  AlfCore, topics, 
+                 lang, array, domConstruct, domClass, on, hashUtils, ioQuery, arrayUtils) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
       
@@ -124,6 +126,19 @@ define(["dojo/_base/declare",
       filterData: "",
 
       /**
+       * Indicates that the filter cannot be applied because the a search request is in progress.
+       * This is updated by the [blockFilterRequests]{@link module:alfresco/search/FacetFilter#blockFilterRequests}
+       * and [unblockFilterRequests]{@link module:alfresco/search/FacetFilter#unblockFilterRequests} functions.
+       * It should not be configured.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.51
+       */
+      _filteringBlocked: false,
+
+      /**
        * Indicates whether or not the full width of the filter (including the count and the white space)
        * can be clicked to toggle the filter.
        * 
@@ -166,7 +181,7 @@ define(["dojo/_base/declare",
             this.appliedFilterAltText = this.message(this.appliedFilterAltText, {0: this.label});
 
             // Set the source for the image to use to indicate that a filter is applied...
-            this.appliedFilterImageSrc = require.toUrl("alfresco/search") + "/css/images/" + this.appliedFilterImageSrc;
+            this.appliedFilterImageSrc = require.toUrl("alfresco/search/css/images/" + this.appliedFilterImageSrc);
          }
          else
          {
@@ -195,16 +210,78 @@ define(["dojo/_base/declare",
          {
             domClass.add(this.domNode, "alfresco-search-FacetFilter--full-width-click");
          }
+
+         // See AKU-782 - Ensure that filters cannot be applied when search requests are in progress...
+         this.alfSubscribe(topics.SEARCH_REQUEST, lang.hitch(this, this.onSearchRequestStart));
+         this.alfSubscribe(topics.GET_DOCUMENT_LIST_SUCCESS, lang.hitch(this, this.onSearchRequestEnd));
       },
       
       /**
+       * This function is called from [onSearchRequestStart]{@link module:alfresco/search/FacetFilter#onSearchRequestStart}
+       * and sets the [_filteringBlocked]{@link module:alfresco/search/FacetFilter#_filteringBlocked} to be true
+       * to prevent further filtering from being performed whilst search requests are in progress.
+       * 
+       * @instance
+       * @since 1.0.51
+       */
+      blockFilterRequests: function alfresco_search_FacetFilter__blockFilterRequests() {
+         this._filteringBlocked = true;
+         domClass.add(this.domNode, "alfresco-search-FacetFilter--block-requests");
+      },
+
+      /**
+       * This function is called from [onSearchRequestEnd]{@link module:alfresco/search/FacetFilter#onSearchRequestEnd}
+       * and sets the [_filteringBlocked]{@link module:alfresco/search/FacetFilter#_filteringBlocked} to be false
+       * to indicate that the filter can be applied as there is no search request currently in progress.
+       * 
+       * @instance
+       * @since 1.0.51
+       */
+      unblockFilterRequests: function alfresco_search_FacetFilter__unblockFilterRequests() {
+         this._filteringBlocked = false;
+         domClass.remove(this.domNode, "alfresco-search-FacetFilter--block-requests");
+      },
+
+      /**
+       * This function is called when a search request is made. It calls
+       * [blockFilterRequests]{@link module:alfresco/search/FacetFilter#blockFilterRequests} to ensure that
+       * no further filtering can be performed whilst a search request is in progress.
+       * 
+       * @instance
+       * @param  {object} payload The request start payload
+       * @since 1.0.51
+       */
+      onSearchRequestStart: function alfresco_search_FacetFilter__onSearchRequestStart(/*jshint unused:false*/ payload) {
+         this.blockFilterRequests();
+      },
+
+      /**
+       * This function is called when a search request is made. It calls
+       * [unblockFilterRequests]{@link module:alfresco/search/FacetFilter#unblockFilterRequests} to allow filtering
+       * to occur as no search request is in progress.
+       * 
+       * @instance
+       * @param  {object} payload The request start payload
+       * @since 1.0.51
+       */
+      onSearchRequestEnd: function alfresco_search_FacetFilter__onSearchRequestEnd(/*jshint unused:false*/ payload) {
+         this.unblockFilterRequests();
+      },
+
+      /**
        * If the filter has previously been applied then it is removed, if the filter is not applied
-       * then it is applied.
+       * then it is applied. Note that it is not possible for filters to be applied when
+       * [_filteringBlocked]{@link module:alfresco/search/FacetFilter#_filteringBlocked} has been set
+       * to true.
        *
        * @instance
        */
       onToggleFilter: function alfresco_search_FacetFilter__onToggleFilter(evt) {
-         if (evt.target === this.labelNode || this.fullWidthClick)
+         if (this._filteringBlocked)
+         {
+            this.alfLog("log", "Facet filtering blocked whilst search request in progress", this);
+         }
+         else if (evt.target === this.labelNode || this.fullWidthClick)
          {
             if (this.applied)
             {

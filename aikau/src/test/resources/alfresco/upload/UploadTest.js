@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -60,7 +60,7 @@ define(["intern!object",
                })
             .end()
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+            .findByCssSelector(".dialogDisplayed .footer .dijitButtonNode")
                .click()
             .end()
 
@@ -103,7 +103,7 @@ define(["intern!object",
                })
             .end()
 
-            .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+            .findByCssSelector(".dialogDisplayed .footer .dijitButtonNode")
                .click()
             .end()
 
@@ -189,7 +189,22 @@ define(["intern!object",
          },
          
          "Test Multi-File Upload (successful)": function () {
-            return browser.findAllByCssSelector(successfulUploadsSelector)
+            return browser.findByCssSelector(successfulUploadsSelector + ":nth-child(1)")
+            .sleep(2000)
+            .end()
+
+            .findByCssSelector(successfulUploadsSelector + ":nth-child(2)")
+            .sleep(2000)
+            .end()
+
+            .findByCssSelector(successfulUploadsSelector + ":nth-child(3)")
+            .sleep(2000)
+            .end()
+
+            .findByCssSelector(successfulUploadsSelector + ":nth-child(4)")
+            .end()
+
+            .findAllByCssSelector(successfulUploadsSelector)
                .then(function(elements) {
                   assert.lengthOf(elements, 4, "Wrong number of successful uploads");
                })

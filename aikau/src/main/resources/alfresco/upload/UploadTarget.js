@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
             dialogTitle: "upload.target.dialog.title",
             dialogConfirmationButtonTitle: "upload.target.dialog.confirmation",
             dialogCancellationButtonTitle: "upload.target.dialog.cancellation",
-            formSubmissionTopic: "ALF_UPLOAD_REQUEST",
+            formSubmissionTopic: topics.UPLOAD_REQUEST,
             formSubmissionPayloadMixin: {
                alfResponseTopic: responseTopic,
                filesRefs: filesRef,

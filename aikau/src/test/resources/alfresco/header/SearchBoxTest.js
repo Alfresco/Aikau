@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -143,7 +143,7 @@ define(["intern!object",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
-                  assert.propertyVal(payload, "url", Config.urls.unitTestAppBaseUrl + "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
+                  assert.include(payload.url, "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
                });
          },
 
@@ -153,7 +153,7 @@ define(["intern!object",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
-                  assert.propertyVal(payload, "url", Config.urls.unitTestAppBaseUrl + "/aikau/page/user/admin/profile", "Wrong URL");
+                  assert.include(payload.url, "/aikau/page/user/admin/profile", "Wrong URL");
                });
          },
 

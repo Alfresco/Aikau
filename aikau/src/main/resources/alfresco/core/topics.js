@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -78,6 +78,20 @@ define([],function() {
       ASSIGN_WORKFLOW: "ALF_ASSIGN_WORKFLOW",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {string} site The site shortname to change the user role in
+       * @property {string} [role=SiteManager] The role for the user to become
+       * @property {string} [user] The userid to change the role for
+       */
+      BECOME_SITE_MANAGER: "ALF_BECOME_SITE_MANAGER",
+
+      /**
        * Event topic to trigger the cancel the editing of a checkout document
        *
        * @instance
@@ -125,6 +139,37 @@ define([],function() {
        * @event
        */
       CLOUD_AUTHENTICATION_SUCCESS: "ALF_CLOUD_AUTHENTICATION_SUCCESS",
+
+      /**
+       * This is fired when content is created (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content creation.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string} parentNodeRef The nodeRef of the parent that the content was created within
+       * @property {string} nodeRef The nodeRef of the created content
+       */
+      CONTENT_CREATED: "ALF_CONTENT_CREATED",
+
+      /**
+       * This is fired when content is deleted (typically by the [ContentService]{@link module:alfresco/services/ContentService})
+       * and was added to that [trees]{@link module:alfresco/navigation/PathTree} would be able to refresh themselves
+       * following content deletion.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string[]} nodeRef The nodeRefs of the content that has been deleted.
+       */
+      CONTENT_DELETED: "ALF_CONTENT_DELETED",
 
       /**
        * This topic is published to launch the copying or moving of a node (or nodes) to another location.
@@ -218,6 +263,19 @@ define([],function() {
       DELETE_SITE: "ALF_DELETE_SITE",
 
       /**
+       * This topic is published to request a title change in the current, top-most dialog.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {string} title The new title
+       */
+      DIALOG_CHANGE_TITLE: "ALF_DIALOG_CHANGE_TITLE",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *
@@ -241,8 +299,33 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       *
+       * @event
+       * @property {string} message The message to be displayed in the prompt
+       * @property {string} [title] The title of the prompt
        */
       DISPLAY_PROMPT: "ALF_DISPLAY_PROMPT",
+
+      /**
+       * This topic can be published to request that a [StickyPanel]{@link module:alfresco/layout/StickyPanel} be
+       * displayed. It is subscribed to by the [NotificationService]{@link module:alfresco/services/NotificationService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {object[]} widgets The widgets to appear in the panel
+       * @property {string} [title=default.title] The title to display (uses i18n)
+       * @property {number} [padding=10] The padding to be applied to the widgets area
+       * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
+       * @property {boolean} [warnIfOpen=true] Whether to put a warning in the console if the panel is
+       *                                       already visible
+       * @property {function} [callback] The function to call after panel created (or if it already exists)
+       *                                 with the panel instance as the first and only argument
+       */
+      DISPLAY_STICKY_PANEL: "ALF_DISPLAY_STICKY_PANEL",
 
       /**
        * Publish this to indicate the de-selection of an individual item
@@ -366,6 +449,18 @@ define([],function() {
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
 
       /**
+       * This topic can be fired when the enter key is pressed (but normally is not by default).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.49
+       *
+       * @event
+       */
+      ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
+
+      /**
        * This topic can be used to request Cloud specific paths to use in an
        * [Tree form control]{@link module:alfresco/forms/controls/Tree}.
        *
@@ -418,6 +513,18 @@ define([],function() {
        * @since 1.0.33
        */
       GET_DOCUMENT_LIST: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
+
+      /**
+       * This topic is typically published as a result of request to load documents by publishing
+       * [GET_DOCUMENT_LIST]{@link module:alfresco/core/topics#GET_DOCUMENT_LIST}. It will contain
+       * the results of the request and can have a varying payload depending upon the API being used.
+       *
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.51
+       */
+      GET_DOCUMENT_LIST_SUCCESS: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
        * Get the node ref for the current node's parent.
@@ -510,6 +617,7 @@ define([],function() {
        * @property {string} url - The URL to navigate to
        * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {string} [modifyCurrent=false] Whether to modify the current hash (default is to completely replace it)
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
 
@@ -576,6 +684,22 @@ define([],function() {
        * @property {object} [parameters={}] - The parameters to include in the POST
        */
       POST_TO_PAGE: "ALF_POST_TO_PAGE",
+
+      /**
+       * This topic should be published when indicating what [previewers]{@link module:alfresco/preview/AlfDocumentPreview}
+       * are currently displayed. This has been added to support the 
+       * [DocumentCarousel]{@link module:alfresco/documentlibrary/views/layouts/DocumentCarousel} so that audio and video
+       * previewers can automatically be stopped and started as they leave are hidden and displayed.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.51
+       *
+       * @event
+       * @property {object[]} items An array of the items that have been displayed.
+       */
+      PREVIEWS_SHOWN: "ALF_PREVIEWS_SHOWN",
 
       /**
        * This topic is published to indicate that data needs to be uploaded. This is typically list based data but can
@@ -691,6 +815,30 @@ define([],function() {
       SCROLL_NEAR_BOTTOM: "ALF_SCROLL_NEAR_BOTTOM",
 
       /**
+       * This topic can be used to publish a request to perform a search.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.51
+       *
+       * @event module:alfresco/core/topics~SEARCH_REQUEST
+       * @property {string} term The term to search for
+       * @property {number} [startIndex] The index in the search results to start the page of data from
+       * @property {number} [pageSize] The number of results to include in the page of data
+       * @property {string} [site] The shortName of a site to search within
+       * @property {string} rootNode The nodeRef of the node to search within
+       * @property {boolean} [repo] Indicates whether or not so search within the entire Alfresco Repository or just sites
+       * @property {string} [facetFields] Comma delimited fields to facet on in the search
+       * @property {string} [filters] Comma delimited facet filters to apply to the search
+       * @property {boolean} [spellcheck] Indicates whether or not to perform alternative searches based on better spelling
+       * @property {object} [query] Additinal query parameters to apply to the search
+       * @property {string} [sortField] The field to sort the search results on
+       * @property {boolean} [sortAscending] Indicates whether or not to sort the search results in ascending order
+       */
+      SEARCH_REQUEST: "ALF_SEARCH_REQUEST",
+
+      /**
        * This topic should be published by [menu items]{@link module:alfresco/menus/AlfMenuItem} contained within
        * a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup} to
        * be forwarded onto the [ActionService]{@link module:alfresco/services/ActionService} in order to request
@@ -774,6 +922,43 @@ define([],function() {
        * @property {object[]} nodes The node or nodes to download.
        */
       SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
+
+      /**
+       * This can be called to close the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       */
+      STICKY_PANEL_CLOSE: "ALF_STICKY_PANEL_CLOSE",
+
+      /**
+       * This is fired when the StickyPanel has been closed.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       */
+      STICKY_PANEL_CLOSED: "ALF_STICKY_PANEL_CLOSED",
+
+      /**
+       * This can be called to set the title of the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.48
+       *
+       * @event
+       * @property {string} title The new title to use
+       */
+      STICKY_PANEL_SET_TITLE: "ALF_STICKY_PANEL_SET_TITLE",
 
       /**
        * This topic is published in order to make the actual request to sync a node or nodes
@@ -860,6 +1045,27 @@ define([],function() {
        * @event
        */
       UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
+
+      /**
+       * This topic is published to request an upload.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.52
+       *
+       * @event
+       * @property {object[]} files The files to upload
+       * @property {string} [fileRefs] A dot-notation reference to the files in the context of
+       *                               [alfGetData]{@link module:alfresco/core/Core#alfGetData}
+       *                               which will override any included files
+       * @property {object} targetData An object describing where to upload the files to
+       * @property {string} alfResponseTopic The topic on which to respond after all files have
+       *                                     uploaded (successfully or unsuccessfully)
+       * @property {string} [responseScope] The scope of the response defined by the alfResponseTopic,
+       *                                    defaults to the scope of the publish caller
+       */
+      UPLOAD_REQUEST: "ALF_UPLOAD_REQUEST",
 
       /**
        * This topic can be published to display a dialog that allows users to select one or more files

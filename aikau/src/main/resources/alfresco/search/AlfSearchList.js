@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -27,14 +27,16 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/AlfSortablePaginatedList",
+        "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/dom-class",
         "alfresco/util/hashUtils",
         "dojo/io-query",
         "alfresco/core/ArrayUtils",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/search/AlfSearchListView"],
-        function(declare, AlfSortablePaginatedList, array, lang, hashUtils, ioQuery, arrayUtils, ObjectTypeUtils) {
+        function(declare, AlfSortablePaginatedList, topics, array, lang, domClass, hashUtils, ioQuery, arrayUtils, ObjectTypeUtils) {
 
    return declare([AlfSortablePaginatedList], {
 
@@ -203,7 +205,6 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_REMOVE_FACET_FILTER", lang.hitch(this, this.onRemoveFacetFilter));
          this.alfSubscribe("ALF_SEARCHLIST_SCOPE_SELECTION", lang.hitch(this, this.onScopeSelection));
          this.alfSubscribe("ALF_ADVANCED_SEARCH", lang.hitch(this, this.onAdvancedSearch));
-         this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.onReloadData));
       },
 
       /**
@@ -213,7 +214,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDisplayMessages: function alfresco_search_AlfSearchList__setDisplayMessages() {
-         this.noViewSelectedMessage = this.message("searchlist.no.view.message");
          this.noDataMessage = this.message("searchlist.no.data.message");
          this.fetchingDataMessage = this.message("searchlist.loading.data.message");
          this.renderingViewMessage = this.message("searchlist.rendering.data.message");
@@ -554,6 +554,10 @@ define(["dojo/_base/declare",
        */
       loadData: function alfresco_search_AlfSearchList__loadData() {
          // jshint maxcomplexity:false,maxstatements:false
+         
+         // Ensure any no data node is hidden...
+         domClass.add(this.noDataNode, "share-hidden");
+
          var key;
          if (this.requestInProgress)
          {
@@ -657,7 +661,7 @@ define(["dojo/_base/declare",
 
                // Set a response topic that is scoped to this widget...
                searchPayload.alfResponseTopic = this.pubSubScope + "ALF_RETRIEVE_DOCUMENTS_REQUEST";
-               this.alfPublish("ALF_SEARCH_REQUEST", searchPayload, true);
+               this.alfPublish(topics.SEARCH_REQUEST, searchPayload, true);
             }
             else
             {
@@ -734,7 +738,7 @@ define(["dojo/_base/declare",
             // Publish the number of search results found...
             this.alfPublish("ALF_SEARCH_RESULTS_COUNT", {
                count: resultsCount,
-               label: this.message("faceted-search.results-menu.results-found", {
+               label: this.message("faceted-search.results-menu.results-found-patch", {
                   0: resultsCount
                })
             });

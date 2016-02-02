@@ -119,9 +119,9 @@
          border-top-color: #ccc;
          cursor: pointer;
          &__highlighted-label {
+            color: @general-font-color;
             font-family: @bold-font;
             font-weight: 700;
-            color: @general-font-color;
             text-decoration: underline;
          }
          &:first-child {
@@ -168,11 +168,11 @@
    }
    &--has-error {
       border-color: #c00;
-      outline: 1px solid #faa;
+      box-shadow: 0 0 1px 1px #ffc4c4;
    }
    &--focused {
       border-color: #09c;
-      outline: 1px solid #0cf;
+      box-shadow: 0 0 1px 1px #80e5ff;
    }
    &--choices-nowrap {
       .alfresco-forms-controls-MultiSelect__choice__content {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -379,7 +379,8 @@ define(["dojo/_base/declare",
                config.publishPayload = {
                   url: "path=" + (path || "/"),
                   type: "HASH",
-                  target: "CURRENT"
+                  target: "CURRENT",
+                  modifyCurrent: true
                };
                config.publishGlobal = true;
             }

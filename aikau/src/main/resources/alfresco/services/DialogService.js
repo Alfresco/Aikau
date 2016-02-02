@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -180,11 +180,12 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/aspect",
         "dojo/dom-class",
+        "dojo/dom-style",
         "dojo/on",
         "dojo/keys",
         "dojo/when",
         "jquery"],
-        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, aspect, domClass, on, keys, when, $) {
+        function(declare, BaseService, topics, AlfDialog, AlfForm, lang, array, aspect, domClass, domStyle, on, keys, when, $) {
 
    return declare([BaseService], {
 
@@ -291,9 +292,20 @@ define(["dojo/_base/declare",
       _activeDialogs: [],
 
       /**
+       * The scrollbar width for this browser-environment
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.53
+       */
+      _scrollbarWidth: null,
+
+      /**
        * @instance
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST
        * @listens module:alfresco/services/DialogService~event:ALF_CREATE_DIALOG_REQUEST
+       * @listens module:alfresco/core/topics#DIALOG_CHANGE_TITLE
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_DialogService__registerSubscriptions() {
@@ -302,6 +314,7 @@ define(["dojo/_base/declare",
          this.publishTopic = topics.CREATE_FORM_DIALOG;
          this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onCreateFormDialogRequest));
          this.alfSubscribe(topics.CREATE_DIALOG, lang.hitch(this, this.onCreateDialogRequest));
+         this.alfSubscribe(topics.DIALOG_CHANGE_TITLE, lang.hitch(this, this.changeDialogTitle));
 
          // Create a reference of IDs to dialogs...
          // The idea is that we shouldn't have multiple instances of a dialog with the same ID, but we
@@ -316,6 +329,21 @@ define(["dojo/_base/declare",
                this._handleEscape();
             }
          }));
+      },
+
+      /**
+       * Change the title of the current (i.e. top-most) dialog.
+       *
+       * @instance
+       * @param {object} payload The payload
+       */
+      changeDialogTitle: function alfresco_services_DialogService__changeDialogTitle(payload) {
+         var newTitle = payload.title,
+            dialogs = this._activeDialogs,
+            topDialog = dialogs.length && dialogs[dialogs.length - 1];
+         if (newTitle && topDialog) {
+            topDialog.setTitle(newTitle);
+         }
       },
 
       /**
@@ -479,13 +507,13 @@ define(["dojo/_base/declare",
        */
       publishOnShow: function alfresco_services_DialogService__publishOnShow(publication) {
          // TODO: Defensive coding, global/parent scope arg handling...
-         if (publication.publishTopic && publication.publishPayload)
+         if (publication.publishTopic)
          {
             this.alfPublish(publication.publishTopic, publication.publishPayload);
          }
          else
          {
-            this.alfLog("warn", "A request was made to publish data when a dialog is loaded, but either the topic or payload was missing", publication, this);
+            this.alfLog("warn", "A request was made to publish data when a dialog is loaded, but the topic was missing", publication, this);
          }
       },
 
@@ -820,6 +848,7 @@ define(["dojo/_base/declare",
 
          // Ensure the dialogs-showing CSS state is "true"
          // NOTE: This selector is used in AlfDialog.css as this service has no CSS file itself
+         domStyle.set(document.body, "margin-right", this._getScrollbarWidth() + "px");
          domClass.add(document.documentElement, "alfresco-dialog-AlfDialog--dialogs-visible");
 
          // Handle cancelling
@@ -842,8 +871,24 @@ define(["dojo/_base/declare",
             // If there are no dialogs "left" then set the dialogs-showing CSS state to "false"
             if(this._activeDialogs.length === 0) {
                domClass.remove(document.documentElement, "alfresco-dialog-AlfDialog--dialogs-visible");
+               domStyle.set(document.body, "margin-right", "0");
             }
          }));
+      },
+
+      /**
+       * Get the scrollbar width for the current browser environment. This is cached
+       * after first retrieval for faster access.
+       *
+       * @instance
+       * @returns {number} The scrollbar width
+       * @since 1.0.53
+       */
+      _getScrollbarWidth: function alfresco_services_DialogService___getScrollbarWidth() {
+         if (!this._scrollbarWidth) {
+            this._scrollbarWidth = window.innerWidth - document.documentElement.offsetWidth;
+         }
+         return this._scrollbarWidth;
       },
 
        /**

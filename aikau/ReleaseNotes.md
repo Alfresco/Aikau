@@ -1,4 +1,4 @@
-Aikau 1.0.47 Release Notes
+Aikau 1.0.52 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,56 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.52:
+* [AKU-676](https://issues.alfresco.com/jira/browse/AKU-676)       - Added alfresco/buttons/DropDownButton
+* [AKU-747](https://issues.alfresco.com/jira/browse/AKU-747)       - Added alfresco/services/FileUploadService
+* [AKU-769](https://issues.alfresco.com/jira/browse/AKU-769)       - Support Mac cmd-click to open new tab
+* [AKU-787](https://issues.alfresco.com/jira/browse/AKU-787)       - Added label node to InlineEditPropery template
+* [AKU-788](https://issues.alfresco.com/jira/browse/AKU-788)       - Ensure arrow is visible on ellipsis displayed AlfMenuBarPopup
+* [AKU-789](https://issues.alfresco.com/jira/browse/AKU-789)       - Support page reload option on become site manager
+
+1.0.51:
+* [AKU-775](https://issues.alfresco.com/jira/browse/AKU-775)       - Improve auto-resizing TinyMCE improvements
+* [AKU-777](https://issues.alfresco.com/jira/browse/AKU-777)       - Fixed MultiSelect options list expansion
+* [AKU-778](https://issues.alfresco.com/jira/browse/AKU-778)       - Fixed MultiSelect options filtering
+* [AKU-779](https://issues.alfresco.com/jira/browse/AKU-779)       - Ensure non-focused filmstrip view previews are paused
+* [AKU-780](https://issues.alfresco.com/jira/browse/AKU-780)       - Ensure videos in filmstrip view can be replayed
+* [AKU-781](https://issues.alfresco.com/jira/browse/AKU-781)       - Support client-side propety evaluation in renderFilter
+* [AKU-782](https://issues.alfresco.com/jira/browse/AKU-782)       - Prevent selection of facet filters when search in progress
+* [AKU-784](https://issues.alfresco.com/jira/browse/AKU-784)       - Fix drag-and-drop file upload
+* [AKU-786](https://issues.alfresco.com/jira/browse/AKU-786)       - Allow thumbnail preview of cm:content sub-type
+
+1.0.50:
+* [AKU-764](https://issues.alfresco.com/jira/browse/AKU-764)       - Added warnings for scoped form controls
+* [AKU-766](https://issues.alfresco.com/jira/browse/AKU-766)       - Resolve Firefox iframe rendering issues
+* [AKU-768](https://issues.alfresco.com/jira/browse/AKU-768)       - Added alfresco/upload/UploadMonitor widget
+* [AKU-769](https://issues.alfresco.com/jira/browse/AKU-769)       - Add mouse middle/control click support for search links
+* [AKU-770](https://issues.alfresco.com/jira/browse/AKU-770)       - PathTree refresh on root node additions
+* [AKU-771](https://issues.alfresco.com/jira/browse/AKU-771)       - InlineEditProperty edit value encoding correction
+* [AKU-774](https://issues.alfresco.com/jira/browse/AKU-774)       - Fixed DebugLog filtering issue
+* [AKU-775](https://issues.alfresco.com/jira/browse/AKU-775)       - Ensure TinyMCE editor resizes correctly on first use
+* [AKU-776](https://issues.alfresco.com/jira/browse/AKU-776)       - Ensure "No Data" message is not displayed in lists when loading data
+
+1.0.49:
+* [AKU-750](https://issues.alfresco.com/jira/browse/AKU-750)       - Support for form submission from textbox on enter key
+* [AKU-751](https://issues.alfresco.com/jira/browse/AKU-751)       - Support to configure forms to focus first field
+* [AKU-752](https://issues.alfresco.com/jira/browse/AKU-752)       - Support for title on AlfButton
+* [AKU-761](https://issues.alfresco.com/jira/browse/AKU-761)       - Support showValidationErrorsImmediately for form fields within ControlRow
+* [AKU-765](https://issues.alfresco.com/jira/browse/AKU-765)       - Update shims to support textContent use in IE8
+
+1.0.48:
+* [AKU-687](https://issues.alfresco.com/jira/browse/AKU-687)       - Add "primary-call-to-action" CSS class for AlfButton
+* [AKU-700](https://issues.alfresco.com/jira/browse/AKU-700)       - Improve list loading to make "smoother"
+* [AKU-732](https://issues.alfresco.com/jira/browse/AKU-732)       - Add hash update support for AlfBreadcrumbTrail
+* [AKU-739](https://issues.alfresco.com/jira/browse/AKU-739)       - Make PathTree respond to creation/deletion
+* [AKU-742](https://issues.alfresco.com/jira/browse/AKU-742)       - Placeholder support for ComboBox
+* [AKU-744](https://issues.alfresco.com/jira/browse/AKU-744)       - Height config support for FilmStripViewSearchResult
+* [AKU-745](https://issues.alfresco.com/jira/browse/AKU-745)       - Escaping of variables in AlfBreadcrumbTrail
+* [AKU-747](https://issues.alfresco.com/jira/browse/AKU-747)       - Created StickyPanel widget
+* [AKU-749](https://issues.alfresco.com/jira/browse/AKU-749)       - Removed HTML from search count label
+* [AKU-754](https://issues.alfresco.com/jira/browse/AKU-754)       - Dutch date format correction
+* [AKU-759](https://issues.alfresco.com/jira/browse/AKU-759)       - AlfShareFooter copyright correction
+
 1.0.47:
 * [AKU-679](https://issues.alfresco.com/jira/browse/AKU-679)       - Ensure form elementrs pass Wave accessibility checks
 * [AKU-703](https://issues.alfresco.com/jira/browse/AKU-703)       - Added config option for full-width FacetFilters

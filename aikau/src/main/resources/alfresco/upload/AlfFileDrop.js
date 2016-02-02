@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -32,9 +32,10 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/AlfFileDrop.html",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/on"], 
-        function(declare, _Widget, _Templated, template, Core, lang, on) {
+        function(declare, _Widget, _Templated, template, Core, topics, lang, on) {
    
    return declare([_Widget, _Templated, Core], {
       
@@ -94,11 +95,12 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
+       * @fires module:alfresco/core/topics#UPLOAD_REQUEST
        */
       onDndDrop: function alfresco_upload_AlfFileDrop__onDndDrop(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        this.alfPublish("ALF_UPLOAD_REQUEST", {
+        this.alfPublish(topics.UPLOAD_REQUEST, {
            files: evt.dataTransfer.files,
            targetData: {
               destination: this.destinationNodeRef,

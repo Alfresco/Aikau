@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,9 +25,14 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "dojo/_base/lang",
+        "dojo/on",
+        "alfresco/layout/StickyPanel",
         "alfresco/notifications/AlfNotification",
         "alfresco/core/topics"],
-        function(declare, BaseService, lang, AlfNotification, topics) {
+        function(declare, BaseService, lang, on, StickyPanel, AlfNotification, topics) {
+
+   // We only ever allow one sticky panel currently
+   var theStickyPanel = null;
 
    return declare([BaseService], {
 
@@ -75,17 +80,20 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.32
        * @listens module:alfresco/services/NotificationService#displayNotificationTopic
+       * @listens module:alfresco/services/NotificationService#displayPromptTopic
+       * @listens module:alfresco/core/topics#DISPLAY_STICKY_PANEL
        */
       registerSubscriptions: function alfresco_services_NotificationService__registerSubscriptions() {
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
          this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
+         this.alfSubscribe(topics.DISPLAY_STICKY_PANEL, lang.hitch(this, this.onDisplayStickyPanel));
       },
 
       /**
        * Displays a notification to the user
        *
        * @instance
-       * @param {object} payload The The details of the notification.
+       * @param {object} payload The details of the notification.
        */
       onDisplayNotification: function alfresco_services_NotificationService__onDisplayNotification(payload) {
          var message = lang.getObject("message", false, payload);
@@ -106,10 +114,64 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Displays a sticky panel at the bottom of the screen.
+       *
+       * @instance
+       * @param {object} payload The details of the notification.
+       * @since 1.0.48
+       */
+      onDisplayStickyPanel: function alfresco_services_NotificationService__onDisplayStickyPanel(payload) {
+
+         // Setup variables
+         var panelConfig = {},
+            closeSubscription;
+
+         // Determine action
+         if (theStickyPanel) {
+
+            // Warn that panel aready exists if appropriate
+            payload.warnIfOpen && this.alfLog("warn", "It was not possible to display a StickyPanel because one is already displayed", payload);
+
+         } else if (payload.widgets) {
+
+            // Setup the panel-widget config
+            panelConfig.widgets = payload.widgets;
+            if (payload.title) {
+               panelConfig.title = payload.title;
+            }
+            if (payload.width) {
+               panelConfig.panelWidth = payload.width;
+            }
+            if (payload.padding || payload.padding === 0) {
+               panelConfig.widgetsPadding = payload.padding;
+            }
+
+            // Create the panel
+            theStickyPanel = new StickyPanel(panelConfig);
+
+            // When the panel is closed, empty the static pointer to it
+            closeSubscription = this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, function() {
+               theStickyPanel = null;
+               this.alfUnsubscribe(closeSubscription);
+            }));
+
+         } else {
+
+            // Cannot create panel
+            this.alfLog("warn", "It was not possible to display the StickyPanel because no suitable 'widgets' attribute was provided", payload);
+         }
+
+         // If we've got a panel and a callback, use it
+         if (theStickyPanel && payload.callback) {
+            payload.callback(theStickyPanel);
+         }
+      },
+
+      /**
        * Displays a prompt to the user
        *
        * @instance
-       * @param {object} payload The The details of the notification.
+       * @param {object} payload The details of the notification.
        */
       onDisplayPrompt: function alfresco_services_NotificationService__onDisplayPrompt(payload) {
          var message = lang.getObject("message", false, payload);

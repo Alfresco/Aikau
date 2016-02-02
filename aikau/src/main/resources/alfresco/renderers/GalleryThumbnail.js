@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
        * @returns {boolean}
        */
       getFolderImage: function alfresco_renderers_GalleryThumbnail__getDefaultFolderImage() {
-         return require.toUrl("alfresco/renderers") + "/css/images/folder-256.png";
+         return require.toUrl("alfresco/renderers/css/images/folder-256.png");
       },
       
       /**

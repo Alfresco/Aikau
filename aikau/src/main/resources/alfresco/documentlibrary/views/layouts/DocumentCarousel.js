@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -29,6 +29,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/Carousel",
+        "alfresco/core/topics",
         "alfresco/enums/urlTypes",
         "dojo/_base/lang",
         "dojo/dom-class",
@@ -37,7 +38,7 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/query", 
         "dojo/NodeList-dom"], 
-        function(declare, Carousel, urlTypes, lang, domClass, domConstruct, domStyle, domGeom, query, nodeListDom) {
+        function(declare, Carousel, topics, urlTypes, lang, domClass, domConstruct, domStyle, domGeom, query, /*jshint unused:false*/ nodeListDom) {
 
    return declare([Carousel], {
       
@@ -146,6 +147,21 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this.alfPublish("ALF_FILMSTRIP_ITEM_CHANGED", {
             index: this.firstDisplayedIndex
+         });
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/views/layouts/Carousel#renderDisplayedItems}
+       * to publish a topic indicating that the items being played should be stopped.
+       * 
+       * @instance
+       * @since 1.0.51
+       * @fires module:alfresco/core/topics#PREVIEWS_SHOWN
+       */
+      renderDisplayedItems: function alfresco_documentlibrary_views_layouts_DocumentCarousel__renderDisplayedItems() {
+         this.inherited(arguments);
+         this.alfPublish(topics.PREVIEWS_SHOWN, {
+            items: this.currentData.items.slice(this.firstDisplayedIndex, this.lastDisplayedIndex + 1)
          });
       }
    });

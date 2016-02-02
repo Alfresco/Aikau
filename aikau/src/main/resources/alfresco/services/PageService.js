@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -30,11 +30,12 @@ define(["dojo/_base/declare",
         "alfresco/services/_PageServiceTopicMixin",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
+        "alfresco/util/objectProcessingUtil",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils, ObjectTypeUtils, lang, array, domConstruct, AlfConstants) {
+        function(declare, BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils, ObjectTypeUtils, objectProcessingUtil, lang, array, domConstruct, AlfConstants) {
    
    return declare([BaseService, CoreXhr, _PageServiceTopicMixin, NotificationUtils], {
       
@@ -54,10 +55,11 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_PageService__registerSubscriptions() {
-         this.alfSubscribe("ALF_AVAILABLE_PAGE_DEFINITIONS", lang.hitch(this, "loadPages"));
-         this.alfSubscribe(this.createPageTopic, lang.hitch(this, "createPage"));
-         this.alfSubscribe(this.updatePageTopic, lang.hitch(this, "updatePage"));
-         this.alfSubscribe("ALF_EXPORT_PAGE_DEFINITION", lang.hitch(this, "exportPageModel"));
+         this.alfSubscribe("ALF_AVAILABLE_PAGE_DEFINITIONS", lang.hitch(this, this.loadPages));
+         this.alfSubscribe("ALF_GET_ALL_REMOTE_PAGES", lang.hitch(this, this.getPages));
+         this.alfSubscribe(this.createPageTopic, lang.hitch(this, this.createPage));
+         this.alfSubscribe(this.updatePageTopic, lang.hitch(this, this.updatePage));
+         this.alfSubscribe("ALF_EXPORT_PAGE_DEFINITION", lang.hitch(this, this.exportPageModel));
       },
       
 
@@ -108,6 +110,61 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * PLEASE NOTE: This only works with the Horizon3-Repo-AMP REST APIs
+       *
+       * @instance
+       * @param {object} payload The payload for the page request
+       * @since 1.0.49
+       */
+      getPages: function alfresco_services_PageService__loadPages(/*jshint unused:false */ payload) {
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "horizon3/pages",
+            method: "GET",
+            alfTopic: payload.alfResponseTopic,
+            successCallback: this.getPagesSuccess,
+            callbackScope: this
+         });
+      },
+
+      /**
+       * Success handler for [getPages]{@link module:alfresco/services/PageService#getPages}.
+       *
+       * @instance
+       * @param {object} response
+       * @param {object} originalRequestConfig
+       * @since 1.0.49
+       */
+      getPagesSuccess: function alfresco_services_PageService__getPagesSuccess(response, originalRequestConfig) {
+         if (response && response.items && ObjectTypeUtils.isArray(response.items))
+         {
+            var pageDefs = [];
+            array.forEach(response.items, lang.hitch(this, function(item) {
+               pageDefs.push(
+                  {
+                     type: [ "widget"],
+                     label: item.name,
+                     value: {
+                        templateModel: JSON.parse(item.content),
+                        isTemplate: true
+                     }
+                  }
+               );
+            }));
+
+            response.items = pageDefs;
+            var topic = originalRequestConfig.alfTopic + "_SUCCESS";
+            this.alfPublish(topic, {
+               response: response,
+               originalRequestConfig: originalRequestConfig
+            });
+         }
+         else
+         {
+            this.alfLog("error", "The request to retrieve available page definitions returned a response that could not be interpreted", response, originalRequestConfig, this);
+         }
+      },
+
+      /**
        * Makes an XHR request to retrieve the pages that are available. The pages returned are those
        * that have been created and stored in the Data Dictionary on the Alfresco repository. 
        *
@@ -117,7 +174,7 @@ define(["dojo/_base/declare",
        */
       loadPages: function alfresco_services_PageService__loadPages(payload) {
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "/remote-share/pages",
+            url: AlfConstants.PROXY_URI + "remote-share/pages",
             method: "GET",
             responseTopic: payload.responseTopic,
             successCallback: this.loadPagesSuccess,
@@ -220,6 +277,31 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Removes unnecessary attributes from a template before it is passed for previewing.
+       * 
+       * @instance
+       * @param {object} parameters
+       * @since 1.0.49
+       */
+      cleanUpTemplateConfig: function alfresco_services_PageService__cleanUpTemplateConfig(parameters) {
+         if (parameters.object === true)
+         {
+            var parent = parameters.ancestors[parameters.ancestors.length-1];
+            objectProcessingUtil.findObject(parent.config, {
+               prefix: "isTemplate",
+               processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+               config: null
+            });
+
+            parent._alfTemplateName = parent.label;
+            delete parent.label;
+            delete parent.isTemplate;
+            delete parent.templateModel;
+            delete parent.type;
+         }
+      },
+
+      /**
        * 
        * @instance
        * @param {object} payload The details of the page to create
@@ -231,6 +313,14 @@ define(["dojo/_base/declare",
                name: payload.pageName,
                json: this.getPageDefinitionFromPayload(payload)
             };
+
+            // Clean up template data to set "_alfTemplateName" and remove superfluous attributes...
+            objectProcessingUtil.findObject(data, {
+               prefix: "isTemplate",
+               processFunction: lang.hitch(this, this.cleanUpTemplateConfig),
+               config: null
+            });
+
             this.serviceXhr({
                url : AlfConstants.PROXY_URI + "remote-share/page-definition",
                data: data,

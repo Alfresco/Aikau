@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -41,6 +41,11 @@ define(["intern!object",
             browser.end();
          },
 
+         // See AKU-788...
+         "Down arrow is visible on long menu bar pop-up": function() {
+            return browser.findDisplayedByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__arrow");
+         },
+
          "Test that header CSS is applied": function() {
             // Check that the header CSS is applied...         
             return browser.findByCssSelector(".alfresco-layout-LeftAndRight.alfresco-header-Header")
@@ -67,7 +72,7 @@ define(["intern!object",
          },
 
          "Test initial user status": function() {
-            return browser.findByCssSelector("#HEADER_POPUP_text")
+            return browser.findByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__text-wrapper")
                .click()
                .end()
 
@@ -142,7 +147,7 @@ define(["intern!object",
          "Test setting status updates via PubSub (status)": function() {
             // Use the menus to simulate a status update...
             // (with the bonus of checking the header versions of the menu items work)...
-            return browser.findByCssSelector("#HEADER_POPUP_text")
+            return browser.findByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__text-wrapper")
                .click()
                .end()
                .sleep(150)
@@ -156,7 +161,7 @@ define(["intern!object",
                .sleep(150)
 
             // Open the popup again...
-            .findByCssSelector("#HEADER_POPUP_text")
+            .findByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__text-wrapper")
                .click()
                .end()
 

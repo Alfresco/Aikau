@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -160,10 +160,15 @@ define(["intern!object",
             return browser.findByCssSelector(".dijitMenuBar .dijitMenuItem:nth-child(6) span")
                .click()
             .end()
+
+            .clearLog()
+
             .findByCssSelector(".dijitPopup tr:nth-child(2) .dijitMenuItemLabel")
                .click()
             .end()
-            .sleep(500)
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+
             .findAllByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row")
                .then(function(elements) {
                   assert.lengthOf(elements, 7, "Page size change didn't work");
@@ -171,27 +176,53 @@ define(["intern!object",
          },
 
          "Delete all the comments": function() {
-            return browser.findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+            return browser.findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+               .clearLog()
                .click()
             .end()
-            .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+            .clearLog()
+
+            .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
                .click()
             .end()
-            .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+            .clearLog()
+
+            .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
                .click()
             .end()
-            .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+            .clearLog()
+
+            .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
                .click()
             .end()
-            .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+            .clearLog()
+
+            .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
                .click()
             .end()
-            .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+
+            .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
                .click()
             .end()
-            .findByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+            .clearLog()
+
+            .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
                .click()
             .end()
+
+            .getLastPublish("COMMENTS1_ALF_DOCLIST_REQUEST_FINISHED")
+            .clearLog()
+
             .findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
                .getVisibleText()
                .then(function(text) {

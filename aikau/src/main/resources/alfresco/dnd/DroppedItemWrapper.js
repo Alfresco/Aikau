@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -185,10 +185,10 @@ define(["dojo/_base/declare",
          this.downAltText = this.encodeHTML(this.message(this.downAltText));
          this.deleteAltText = this.encodeHTML(this.message(this.deleteAltText));
          this.editAltText = this.encodeHTML(this.message(this.editAltText));
-         this.upImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.upImg;
-         this.downImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.downImg;
-         this.editImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.editImg;
-         this.deleteImageSrc = require.toUrl("alfresco/dnd") + "/css/images/" + this.deleteImg;
+         this.upImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.upImg);
+         this.downImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.downImg);
+         this.editImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.editImg);
+         this.deleteImageSrc = require.toUrl("alfresco/dnd/css/images/" + this.deleteImg);
       },
 
       /**
@@ -365,7 +365,8 @@ define(["dojo/_base/declare",
          dialogTitle: "{item.name}",
          formSubmissionTopic: "{subscriptionTopic}",
          formSubmissionPayloadMixin: "{payloadMixin}",
-         dialogWidth: "80%",
+         contentWidth: "600px",
+         contentHeight: "700px",
          fixedWidth: true,
          formValue: "{item}",
          widgets: "{widgets}"

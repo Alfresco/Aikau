@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -216,7 +216,7 @@ define(["dojo/_base/declare",
             this.iconNode = domConstruct.create("img", {
                role:"presentation",
                className: "dijitInline dijitIcon dijitMenuItemIcon " + this.iconClass,
-               src: require.toUrl("alfresco/menus") + "/css/images/transparent-20.png",
+               src: require.toUrl("alfresco/menus/css/images/transparent-20.png"),
                title: this.message(this.iconAltText),
                alt: this.message(this.iconAltText),
                tabIndex: 0

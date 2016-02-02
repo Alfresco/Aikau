@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -565,8 +565,11 @@ define(["intern!object",
       return function() {
          return browser.end()
             .findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+            .clearLog()
             .click()
-            .end();
+         .end()
+
+         .getLastPublish("CUSTOM_ALF_DOCLIST_REQUEST_FINISHED");
       };
    }
 

@@ -1,7 +1,7 @@
 /*globals Alfresco,Spinner*/
 // TODO Strip these external dependencies
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -1774,7 +1774,7 @@ define(["dojo/_base/declare",
                               name: "alfresco/menus/AlfMenuBarItem",
                               config: {
                                  label: "pdfjs.zoom.in.label",
-                                 title: "pdfjs.zoom.out.title",
+                                 title: "pdfjs.zoom.in.title",
                                  iconClass: "alf-pdfjs-zoom-in-icon",
                                  disablementTopic: PdfJsConstants.DISABLE_ZOOM_IN_BUTTON_TOPIC,
                                  publishTopic: PdfJsConstants.ZOOM_IN_TOPIC

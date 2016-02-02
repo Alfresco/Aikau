@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -72,6 +72,42 @@ define(["intern!object",
                   .getSize()
                   .then(function(size) {
                      assert.equal(firstPreviewHeight, size.height, "The preview heights were not equal");
+                  });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "SearchFilmStripView Tests (height config)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/SearchFilmStripView?heightMode=400", "SearchFilmStripView Tests  (height config)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         // See AKU-744...
+         "Height configuration is applied": function() {
+            return browser.findByCssSelector("body")
+
+               // Last publish on page render completion...
+               .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
+               
+               .findDisplayedById("SEARCH_RESULTS_PREVIEWS")
+                  .getSize()
+                  .then(function(size) {
+                     // The height should be the requested height, minus the item carousel...
+                     assert.equal(size.height, 288, "Height configuration not used");
                   });
          },
 

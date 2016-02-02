@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.alfresco</groupId>
+      <artifactId>aikau-parent</artifactId>
+      <version>1.0.53-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+   
+   <artifactId>aikau-sandpit-application</artifactId>
+   <packaging>war</packaging>
+   <name>Aikau Sandpit Application</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.alfresco</groupId>
+         <artifactId>aikau</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.extensions.surf</groupId>
+         <artifactId>spring-surf</artifactId>
+         <version>${dependency.surf.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.extensions.surf</groupId>
+         <artifactId>spring-surf-api</artifactId>
+         <version>${dependency.surf.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>servlet-api</artifactId>
+         <version>2.5</version>
+         <scope>provided</scope>
+      </dependency>
+   </dependencies>
+   
+   <build>
+      <finalName>aikau-sandpit-application</finalName>
+      
+      <plugins>
+         <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+               <port>8091</port>
+               <path>/aikau-sandpit</path>
+               <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
+            </configuration>
+         </plugin>
+
+         <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.2.5.v20141112</version>
+            <configuration>
+
+               <!-- Override the system properties to set a port that *should* be unused -->
+               <systemProperties>
+                  <force>true</force>
+                  <systemProperty>
+                     <name>jetty.port</name>
+                     <value>8091</value>
+                  </systemProperty>
+               </systemProperties>
+
+               <webApp>
+                  <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
+                  <contextPath>/aikau-sandpit</contextPath>
+                  <resourceBases>
+                     <resourceBase>src/main/webapp</resourceBase>
+                  </resourceBases>
+                  <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames> 
+               </webApp>
+            </configuration>
+
+         </plugin>
+      </plugins>
+   </build>
+</project>

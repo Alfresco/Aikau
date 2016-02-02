@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -146,11 +146,19 @@ define(["intern!object",
             return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
                .click()
             .end()
+
+            // Scroll back up the page to prevent Chrome loading the next page of data because its so damn fast!
+            .execute(function() {
+               document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop -= 50;
+            })
+
             .findByCssSelector("#SIMULATE_FILTER_label")
                .click()
             .end()
+
             .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", 1500, "More results not loaded")
             .end()
+
             .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
                .then(function(elements) {
                   assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");

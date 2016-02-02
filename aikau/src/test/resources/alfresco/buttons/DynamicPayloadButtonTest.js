@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,133 +23,132 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"],
-      function (registerSuite, assert, require, TestCommon) {
+      function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Dynamic Payload Button Tests",
+      return {
+         name: "Dynamic Payload Button Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/dynamicPayloadButton#initial=test", "Dynamic Payload Button Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/dynamicPayloadButton#initial=test", "Dynamic Payload Button Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Check the original payload": function() {
-         return browser.findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Original Value", "The original payload value has been changed unexpectedly");
-            });
-      },
+         "Check the original payload": function() {
+            return browser.findByCssSelector("#DYNAMIC_BUTTON_label")
+               .click()
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Original Value", "The original payload value has been changed unexpectedly");
+               });
+         },
 
-      "Check the original hash based payload": function() {
-         return browser.findByCssSelector("#DYNAMIC_BUTTON_2_label")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "initial"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "test", "The original payload value has been changed unexpectedly");
-            });
-      },
+         "Check the original hash based payload": function() {
+            return browser.findByCssSelector("#DYNAMIC_BUTTON_2_label")
+               .click()
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "initial"))
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "test", "The original payload value has been changed unexpectedly");
+               });
+         },
 
-      "Override the complete payload": function() {
-         return browser.findByCssSelector("#FULL_OVERRIDE_label")
-            .click()
-         .end()
-         .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override 1", "The original payload value was not updated");
-            });
-      },
+         "Override the complete payload": function() {
+            return browser.findByCssSelector("#FULL_OVERRIDE_label")
+               .click()
+            .end()
+            .findByCssSelector("#DYNAMIC_BUTTON_label")
+               .click()
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Override 1", "The original payload value was not updated");
+               });
+         },
 
-      "Mixin in values and override": function() {
-         return browser.findByCssSelector("#MIXIN_WITH_OVERRIDES_label")
-            .click()
-         .end()
-         .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override 2", "The original payload value was not updated");
-            });
-      },
+         "Mixin in values and override": function() {
+            return browser.findByCssSelector("#MIXIN_WITH_OVERRIDES_label")
+               .click()
+            .end()
+            .findByCssSelector("#DYNAMIC_BUTTON_label")
+               .click()
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Override 2", "The original payload value was not updated");
+               });
+         },
 
-      "Check additional data was included in payload": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "data", "extra data"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data was not found");
-            });
-      },
+         "Check additional data was included in payload": function() {
+            return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "data", "extra data"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Additional data was not found");
+               });
+         },
 
-      "Mixin in values without an override": function() {
-         return browser.findByCssSelector("#MIXIN_NO_OVERRIDES_label")
-            .click()
-         .end()
-         .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override 2", "The previously updated payload value changed again unexpectedly");
-            });
-      },
+         "Mixin in values without an override": function() {
+            return browser.findByCssSelector("#MIXIN_NO_OVERRIDES_label")
+               .click()
+            .end()
+            .findByCssSelector("#DYNAMIC_BUTTON_label")
+               .click()
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Override 2", "The previously updated payload value changed again unexpectedly");
+               });
+         },
 
-      "Check additional data  performs override": function() {
-         return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "data", "bonus data"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data was not found");
-            });
-      },
+         "Check additional data  performs override": function() {
+            return browser.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "data", "bonus data"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Additional data was not found");
+               });
+         },
 
-      "Override via has update": function() {
-         return browser.findByCssSelector("#HASH_OVERRIDE_label")
-            .click()
-         .end()
-         .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override3", "The previously updated payload value was not updated via hash change");
-            });
-      },
+         "Override via has update": function() {
+            return browser.findByCssSelector("#HASH_OVERRIDE_label")
+               .click()
+            .end()
+            .findByCssSelector("#DYNAMIC_BUTTON_label")
+               .click()
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Override3", "The previously updated payload value was not updated via hash change");
+               });
+         },
 
-      "Add extra data via has update": function() {
-         return browser.findByCssSelector("#HASH_OVERRIDE_EXTRA_label")
-            .click()
-         .end()
-         .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "hash", "hashData"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data provided via hash was not found");
-            });
-      },
+         "Add extra data via has update": function() {
+            return browser.findByCssSelector("#HASH_OVERRIDE_EXTRA_label")
+               .click()
+            .end()
+            .findByCssSelector("#DYNAMIC_BUTTON_label")
+               .click()
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "hash", "hashData"))
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Additional data provided via hash was not found");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,17 +23,6 @@
  * @author Richard Smith
  */
 define({
-
-   /**
-    * This is a selection of urls for test purposes. They should ONLY be defined here so that
-    * pervasive changes can be made in this one file.
-    *
-    * @instance
-    * @type {object}
-    */
-   urls: {
-      unitTestAppBaseUrl: null
-   },
 
    /**
     * A selection of timeouts

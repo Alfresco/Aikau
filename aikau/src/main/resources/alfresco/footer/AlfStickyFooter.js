@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,8 +18,6 @@
  */
 
 /**
- * This module is currently in BETA. Outstanding work:
- *
  * @module alfresco/footer/AlfStickyFooter
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -29,9 +27,8 @@
 define(["dojo/_base/declare",
         "alfresco/core/ProcessWidgets",
         "dojo/text!./templates/AlfStickyFooter.html",
-        "alfresco/core/Core",
-        "dojo/dom-style"], 
-        function(declare, ProcessWidgets, template, AlfCore, domStyle) {
+        "alfresco/core/Core"], 
+        function(declare, ProcessWidgets, template, AlfCore) {
    
    return declare([ProcessWidgets, AlfCore], {
 

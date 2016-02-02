@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfFilmStripView (Media Previews)</shortname>
+  <description>This shows an AlfFilmStripView configured with mocked media documents for previewing.</description>
+  <family>aikau-unit-tests</family>
+  <url>/MediaFilmStripView</url>
+</webscript>

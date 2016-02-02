@@ -145,7 +145,8 @@ Add the following services to the page, in the same way that you added the Docum
 
 ```
 "alfresco/services/ActionService",
-"alfresco/services/UploadService"
+"alfresco/services/UploadService",
+"alfresco/services/DialogService"
 ```
 
 Now refresh the page and then try dragging and dropping a file from your computer’s file-system onto the document list and you should see it successfully uploaded. Ensure you drop the file into the document list component area to trigger the drop-zone.

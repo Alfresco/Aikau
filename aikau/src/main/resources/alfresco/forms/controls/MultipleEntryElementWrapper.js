@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -203,22 +203,22 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_forms_controls_MultipleEntryElementWrapper__postMixInProperties() {
          if (this.saveEntryImageSrc == null || this.saveEntryImageSrc == "")
          {
-            this.saveEntryImageSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.saveEntryImage;
+            this.saveEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.saveEntryImage);
          }
          this.saveEntryAltText = this.message(this.saveEntryAltText);
          if (this.cancelEditImageSrc == null || this.cancelEditImageSrc == "")
          {
-            this.cancelEditImageSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.cancelEditImage;
+            this.cancelEditImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.cancelEditImage);
          }
          this.cancelEditAltText = this.message(this.cancelEditAltText);
          if (this.deleteEntryImageSrc == null || this.deleteEntryImageSrc == "")
          {
-            this.deleteEntryImageSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.deleteEntryImage;
+            this.deleteEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.deleteEntryImage);
          }
          this.deleteEntryAltText = this.message(this.deleteEntryAltText);
          if (this.editEntryImageSrc == null || this.editEntryImageSrc == "")
          {
-            this.editEntryImageSrc = require.toUrl("alfresco/forms/controls") + "/css/images/" + this.editEntryImage;
+            this.editEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.editEntryImage);
          }
          this.editEntryAltText = this.message(this.editEntryAltText);
       },

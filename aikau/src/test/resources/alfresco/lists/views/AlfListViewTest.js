@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -39,10 +39,6 @@ registerSuite(function(){
 
          beforeEach: function() {
             browser.end();
-         },
-
-         "Can find loading message": function() {
-            return browser.findByCssSelector("#LOADING .alfresco-lists-AlfList > .data-loading");
          },
 
          "Can find data-load failure message": function() {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -95,7 +95,7 @@ define(["intern!object",
          },
 
          "Open the menu and select documents": function() {
-            return browser.findByCssSelector(".alf-menu-arrow")
+            return browser.findByCssSelector(".alfresco-menus-AlfMenuBarPopup__arrow")
                .click()
             .end()
 
@@ -116,7 +116,7 @@ define(["intern!object",
          },
 
          "Open the menu and select folders": function() {
-            return browser.findByCssSelector(".alf-menu-arrow")
+            return browser.findByCssSelector(".alfresco-menus-AlfMenuBarPopup__arrow")
                .click()
             .end()
 
