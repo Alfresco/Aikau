@@ -13,6 +13,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
+         id: "FORM",
          name: "alfresco/forms/Form",
          config: {
             okButtonPublishTopic: "UPDATE_MARKDOWN",
@@ -21,6 +22,7 @@ model.jsonModel = {
             showCancelButton: false,
             widgets: [
                {
+                  id: "TEXTAREA",
                   name: "alfresco/forms/controls/TextArea",
                   config: {
                      name: "markdown",
@@ -33,11 +35,15 @@ model.jsonModel = {
          }
       },
       {
+         id: "MARKDOWN",
          name: "alfresco/html/Markdown",
          config: {
             markdown: "# H1\n## H2",
             subscriptionTopics: ["UPDATE_MARKDOWN"]
          }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
