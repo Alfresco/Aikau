@@ -49,7 +49,7 @@
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
- * @since 1.0.54
+ * @since 1.0.53
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 

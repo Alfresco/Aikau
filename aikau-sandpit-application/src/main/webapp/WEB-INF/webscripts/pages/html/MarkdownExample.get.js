@@ -12,7 +12,7 @@ buildPageModel({
             {
                name: "alfresco/html/Markdown",
                config: {
-                  markdown: "# H1\n## H2\n*bullet 1\n*bullet2"
+                  markdown: "# H1\n## H2\n* bullet 1\n* bullet2"
                }
             }
          ]
