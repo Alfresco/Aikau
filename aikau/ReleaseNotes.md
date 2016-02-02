@@ -1,4 +1,4 @@
-Aikau 1.0.52 Release Notes
+Aikau 1.0.53 Release Notes
 ===
 
 Previous deprecations:
@@ -41,6 +41,14 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.53:
+* [AKU-763](https://issues.alfresco.com/jira/browse/AKU-763)       - Add LESS variables to StickyPanel and UploadMonitor
+* [AKU-791](https://issues.alfresco.com/jira/browse/AKU-791)       - Resolved AlfDialog scrolling issues (in Share)
+* [AKU-792](https://issues.alfresco.com/jira/browse/AKU-792)       - Improve list loading/rendering message handling
+* [AKU-797](https://issues.alfresco.com/jira/browse/AKU-797)       - Fixed zoom tooltip text in PDF.js preview plugin
+* [AKU-799](https://issues.alfresco.com/jira/browse/AKU-799)       - Resolved form dialog margins regression
+* [AKU-802](https://issues.alfresco.com/jira/browse/AKU-802)       - Resolved list margin regression
+
 1.0.52:
 * [AKU-676](https://issues.alfresco.com/jira/browse/AKU-676)       - Added alfresco/buttons/DropDownButton
 * [AKU-747](https://issues.alfresco.com/jira/browse/AKU-747)       - Added alfresco/services/FileUploadService
