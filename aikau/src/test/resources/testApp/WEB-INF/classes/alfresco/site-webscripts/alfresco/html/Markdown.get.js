@@ -1,3 +1,4 @@
+/* global msg*/
 model.jsonModel = {
    services: [
       {
@@ -28,7 +29,7 @@ model.jsonModel = {
                      name: "markdown",
                      label: "Markdown",
                      description: "Enter some markdown to render",
-                     value: "# H1\n## H2"
+                     value: msg.get("markdown.example")
                   }
                }
             ]

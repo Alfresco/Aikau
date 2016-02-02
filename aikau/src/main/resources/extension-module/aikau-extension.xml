@@ -26,6 +26,7 @@
                          <package name="cm"           location="js/lib/code-mirror"/>
                          <package name="jquery"       location="js/lib/jquery-${dependency.jquery.version}" main="jquery-${dependency.jquery.version}.min"/>
                          <package name="jqueryui"     location="js/lib/jquery-ui-${dependency.jquery-ui.version}" main="jquery-ui.min"/>
+                         <package name="showdown"     location="js/lib/showdown-1.3.0" main="showdown.min"/>
                      </packages>
                   </dojo-pages>
                </web-framework>
