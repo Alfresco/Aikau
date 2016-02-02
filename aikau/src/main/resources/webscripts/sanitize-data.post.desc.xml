@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Sanitize Data</shortname>
+  <description>This WebScript to strip unsafe HTML from the posted data. This is provided for use of removing unsafe data from Markdown content.</description>
+  <url>/sanitize/data</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>
