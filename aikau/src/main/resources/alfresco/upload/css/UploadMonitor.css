@@ -18,40 +18,40 @@
       font-size: 0;
    }
    &__item {
-      line-height: 32px;
+      line-height: @upload-monitor-item-line-height;
       > * {
-         border-top: 1px solid #ccc;
+         border-top: @upload-monitor-item-separator-border;
          vertical-align: top;
          &:first-child {
-            padding-left: 10px;
+            padding-left: @upload-monitor-item-padding-left;
          }
          &:last-child {
-            padding-right: 10px;
+            padding-right: @upload-monitor-item-padding-right;
          }
       }
       &__name__error {
-         color: #c00;
+         color: @upload-monitor-error-message-color;
          display: none;
-         line-height: 18px;
+         line-height: @upload-monitor-error-message-line-height;
          position: relative;
-         top: -7px;
+         top: @upload-monitor-error-message-top;
       }
       &__progress {
-         width: 50px;
+         width: @upload-monitor-progress-column-width;
       }
       &__status {
-         width: 150px;
+         width: @upload-monitor-status-column-width;
          &__in-progress, &__successful, &__unsuccessful {
             display: none;
          }
          &__in-progress {
-            color: #ccc;
+            color: @upload-monitor-status-color-in-progress;
          }
          &__successful {
-            color: #090;
+            color: @upload-monitor-status-color-successful;
          }
          &__unsuccessful {
-            color: #c00;
+            color: @upload-monitor-status-color-unsuccessful;
          }
       }
       &--has-error {

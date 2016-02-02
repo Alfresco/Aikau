@@ -157,6 +157,7 @@ define({
       "src/test/resources/alfresco/html/HeadingTest",
       "src/test/resources/alfresco/html/ImageTest",
       "src/test/resources/alfresco/html/LabelTest",
+      "src/test/resources/alfresco/html/MarkdownTest",
 
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",
       "src/test/resources/alfresco/layout/AlfStackContainerTest",

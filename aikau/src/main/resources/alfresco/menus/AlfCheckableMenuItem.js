@@ -324,6 +324,7 @@ define(["dojo/_base/declare",
             this.publishPayload.selected = this.checked;
             this.publishPayload.value = this.value;
             this.publishPayload.label = this.label;
+
             this.alfPublish(this.publishTopic, this.publishPayload);
          }
       },

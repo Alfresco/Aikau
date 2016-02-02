@@ -143,7 +143,7 @@ define(["intern!object",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
-                  assert.propertyVal(payload, "url", Config.urls.unitTestAppBaseUrl + "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
+                  assert.include(payload.url, "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
                });
          },
 
@@ -153,7 +153,7 @@ define(["intern!object",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
-                  assert.propertyVal(payload, "url", Config.urls.unitTestAppBaseUrl + "/aikau/page/user/admin/profile", "Wrong URL");
+                  assert.include(payload.url, "/aikau/page/user/admin/profile", "Wrong URL");
                });
          },
 

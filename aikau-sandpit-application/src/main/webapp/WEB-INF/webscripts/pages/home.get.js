@@ -40,7 +40,7 @@ model.jsonModel = {
                            align: "left",
                            config: {
                               label: "Aikau Sandpit",
-                              setBrowserTitle: "Aikau Sandpit"
+                              setBrowserTitle: true
                            }
                         }
                      ]

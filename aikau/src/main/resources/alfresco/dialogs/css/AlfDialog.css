@@ -10,7 +10,7 @@
       box-shadow: 0 3px 8px rgba(0,0,0,.1);
       font-family: @standard-font;
       font-size: @normal-font-size;
-      min-width: 560px;
+      min-width: 580px;
       &.tinymce-dialog {
          min-width: 540px;
          .control {
@@ -70,7 +70,7 @@
    }
    .dialog-body {
       margin-bottom: 40px; // NOTE: If this is changed, the associated margin adjustment in the JS needs updating
-      min-width: 560px;
+      min-width: 580px;
       overflow: auto;
       padding: 12px; // NOTE: If this is changed, the associated paddingAdjustment in the JS needs updating
       &.no-buttons {
@@ -116,12 +116,7 @@
       text-align: center;
    }
    &--dialogs-visible {
-      &, body, .alfresco-core-Page {
-         height: 100%;
-      }
-      body, .alfresco-core-Page {
-         overflow: hidden;
-      }
+      overflow: hidden;
    }
 }
 
