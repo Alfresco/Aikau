@@ -126,7 +126,7 @@ define(["dojo/_base/declare",
          {
             array.forEach(this.subscriptionTopics, function(topic) {
                this.alfSubscribe(topic, lang.hitch(this, this.onMarkdownUpdate));
-            } ,this);
+            }, this);
          }
          
          this.converter = new showdown.Converter({
@@ -155,6 +155,11 @@ define(["dojo/_base/declare",
             }
             else
             {
+              // Set the flag to indicate that a request is about to be made...
+              // TODO: We could potentially optimize this code by logging a timestamp in the request (or similar) and allow requests to be
+              //       processed together and then just render the last request...
+              this._requestInProgress = true;
+
                // Convert markdown to HTML...
                var html = this.converter.makeHtml(markdown);
 
