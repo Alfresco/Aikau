@@ -18,6 +18,10 @@
  */
 
 /**
+ * This widget allows Aikau models to be be displayed. It passes the model to Surf to obtain a list of the JavaScript and CSS
+ * dependencies required to render the model and these are then dynamically added to the DOM.
+ *
+ * @example <caption>This is an example configuration:</caption>
  * 
  * @module alfresco/prototyping/Preview
  * @extends external:dijit/_WidgetBase
@@ -31,6 +35,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Preview.html",
         "alfresco/core/Core",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "service/constants/Default",
         "alfresco/core/Page",
         "alfresco/util/objectProcessingUtil",
@@ -42,7 +47,7 @@ define(["dojo/_base/declare",
         "dojo/json",
         "dojo/query",
         "dojo/NodeList-manipulate"], 
-        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, AlfConstants, Page, objectProcessingUtil, 
+        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, topics, AlfConstants, Page, objectProcessingUtil, 
                  domConstruct, lang, array, Deferred, when, dojoJson, query) {
    
    return declare([_Widget, _Templated, AlfCore, CoreXhr], {
@@ -90,14 +95,42 @@ define(["dojo/_base/declare",
       processTemplates: false,
 
       /**
+       * This will hold a reference to the root object on which the preview is built. This object should be destroyed
+       * before each new preview is built.
+       *
        * @instance
+       * @type {object}
+       * @default
+       */
+      rootPreviewWidget: null,
+
+      /**
+       * This is used to store the timestamp of the last request made to generate the dependencies of a model. A timetamp
+       * is taken before making an XHR request and included in the request configuration. When handling the response the 
+       * request timestamp is compared against the last stored timestamp so that only the data for the last request is used
+       * to build the preview.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since  1.0.54
+       */
+      _lastRequestTimestamp: null,
+
+      /**
+       * If a [pageDefinition]{@link module:alfresco/prototyping/Preview#pageDefinition} has been provided then the 
+       * [generatePreview]{@link module:alfresco/prototyping/Preview#generatePreview} function will be called. A subscription
+       * will be made for dynamic updating of the model.
+       * 
+       * @instance
+       * @listens module:alfresco/core/topics#PREVIEW_MODEL_RENDER_REQUEST
        */
       postCreate: function alfresco_prototyping_Preview__postCreate() {
          if (this.pageDefinition)
          {
             this.generatePreview(this.pageDefinition);
          }
-         this.alfSubscribe("ALF_GENERATE_PAGE_PREVIEW", lang.hitch(this, "generatePreview"));
+         this.alfSubscribe(topics.PREVIEW_MODEL_RENDER_REQUEST, lang.hitch(this, this.generatePreview));
       },
       
       /**
@@ -345,10 +378,16 @@ define(["dojo/_base/declare",
        * @since 1.0.49
        */
       requestPreviewDependencies: function alfresco_prototyping_Preview__requestPreviewDependencies(data) {
+
+         // Get a timestamp to make sure that we render the last request...
+         var timestamp = Date.now();
+         this._lastRequestTimestamp = timestamp;
+
          data.widgets = JSON.stringify(data.jsonContent);
          this.serviceXhr({
             url : AlfConstants.URL_SERVICECONTEXT + "surf/dojo/xhr/dependencies",
             data: data,
+            lastRequestTimestamp: timestamp,
             method: "POST",
             successCallback: this.updatePage,
             failureCallback: this.onDependencyFailure,
@@ -362,56 +401,50 @@ define(["dojo/_base/declare",
       updatePage: function alfresco_prototyping_Preview__updatePage(response, originalRequestConfig) {
          // Iterate over the CSS map and append a new <link> element into the <head> element to ensure that all the
          // widgets CSS dependencies are loaded... 
-         for (var media in response.cssMap)
+         if (originalRequestConfig.lastRequestTimestamp === this._lastRequestTimestamp)
          {
-            if (response.cssMap.hasOwnProperty(media))
+            for (var media in response.cssMap)
             {
-               // TODO: query for the node outside of the loop
-               // TODO: keep a reference to each node appended and then remove it when the preview is regenerated
-               query("head").append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + appContext + response.cssMap[media] + "\" media=\"" + media + "\">");
+               if (response.cssMap.hasOwnProperty(media))
+               {
+                  // TODO: query for the node outside of the loop
+                  // TODO: keep a reference to each node appended and then remove it when the preview is regenerated
+                  query("head").append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + appContext + response.cssMap[media] + "\" media=\"" + media + "\">");
+               }
             }
+            
+            // Build in the i18n properties into the global object...
+            for (var scope in response.i18nMap)
+            {
+               if (typeof window[response.i18nGlobalObject].messages.scope[scope] === "undefined")
+               {
+                  // If the scope hasn't already been used then we can just assign it directly...
+                  window[response.i18nGlobalObject].messages.scope[scope] = response.i18nMap[scope];
+               }
+               else
+               {
+                  // ...but if the scope already exists, then we need to mixin the new properties...
+                  lang.mixin(window[response.i18nGlobalObject].messages.scope[scope], response.i18nMap[scope]);
+               }
+            }
+            
+            // The data response will contain a MD5 referencing JavaScript resource that we should request that Dojo loads...
+            var requires = [];
+            array.forEach(response.nonAmdDeps, function(dep) {
+               requires.push(AlfConstants.URL_RESCONTEXT + dep);
+            });
+            requires.push(AlfConstants.URL_RESCONTEXT + response.javaScript);
+            require(requires, lang.hitch(this, "buildPreview", originalRequestConfig.data.jsonContent, this.previewNode));
          }
-         
-         // Build in the i18n properties into the global object...
-         for (var scope in response.i18nMap)
-         {
-            if (typeof window[response.i18nGlobalObject].messages.scope[scope] === "undefined")
-            {
-               // If the scope hasn't already been used then we can just assign it directly...
-               window[response.i18nGlobalObject].messages.scope[scope] = response.i18nMap[scope];
-            }
-            else
-            {
-               // ...but if the scope already exists, then we need to mixin the new properties...
-               lang.mixin(window[response.i18nGlobalObject].messages.scope[scope], response.i18nMap[scope]);
-            }
-         }
-         
-         // The data response will contain a MD5 referencing JavaScript resource that we should request that Dojo loads...
-         var requires = [];
-         array.forEach(response.nonAmdDeps, function(dep) {
-            requires.push(AlfConstants.URL_RESCONTEXT + dep);
-         });
-         requires.push(AlfConstants.URL_RESCONTEXT + response.javaScript);
-         require(requires, lang.hitch(this, "buildPreview", originalRequestConfig.data.jsonContent, this.previewNode));
       },
 
       /**
-       * This will hold a reference to the root object on which the preview is built. This object should be destroyed
-       * before each new preview is built.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      rootPreviewWidget: null,
-
-      /**
-       * This function builds a new preview of the 
+       * This function builds a new preview of the supplied model.
        *
        * @instance
        * @param {Object[]} config The configuration to use to build the preview
        * @param {element} rootNode The DOM node which should be used to add instantiated widgets to
+       * @fires module:alfresco/core/topics#PREVIEW_MODEL_RENDERED
        */
       buildPreview: function alfresco_prototyping_Preview__buildPreview(config, rootNode) {
          domConstruct.empty(this.previewNode);
@@ -422,6 +455,8 @@ define(["dojo/_base/declare",
             services: config.services,
             publishOnReady: config.publishOnReady
          }, tmpNode);
+
+         this.alfPublish(topics.PREVIEW_MODEL_RENDERED);
       },
 
       /**
