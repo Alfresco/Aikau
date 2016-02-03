@@ -2,19 +2,29 @@ var notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
    os = require("os"),
    tcpPortUsed = require("tcp-port-used");
 
-// Calculate this machine's (i.e. the server's) IP address
+// Calculate this machine's (i.e. the server's) best IP address
+// Preference is given to VM tunnel (which will work everywhere) and then an ethernet interface
 var networkInterfaces = os.networkInterfaces(),
    interfaceNames = Object.keys(networkInterfaces),
-   serverIP;
-interfaceNames.sort().reverse(); // Alphabetically descending (because vXXX is higher priority than eXXX)
-interfaceNames.some(function(interfaceName) {
-   return networkInterfaces[interfaceName].some(function(interface) {
+   serverIP,
+   localIP;
+interfaceNames.forEach(function(interfaceName) {
+   networkInterfaces[interfaceName].forEach(function(interface) {
+      var ipAddress = interface.address;
       if (interface.family === "IPv4" && !interface.internal) {
-         serverIP = interface.address;
-         return true;
+         if (interfaceName.indexOf("vbox") === 0) {
+            serverIP = ipAddress;
+         } else if (interfaceName.indexOf("eth") === 0) {
+            localIP = ipAddress;
+         } else if (interfaceName.indexOf("en") === 0) {
+            localIP = ipAddress;
+         }
       }
    });
 });
+if (!serverIP) {
+   serverIP = localIP;
+}
 console.log("");
 console.log("Using server IP address of " + serverIP);
 console.log("");
