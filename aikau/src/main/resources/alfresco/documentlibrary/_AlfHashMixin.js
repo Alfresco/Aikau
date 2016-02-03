@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * anything to happen.
        */
       onHashChange: function alfresco_documentlibrary__AlfHashMixin__onHashChange(payload) {
-         var filterObj = this.processFilter(payload);
+         var filterObj = this.processHashFilter(payload);
          this.alfLog("log", "Publishing decoded filter", filterObj);
          this.alfPublish(this.hashChangeTopic, filterObj);
       },
