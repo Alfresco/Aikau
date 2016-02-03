@@ -153,6 +153,10 @@ define(["alfresco/TestCommon",
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
          },
 
+         "Post Coverage Results (prior to reload)": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         },
+
          "Navigating to another page and then back will re-apply hash": function() {
             var anotherPageUrl = TestCommon.testWebScriptURL("/Index"),
                returnUrl = TestCommon.testWebScriptURL("/AlfHashList#var1=test1&var2=test2&var3=test3");
@@ -173,6 +177,19 @@ define(["alfresco/TestCommon",
                   assert.propertyVal(payload, "var1", "test1", "Hash not read and used correctly");
                   assert.propertyVal(payload, "var2", "test2", "Hash not read and used correctly");
                   assert.notProperty(payload, "var3", "Hash not read and used correctly");
+               });
+         },
+
+         "Check overflow on list": function() {
+            function nodeOverflows(selector) {
+               var node = document.querySelector(selector);
+               return node.scrollWidth > node.clientWidth;
+            }
+
+            return browser.setWindowSize(null, 400, 768)
+               .execute(nodeOverflows, ["#HASHLIST1"])
+               .then(function(overflows) {
+                  assert.isTrue(overflows, "Scroll bar is not displayed");
                });
          },
 
