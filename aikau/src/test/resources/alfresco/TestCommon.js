@@ -634,38 +634,6 @@ define(["intern/dojo/node!fs",
       },
 
       /**
-       * Get the local machine IP address (for us from other machines on the network). Specifically,
-       * it will pass back the first IPv4, external IP address whose name begins with an "e".
-       * 
-       * [MJD 2015-03-30] Hopefully this will be robust enough (examples seen = en0,en1,eth0,ethernet0)
-       *
-       * @instance
-       * @protected
-       * @returns  {string} The local IP address
-       */
-      _getLocalIP: function() {
-         var networkInterfaces = os.networkInterfaces(),
-            validNameRegex = /^e[a-z]+[0-9]$/i,
-            ipAddress = null;
-         Object.keys(networkInterfaces).every(function(interfaceName) {
-            if (validNameRegex.test(interfaceName)) {
-               networkInterfaces[interfaceName].every(function(interface) {
-                  if (interface.family === "IPv4" && !interface.internal) {
-                     ipAddress = interface.address;
-                     return false;
-                  }
-                  return true;
-               });
-            }
-            if (ipAddress) {
-               return false;
-            }
-            return true;
-         });
-         return ipAddress;
-      },
-
-      /**
        * Maximises the browser window if not already maximised
        *
        * @instance
