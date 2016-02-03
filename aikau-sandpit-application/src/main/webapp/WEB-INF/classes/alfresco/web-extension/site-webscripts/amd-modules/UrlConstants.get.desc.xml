@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Override URL Constants Module</shortname>
+  <description>This overrides the default constants provided by Surf to make it appear as though the application is in debug mode when it isn't. This is done in order to allow the DebugLog to capture pub/sub logging.</description>
+  <url>/constants/Default</url>
+  <family>WebScript AMD Modules</family>
+  <format default="js">extension</format>
+</webscript>

@@ -223,6 +223,8 @@ define({
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
       "src/test/resources/alfresco/preview/PreviewerTests",
 
+      "src/test/resources/alfresco/prototyping/PreviewTest",
+
       "src/test/resources/alfresco/renderers/ActionsTest",
       "src/test/resources/alfresco/renderers/ActivitySummaryTest",
       "src/test/resources/alfresco/renderers/AvatarThumbnailTest",

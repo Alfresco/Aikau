@@ -686,6 +686,35 @@ define([],function() {
       POST_TO_PAGE: "ALF_POST_TO_PAGE",
 
       /**
+       * This topic is published when [preview models]{@link module:alfresco/prototyping/Preview} have finished rendering.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      PREVIEW_MODEL_RENDERED: "ALF_PREVIEW_MODEL_RENDERED",
+
+      /**
+       * Used to request the rendering of a model. Typically handled by the [preview widget]{@link module:alfresco/prototyping/Preview}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       * @property {object} pageDefinition The model to render
+       * @property {boolean} pageDefinition.stringified Indicates whether the pageDefinition model is already stringified
+       * @property {object[]} pageDefinition.publishOnReady Publications to make when the model has finished rendering
+       * @property {object[]} pageDefinition.services The services to create
+       * @property {object[]} pageDefinition.widgets The widgets to create
+       */
+      PREVIEW_MODEL_RENDER_REQUEST: "ALF_GENERATE_PAGE_PREVIEW",
+
+      /**
        * This topic should be published when indicating what [previewers]{@link module:alfresco/preview/AlfDocumentPreview}
        * are currently displayed. This has been added to support the 
        * [DocumentCarousel]{@link module:alfresco/documentlibrary/views/layouts/DocumentCarousel} so that audio and video
