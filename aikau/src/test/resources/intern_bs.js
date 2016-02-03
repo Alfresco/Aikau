@@ -35,6 +35,13 @@ define(["./config/Suites"],
             version: "11",
             platform: "WINDOWS"
          }],
+         xenvData = [{
+            browserName: "chrome",
+            platform: "WINDOWS"
+         }, {
+            browserName: "firefox",
+            platform: "WINDOWS"
+         }],
          environments = envData.map(function(env) {
             return Object.assign(env, settings);
          });
