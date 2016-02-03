@@ -37,7 +37,6 @@ define(["intern/dojo/node!fs",
         "lodash"], 
         function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
 
-   var unitTestAppBaseUrl;
    return {
 
       /**
@@ -48,13 +47,8 @@ define(["intern/dojo/node!fs",
        * @param {string} webScriptPrefix Optional prefix to the test page.
        */
       testWebScriptURL: function(webScriptURL, webScriptPrefix) {
-         var serverAddress,
-            prefix = webScriptPrefix || "/tp/ws";
-         if (!unitTestAppBaseUrl) {
-            serverAddress = (intern.args.useLocalhost === "true") ? "localhost" : this._getLocalIP();
-            unitTestAppBaseUrl = "http://" + serverAddress + ":8089";
-         }
-         return unitTestAppBaseUrl + "/aikau/page" + prefix + webScriptURL;
+         var prefix = webScriptPrefix || "/tp/ws";
+         return "http://" + intern.args.serverIP + ":8089/aikau/page" + prefix + webScriptURL;
       },
 
       /**

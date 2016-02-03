@@ -1,6 +1,25 @@
 var notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
+   os = require("os"),
    tcpPortUsed = require("tcp-port-used");
 
+// Calculate this machine's (i.e. the server's) IP address
+var networkInterfaces = os.networkInterfaces(),
+   interfaceNames = Object.keys(networkInterfaces),
+   serverIP;
+interfaceNames.sort().reverse(); // Alphabetically descending (because vXXX is higher priority than eXXX)
+interfaceNames.some(function(interfaceName) {
+   return networkInterfaces[interfaceName].some(function(interface) {
+      if (interface.family === "IPv4" && !interface.internal) {
+         serverIP = interface.address;
+         return true;
+      }
+   });
+});
+console.log("");
+console.log("Using server IP address of " + serverIP);
+console.log("");
+
+// Modify grunt
 module.exports = function(grunt) {
 
    // New Test
@@ -78,7 +97,8 @@ module.exports = function(grunt) {
    grunt.config.merge({
       intern: {
          options: {
-            rowsCols: process.stdout.rows + "|" + process.stdout.columns // Used by ConcurrentReporter
+            rowsCols: process.stdout.rows + "|" + process.stdout.columns, // Used by ConcurrentReporter
+            serverIP: serverIP // Used by all
          },
          bs: {
             options: {
