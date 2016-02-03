@@ -21,75 +21,73 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Video Previewer Tests",
+      return {
+         name: "Video Previewer Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/VideoPreview", "Video Previewer Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/VideoPreview", "Video Previewer Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-     "Tests": function () {
-         return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Video")
-            .then(null, function() {
-               assert(false, "Couldn't find video previewer node");
-            })
-         .end()
-         .findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Video video")
-            .then(null, function() {
-               assert(false, "Couldn't find video element");
-            });
-      },
+        "Tests": function () {
+            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Video")
+               .then(null, function() {
+                  assert(false, "Couldn't find video previewer node");
+               })
+            .end()
+            .findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Video video")
+               .then(null, function() {
+                  assert(false, "Couldn't find video element");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Audio Previewer Tests",
+      return {
+         name: "Audio Previewer Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AudioPreview", "Audio Previewer Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AudioPreview", "Audio Previewer Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-     "Tests": function () {
-         return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Audio")
-            .then(null, function() {
-               assert(false, "Couldn't find video previewer node");
-            })
-         .end()
-         .findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Audio audio")
-            .then(null, function() {
-               assert(false, "Couldn't find audio element");
-            });
-      },
+        "Tests": function () {
+            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Audio")
+               .then(null, function() {
+                  assert(false, "Couldn't find video previewer node");
+               })
+            .end()
+            .findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer.Audio audio")
+               .then(null, function() {
+                  assert(false, "Couldn't find audio element");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

@@ -18,6 +18,11 @@
       <from>/proxy/alfresco/api/node/workspace/SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5/content/Video Test Binary.mp4(.*)</from>
       <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Video.mp4</to>
    </rule>
+   <!-- Video plugin (H264 rendition) -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/8a93f2cc-5276-45b6-929a-f5112e7a645d/content/thumbnails/h264-720?(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Video_h264.mp4</to>
+   </rule>
    <!-- Audio plugin -->
    <rule>
       <from>/proxy/alfresco/api/node/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/content/Demo 3.mp3(.*)</from>

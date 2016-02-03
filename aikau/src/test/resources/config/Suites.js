@@ -218,6 +218,7 @@ define({
 
       "src/test/resources/alfresco/node/MetadataGroupsTest",
 
+      "src/test/resources/alfresco/preview/H264ProxyTest",
       "src/test/resources/alfresco/preview/ImagePreviewTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
