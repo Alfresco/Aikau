@@ -1,6 +1,10 @@
 Aikau 1.0.53 Release Notes
 ===
 
+New deprecations:
+---
+* alfresco/documentlibrary/_AlfFilterMixin                       (use alfresco/documentlibrary/_AlfHashMixin)
+
 Previous deprecations:
 ---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
