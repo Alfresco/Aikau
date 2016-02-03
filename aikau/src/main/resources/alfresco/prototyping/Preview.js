@@ -414,9 +414,10 @@ define(["dojo/_base/declare",
             }
             
             // Build in the i18n properties into the global object...
+            var scopeMap = window[response.i18nGlobalObject].messages.scope;
             for (var scope in response.i18nMap)
             {
-               if (typeof window[response.i18nGlobalObject].messages.scope[scope] === "undefined")
+               if (typeof scopeMap[scope] === "undefined")
                {
                   // If the scope hasn't already been used then we can just assign it directly...
                   window[response.i18nGlobalObject].messages.scope[scope] = response.i18nMap[scope];
@@ -424,7 +425,7 @@ define(["dojo/_base/declare",
                else
                {
                   // ...but if the scope already exists, then we need to mixin the new properties...
-                  lang.mixin(window[response.i18nGlobalObject].messages.scope[scope], response.i18nMap[scope]);
+                  lang.mixin(scopeMap[scope], response.i18nMap[scope]);
                }
             }
             
