@@ -57,6 +57,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
  * @mixes external:dijit/_FocusMixin
+ * @mixes alfresco/forms/controls/utilities/ChoiceMixin
  * @mixes alfresco/core/Core
  * @mixes alfresco/core/ObjectProcessingMixin
  * @author Martin Doyle
@@ -65,6 +66,7 @@ define([
       "alfresco/core/Core",
       "alfresco/core/ObjectProcessingMixin",
       "alfresco/core/ObjectTypeUtils",
+      "alfresco/forms/controls/utilities/ChoiceMixin",
       "alfresco/util/functionUtils",
       "dijit/_FocusMixin",
       "dijit/_TemplatedMixin",
@@ -82,10 +84,10 @@ define([
       "dojo/when",
       "dojo/text!./templates/MultiSelect.html"
    ],
-   function(Core, ObjectProcessingMixin, ObjectTypeUtils, functionUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
+   function(Core, ObjectProcessingMixin, ObjectTypeUtils, ChoiceMixin, functionUtils, _FocusMixin, _TemplatedMixin, _WidgetBase, array,
       declare, lang, Deferred, domConstruct, domGeom, domStyle, domClass, keys, on, when, template) {
 
-      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
+      return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, ChoiceMixin, Core, ObjectProcessingMixin], {
 
          /**
           * The Choice object (referenced in other JSDoc comments)
@@ -120,24 +122,6 @@ define([
           * @property {string} result The version of the label used for items in the results dropdown
           * @property {string} full The full version of the label, used as the title attribute for choices and results
           */
-
-         /**
-          * Whether choices' text can wrap
-          *
-          * @instance
-          * @type {boolean}
-          * @default
-          */
-         choiceCanWrap: true,
-
-         /**
-          * The maximum width of choices within the control as a CSS string
-          *
-          * @instance
-          * @type {string}
-          * @default
-          */
-         choiceMaxWidth: "100%",
 
          /**
           * An array of the CSS files to use with this widget.
@@ -234,22 +218,6 @@ define([
          _currentSearchValue: "",
 
          /**
-          * Listener handles by choice (for removing)
-          *
-          * @instance
-          * @type {object}
-          */
-         _choiceListeners: null,
-
-         /**
-          * Collection of choice objects
-          *
-          * @instance
-          * @type {module:alfresco/forms/controls/MultiSelect#Choice[]}
-          */
-         _choices: null,
-
-         /**
           * Whether the control is disabled
           *
           * @instance
@@ -334,14 +302,6 @@ define([
          _searchDebounceMs: 100,
 
          /**
-          * The currently selected choice object
-          *
-          * @instance
-          * @type {module:alfresco/forms/controls/MultiSelect#Choice}
-          */
-         _selectedChoice: null,
-
-         /**
           * A timeout to ensure the loading message does not display if the results
           * come back super-quick
           *
@@ -349,14 +309,6 @@ define([
           * @type {number}
           */
          _showLoadingTimeoutPointer: 0,
-
-         /**
-          * A map of retrieved items, by value
-          *
-          * @instance
-          * @type {object}
-          */
-         _storeItems: null,
 
          /**
           * Sometimes we want to prevent key-up from performing a search, which we
@@ -387,13 +339,10 @@ define([
           * @instance
           */
          constructor: function alfresco_forms_controls_MultiSelect__constructor() {
-            this._choices = [];
-            this._choiceListeners = {};
             this._itemsToUpdateFromStore = [];
             this._nodes = {};
             this._results = [];
             this._resultListeners = [];
-            this._storeItems = {};
          },
 
          /**
@@ -407,9 +356,6 @@ define([
             this._setupDisabling();
             this.own(on(this.domNode, "click", lang.hitch(this, this._onControlClick)));
             this._setupScrollHandling();
-            if (!this.choiceCanWrap) {
-               domClass.add(this.domNode, this.rootClass + "--choices-nowrap");
-            }
             this._preventWidgetDropdownDisconnects();
             this.value = [];
          },
@@ -427,6 +373,55 @@ define([
                case "disabled":
                   return this.isDisabled();
             }
+         },
+
+         /**
+          * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getItemValue}
+          * to return the target item mapped in the [store]{@link module:alfresco/forms/controls/MultiSelect#store}.
+          *
+          * @instance
+          * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
+          * @since 1.0.54
+          */
+         getItemValue: function alfresco_forms_controls_utilities_ChoiceMixin__getItemValue(item) {
+            return item[this.store.valueAttribute];
+         },
+
+         /**
+          * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getNewChoiceRelativePosition}
+          * indicate that choices should be placed before the [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox}.
+          *
+          * @instance
+          * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
+          * @since 1.0.54
+          */
+         getNewChoiceRelativePosition: function alfresco_forms_controls_MultiSelect__getNewChoiceTargetNode() {
+            return "before";
+         },
+
+         /**
+          * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getNewChoiceTargetNode}
+          * to return the [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} as the DOM element to add choices
+          * relative to.
+          *
+          * @instance
+          * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
+          * @since 1.0.54
+          */
+         getNewChoiceTargetNode: function alfresco_forms_controls_MultiSelect__getNewChoiceTargetNode() {
+            return this.searchBox;
+         },
+
+         /**
+          * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getStoreItem}
+          * to return the the mapped item from the [store]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_storeItems}.
+          *
+          * @instance
+          * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
+          * @since 1.0.54
+          */
+         getStoreItem: function alfresco_forms_controls_utilities_ChoiceMixin__getStoreItem(value) {
+            return this._storeItems[value];
          },
 
          /**
@@ -595,59 +590,6 @@ define([
          },
 
          /**
-          * Add the specified result item to the choices
-          *
-          * @instance
-          * @param    {object} item The item to choose
-          */
-         _addChoice: function alfresco_forms_controls_MultiSelect___addChoice(item) {
-
-            // Get the label and value
-            var labelObj = this._getLabel(item),
-               value = item[this.store.valueAttribute];
-
-            // Add to the control's value property
-            var storeItem = this._storeItems[value];
-            this._changeAttrValue("value", this.value.concat(storeItem));
-
-            // Construct and attach the DOM nodes
-            var choiceClass = this.rootClass + "__choice",
-               choiceNode = domConstruct.create("div", {
-                  className: choiceClass,
-                  style: {
-                     maxWidth: this.choiceMaxWidth
-                  }
-               }, this.searchBox, "before"),
-               contentNode = domConstruct.create("span", {
-                  className: choiceClass + "__content"
-               }, choiceNode),
-               closeButton = domConstruct.create("a", {
-                  className: choiceClass + "__close-button",
-                  innerHTML: "&times;"
-               }, choiceNode);
-
-            // Setup the listeners
-            var choiceObject = {},
-               selectListener = on(choiceNode, "click", lang.hitch(this, this._onChoiceClick, choiceObject)),
-               closeListener = on(closeButton, "mousedown", lang.hitch(this, this._onChoiceCloseMouseDown, choiceObject));
-            this.own(selectListener, closeListener);
-            lang.mixin(choiceObject, {
-               domNode: choiceNode,
-               contentNode: contentNode,
-               closeButton: closeButton,
-               selectListener: selectListener,
-               closeListener: closeListener,
-               item: storeItem,
-               value: value
-            });
-            this._choices.push(choiceObject);
-
-            // Add the label
-            contentNode.setAttribute("title", labelObj.full);
-            contentNode.appendChild(document.createTextNode(labelObj.choice));
-         },
-
-         /**
           * Choose the focused item in the results dropdown
           *
           * @instance
@@ -762,29 +704,6 @@ define([
          },
 
          /**
-          * Delete the currently selected choice
-          *
-          * @instance
-          */
-         _deleteSelectedChoice: function alfresco_forms_controls_MultiSelect___deleteSelectedChoice() {
-            on.emit(this._selectedChoice.closeButton, "mousedown", {
-               bubbles: true,
-               cancelable: true
-            });
-         },
-
-         /**
-          * Deselect all choices
-          *
-          * @instance
-          */
-         _deselectAllChoices: function alfresco_forms_controls_MultiSelect___deselectAllChoices() {
-            array.forEach(this._choices, function(nextChoice) {
-               domClass.remove(nextChoice.domNode, this.rootClass + "__choice--selected");
-            }, this);
-         },
-
-         /**
           * Empty the results dropdown
           *
           * @instance
@@ -825,8 +744,8 @@ define([
          },
 
          /**
-          * Build the label for an item. By default, this simply returns item[labelAttribute]
-          * (where labelAttribute is defined in the store config) for both short and full values.
+          * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_getLabel} to
+          * return a more complex label object to satisfy requirements of the drop-down.
           *
           * @instance
           * @param    {item} item The item whose label to retrieve
@@ -984,30 +903,16 @@ define([
          },
 
          /**
-          * Handle clicks on a choice
+          * Extends the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_onChoiceClick} to
+          * [remove the focus from results]{@link module:alfresco/forms/controls/MultiSelect#_unfocusResults}.
           *
           * @instance
           * @param    {object} choiceObject The choice (node) being clicked on
           * @param    {object} evt Dojo-normalised event object
           */
-         _onChoiceClick: function alfresco_forms_controls_MultiSelect___onChoiceClick(choiceObject, evt) {
-            this._selectChoice(choiceObject.domNode);
+         _onChoiceClick: function alfresco_forms_controls_MultiSelect___onChoiceClick(/*jshint unused:false*/ choiceObject, evt) {
+            this.inherited(arguments);
             this._unfocusResults();
-            evt.preventDefault();
-            evt.stopPropagation();
-         },
-
-         /**
-          * Handle clicks on a choice's close icon
-          *
-          * @instance
-          * @param    {object} choiceToRemove The choice object to remove
-          * @param    {object} evt Dojo-normalised event object
-          */
-         _onChoiceCloseMouseDown: function alfresco_forms_controls_MultiSelect___onChoiceCloseMouseDown(choiceToRemove, evt) {
-            this._removeChoice(choiceToRemove);
-            evt.preventDefault();
-            evt.stopPropagation();
          },
 
          /**
@@ -1222,32 +1127,16 @@ define([
          },
 
          /**
-          * Remove a specific choice value
+          * Extends the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_removeChoice} to
+          * [update the results dropdown]{@link module:alfresco/forms/controls/MultiSelect#_updateResultsDropdown} and 
+          * [hide it]{@link module:alfresco/forms/controls/MultiSelect#_hideResultsDropdown}.
           *
           * @instance
           * @param    {object} choiceToRemove The choice object to remove
           * @param    {object} evt Dojo-normalised event object
           */
-         _removeChoice: function alfresco_forms_controls_MultiSelect___removeChoice(choiceToRemove) {
-
-            // Update the choices collection
-            this._choices = array.filter(this._choices, function(nextChoice) {
-               return nextChoice.value !== choiceToRemove.value;
-            });
-            if (this._selectedChoice === choiceToRemove) {
-               this._selectedChoice = null;
-            }
-
-            // Synchronise the control's value with the choices collection
-            var updatedValue = array.map(this._choices, function(nextChoice) {
-               return nextChoice.item;
-            }, this);
-            this._changeAttrValue("value", updatedValue);
-
-            // Remove the node and its listeners
-            domConstruct.destroy(choiceToRemove.domNode);
-            choiceToRemove.selectListener.remove();
-            choiceToRemove.closeListener.remove();
+         _removeChoice: function alfresco_forms_controls_MultiSelect___removeChoice(/*jshint unused:false*/ choiceToRemove) {
+            this.inherited(arguments);
 
             // Update the results (i.e. adjust the items' chosen states)
             this._updateResultsDropdown();
@@ -1289,43 +1178,8 @@ define([
           *                                              If none is selected, then the start position is to the
           *                                              right of the current choices.
           */
-         _selectChoice: function alfresco_forms_controls_MultiSelect___selectChoice(choiceNodeOrOffset) {
-            var currentlySelectedChoice = this._selectedChoice,
-               selectNextChoice = false,
-               choiceToSelect = null,
-               choices = this._choices.slice(0); // Clone the array, so we can reverse if necessary
-            this._deselectAllChoices();
-            if (typeof choiceNodeOrOffset === "object") {
-               array.some(choices, function(nextChoice) {
-                  if (nextChoice.domNode === choiceNodeOrOffset) {
-                     choiceToSelect = nextChoice;
-                  }
-                  return !!choiceToSelect;
-               });
-            } else {
-               if (!currentlySelectedChoice) {
-                  choiceToSelect = choices[choices.length - 1];
-               } else {
-                  if (choiceNodeOrOffset < 0) {
-                     choices.reverse();
-                  }
-                  array.some(choices, function(nextChoice) {
-                     if (currentlySelectedChoice === nextChoice) {
-                        selectNextChoice = true;
-                     } else if (selectNextChoice) {
-                        choiceToSelect = nextChoice;
-                     }
-                     return !!choiceToSelect;
-                  });
-                  if (!choiceToSelect && choiceNodeOrOffset < 0) {
-                     choiceToSelect = currentlySelectedChoice;
-                  }
-               }
-            }
-            if (choiceToSelect) {
-               domClass.add(choiceToSelect.domNode, this.rootClass + "__choice--selected");
-            }
-            this._selectedChoice = choiceToSelect;
+         _selectChoice: function alfresco_forms_controls_MultiSelect___selectChoice(/*jshint unused:false*/ choiceNodeOrOffset) {
+            this.inherited(arguments);
             this.searchBox.focus();
          },
 

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FilterSummary</shortname>
+  <description>This is a ultility that can be used with the AlfFilteredList to get a simple view of the currently applied filters.</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilterSummary</url>
+</webscript>
