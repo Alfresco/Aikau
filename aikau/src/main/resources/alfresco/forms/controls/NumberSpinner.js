@@ -69,13 +69,29 @@ define(["alfresco/forms/controls/BaseFormControl",
    var DijitNumberSpinner = declare([NumberSpinner], {
 
       /**
+       * Override the standard format method to avoid rounding decimals.
+       *
+       * @instance
+       * @override
+       * @param {number} value The number to format
+       * @param {object} [constraints] The constraints
+       * @returns {string} The formatted number
+       */
+      format: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner__format(value, constraints) {
+         constraints = lang.mixin({}, constraints, {
+            places: undefined
+         });
+         return this.inherited(arguments);
+      },
+
+      /**
        * Override the standard value-getter to always return a number if one is provided.
        *
        * @instance
        * @override
        * @returns {number} The value, as a number, or null if NaN
        */
-      _getValueAttr: function() {
+      _getValueAttr: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner___getValueAttr() {
          var rawValue = this.textbox.value,
             numberValue = number.parse(rawValue),
             value = null;
@@ -95,10 +111,10 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @override
        * @param {number} newValue The new value to set
        */
-      _setValueAttr: function(newValue) {
+      _setValueAttr: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner___setValueAttr(newValue) {
          if (!isNaN(newValue)) {
             if (typeof newValue === "string") {
-               newValue = number.parse(newValue);
+               newValue = parseFloat(newValue);
             }
             this.textbox.value = number.format(newValue);
          }
@@ -219,18 +235,22 @@ define(["alfresco/forms/controls/BaseFormControl",
       },
 
       /**
-       * This validator checks that the value has no more than the specified number of decimal places
+       * This validator checks that the value has no more than the specified number of decimal places (or isn't a number!)
        *
        * @instance
        * @param {object} validationConfig The configuration for this validator
        */
       decimalPlacesValidator: function alfresco_forms_controls_FormControlValidationMixin__decimalPlacesValidator(validationConfig) {
-         var isValid = false;
+         var isValid = true;
          try {
-            var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
-               isNumber = this._valueIsNumber(value),
-               numDecimals = value.indexOf(".") === -1 ? 0 : value.split(".")[1].length;
-            isValid = !isNumber || numDecimals === this.permittedDecimalPlaces;
+            var value = this.wrappedWidget.get("value"),
+               strValue,
+               decimalDigits;
+            if (value) {
+               strValue = value.toFixed(20);
+               decimalDigits = strValue.replace(/^-?\d*\.?(\d*?)0*$/, "$1");
+               isValid = decimalDigits.length <= this.permittedDecimalPlaces;
+            }
          } catch (e) {
             this.alfLog("warn", "Error validating number of decimal places: ", e);
          }
