@@ -26,10 +26,11 @@
  */
 define(["dojo/_base/declare",
         "alfresco/preview/AVPlugin", 
+        "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/has"], 
-        function(declare, AVPlugin, lang, array, has) {
+        function(declare, AVPlugin, AlfConstants, lang, array, has) {
    
    return declare([AVPlugin], {
 
@@ -98,8 +99,37 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          this._setPreviewerElementHeight();
 
-         var src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl(),
-             mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
+         // See AKU-785...
+         // We need to check whether or not there is a H264 proxy rendition (this will only be provided if the Media Management
+         // module has been installed on the Repository). We can look for the "h264-720" thumbnail rendition, and if it exists
+         // then we can set that specific rendition as the source for the video element. By using the proxy it should give
+         // modern browsers the best opportunity of playing the content natively
+         var src;
+         var thumbnailModifications = lang.getObject("currentItem.node.properties.cm:lastThumbnailModification", false, this.previewManager);
+         if (thumbnailModifications)
+         {
+            var h264Rendition;
+            array.some(thumbnailModifications, function(modification) {
+               if (modification.indexOf("h264-720:") !== -1)
+               {
+                  h264Rendition = modification;
+               }
+               return h264Rendition;
+            });
+
+            if (h264Rendition)
+            {
+               var nodeRefAsLink = this.previewManager.nodeRef.replace(":/", "");
+               src = AlfConstants.PROXY_URI + "api/node/" + nodeRefAsLink + "/content/thumbnails/h264-720?c=force&lastModified=" + h264Rendition;
+            }
+         }
+
+         // If the H264 proxy isn't available then just attempt to play the defined content...
+         if (!src)
+         {
+            src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl();
+         }
+         var mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
          var str = "";
          str += "<video controls alt=\"" + this.previewManager.name  + "\" title=\"" + this.previewManager.name  + "\">";
          str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";

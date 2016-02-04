@@ -29,8 +29,9 @@ define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/previews/Image.json",
         "dojo/text!./responseTemplates/previews/Video.json",
+        "dojo/text!./responseTemplates/previews/Video_h264.json",
         "dojo/text!./responseTemplates/previews/Audio.json"], 
-        function(declare, MockXhr, imageNode, videoNode, audioNode) {
+        function(declare, MockXhr, imageNode, videoNode, videoH264Node, audioNode) {
    
    return declare([MockXhr], {
 
@@ -54,6 +55,12 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":5520127},
                                      videoNode]); 
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/8a93f2cc-5276-45b6-929a-f5112e7a645d\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":5520127},
+                                     videoH264Node]); 
             this.server.respondWith("GET",
                                     /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/50e8fa78-86ee-4209-9de0-b5c996b7ee52\?(.*)/,
                                     [200,
