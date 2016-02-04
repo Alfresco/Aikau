@@ -180,6 +180,10 @@ define(["dojo/_base/declare",
                {
                   window.open(url);
                }
+               else
+               {
+                  window.open(url, data.target);
+               }
             }
          }
       },
