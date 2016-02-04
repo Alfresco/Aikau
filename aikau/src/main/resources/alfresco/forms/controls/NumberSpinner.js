@@ -54,9 +54,56 @@ define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
-        "alfresco/forms/controls/DijitNumberSpinner",
+        "dijit/form/NumberSpinner",
+        "dojo/number",
         "alfresco/core/ObjectTypeUtils"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, DijitNumberSpinner, ObjectTypeUtils) {
+        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, NumberSpinner, number, ObjectTypeUtils) {
+   
+    /**
+    * This extension of NumberSpinner is to "fix" certain inconsistencies
+    * when working with non-integer numbers.
+    *
+    * @instance
+    * @since 1.0.54
+    */
+   var DijitNumberSpinner = declare([NumberSpinner], {
+
+      /**
+       * Override the standard value-getter to always return a number if one is provided.
+       *
+       * @instance
+       * @override
+       * @returns {number} The value, as a number, or null if NaN
+       */
+      _getValueAttr: function() {
+         var rawValue = this.textbox.value,
+            numberValue = number.parse(rawValue),
+            value = null;
+         if (!isNaN(numberValue)) {
+            value = numberValue;
+            if (value === Math.round(value)) {
+               value = Math.round(value);
+            }
+         }
+         return value;
+      },
+
+      /**
+       * Override the standard value-setter to correctly locale-format the content
+       *
+       * @instance
+       * @override
+       * @param {number} newValue The new value to set
+       */
+      _setValueAttr: function(newValue) {
+         if (!isNaN(newValue)) {
+            if (typeof newValue === "string") {
+               newValue = number.parse(newValue);
+            }
+            this.textbox.value = number.format(newValue);
+         }
+      }
+   });
    
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
       
@@ -181,7 +228,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          var isValid = false;
          try {
             var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
-               isNumber = this._valueIsNumber(value);
+               isNumber = this._valueIsNumber(value),
                numDecimals = value.indexOf(".") === -1 ? 0 : value.split(".")[1].length;
             isValid = !isNumber || numDecimals === this.permittedDecimalPlaces;
          } catch (e) {
