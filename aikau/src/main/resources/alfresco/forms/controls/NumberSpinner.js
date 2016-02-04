@@ -61,7 +61,7 @@ define(["alfresco/forms/controls/BaseFormControl",
    
     /**
     * This extension of NumberSpinner is to "fix" certain inconsistencies
-    * when working with non-integer numbers.
+    * when working with non-integer numbers and different locales.
     *
     * @instance
     * @since 1.0.54
