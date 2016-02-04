@@ -24,6 +24,7 @@
  * @module alfresco/forms/controls/DijitNumberSpinner
  * @extends external:dijit/form/NumberSpinner
  * @author Martin Doyle
+ * @since 1.0.54
  */
 define([
    "dijit/form/NumberSpinner",
