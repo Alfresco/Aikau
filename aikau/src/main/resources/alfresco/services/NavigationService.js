@@ -179,7 +179,9 @@ define(["dojo/_base/declare",
                else if (data.target === this.newTarget)
                {
                   window.open(url);
-               } else {
+               }
+               else
+               {
                   window.open(url, data.target);
                }
             }
