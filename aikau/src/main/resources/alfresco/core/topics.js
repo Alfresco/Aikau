@@ -478,7 +478,7 @@ define([],function() {
        * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
        * @property {string} url - The URL to navigate to
        * @property {string} [type="PAGE_RELATIVE"] - The type of navigation, either "PAGE_RELATIVE", "CONTEXT_RELATIVE", "FULL_PATH" or "HASH"
-       * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT"), a new tab ("NEW") or a named tab (any other value than "CURRENT" or "NEW")
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
 
