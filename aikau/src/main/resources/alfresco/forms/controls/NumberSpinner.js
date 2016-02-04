@@ -54,9 +54,9 @@ define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/dom-class",
-        "dijit/form/NumberSpinner",
+        "alfresco/forms/controls/DijitNumberSpinner",
         "alfresco/core/ObjectTypeUtils"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, NumberSpinner, ObjectTypeUtils) {
+        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, DijitNumberSpinner, ObjectTypeUtils) {
    
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
       
@@ -264,7 +264,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          }
          domClass.add(this.domNode, "alfresco-forms-controls-NumberSpinner " + additionalCssClasses);
          
-         var ns = new NumberSpinner(config);
+         var ns = new DijitNumberSpinner(config);
          // We'll take care of the validation thanks very much!
          ns.isValid = function() {
             return true;
