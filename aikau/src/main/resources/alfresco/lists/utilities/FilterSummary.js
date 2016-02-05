@@ -28,8 +28,12 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "alfresco/core/Core",
         "alfresco/forms/controls/utilities/ChoiceMixin",
-        "dojo/text!./templates/FilterSummary.html"], 
-        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, ChoiceMixin, template) {
+        "dojo/text!./templates/FilterSummary.html",
+        "alfresco/core/topics",
+        "dojo/_base/array",
+        "dojo/_base/lang",
+        "dojo/dom-construct"], 
+        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, ChoiceMixin, template, topics, array, lang, domConstruct) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, ChoiceMixin], {
 
@@ -42,12 +46,77 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getItemValue}
+       * to return the filter value.
+       *
+       * @instance
+       * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
+       */
+      // getItemValue: function alfresco_forms_controls_utilities_ChoiceMixin__getItemValue(item) {
+      //    return item.name + "=" + item.value;
+      // },
+
+      /**
        * 
        * @instance
+       * @listens module:alfresco/core/topics#FILTERS_APPLIED
        */
       postCreate: function alfresco_lists_utilities_FilterSummary__postCreate() {
          this.inherited(arguments);
-         this._addChoice("bob");
+         this.alfSubscribe(topics.FILTERS_APPLIED, lang.hitch(this, this.onFiltersApplied));
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {object} payload A payload containing the applied filters.
+       */
+      onFiltersApplied: function alfresco_lists_utilities_FilterSummary__onFiltersApplied(payload) {
+         this.alfLog("info", "Filters applied", payload);
+
+         this._choices = [];
+         this._storeItems = {};
+
+         domConstruct.empty(this.domNode);
+
+         array.forEach(payload, function(filter) {
+            this._addChoice(filter);
+         }, this);
+
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_getLabel} to
+       * retrieve the name from the filter to return as the label.
+       *
+       * @instance
+       * @param    {item} item The filter whose "name" attribute should be returned as the label
+       * @returns {object} An object representing the filter name.
+       */
+      _getLabel: function alfresco_forms_controls_MultiSelect___getLabel(item) {
+         return {
+            choice: item.name + ": " + item.value,
+            full: item.name + ": " + item.value
+         };
+      },
+
+      /**
+       * This extends the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_removeChoice}
+       * to publish updated filter data.
+       *
+       * @instance
+       * @param  {object} choiceToRemove The choice removed.
+       */
+      _removeChoice: function alfresco_forms_controls_MultiSelect___removeChoice(choiceToRemove) {
+         this.inherited(arguments);
+
+         this.alfLog("info", "Remove choice", choiceToRemove);
+         this.alfPublish(topics.FILTER_REMOVED, choiceToRemove.item);
+
+         this.alfPublish("FILTER_VALUE_CHANGED", {
+            value: "",
+            name: choiceToRemove.item.name
+         });
       }
    });
 });

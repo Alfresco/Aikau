@@ -591,6 +591,28 @@ define([],function() {
       INIT_CLOUD_SYNC: "ALF_INIT_CLOUD_SYNC",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTERS_APPLIED: "ALF_FILTERS_APPLIED",
+
+      /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTER_REMOVED: "ALF_FILTER_REMOVED",
+
+      /**
        * This can be published to request that an action be performed on multiple selected items. The 
        * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
        * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.

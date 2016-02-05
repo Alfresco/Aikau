@@ -98,7 +98,8 @@ model.jsonModel = {
                                        fieldId: "TEXTBOX_FILTER",
                                        name: "name",
                                        placeHolder: "Filter by name",
-                                       label: "Name filter"
+                                       label: "Name filter",
+                                       valueSubscriptionTopic: "FILTER_VALUE_CHANGED"
                                     }
                                  },
                                  {
@@ -126,7 +127,8 @@ model.jsonModel = {
                                           queryAttribute: "label",
                                           labelAttribute: "label",
                                           valueAttribute: "value"
-                                       }
+                                       },
+                                       valueSubscriptionTopic: "FILTER_VALUE_CHANGED"
                                     }
                                  },
                                  {
@@ -183,6 +185,12 @@ model.jsonModel = {
                                     }
                                  }
                               ]
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/utilities/FilterSummary",
+                           config: {
+                              pubSubScope: "COMPOSITE_"
                            }
                         }
                      ]

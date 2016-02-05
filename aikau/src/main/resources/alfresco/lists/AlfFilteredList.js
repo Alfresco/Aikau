@@ -26,13 +26,14 @@
 define(["dojo/_base/declare",
         "alfresco/lists/AlfSortablePaginatedList",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dijit/registry",
         "alfresco/util/hashUtils"], 
-        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, lang, array, domConstruct, domClass, registry, hashUtils) {
+        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, topics, lang, array, domConstruct, domClass, registry, hashUtils) {
    
    return declare([AlfSortablePaginatedList, ObjectProcessingMixin], {
       
@@ -101,6 +102,12 @@ define(["dojo/_base/declare",
             this._filterWidgets = {};
          }
          this.inherited(arguments);
+
+         this.alfSubscribe(topics.FILTER_REMOVED, lang.hitch(this, this.onFilterRemoved));
+      },
+
+      onFilterRemoved: function alfresco_lists_AlfFilteredList__onFilterRemoved(payload) {
+         this.alfLog("info", "Remove filter:", payload);
       },
 
       /**
@@ -150,6 +157,19 @@ define(["dojo/_base/declare",
             domClass.remove(this.filtersNode, "share-hidden");
          }
       },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfHashList#onFiltersUpdated} to publish 
+       * information about the new filters that are applied to the list.
+       * 
+       * @instance
+       * @since 1.0.54
+       */
+      onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
+         this.inherited(arguments);
+         this.alfPublish(topics.FILTERS_APPLIED, this.dataFilters);
+      },
+
 
       /**
        * We need to make sure any filters in the hash are populated into the dataFilters property
@@ -242,6 +262,8 @@ define(["dojo/_base/declare",
             // Set the widget value
             widget && widget.setValue && widget.setValue(filterValue);
          }, this);
+
+         this.alfPublish(topics.FILTERS_APPLIED, this.dataFilters || []);
       },
 
       /**
