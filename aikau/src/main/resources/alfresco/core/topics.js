@@ -613,6 +613,20 @@ define([],function() {
       FILTER_REMOVED: "ALF_FILTER_REMOVED",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       * @property {string} name The [name]{@link module:alfresco/forms/controls/BaseFormControl#name} of the form control to update
+       * @property {string} value The value to set on the form control
+       */
+      FILTER_VALUE_CHANGE: "ALF_FILTER_VALUE_CHANGED",
+
+
+      /**
        * This can be published to request that an action be performed on multiple selected items. The 
        * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
        * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.

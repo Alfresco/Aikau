@@ -19,6 +19,10 @@
 
 /**
  * @module alfresco/lists/utilities/FilterSummary
+ * @extends external:dijit/_WidgetBase
+ * @mixes external:dijit/_TemplatedMixin
+ * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/forms/controls/utilities/ChoiceMixin
  * 
  * @author Dave Draper
  * @since 1.0.54
@@ -41,20 +45,9 @@ define(["dojo/_base/declare",
        * The HTML template to use for the widget.
        * 
        * @instance
-       * @type {String}
+       * @type {string}
        */
       templateString: template,
-
-      /**
-       * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getItemValue}
-       * to return the filter value.
-       *
-       * @instance
-       * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
-       */
-      // getItemValue: function alfresco_forms_controls_utilities_ChoiceMixin__getItemValue(item) {
-      //    return item.name + "=" + item.value;
-      // },
 
       /**
        * 
@@ -74,11 +67,12 @@ define(["dojo/_base/declare",
       onFiltersApplied: function alfresco_lists_utilities_FilterSummary__onFiltersApplied(payload) {
          this.alfLog("info", "Filters applied", payload);
 
+         // Clear the previous filters before adding the current ones...
          this._choices = [];
          this._storeItems = {};
-
          domConstruct.empty(this.domNode);
 
+         // Add each applied filter...
          array.forEach(payload, function(filter) {
             this._addChoice(filter);
          }, this);
@@ -95,25 +89,26 @@ define(["dojo/_base/declare",
        */
       _getLabel: function alfresco_forms_controls_MultiSelect___getLabel(item) {
          return {
-            choice: item.name + ": " + item.value,
-            full: item.name + ": " + item.value
+            choice: item.value,
+            full: item.value
          };
       },
 
       /**
        * This extends the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_removeChoice}
-       * to publish updated filter data.
+       * to publish information about the filter removal.
        *
        * @instance
        * @param  {object} choiceToRemove The choice removed.
+       * @fires module:alfresco/core/topics#FILTER_REMOVED
+       * @fires module:alfresco/core/topics#FILTER_VALUE_CHANGE
        */
       _removeChoice: function alfresco_forms_controls_MultiSelect___removeChoice(choiceToRemove) {
          this.inherited(arguments);
 
-         this.alfLog("info", "Remove choice", choiceToRemove);
+         // Publish information indicating that the filter has been removed and that the value of the filter has changed...
          this.alfPublish(topics.FILTER_REMOVED, choiceToRemove.item);
-
-         this.alfPublish("FILTER_VALUE_CHANGED", {
+         this.alfPublish(topics.FILTER_VALUE_CHANGE, {
             value: "",
             name: choiceToRemove.item.name
          });

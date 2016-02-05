@@ -90,6 +90,7 @@ model.jsonModel = {
                               pubSubScope: "COMPOSITE_",
                               useHash: true,
                               filteringTopics: ["_valueChangeOf_FILTER"],
+                              showFilterSummary: true,
                               widgetsForFilters: [
                                  {
                                     id: "COMPOSITE_TEXTBOX",
@@ -98,8 +99,7 @@ model.jsonModel = {
                                        fieldId: "TEXTBOX_FILTER",
                                        name: "name",
                                        placeHolder: "Filter by name",
-                                       label: "Name filter",
-                                       valueSubscriptionTopic: "FILTER_VALUE_CHANGED"
+                                       label: "Name filter"
                                     }
                                  },
                                  {
@@ -127,8 +127,7 @@ model.jsonModel = {
                                           queryAttribute: "label",
                                           labelAttribute: "label",
                                           valueAttribute: "value"
-                                       },
-                                       valueSubscriptionTopic: "FILTER_VALUE_CHANGED"
+                                       }
                                     }
                                  },
                                  {
@@ -185,12 +184,6 @@ model.jsonModel = {
                                     }
                                  }
                               ]
-                           }
-                        },
-                        {
-                           name: "alfresco/lists/utilities/FilterSummary",
-                           config: {
-                              pubSubScope: "COMPOSITE_"
                            }
                         }
                      ]
