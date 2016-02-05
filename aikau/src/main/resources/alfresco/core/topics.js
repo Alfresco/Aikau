@@ -610,6 +610,17 @@ define([],function() {
        *
        * @event
        */
+      FILTERS_CLEARED: "ALF_FILTERS_CLEARED",
+      
+      /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
       FILTER_REMOVED: "ALF_FILTER_REMOVED",
 
       /**

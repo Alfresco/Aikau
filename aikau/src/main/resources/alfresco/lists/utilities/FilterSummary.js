@@ -31,15 +31,36 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "alfresco/core/Core",
+        "alfresco/core/CoreWidgetProcessing",
         "alfresco/forms/controls/utilities/ChoiceMixin",
         "dojo/text!./templates/FilterSummary.html",
         "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang",
-        "dojo/dom-construct"], 
-        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, ChoiceMixin, template, topics, array, lang, domConstruct) {
+        "dojo/dom-construct",
+        "dojo/when"], 
+        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, ChoiceMixin, template, topics, 
+                 array, lang, domConstruct, when) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, ChoiceMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, CoreWidgetProcessing, AlfCore, ChoiceMixin], {
+
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/FilterSummary.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/FilterSummary.properties"}],
+
+      /**
+       * An array of the CSS files to use with this widget.
+       *
+       * @instance cssRequirements {Array}
+       * @type {object[]}
+       * @default [{cssFile:"./css/FilterSummary.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/FilterSummary.css"}],
 
       /**
        * The HTML template to use for the widget.
@@ -50,33 +71,126 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * A label to prefix the summary with.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      label: "filter-summary.label",
+
+      /**
+       * Processes the [label]{@link module:alfresco/lists/utilities/Label} to ensure that it is localized.
+       * 
+       * @instance
+       */
+      postMixInProperties: function alfresco_lists_utilities_FilterSummary__postMixInProperties() {
+         this.inherited(arguments);
+         this.label = this.message(this.label);
+      },
+
+      /**
+       * Sets up the subcription for handling filter changes.
        * 
        * @instance
        * @listens module:alfresco/core/topics#FILTERS_APPLIED
+       * @listens module:alfresco/core/topics#FILTERS_CLEARED
        */
       postCreate: function alfresco_lists_utilities_FilterSummary__postCreate() {
          this.inherited(arguments);
          this.alfSubscribe(topics.FILTERS_APPLIED, lang.hitch(this, this.onFiltersApplied));
+         this.alfSubscribe(topics.FILTERS_CLEARED, lang.hitch(this, this.onClearAllFilters));
       },
 
       /**
+       * If one or more filter has been applied then the
+       * [widgetsForActions]{@link module:alfresco/lists/utilities/FilterSummary#widgetsForActions} will
+       * be created to provide a "Clear All" action.
+       * 
+       * @instance
+       * @param {object[]} filters An array of the filters that have been applied.
+       */
+      addActions: function alfresco_lists_utilities_FilterSummary__addActions(filters) {
+         if (filters && filters.length)
+         {
+            this.processWidgets(this.widgetsForActions, this.choicesNode);
+         }
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getNewChoiceTargetNode}
+       * to return the appropriate node to add choices to.
+       * 
+       * @instance
+       * @return {object} The DOM element to add choices relative to
+       * @overridable
+       */
+      getNewChoiceTargetNode: function alfresco_lists_utilities_FilterSummary__getNewChoiceTargetNode() {
+         return this.choicesNode;
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getNewChoiceTargetNode}
+       * to return the appropriate node to set the root class on.
+       * 
+       * @instance
+       * @return {object} The target DOM element
+       * @overridable
+       */
+      getRootClassTargetNode: function alfresco_lists_utilities_FilterSummary__getRootClassTargetNode() {
+         return this.choicesNode;
+      },
+
+      /**
+       * Called on requests to clear all the filters.
+       * 
+       * @instance
+       * @param  {object} payload
+       */
+      onClearAllFilters: function alfresco_lists_utilities_FilterSummary__onClearAllFilters(/*jshint unused:false*/ payload) {
+         array.forEach(this._choices, lang.hitch(this, this._removeChoice));
+         this.reset();
+      },
+
+      /**
+       * Called when the current filter data changes.
        * 
        * @instance
        * @param  {object} payload A payload containing the applied filters.
        */
       onFiltersApplied: function alfresco_lists_utilities_FilterSummary__onFiltersApplied(payload) {
-         this.alfLog("info", "Filters applied", payload);
-
          // Clear the previous filters before adding the current ones...
-         this._choices = [];
-         this._storeItems = {};
-         domConstruct.empty(this.domNode);
+         this.reset();
 
          // Add each applied filter...
          array.forEach(payload, function(filter) {
             this._addChoice(filter);
          }, this);
 
+         // Add any actions, by default this will add a "Clear All" action if one or more filter has been provided.
+         this.addActions(payload);
+      },
+
+      /**
+       * Resets the widget to its original state. Each choice is 
+       * [individually removed]{@link module:alfresco/lists/utilities/FilterSummary#_removeChoice} before all the
+       * [actions widgets]{@link module:alfresco/lists/utilities/FilterSummary#widgetsForActions} are destroyed.
+       * 
+       * @instance
+       */
+      reset: function alfresco_lists_utilities_FilterSummary__reset() {
+         this._choices = [];
+         this._storeItems = {};
+
+         // Destroy any action widgets...
+         when(this.getProcessedWidgets(), lang.hitch(this, function(widgets) {
+            array.forEach(widgets, function(widget) {
+               widget.destroy();
+            });
+         }));
+
+         // Empty the choices...
+         domConstruct.empty(this.choicesNode);
       },
 
       /**
@@ -112,6 +226,24 @@ define(["dojo/_base/declare",
             value: "",
             name: choiceToRemove.item.name
          });
-      }
+      },
+
+      /**
+       * A widget model of widgets for performing actions. By default a single [link]{@link module:alfresco/renderers/Link}
+       * is defined for clearing all choices.
+       * 
+       * @instance
+       * @type {object[]}
+       */
+      widgetsForActions: [
+         {
+            id: "{id}_CLEAR_ALL",
+            name: "alfresco/renderers/Link",
+            config: {
+               linkLabel: "filter-summary.clear-all.action",
+               publishTopic: topics.FILTERS_CLEARED
+            }
+         }
+      ]
    });
 });

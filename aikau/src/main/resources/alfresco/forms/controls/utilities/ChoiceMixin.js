@@ -109,9 +109,9 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_forms_controls_utilities_ChoiceMixin__postCreate() {
          this.inherited(arguments);
-         domClass.add(this.domNode, this._rootChoiceClass);
+         domClass.add(this.getRootClassTargetNode(), this._rootChoiceClass);
          if (!this.choiceCanWrap) {
-            domClass.add(this.domNode, this._rootChoiceClass + "--choices-nowrap");
+            domClass.add(this.getRootClassTargetNode(), this._rootChoiceClass + "--choices-nowrap");
          }
             
          this._choices = [];
@@ -155,6 +155,19 @@ define(["dojo/_base/declare",
        */
       getStoreItem: function alfresco_forms_controls_utilities_ChoiceMixin__getStoreItem(value) {
          return value;
+      },
+
+      /**
+       * Called from [postCreate]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#postCreate} to return the 
+       * DOM element that the [root class]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_rootChoiceClass}
+       * should be applied to.
+       * 
+       * @instance
+       * @return {object} The target DOM element
+       * @overridable
+       */
+      getRootClassTargetNode: function alfresco_forms_controls_utilities_ChoiceMixin__getRootClassTargetNode() {
+         return this.domNode;
       },
 
       /**
