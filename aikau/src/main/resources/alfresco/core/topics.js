@@ -591,6 +591,8 @@ define([],function() {
       INIT_CLOUD_SYNC: "ALF_INIT_CLOUD_SYNC",
 
       /**
+       * This is published by the [filtered list]{@link module:alfresco/lists/AlfFilteredList} to indicate
+       * what filters have been applied to the list.
        * 
        * @instance
        * @type {string}
@@ -602,6 +604,8 @@ define([],function() {
       FILTERS_APPLIED: "ALF_FILTERS_APPLIED",
 
       /**
+       * This function is both published from and subcribed to by the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}
+       * to request that all filters are cleared.
        * 
        * @instance
        * @type {string}
@@ -613,6 +617,7 @@ define([],function() {
       FILTERS_CLEARED: "ALF_FILTERS_CLEARED",
       
       /**
+       * Published when an a list filter is removed from the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}
        * 
        * @instance
        * @type {string}
@@ -624,6 +629,8 @@ define([],function() {
       FILTER_REMOVED: "ALF_FILTER_REMOVED",
 
       /**
+       * Published when a filter is removed in order to allow form controls representing the filter to update their rendering
+       * of the current filter value.
        * 
        * @instance
        * @type {string}

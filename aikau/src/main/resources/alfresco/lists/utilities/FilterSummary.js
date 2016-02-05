@@ -18,6 +18,11 @@
  */
 
 /**
+ * This widget can be used to provide a summary of filters applied to a [filtered list]{@link module:alfresco/lists/AlfFilteredList}.
+ * Although this widget can be used independently it is typically rendered by configuring the
+ * [showFilterSummary]{@link module:alfresco/lists/AlfFilteredList#showFilterSummary} attribute on a 
+ * [filtered list]{@link module:alfresco/lists/AlfFilteredList}.
+ * 
  * @module alfresco/lists/utilities/FilterSummary
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
@@ -113,7 +118,9 @@ define(["dojo/_base/declare",
       addActions: function alfresco_lists_utilities_FilterSummary__addActions(filters) {
          if (filters && filters.length)
          {
-            this.processWidgets(this.widgetsForActions, this.choicesNode);
+            var actionsModel = lang.clone(this.widgetsForActions);
+            this.processObject(["processInstanceTokens"], actionsModel);
+            this.processWidgets(actionsModel, this.choicesNode);
          }
       },
 

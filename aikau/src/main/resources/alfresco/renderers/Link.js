@@ -18,8 +18,17 @@
  */
 
 /**
- * Extends the [property link renderer]{@link module:alfresco/renderers/Property} to provide a link that is
- * not displayed as a rendering of a property (i.e. it can be rendered with any text).
+ * Extends the [property link renderer]{@link module:alfresco/renderers/PropertyLink} to allow custom link text to
+ * be configured.
+ *
+ * @example <caption>Simple example:</caption>
+ * {
+ *   name: "alfresco/renderers/Link",
+ *   config: {
+ *     labelNode: "Click Me!",
+ *     publishTopic: "LINK_CLICKED"
+ *   }
+ * }
  * 
  * @module alfresco/renderers/Link
  * @extends alfresco/renderers/PropertyLink
@@ -33,6 +42,7 @@ define(["dojo/_base/declare",
    return declare([PropertyLink], {
 
       /**
+       * The value to render as the displayed link.
        * 
        * @instance
        * @type {string}
@@ -41,8 +51,8 @@ define(["dojo/_base/declare",
       linkLabel: "linkLabel not configured",
 
       /**
-       * If this is set to true then the current item will be published when the link is clicked. If set to
-       * false then the payload will be generated from the configured value.
+       * Overrides the [inherited default value]{@link module:alfresco/renderers/Link#useCurrentItemAsPayload}
+       * because it is a more sensible default.
        *
        * @instance
        * @type {boolean}
