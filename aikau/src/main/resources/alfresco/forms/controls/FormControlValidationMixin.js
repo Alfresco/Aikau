@@ -371,23 +371,32 @@ define(["dojo/_base/declare",
          var isValid = true;
          var value = parseFloat(this.getValue());
          var minValue = lang.getObject("min", false, validationConfig);
-         if (minValue !== null && !isNaN(minValue))
+         var permitEmpty = lang.getObject("permitEmpty", false, validationConfig);
+         if (permitEmpty && this.getValue() === null)
          {
-            isValid = (!isNaN(value) && value >= minValue);
+            // If permitEmpty is true, and there is no value then there is no need to check min/max
          }
          else
          {
-            this.alfLog("warn", "A numericalRange validation was configured with an invalid 'min' attribute", validationConfig, this);
+            if (minValue !== null && !isNaN(minValue))
+            {
+               isValid = (!isNaN(value) && value >= minValue);
+            }
+            else
+            {
+               this.alfLog("warn", "A numericalRange validation was configured with an invalid 'min' attribute", validationConfig, this);
+            }
+            var maxValue = lang.getObject("max", false, validationConfig);
+            if (maxValue !== null && !isNaN(maxValue))
+            {
+               isValid = isValid && (!isNaN(value) && value <= maxValue);
+            }
+            else
+            {
+               this.alfLog("warn", "A numericalRange validation was configured with an invalid 'max' attribute", validationConfig, this);
+            }
          }
-         var maxValue = lang.getObject("max", false, validationConfig);
-         if (maxValue !== null && !isNaN(maxValue))
-         {
-            isValid = isValid && (!isNaN(value) && value <= maxValue);
-         }
-         else
-         {
-            this.alfLog("warn", "A numericalRange validation was configured with an invalid 'max' attribute", validationConfig, this);
-         }
+         
          this.reportValidationResult(validationConfig, isValid);
       },
 

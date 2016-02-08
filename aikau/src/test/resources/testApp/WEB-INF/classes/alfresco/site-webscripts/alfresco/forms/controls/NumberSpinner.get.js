@@ -152,6 +152,39 @@ model.jsonModel = {
                         }
                      ]
                   }
+               },
+               {
+                  name: "alfresco/forms/ControlRow",
+                  config: {
+                     widgets: [
+                        {
+                           id: "NS9",
+                           name: "alfresco/forms/controls/NumberSpinner", 
+                           config: {
+                              fieldId: "NS9",
+                              name: "nine",
+                              label: "Min and permit empty",
+                              description: "This number spinner is used to confirm that min validation does not apply when permitEmpty is true",
+                              value: 4,
+                              min: 3,
+                              permitEmpty: true
+                           }
+                        },
+                        {
+                           id: "NS10",
+                           name: "alfresco/forms/controls/NumberSpinner", 
+                           config: {
+                              fieldId: "NS10",
+                              name: "ten",
+                              label: "Max and permit empty",
+                              description: "This number spinner is used to confirm that max validation does not apply when permitEmpty is true",
+                              value: 4,
+                              max: 5,
+                              permitEmpty: true
+                           }
+                        }
+                     ]
+                  }
                }
             ]
          }
