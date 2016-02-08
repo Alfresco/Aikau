@@ -23,8 +23,9 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(registerSuite, assert, TestCommon, keys) {
 
    registerSuite(function(){
       var browser;
@@ -275,6 +276,36 @@ define(["intern!object",
                });
          },
 
+         "Min validation with permitEmpty can be empty": function() {
+            return browser.findByCssSelector("#NS9 input.dijitInputInner")
+               .clearValue()
+               .click()
+            .end()
+
+            .pressKeys(keys.TAB)
+
+            .findByCssSelector("#NS9 span.validation-message")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
+               });
+         },
+
+         "Max validation with permitEmpty can be empty": function() {
+            return browser.findByCssSelector("#NS10 input.dijitInputInner")
+               .clearValue()
+               .click()
+            .end()
+
+            .pressKeys(keys.TAB)
+
+            .findByCssSelector("#NS10 span.validation-message")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
+               });
+         },
+
          // Make sure this is always the final test, and update accordingly
          "All values publish correctly": function() {
             return browser.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"RESET_VALUES\"] .dijitButtonNode")
@@ -299,6 +330,8 @@ define(["intern!object",
                   assert.propertyVal(payload, "six", 1001, "Invalid published value for control with ID \"NS6\"");
                   assert.propertyVal(payload, "seven", null, "Invalid published value for control with ID \"NS7\"");
                   assert.propertyVal(payload, "eight", 5.5, "Invalid published value for control with ID \"NS8\"");
+                  assert.propertyVal(payload, "nine", null, "Invalid published value for control with ID \"NS9\"");
+                  assert.propertyVal(payload, "ten", null, "Invalid published value for control with ID \"NS10\"");
                });
          },
          // Make sure this is always the final test, and update accordingly
