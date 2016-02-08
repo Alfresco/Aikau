@@ -216,6 +216,18 @@ define(["alfresco/core/CoreXhr",
       widgetsForUploadDisplay: null,
 
       /**
+       * The Alfresco repository features multiple upload REST APIs. Up to and including version 5.1 of Alfresco
+       * supports the "version zero" REST API (also known as Share Services API) for Upload. In addition post 5.1
+       * there is a "version one" Public Upload API also. Set this value to 1 to use the new version one API, else
+       * the classic v0 API will be used and Share Services AMP must be applied to the repository.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      apiVersion: 0,
+
+      /**
        * An internal counter for the currently uploading files.
        *
        * @instance
@@ -437,17 +449,32 @@ define(["alfresco/core/CoreXhr",
 
             // Get the response and update the file-info object
             var response = JSON.parse(fileInfo.request.responseText);
-            fileInfo.nodeRef = response.nodeRef;
-            fileInfo.fileName = response.fileName;
-            fileInfo.state = this.STATE_SUCCESS;
+            switch (this.apiVersion)
+            {
+               case 0:
+               {
+                  fileInfo.nodeRef = response.nodeRef;
+                  fileInfo.fileName = response.fileName;
+                  fileInfo.state = this.STATE_SUCCESS;
+                  break;
+               }
+               case 1:
+               {
+                  fileInfo.nodeRef = "workspace://SpacesStore/" + response.id;
+                  fileInfo.fileName = response.name;
+                  fileInfo.state = this.STATE_SUCCESS;
+               }
+               default:
+                  this.alfLog("error", "Unknown Upload API version specified: " + this.apiVersion);
+            }
 
             // Notify uploads-display widget of completion
             this.uploadDisplayWidget.handleCompletedUpload(fileId, evt, fileInfo.request);
 
             // Execute post-upload actions
             this.onUploadFinished(fileId);
-
-         } else {
+         }
+         else {
             this.processUploadFailure(fileId, evt);
          }
       },
@@ -548,34 +575,71 @@ define(["alfresco/core/CoreXhr",
          // Mark file as being uploaded
          fileInfo.state = this.STATE_UPLOADING;
 
-         var url = AlfConstants.PROXY_URI + (this.uploadURL || "api/upload");
-         if (this.isCsrfFilterEnabled()) {
-            url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
-         }
-
-         // Setup the form data object
-         // NOTE: This is IE10+ but code is unchanged from existing UploadService, so maybe there's a hidden polyfill somewhere
+         var url;
          var formData = new FormData();
-         formData.append("filedata", fileInfo.uploadData.filedata);
-         formData.append("filename", fileInfo.uploadData.filename);
-         formData.append("destination", fileInfo.uploadData.destination);
-         formData.append("siteId", fileInfo.uploadData.siteId);
-         formData.append("containerId", fileInfo.uploadData.containerId);
-         formData.append("uploaddirectory", fileInfo.uploadData.uploaddirectory);
-         formData.append("majorVersion", fileInfo.uploadData.majorVersion ? fileInfo.uploadData.majorVersion : "false");
-         formData.append("username", fileInfo.uploadData.username);
-         formData.append("overwrite", fileInfo.uploadData.overwrite);
-         formData.append("thumbnails", fileInfo.uploadData.thumbnails);
-         if (fileInfo.uploadData.updateNodeRef) {
-            formData.append("updateNodeRef", fileInfo.uploadData.updateNodeRef);
-         }
-         if (fileInfo.uploadData.description) {
-            formData.append("description", fileInfo.uploadData.description);
-         }
 
+         // resolve final API URL and Form structure based on configuration and apiVersion setting
+         switch (this.apiVersion)
+         {
+            case 0:
+            {
+               // Set-up the API URL
+               url = AlfConstants.PROXY_URI + (this.uploadURL || "api/upload");
+               if (this.isCsrfFilterEnabled()) {
+                  url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
+               }
+               
+               // Set-up the form data object
+               formData.append("filedata", fileInfo.uploadData.filedata);
+               formData.append("filename", fileInfo.uploadData.filename);
+               formData.append("destination", fileInfo.uploadData.destination);
+               formData.append("siteId", fileInfo.uploadData.siteId);
+               formData.append("containerId", fileInfo.uploadData.containerId);
+               formData.append("uploaddirectory", fileInfo.uploadData.uploaddirectory);
+               formData.append("majorVersion", fileInfo.uploadData.majorVersion ? fileInfo.uploadData.majorVersion : "false");
+               formData.append("username", fileInfo.uploadData.username);
+               formData.append("overwrite", fileInfo.uploadData.overwrite);
+               formData.append("thumbnails", fileInfo.uploadData.thumbnails);
+               if (fileInfo.uploadData.updateNodeRef) {
+                  formData.append("updateNodeRef", fileInfo.uploadData.updateNodeRef);
+               }
+               if (fileInfo.uploadData.description) {
+                  formData.append("description", fileInfo.uploadData.description);
+               }
+               
+               break;
+            }
+            
+            case 1:
+            {
+               // Set-up the API URL
+               url = AlfConstants.PROXY_URI + "public/alfresco/versions/1/nodes/{nodeId}/children";
+               // extract node id only from expected NodeRef
+               url = lang.replace(url, {
+                  nodeId: fileInfo.uploadData.destination.split("/")[3]
+               });
+               if (this.isCsrfFilterEnabled()) {
+                  url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
+               }
+               
+               // Set-up the form data object
+               formData.append("fileData", fileInfo.uploadData.filedata);
+               formData.append("fileName", fileInfo.uploadData.filename);
+               formData.append("autoRename", !fileInfo.uploadData.overwrite);
+               
+               break;
+            }
+            
+            default:
+               this.alfLog("error", "Unknown Upload API version specified: " + this.apiVersion);
+         }
+         
          // Open and send the request
-         fileInfo.request.open("POST", url, true);
-         fileInfo.request.send(formData);
+         if (url)
+         {
+            fileInfo.request.open("POST", url, true);
+            fileInfo.request.send(formData);
+         }
       },
 
       /**
