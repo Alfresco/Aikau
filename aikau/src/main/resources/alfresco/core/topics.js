@@ -591,6 +591,60 @@ define([],function() {
       INIT_CLOUD_SYNC: "ALF_INIT_CLOUD_SYNC",
 
       /**
+       * This is published by the [filtered list]{@link module:alfresco/lists/AlfFilteredList} to indicate
+       * what filters have been applied to the list.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTERS_APPLIED: "ALF_FILTERS_APPLIED",
+
+      /**
+       * This function is both published from and subcribed to by the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}
+       * to request that all filters are cleared.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTERS_CLEARED: "ALF_FILTERS_CLEARED",
+      
+      /**
+       * Published when an a list filter is removed from the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTER_REMOVED: "ALF_FILTER_REMOVED",
+
+      /**
+       * Published when a filter is removed in order to allow form controls representing the filter to update their rendering
+       * of the current filter value.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       * @property {string} name The [name]{@link module:alfresco/forms/controls/BaseFormControl#name} of the form control to update
+       * @property {string} value The value to set on the form control
+       */
+      FILTER_VALUE_CHANGE: "ALF_FILTER_VALUE_CHANGED",
+
+
+      /**
        * This can be published to request that an action be performed on multiple selected items. The 
        * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
        * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
