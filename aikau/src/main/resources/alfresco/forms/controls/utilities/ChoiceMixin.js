@@ -52,7 +52,6 @@ define(["dojo/_base/declare",
       choiceCanWrap: true,
 
       /**
-       * TODO: Remove from MultiSelect
        * The maximum width of choices within the control as a CSS string
        *
        * @instance
@@ -94,8 +93,7 @@ define(["dojo/_base/declare",
        */
       _selectedChoice: null,
 
-         /**
-       * TODO: Remove from MultiSelect
+      /**
        * A map of retrieved items, by value
        *
        * @instance
