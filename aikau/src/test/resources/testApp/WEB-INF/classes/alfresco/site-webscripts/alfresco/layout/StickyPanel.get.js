@@ -37,6 +37,7 @@ model.jsonModel = {
          name: "alfresco/layout/StickyPanel",
          id: "STICKY_PANEL",
          config: {
+            panelWidth: 400,
             widgets: multipleWidgets
          }
       },
