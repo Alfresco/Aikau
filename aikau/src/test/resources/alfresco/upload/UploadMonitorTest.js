@@ -63,7 +63,7 @@ define(["intern!object",
          "Single file upload succeeds": function() {
             return browser.findById("SINGLE_UPLOAD_label")
                .click()
-               .end()
+            .end()
 
             .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
 
@@ -74,25 +74,43 @@ define(["intern!object",
                .click();
          },
 
-         "Multiple file upload succeeds with one failure": function() {
+         "Close button disabled on upload start": function() {
             return browser.findById("MULTI_UPLOAD_label")
                .clearLog()
                .click()
-               .end()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_DISABLE_CLOSE")
+
+            .findByCssSelector(".alfresco-layout-StickyPanel--close-disabled");
+         },
+
+         "Multiple file upload succeeds with one failure": function() {
+            return browser.findByCssSelector("body").end()
 
             .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 10000)
 
             .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
-               .end()
+            .end()
 
             .findAllByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "Should be three successful uploads");
                })
-               .end()
+            .end()
 
             .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
                .click();
+         },
+
+         "Close button enabled on upload complete": function() {
+            return browser.findAllByCssSelector(".alfresco-layout-StickyPanel--close-disabled")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0, "Found disablement class");
+               })
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_ENABLE_CLOSE");
          },
 
          "Post Coverage Results": function() {

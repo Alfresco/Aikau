@@ -67,4 +67,14 @@
          }
       }
    }
+   &--close-disabled {
+      .alfresco-layout-StickyPanel {
+         &__title-bar {
+            &__close {
+               cursor: default;
+               opacity: 0.3;
+            }
+         }
+      }
+   }
 }
