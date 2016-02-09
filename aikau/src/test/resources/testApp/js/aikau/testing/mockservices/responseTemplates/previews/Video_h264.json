@@ -1,0 +1,380 @@
+{
+   "metadata": {
+      "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+      "custom": {
+         "googledocs": {
+            "enabled": true,
+            "importFormats": {
+               "application/vnd.openxmlformats-officedocument.presentationml.presentation": "presentation",
+               "application/vnd.ms-powerpoint": "presentation",
+               "text/tab-separated-values": "spreadsheet",
+               "application/vnd.sun.xml.writer": "document",
+               "application/vnd.ms-excel": "spreadsheet",
+               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "spreadsheet",
+               "application/rtf": "document",
+               "application/msword": "document",
+               "application/vnd.oasis.opendocument.text": "document",
+               "text/plain": "document",
+               "text/csv": "spreadsheet",
+               "application/x-vnd.oasis.opendocument.spreadsheet": "spreadsheet",
+               "application/vnd.oasis.opendocument.spreadsheet": "spreadsheet",
+               "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "document"
+            }
+         },
+         "aos": {
+            "baseUrl": "https:\/\/ts.alfresco.com\/alfresco\/aos"
+         },
+         "vtiServer": null
+      },
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "https:\/\/ts.alfresco.com\/share",
+      "serverURL": "http:\/\/localhost:8080",
+      "parent": {
+         "permissions": {
+            "user": {},
+            "roles": []
+         }
+      }
+   },
+   "item": {
+      "node": {
+         "isLink": false,
+         "aspects": ["rn:renditioned", "cm:versionable", "cm:titled", "additionalXmpModel:stDimAspect", "cm:auditable", "pbcoreModel:pbcoreAspect", "sys:referenceable", "cm:taggable", "sys:localized", "cm:author", "cm:thumbnailModification"],
+         "isContainer": false,
+         "type": "cm:content",
+         "encoding": "UTF-8",
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/8a93f2cc-5276-45b6-929a-f5112e7a645d\/Fluid%20Dashboard%20Demo.mp4",
+         "size": 21724775,
+         "nodeRef": "workspace:\/\/SpacesStore\/8a93f2cc-5276-45b6-929a-f5112e7a645d",
+         "permissions": {
+            "inherited": true,
+            "roles": ["ALLOWED;GROUP_EVERYONE;Consumer;INHERITED", "ALLOWED;GROUP_site_aikau_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_aikau_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_aikau_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_aikau_SiteManager;SiteManager;INHERITED"],
+            "user": {
+               "Delete": true,
+               "Write": true,
+               "CancelCheckOut": false,
+               "ChangePermissions": true,
+               "CreateChildren": true,
+               "Unlock": false
+            }
+         },
+         "isLocked": false,
+         "mimetype": "video\/mp4",
+         "properties": {
+            "cm:creator": {
+               "firstName": "David",
+               "lastName": "Draper",
+               "displayName": "David Draper",
+               "userName": "ddraper"
+            },
+            "cm:autoVersion": "true",
+            "cm:versionLabel": "1.0",
+            "cm:created": {
+               "iso8601": "2016-01-20T11:02:52.613Z",
+               "value": "Wed Jan 20 11:02:52 GMT 2016"
+            },
+            "pbcore:essenceTrackDuration": ["", ""],
+            "pbcore:essenceTrackFrameRate": ["12.83 fps", ""],
+            "pbcore:essenceTrackEncoding": ["h264", "aac"],
+            "cm:lastThumbnailModification": ["doclib:1453287778903", "h264-720:1453288430561", "storyboard:1453288435327", "storyboard[64]:1453288436375", "storyboard[128]:1453288437693", "storyboard[192]:1453288438627", "storyboard[8]:1453288439528", "storyboard[72]:1453288440544", "imgpreview:1453288441660", "storyboard[136]:1453288442683", "storyboard[200]:1453288443852", "storyboard[16]:1453288444904", "storyboard[80]:1453288445927", "storyboard[144]:1453288447363", "storyboard[208]:1453288448784", "storyboard[24]:1453288449631", "storyboard[88]:1453288450720", "storyboard[152]:1453288451939", "storyboard[216]:1453288453053", "storyboard[32]:1453288454354", "storyboard[96]:1453288455794", "storyboard[160]:1453288457107", "storyboard[224]:1453288458460", "storyboard[40]:1453288459832", "storyboard[104]:1453288460854", "storyboard[168]:1453288461816", "storyboard[48]:1453288463063", "storyboard[112]:1453288464448", "storyboard[176]:1453288465899", "storyboard[56]:1453288466929", "storyboard[120]:1453288468164", "storyboard[184]:1453288470121"],
+            "sys:node-uuid": null,
+            "stDim:unit": "pixel",
+            "pbcore:essenceTrackDataRate": ["729 kb\/s", "37 kb\/s"],
+            "pbcore:essenceTrackStandard": ["", ""],
+            "stDim:h": "1056.0",
+            "sys:locale": null,
+            "cm:modified": {
+               "iso8601": "2016-01-20T11:12:33.130Z",
+               "value": "Wed Jan 20 11:12:33 GMT 2016"
+            },
+            "pbcore:essenceTrackAspectRatio": ["20:11", ""],
+            "cm:title": "",
+            "pbcore:instantiationDataRate": "770 kb\/s",
+            "cm:modifier": {
+               "firstName": "David",
+               "lastName": "Draper",
+               "displayName": "David Draper",
+               "userName": "ddraper"
+            },
+            "pbcore:essenceTrackBitDepth": ["", ""],
+            "cm:autoVersionOnUpdateProps": "false",
+            "sys:store-protocol": null,
+            "pbcore:instantiationDuration": "00:03:45.47",
+            "sys:store-identifier": null,
+            "pbcore:essenceTrackIdentifier": ["", ""],
+            "stDim:w": "1920.0",
+            "cm:content": null,
+            "pbcore:essenceTrackPlaybackSpeed": ["", ""],
+            "pbcore:essenceTrackFrameSize": ["1920x1056", ""],
+            "cm:taggable": null,
+            "cm:description": "This is a demo of a prototype that I put together prompted by a requirement raised by Nike",
+            "pbcore:essenceTrackLanguage": ["und", "und"],
+            "pbcore:instantiationDimensions": "1920x1056",
+            "cm:name": "Fluid Dashboard Demo.mp4",
+            "sys:node-dbid": null,
+            "pbcore:essenceTrackType": ["Video", "Audio"],
+            "cm:initialVersion": "true",
+            "pbcore:essenceTrackTimeStart": ["", ""],
+            "pbcore:essenceTrackAnnotation": ["", ""],
+            "pbcore:essenceTrackSamplingRate": ["", "22050 Hz"]
+         },
+         "mimetypeDisplayName": "MPEG4 Video"
+      },
+      "parent": {
+         "isLink": false,
+         "nodeRef": "workspace:\/\/SpacesStore\/7c6eb7c3-cbc7-4c92-b973-a5d39b8e5818",
+         "permissions": {
+            "inherited": true,
+            "roles": ["ALLOWED;GROUP_EVERYONE;Consumer;DIRECT", "ALLOWED;GROUP_site_aikau_SiteContributor;SiteContributor;INHERITED", "ALLOWED;GROUP_site_aikau_SiteConsumer;SiteConsumer;INHERITED", "ALLOWED;GROUP_site_aikau_SiteCollaborator;SiteCollaborator;INHERITED", "ALLOWED;GROUP_site_aikau_SiteManager;SiteManager;INHERITED"],
+            "user": {
+               "Delete": true,
+               "Write": true,
+               "CancelCheckOut": false,
+               "ChangePermissions": true,
+               "CreateChildren": true,
+               "Unlock": false
+            }
+         },
+         "isLocked": false,
+         "aspects": ["cm:titled", "cm:auditable", "sys:referenceable", "sys:localized"],
+         "isContainer": true,
+         "type": "cm:folder",
+         "properties": {
+            "cm:title": "",
+            "cm:creator": {
+               "firstName": "David",
+               "lastName": "Webster",
+               "displayName": "David Webster",
+               "userName": "dwebster"
+            },
+            "cm:modifier": {
+               "firstName": "David",
+               "lastName": "Draper",
+               "displayName": "David Draper",
+               "userName": "ddraper"
+            },
+            "cm:created": {
+               "iso8601": "2014-12-01T17:30:04.362Z",
+               "value": "Mon Dec 01 17:30:04 GMT 2014"
+            },
+            "cm:name": "Demo Videos",
+            "sys:store-protocol": null,
+            "sys:node-dbid": null,
+            "sys:store-identifier": null,
+            "sys:locale": null,
+            "cm:modified": {
+               "iso8601": "2016-01-21T16:55:08.742Z",
+               "value": "Thu Jan 21 16:55:08 GMT 2016"
+            },
+            "cm:description": "",
+            "sys:node-uuid": null
+         }
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Sites\/aikau\/documentLibrary\/Demo%20Videos\/Fluid%20Dashboard%20Demo.mp4",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b5de7b90-78a4-41a2-b816-aa12b09015dd",
+         "site": {
+            "name": "aikau",
+            "title": "Aikau",
+            "preset": "site-dashboard"
+         },
+         "container": {
+            "name": "documentLibrary",
+            "type": "cm:folder",
+            "nodeRef": ""
+         },
+         "path": "\/Demo Videos",
+         "repoPath": "\/Sites\/aikau\/documentLibrary\/Demo Videos",
+         "file": "Fluid Dashboard Demo.mp4",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/8a93f2cc-5276-45b6-929a-f5112e7a645d",
+      "fileName": "Fluid Dashboard Demo.mp4",
+      "displayName": "Fluid Dashboard Demo.mp4",
+      "actionGroupId": "document-details",
+      "actions": [{
+         "id": "document-view-content",
+         "icon": "document-view-content",
+         "type": "link",
+         "label": "actions.document.view",
+         "params": {
+            "href": "{viewUrl}"
+         },
+         "index": 10110.0,
+         "subgroup": 10.0
+      }, {
+         "id": "document-edit-offline",
+         "icon": "document-edit-offline",
+         "type": "javascript",
+         "label": "actions.document.edit-offline",
+         "params": {
+            "function": "onActionEditOffline"
+         },
+         "index": 30360.0,
+         "subgroup": 30.0
+      }, {
+         "id": "document-upload-new-version",
+         "icon": "document-upload-new-version",
+         "type": "javascript",
+         "label": "actions.document.upload-new-version",
+         "params": {
+            "function": "onActionUploadNewVersion"
+         },
+         "index": 30370.0,
+         "subgroup": 30.0
+      }, {
+         "id": "document-edit-metadata",
+         "icon": "document-edit-metadata",
+         "type": "pagelink",
+         "label": "actions.document.edit-metadata",
+         "params": {
+            "page": "edit-metadata?nodeRef={node.nodeRef}"
+         },
+         "index": 40410.0,
+         "subgroup": 40.0
+      }, {
+         "id": "document-move-to",
+         "icon": "document-move-to",
+         "type": "javascript",
+         "label": "actions.document.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": 50510.0,
+         "subgroup": 50.0
+      }, {
+         "id": "document-copy-to",
+         "icon": "document-copy-to",
+         "type": "javascript",
+         "label": "actions.document.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": 50520.0,
+         "subgroup": 50.0
+      }, {
+         "id": "document-delete",
+         "icon": "document-delete",
+         "type": "javascript",
+         "label": "actions.document.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": 50540.0,
+         "subgroup": 50.0
+      }, {
+         "id": "document-cloud-sync",
+         "icon": "document-cloud-sync",
+         "type": "javascript",
+         "label": "actions.document.cloud-sync",
+         "params": {
+            "function": "onActionCloudSync"
+         },
+         "index": 60610.0,
+         "subgroup": 60.0
+      }, {
+         "id": "document-assign-workflow",
+         "icon": "document-assign-workflow",
+         "type": "javascript",
+         "label": "actions.document.assign-workflow",
+         "params": {
+            "function": "onActionAssignWorkflow"
+         },
+         "index": 70710.0,
+         "subgroup": 70.0
+      }, {
+         "id": "document-manage-granular-permissions",
+         "icon": "document-manage-permissions",
+         "type": "link",
+         "label": "actions.document.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": 70720.0,
+         "subgroup": 70.0
+      }, {
+         "id": "document-take-ownership",
+         "icon": "document-manage-permissions",
+         "type": "javascript",
+         "label": "actions.document.take-ownership",
+         "params": {
+            "function": "onActionTakeOwnership",
+            "action": "take-ownership",
+            "successMessage": "message.take-ownership.success",
+            "failureMessage": "message.take-ownership.failure"
+         },
+         "index": 70740.0,
+         "subgroup": 70.0
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.document.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": 70750.0,
+         "subgroup": 70.0
+      }, {
+         "id": "document-change-type",
+         "icon": "document-change-type",
+         "type": "javascript",
+         "label": "actions.document.change-type",
+         "params": {
+            "function": "onActionChangeType"
+         },
+         "index": 70760.0,
+         "subgroup": 70.0
+      }, {
+         "id": "wps.doclib.action.emailAslink",
+         "icon": "..\/..\/wps\/mail-details\/images\/msg",
+         "type": "javascript",
+         "label": "emails.action.aslink",
+         "params": {
+            "function": "onActionWpsEmailAsLink"
+         },
+         "index": 99195.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-publish",
+         "icon": "document-publish",
+         "type": "javascript",
+         "label": "actions.document.publish",
+         "params": {
+            "function": "onActionPublish"
+         },
+         "index": 99340.0,
+         "subgroup": 99.0
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "pbcore",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}{quantitative}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }
+}

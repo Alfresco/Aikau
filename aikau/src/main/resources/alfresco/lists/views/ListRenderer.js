@@ -244,9 +244,9 @@ define(["dojo/_base/declare",
                // appropriate position to scroll to based on the position within the item and the current
                // scrollTop value...
                var position = $(widget.domNode).position();
-               var currentScrollTop = $(widget.domNode).scrollParent().scrollTop();
+               var currentScrollTop = scrollParent.scrollTop();
                var scrollTo = currentScrollTop + position.top;
-               $(widget.domNode).scrollParent().animate({
+               scrollParent.animate({
                   scrollTop: scrollTo
                });
             }

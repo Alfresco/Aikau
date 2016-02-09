@@ -238,6 +238,10 @@ define(["alfresco/TestCommon",
                });
          },
 
+         "Post Coverage Results (prior to reloading page)": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         },
+
          "Navigating to another page and then back will re-apply filter (useHash=true)": function() {
             var anotherPageUrl = TestCommon.testWebScriptURL("/Index"),
                returnUrl = TestCommon.testWebScriptURL("/FilteredList#description=woof");
@@ -259,6 +263,111 @@ define(["alfresco/TestCommon",
                   var text = visibleText.split("\n").join("|"),
                      expectedText = "five woof|five and a half woof|six woof|six and a half woof";
                   assert.equal(text, expectedText, "Incorrect results displayed for filter 'woof'");
+               });
+         },
+
+         "Filter summary displayed": function() {
+            return browser.findDisplayedByCssSelector(".alfresco-lists-utilities-FilterSummary");
+         },
+
+         "Single Filter choice displayed": function() {
+            return browser.findAllByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1);
+               });
+         },
+
+         "Filter choice displayed correctly": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "woof");
+               });
+         },
+
+         "Clear all action displayed": function() {
+            return browser.findDisplayedByCssSelector(".alfresco-lists-utilities-FilterSummary__choices .alfresco-renderers-PropertyLink")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Clear All");
+               });
+         },
+
+         "Removing filter loads data": function() {
+            return browser.findByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
+         },
+
+         "Filter form control is reset": function() {
+            return browser.findById("COMPOSITE_DROPDOWN_CONTROL")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "");
+               });
+         },
+
+         "Filter summary is empty": function() {
+            return browser.findAllByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+         },
+
+         "Enter a filter updates summary": function() {
+            return browser.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
+               .clearLog()
+               .type("e")
+            .end()
+
+            .findByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "e");
+               });
+         },
+
+         "Second filter updates summary": function() {
+            return browser.findByCssSelector("#COMPOSITE_DROPDOWN .dijitArrowButtonInner")
+               .clearLog()
+               .click()
+            .end()
+
+            .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL_popup1")
+               .click()
+            .end()
+
+            .getLastPublish("COMPOSITE_ALF_DOCLIST_REQUEST_FINISHED")
+            .end()
+
+            .findAllByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 2);
+               });
+         },
+
+         "Clear all removes filters": function() {
+            return browser.findByCssSelector(".alfresco-lists-utilities-FilterSummary__choices .alfresco-renderers-PropertyLink")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .end()
+
+            .findAllByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               })
+            .end()
+
+            .findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
+               .getProperty("value")
+               .then(function(value) {
+                  assert.equal(value, "", "Text box value not reset");
                });
          },
 

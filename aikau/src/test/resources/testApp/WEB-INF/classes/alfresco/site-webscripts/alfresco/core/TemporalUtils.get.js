@@ -10,16 +10,11 @@ model.jsonModel = {
          }
       },
       "alfresco/services/ErrorReporter",
-      {
-         name: "aikauTesting/mixins/TemporalUtils"
-      }
+      "aikauTesting/mixins/TemporalUtils"
    ],
    widgets:[
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

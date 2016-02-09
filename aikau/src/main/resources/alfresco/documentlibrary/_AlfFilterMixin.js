@@ -29,6 +29,7 @@
  * @module alfresco/documentlibrary/_AlfFilterMixin
  * @extends module:alfresco/core/Core
  * @author Dave Draper
+ * @deprecated Since 1.0.54 - Use [_AlfHashMixin]{@link module:alfresco/documentlibrary/_AlfHashMixin} instead (call processHashFilter instead of processFilter - see AKU-813)
  */
 define(["dojo/_base/declare",
         "alfresco/core/Core",

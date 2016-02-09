@@ -37,7 +37,6 @@ define(["intern/dojo/node!fs",
         "lodash"], 
         function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
 
-   var unitTestAppBaseUrl;
    return {
 
       /**
@@ -48,13 +47,8 @@ define(["intern/dojo/node!fs",
        * @param {string} webScriptPrefix Optional prefix to the test page.
        */
       testWebScriptURL: function(webScriptURL, webScriptPrefix) {
-         var serverAddress,
-            prefix = webScriptPrefix || "/tp/ws";
-         if (!unitTestAppBaseUrl) {
-            serverAddress = (intern.args.useLocalhost === "true") ? "localhost" : this._getLocalIP();
-            unitTestAppBaseUrl = "http://" + serverAddress + ":8089";
-         }
-         return unitTestAppBaseUrl + "/aikau/page" + prefix + webScriptURL;
+         var prefix = webScriptPrefix || "/tp/ws";
+         return "http://" + intern.args.serverIP + ":8089/aikau/page" + prefix + webScriptURL;
       },
 
       /**
@@ -637,38 +631,6 @@ define(["intern/dojo/node!fs",
          browser.setFindTimeout(Config.timeout.find);
          browser.setPageLoadTimeout(Config.timeout.pageLoad);
          browser.setExecuteAsyncTimeout(Config.timeout.executeAsync);
-      },
-
-      /**
-       * Get the local machine IP address (for us from other machines on the network). Specifically,
-       * it will pass back the first IPv4, external IP address whose name begins with an "e".
-       * 
-       * [MJD 2015-03-30] Hopefully this will be robust enough (examples seen = en0,en1,eth0,ethernet0)
-       *
-       * @instance
-       * @protected
-       * @returns  {string} The local IP address
-       */
-      _getLocalIP: function() {
-         var networkInterfaces = os.networkInterfaces(),
-            validNameRegex = /^e[a-z]+[0-9]$/i,
-            ipAddress = null;
-         Object.keys(networkInterfaces).every(function(interfaceName) {
-            if (validNameRegex.test(interfaceName)) {
-               networkInterfaces[interfaceName].every(function(interface) {
-                  if (interface.family === "IPv4" && !interface.internal) {
-                     ipAddress = interface.address;
-                     return false;
-                  }
-                  return true;
-               });
-            }
-            if (ipAddress) {
-               return false;
-            }
-            return true;
-         });
-         return ipAddress;
       },
 
       /**

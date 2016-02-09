@@ -1,3 +1,4 @@
+/* global msg */
 function outputExamples(examples) {
    var model = [];
    if (examples)
@@ -29,6 +30,8 @@ function outputExamples(examples) {
                                        config: {
                                           okButtonLabel: "Update Preview",
                                           okButtonPublishTopic: "ALF_GENERATE_PAGE_PREVIEW",
+                                          okButtonDisableOnPublish: true,
+                                          okButtonEnablementTopics: ["ALF_PREVIEW_MODEL_RENDERED"],
                                           showCancelButton: false,
                                           pubSubScope: pubSubScope,
                                           widgets: [
