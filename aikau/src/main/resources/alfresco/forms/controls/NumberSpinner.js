@@ -93,8 +93,8 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       _getValueAttr: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner___getValueAttr() {
          var rawValue = this.textbox.value,
-            numberValue = number.parse(rawValue),
-            value = null;
+             numberValue = number.parse(rawValue),
+             value = null;
          if (!isNaN(numberValue)) {
             value = numberValue;
             if (value === Math.round(value)) {
@@ -112,8 +112,10 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {number} newValue The new value to set
        */
       _setValueAttr: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner___setValueAttr(newValue) {
-         if (!isNaN(newValue)) {
-            if (typeof newValue === "string") {
+         if (newValue !== null && !isNaN(newValue)) 
+         {
+            if (typeof newValue === "string") 
+            {
                newValue = parseFloat(newValue);
             }
             this.textbox.value = number.format(newValue);
@@ -338,6 +340,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                validation: "numericalRange",
                min: this.min,
                max: this.max,
+               permitEmpty: this.permitEmpty,
                errorMessage: errorMessage
             });
          }
