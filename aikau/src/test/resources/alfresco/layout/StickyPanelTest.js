@@ -55,6 +55,14 @@ define(["intern!object",
                });
          },
 
+         "Panel has no title attribute": function() {
+            return browser.findByCssSelector(".alfresco-layout-StickyPanel")
+               .getAttribute("title")
+               .then(function(title) {
+                  assert.equal(title, null);
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
