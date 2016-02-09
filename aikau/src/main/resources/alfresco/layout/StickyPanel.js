@@ -242,6 +242,18 @@ define(["alfresco/core/Core",
             }
             domStyle.set(this.panelNode, "width", newWidth);
          }
+      },
+
+      /**
+       * Prevent the title property from being used to set the title
+       * attribute on the widget's root node.
+       *
+       * @instance
+       * @override
+       * @param {string} newTitle The new title
+       */
+      _setTitleAttr: function alfresco_layout_StickyPanel___setTitleAttr(newTitle) {
+         // NOOP
       }
    });
 });
