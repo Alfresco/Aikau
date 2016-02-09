@@ -492,9 +492,13 @@ define(["alfresco/core/CoreXhr",
       },
 
       /**
+       * This function is called when all uploads have completed and resets the
+       * [totalNewUploads counter]{@link module:alfresco/services/_BaseUploadService#totalNewUploads}
+       * to zero.
        * 
        * @instance
        * @since 1.0.54
+       * @extendable
        */
       resetTotalUploads: function alfresco_services__BaseUploadService__resetTotalUploads() {
          this.totalNewUploads = 0;
