@@ -463,6 +463,7 @@ define(["alfresco/core/CoreXhr",
                   fileInfo.nodeRef = "workspace://SpacesStore/" + response.id;
                   fileInfo.fileName = response.name;
                   fileInfo.state = this.STATE_SUCCESS;
+                  break;
                }
                default:
                   this.alfLog("error", "Unknown Upload API version specified: " + this.apiVersion);
