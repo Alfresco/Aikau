@@ -1031,6 +1031,32 @@ define([],function() {
       STICKY_PANEL_CLOSED: "ALF_STICKY_PANEL_CLOSED",
 
       /**
+       * This topic can be published to request that the close button on a [StickyPanel]{@link module:alfresco/layout/StickyPanel}
+       * be disabled.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      STICKY_PANEL_DISABLE_CLOSE: "ALF_STICKY_PANEL_DISABLE_CLOSE",
+
+      /**
+       * This topic can be published to request that the close button on a [StickyPanel]{@link module:alfresco/layout/StickyPanel}
+       * be enabled.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      STICKY_PANEL_ENABLE_CLOSE: "ALF_STICKY_PANEL_ENABLE_CLOSE",
+
+      /**
        * This can be called to set the title of the StickyPanel.
        *
        * @instance
