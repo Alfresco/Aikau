@@ -1,6 +1,35 @@
 var notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
+   os = require("os"),
    tcpPortUsed = require("tcp-port-used");
 
+// Calculate this machine's (i.e. the server's) best IP address
+// Preference is given to VM tunnel (which will work everywhere) and then an ethernet interface
+var networkInterfaces = os.networkInterfaces(),
+   interfaceNames = Object.keys(networkInterfaces),
+   serverIP,
+   localIP;
+interfaceNames.forEach(function(interfaceName) {
+   networkInterfaces[interfaceName].forEach(function(interface) {
+      var ipAddress = interface.address;
+      if (interface.family === "IPv4" && !interface.internal) {
+         if (interfaceName.indexOf("vbox") === 0) {
+            serverIP = ipAddress;
+         } else if (interfaceName.indexOf("eth") === 0) {
+            localIP = ipAddress;
+         } else if (interfaceName.indexOf("en") === 0) {
+            localIP = ipAddress;
+         }
+      }
+   });
+});
+if (!serverIP) {
+   serverIP = localIP;
+}
+console.log("");
+console.log("Using server IP address of " + serverIP);
+console.log("");
+
+// Modify grunt
 module.exports = function(grunt) {
 
    // New Test
@@ -78,7 +107,8 @@ module.exports = function(grunt) {
    grunt.config.merge({
       intern: {
          options: {
-            rowsCols: process.stdout.rows + "|" + process.stdout.columns // Used by ConcurrentReporter
+            rowsCols: process.stdout.rows + "|" + process.stdout.columns, // Used by ConcurrentReporter
+            serverIP: serverIP // Used by all
          },
          bs: {
             options: {

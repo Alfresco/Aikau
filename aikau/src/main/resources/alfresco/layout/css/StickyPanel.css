@@ -1,46 +1,47 @@
 .alfresco-layout-StickyPanel {
    bottom: 0;
    left: 50%;
-   max-height: 90%;
+   max-height: @sticky-panel-max-height;
    position: fixed;
    right: 0;
    &__panel {
-      background: #fff;
-      border: 1px solid #07c;
+      background: @sticky-panel-background;
+      border: @sticky-panel-border;
       border-bottom: 0;
-      border-radius: 3px 3px 0 0;
+      border-radius: @sticky-panel-border-radius;
+      box-shadow: @sticky-panel-box-shadow;
       box-sizing: border-box;
       left: -50%;
       position: relative;
    }
    &__title-bar {
-      background: #07c;
-      color: #fff;
-      line-height: 28px;
-      padding: 0 70px 0 10px;
+      background: @sticky-panel-title-background;
+      color: @sticky-panel-title-foreground;
+      line-height: @sticky-panel-title-line-height;
+      padding: @sticky-panel-title-padding;
       position: relative;
       &__title {
-         font-size: 13px;
+         font-size: @sticky-panel-title-font-size;
          text-align: center;
       }
       &__close, &__restore, &__minimise {
          cursor: pointer;
          display: block;
-         font-size: 20px;
+         font-size: @sticky-panel-buttons-font-size;
          position: absolute;
       }
       &__close {
-         right: 10px;
-         top: 0;
+         right: @sticky-panel-button-close-right;
+         top: @sticky-panel-button-close-top;
       }
       &__restore {
          display: none;
-         right: 35px;
-         top: -5px;
+         right: @sticky-panel-button-restore-right;
+         top: @sticky-panel-button-restore-top;
       }
       &__minimise {
-         right: 35px;
-         top: 2px;
+         right: @sticky-panel-button-minimise-right;
+         top: @sticky-panel-button-minimise-top;
       }
    }
    &__widgets {
@@ -51,7 +52,7 @@
    &--minimised {
       .alfresco-layout-StickyPanel {
          &__panel {
-            opacity: .8;
+            opacity: @sticky-panel-minimised-opacity;
          }
          &__title-bar {
             &__restore {
@@ -63,6 +64,16 @@
          }
          &__widgets {
             display: none;
+         }
+      }
+   }
+   &--close-disabled {
+      .alfresco-layout-StickyPanel {
+         &__title-bar {
+            &__close {
+               cursor: default;
+               opacity: 0.3;
+            }
          }
       }
    }

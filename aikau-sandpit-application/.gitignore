@@ -1,1 +1,5 @@
+# Ignored directories (please keep alphabetical)
 /target/
+
+# Ignored files (please keep alphabetical)
+*.log

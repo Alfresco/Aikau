@@ -100,6 +100,41 @@ model.jsonModel = {
                               id: "COLUMN1_HEADER",
                               label: "Header"
                            }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              id: "COLUMN1_HEADER",
+                              label: "Header"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              id: "COLUMN1_HEADER",
+                              label: "Header"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              id: "COLUMN1_HEADER",
+                              label: "Header"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              id: "COLUMN1_HEADER",
+                              label: "Header"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              id: "COLUMN1_HEADER",
+                              label: "Header"
+                           }
                         }
                      ],
                      widgets: [
@@ -107,6 +142,76 @@ model.jsonModel = {
                            name: "alfresco/lists/views/layouts/Row",
                            config: {
                               widgets: [
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       additionalCssClasses: "mediumpad",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "name"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       additionalCssClasses: "mediumpad",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "name"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       additionalCssClasses: "mediumpad",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "name"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       additionalCssClasses: "mediumpad",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "name"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       additionalCssClasses: "mediumpad",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "name"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 },
                                  {
                                     name: "alfresco/lists/views/layouts/Cell",
                                     config: {

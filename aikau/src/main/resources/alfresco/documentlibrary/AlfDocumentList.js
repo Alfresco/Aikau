@@ -402,7 +402,7 @@ define(["dojo/_base/declare",
       onFolderClick: function alfresco_documentlibrary_AlfDocumentList__onFolderClick(payload) {
          if (payload.url)
          {
-            this.currentFilter = this.processFilter(payload.url);
+            this.currentFilter = this.processHashFilter(payload.url);
             if (!this.useHash && this.currentFilter.path)
             {
                this.alfPublish(this.pathChangeTopic, this.currentFilter, this.folderClickPublishGlobal);

@@ -157,12 +157,37 @@ define(["alfresco/core/Core",
       },
 
       /**
-       * Handle clicks on the close button.
+       * Disables the close button.
+       * 
+       * @instance
+       * @param {object} payload Payload for the publication (expected to be empty)
+       * @since 1.0.54
+       */
+      disableCloseButton: function alfresco_layout_StickyPanel__disableCloseButton(/*jshint unused:false*/ payload) {
+         domClass.add(this.domNode, this.baseClass + "--close-disabled");
+      },
+
+      /**
+       * Enables the close button.
+       * 
+       * @instance
+       * @param {object} payload Payload for the publication (expected to be empty)
+       * @since 1.0.54
+       */
+      enableCloseButton: function alfresco_layout_StickyPanel__enableCloseButton(/*jshint unused:false*/ payload) {
+         domClass.remove(this.domNode, this.baseClass + "--close-disabled");
+      },
+
+      /**
+       * Handle clicks on the close button (unless it has been disabled).
        *
        * @instance
        */
       onClickClose: function alfresco_layout_StickyPanel__onClickClose() {
-         this.close();
+         if (!domClass.contains(this.domNode, this.baseClass + "--close-disabled"))
+         {
+            this.close();
+         }
       },
 
       /**
@@ -180,10 +205,14 @@ define(["alfresco/core/Core",
        * @instance
        * @listens module:alfresco/core/topics#STICKY_PANEL_CLOSE
        * @listens module:alfresco/core/topics#STICKY_PANEL_SET_TITLE
+       * @listens module:alfresco/core/topics#STICKY_PANEL_DISABLE_CLOSE
+       * @listens module:alfresco/core/topics#STICKY_PANEL_ENABLE_CLOSE
        */
       setupSubscriptions: function alfresco_layout_StickyPanel__setupSubscriptions() {
          this.alfSubscribe(topics.STICKY_PANEL_CLOSE, lang.hitch(this, this.close));
          this.alfSubscribe(topics.STICKY_PANEL_SET_TITLE, lang.hitch(this, this.setTitle));
+         this.alfSubscribe(topics.STICKY_PANEL_DISABLE_CLOSE, lang.hitch(this, this.disableCloseButton));
+         this.alfSubscribe(topics.STICKY_PANEL_ENABLE_CLOSE, lang.hitch(this, this.enableCloseButton));
       },
 
       /**

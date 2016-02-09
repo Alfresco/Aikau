@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Markdown Test</shortname>
+  <description>Demonstrates the alfresco/html/Markdown widget to verify that it is XSS safe.</description>
+  <family>aikau-unit-tests</family>
+  <url>/Markdown</url>
+</webscript>

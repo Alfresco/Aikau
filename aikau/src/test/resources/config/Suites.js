@@ -157,6 +157,7 @@ define({
       "src/test/resources/alfresco/html/HeadingTest",
       "src/test/resources/alfresco/html/ImageTest",
       "src/test/resources/alfresco/html/LabelTest",
+      "src/test/resources/alfresco/html/MarkdownTest",
 
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",
       "src/test/resources/alfresco/layout/AlfStackContainerTest",
@@ -217,10 +218,13 @@ define({
 
       "src/test/resources/alfresco/node/MetadataGroupsTest",
 
+      "src/test/resources/alfresco/preview/H264ProxyTest",
       "src/test/resources/alfresco/preview/ImagePreviewTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
       "src/test/resources/alfresco/preview/PdfJsPreviewTest",
       "src/test/resources/alfresco/preview/PreviewerTests",
+
+      "src/test/resources/alfresco/prototyping/PreviewTest",
 
       "src/test/resources/alfresco/renderers/ActionsTest",
       "src/test/resources/alfresco/renderers/ActivitySummaryTest",

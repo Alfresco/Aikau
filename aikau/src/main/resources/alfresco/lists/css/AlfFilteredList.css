@@ -6,4 +6,8 @@
          display: inline-block;
       }
    }
+
+   &__summary {
+      display: block;
+   }
 }

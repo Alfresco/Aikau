@@ -591,6 +591,60 @@ define([],function() {
       INIT_CLOUD_SYNC: "ALF_INIT_CLOUD_SYNC",
 
       /**
+       * This is published by the [filtered list]{@link module:alfresco/lists/AlfFilteredList} to indicate
+       * what filters have been applied to the list.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTERS_APPLIED: "ALF_FILTERS_APPLIED",
+
+      /**
+       * This function is both published from and subcribed to by the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}
+       * to request that all filters are cleared.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTERS_CLEARED: "ALF_FILTERS_CLEARED",
+      
+      /**
+       * Published when an a list filter is removed from the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      FILTER_REMOVED: "ALF_FILTER_REMOVED",
+
+      /**
+       * Published when a filter is removed in order to allow form controls representing the filter to update their rendering
+       * of the current filter value.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       * @property {string} name The [name]{@link module:alfresco/forms/controls/BaseFormControl#name} of the form control to update
+       * @property {string} value The value to set on the form control
+       */
+      FILTER_VALUE_CHANGE: "ALF_FILTER_VALUE_CHANGED",
+
+
+      /**
        * This can be published to request that an action be performed on multiple selected items. The 
        * selected items are tracked by either the [ActionService]{@link module:alfresco/services/ActionService}
        * or preferrably a [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
@@ -684,6 +738,35 @@ define([],function() {
        * @property {object} [parameters={}] - The parameters to include in the POST
        */
       POST_TO_PAGE: "ALF_POST_TO_PAGE",
+
+      /**
+       * This topic is published when [preview models]{@link module:alfresco/prototyping/Preview} have finished rendering.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      PREVIEW_MODEL_RENDERED: "ALF_PREVIEW_MODEL_RENDERED",
+
+      /**
+       * Used to request the rendering of a model. Typically handled by the [preview widget]{@link module:alfresco/prototyping/Preview}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       * @property {object} pageDefinition The model to render
+       * @property {boolean} pageDefinition.stringified Indicates whether the pageDefinition model is already stringified
+       * @property {object[]} pageDefinition.publishOnReady Publications to make when the model has finished rendering
+       * @property {object[]} pageDefinition.services The services to create
+       * @property {object[]} pageDefinition.widgets The widgets to create
+       */
+      PREVIEW_MODEL_RENDER_REQUEST: "ALF_GENERATE_PAGE_PREVIEW",
 
       /**
        * This topic should be published when indicating what [previewers]{@link module:alfresco/preview/AlfDocumentPreview}
@@ -946,6 +1029,32 @@ define([],function() {
        * @event
        */
       STICKY_PANEL_CLOSED: "ALF_STICKY_PANEL_CLOSED",
+
+      /**
+       * This topic can be published to request that the close button on a [StickyPanel]{@link module:alfresco/layout/StickyPanel}
+       * be disabled.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      STICKY_PANEL_DISABLE_CLOSE: "ALF_STICKY_PANEL_DISABLE_CLOSE",
+
+      /**
+       * This topic can be published to request that the close button on a [StickyPanel]{@link module:alfresco/layout/StickyPanel}
+       * be enabled.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       *
+       * @event
+       */
+      STICKY_PANEL_ENABLE_CLOSE: "ALF_STICKY_PANEL_ENABLE_CLOSE",
 
       /**
        * This can be called to set the title of the StickyPanel.

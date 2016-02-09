@@ -6,15 +6,19 @@
 define(["./config/Suites"],
    function(Suites) {
 
-      // Extract the rows and columns from the command-line arguments
+      // Extract command-line arguments
       var rowsColsRegex = /rowsCols=(\d+)\|(\d+)/,
+         serverIPRegex = /serverIP=([.0-9]+)/,
+         serverIP,
          rows,
          cols;
       process.argv.forEach(function(arg) {
-         var match = rowsColsRegex.exec(arg);
-         if (match) {
+         var match;
+         if ((match = rowsColsRegex.exec(arg))) {
             rows = parseInt(match[1], 10);
             cols = parseInt(match[2], 10);
+         } else if ((match = serverIPRegex.exec(arg))) {
+            serverIP = match[1];
          }
       });
 
@@ -35,17 +39,27 @@ define(["./config/Suites"],
             version: "11",
             platform: "WINDOWS"
          }],
+         xenvData = [{
+            browserName: "chrome",
+            platform: "WINDOWS"
+         }, {
+            browserName: "firefox",
+            platform: "WINDOWS"
+         }],
          environments = envData.map(function(env) {
             return Object.assign(env, settings);
          });
 
       return {
 
+         // The IP address of the test server
+         serverIP: serverIP,
+
          // The port on which the instrumenting proxy will listen
          proxyPort: 9000,
 
          // A fully qualified URL to the Intern proxy
-         proxyUrl: "http://localhost:9000/",
+         proxyUrl: "http://" + serverIP + ":9000/",
 
          // Environments to run against
          environments: environments,

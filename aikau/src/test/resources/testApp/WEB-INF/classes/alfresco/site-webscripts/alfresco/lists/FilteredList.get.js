@@ -90,6 +90,7 @@ model.jsonModel = {
                               pubSubScope: "COMPOSITE_",
                               useHash: true,
                               filteringTopics: ["_valueChangeOf_FILTER"],
+                              showFilterSummary: true,
                               widgetsForFilters: [
                                  {
                                     id: "COMPOSITE_TEXTBOX",

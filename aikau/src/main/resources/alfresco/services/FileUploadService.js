@@ -61,6 +61,21 @@ define(["alfresco/core/topics",
       }],
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/services/_BaseUploadService#resetTotalUploads}
+       * to publish a topic to indicate that the [sticky panel]{@link module:alfresco/layout/StickyPanel} containing
+       * this upload monitor can re-enable its close button.
+       *
+       * @instance
+       * @param {object} payload A payload detailing the completed upload (not used)
+       * @since 1.0.54
+       * @fires module:alfresco/core/topics#STICKY_PANEL_DISABLE_CLOSE
+       */
+      resetTotalUploads: function alfresco_services_FileUploadService__resetTotalUploads() {
+         this.inherited(arguments);
+         this.alfPublish(topics.STICKY_PANEL_ENABLE_CLOSE);
+      },
+
+      /**
        * Register this service's subscriptions.
        * 
        * @instance
@@ -78,6 +93,7 @@ define(["alfresco/core/topics",
        * @instance
        * @override
        * @returns {object} A promise, that will resolve when the widget is ready to accept upload information.
+       * @fires module:alfresco/core/topics#STICKY_PANEL_DISABLE_CLOSE
        */
       showUploadsWidget: function alfresco_services_FileUploadService__showUploadsWidget() {
          var dfd = new Deferred();
@@ -90,6 +106,7 @@ define(["alfresco/core/topics",
                dfd.resolve();
             })
          });
+         this.alfPublish(topics.STICKY_PANEL_DISABLE_CLOSE);
          return dfd.promise;
       }
    });
