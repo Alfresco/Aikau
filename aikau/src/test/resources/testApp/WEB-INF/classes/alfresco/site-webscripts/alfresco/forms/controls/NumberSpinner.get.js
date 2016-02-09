@@ -10,7 +10,8 @@ model.jsonModel = {
                error: true
             }
          }
-      }
+      },
+      "alfresco/services/DialogService"
    ],
    widgets: [
       {
@@ -29,6 +30,45 @@ model.jsonModel = {
                six: 1001,
                seven: "",
                eight: 5.5
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_NUMNER_SPINNER_DIALOG",
+         config: {
+            label: "Numner Spinner Dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishGlobal: true,
+            publishPayload: {
+               cancelPublishScope: "",
+               cancelPublishTopic: "DIALOG_CANCELLED",
+               dialogId: "TEST_DIALOG",
+               formSubmissionTopic: "NEVERMIND",
+               formValue: {
+                  filterValueMin: 1001,
+                  filterValueMax: 1001
+               },
+               widgets: [
+                  {
+                     name: "alfresco/forms/controls/NumberSpinner",
+                     config: {
+                        name: "filterValueMin",
+                        label: "min value",
+                        permitEmpty: true,
+                        permittedDecimalPlaces: 0
+                     }
+                  },
+                  {
+                     name: "alfresco/forms/controls/NumberSpinner",
+                     config: {
+                        name: "filterValueMax",
+                        label: "max value",
+                        permitEmpty: true,
+                        permittedDecimalPlaces: 0
+                     }
+                  }
+               ]
             }
          }
       },
