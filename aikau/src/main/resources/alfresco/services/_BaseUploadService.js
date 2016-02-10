@@ -683,7 +683,9 @@ define(["alfresco/core/CoreXhr",
          cumulativeProgress += (this.totalNewUploads - inProgressFiles) * 100;
 
          // Calculate total percentage and send to widget
-         var currentProgressPercent = inProgressFiles ? Math.floor(cumulativeProgress / totalPercent * 100) : 100;
+         // NOTE: If no in-progress files, or race-condition causes zero total percent, then
+         // just call it 100, because it will mean that essentially there are no pending uploads
+         var currentProgressPercent = (inProgressFiles && totalPercent) ? Math.floor(cumulativeProgress / totalPercent * 100) : 100;
          this.uploadDisplayWidget.updateAggregateProgress(currentProgressPercent / 100);
 
          // If no longer have uploads pending, update the total-completed variable
