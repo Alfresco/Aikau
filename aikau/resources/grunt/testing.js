@@ -6,27 +6,40 @@ var notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
 // Preference is given to VM tunnel (which will work everywhere) and then an ethernet interface
 var networkInterfaces = os.networkInterfaces(),
    interfaceNames = Object.keys(networkInterfaces),
-   serverIP,
-   localIP;
+   vmInterface,
+   localInterface,
+   fallbackInterface;
 interfaceNames.forEach(function(interfaceName) {
+   var lowerName = interfaceName && interfaceName.toLowerCase();
    networkInterfaces[interfaceName].forEach(function(interface) {
-      var ipAddress = interface.address;
       if (interface.family === "IPv4" && !interface.internal) {
-         if (interfaceName.indexOf("vbox") === 0) {
-            serverIP = ipAddress;
-         } else if (interfaceName.indexOf("eth") === 0) {
-            localIP = ipAddress;
-         } else if (interfaceName.indexOf("en") === 0) {
-            localIP = ipAddress;
+         if (!lowerName) {
+            // Ignore unnamed interfaces (for the moment)
+         } else if (lowerName.indexOf("vbox") === 0) {
+            vmInterface = interface;
+            vmInterface.name = interfaceName;
+         } else if (lowerName.indexOf("virtual") === 0) {
+            vmInterface = interface;
+            vmInterface.name = interfaceName;
+         } else if (lowerName.indexOf("eth") === 0) {
+            localInterface = interface;
+            localInterface.name = interfaceName;
+         } else if (lowerName.indexOf("en") === 0) {
+            localInterface = interface;
+            localInterface.name = interfaceName;
+         } else {
+            fallbackInterface = interface;
+            fallbackInterface.name = interfaceName;
          }
       }
    });
 });
-if (!serverIP) {
-   serverIP = localIP;
-}
+var interfaceToUse = vmInterface || localInterface || fallbackInterface,
+   serverIP = interfaceToUse.address,
+   interfaceName = interfaceToUse.name;
 console.log("");
-console.log("Using server IP address of " + serverIP);
+console.log("\x1b[4m" + "Retrieving IP address of server" + "\x1b[0m");
+console.log("Using network interface '" + interfaceName + "' with address of " + serverIP);
 console.log("");
 
 // Modify grunt
