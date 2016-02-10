@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
          }
          if (this.title)
          {
-            this.title = this.encodeHTML(this.message(this.title));
+            this.title = this.message(this.title);
          }
 
          this.inherited(arguments);
