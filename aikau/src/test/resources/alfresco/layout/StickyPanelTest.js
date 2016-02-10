@@ -42,6 +42,16 @@ define(["intern!object",
             browser.end();
          },
 
+         "Panel opens when requested": function() {
+            return browser.findByCssSelector("[widgetid=\"OPEN_STICKY_PANEL\"] .dijitButtonNode")
+               .click()
+               .end()
+
+            .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
+
+            .findDisplayedByCssSelector(".alfresco-layout-StickyPanel__panel");
+         },
+
          "Panel scrolls when content too great for window size": function() {
             return browser.setWindowSize(null, 1024, 300)
                .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
@@ -60,6 +70,37 @@ define(["intern!object",
                .getAttribute("title")
                .then(function(title) {
                   assert.equal(title, null);
+               });
+         },
+
+         "Panel can be minimised": function() {
+            return browser.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
+               .click()
+               .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel--minimised")
+               .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
+               .isDisplayed()
+               .then(function(isDisplayed){
+                  assert.isFalse(isDisplayed);
+               });
+         },
+
+         "If StickyPanel requested when minimised, it will restore automatically": function(){
+            return browser.findByCssSelector("[widgetid=\"OPEN_STICKY_PANEL\"] .dijitButtonNode")
+               .click()
+               .end()
+
+            .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
+
+            .waitForDeletedByCssSelector(".alfresco-layout-StickyPanel--minimised")
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
+               .isDisplayed()
+               .then(function(isDisplayed){
+                  assert.isTrue(isDisplayed);
                });
          },
 
