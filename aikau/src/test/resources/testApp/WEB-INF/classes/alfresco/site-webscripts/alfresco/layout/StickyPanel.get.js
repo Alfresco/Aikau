@@ -7,7 +7,7 @@ var multipleWidgets = [],
          label: "This is a heading"
       }
    },
-   numWidgets = 10;
+   numWidgets = 8;
 for(var i = 0; i < numWidgets; i++) {
    multipleWidgets.push(singleWidget);
 }
