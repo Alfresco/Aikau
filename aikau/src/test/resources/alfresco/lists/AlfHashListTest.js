@@ -199,8 +199,7 @@ define(["alfresco/TestCommon",
          },
 
          "Payload Data Loading is prevented when the hash vars are filter out": function() {
-            var badUrl = TestCommon.testWebScriptURL("/AlfHashListPayloadData#lib=Libraries&path=a/b/c"),
-                goodUrl = TestCommon.testWebScriptURL("/AlfHashListPayloadData#lib=Personal&path=d/e/f");
+            var badUrl = TestCommon.testWebScriptURL("/AlfHashListPayloadData#lib=Libraries&path=a/b/c");
 
             return browser.findByCssSelector("body")
                .clearLog()
@@ -213,9 +212,17 @@ define(["alfresco/TestCommon",
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
                .then(function(payload) {
                   assert.notProperty(payload, "path", "There should be no path value in the payload");
-               })
+               });
+         },
 
-            .findByCssSelector("body")
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         },
+
+         "Payload Data Loading is successful when the hash vars are not filter out": function() {
+            var goodUrl = TestCommon.testWebScriptURL("/AlfHashListPayloadData#lib=Personal&path=d/e/f");
+
+            return browser.findByCssSelector("body")
                .clearLog()
                .end()
 
@@ -227,6 +234,10 @@ define(["alfresco/TestCommon",
                .then(function(payload) {
                   assert.propertyVal(payload, "path", "d/e/f", "Path value incorrect");
                });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
          }
       };
    });
