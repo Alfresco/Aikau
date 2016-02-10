@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfHashListPayloadData</shortname>
+  <description>Shows an AlfHashList which is a list that can request new data as the browser URL hash changes</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfHashListPayloadData</url>
+</webscript>
