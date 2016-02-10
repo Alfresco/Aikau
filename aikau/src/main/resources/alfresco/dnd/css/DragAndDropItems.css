@@ -1,11 +1,13 @@
-.alfresco-dnd-DragAndDropItems .palette {
-   margin: 5px;
-   padding: 5px;
+.alfresco-dnd-DragAndDropItems {
+   .palette {
+      margin: @dnd-palette-margin;
+      padding: @dnd-palette-padding;
+   }
 }
 
 .alfresco-dnd-DragAndDropItems .dojoDndItem.dojoDndItemAnchor,
 .alfresco-dnd-DragAndDropItems .dojoDndItem.dojoDndItemOver {
-   background-color: #fff;
+   background-color: @primary-background-color;
    background-image: none;
-   border: none;
+   border-color: @primary-background-color;
 }
