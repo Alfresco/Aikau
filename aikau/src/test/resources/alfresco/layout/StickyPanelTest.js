@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -18,58 +19,48 @@
  */
 
 /**
- * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["intern!object",
         "intern/chai!assert",
+        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        function (registerSuite, assert, require, TestCommon) {
 
-   registerSuite(function(){
+   registerSuite(function() {
       var browser;
 
       return {
-         name: "AlfMenuItem Tests",
+         name: "StickyPanel Tests",
 
          setup: function() {
             browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfMenuItem", "AlfMenuItem Tests").end();
+            return TestCommon.loadTestWebScript(this.remote, "/StickyPanel", "StickyPanel Tests").end();
          },
 
          beforeEach: function() {
             browser.end();
          },
 
-         "Check title encoding (popup)": function() {
-            return browser.findById("MENU_BAR_POPUP")
-               .getAttribute("title")
-               .then(function(title) {
-                  assert.equal(title, "Workflows que j'ai initiés");
+         "Panel scrolls when content too great for window size": function() {
+            return browser.setWindowSize(null, 1024, 300)
+               .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
+               .then(function(hasScrollbars) {
+                  assert.isTrue(hasScrollbars.vertical, "Should have scrollbar after resize");
+               })
+               .setWindowSize(null, 1024, 768)
+               .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
+               .then(function(hasScrollbars) {
+                  assert.isFalse(hasScrollbars.vertical, "Scrollbar should disappear after resize to original size");
                });
          },
 
-         "Check title (menu item)": function() {
-            return browser.findByCssSelector("#MENU_BAR_POPUP_text")
-               .click()
-            .end()
-
-            .findByCssSelector(".alfresco-menus-_AlfMenuItemMixin")
+         "Panel has no title attribute": function() {
+            return browser.findByCssSelector(".alfresco-layout-StickyPanel")
                .getAttribute("title")
                .then(function(title) {
-                  assert.equal(title, "Workflows que j'ai initiés");
+                  assert.equal(title, null);
                });
-         },
-
-         "Check processed payload": function() {
-            return browser.findByCssSelector("#PROCESS_PAYLOAD_MENU_ITEM_text")
-               .click()
-            .end()
-
-            .getLastPublish("PROCESSED_PAYLOAD")
-
-            .then(function(payload) {
-               assert.propertyVal(payload, "value", "test", "Processed payload not generated correctly");
-            });
          },
 
          "Post Coverage Results": function() {

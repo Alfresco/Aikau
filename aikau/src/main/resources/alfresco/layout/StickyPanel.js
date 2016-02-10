@@ -229,25 +229,31 @@ define(["alfresco/core/Core",
       },
 
       /**
-       * Size the panel, based on the panelWidth property.
+       * Size the panel, based on the panelWidth property. If we receive a number without
+       * units (apart from 0), we should assume it's pixels.
        *
        * @instance
        */
       sizePanel: function alfresco_layout_StickyPanel__sizePanel() {
-         var widthRegex = /([0-9.]+)(.*)/,
-            widthString = (typeof this.panelWidth !== "string") ? this.panelWidth : "" + this.panelWidth,
-            matchResult = widthRegex.exec(widthString),
-            number = parseInt(matchResult[1], 10),
-            units = matchResult[2] || "px",
-            numberToUse = units === "%" ? number * 2 : number;
-         if (isNaN(number)) {
-            this.alfLog("error", "Invalid panel width supplied for StickyPanel (" + this.panelWidth + ")");
-         } else {
-            domStyle.set(this.panelNode, {
-               width: numberToUse + units,
-               left: (0 - Math.round(numberToUse / 2)) + units
-            });
+         var newWidth = this.panelWidth;
+         if (newWidth) {
+            if (!isNaN(newWidth)) {
+               newWidth += "px";
+            }
+            domStyle.set(this.panelNode, "width", newWidth);
          }
+      },
+
+      /**
+       * Prevent the title property from being used to set the title
+       * attribute on the widget's root node.
+       *
+       * @instance
+       * @override
+       * @param {string} newTitle The new title
+       */
+      _setTitleAttr: function alfresco_layout_StickyPanel___setTitleAttr(newTitle) {
+         // NOOP
       }
    });
 });

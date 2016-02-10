@@ -1,7 +1,6 @@
 .alfresco-layout-StickyPanel {
    bottom: 0;
-   left: 50%;
-   max-height: @sticky-panel-max-height;
+   left: 0;
    position: fixed;
    right: 0;
    &__panel {
@@ -11,7 +10,7 @@
       border-radius: @sticky-panel-border-radius;
       box-shadow: @sticky-panel-box-shadow;
       box-sizing: border-box;
-      left: -50%;
+      margin: 0 auto;
       position: relative;
    }
    &__title-bar {
@@ -45,9 +44,9 @@
       }
    }
    &__widgets {
+      max-height: @sticky-panel-max-height;
       overflow-x: hidden;
       overflow-y: auto;
-      padding: 0;
    }
    &--minimised {
       .alfresco-layout-StickyPanel {
@@ -72,7 +71,7 @@
          &__title-bar {
             &__close {
                cursor: default;
-               opacity: 0.3;
+               opacity: .3;
             }
          }
       }
