@@ -139,7 +139,7 @@ define(["alfresco/core/Core",
          document.body.appendChild(this.domNode);
          this.setTitle();
          this.widgets && this.processWidgets(this.widgets, this.widgetsNode);
-         if(this.widgetsPadding || this.widgetsPadding === 0) {
+         if (this.widgetsPadding || this.widgetsPadding === 0) {
             domStyle.set(this.widgetsNode, "padding", this.widgetsPadding + "px");
          }
          this.sizePanel();
@@ -163,7 +163,7 @@ define(["alfresco/core/Core",
        * @param {object} payload Payload for the publication (expected to be empty)
        * @since 1.0.54
        */
-      disableCloseButton: function alfresco_layout_StickyPanel__disableCloseButton(/*jshint unused:false*/ payload) {
+      disableCloseButton: function alfresco_layout_StickyPanel__disableCloseButton( /*jshint unused:false*/ payload) {
          domClass.add(this.domNode, this.baseClass + "--close-disabled");
       },
 
@@ -174,7 +174,7 @@ define(["alfresco/core/Core",
        * @param {object} payload Payload for the publication (expected to be empty)
        * @since 1.0.54
        */
-      enableCloseButton: function alfresco_layout_StickyPanel__enableCloseButton(/*jshint unused:false*/ payload) {
+      enableCloseButton: function alfresco_layout_StickyPanel__enableCloseButton( /*jshint unused:false*/ payload) {
          domClass.remove(this.domNode, this.baseClass + "--close-disabled");
       },
 
@@ -196,7 +196,7 @@ define(["alfresco/core/Core",
        * @instance
        */
       onClickMinimiseRestore: function alfresco_layout_StickyPanel__onClickMinimiseRestore() {
-         domClass.toggle(this.domNode, this.baseClass + "--minimised");
+         this.toggleMinimised();
       },
 
       /**
@@ -207,12 +207,16 @@ define(["alfresco/core/Core",
        * @listens module:alfresco/core/topics#STICKY_PANEL_SET_TITLE
        * @listens module:alfresco/core/topics#STICKY_PANEL_DISABLE_CLOSE
        * @listens module:alfresco/core/topics#STICKY_PANEL_ENABLE_CLOSE
+       * @listens module:alfresco/core/topics#STICKY_PANEL_RESTORE
+       * @listens module:alfresco/core/topics#STICKY_PANEL_MINIMISE
        */
       setupSubscriptions: function alfresco_layout_StickyPanel__setupSubscriptions() {
          this.alfSubscribe(topics.STICKY_PANEL_CLOSE, lang.hitch(this, this.close));
          this.alfSubscribe(topics.STICKY_PANEL_SET_TITLE, lang.hitch(this, this.setTitle));
          this.alfSubscribe(topics.STICKY_PANEL_DISABLE_CLOSE, lang.hitch(this, this.disableCloseButton));
          this.alfSubscribe(topics.STICKY_PANEL_ENABLE_CLOSE, lang.hitch(this, this.enableCloseButton));
+         this.alfSubscribe(topics.STICKY_PANEL_RESTORE, lang.hitch(this, this.toggleMinimised, "restore"));
+         this.alfSubscribe(topics.STICKY_PANEL_MINIMISE, lang.hitch(this, this.toggleMinimised, "minimise"));
       },
 
       /**
@@ -245,14 +249,29 @@ define(["alfresco/core/Core",
       },
 
       /**
+       * Toggle between minimised/restored states.
+       *
+       * @instance
+       * @param {string} [forceTo] This can be used to force the panel to either "minimise" or "restore".
+       * @since 1.0.55
+       */
+      toggleMinimised: function alfresco_layout_StickyPanel__toggleMinimised(forceTo) {
+         var doOpen = (forceTo === "restore"),
+            doMinimise = (forceTo === "minimise"),
+            funcName = doOpen ? "remove" : doMinimise ? "add" : "toggle";
+         domClass[funcName](this.domNode, this.baseClass + "--minimised");
+      },
+
+      /**
        * Prevent the title property from being used to set the title
        * attribute on the widget's root node.
        *
        * @instance
        * @override
        * @param {string} newTitle The new title
+       * @since 1.0.55
        */
-      _setTitleAttr: function alfresco_layout_StickyPanel___setTitleAttr(newTitle) {
+      _setTitleAttr: function alfresco_layout_StickyPanel___setTitleAttr(/*jshint unused:false*/ newTitle) {
          // NOOP
       }
    });

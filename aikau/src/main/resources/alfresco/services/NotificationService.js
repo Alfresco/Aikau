@@ -132,6 +132,9 @@ define(["dojo/_base/declare",
             // Warn that panel aready exists if appropriate
             payload.warnIfOpen && this.alfLog("warn", "It was not possible to display a StickyPanel because one is already displayed", payload);
 
+            // Make sure panel isn't minimised
+            this.alfPublish(topics.STICKY_PANEL_RESTORE);
+
          } else if (payload.widgets) {
 
             // Setup the panel-widget config

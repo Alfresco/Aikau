@@ -1057,6 +1057,30 @@ define([],function() {
       STICKY_PANEL_ENABLE_CLOSE: "ALF_STICKY_PANEL_ENABLE_CLOSE",
 
       /**
+       * This can be called to minimise the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      STICKY_PANEL_MINIMISE: "ALF_STICKY_PANEL_MINIMISE",
+
+      /**
+       * This can be called to restore the StickyPanel from a minimised state.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      STICKY_PANEL_RESTORE: "ALF_STICKY_PANEL_RESTORE",
+
+      /**
        * This can be called to set the title of the StickyPanel.
        *
        * @instance

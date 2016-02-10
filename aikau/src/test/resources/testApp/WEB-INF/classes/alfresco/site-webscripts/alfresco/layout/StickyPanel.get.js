@@ -7,7 +7,7 @@ var multipleWidgets = [],
          label: "This is a heading"
       }
    },
-   numWidgets = 10;
+   numWidgets = 8;
 for(var i = 0; i < numWidgets; i++) {
    multipleWidgets.push(singleWidget);
 }
@@ -22,23 +22,22 @@ model.jsonModel = {
                all: true
             }
          }
-      }
+      },
+      "alfresco/services/NotificationService"
    ],
    widgets:[
       {
-         name: "alfresco/html/Heading",
-         id: "PAGE_HEADING",
+         name: "alfresco/buttons/AlfButton",
+         id: "OPEN_STICKY_PANEL",
          config: {
-            level: 3,
-            label: "Page used for development only. This widget should be instantiated through the NotificationService."
-         }
-      },
-      {
-         name: "alfresco/layout/StickyPanel",
-         id: "STICKY_PANEL",
-         config: {
-            panelWidth: 400,
-            widgets: multipleWidgets
+            label: "Open StickyPanel",
+            publishTopic: "ALF_DISPLAY_STICKY_PANEL",
+            publishPayload: {
+               title: "This is a sticky panel",
+               widgets: multipleWidgets,
+               width: 500,
+               warnIfOpen: false
+            }
          }
       },
       {
