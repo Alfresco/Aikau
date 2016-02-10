@@ -13,6 +13,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
+         id: "INDICATORS1",
          name: "alfresco/renderers/Indicators",
          config: {
             currentItem: {
@@ -62,10 +63,39 @@ model.jsonModel = {
          config: {}
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "INDICATORS3",
+         name: "alfresco/renderers/Indicators",
+         config: {
+            legacyMode: true,
+            iconMapping: {
+               "custom-icon": "some/custom/image.jpg"
+            },
+            currentItem: {
+               node: {
+                  nodeRef: "some://dummy/node",
+                  properties: {
+                     name: "Test"
+                  }
+               },
+               indicators: [
+                  {
+                     "id": "exif",
+                     "index": "40",
+                     "icon": "exif-16.png",
+                     "label": "status.exif"
+                  },
+                  {
+                     "id": "custom",
+                     "index": "40",
+                     "icon": "custom-icon",
+                     "label": "status.exif"
+                  }
+               ]
+            }
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
