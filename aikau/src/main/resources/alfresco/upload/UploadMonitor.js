@@ -130,7 +130,7 @@ define(["alfresco/core/FileSizeMixin",
          // Add new row
          var itemRow = domConstruct.create("tr", {
                className: this.baseClass + "__item"
-            }, this.inProgressItemsNode, "first"),
+            }, this.inProgressItemsNode),
             itemName = domConstruct.create("td", {
                className: this.baseClass + "__item__name"
             }, itemRow),
@@ -292,6 +292,7 @@ define(["alfresco/core/FileSizeMixin",
          if (upload) {
             upload.completed = true;
             domConstruct.place(upload.nodes.row, this.unsuccessfulItemsNode, "first");
+            upload.nodes.progress.textContent = "";
             upload.nodes.error.textContent = (request && request.statusText) || this.message("upload.failure.unknown-reason");
             domClass.add(upload.nodes.row, this.baseClass + "__item--has-error");
          } else {
