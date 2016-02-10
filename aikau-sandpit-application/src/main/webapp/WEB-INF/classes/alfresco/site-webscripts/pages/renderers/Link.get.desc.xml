@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>alfresco/renderers/Link</shortname>
+  <description>A custom link that when clicked will publish a configured topic with a payload that can be constructed from the current item.</description>
+  <family>ExamplePage</family>
+  <url>/RendererLink</url>
+</webscript>

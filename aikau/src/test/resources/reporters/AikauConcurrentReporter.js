@@ -72,7 +72,7 @@ define([
    var CHARM = {
       Col: {
          Default: 3,
-         LastStarted: 75,
+         LastStarted: 76,
          MessageString: 3,
          MessageTitle: 3,
          ProgressBar: 3,
@@ -81,17 +81,12 @@ define([
       },
       Row: {
          Title: 3,
-
          ProgressTitle: 6,
          ProgressBar: 9,
          FirstProgressProperty: 12,
-
          StatusTitle: 6,
-
          LastStartedTitle: 6,
-
          ReporterInfoTitle: 11,
-
          MessagesLine: 17
       },
       ProblemIndent: 2,
@@ -119,6 +114,7 @@ define([
     */
    var CONFIG = {
       BreakOnError: false,
+      ClearScreenBeforeResults: true,
       OutputReporterInfo: true,
       Title: "AIKAU UNIT TESTS",
       TitleHelp: "(Ctrl-C to abort)",
@@ -147,6 +143,24 @@ define([
    var RESULT_TYPE = {
       Failed: "failed",
       Skipped: "skipped"
+   };
+
+   /**
+    * Arbitrarily shortened names of things.
+    *
+    * @readOnly
+    * @type {Object}
+    */
+   var SHORT_NAMES = {
+      "chrome": "Chrome",
+      "edge": "Edge",
+      "firefox": "FF",
+      "ie": "IE",
+      "internet explorer": "IE",
+      "mac": "Mac",
+      "os x": "Mac",
+      "win": "Win",
+      "windows": "Win"
    };
 
    /**
@@ -198,7 +212,7 @@ define([
        * The environments within which the tests are being run
        *
        * @type {Object}
-       * @property {boolean} envName The name of the environment as the key, with true as the value
+       * @property {boolean} envName The short-name of the environment as the key, with the full-name as the value
        */
       environments: {},
 
@@ -238,6 +252,19 @@ define([
          suite: "Waiting...",
          test: "Waiting..."
       },
+
+      /**
+       * This holds the messages output to the display during test-runs and also
+       * displayed as the post-run summary.
+       *
+       * @instance
+       * @type {object}
+       * @property {string} deprecations The deprecation messages
+       * @property {string} errors The error messages
+       * @property {string} failed The failures messages
+       * @property {string} warnings The warning messages
+       */
+      messages: null,
 
       /**
        * Problems (deprecations, errors or warnings) encountered during the test run
@@ -331,6 +358,14 @@ define([
       },
 
       /**
+       * The total time of the test run in ms
+       *
+       * @instance
+       * @type {int}
+       */
+      timeTakenMs: 0,
+
+      /**
        * How many rows are available for displaying messages
        *
        * @instance
@@ -370,7 +405,12 @@ define([
        * @returns {string} The capitalised string or the input if it was falsy
        */
       capitalise: function(input) {
-         return input && input[0].toUpperCase() + input.substr(1).toLowerCase();
+         if (!input || typeof input !== "string") {
+            return input;
+         }
+         return input.split(" ").map(function(word) {
+            return word[0].toUpperCase() + word.substr(1).toLowerCase()
+         }).join(" ");
       },
 
       /**
@@ -437,21 +477,27 @@ define([
        *
        * @instance
        * @param {Object} testOrSuite The test or suite
-       * @returns {string} The environment name
+       * @returns {Object} The environment names with two properties "full" and "short"
        */
-      getEnv: function(testOrSuite) {
+      getEnv: function(testOrSuite, shortened) {
          try {
             var env = (testOrSuite.remote && testOrSuite.remote.environmentType),
-               envName;
+               shortName = "Unknown",
+               fullName = "Unknown";
             if (env) {
-               envName = this.capitalise(env.browserName);
-               envName += " v" + env.version;
-               envName += " on " + this.capitalise(env.platform);
+               shortName = this.getShortName(env.browserName);
+               shortName += (env.version + "").replace(/(\d+).*/, "$1");
+               shortName += "_" + this.getShortName(env.platform);
+               fullName = this.capitalise(env.browserName);
+               fullName += " v" + env.version;
+               fullName += " on " + env.platform.toUpperCase();
             } else {
-               envName = "Unknown";
                this.logProblem(PROBLEM_TYPE.Warning, "\"" + testOrSuite.name + "\"", "Unable to retrieve environment info", true);
             }
-            return envName;
+            return {
+               short: shortName,
+               full: fullName
+            };
          } catch (e) {
             this.exitWithError(e, "Error retrieving environment details for test/suite with name \"" + testOrSuite.name + "\"");
          }
@@ -471,7 +517,22 @@ define([
             envName = parentTest.name;
          }
          while ((parentTest = parentTest.parent));
-         return this.capitalise(envName);
+         return envName;
+      },
+
+      /**
+       * Get the short-name using the SHORT_NAMES as a source.
+       *
+       * @instance
+       * @param {string} inStr The "name" to shorten
+       * @returns {string} The shortened name, if available, or the original string
+       */
+      getShortName: function(inStr) {
+         if (!inStr || typeof inStr !== "string") {
+            return inStr;
+         }
+         var shortName = SHORT_NAMES[inStr.toLowerCase()];
+         return shortName || inStr.toUpperCase();
       },
 
       /**
@@ -561,7 +622,7 @@ define([
        *
        * @instance
        * @param {string} resultType The result type (from RESULT_TYPE enum)
-       * @param {Object} test The failed test
+       * @param {Object} test The test
        */
       logResult: function(resultType, test) {
 
@@ -573,7 +634,7 @@ define([
                suiteName = test.parent.name,
                isFailure = resultType === RESULT_TYPE.Failed,
                message = (isFailure ? test.error.message : test.skipped) || "N/A",
-               envName = this.getEnv(test);
+               envKey = this.getEnv(test).short;
 
             // Sanitise the error message
             message = message.replace(/^([^\n]+)\n?.*$/, "$1");
@@ -582,7 +643,7 @@ define([
             var resultCollection = this.results[resultType],
                suiteResults = resultCollection[suiteName] || {},
                testResults = suiteResults[testName] || {};
-            testResults[envName] = message;
+            testResults[envKey] = message;
             suiteResults[testName] = testResults;
             resultCollection[suiteName] = suiteResults;
 
@@ -734,12 +795,17 @@ define([
          // Function variables
          var loggedSectionTitle = false;
 
+         // Before we display the results, get rid of the in-progress stuff that can look a bit funky
+         if (CONFIG.ClearScreenBeforeResults) {
+            charm.position(0, 0);
+            charm.display("reset");
+            charm.reset();
+         }
+
          // Next, stop using charm ... it's all console logging from now on
          charm.destroy();
 
          // Output the environments (requested and actual)
-         console.log("");
-         console.log("");
          console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
          console.log(ANSI_CODES.Bright + "===== ENVIRONMENTS =====" + ANSI_CODES.Reset);
          console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
@@ -749,11 +815,73 @@ define([
             console.log("\"" + requestedEnv + "\" was fulfilled by \"" + actualEnv + "\"");
          }, this);
 
+         // Output the stats
+         console.log("");
+         console.log("");
+         console.log(ANSI_CODES.Bright + "=================" + ANSI_CODES.Reset);
+         console.log(ANSI_CODES.Bright + "===== STATS =====" + ANSI_CODES.Reset);
+         console.log(ANSI_CODES.Bright + "=================" + ANSI_CODES.Reset);
+         console.log("");
+
+         // Create passed/failed/skipped messages
+         var total = this.testCounts.total,
+            passed = this.testCounts.passed,
+            failed = this.testCounts.failed,
+            skipped = this.testCounts.skipped,
+            errors = this.testCounts.errors,
+            warnings = this.testCounts.warnings,
+            deprecations = this.testCounts.deprecations;
+         if (passed && passed !== total && (failed || skipped)) {
+            passed += " (" + (passed / total * 100).toFixed(1) + "%)";
+         }
+         if (failed && failed !== total && (passed || skipped)) {
+            failed += " (" + (failed / total * 100).toFixed(1) + "%)";
+         }
+         if (skipped && skipped !== total && (passed || failed)) {
+            skipped += " (" + (skipped / total * 100).toFixed(1) + "%)";
+         }
+
+         // Format time-taken
+         var timeTaken = this.msToHumanReadable(this.timeTakenMs);
+
+         // Output the stats
+         console.log("Total tests:  " + total);
+         console.log("Passed:       " + passed);
+         console.log("Failed:       " + failed);
+         console.log("Skipped:      " + skipped);
+         console.log("Errors:       " + errors);
+         console.log("Warnings:     " + warnings);
+         console.log("Deprecations: " + deprecations);
+         console.log("Time taken:   " + timeTaken);
+
+
+         // Show the summary of the results
+         console.log("");
+         console.log("");
+         console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+         console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
+         console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+
+         // Output the messages (array literal determines output order)
+         var messageGroups = ["failed", "errors", "warnings", "deprecations"];
+         messageGroups.forEach(function(groupName) {
+
+            // Output this group?
+            var messageLines = this.messages[groupName];
+            if (messageLines.length && messageLines[0].indexOf("N/A") === -1) {
+               console.log("");
+               console.log(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
+               messageLines.forEach(function(nextLine) {
+                  console.log(nextLine + ANSI_CODES.Reset);
+               });
+            }
+         }, this);
+
          // Output the "results" (i.e. failures and skipped tests)
          Object.keys(this.results).forEach(function(resultType) {
 
             // Log results by environment
-            Object.keys(this.environments).forEach(function(envName) {
+            Object.keys(this.environments).forEach(function(envKey) {
 
                // Group results by suite
                var thisEnvResultsBySuite = {},
@@ -762,7 +890,7 @@ define([
                   var nextSuiteTestResults = allResultsByType[suiteName];
                   Object.keys(nextSuiteTestResults).forEach(function(testName) {
                      var environments = nextSuiteTestResults[testName],
-                        resultMessage = environments[envName];
+                        resultMessage = environments[envKey];
                      if (resultMessage) {
                         var thisEnvTestResults = thisEnvResultsBySuite[suiteName] || {};
                         thisEnvTestResults[testName] = resultMessage;
@@ -778,6 +906,7 @@ define([
                   var sectionTitleText = resultType.toUpperCase().replace(/^(\w{2})(.+)$/, "$1" + ANSI_CODES.Bright + "$2");
                   if (!loggedSectionTitle) {
                      console.log("");
+                     console.log("");
                      console.log(ANSI_CODES.Bright + "====================" + ANSI_CODES.Reset);
                      console.log(ANSI_CODES.Bright + "===== " + sectionTitleText + " =====" + ANSI_CODES.Reset);
                      console.log(ANSI_CODES.Bright + "====================" + ANSI_CODES.Reset);
@@ -786,7 +915,7 @@ define([
 
                   // Log the environment name
                   console.log("");
-                  console.log(ANSI_CODES.Bright + "--- " + envName + " ---" + ANSI_CODES.Reset);
+                  console.log(ANSI_CODES.Bright + "--- " + this.environments[envKey] + " ---" + ANSI_CODES.Reset);
 
                   // Output the suites/tests/results
                   Object.keys(thisEnvResultsBySuite).forEach(function(suiteName) {
@@ -888,9 +1017,9 @@ define([
             actualEnv = this.getEnv(test);
          this.lastStarted.test = test.name;
          this.lastStarted.suite = test.parent.name;
-         this.lastStarted.env = actualEnv;
-         this.environments[actualEnv] = true;
-         this.requestedEnvironments[requestedEnv] = actualEnv;
+         this.lastStarted.env = actualEnv.full;
+         this.environments[actualEnv.short] = actualEnv.full;
+         this.requestedEnvironments[requestedEnv] = actualEnv.full;
       },
 
       /**
@@ -1023,14 +1152,14 @@ define([
             this.write(CHARM.Col.Default, CHARM.Row.Title + 1, underOverLine, ANSI_CODES.Bright);
 
             // Calculate the progress information
+            this.timeTakenMs = Date.now() - this.startTime;
             var ratioComplete = this.testCounts.run / this.testCounts.total,
                percentComplete = Math.floor(ratioComplete * 100) + "%",
-               timeTaken = Date.now() - this.startTime,
-               timeTakenMessage = this.msToHumanReadable(timeTaken),
-               timeRemainingMs = timeTaken * ((1 / ratioComplete) - 1),
+               timeTakenMessage = this.msToHumanReadable(this.timeTakenMs),
+               timeRemainingMs = this.timeTakenMs * ((1 / ratioComplete) - 1),
                timeRemainingMins = this.msToTimeRemaining(timeRemainingMs),
                timeRemainingMessage = timeRemainingMins;
-            if ((timeTaken < 60000 && ratioComplete < 0.1) || ratioComplete < 0.05) {
+            if ((this.timeTakenMs < 60000 && ratioComplete < 0.1) || ratioComplete < 0.05) {
                timeRemainingMessage = "Calculating...";
             }
 
@@ -1089,7 +1218,7 @@ define([
                ["Passed", passed],
                ["Failed", failed, failed ? highlightCodes : null],
                ["Skipped", skipped],
-               ["Errors", errors, , failed ? highlightCodes : null],
+               ["Errors", errors, failed ? highlightCodes : null],
                ["Warnings", warnings],
                ["Deprecations", deprecations]
             ], maxStatusLength);
@@ -1113,8 +1242,8 @@ define([
                ], finalColSpace);
             }
 
-            // Prepare object to contain messages
-            var messages = {
+            // Reset messages object
+            this.messages = {
                deprecations: [],
                errors: [],
                failed: [],
@@ -1129,16 +1258,15 @@ define([
                };
             }
             Object.keys(failedTests).forEach(function(suiteName) {
-               messages.failed.push(suiteName);
+               this.messages.failed.push(suiteName);
                var failingTests = failedTests[suiteName];
                Object.keys(failingTests).forEach(function(testName) {
                   var testFailingEnvironments = failingTests[testName],
-                     environments = Object.keys(testFailingEnvironments).join(", "),
-                     failureMessage = CHARM.ProblemPrefix + testName;
-                  failureMessage += ANSI_CODES.Bright + " [" + environments + "]" + ANSI_CODES.Reset;
-                  messages.failed.push(failureMessage);
-               });
-            });
+                     environments = Object.keys(testFailingEnvironments).sort().join(", "),
+                     failureMessage = CHARM.ProblemPrefix + ANSI_CODES.Bright + " [" + environments + "]" + ANSI_CODES.Reset + " " + testName;
+                  this.messages.failed.push(failureMessage);
+               }, this);
+            }, this);
 
             // Generate problem messages
             Object.keys(this.problems).forEach(function(problemType) {
@@ -1153,7 +1281,7 @@ define([
 
                // Log the groups and their counts
                Object.keys(problems).forEach(function(groupName) {
-                  messages[problemType].push(groupName);
+                  this.messages[problemType].push(groupName);
                   var groupProblems = problems[groupName];
                   Object.keys(groupProblems).forEach(function(problemMessage) {
                      var messageCount = groupProblems[problemMessage].count,
@@ -1161,17 +1289,23 @@ define([
                      if (messageCount && messageCount > 1) {
                         messageOutput += " (x" + messageCount + ")";
                      }
-                     messages[problemType].push(messageOutput);
-                  });
-               });
+                     this.messages[problemType].push(messageOutput);
+                  }, this);
+               }, this);
             }, this);
 
             // Calculate how many rows of messages to show
             var availableRowsForMessages = this.totalMessageRows - 7, // Four titles, three blank rows between
-               failureLines = messages.failed.length,
-               errorLines = messages.errors.length,
-               warningLines = messages.warnings.length,
-               deprecationLines = messages.deprecations.length;
+               failureLines = this.messages.failed.length,
+               errorLines = this.messages.errors.length,
+               warningLines = this.messages.warnings.length,
+               deprecationLines = this.messages.deprecations.length,
+               constrainedMessages = {
+                  failed: this.messages.failed.slice(),
+                  errors: this.messages.errors.slice(),
+                  warnings: this.messages.warnings.slice(),
+                  deprecations: this.messages.deprecations.slice()
+               };
             if ((failureLines + errorLines + warningLines + warningLines) > availableRowsForMessages) {
 
                // Work out the ostensible max height of each message group if all are full
@@ -1191,23 +1325,23 @@ define([
                }
 
                // Update the collections
-               messages.failed = messages.failed.reverse().slice(0, newFailureLines).reverse();
-               messages.errors = messages.errors.reverse().slice(0, newErrorLines).reverse();
-               messages.warnings = messages.warnings.reverse().slice(0, newWarningLines).reverse();
-               messages.deprecations = messages.deprecations.reverse().slice(0, newDeprecationLines).reverse();
+               constrainedMessages.failed = constrainedMessages.failed.reverse().slice(0, newFailureLines).reverse();
+               constrainedMessages.errors = constrainedMessages.errors.reverse().slice(0, newErrorLines).reverse();
+               constrainedMessages.warnings = constrainedMessages.warnings.reverse().slice(0, newWarningLines).reverse();
+               constrainedMessages.deprecations = constrainedMessages.deprecations.reverse().slice(0, newDeprecationLines).reverse();
 
                // Indicate on first line if previous lines hidden
                if (newFailureLines < failureLines) {
-                  messages.failed[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
+                  constrainedMessages.failed[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
                }
                if (newErrorLines < errorLines) {
-                  messages.errors[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
+                  constrainedMessages.errors[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
                }
                if (newWarningLines < warningLines) {
-                  messages.warnings[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
+                  constrainedMessages.warnings[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
                }
                if (newDeprecationLines < deprecationLines) {
-                  messages.deprecations[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
+                  constrainedMessages.deprecations[0] = ANSI_CODES.Dim + CHARM.ProblemsCroppedMessage + ANSI_CODES.Reset;
                }
             }
 
@@ -1220,7 +1354,7 @@ define([
                this.write(CHARM.Col.MessageTitle, messagesRow++, groupName.toUpperCase(), ANSI_CODES.Bright);
 
                // Display the messages
-               var messageLines = messages[groupName];
+               var messageLines = constrainedMessages[groupName];
                messageLines.forEach(function(nextLine) {
                   var maxLineLength = this.terminalInfo.cols - 7; // 7 = ellipsis length (3) + side-margins (2x2)
                   if (nextLine.length > maxLineLength) {
@@ -1565,7 +1699,7 @@ define([
       suiteError: function(suite, error) {
          helper.logReporterMethod("suiteError");
          if (suite.name) {
-            var envName = helper.getEnv(suite);
+            var envName = helper.getEnv(suite).short;
             helper.logProblem(PROBLEM_TYPE.Error, suite.name + " (" + envName + ")", error);
          }
       },

@@ -4,7 +4,7 @@
 The Sandpit application is hosted by Alfresco [here](https://aikau-sandpit.alfresco.com/aikau-sandpit/ "Link to Sandpit application online"). It is provided as an education tool for demonstrating available widgets and allowing dynamic experimentation through configuration. It was originally created during the 1.0.50 release so does not yet contain examples for every Aikau widget available. Examples should be created for all new widgets from now on (as part of the Aikau delivery team definition of "done") and it is hoped that the team (with assistance from the Alfresco community) will be able to add examples for all the existing widgets.
 
 ### Contributing to the Sandpit
-The example pages for the Sandpit can be found in the [/aikau-sandpit-application/src/main/webapp/WEB-INF/webscripts/pages](https://github.com/Alfresco/Aikau/tree/feature/AKU-748_Sandpit/aikau-sandpit-application/src/main/webapp/WEB-INF/webscripts/pages "Link to pages folder") folder. Each example page is defined as a WebScript. To contribute a new example you should follow these steps:
+The example pages for the Sandpit can be found in the [/aikau-sandpit-application/src/main/webapp/WEB-INF/webscripts/pages](https://github.com/Alfresco/Aikau/tree/feature/AKU-748_Sandpit/aikau-sandpit-application/src/main/webapp/WEB-INF/classes/alfresco/site-webscripts/pages "Link to pages folder") folder. Each example page is defined as a WebScript. To contribute a new example you should follow these steps:
 
 ##### Create WebScript files
 Create the WebScript files in a suitable sub-folder for the widget type that you are creating the example for (i.e. and "alfresco/buttons/AlfButton" widget example should go in a "pages/buttons" folder). The four files you need to create are:

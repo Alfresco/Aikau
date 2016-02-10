@@ -212,6 +212,38 @@ model.jsonModel = {
          }
       },
       {
+         id: "RENDER_FILTER_FORM",
+         name: "alfresco/forms/Form",
+         config: {
+            currentItem: {
+               a: "b"
+            },
+            widgets: [
+               {
+                  id: "RENDER_FILTER_TEXTBOX",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "control",
+                     label: "Textbox",
+                     description: "Pressing ENTER will submit this form",
+                     renderFilter: [
+                        {
+                           property: "a",
+                           values: ["b"]
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "20px"
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

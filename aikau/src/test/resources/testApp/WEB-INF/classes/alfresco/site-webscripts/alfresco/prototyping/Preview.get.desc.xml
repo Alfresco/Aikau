@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Preview</shortname>
+  <description>This demonstrates the 'alfresco/prototyping/Preview' widget.</description>
+  <family>aikau-unit-tests</family>
+  <url>/Preview</url>
+</webscript>

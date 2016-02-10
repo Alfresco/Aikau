@@ -1,6 +1,7 @@
 .alfresco-lists-AlfList {
+   overflow: auto;
+
    > .rendered-view {
-      overflow: hidden;
       position: relative;
       &::before, &::after {
          box-sizing: border-box;
@@ -39,6 +40,10 @@
    }
    &--loading, &--rendering {
       > .rendered-view {
+
+         min-height: 200px;
+         display: block;
+
          &::before, &::after {
             opacity: 1;
          }

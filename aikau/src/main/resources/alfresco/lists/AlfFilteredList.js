@@ -26,13 +26,14 @@
 define(["dojo/_base/declare",
         "alfresco/lists/AlfSortablePaginatedList",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dijit/registry",
         "alfresco/util/hashUtils"], 
-        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, lang, array, domConstruct, domClass, registry, hashUtils) {
+        function(declare, AlfSortablePaginatedList, ObjectProcessingMixin, topics, lang, array, domConstruct, domClass, registry, hashUtils) {
    
    return declare([AlfSortablePaginatedList, ObjectProcessingMixin], {
       
@@ -55,6 +56,75 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfFilteredList.css"}],
 
       /**
+       * Indicates whether or not all [filter widgets]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} will have their 
+       * configuration updated to set their [valueSubscriptionTopic]{@link module:alfresco/forms/controls/BaseFormControl#valueSubscriptionTopic}
+       * to be a [topic]{@link module:alfresco/core/topics#FILTER_VALUE_CHANGE} dedicated to filter value changes. This is done 
+       * in order to allow removal of filters from the [filter summary]{@link module:alfresco/lists/utilities/FilterSummary} to
+       * reset the filter form control values.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.54
+       */
+      addFilterValueSubscription: true,
+
+      /**
+       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
+       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#description}
+       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      filterDescription: "filtered.list.filter.description",
+
+      /**
+       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
+       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#label}
+       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      filterLabel: "filtered.list.filter.label",
+
+      /**
+       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
+       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#name}
+       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      filterName: "name",
+
+      /**
+       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
+       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#placeHolder}
+       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      filterPlaceholder: "filtered.list.filter.placeholder",
+
+      /**
+       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
+       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#unitsLabel}
+       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      filterUnitsLabel: "filtered.list.filter.unitsLabel",
+
+      /**
        * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * to create the defined filters to the resulting callback in [allWidgetsProcessed]{@link module:alfresco/lists/AlfFilteredList#allWidgetsProcessed}
        * 
@@ -64,6 +134,37 @@ define(["dojo/_base/declare",
        * @since 1.0.35
        */
       filterWidgetsMappingId: "FILTERS",
+
+      /**
+       * If this is configured to be true then a [filter summary widget]{@link module:alfresco/lists/utilities/FilterSummary}
+       * will be added above the list.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.54
+       */
+      showFilterSummary: false,
+
+      /**
+       * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
+       * to create the [filter summary widget]{@link module:alfresco/lists/utilities/FilterSummary} to the resulting callback 
+       * in [allWidgetsProcessed]{@link module:alfresco/lists/AlfFilteredList#allWidgetsProcessed}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.54
+       */
+      summaryWidgetsMappingId: "FILTER_SUMMARY",
+
+      /**
+       * The filter widgets
+       *
+       * @instance
+       * @type {Object[]}
+       */
+      _filterWidgets: null,
 
       /**
        * Called after properties mixed into instance
@@ -93,6 +194,17 @@ define(["dojo/_base/declare",
          if (this.widgetsForFilters)
          {
             var filtersModel = lang.clone(this.widgetsForFilters);
+
+            // Update the filter form control configuration to set (or override) the valueSubScriptionTopic in order
+            // that filter changes can be applied to the form control (this will typically occur when a filter is
+            // removed via the FilterSummary widget).
+            if (this.addFilterValueSubscription)
+            {
+               array.forEach(filtersModel, function(widget) {
+                  lang.setObject("config.valueSubscriptionTopic", topics.FILTER_VALUE_CHANGE, widget);
+               }, this);
+            }
+
             this.processObject(["processInstanceTokens"], filtersModel);
             this.processWidgets(filtersModel, this.filtersNode, this.filterWidgetsMappingId);
          }
@@ -100,7 +212,33 @@ define(["dojo/_base/declare",
          {
             this._filterWidgets = {};
          }
+
+         if (this.showFilterSummary)
+         {
+            this.summaryNode = domConstruct.create("div", {
+               className: "alfresco-lists-AlfFilteredList__summary"
+            }, this.filtersNode, "after");
+
+            var summaryModel = lang.clone(this.widgetsForFilterSummary);
+            this.processObject(["processInstanceTokens"], summaryModel);
+            this.processWidgets(summaryModel, this.summaryNode, this.summaryWidgetsMappingId);
+            
+         }
+
          this.inherited(arguments);
+         this.alfSubscribe(topics.FILTER_REMOVED, lang.hitch(this, this.onFilterRemoved));
+      },
+
+      /**
+       * This function can be extended in order to perform additional actions when filters are removed.
+       * 
+       * @instance
+       * @param  {object} payload The filter item that was removed.
+       * @since 1.0.54
+       * @extendable
+       */
+      onFilterRemoved: function alfresco_lists_AlfFilteredList__onFilterRemoved(/*jshint unused:false*/ payload) {
+         // No action by default - this is just an extension point function.
       },
 
       /**
@@ -128,6 +266,10 @@ define(["dojo/_base/declare",
             // Create the subscriptions for the filters once created...
             this.createFilterSubscriptions();
          }
+         else if (processWidgetsId === this.summaryWidgetsMappingId)
+         {
+            // No action required for filter summary creation
+         }
          else
          {
             // Only perform the inherited function (e.g. to processViews) when not processing filters
@@ -149,7 +291,24 @@ define(["dojo/_base/declare",
          {
             domClass.remove(this.filtersNode, "share-hidden");
          }
+         if (this.summaryNode)
+         {
+            domClass.remove(this.summaryNode, "share-hidden");
+         }
       },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfHashList#onFiltersUpdated} to publish 
+       * information about the new filters that are applied to the list.
+       * 
+       * @instance
+       * @since 1.0.54
+       */
+      onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
+         this.inherited(arguments);
+         this.alfPublish(topics.FILTERS_APPLIED, this.dataFilters);
+      },
+
 
       /**
        * We need to make sure any filters in the hash are populated into the dataFilters property
@@ -242,6 +401,8 @@ define(["dojo/_base/declare",
             // Set the widget value
             widget && widget.setValue && widget.setValue(filterValue);
          }, this);
+
+         this.alfPublish(topics.FILTERS_APPLIED, this.dataFilters || []);
       },
 
       /**
@@ -267,69 +428,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The filter widgets
-       *
-       * @instance
-       * @type {Object[]}
-       */
-      _filterWidgets: null,
-
-      /**
-       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
-       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#name}
-       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      filterName: "name",
-
-      /**
-       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
-       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#label}
-       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      filterLabel: "filtered.list.filter.label",
-
-      /**
-       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
-       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#description}
-       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      filterDescription: "filtered.list.filter.description",
-
-      /**
-       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
-       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#placeHolder}
-       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      filterPlaceholder: "filtered.list.filter.placeholder",
-
-      /**
-       * If the [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} attribute is not overridden
-       * then then this is the value that will be assigned to the [name]{@link module:alfresco/forms/controls/BaseFormControl#unitsLabel}
-       * attribute of the [TextBox]{@link module:alfresco/forms/controls/TextBox} that is rendered as the default filter control.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      filterUnitsLabel: "filtered.list.filter.unitsLabel",
-
-      /**
        * This is the default widget model for the filters and defines a single text box that can be
        * used as a filter. This can be overridden with any number of filters that are required.
        *
@@ -348,6 +446,22 @@ define(["dojo/_base/declare",
                description: "{filterDescription}",
                unitsLabel: "{filterUnitsLabel}"
             }
+         }
+      ],
+
+      /**
+       * The default model for rendering a [filter summary]{@link module:alfresco/lists/utilities/FilterSummary}. This
+       * will only be used if [showFilterSummary]{@link module:alfresco/lists/AlfFilteredList#showFilterSummary} is 
+       * configured to be true.
+       * 
+       * @instance
+       * @type {object[]}
+       * @since 1.0.54
+       */
+      widgetsForFilterSummary: [
+         {
+            id: "{id}_FILTER_SUMMARY",
+            name: "alfresco/lists/utilities/FilterSummary"
          }
       ]
    });

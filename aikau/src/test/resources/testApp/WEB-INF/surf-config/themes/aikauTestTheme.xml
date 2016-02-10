@@ -23,6 +23,8 @@
 
          @sidebar-container-sidebar-background-color: #eee;
          @sidebar-container-main-background-color: #f8f8f8;
+
+         @sticky-panel-max-height: 50vh;
       </less-variables>
    </css-tokens>
 </theme>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Video Preview (H264 Proxy) Test</shortname>
+  <description>This shows the a preview using the Video plugin and should render an H264 proxy as would be expected to be found when the Media Management module is available on the Alfresco Repository</description>
+  <family>aikau-unit-tests</family>
+  <url>/VideoH264ProxyPreview</url>
+</webscript>

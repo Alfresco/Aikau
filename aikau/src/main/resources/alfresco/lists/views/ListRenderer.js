@@ -230,7 +230,7 @@ define(["dojo/_base/declare",
          {
             // Find the scroll parent and check to see if it is the document, we need to special case scrolling within
             // the document as we need to animate the scrollTop of both the html and body elements.
-            var scrollParent = $(widget.domNode).scrollParent();
+            var scrollParent = this.findScrollParent(widget.domNode);
             if (scrollParent.is("html"))
             {
                var offset = $(widget.domNode).offset();
@@ -244,13 +244,31 @@ define(["dojo/_base/declare",
                // appropriate position to scroll to based on the position within the item and the current
                // scrollTop value...
                var position = $(widget.domNode).position();
-               var currentScrollTop = $(widget.domNode).scrollParent().scrollTop();
+               var currentScrollTop = scrollParent.scrollTop();
                var scrollTo = currentScrollTop + position.top;
-               $(widget.domNode).scrollParent().animate({
+               scrollParent.animate({
                   scrollTop: scrollTo
                });
             }
          }
+      },
+
+      /**
+       * This function recursively searches out through the DOM to find the first parent of the supplied element that
+       * is capable of scrolling vertically and has scrollbars displayed.
+       * 
+       * @instance
+       * @returns {element} The DOM element that is the scroll parent with scroll bars displayed
+       * @since 1.0.53
+       */
+      findScrollParent: function alfresco_lists_views_ListRenderer__findScrollParent(domNode) {
+         var scrollParent = $(domNode).scrollParent();
+         if (!scrollParent.is("html") &&
+             scrollParent[0].clientHeight === scrollParent[0].scrollHeight)
+         {
+            scrollParent = this.findScrollParent(scrollParent[0]);
+         }
+         return scrollParent;
       }
    });
 });

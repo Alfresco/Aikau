@@ -1,0 +1,16 @@
+.alfresco-lists-utilities-FilterSummary {
+
+   &__label {
+      float: left;
+      width: @list-filter-summary-label-width;
+      line-height: 39px;
+   }
+
+   &__choices {
+      margin-left: @list-filter-summary-label-width;
+
+      .alfresco-renderers-Property.medium {
+         line-height: 27px;
+      }
+   }
+}

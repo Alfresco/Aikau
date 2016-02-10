@@ -157,12 +157,37 @@ define(["alfresco/core/Core",
       },
 
       /**
-       * Handle clicks on the close button.
+       * Disables the close button.
+       * 
+       * @instance
+       * @param {object} payload Payload for the publication (expected to be empty)
+       * @since 1.0.54
+       */
+      disableCloseButton: function alfresco_layout_StickyPanel__disableCloseButton(/*jshint unused:false*/ payload) {
+         domClass.add(this.domNode, this.baseClass + "--close-disabled");
+      },
+
+      /**
+       * Enables the close button.
+       * 
+       * @instance
+       * @param {object} payload Payload for the publication (expected to be empty)
+       * @since 1.0.54
+       */
+      enableCloseButton: function alfresco_layout_StickyPanel__enableCloseButton(/*jshint unused:false*/ payload) {
+         domClass.remove(this.domNode, this.baseClass + "--close-disabled");
+      },
+
+      /**
+       * Handle clicks on the close button (unless it has been disabled).
        *
        * @instance
        */
       onClickClose: function alfresco_layout_StickyPanel__onClickClose() {
-         this.close();
+         if (!domClass.contains(this.domNode, this.baseClass + "--close-disabled"))
+         {
+            this.close();
+         }
       },
 
       /**
@@ -180,10 +205,14 @@ define(["alfresco/core/Core",
        * @instance
        * @listens module:alfresco/core/topics#STICKY_PANEL_CLOSE
        * @listens module:alfresco/core/topics#STICKY_PANEL_SET_TITLE
+       * @listens module:alfresco/core/topics#STICKY_PANEL_DISABLE_CLOSE
+       * @listens module:alfresco/core/topics#STICKY_PANEL_ENABLE_CLOSE
        */
       setupSubscriptions: function alfresco_layout_StickyPanel__setupSubscriptions() {
          this.alfSubscribe(topics.STICKY_PANEL_CLOSE, lang.hitch(this, this.close));
          this.alfSubscribe(topics.STICKY_PANEL_SET_TITLE, lang.hitch(this, this.setTitle));
+         this.alfSubscribe(topics.STICKY_PANEL_DISABLE_CLOSE, lang.hitch(this, this.disableCloseButton));
+         this.alfSubscribe(topics.STICKY_PANEL_ENABLE_CLOSE, lang.hitch(this, this.enableCloseButton));
       },
 
       /**
@@ -200,25 +229,31 @@ define(["alfresco/core/Core",
       },
 
       /**
-       * Size the panel, based on the panelWidth property.
+       * Size the panel, based on the panelWidth property. If we receive a number without
+       * units (apart from 0), we should assume it's pixels.
        *
        * @instance
        */
       sizePanel: function alfresco_layout_StickyPanel__sizePanel() {
-         var widthRegex = /([0-9.]+)(.*)/,
-            widthString = (typeof this.panelWidth !== "string") ? this.panelWidth : "" + this.panelWidth,
-            matchResult = widthRegex.exec(widthString),
-            number = parseInt(matchResult[1], 10),
-            units = matchResult[2] || "px",
-            numberToUse = units === "%" ? number * 2 : number;
-         if (isNaN(number)) {
-            this.alfLog("error", "Invalid panel width supplied for StickyPanel (" + this.panelWidth + ")");
-         } else {
-            domStyle.set(this.panelNode, {
-               width: numberToUse + units,
-               left: (0 - Math.round(numberToUse / 2)) + units
-            });
+         var newWidth = this.panelWidth;
+         if (newWidth) {
+            if (!isNaN(newWidth)) {
+               newWidth += "px";
+            }
+            domStyle.set(this.panelNode, "width", newWidth);
          }
+      },
+
+      /**
+       * Prevent the title property from being used to set the title
+       * attribute on the widget's root node.
+       *
+       * @instance
+       * @override
+       * @param {string} newTitle The new title
+       */
+      _setTitleAttr: function alfresco_layout_StickyPanel___setTitleAttr(newTitle) {
+         // NOOP
       }
    });
 });

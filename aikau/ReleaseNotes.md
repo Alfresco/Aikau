@@ -1,5 +1,9 @@
-Aikau 1.0.52 Release Notes
+Aikau 1.0.54 Release Notes
 ===
+
+New deprecations:
+---
+* alfresco/documentlibrary/_AlfFilterMixin                       (use alfresco/documentlibrary/_AlfHashMixin)
 
 Previous deprecations:
 ---
@@ -41,6 +45,26 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.54:
+* [AKU-785](https://issues.alfresco.com/jira/browse/AKU-785)       - Update video preview plugin to play H264 proxy when available
+* [AKU-794](https://issues.alfresco.com/jira/browse/AKU-794)       - Disable UploadMonitor close during file upload
+* [AKU-805](https://issues.alfresco.com/jira/browse/AKU-805)       - Prevent double rendering off model previews
+* [AKU-807](https://issues.alfresco.com/jira/browse/AKU-807)       - Resolved NumberSpinner validation on focus
+* [AKU-808](https://issues.alfresco.com/jira/browse/AKU-808)       - Supprt permitEmpty with min/max in NumberSpinner
+* [AKU-809](https://issues.alfresco.com/jira/browse/AKU-809)       - Ensure lists can be scrolled horizontally
+* [AKU-812](https://issues.alfresco.com/jira/browse/AKU-812)       - Ensure NumberSpinner supports "," as decimal place in appropriate locales
+* [AKU-813](https://issues.alfresco.com/jira/browse/AKU-813)       - Ensure renderFilter can be used with form children
+* [AKU-814](https://issues.alfresco.com/jira/browse/AKU-814)       - Added alfresco/lists/utilities/FilterSummary widget
+* [AKU-818](https://issues.alfresco.com/jira/browse/AKU-818)       - Improve LoggingService filtering configuration
+
+1.0.53:
+* [AKU-763](https://issues.alfresco.com/jira/browse/AKU-763)       - Add LESS variables to StickyPanel and UploadMonitor
+* [AKU-791](https://issues.alfresco.com/jira/browse/AKU-791)       - Resolved AlfDialog scrolling issues (in Share)
+* [AKU-792](https://issues.alfresco.com/jira/browse/AKU-792)       - Improve list loading/rendering message handling
+* [AKU-797](https://issues.alfresco.com/jira/browse/AKU-797)       - Fixed zoom tooltip text in PDF.js preview plugin
+* [AKU-799](https://issues.alfresco.com/jira/browse/AKU-799)       - Resolved form dialog margins regression
+* [AKU-802](https://issues.alfresco.com/jira/browse/AKU-802)       - Resolved list margin regression
+
 1.0.52:
 * [AKU-676](https://issues.alfresco.com/jira/browse/AKU-676)       - Added alfresco/buttons/DropDownButton
 * [AKU-747](https://issues.alfresco.com/jira/browse/AKU-747)       - Added alfresco/services/FileUploadService

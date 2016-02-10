@@ -232,6 +232,24 @@ define(["dojo/_base/declare",
                   this.unsubLogSubscriptionHandle = this.alfSubscribe("ALF_LOG_UNSUBSCRIPTION_ACTIVITY", lang.hitch(this, this.onPubSubLogRequest, "UNSUBSCRIPTION"));
                }
             }
+            else
+            {
+               if (this.subLogSubscriptionHandle)
+               {
+                  this.alfUnsubscribe(this.subLogSubscriptionHandle);
+                  this.subLogSubscriptionHandle = null;
+               }
+               if (this.pubLogSubscriptionHandle)
+               {
+                  this.alfUnsubscribe(this.pubLogSubscriptionHandle);
+                  this.pubLogSubscriptionHandle = null;
+               }
+               if (this.unsubLogSubscriptionHandle)
+               {
+                  this.alfUnsubscribe(this.unsubLogSubscriptionHandle);
+                  this.unsubLogSubscriptionHandle = null;
+               }
+            }
          }
          else if (!this.loggingPreferences.enabled && this.logSubscriptionHandle)
          {

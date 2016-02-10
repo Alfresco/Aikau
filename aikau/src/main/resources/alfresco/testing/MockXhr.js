@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
 
          // Adds a filter to allow dynamic dependency requests to be processed normally...
          server.xhr.addFilter(function(method, url) {
-           return !!url.match(/surf\/dojo\/xhr\/dependencies/);
+           return !!url.match(/surf\/dojo\/xhr\/dependencies/) || !!url.match(/service\/sanitize\/data/);
          });
          this.setupServer();
 

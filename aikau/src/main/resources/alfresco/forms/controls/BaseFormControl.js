@@ -1452,7 +1452,10 @@ define(["dojo/_base/declare",
          var value = lang.getObject("value", false, payload);
          if (value !== null && typeof value !== "undefined")
          {
-            this.setValue(value);
+            if (typeof payload.name === "undefined" || payload.name === this.name)
+            {
+               this.setValue(value);
+            }
          }
          else
          {

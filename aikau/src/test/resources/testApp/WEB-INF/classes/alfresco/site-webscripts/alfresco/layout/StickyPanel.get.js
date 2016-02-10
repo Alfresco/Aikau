@@ -1,3 +1,17 @@
+// Easily change number of widgets in panel (just used to vertically fill it)
+var multipleWidgets = [],
+   singleWidget = {
+      name: "alfresco/html/Heading",
+      config: {
+         level: 3,
+         label: "This is a heading"
+      }
+   },
+   numWidgets = 10;
+for(var i = 0; i < numWidgets; i++) {
+   multipleWidgets.push(singleWidget);
+}
+
 model.jsonModel = {
    services: [
       {
@@ -23,16 +37,8 @@ model.jsonModel = {
          name: "alfresco/layout/StickyPanel",
          id: "STICKY_PANEL",
          config: {
-            widgets: [
-               {
-                  name: "alfresco/html/Heading",
-                  id: "TEST_HEADING",
-                  config: {
-                     level: 3,
-                     label: "This is a heading"
-                  }
-               }
-            ]
+            panelWidth: 400,
+            widgets: multipleWidgets
          }
       },
       {

@@ -206,6 +206,11 @@ define(["intern!object",
                });
          },
 
+         // See AKU-813
+         "Check renderFilter config can be used on form": function() {
+            return browser.findById("RENDER_FILTER_FORM");
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

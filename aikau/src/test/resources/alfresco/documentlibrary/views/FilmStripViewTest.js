@@ -141,22 +141,30 @@ define(["alfresco/TestCommon",
             return this.remote.findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
                .then(function(elements) {
                   assert.lengthOf(elements, 5, "Incorrect number of items");
-               })
-               .end()
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+         "First item displayed": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(1)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
+         "Fourth item displayed": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(4)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+         "Fifth item NOT displayed": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
                });
          },
 
@@ -164,7 +172,7 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
                .then(function(payload) {
@@ -206,7 +214,7 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
                .then(function(payload) {
@@ -234,7 +242,7 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_SCROLL_NEAR_BOTTOM", "Did not fire near-end event", true)
 
@@ -243,33 +251,46 @@ define(["alfresco/TestCommon",
             .findAllByCssSelector("#FILMSTRIP_VIEW_ITEMS li")
                .then(function(elements) {
                   assert.lengthOf(elements, 10, "Did not load another page of five items");
-               })
-               .end()
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The third item should not be displayed");
-               })
+         "Third item now hidden": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(3)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
-               })
+         "Fifth item displayed": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 6, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The sixth item should be displayed");
-               })
+         "Eighth item displayed": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(8)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 7, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The seventh item should not be displayed");
-               })
+         "Ninth item hidden": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(9)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
+               });
+         },
 
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
+         "Previous button now displayed": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
                .isDisplayed()
                .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Second page of items should enable previous control");
+                  assert.isTrue(isDisplayed);
                });
          },
 
@@ -277,37 +298,35 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_FILMSTRIP_ITEM_CHANGED", true)
                .then(function(payload) {
                   assert.propertyVal(payload, "index", 1, "Did not select second preview item");
-               })
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The second preview item should be displayed");
-               })
+         "First item is now displayed": function() {
+            return browser.findDisplayedByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(1)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+         "Sixth item now hidden": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(6)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
-
-            .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL)
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
-               })
-
-            .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
+         "Previous button hidden again": function() {
+            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev")
                .isDisplayed()
                .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "First page of items should disable previous control");
+                  assert.isFalse(isDisplayed);
                });
          },
 
@@ -315,7 +334,7 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS li:nth-child(3) .alfresco-renderers-Thumbnail")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("ALF_FILMSTRIP_SELECT_ITEM", true)
                .then(function(payload) {
@@ -329,12 +348,12 @@ define(["alfresco/TestCommon",
          },
 
          "Navigating to fourth page loads more items on first occasion only": function() {
-            return browser.findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
+            return browser.findDisplayedByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
                .clearLog()
                .click()
                .click()
-               .click()
-               .end()
+               // .click()
+            .end()
 
             .getLastPublish("ALF_SCROLL_NEAR_BOTTOM", "Did not fire near-end event", true)
 
@@ -344,16 +363,16 @@ define(["alfresco/TestCommon",
                .then(function(elements) {
                   assert.lengthOf(elements, 11, "Did not load final item");
                })
-               .end()
+            .end()
 
             .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .prev img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .findByCssSelector("#FILMSTRIP_VIEW_ITEMS .next img")
                .click()
-               .end()
+            .end()
 
             .getAllPublishes("ALF_SCROLL_NEAR_BOTTOM")
                .then(function(payloads) {
@@ -463,22 +482,30 @@ define(["alfresco/TestCommon",
             return this.remote.findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
                .then(function(elements) {
                   assert.lengthOf(elements, 5, "Incorrect number of items");
-               })
-               .end()
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+         "First item displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(1)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
+         "Fourth item displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(4)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
+         "Fifth item NOT displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
                });
          },
 
@@ -494,7 +521,7 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
                .then(function(payload) {
@@ -567,25 +594,35 @@ define(["alfresco/TestCommon",
             .findAllByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li")
                .then(function(elements) {
                   assert.lengthOf(elements, 5, "Loaded more items");
-               })
-               .end()
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The third item should not be displayed");
-               })
+         "Third item NOT displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(3)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isFalse(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fourth item should be displayed");
-               })
+         "Fourth item now displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(4)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 5, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The fifth item should be displayed");
-               })
+         "Fifth item now displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
+         "Previous control displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
                .isDisplayed()
                .then(function(isDisplayed) {
                   assert.isTrue(isDisplayed, "Second page of items should enable previous control");
@@ -596,34 +633,49 @@ define(["alfresco/TestCommon",
             return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS .next img")
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("PAGED_ALF_FILMSTRIP_ITEM_CHANGED", true)
                .then(function(payload) {
                   assert.propertyVal(payload, "index", 1, "Did not select second preview item");
-               })
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 2, PREVIEW_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The second preview item should be displayed");
-               })
+         "Second preview item should be displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_PREVIEWS li:nth-child(2)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+            
+         },
 
-            .carouselItemIsDisplayed(browser, 1, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The first item should be displayed");
-               })
+         "First item now displayed": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(1)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 3, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "The third item should be displayed");
-               })
+         "Fourth item displayed again": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(4)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .carouselItemIsDisplayed(browser, 4, ITEMS_CAROUSEL, "PAGED_")
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "The fourth item should not be displayed");
-               })
+         "Fifth item NOT displayed again": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
+               .isDisplayed()
+               .then(function(displayed) {
+                  assert.isTrue(displayed);
+               });
+         },
 
-            .findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
+         "Previous control is now hidden": function() {
+            return browser.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS .prev")
                .isDisplayed()
                .then(function(isDisplayed) {
                   assert.isFalse(isDisplayed, "First page of items should disable previous control");

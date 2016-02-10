@@ -55,8 +55,73 @@ define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dijit/form/NumberSpinner",
+        "dojo/number",
         "alfresco/core/ObjectTypeUtils"], 
-        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, NumberSpinner, ObjectTypeUtils) {
+        function(BaseFormControl, TextBoxValueChangeMixin, declare, lang, domClass, NumberSpinner, number, ObjectTypeUtils) {
+   
+    /**
+    * This extension of NumberSpinner is to "fix" certain inconsistencies
+    * when working with non-integer numbers and different locales.
+    *
+    * @instance
+    * @since 1.0.54
+    */
+   var DijitNumberSpinner = declare([NumberSpinner], {
+
+      /**
+       * Override the standard format method to avoid rounding decimals.
+       *
+       * @instance
+       * @override
+       * @param {number} value The number to format
+       * @param {object} [constraints] The constraints
+       * @returns {string} The formatted number
+       */
+      format: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner__format(value, constraints) {
+         constraints = lang.mixin({}, constraints, {
+            places: undefined
+         });
+         return this.inherited(arguments);
+      },
+
+      /**
+       * Override the standard value-getter to always return a number if one is provided.
+       *
+       * @instance
+       * @override
+       * @returns {number} The value, as a number, or null if NaN
+       */
+      _getValueAttr: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner___getValueAttr() {
+         var rawValue = this.textbox.value,
+             numberValue = number.parse(rawValue),
+             value = null;
+         if (!isNaN(numberValue)) {
+            value = numberValue;
+            if (value === Math.round(value)) {
+               value = Math.round(value);
+            }
+         }
+         return value;
+      },
+
+      /**
+       * Override the standard value-setter to correctly locale-format the content
+       *
+       * @instance
+       * @override
+       * @param {number} newValue The new value to set
+       */
+      _setValueAttr: function alfresco_forms_controls_NumberSpinner__DijitNumberSpinner___setValueAttr(newValue) {
+         if (newValue !== null && !isNaN(newValue)) 
+         {
+            if (typeof newValue === "string") 
+            {
+               newValue = parseFloat(newValue);
+            }
+            this.textbox.value = number.format(newValue);
+         }
+      }
+   });
    
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
       
@@ -161,30 +226,59 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       isNumberValidator: function alfresco_forms_controls_FormControlValidationMixin__isNumberValidator(validationConfig) {
          var isValid = false;
-         try {
-            var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
-               isNumber = this._valueIsNumber(value);
-            isValid = isNumber || (this.permitEmpty && value === "");
-         } catch (e) {
+         try 
+         {
+            var textBoxValue = this.wrappedWidget.textbox.value;
+            var parsed = number.parse(textBoxValue);
+            isValid = !isNaN(parsed) || (this.permitEmpty && textBoxValue === "");
+         }
+         catch (e) 
+         {
             this.alfLog("warn", "Error validating number: ", e);
          }
          this.reportValidationResult(validationConfig, isValid);
       },
 
       /**
-       * This validator checks that the value has no more than the specified number of decimal places
+       * This validator checks that the value has no more than the specified number of decimal places (or isn't a number!)
        *
        * @instance
        * @param {object} validationConfig The configuration for this validator
        */
       decimalPlacesValidator: function alfresco_forms_controls_FormControlValidationMixin__decimalPlacesValidator(validationConfig) {
-         var isValid = false;
-         try {
-            var value = this._removeCommasAndSpaces(this.wrappedWidget.textbox.value),
-               isNumber = this._valueIsNumber(value);
-               numDecimals = value.indexOf(".") === -1 ? 0 : value.split(".")[1].length;
-            isValid = !isNumber || numDecimals === this.permittedDecimalPlaces;
-         } catch (e) {
+         var isValid = true;
+         try 
+         {
+            // Get the raw value of the number box (for locales that use the "," for a decimal place, then the value will include
+            // the ",")...
+            var textBoxValue = this.wrappedWidget.textbox.value;
+
+            // Parse the number (this will convert the "," to ".")...
+            var parsed = number.parse(textBoxValue);
+            if (isNaN(parsed))
+            {
+               // Can't do anything with a value that isn't a number - it should have been picked up by the "isNumberValidator" anyway
+            }
+            else
+            {
+               // Convert to a string... regardless of locale, the decimal place will be "." - we can use this to reliably work out
+               // the number of decimal places specified...
+               var string = parsed.toString();
+               var decimalIndex = string.lastIndexOf(".");
+               if (decimalIndex === -1)
+               {
+                  // There is no decimal place, nothing to validate...
+               }
+               else
+               {
+                  // Workout the decimal places...
+                  var decimalPlaces = string.length - decimalIndex - 1; // Deduct additional one for index/length conversion
+                  isValid = decimalPlaces <= this.permittedDecimalPlaces;
+               }
+            }
+         } 
+         catch (e) 
+         {
             this.alfLog("warn", "Error validating number of decimal places: ", e);
          }
          this.reportValidationResult(validationConfig, isValid);
@@ -246,6 +340,7 @@ define(["alfresco/forms/controls/BaseFormControl",
                validation: "numericalRange",
                min: this.min,
                max: this.max,
+               permitEmpty: this.permitEmpty,
                errorMessage: errorMessage
             });
          }
@@ -264,7 +359,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          }
          domClass.add(this.domNode, "alfresco-forms-controls-NumberSpinner " + additionalCssClasses);
          
-         var ns = new NumberSpinner(config);
+         var ns = new DijitNumberSpinner(config);
          // We'll take care of the validation thanks very much!
          ns.isValid = function() {
             return true;
@@ -305,6 +400,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @param {string} value The value to parse
        * @returns {string} The cleaned value
+       * @deprecated Since 1.0.54 - No longer required - extending modules should prepare for the removal of this function
        */
       _removeCommasAndSpaces: function alfresco_forms_controls_NumberSpinner___removeCommasAndSpaces(value) {
          return value && value.replace(/,|\s/g, "");
@@ -316,10 +412,11 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @param {string} value The value to check (should already be trimmed)
        * @returns {boolean} true if the value is a number
+       * @deprecated Since 1.0.54 - No longer required - extending modules should prepare for the removal of this function
        */
       _valueIsNumber: function alfresco_forms_controls_NumberSpinner___valueIsNumber(value) {
-         var isValidNumber = /^-?\d+(\.\d+)?$/.test(value),
-            parsedValue = parseFloat(value);
+         var isValidNumber = /^-?\d+(\.\d+)?$/.test(value);
+         var parsedValue = parseFloat(value);
          return isValidNumber && !isNaN(parsedValue);
       }
    });
