@@ -126,6 +126,16 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      newTarget: "NEW"
+      newTarget: "NEW",
+
+      /**
+       * This value is used to indicate that the URL should be displayed in a named browser window.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       */
+      namedTarget: "NAMED"
    });
 });
