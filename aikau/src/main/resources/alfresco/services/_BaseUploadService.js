@@ -73,6 +73,19 @@ define(["alfresco/core/CoreXhr",
       }],
 
       /**
+       * The Alfresco repository features multiple upload REST APIs. Up to and including version 5.1 of Alfresco
+       * supports the "version zero" REST API (also known as Share Services API) for Upload. In addition post 5.1
+       * there is a "version one" Public Upload API also. Set this value to 1 to use the new version one API, else
+       * the classic v0 API will be used and Share Services AMP must be applied to the repository.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.55
+       */
+      apiVersion: 0,
+
+      /**
        * Stores references and state for each file that is in the file list. The fileId is used as
        * the key and the value is a [File object]{@link module:alfresco/services/_BaseUploadService#File}.
        *
@@ -205,6 +218,17 @@ define(["alfresco/core/CoreXhr",
       uploadTopic: topics.UPLOAD_REQUEST,
 
       /**
+       * The location of the upload endpoint, used when using an
+       * [apiVersion]{@link module:alfresco/services/_BaseUploadService#apiVersion} of 0.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       */
+      uploadURL: "api/upload",
+
+      /**
        * The widget definition that displays the uploads' progress. This should
        * be a single widget that implements the interface defined by
        * [_UploadsDisplayMixin]{@link module:alfresco/services/_UploadsDisplayMixin}.
@@ -214,18 +238,6 @@ define(["alfresco/core/CoreXhr",
        * @default
        */
       widgetsForUploadDisplay: null,
-
-      /**
-       * The Alfresco repository features multiple upload REST APIs. Up to and including version 5.1 of Alfresco
-       * supports the "version zero" REST API (also known as Share Services API) for Upload. In addition post 5.1
-       * there is a "version one" Public Upload API also. Set this value to 1 to use the new version one API, else
-       * the classic v0 API will be used and Share Services AMP must be applied to the repository.
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      apiVersion: 0,
 
       /**
        * An internal counter for the currently uploading files.
@@ -246,6 +258,7 @@ define(["alfresco/core/CoreXhr",
        */
       initService: function alfresco_services__BaseUploadService__initService() {
          this.inherited(arguments);
+         this.widgetsForUploadDisplay = lang.clone(this.widgetsForUploadDisplay);
          var widgets = this.widgetsForUploadDisplay;
          if (widgets && widgets.constructor === Array && widgets.length === 1) {
             lang.mixin(widgets[0], {
@@ -576,8 +589,10 @@ define(["alfresco/core/CoreXhr",
          // Mark file as being uploaded
          fileInfo.state = this.STATE_UPLOADING;
 
-         var url;
-         var formData = new FormData();
+         // Setup variables
+         var formData = new FormData(),
+            uploadData = fileInfo.uploadData,
+            url;
 
          // resolve final API URL and Form structure based on configuration and apiVersion setting
          switch (this.apiVersion)
@@ -585,27 +600,27 @@ define(["alfresco/core/CoreXhr",
             case 0:
             {
                // Set-up the API URL
-               url = AlfConstants.PROXY_URI + (this.uploadURL || "api/upload");
+               url = AlfConstants.PROXY_URI + this.uploadURL;
                if (this.isCsrfFilterEnabled()) {
                   url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
                }
                
                // Set-up the form data object
-               formData.append("filedata", fileInfo.uploadData.filedata);
-               formData.append("filename", fileInfo.uploadData.filename);
-               formData.append("destination", fileInfo.uploadData.destination);
-               formData.append("siteId", fileInfo.uploadData.siteId);
-               formData.append("containerId", fileInfo.uploadData.containerId);
-               formData.append("uploaddirectory", fileInfo.uploadData.uploaddirectory);
-               formData.append("majorVersion", fileInfo.uploadData.majorVersion ? fileInfo.uploadData.majorVersion : "false");
-               formData.append("username", fileInfo.uploadData.username);
-               formData.append("overwrite", fileInfo.uploadData.overwrite);
-               formData.append("thumbnails", fileInfo.uploadData.thumbnails);
-               if (fileInfo.uploadData.updateNodeRef) {
-                  formData.append("updateNodeRef", fileInfo.uploadData.updateNodeRef);
+               formData.append("filedata", uploadData.filedata);
+               formData.append("filename", uploadData.filename);
+               formData.append("destination", uploadData.destination);
+               formData.append("siteId", uploadData.siteId);
+               formData.append("containerId", uploadData.containerId);
+               formData.append("uploaddirectory", uploadData.uploaddirectory);
+               formData.append("majorVersion", uploadData.majorVersion ? uploadData.majorVersion : "false");
+               formData.append("username", uploadData.username);
+               formData.append("overwrite", uploadData.overwrite);
+               formData.append("thumbnails", uploadData.thumbnails);
+               if (uploadData.updateNodeRef) {
+                  formData.append("updateNodeRef", uploadData.updateNodeRef);
                }
-               if (fileInfo.uploadData.description) {
-                  formData.append("description", fileInfo.uploadData.description);
+               if (uploadData.description) {
+                  formData.append("description", uploadData.description);
                }
                
                break;
@@ -617,16 +632,16 @@ define(["alfresco/core/CoreXhr",
                url = AlfConstants.PROXY_URI + "public/alfresco/versions/1/nodes/{nodeId}/children";
                // extract node id only from expected NodeRef
                url = lang.replace(url, {
-                  nodeId: fileInfo.uploadData.destination.split("/")[3]
+                  nodeId: uploadData.destination.split("/")[3]
                });
                if (this.isCsrfFilterEnabled()) {
                   url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
                }
                
                // Set-up the form data object
-               formData.append("fileData", fileInfo.uploadData.filedata);
-               formData.append("fileName", fileInfo.uploadData.filename);
-               formData.append("autoRename", !fileInfo.uploadData.overwrite);
+               formData.append("fileData", uploadData.filedata);
+               formData.append("fileName", uploadData.filename);
+               formData.append("autoRename", !uploadData.overwrite);
                
                break;
             }
@@ -764,7 +779,7 @@ define(["alfresco/core/CoreXhr",
             if (currentProgressPercent === 100) {
                title = this.message(this.uploadsContainerTitleComplete);
             }
-            this.alfPublish(this.uploadsContainerTitleUpdateTopic, {
+            this.alfServicePublish(this.uploadsContainerTitleUpdateTopic, {
                title: title
             });
          }
