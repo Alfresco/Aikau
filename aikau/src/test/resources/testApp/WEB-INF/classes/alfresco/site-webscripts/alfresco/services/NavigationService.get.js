@@ -97,6 +97,20 @@ model.jsonModel = {
          }
       },
       {
+         id: "NAVIGATE_TO_NAMED_PAGE",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Navigate to named page",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayload: {
+               url: "tp/ws/NavigationService?named=true",
+               type: "PAGE_RELATIVE",
+               target: "NAMED",
+               targetName: "new_window"
+            }
+         }
+      },
+      {
          id: "NAV_TO_PAGE_WITH_PARAMS",
          name: "alfresco/buttons/AlfButton",
          config: {

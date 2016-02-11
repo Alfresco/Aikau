@@ -156,6 +156,19 @@ define(["intern!object",
                .end();
          },
 
+         // Keep this as last test to avoid having to switch window back!!
+         "Navigate to new page in named window": function() {
+            return browser.findById("NAVIGATE_TO_NAMED_PAGE_label")
+               .click()
+               .end()
+
+            .switchToWindow("new_window")
+               .getCurrentUrl()
+               .then(function(currentUrl){
+                  assert.include(currentUrl, "page/tp/ws/NavigationService?named=true");
+               });
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }

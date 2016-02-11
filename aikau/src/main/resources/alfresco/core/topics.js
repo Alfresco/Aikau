@@ -257,7 +257,7 @@ define([],function() {
        * @event module:alfresco/core/topics~DELETE_SITE
        * @property {object} [redirect] - The redirect data to use after successfully deleting the site
        * @property {string} [redirect.url] - The URL to navigate to
-       * @property {string} [redirect.type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
+       * @property {string} [redirect.type=PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes}
        * @property {string} [redirect.target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        */
       DELETE_SITE: "ALF_DELETE_SITE",
@@ -668,9 +668,10 @@ define([],function() {
        * @since 1.0.35
        *
        * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
-       * @property {string} url - The URL to navigate to
-       * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
-       * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {string} url The URL to navigate to
+       * @property {string} [type=PAGE_RELATIVE] The [type of navigation]{@link module:alfresco/enums/urlTypes}
+       * @property {string} [target=CURRENT] Whether to use the "CURRENT" tab, open in a "NEW" tab, or use a "NAMED" tab
+       * @property {string} [targetName] The name of the tab to create when using "NAMED" as the target value
        * @property {string} [modifyCurrent=false] Whether to modify the current hash (default is to completely replace it)
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
@@ -733,7 +734,7 @@ define([],function() {
        *
        * @event module:alfresco/core/topics~POST_TO_PAGE
        * @property {string} url - The URL to navigate to
-       * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
+       * @property {string} [type=PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        * @property {object} [parameters={}] - The parameters to include in the POST
        */
