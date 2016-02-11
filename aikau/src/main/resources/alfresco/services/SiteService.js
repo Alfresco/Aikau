@@ -703,27 +703,37 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles the successful creation of a new site.
+       *
        * 
        * @instance
        * @param  {object} response The response from the request to create the site
        * @param  {object} originalRequestConfig The configuration for the request to create the site
        * @since 1.0.55
        * @fires module:alfresco/core/topics#SITE_CREATION_SUCCESS
+       * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
        */
       onSiteCreationSuccess: function alfresco_services_SiteService__onSiteCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          this.alfPublish(topics.SITE_CREATION_SUCCESS);
+         this.alfPublish(topics.NAVIGATE_TO_PAGE, {
+            url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
+         });
       },
 
       /**
+       * Handles failed requests to create a site.
        * 
        * @instance
        * @param  {object} response The response from the request to create the site
        * @param  {object} originalRequestConfig The configuration for the request to create the site
        * @since 1.0.55
+       * @fires module:alfresco/core/topics#DISPLAY_PROMPT
        */
-      onSiteCreationFailure: function alfresco_services_SiteService__onSiteCreationFailure(response, originalRequestConfig) {
+      onSiteCreationFailure: function alfresco_services_SiteService__onSiteCreationFailure(response, /*jshint unused:false*/ originalRequestConfig) {
+         var responseText = JSON.parse(response.response.text);
          this.alfServicePublish(topics.DISPLAY_PROMPT, {
-
+            title: "create-site.failure.dialog.title",
+            message: this.message(responseText.message)
          });
       },
 
