@@ -74,6 +74,11 @@ define(["intern!object",
                .click();
          },
 
+         "Upload service uses v0 API by default": function() {
+            return browser.findByCssSelector("body")
+               .getLastXhr("api/upload");
+         },
+
          "Close button disabled on upload start": function() {
             return browser.findById("MULTI_UPLOAD_label")
                .clearLog()
@@ -111,6 +116,46 @@ define(["intern!object",
             .end()
 
             .getLastPublish("ALF_STICKY_PANEL_ENABLE_CLOSE");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function() {
+      var browser;
+
+      return {
+         name: "UploadMonitor V1 API Tests",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/UploadMonitorV1", "UploadMonitor V1 API Tests");
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Single file upload succeeds": function() {
+            return browser.findById("V1_API_UPLOAD_label")
+               .click()
+            .end()
+
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
+               .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click();
+         },
+
+         "Upload service uses v0 API by default": function() {
+            return browser.findByCssSelector("body")
+               .getLastXhr("public/alfresco/versions/1/nodes/node/children");
          },
 
          "Post Coverage Results": function() {

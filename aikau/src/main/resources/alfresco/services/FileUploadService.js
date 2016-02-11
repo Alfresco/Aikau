@@ -72,7 +72,7 @@ define(["alfresco/core/topics",
        */
       resetTotalUploads: function alfresco_services_FileUploadService__resetTotalUploads() {
          this.inherited(arguments);
-         this.alfPublish(topics.STICKY_PANEL_ENABLE_CLOSE);
+         this.alfServicePublish(topics.STICKY_PANEL_ENABLE_CLOSE);
       },
 
       /**
@@ -84,7 +84,7 @@ define(["alfresco/core/topics",
        */
       registerSubscriptions: function alfresco_services_FileUploadService__registerSubscriptions() {
          this.inherited(arguments);
-         this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, this.onUploadsContainerClosed));
+         this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, this.onUploadsContainerClosed), true);
       },
 
       /**
@@ -106,7 +106,7 @@ define(["alfresco/core/topics",
                dfd.resolve();
             })
          });
-         this.alfPublish(topics.STICKY_PANEL_DISABLE_CLOSE);
+         this.alfServicePublish(topics.STICKY_PANEL_DISABLE_CLOSE);
          return dfd.promise;
       }
    });
