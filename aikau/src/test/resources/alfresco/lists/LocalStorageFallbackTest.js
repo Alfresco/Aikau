@@ -21,237 +21,261 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!assert",
-        "require",
+        "intern/chai!assert", 
+        "require", 
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        function(registerSuite, assert, require, TestCommon) {
+
+   // Define URL with hash regexp
+   var reUrlWithHash = /.*#(?:&?[^&=]+=[^&]+)+$/;
+
+   // Function to convert URL to hash object (should always return object)
+   function getHash(url) {
+      if (!reUrlWithHash.test(url)) {
+         return {};
+      }
+      var hashString = url.substr(url.indexOf("#") + 1),
+         hashParams = hashString.split("&"),
+         hashObj = hashParams.reduce(function(obj, param) {
+            var nameValue = param.split("="),
+               name = nameValue[0],
+               value = nameValue[1];
+            obj[name] = value;
+            return obj;
+         }, {});
+      return hashObj;
+   }
 
    // The first test page has a list that does not fallback on local storage and has no current filter...
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "List Local Storage (1)",
-      
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/ListLocalStorageFallback", "List Local Storage (1)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "List Local Storage (1)",
 
-      "When there is no hash only topic is published": function() {
-         return browser.findById("LIST").end()
-            .getLastPublish("LOAD", "The list should have requested data");
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/ListLocalStorageFallback", "List Local Storage (1)").end();
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "When there is no hash only topic is published": function() {
+            return browser.findById("LIST").end()
+               .getLastPublish("LOAD", "The list should have requested data");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    // The second test page sets local storage using the current filter...
-   registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "List Local Storage (2)",
-      
-      setup: function() {
-         browser = this.remote;
-         browser.clearLocalStorage(); // NOTE: Need to clear previous local storage...
-         return TestCommon.loadTestWebScript(this.remote, 
-                                             "/ListLocalStorageFallback?listType=CurrentFilterWithLocalStorage", 
-                                             "List Local Storage (2)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "List Local Storage (2)",
 
-      "Data should have been requested": function() {
-         return browser.findById("LIST").end()
-            .getLastPublish("LOAD", "The list should have requested data");
-      },
+         setup: function() {
+            browser = this.remote;
+            browser.clearLocalStorage(); // NOTE: Need to clear previous local storage...
+            return TestCommon.loadTestWebScript(this.remote,
+               "/ListLocalStorageFallback?listType=CurrentFilterWithLocalStorage",
+               "List Local Storage (2)").end();
+         },
 
-      "When there is no hash, the current filter is set as the hash": function() {
-         return browser.getCurrentUrl()
-            .then(function (url) {
-               assert.include(url, "#key2=value2&key1=value1", "The URL hash was not set to the current filter");
-            });
-      },
-     
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Data should have been requested": function() {
+            return browser.findById("LIST").end()
+               .getLastPublish("LOAD", "The list should have requested data");
+         },
+
+         "When there is no hash, the current filter is set as the hash": function() {
+            return browser.getCurrentUrl()
+               .then(function(url) {
+                  var hashObj = getHash(url);
+                  assert.propertyVal(hashObj, "key1", "value1");
+                  assert.propertyVal(hashObj, "key2", "value2");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    // The third test page has a hash which trumps the current filter and is stored...
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "Local Storage for Lists Tests (3)",
-      
-      setup: function() {
-         // NOTE: Do not clear local storage this time!
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, 
-                                             "/ListLocalStorageFallback?listType=CurrentFilterWithLocalStorage#key3=value3", 
-                                             "Local Storage for Lists Tests (3)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "Local Storage for Lists Tests (3)",
 
-      "When there is a hash, the current filter should not be used": function() {
-         return browser.getCurrentUrl()
-            .then(function (url) {
-               assert.include(url, "#key3=value3", "The requested URL hash was not retained");
-            });
-      },
-     
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         setup: function() {
+            // NOTE: Do not clear local storage this time!
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote,
+               "/ListLocalStorageFallback?listType=CurrentFilterWithLocalStorage#key3=value3",
+               "Local Storage for Lists Tests (3)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "When there is a hash, the current filter should not be used": function() {
+            return browser.getCurrentUrl()
+               .then(function(url) {
+                  assert.include(url, "#key3=value3", "The requested URL hash was not retained");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    // The fourth test page has no hash, and although there is a current filter the locally stored hash is used...
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "Local Storage for Lists Tests (4)",
-      
-      setup: function() {
-         // NOTE: Do not clear local storage this time!
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, 
-                                             "/ListLocalStorageFallback?listType=CurrentFilterWithLocalStorage", 
-                                             "Local Storage for Lists Tests (4)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "Local Storage for Lists Tests (4)",
 
-      "When there is no hash, local storage should trump the current filter": function() {
-         return browser.getCurrentUrl()
-            .then(function (url) {
-               assert.include(url, "#key3=value3", "Local storage was NOT used as the hash");
-            });
-      },
-     
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         setup: function() {
+            // NOTE: Do not clear local storage this time!
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote,
+               "/ListLocalStorageFallback?listType=CurrentFilterWithLocalStorage",
+               "Local Storage for Lists Tests (4)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "When there is no hash, local storage should trump the current filter": function() {
+            return browser.getCurrentUrl()
+               .then(function(url) {
+                  assert.include(url, "#key3=value3", "Local storage was NOT used as the hash");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    // The fifth test page has no hash, and the list is configured to not use the previously stored
    // hash to the current filter should be used...
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "Local Storage for Lists Tests (5)",
-      
-      setup: function() {
-         // NOTE: Do not clear local storage this time!
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, 
-                                             "/ListLocalStorageFallback?listType=CurrentFilter", 
-                                             "Local Storage for Lists Tests (5)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "Local Storage for Lists Tests (5)",
 
-      "When there is no hash and local storage is available the current filter should still be used": function() {
-         return browser.getCurrentUrl()
-            .then(function (url) {
-               assert.include(url, "#key2=value2&key1=value1", "Current filter was not used");
-            });
-      },
-     
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         setup: function() {
+            // NOTE: Do not clear local storage this time!
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote,
+               "/ListLocalStorageFallback?listType=CurrentFilter",
+               "Local Storage for Lists Tests (5)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "When there is no hash and local storage is available the current filter should still be used": function() {
+            return browser.getCurrentUrl()
+               .then(function(url) {
+                  var hashObj = getHash(url);
+                  assert.propertyVal(hashObj, "key1", "value1");
+                  assert.propertyVal(hashObj, "key2", "value2");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    // The sixth test page has a list without a current filter, it should re-use the locally stored hash
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "Local Storage for Lists Tests (6)",
-      
-      setup: function() {
-         // NOTE: Do not clear local storage this time!
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, 
-                                             "/ListLocalStorageFallback?listType=LocalStorage", 
-                                             "Local Storage for Lists Tests (6)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "Local Storage for Lists Tests (6)",
 
-      "When there is no hash, local storage should be used": function() {
-         return browser.getCurrentUrl()
-            .then(function (url) {
-               assert.include(url, "#key3=value3", "Local storage was NOT used as the hash");
-            });
-      },
-     
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         setup: function() {
+            // NOTE: Do not clear local storage this time!
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote,
+               "/ListLocalStorageFallback?listType=LocalStorage",
+               "Local Storage for Lists Tests (6)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "When there is no hash, local storage should be used": function() {
+            return browser.getCurrentUrl()
+               .then(function(url) {
+                  assert.include(url, "#key3=value3", "Local storage was NOT used as the hash");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 
    // The sixth test page has a list but sets a hash which should be used...
-registerSuite(function(){
-   var browser;
+   registerSuite(function() {
+      var browser;
 
-   return {
-      name: "Local Storage for Lists Tests (7)",
-      
-      setup: function() {
-         // NOTE: Do not clear local storage this time!
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, 
-                                             "/ListLocalStorageFallback?listType=LocalStorage#update=test", 
-                                             "Local Storage for Lists Tests (7)").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      return {
+         name: "Local Storage for Lists Tests (7)",
 
-      "When there is a hash it should be used": function() {
-         return browser.getCurrentUrl()
-            .then(function (url) {
-               assert.include(url, "#update=test", "Local storage should not have been used as the hash");
-            })
-            .getLastPublish("LOAD")
+         setup: function() {
+            // NOTE: Do not clear local storage this time!
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote,
+               "/ListLocalStorageFallback?listType=LocalStorage#update=test",
+               "Local Storage for Lists Tests (7)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "When there is a hash it should be used": function() {
+            return browser.getCurrentUrl()
+               .then(function(url) {
+                  assert.include(url, "#update=test", "Local storage should not have been used as the hash");
+               })
+               .getLastPublish("LOAD")
                .then(function(payload) {
                   assert.propertyVal(payload, "update", "test", "The data request did not include the hash parameter");
                });
-      },
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });
