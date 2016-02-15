@@ -46,7 +46,7 @@
       &--selected {
          background: #06a linear-gradient(to bottom, #08c, #06a);
          border-color: #039;
-         .alfresco-forms-controls-MultiSelect__choice {
+         .alfresco-forms-controls-utilities-ChoiceMixin__choice {
             &__content {
                color: @highlighted-font-color;
             }
@@ -60,7 +60,7 @@
       }
    }
    &--choices-nowrap {
-      .alfresco-forms-controls-MultiSelect__choice__content {
+      .alfresco-forms-controls-utilities-ChoiceMixin__choice__content {
          white-space: nowrap;
       }
    }
