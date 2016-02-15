@@ -70,9 +70,7 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @since 1.0.55
        */
-      sitePresets: [
-         { label: "create-site.dialog.type.collaboration", value: "site-dashboard" }
-      ],
+      sitePresets: null,
 
       /**
        * The standard home page for a user
@@ -83,6 +81,23 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       userHomePage: "/dashboard",
+
+      /**
+       * Ensures that default [sitePresets]{@link module:alfresco/services/SiteService#sitePresets} are configured
+       * if no custom values have been provided.
+       * 
+       * @instance
+       * @since 1.0.55
+       */
+      initService: function alfresco_services_SiteService__initService() {
+         this.inherited(arguments);
+         if (!this.sitePresets)
+         {
+            this.sitePresets = [
+               { label: "create-site.dialog.type.collaboration", value: "site-dashboard" }
+            ];
+         }
+      },
 
       /**
        * Sets up the subscriptions for the SiteService
@@ -723,8 +738,8 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
        */
       onSiteCreationSuccess: function alfresco_services_SiteService__onSiteCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
-         this.alfPublish(topics.SITE_CREATION_SUCCESS);
-         this.alfPublish(topics.NAVIGATE_TO_PAGE, {
+         this.alfServicePublish(topics.SITE_CREATION_SUCCESS);
+         this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
             url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
          });
       },
@@ -872,8 +887,8 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
        */
       onSiteEditSuccess: function alfresco_services_SiteService__onSiteEditSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
-         this.alfPublish(topics.SITE_EDIT_SUCCESS);
-         this.alfPublish(topics.NAVIGATE_TO_PAGE, {
+         this.alfServicePublish(topics.SITE_EDIT_SUCCESS);
+         this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
             url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
          });
       },
@@ -1123,7 +1138,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      validation: "regex",
-                     regex: "^[0-9a-zA-Z]+$",
+                     regex: "^[0-9a-zA-Z\-]+$",
                      errorMessage: "create-site.dialog.urlname.regex"
                   }
                ]

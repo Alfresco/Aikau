@@ -470,6 +470,7 @@ define([],function() {
        * @since 1.0.55
        *
        * @event
+       * @parameter {string} site The shortName of the site to be edited
        */
       EDIT_SITE: "ALF_EDIT_SITE",
 
@@ -1029,6 +1030,12 @@ define([],function() {
        * @since 1.0.55
        *
        * @event
+       * @property {string} title The display title of the site
+       * @property {string} shortName The unique site identifier
+       * @property {string} description The site description
+       * @property {string} preset The Surf preset to use for the site
+       * @property {string} visibility The visibility of the site ("PUBLIC" or "PRIVATE")
+       * @property {boolean} moderated Indicates whether "PUBLIC" sites should have moderated membership
        */
       SITE_CREATION_REQUEST: "ALF_SITE_CREATION_REQUEST",
 
@@ -1057,6 +1064,11 @@ define([],function() {
        * @since 1.0.55
        *
        * @event
+       * @property {string} title The display title of the site
+       * @property {string} shortName The unique site identifier
+       * @property {string} description The site description
+       * @property {string} visibility The visibility of the site ("PUBLIC" or "PRIVATE")
+       * @property {boolean} moderated Indicates whether "PUBLIC" sites should have moderated membership 
        */
       SITE_EDIT_REQUEST: "ALF_SITE_EDIT_REQUEST",
 
