@@ -178,6 +178,17 @@ define(["dojo/_base/declare",
                {
                   window.open(url);
                }
+               else if (data.target === this.namedTarget)
+               {
+                  if (data.targetName)
+                  {
+                     window.open(url, data.targetName);
+                  }
+                  else
+                  {
+                     this.alfLog("warn", "Tried to open named window, but did not specify 'targetName' property");
+                  }
+               }
             }
          }
       },

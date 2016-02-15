@@ -27,7 +27,7 @@ define(["./config/Suites"],
          settings = {
             project: "Aikau",
             name: "[AKU] BrowserStack Tests @ " + isoTimestamp,
-            "browserstack.debug": false
+            "browserstack.debug": true
          },
          envData = [{
             browserName: "chrome",

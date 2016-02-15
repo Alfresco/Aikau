@@ -21,6 +21,7 @@ model.jsonModel = {
                   name: "alfresco/menus/AlfMenuBarPopup",
                   config: {
                      label: "Drop down menu",
+                     title: "menu.item.label",
                      widgets: [
                         {
                            id: "PROCESS_PAYLOAD_MENU_ITEM",
@@ -32,6 +33,7 @@ model.jsonModel = {
                                  }
                               },
                               label: "Processed Payload",
+                              title: "menu.item.label",
                               publishTopic: "PROCESSED_PAYLOAD",
                               publishPayloadType: "PROCESS",
                               publishPayloadModifiers: ["processCurrentItemTokens"],

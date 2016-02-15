@@ -18,7 +18,36 @@
  */
 
 /**
- * This creates a set of icons that indicate the status of the item.
+ * This creates a set of icons that indicate the status of the item. Indicators are defined in the Alfresco Share
+ * XML configuration to be rendered in the Document Library. When using this renderer in the context of Alfresco Share
+ * then the [legacyMode]{@link module:alfresco/renderers/Indicators#legacyMode} should be configured to be true in 
+ * order to support 3rd party extensions to the Share configuration. By default the widget will attempt to map the
+ * indicator "icon" attribute to an image path either in Share (with [legacyMode]{@link module:alfresco/renderers/Indicators#legacyMode})
+ * enabled) or within the Aikau - however, it is also possible to configure an
+ * [iconMapping]{@link module:alfresco/renderers/Indicators#iconMapping} to map indicator icons to custom image files.
+ *
+ * @example <caption>Standalone Aikau Client configuration (images expected to be found in "alfresco/renderers/css/images/indicators/"):</caption>
+ * {
+ *   name: "alfresco/renderers/Indicators",
+ * }
+ *
+ * @example <caption>Alfresco Share configuration (images expected to be found in"components/documentlibrary/indicators/"):</caption>
+ * {
+ *   name: "alfresco/renderers/Indicators",
+ *   config: {
+ *     legacyMode: true
+ *   }
+ * }
+ *
+ * @example <caption>Custom mapping for EXIF indicator image:</caption>
+ * {
+ *   name: "alfresco/renderers/Indicators",
+ *   config: {
+ *     iconMapping: {
+ *       "exif-16.png": "custom/icon/folder/my-exif-icon.png"
+ *     }
+ *   }
+ * }
  *
  * @module alfresco/renderers/Indicators
  * @extends external:dijit/_WidgetBase
@@ -33,11 +62,12 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_PublishPayloadMixin", 
         "dojo/text!./templates/Indicators.html", 
         "alfresco/core/Core", 
+        "service/constants/Default",
         "dojo/_base/array", 
         "dojo/_base/lang", 
         "dojo/dom-construct", 
         "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, array, lang, domConstruct, on) {
+        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, AlfConstants, array, lang, domConstruct, on) {
 
    return declare([_WidgetBase, _TemplatedMixin, _PublishPayloadMixin, AlfCore], {
 
@@ -69,6 +99,30 @@ define(["dojo/_base/declare",
        * @type {string}
        */
       templateString: template,
+
+      /**
+       * An object that can map each icon attribute to a custom source file for the indicator image. All mappings
+       * will be appended to the "resource URL" (e.g. in Alfresc Share this prefix would be "share/res/") which give
+       * maximum opportunity for finding images anywhere within the application.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.55
+       */
+      iconMapping: null,
+
+      /**
+       * This indicates whether or not to use the root path of "/res/components/documentlibrary/indicators/" for icon
+       * images. This would be the path expected when the widget is being used within the Alfresco Share application
+       * and all icons would need to be found at this location to satify customization requirements.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.55
+       */
+      legacyMode: false,
 
       /**
        * This should be set to the name of the property to render (e.g. "cm:name"). The property is expected
@@ -206,8 +260,30 @@ define(["dojo/_base/declare",
          if (indicator.action) {
             classes.push("has-action");
          }
+
+         // Attempt to map the icon to a custom image...
+         var src;
+         if (this.iconMapping && this.iconMapping[indicator.icon])
+         {
+            src = AlfConstants.URL_RESCONTEXT + this.iconMapping[indicator.icon];
+         }
+
+         if (!src)
+         {
+            // If mapping is unsuccessful then use either the legcacy path or the "pure" Aikau path to set the 
+            // icon image source...
+            if (this.legacyMode)
+            {
+               src = AlfConstants.URL_RESCONTEXT + "components/documentlibrary/indicators/" + indicator.icon;
+            }
+            else
+            {
+               src = require.toUrl("alfresco/renderers/css/images/indicators/" + indicator.icon);
+            }
+         }
+         
          var img = domConstruct.create("img", {
-            "src": require.toUrl("alfresco/renderers/css/images/indicators/" + indicator.icon),
+            "src": src,
             "title": label,
             "alt": indicator.id,
             "class": classes.join(" ")

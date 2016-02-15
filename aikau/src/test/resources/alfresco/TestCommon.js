@@ -585,6 +585,27 @@ define(["intern/dojo/node!fs",
             // Pass back the base promise
             return dfd.promise;
          };
+         command.session.hasScrollbars = function(selector) {
+            return browser.execute(function(cssSelector) {
+               var elem = document.querySelectorAll(cssSelector)[0],
+                  contentIsTaller = false,
+                  contentIsWider = false,
+                  canScrollVertically = false,
+                  canScrollHorizontally = false,
+                  computedStyle = elem && getComputedStyle(elem),
+                  validOverflows = ["auto", "scroll"];
+               if (computedStyle) {
+                  contentIsTaller = elem.scrollHeight > elem.clientHeight;
+                  contentIsWider = elem.scrollWidth > elem.clientWidth;
+                  canScrollVertically = validOverflows.indexOf(computedStyle.overflowY) !== -1;
+                  canScrollHorizontally = validOverflows.indexOf(computedStyle.overflowX) !== -1;
+               }
+               return {
+                  vertical: contentIsTaller && canScrollVertically,
+                  horizontal: contentIsWider && canScrollHorizontally
+               };
+            }, [selector]);
+         };
 
          return command;
       },

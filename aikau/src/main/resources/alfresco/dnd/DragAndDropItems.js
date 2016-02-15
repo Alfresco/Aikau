@@ -346,7 +346,7 @@ define(["dojo/_base/declare",
          this.currentItem.title = "";
          if (clonedItem.label)
          {
-            this.currentItem.title = this.encodeHTML(this.message(clonedItem.label));
+            this.currentItem.title = this.message(clonedItem.label);
          }
          this.currentItem.iconClass = clonedItem.iconClass || "";
          var widgetModel = lang.clone(this.widgets);

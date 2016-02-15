@@ -215,20 +215,24 @@ define(["dojo/_base/declare",
        */
       updateLoadDataPayload: function alfresco_lists_AlfHashList__updateLoadDataPayload(payload) {
          this.inherited(arguments);
-         if (this.mapHashVarsToPayload)
+         var currHash = hashUtils.getHash();
+         if (this.mapHashVarsToPayload && this.doHashVarUpdate(currHash))
          {
-            var currHash = hashUtils.getHash();
-            array.forEach(this.hashVarsForUpdate, function(hashName){
+            array.forEach(this.hashVarsForUpdate, function(hashName) {
                var hashValue;
-               if(currHash.hasOwnProperty(hashName)) {
+               if(currHash.hasOwnProperty(hashName))
+               {
                   hashValue = currHash[hashName];
                   if(hashValue !== null && typeof hashValue !== "undefined") {
                      payload[hashName] = hashValue;
-                  } else {
+                  }
+                  else
+                  {
                      delete payload[hashName];
+                  }
                }
-            }
             }, this);
+            this.alfLog("log", "LoadDataPayload updated", this);
          }
       },
 

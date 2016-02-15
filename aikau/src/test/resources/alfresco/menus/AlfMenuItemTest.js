@@ -22,41 +22,59 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "AlfMenuItem Tests",
+      return {
+         name: "AlfMenuItem Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuItem", "AlfMenuItem Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/AlfMenuItem", "AlfMenuItem Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Check processed payload": function() {
-         return browser.findByCssSelector("#MENU_BAR_POPUP_text")
-            .click()
-         .end()
-         .findByCssSelector("#PROCESS_PAYLOAD_MENU_ITEM_text")
-            .click()
-         .end()
-         .getLastPublish("PROCESSED_PAYLOAD")
-         .then(function(payload) {
-            assert.propertyVal(payload, "value", "test", "Processed payload not generated correctly");
-         });
-      },
+         "Check title encoding (popup)": function() {
+            return browser.findById("MENU_BAR_POPUP")
+               .getAttribute("title")
+               .then(function(title) {
+                  assert.equal(title, "Workflows que j'ai initiés");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Check title (menu item)": function() {
+            return browser.findByCssSelector("#MENU_BAR_POPUP_text")
+               .click()
+            .end()
+
+            .findByCssSelector(".alfresco-menus-_AlfMenuItemMixin")
+               .getAttribute("title")
+               .then(function(title) {
+                  assert.equal(title, "Workflows que j'ai initiés");
+               });
+         },
+
+         "Check processed payload": function() {
+            return browser.findByCssSelector("#PROCESS_PAYLOAD_MENU_ITEM_text")
+               .click()
+            .end()
+
+            .getLastPublish("PROCESSED_PAYLOAD")
+
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "test", "Processed payload not generated correctly");
+            });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

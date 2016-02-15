@@ -1,11 +1,7 @@
-Aikau 1.0.54 Release Notes
+Aikau 1.0.55 Release Notes
 ===
 
-New deprecations:
----
-* alfresco/documentlibrary/_AlfFilterMixin                       (use alfresco/documentlibrary/_AlfHashMixin)
-
-Previous deprecations:
+Current deprecations:
 ---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
 * alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
@@ -13,6 +9,7 @@ Previous deprecations:
 * alfresco/core/UrlUtils.js                                      (use alfresco/util/urlUtils or alfresco/core/UrlUtilsMixin)
 * alfresco/dialogs/_AlfCreateFormDialogMixin.js                  (use alfresco/services/DialogService)
 * alfresco/dialogs/AlfDialogService                              (use: alfresco/services/Dialog) 
+* alfresco/documentlibrary/_AlfFilterMixin                       (use alfresco/documentlibrary/_AlfHashMixin)
 * alfresco/documentlibrary/AlfDocumentListInfiniteScroll.js      (use: alfresco/services/InfiniteScrollService)
 * alfresco/documentlibrary/AlfDocumentListPaginator              (use: alfresco/lists/Paginator)
 * alfresco/documentlibrary/AlfResultsPerPageGroup                (use: alfresco/lists/ResultsPerPageGroup)
@@ -45,6 +42,21 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.55:
+* [AKU-817](https://issues.alfresco.com/jira/browse/AKU-817)       - Prevent double encoding of tooltips on menu items
+* [AKU-819](https://issues.alfresco.com/jira/browse/AKU-819)       - Added non-Share create/edit site behaviour
+* [AKU-821](https://issues.alfresco.com/jira/browse/AKU-821)       - Upload monitor tooltip removal
+* [AKU-822](https://issues.alfresco.com/jira/browse/AKU-822)       - Upload monitor content scrolling
+* [AKU-823](https://issues.alfresco.com/jira/browse/AKU-823)       - Ensure minimized upload monitor restores on new uploads
+* [AKU-824](https://issues.alfresco.com/jira/browse/AKU-824)       - Added support for named targets via NavigationService
+* [AKU-825](https://issues.alfresco.com/jira/browse/AKU-825)       - Ensure upload monitor never displays NaN as percentage complete
+* [AKU-827](https://issues.alfresco.com/jira/browse/AKU-827)       - Prevent double encoding of DragAndDropItems
+* [AKU-829](https://issues.alfresco.com/jira/browse/AKU-829)       - Added support for custom indicator icons
+* [AKU-830](https://issues.alfresco.com/jira/browse/AKU-830)       - Added configurable support for forthcoming upload API
+* [AKU-831](https://issues.alfresco.com/jira/browse/AKU-831)       - Updates to AlfHashList hash trigger processing
+* [AKU-833](https://issues.alfresco.com/jira/browse/AKU-833)       - Improved handling of upload failures
+* [AKU-836](https://issues.alfresco.com/jira/browse/AKU-836)       - Fixed property spelling error in Grid.js
+
 1.0.54:
 * [AKU-785](https://issues.alfresco.com/jira/browse/AKU-785)       - Update video preview plugin to play H264 proxy when available
 * [AKU-794](https://issues.alfresco.com/jira/browse/AKU-794)       - Disable UploadMonitor close during file upload

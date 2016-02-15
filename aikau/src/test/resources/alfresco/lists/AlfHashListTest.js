@@ -160,6 +160,7 @@ define(["alfresco/TestCommon",
          "Navigating to another page and then back will re-apply hash": function() {
             var anotherPageUrl = TestCommon.testWebScriptURL("/Index"),
                returnUrl = TestCommon.testWebScriptURL("/AlfHashList#var1=test1&var2=test2&var3=test3");
+
             return browser.findByCssSelector("body")
                .clearLog()
                .end()
@@ -190,6 +191,48 @@ define(["alfresco/TestCommon",
                .execute(nodeOverflows, ["#HASHLIST1"])
                .then(function(overflows) {
                   assert.isTrue(overflows, "Scroll bar is not displayed");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         },
+
+         "Payload Data Loading is prevented when the hash vars are filter out": function() {
+            var badUrl = TestCommon.testWebScriptURL("/AlfHashListPayloadData#lib=Libraries&path=a/b/c");
+
+            return browser.findByCssSelector("body")
+               .clearLog()
+               .end()
+
+            .get(badUrl)
+               .findByCssSelector("body")
+               .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+               .then(function(payload) {
+                  assert.notProperty(payload, "path", "There should be no path value in the payload");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         },
+
+         "Payload Data Loading is successful when the hash vars are not filter out": function() {
+            var goodUrl = TestCommon.testWebScriptURL("/AlfHashListPayloadData#lib=Personal&path=d/e/f");
+
+            return browser.findByCssSelector("body")
+               .clearLog()
+               .end()
+
+            .get(goodUrl)
+               .findByCssSelector("body")
+               .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "path", "d/e/f", "Path value incorrect");
                });
          },
 
