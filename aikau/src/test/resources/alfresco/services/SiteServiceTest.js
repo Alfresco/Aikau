@@ -42,6 +42,103 @@ define(["alfresco/TestCommon",
             browser.end();
          },
 
+         "Create site (duplicate shortName)": function() {
+            return browser.setFindTimeout(5000)
+
+            .findById("CREATE_SITE_label")
+               .click()
+            .end()
+
+            .findDisplayedById("CREATE_SITE_DIALOG")
+            .end()
+
+            .findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_TITLE .dijitInputContainer input")
+               .type("fail")
+            .end()
+
+            .findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_SHORTNAME .dijitInputContainer input")
+               .type("fail")
+            .end()
+
+            .findById("CREATE_SITE_DIALOG_OK_label")
+               .click()
+            .end()
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+            .end()
+
+            .findDisplayedById("NOTIFICATION_PROMPT")
+            .end()
+
+            .findById("NOTIFCATION_PROMPT_ACKNOWLEDGEMENT_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#NOTIFICATION_PROMPT.dialogHidden")
+            .end();
+         },
+
+         "Create site success": function() {
+            return browser.findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_TITLE .dijitInputContainer input")
+               .clearValue()
+               .type("pass")
+            .end()
+
+            .findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_SHORTNAME .dijitInputContainer input")
+               .clearValue()
+               .type("pass")
+            .end()
+
+            .clearLog()
+
+            .findById("CREATE_SITE_DIALOG_OK_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#CREATE_SITE_DIALOG.dialogHidden")
+            .end()
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+            .end()
+
+            .getLastPublish("ALF_SITE_CREATION_REQUEST")
+            .getLastPublish("ALF_SITE_CREATION_SUCCESS")
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "url", "site/pass/dashboard");
+               });
+         },
+
+         "Edit site": function() {
+            return browser.findById("EDIT_SITE_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_TITLE .dijitInputContainer input")
+               .clearValue()
+               .type("New Site Title")
+            .end()
+
+            .clearLog()
+
+            .findById("EDIT_SITE_DIALOG_OK_label")
+               .click()
+            .end()
+
+            .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
+            .end()
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+            .end()
+
+            .getLastPublish("ALF_SITE_EDIT_REQUEST")
+            .getLastPublish("ALF_SITE_EDIT_SUCCESS")
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "url", "site/site1/dashboard");
+               });
+         },
+
          "Request to join site navigates user to their dashboard afterwards": function(){
             return browser.findById("REQUEST_SITE_MEMBERSHIP_label")
                .click()
@@ -57,7 +154,9 @@ define(["alfresco/TestCommon",
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload){
                   assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not navigate to user home page");
-               });
+               })
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
          },
 
          "Leave site and confirm user home page override works": function(){

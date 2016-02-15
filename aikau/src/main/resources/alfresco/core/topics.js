@@ -227,6 +227,19 @@ define([],function() {
       CREATE_TAG: "ALF_CREATE_TAG",
 
       /**
+       * This can be published to make a request to show a new dialog for creating sites. This is typically handled by
+       * the [SiteService]{@link module:alfresco/services/SiteService}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      CREATE_SITE: "ALF_CREATE_SITE",
+
+      /**
        * Delete the archive created for downloading.
        *
        * @instance
@@ -447,6 +460,19 @@ define([],function() {
        * @property {object} response.item The metadata for the requested node
        */
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
+
+      /**
+       * This topic can be published to display a dialog that allow the details of a site to be edited.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       * @parameter {string} site The shortName of the site to be edited
+       */
+      EDIT_SITE: "ALF_EDIT_SITE",
 
       /**
        * This topic can be fired when the enter key is pressed (but normally is not by default).
@@ -992,6 +1018,73 @@ define([],function() {
        * @property {number} value - The size (in pixels) to make the thumbnails.
        */
       SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
+
+      /**
+       * This topic can be published to perform the actual creation of a site. Unlike 
+       * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
+       * details for the new site (as it performs the actual creation on the Alfresco Repository rather than
+       * just showing a site creation dialog).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       * @property {string} title The display title of the site
+       * @property {string} shortName The unique site identifier
+       * @property {string} description The site description
+       * @property {string} preset The Surf preset to use for the site
+       * @property {string} visibility The visibility of the site ("PUBLIC" or "PRIVATE")
+       * @property {boolean} moderated Indicates whether "PUBLIC" sites should have moderated membership
+       */
+      SITE_CREATION_REQUEST: "ALF_SITE_CREATION_REQUEST",
+
+      /**
+       * This topic is published in response to [SITE_CREATION_REQUEST]{@link module:alfresco/core/topics#SITE_CREATION_REQUEST}
+       * to indicate that the site creation attempt was successful.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      SITE_CREATION_SUCCESS: "ALF_SITE_CREATION_SUCCESS",
+
+      /**
+       * This topic can be published to perform the actual creation of a site. Unlike 
+       * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
+       * details for the new site (as it performs the actual creation on the Alfresco Repository rather than
+       * just showing a site creation dialog).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       * @property {string} title The display title of the site
+       * @property {string} shortName The unique site identifier
+       * @property {string} description The site description
+       * @property {string} visibility The visibility of the site ("PUBLIC" or "PRIVATE")
+       * @property {boolean} moderated Indicates whether "PUBLIC" sites should have moderated membership 
+       */
+      SITE_EDIT_REQUEST: "ALF_SITE_EDIT_REQUEST",
+
+      /**
+       * This topic is published in response to [SITE_EDIT_REQUEST]{@link module:alfresco/core/topics#SITE_EDIT_REQUEST}
+       * to indicate that the site edit attempt was successful.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      SITE_EDIT_SUCCESS: "ALF_SITE_EDIT_SUCCESS",
 
       /**
        * This can be published to request a "smart" download. It is smart because it will determine whether

@@ -26,6 +26,7 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/ObjectProcessingMixin",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/topics",
@@ -33,9 +34,9 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, NotificationUtils, ObjectTypeUtils, topics, urlTypes, lang, AlfButton, AlfConstants) {
+        function(declare, BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils, ObjectTypeUtils, topics, urlTypes, lang, AlfButton, AlfConstants) {
 
-   return declare([BaseService, CoreXhr, NotificationUtils], {
+   return declare([BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -44,6 +45,32 @@ define(["dojo/_base/declare",
        * @type {Array}
        */
       i18nRequirements: [{i18nFile: "./i18n/SiteService.properties"}],
+
+      /**
+       * Indicates whether or not the Site Service is running in legacy mode. When configured in this mode
+       * the service will attempt to use the YUI2 based dialogs provided by Alfresch Share for creating and
+       * editing sites. If this is configured to be false then the 
+       * [DialogService]{@link module:alfresco/services/DialogService} will be used to display dialogs
+       * for creating and editing sites.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.55
+       */
+      legacyMode: true,
+
+      /**
+       * This is an array of site preset options that will be displayed when creating a site (when the service
+       * is not configured to be in [legacyMode]{@link module:alfresco/services/SiteService#legacyMode}). The
+       * default configuration just contains the "Collaboration Site", but this can be re-configured to contain
+       * additional site presets. Any additional presets must have values that map to presets in the Surf configuration.
+       * 
+       * @instance
+       * @type {object[]}
+       * @since 1.0.55
+       */
+      sitePresets: null,
 
       /**
        * The standard home page for a user
@@ -56,12 +83,32 @@ define(["dojo/_base/declare",
       userHomePage: "/dashboard",
 
       /**
+       * Ensures that default [sitePresets]{@link module:alfresco/services/SiteService#sitePresets} are configured
+       * if no custom values have been provided.
+       * 
+       * @instance
+       * @since 1.0.55
+       */
+      initService: function alfresco_services_SiteService__initService() {
+         this.inherited(arguments);
+         if (!this.sitePresets)
+         {
+            this.sitePresets = [
+               { label: "create-site.dialog.type.collaboration", value: "site-dashboard" }
+            ];
+         }
+      },
+
+      /**
        * Sets up the subscriptions for the SiteService
        *
        * @instance
        * @since 1.0.32
-       * @listens module:alfresco/core/topics#DELETE_SITE
        * @listens module:alfresco/core/topics#BECOME_SITE_MANAGER
+       * @listens module:alfresco/core/topics#CREATE_SITE
+       * @listens module:alfresco/core/topics#DELETE_SITE
+       * @listens module:alfresco/core/topics#EDIT_SITE
+       * @listens module:alfresco/core/topics#SITE_CREATION_REQUEST
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));
@@ -74,8 +121,10 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_REQUEST_SITE_MEMBERSHIP", lang.hitch(this, this.requestSiteMembership));
          this.alfSubscribe("ALF_LEAVE_SITE", lang.hitch(this, this.leaveSiteRequest));
          this.alfSubscribe("ALF_LEAVE_SITE_CONFIRMATION", lang.hitch(this, this.leaveSite));
-         this.alfSubscribe("ALF_CREATE_SITE", lang.hitch(this, this.createSite));
-         this.alfSubscribe("ALF_EDIT_SITE", lang.hitch(this, this.editSite));
+         this.alfSubscribe(topics.CREATE_SITE, lang.hitch(this, this.createSite));
+         this.alfSubscribe(topics.SITE_CREATION_REQUEST, lang.hitch(this, this.onCreateSiteData));
+         this.alfSubscribe(topics.EDIT_SITE, lang.hitch(this, this.editSite));
+         this.alfSubscribe(topics.SITE_EDIT_REQUEST, lang.hitch(this, this.editEditSiteData));
          this.alfSubscribe(topics.DELETE_SITE, lang.hitch(this, this.onActionDeleteSite));
          this.alfSubscribe("ALF_ADD_FAVOURITE_SITE", lang.hitch(this, this.addSiteAsFavourite));
          this.alfSubscribe("ALF_REMOVE_FAVOURITE_SITE", lang.hitch(this, this.removeSiteFromFavourites));
@@ -593,49 +642,272 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This method delegates site creation to the legacy YUI popup.
+       * This method delegates site creation to the legacy YUI popup as found in Alfresco Share unless the 
+       * [legacyMode]{@link module:alfresco/services/SiteService#legacyMode} is configured to be false, in which
+       * case a request is published to display a form dialog containing the 
+       * [widgetsForCreateSiteDialog]{@link module:alfresco/services/SiteService#widgetsForCreateSiteDialog}.
        *
        * @instance
-       * @param {string} site
+       * @param {object} payload The payload published with the request to create a site
+       * @fires module:alfresco/core/topics#CREATE_FORM_DIALOG
        */
       createSite: function alfresco_services_SiteService__editSite(config) {
-         // TODO: When an edit site request is received we should display the edit site dialog.
-         //       We need to wrap the existing YUI widget in a Dojo object.
          this.alfLog("log", "A request has been made to create a site: ", config);
-
-         // Just use the old YUI popup...
-         if (Alfresco && Alfresco.module && typeof Alfresco.module.getCreateSiteInstance === "function")
+         if (this.legacyMode)
          {
-            Alfresco.module.getCreateSiteInstance().show();
+            /* global Alfresco */
+            if (Alfresco && Alfresco.module && typeof Alfresco.module.getCreateSiteInstance === "function")
+            {
+               Alfresco.module.getCreateSiteInstance().show();
+            }
+            else
+            {
+               this.alfLog("error", "Could not find the 'Alfresco.module.getCreateSiteInstance' function - has 'create-site.js' been included in the page?");
+            }
          }
          else
          {
-            this.alfLog("error", "Could not find the 'Alfresco.module.getCreateSiteInstance' function - has 'create-site.js' been included in the page?");
+            var dialogWidgets = lang.clone(this.widgetsForCreateSiteDialog);
+            this.processObject(["processInstanceTokens"], dialogWidgets);
+            this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
+               dialogId: "CREATE_SITE_DIALOG",
+               dialogTitle: "create-site.dialog.title",
+               dialogCloseTopic: topics.SITE_CREATION_SUCCESS,
+               formSubmissionTopic: topics.SITE_CREATION_REQUEST,
+               formSubmissionGlobal: true,
+               showValidationErrorsImmediately: false,
+               widgets: dialogWidgets
+            });
          }
       },
 
       /**
-       * This method delegates site editing to the legacy YUI popup.
+       * Attempts to create a new site using the data provided in the supplied payload.
+       * 
+       * @instance
+       * @param  {object} payload The payload containing the data for the site to create
+       * @since 1.0.55
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       */
+      onCreateSiteData: function alfresco_services_SiteService__onCreateSiteData(payload) {
+         if (payload.visibility && 
+             payload.title &&
+             payload.shortName &&
+             payload.sitePreset)
+         {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
+               message: this.message("create-site.creating")
+            });
+
+            var visibility = payload.visibility;
+            if (visibility === "PUBLIC" && payload.moderated)
+            {
+               visibility = "MODERATED";
+            }
+            var url = AlfConstants.URL_SERVICECONTEXT + "modules/create-site";
+            this.serviceXhr({
+               url : url,
+               method: "POST",
+               data: {
+                  visibility: visibility,
+                  title: payload.title,
+                  shortName: payload.shortName,
+                  description: payload.description || "",
+                  sitePreset: payload.sitePreset
+               },
+               successCallback: this.onSiteCreationSuccess,
+               failureCallback: this.onSiteCreationFailure,
+               callbackScope: this
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to create a site but the supplied payload was missing one or more of 'visibility', 'title', 'shortName' and 'sitePreset' attributes", payload, this);
+         }
+      },
+
+      /**
+       * Handles the successful creation of a new site.
+       *
+       * 
+       * @instance
+       * @param  {object} response The response from the request to create the site
+       * @param  {object} originalRequestConfig The configuration for the request to create the site
+       * @since 1.0.55
+       * @fires module:alfresco/core/topics#SITE_CREATION_SUCCESS
+       * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
+       */
+      onSiteCreationSuccess: function alfresco_services_SiteService__onSiteCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
+         this.alfServicePublish(topics.SITE_CREATION_SUCCESS);
+         this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+            url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
+         });
+      },
+
+      /**
+       * Handles failed requests to create a site.
+       * 
+       * @instance
+       * @param  {object} response The response from the request to create the site
+       * @param  {object} originalRequestConfig The configuration for the request to create the site
+       * @since 1.0.55
+       * @fires module:alfresco/core/topics#DISPLAY_PROMPT
+       */
+      onSiteCreationFailure: function alfresco_services_SiteService__onSiteCreationFailure(response, /*jshint unused:false*/ originalRequestConfig) {
+         var responseText = JSON.parse(response.response.text);
+         this.alfServicePublish(topics.DISPLAY_PROMPT, {
+            title: "create-site.failure.dialog.title",
+            message: this.message(responseText.message)
+         });
+      },
+
+      /**
+       * This method delegates edit creation to the legacy YUI popup as found in Alfresco Share unless the 
+       * [legacyMode]{@link module:alfresco/services/SiteService#legacyMode} is configured to be false, in which
+       * case a request is published to get the full site details in order to display a form dialog containing the 
+       * [widgetsForEditSiteDialog]{@link module:alfresco/services/SiteService#widgetsForEditSiteDialog}.
        *
        * @instance
        * @param {string} site
        */
       editSite: function alfresco_services_SiteService__editSite(config) {
-         // TODO: When an edit site request is received we should display the edit site dialog.
-         //       We need to wrap the existing YUI widget in a Dojo object.
          this.alfLog("log", "A request has been made to edit a site: ", config);
-
-         // Just use the old YUI popup...
-         if (Alfresco && Alfresco.module && typeof Alfresco.module.getEditSiteInstance === "function")
+         if (this.legacyMode)
          {
-            Alfresco.module.getEditSiteInstance().show({
-               shortName: config.site
+            /* global Alfresco */
+            if (Alfresco && Alfresco.module && typeof Alfresco.module.getEditSiteInstance === "function")
+            {
+               Alfresco.module.getEditSiteInstance().show({
+                  shortName: config.site
+               });
+            }
+            else
+            {
+               this.alfLog("error", "Could not find the 'Alfresco.module.getEditSiteInstance' function - has 'edit-site.js' been included in the page?");
+            }
+         }
+         else
+         {
+            // Get the site data to display...
+            var url = AlfConstants.PROXY_URI + "api/sites/" + config.site;
+            this.serviceXhr({url : url,
+                             method: "GET",
+                             site: config.site,
+                             successCallback: this.showEditSiteDialog,
+                             callbackScope: this});
+         }
+      },
+
+      /**
+       * This is called as a result of [editSite]{@link module:alfresco/services/SiteService#editSite} being used
+       * when [legacyMode]{@link module:alfresco/services/SiteService#legacyMode} is configured to be false. It 
+       * takes the site data supplied in the response and publishes a request to display a form dialog containing the 
+       * [widgetsForEditSiteDialog]{@link module:alfresco/services/SiteService#widgetsForEditSiteDialog}.
+       *
+       * @instance
+       * @param {object} response The details of the site to be edited
+       * @param {object} originalRequestConfig The details of the request made to obtain site data
+       * @fires module:alfresco/core/topics#CREATE_FORM_DIALOG
+       */
+      showEditSiteDialog: function alfresco_services_SiteService__showEditSiteDialog(response, originalRequestConfig) {
+         // Check that the resposne is the expected siteData...
+         var shortName = lang.getObject("shortName", false, response);
+         if (response)
+         {
+            var dialogWidgets = lang.clone(this.widgetsForEditSiteDialog);
+            this.processObject(["processInstanceTokens"], dialogWidgets);
+            this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
+               dialogId: "EDIT_SITE_DIALOG",
+               dialogTitle: "edit-site.dialog.title",
+               dialogCloseTopic: topics.SITE_EDIT_SUCCESS,
+               formSubmissionTopic: topics.SITE_EDIT_REQUEST,
+               formSubmissionPayloadMixin: {
+                  shortName: shortName
+               },
+               formSubmissionGlobal: true,
+               formValue: response,
+               showValidationErrorsImmediately: false,
+               widgets: dialogWidgets
+            });
+         }
+         this.alfLog("warn", "It was not possible to retrieve the current site data for editing", response, originalRequestConfig, this);
+      },
+
+      /**
+       * Attempts to edit a site using the data supplied in the payload.
+       * 
+       * @instance
+       * @param  {object} payload The payload containing the data for the site to create
+       * @since 1.0.55
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       */
+      editEditSiteData: function alfresco_services_SitesService__editEditSiteData(payload) {
+         if (payload.shortName && 
+             payload.visibility && 
+             payload.title)
+         {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
+               message: this.message("edit-site.saving")
+            });
+
+            var visibility = payload.visibility;
+            if (visibility === "PUBLIC" && payload.moderated)
+            {
+               visibility = "MODERATED";
+            }
+            var url = AlfConstants.PROXY_URI + "api/sites/" + payload.shortName;
+            this.serviceXhr({
+               url : url,
+               method: "PUT",
+               data: {
+                  visibility: visibility,
+                  title: payload.title,
+                  shortName: payload.shortName,
+                  description: payload.description || ""
+               },
+               successCallback: this.onSiteEditSuccess,
+               failureCallback: this.onSiteEditFailure,
+               callbackScope: this
             });
          }
          else
          {
-            this.alfLog("error", "Could not find the 'Alfresco.module.getEditSiteInstance' function - has 'edit-site.js' been included in the page?");
+            this.alfLog("warn", "A request was made to create a site but the supplied payload was missing one or more of 'visibility', 'title', 'shortName' and 'sitePreset' attributes", payload, this);
          }
+      },
+
+      /**
+       * Handles the successful editing of site details.
+       *
+       * @instance
+       * @param  {object} response The response from the request to edit the site
+       * @param  {object} originalRequestConfig The configuration for the request to edit the site
+       * @since 1.0.55
+       * @fires module:alfresco/core/topics#SITE_CREATION_SUCCESS
+       * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
+       */
+      onSiteEditSuccess: function alfresco_services_SiteService__onSiteEditSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
+         this.alfServicePublish(topics.SITE_EDIT_SUCCESS);
+         this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+            url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
+         });
+      },
+
+      /**
+       * Handles failed requests to edit a site.
+       * 
+       * @instance
+       * @param  {object} response The response from the request to edit the site
+       * @param  {object} originalRequestConfig The configuration for the request to edit the site
+       * @since 1.0.55
+       * @fires module:alfresco/core/topics#DISPLAY_PROMPT
+       */
+      onSiteEditFailure: function alfresco_services_SiteService__onSiteEditFailure(response, /*jshint unused:false*/ originalRequestConfig) {
+         var responseText = JSON.parse(response.response.text);
+         this.alfServicePublish(topics.DISPLAY_PROMPT, {
+            title: "edit-site.failure.dialog.title",
+            message: this.message(responseText.message)
+         });
       },
 
       /**
@@ -818,6 +1090,199 @@ define(["dojo/_base/declare",
             callbackScope: this
          };
          this.serviceXhr(config);
-      }
+      },
+
+      /**
+       * This is the widget model displayed when creating sites.
+       * 
+       * @instance
+       * @type {object[]}
+       * @since 1.0.55
+       */
+      widgetsForCreateSiteDialog: [
+         {
+            id: "CREATE_SITE_FIELD_TITLE",
+            name: "alfresco/forms/controls/TextBox",
+            config: {
+               fieldId: "TITLE",
+               label: "create-site.dialog.name.label",
+               name: "title",
+               requirementConfig: {
+                  initialValue: true
+               },
+               validationConfig: [
+                  {
+                     validation: "maxLength",
+                     length: 256,
+                     errorMessage: "create-site.dialog.name.maxLength"
+                  }
+               ]
+            }
+         },
+         {
+            id: "CREATE_SITE_FIELD_SHORTNAME",
+            name: "alfresco/forms/controls/TextBox",
+            config: {
+               fieldId: "SHORTNAME",
+               label: "create-site.dialog.urlname.label",
+               description: "create-site.dialog.urlname.description",
+               name: "shortName",
+               requirementConfig: {
+                  initialValue: true
+               },
+               validationConfig: [
+                  {
+                     validation: "maxLength",
+                     length: 72,
+                     errorMessage: "create-site.dialog.urlname.maxLength"
+                  },
+                  {
+                     validation: "regex",
+                     regex: "^[0-9a-zA-Z-]+$",
+                     errorMessage: "create-site.dialog.urlname.regex"
+                  }
+               ]
+            }
+         },
+         {
+            id: "CREATE_SITE_FIELD_DESCRIPTION",
+            name: "alfresco/forms/controls/TextArea",
+            config: {
+               fieldId: "DESCRIPTION",
+               label: "create-site.dialog.description.label",
+               name: "description",
+               validationConfig: [
+                  {
+                     validation: "maxLength",
+                     length: 512,
+                     errorMessage: "create-site.dialog.description.maxLength"
+                  }
+               ]
+            }
+         },
+         {
+            id: "CREATE_SITE_FIELD_PRESET",
+            name: "alfresco/forms/controls/Select",
+            config: {
+               fieldId: "PRESET",
+               label: "create-site.dialog.type.label",
+               name: "sitePreset",
+               optionsConfig: {
+                  fixed: "{sitePresets}"
+               }
+            }
+         },
+         {
+            id: "CREATE_SITE_FIELD_VISIBILITY",
+            name: "alfresco/forms/controls/RadioButtons",
+            config: {
+               fieldId: "VISIBILITY",
+               label: "create-site.dialog.visibility.label",
+               name: "visibility",
+               optionsConfig: {
+                  fixed: [
+                     { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
+                     { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
+                  ]
+               }
+            }
+         },
+         {
+            id: "CREATE_SITE_FIELD_MODERATED",
+            name: "alfresco/forms/controls/CheckBox",
+            config: {
+               fieldId: "MODERATED",
+               label: "create-site.dialog.moderated.label",
+               description: "create-site.dialog.moderated.description",
+               name: "moderated",
+               visibilityConfig: {
+                  rules: [
+                     {
+                        targetId: "VISIBILITY",
+                        is: ["PUBLIC"]
+                     }
+                  ]
+               }
+            }
+         }
+      ],
+
+      /**
+       * This is the widget model displayed when editing sites.
+       * 
+       * @instance
+       * @type {object[]}
+       * @since 1.0.55
+       */
+      widgetsForEditSiteDialog: [
+         {
+            id: "EDIT_SITE_FIELD_TITLE",
+            name: "alfresco/forms/controls/TextBox",
+            config: {
+               fieldId: "TITLE",
+               label: "create-site.dialog.name.label",
+               name: "title",
+               requirementConfig: {
+                  initialValue: true
+               },
+               validationConfig: [
+                  {
+                     validation: "maxLength",
+                     length: 256,
+                     errorMessage: "create-site.dialog.name.maxLength"
+                  }
+               ]
+            }
+         },
+         {
+            id: "EDIT_SITE_FIELD_DESCRIPTION",
+            name: "alfresco/forms/controls/TextArea",
+            config: {
+               fieldId: "DESCRIPTION",
+               label: "create-site.dialog.description.label",
+               name: "description",
+               validationConfig: [
+                  {
+                     validation: "maxLength",
+                     length: 512,
+                     errorMessage: "create-site.dialog.description.maxLength"
+                  }
+               ]
+            }
+         },
+         {
+            id: "EDIT_SITE_FIELD_VISIBILITY",
+            name: "alfresco/forms/controls/RadioButtons",
+            config: {
+               fieldId: "VISIBILITY",
+               label: "create-site.dialog.visibility.label",
+               name: "visibility",
+               optionsConfig: {
+                  fixed: [
+                     { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
+                     { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
+                  ]
+               }
+            }
+         },
+         {
+            id: "EDIT_SITE_FIELD_MODERATED",
+            name: "alfresco/forms/controls/CheckBox",
+            config: {
+               fieldId: "MODERATED",
+               label: "create-site.dialog.moderated.label",
+               description: "create-site.dialog.moderated.description",
+               name: "moderated",
+               visibilityConfig: {
+                  rules: [
+                     {
+                        targetId: "VISIBILITY",
+                        is: ["PUBLIC"]
+                     }
+                  ]
+               }
+            }
+         }
+      ]
    });
 });

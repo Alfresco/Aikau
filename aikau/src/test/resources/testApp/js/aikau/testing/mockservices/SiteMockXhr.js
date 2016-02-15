@@ -23,6 +23,7 @@
  * @author Richard Smith
  */
 define(["dojo/_base/declare",
+        "dojo/_base/lang",
         "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/SiteTest/GetSites.json",
         "dojo/text!./responseTemplates/SiteTest/GetAdminSites.json",
@@ -37,23 +38,50 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/SiteTest/PutJoinSite.json",
         "dojo/text!./responseTemplates/SiteTest/DeleteLeaveSite.json",
         "dojo/text!./responseTemplates/SiteTest/GetRecentSites.json",
-        "dojo/text!./responseTemplates/SiteTest/GetFavouriteSites.json"
-        ], 
-        function(declare, MockXhr, getSites, getAdminSites, getSite, putSite, deleteSite, postSiteAsFavourite, 
+        "dojo/text!./responseTemplates/SiteTest/GetFavouriteSites.json"], 
+        function(declare, lang, MockXhr, getSites, getAdminSites, getSite, putSite, deleteSite, postSiteAsFavourite, 
          deleteSiteAsFavourite, getSiteMemberships, postBecomeSiteManager, postRequestSiteMembership, putJoinSite, 
          deleteLeaveSite, getRecentSites, getFavouriteSites) {
    
    return declare([MockXhr], {
 
       /**
+       * @instance
+       */
+      createSite: function alfresco_testing_SiteMockXhr__createSite(request) {
+         var response;
+         var shortName = JSON.parse(request.requestBody).shortName;
+         if (shortName === "pass")
+         {
+            request.respond(200, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, JSON.stringify(response));
+         }
+         else
+         {
+            response = {
+               callstack: [],
+               exception: "",
+               message: "error.duplicateShortName"
+            };
+            request.respond(400, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, JSON.stringify(response));
+         }
+      },
+
+      /**
        * This sets up the fake server with all the responses it should provide.
        *
        * @instance
        */
-      setupServer: function alfresco_testing_MockXhr__setupServer() {
+      setupServer: function alfresco_testing_SiteMockXhr__setupServer() {
          try
          {
-
+            this.server.respondWith("POST",
+                                    "/aikau/service/modules/create-site",
+                                    lang.hitch(this, this.createSite));
+            
             this.server.respondWith(
                "GET",
                /\/aikau\/proxy\/alfresco\/api\/sites[^\/]*/,
