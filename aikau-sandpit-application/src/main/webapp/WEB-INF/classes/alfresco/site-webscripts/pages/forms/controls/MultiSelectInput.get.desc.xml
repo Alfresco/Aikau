@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>MultiSelectInput Form Control</shortname>
+  <description>Examples of using the alfresco/forms/controls/MultiSelectInput form control.</description>
+  <family>ExamplePage</family>
+  <url>/MultiSelectInput</url>
+</webscript>
