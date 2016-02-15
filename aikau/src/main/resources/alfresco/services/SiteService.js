@@ -1138,7 +1138,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      validation: "regex",
-                     regex: "^[0-9a-zA-Z\-]+$",
+                     regex: "^[0-9a-zA-Z-]+$",
                      errorMessage: "create-site.dialog.urlname.regex"
                   }
                ]
