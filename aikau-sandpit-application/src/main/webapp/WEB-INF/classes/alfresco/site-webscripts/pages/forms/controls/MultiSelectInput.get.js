@@ -7,7 +7,7 @@ buildPageModel({
    services: ["alfresco/services/TagService"],
    mockXhrWidgets: [
       {
-         name: "sandpit/mockdata/MultiSelectMockXhr"
+         name: "sandpit/mockdata/MultiSelectInputMockXhr"
       }
    ],
    examples: [
