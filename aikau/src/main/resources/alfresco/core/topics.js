@@ -1046,6 +1046,34 @@ define([],function() {
       SITE_CREATION_SUCCESS: "ALF_SITE_CREATION_SUCCESS",
 
       /**
+       * This topic can be published to perform the actual creation of a site. Unlike 
+       * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
+       * details for the new site (as it performs the actual creation on the Alfresco Repository rather than
+       * just showing a site creation dialog).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      SITE_EDIT_REQUEST: "ALF_SITE_EDIT_REQUEST",
+
+      /**
+       * This topic is published in response to [SITE_EDIT_REQUEST]{@link module:alfresco/core/topics#SITE_EDIT_REQUEST}
+       * to indicate that the site edit attempt was successful.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      SITE_EDIT_SUCCESS: "ALF_SITE_EDIT_SUCCESS",
+
+      /**
        * This can be published to request a "smart" download. It is smart because it will determine whether
        * or not to download a single item individually or multiple items as a ZIP.
        * 
