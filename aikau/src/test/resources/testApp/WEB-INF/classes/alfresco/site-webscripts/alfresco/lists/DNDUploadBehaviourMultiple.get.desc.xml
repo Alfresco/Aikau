@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Drag-and-drop upload highlighting - multiple proxyDragAndDropNode</shortname>
+  <description>This page is used for testing various configurations for drag-and-drop upload highlighting and thumbnail dragging, with multiple proxyDragAndDropNodes.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DNDUploadBehaviourMultiple</url>
+</webscript>
