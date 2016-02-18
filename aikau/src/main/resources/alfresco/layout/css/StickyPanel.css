@@ -1,6 +1,8 @@
 .alfresco-layout-StickyPanel {
    bottom: 0;
+   display: block;
    left: 0;
+   pointer-event: none;
    position: fixed;
    right: 0;
    &__panel {
@@ -11,6 +13,7 @@
       box-shadow: @sticky-panel-box-shadow;
       box-sizing: border-box;
       margin: 0 auto;
+      pointer-events: all;
       position: relative;
    }
    &__title-bar {
