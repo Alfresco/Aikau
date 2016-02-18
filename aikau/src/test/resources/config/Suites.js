@@ -93,6 +93,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
       "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
       "src/test/resources/alfresco/documentlibrary/FilteredDocumentListTest",
+      "src/test/resources/alfresco/documentlibrary/InfiniteScrollDocumentListTest",
       "src/test/resources/alfresco/documentlibrary/PaginationTest",
       "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
       "src/test/resources/alfresco/documentlibrary/SearchListTest",

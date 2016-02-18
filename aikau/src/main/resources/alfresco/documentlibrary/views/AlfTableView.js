@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
       getViewName: function alfresco_documentlibrary_views_AlfTableView__getViewName() {
          return "table";
       },
-      
+
       /**
        * The configuration for selecting the view (configured the menu item)
        * @instance
@@ -51,8 +51,15 @@ define(["dojo/_base/declare",
          iconClass: "alf-tableview-icon"
       },
       
+      /**
+       * The view model.
+       * 
+       * @instance
+       * @type {opject}
+       */
       widgetsForHeader: [
          {
+            id: "TABLE_VIEW_SELECTOR_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "",
@@ -60,6 +67,7 @@ define(["dojo/_base/declare",
             }
          },
          {
+            id: "TABLE_VIEW_INDICATORS_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "",
@@ -67,62 +75,77 @@ define(["dojo/_base/declare",
             }
          },
          {
+            id: "TABLE_VIEW_NAME_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.name",
                sortable: true,
-               sortValue: "cm:name"
+               sortValue: "cm:name",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_TITLE_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.title",
                sortable: true,
-               sortValue: "cm:title"
+               sortValue: "cm:title",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_DESCRIPTION_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.description",
                sortable: true,
-               sortValue: "cm:description"
+               sortValue: "cm:description",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_CREATOR_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.creator",
                sortable: true,
-               sortValue: "cm:creator"
+               sortValue: "cm:creator",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_CREATED_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.created",
                sortable: true,
-               sortValue: "cm:created"
+               sortValue: "cm:created",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_MODIFIER_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.modifier",
                sortable: true,
-               sortValue: "cm:modifier"
+               sortValue: "cm:modifier",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_MODIFIED_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "label.modified",
                sortable: true,
-               sortValue: "cm:modified"
+               sortValue: "cm:modified",
+               useHash: "{useHash}"
             }
          },
          {
+            id: "TABLE_VIEW_ACTIONS_HEADING",
             name: "alfresco/lists/views/layouts/HeaderCell",
             config: {
                label: "",

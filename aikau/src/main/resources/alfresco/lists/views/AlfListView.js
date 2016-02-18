@@ -153,7 +153,19 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       suppressDndUploading: true,
-    
+      
+      /**
+       * This will be automatically set when the view is used in an [AlfHashList]{@link module:alfresco/lists/AlfHashList}.
+       * It indicates whether or not the list is being driven by data set on the browser URL hash and it can be useful
+       * for views to have access to this information.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.56
+       */
+      useHash: null,
+
       /**
        * Whether the list that's creating this view has infinite scroll turned on
        *
@@ -587,7 +599,9 @@ define(["dojo/_base/declare",
          if (this.widgetsForHeader)
          {
             var thead = domConstruct.create("thead", null, this.tableNode, "first");
-            this.processWidgets(this.widgetsForHeader, thead);
+            var clonedWidgets = lang.clone(this.widgetsForHeader);
+            this.processObject(["processInstanceTokens"], clonedWidgets);
+            this.processWidgets(clonedWidgets, thead);
          }
          this.currentItem = null;
       },
