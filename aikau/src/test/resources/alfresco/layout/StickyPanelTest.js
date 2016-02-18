@@ -133,6 +133,17 @@ define(["intern!object",
                });
          },
 
+         "Panel allows clicks either side of it": function(){
+            return browser.findByCssSelector("[widgetid=\"LEFT_BUTTON\"] .dijitButtonNode")
+               .click()
+               .getLastPublish("LEFT_BUTTON_PUSHED")
+            .end()  
+
+            .findByCssSelector("[widgetid=\"RIGHT_BUTTON\"] .dijitButtonNode")
+               .click()
+               .getLastPublish("RIGHT_BUTTON_PUSHED");
+         },
+
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
