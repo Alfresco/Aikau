@@ -220,6 +220,10 @@ define(["dojo/_base/declare",
             }
             if (this._readyToLoad === true)
             {
+               if (this.useInfiniteScroll)
+               {
+                  this.clearViews();
+               }
                if (this.useHash === true)
                {
                   var currHash = hashUtils.getHash();
