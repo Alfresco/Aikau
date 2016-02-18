@@ -92,6 +92,21 @@ define(["intern!object",
                });
          },
 
+         "Check close button title": function() {
+            return closeAllDialogs(browser)
+               .then(function() {
+                  return browser.findById("CREATE_FORM_DIALOG")
+                     .click()
+                  .end()
+
+                  .findDisplayedByCssSelector(".dijitDialogCloseIcon")
+                     .getAttribute("title")
+                        .then(function(title) {
+                           assert.equal(title, "Close");
+                        });
+               });
+         },
+
          "Test creating dialog with an ID": function() {
             return closeAllDialogs(browser)
                .then(function() {
