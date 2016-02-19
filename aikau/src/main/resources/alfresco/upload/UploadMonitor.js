@@ -154,8 +154,8 @@ define(["alfresco/core/FileSizeMixin",
 
          // Add localised status messages
          domConstruct.create("span", {
-            className: this.baseClass + "__item__status__in-progress",
-            textContent: this.message("upload.status.in-progress")
+            className: this.baseClass + "__item__status__inprogress",
+            textContent: this.message("upload.status.inprogress")
          }, itemStatus);
          domConstruct.create("span", {
             className: this.baseClass + "__item__status__successful",

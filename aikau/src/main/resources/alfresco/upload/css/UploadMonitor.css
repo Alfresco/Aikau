@@ -41,11 +41,11 @@
       }
       &__status {
          width: @upload-monitor-status-column-width;
-         &__in-progress, &__successful, &__unsuccessful {
+         &__inprogress, &__successful, &__unsuccessful {
             display: none;
          }
-         &__in-progress {
-            color: @upload-monitor-status-color-in-progress;
+         &__inprogress {
+            color: @upload-monitor-status-color-inprogress;
          }
          &__successful {
             color: @upload-monitor-status-color-successful;
@@ -62,10 +62,10 @@
          }
       }
    }
-   &__in-progress-items {
+   &__inprogress-items {
       .alfresco-upload-UploadMonitor {
          &__item {
-            &__status__in-progress {
+            &__status__inprogress {
                display: inline;
             }
          }
