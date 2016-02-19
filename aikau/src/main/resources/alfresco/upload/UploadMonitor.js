@@ -28,15 +28,19 @@
  * @since 1.0.50
  */
 define(["alfresco/core/FileSizeMixin",
+        "alfresco/core/CoreWidgetProcessing", 
+        "alfresco/core/topics",
         "alfresco/upload/_UploadsDisplayMixin", 
+        "dojo/_base/array", 
         "dojo/_base/declare", 
         "dojo/_base/lang", 
         "dojo/dom-class", 
-        "dojo/dom-construct", 
+        "dojo/dom-construct",
+        "dojo/when", 
         "dojo/text!./templates/UploadMonitor.html"], 
-        function(FileSizeMixin, _UploadsDisplayMixin, declare, lang, domClass, domConstruct, template) {
+        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, when, template) {
 
-   return declare([FileSizeMixin, _UploadsDisplayMixin], {
+   return declare([FileSizeMixin, CoreWidgetProcessing, _UploadsDisplayMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -98,6 +102,54 @@ define(["alfresco/core/FileSizeMixin",
       maxUploadNameLength: 50,
 
       /**
+       * This collection of [PublishAction]{@link module:alfresco/renderers/PublishAction} widgets
+       * will be displayed against each inprogress item in the upload monitor. The upload item
+       * (containing relevant information) will be added as the current item, and the
+       * [publishPayloadType]{@link module:alfresco/renderers/_PublishPayloadMixin#publishPayloadType}
+       * will default to [PayloadTypes.CURRENT_ITEM]{@link module:alfresco/renderers/_PublishPayloadMixin#PayloadTypes},
+       * if not specified. In effect, this means that you should normally only need to specify the
+       * [publishTopic]{@link module:alfresco/renderers/PublishAction#publishTopic} and
+       * [iconClass]{@link module:alfresco/renderers/PublishAction#iconClass} in the PublishAction
+       * config.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.56
+       */
+      widgetsForInProgressActions: [
+         {
+            name: "alfresco/renderers/PublishAction",
+            config: {
+               publishTopic: topics.CANCEL_INPROGRESS_UPLOAD,
+               iconClass: "cancel-16"
+            }
+         }
+      ],
+
+      /**
+       * PublishActions for displaying against successful items. For more information on how to use this, see
+       * [widgetsForInProgressActions]{@link module:alfresco/upload/UploadMonitor#widgetsForInProgressActions}.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.56
+       */
+      widgetsForSuccessfulActions: null,
+
+      /**
+       * PublishActions for displaying against unsuccessful items. For more information on how to use this, see
+       * [widgetsForInProgressActions]{@link module:alfresco/upload/UploadMonitor#widgetsForInProgressActions}.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.56
+       */
+      widgetsForUnsuccessfulActions: null,
+
+      /**
        * A map of all uploads.
        *
        * @instance
@@ -113,6 +165,54 @@ define(["alfresco/core/FileSizeMixin",
        */
       constructor: function alfesco_upload_UploadMonitor__constructor() {
          this._uploads = {};
+      },
+
+      /**
+       * Create the actions widgets, ensure that the default publishPayloadType is set
+       * to CURRENT_ITEM, and set the current item to be the supplied upload info.
+       *
+       * @instance
+       * @param {object} actionPayload The upload information to be used in the action payload
+       * @param {object} actionsNode The node in which to place the actions
+       * @since 1.0.56
+       */
+      addActions: function alfesco_upload_UploadMonitor__addActions(actionPayload, actionsNode) {
+
+         // Loop through the potential states of an upload
+         var propTypes = ["InProgress", "Successful", "Unsuccessful"],
+            processId = Date.now() + "_actionWidgets",
+            actionClass = this.baseClass + "__item__action";
+         array.forEach(propTypes, function(propType) {
+
+            // Grab the widgets property for this state
+            var propName = "widgetsFor" + propType + "Actions",
+               widgets = this[propName];
+            if (widgets && widgets.length) {
+
+               // Create state-specific class
+               var actionStateClass = actionClass + "__" + propType.toLowerCase();
+
+               // Mix in the default payload type and a class to control visibility
+               array.forEach(widgets, function(action) {
+                  action.config = lang.mixin({
+                     publishPayloadType: "CURRENT_ITEM",
+                     publishGlobal: true,
+                     additionalCssClasses: actionClass + " " + actionStateClass
+                  }, action.config || {});
+               }, this);
+
+               // Create the widgets under the appropriate node
+               this.processWidgets(widgets, actionsNode, processId);
+            }
+         }, this);
+
+         // Get the processed widgets and assign the current item to each one
+         var processedWidgets = this.getProcessedWidgets(processId);
+         when(processedWidgets, function(widgets) {
+            array.forEach(widgets, function(widget) {
+               widget.currentItem = actionPayload;
+            });
+         });
       },
 
       /**
@@ -150,6 +250,9 @@ define(["alfresco/core/FileSizeMixin",
             }, itemProgress),
             itemStatus = domConstruct.create("td", {
                className: this.baseClass + "__item__status"
+            }, itemRow),
+            itemActions = domConstruct.create("td", {
+               className: this.baseClass + "__item__actions"
             }, itemRow);
 
          // Add localised status messages
@@ -167,9 +270,14 @@ define(["alfresco/core/FileSizeMixin",
          }, itemStatus);
 
          // Store in uploads map
-         this._uploads[fileId] = {
+         var upload = this._uploads[fileId] = {
             id: fileId,
             file: file,
+            actionPayload: {
+               fileId: fileId,
+               fileSize: file.size,
+               fileName : file.name
+            },
             nodes: {
                row: itemRow,
                name: itemNameContent,
@@ -177,6 +285,9 @@ define(["alfresco/core/FileSizeMixin",
                progress: itemProgressContent
             }
          };
+
+         // Add actions
+         this.addActions(upload.actionPayload, itemActions);
       },
 
       /**
@@ -267,7 +378,7 @@ define(["alfresco/core/FileSizeMixin",
             // before the display is closed...
             if (request && request.responseText) {
                var jsonResponse = JSON.parse(request.responseText);
-               lang.mixin(upload, {
+               lang.mixin(upload.actionPayload, {
                   nodeRef: jsonResponse.nodeRef,
                   fileName: jsonResponse.fileName
                });

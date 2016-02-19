@@ -102,6 +102,19 @@ define([],function() {
       CANCEL_EDIT: "ALF_DOC_CANCEL_EDITING",
 
       /**
+       * Cancel an in-progress upload.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.56
+       *
+       * @event
+       * @property {string} fileId The ID of the file to cancel
+       */
+      CANCEL_INPROGRESS_UPLOAD: "CANCEL_INPROGRESS_UPLOAD",
+
+      /**
        * This can be published to clear any selected items that are logged by widgets
        * such as the [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
        *
