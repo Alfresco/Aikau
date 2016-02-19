@@ -41,11 +41,11 @@
       }
       &__status {
          width: @upload-monitor-status-column-width;
-         &__in-progress, &__successful, &__unsuccessful {
+         &__inprogress, &__successful, &__unsuccessful {
             display: none;
          }
-         &__in-progress {
-            color: @upload-monitor-status-color-in-progress;
+         &__inprogress {
+            color: @upload-monitor-status-color-inprogress;
          }
          &__successful {
             color: @upload-monitor-status-color-successful;
@@ -53,6 +53,15 @@
          &__unsuccessful {
             color: @upload-monitor-status-color-unsuccessful;
          }
+      }
+      &__actions {
+         width: 30px;
+         .alfresco-renderers-PublishAction .image {
+            vertical-align: text-bottom;
+         }
+      }
+      &__action {
+         display: none;
       }
       &--has-error {
          .alfresco-upload-UploadMonitor {
@@ -62,11 +71,14 @@
          }
       }
    }
-   &__in-progress-items {
+   &__inprogress-items {
       .alfresco-upload-UploadMonitor {
          &__item {
-            &__status__in-progress {
+            &__status__inprogress {
                display: inline;
+            }
+            &__action__inprogress {
+               display: inline-block;
             }
          }
       }
@@ -82,6 +94,9 @@
             &__status__successful {
                display: inline;
             }
+            &__action__successful {
+               display: inline-block;
+            }
          }
       }
    }
@@ -90,6 +105,9 @@
          &__item {
             &__status__unsuccessful {
                display: inline;
+            }
+            &__action__unsuccessful {
+               display: inline-block;
             }
          }
       }

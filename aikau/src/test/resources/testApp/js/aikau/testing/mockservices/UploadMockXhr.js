@@ -79,6 +79,9 @@ define(["dojo/_base/declare",
 
                // After progress has finished, send the final response
                setTimeout(function() {
+                  if (request.aborted) {
+                     return;
+                  }
                   request.readyState = 1; // Sinon won't send response unless it thinks the response is clean and only just opened
                   request.respond(this.responseCode, headers, body);
                }, i * delay);
@@ -97,8 +100,11 @@ define(["dojo/_base/declare",
        * @param {number} percent The percentage progress to send
        * @param {number} delay The delay, in milliseconds, until the progress is sent
        */
-      sendProgress: function(request, percent, delay) {
+      sendProgress: function alfresco_testing_MockXhr__sendProgress(request, percent, delay) {
          setTimeout(function() {
+            if (request.aborted) {
+               return;
+            }
             request.uploadProgress({
                total: 100,
                loaded: percent

@@ -114,10 +114,6 @@ define(["dojo/_base/declare",
          this.altText = this.message(this.altText, {
             0: altTextId
          });
-
-         this.publishPayload = this.getGeneratedPayload();
-         this.publishGlobal = this.publishGlobal || false;
-         this.publishToParent = this.publishToParent || false;
       },
 
       /**
@@ -128,7 +124,8 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event object
        */
       onClick: function alfresco_renderers_PublishAction__onClick(/*jshint unused:false*/ evt) {
-         this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal, this.publishToParent);
+         this.publishPayload = this.getGeneratedPayload();
+         this.alfPublish(this.publishTopic, this.publishPayload, !!this.publishGlobal, !!this.publishToParent);
       }
    });
 });
