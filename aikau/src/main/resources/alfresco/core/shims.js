@@ -42,11 +42,28 @@ define([], function() {
          if (_applied) {
             return;
          }
-         this._addObjectKeys();
+         this._addArrayIsArray();
          this._addArrayReduce();
          this._addDateNow();
+         this._addObjectKeys();
          this._addTextContent();
          _applied = true;
+      },
+
+      /**
+       * Add an isArray() function to the global Array object.
+       * From https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray#Polyfill
+       *
+       * @protected
+       * @instance
+       * @since 1.0.56
+       */
+      _addArrayIsArray: function alfresco_core_shim___addArrayIsArray() {
+         if (!Array.isArray) {
+           Array.isArray = function(arg) {
+             return Object.prototype.toString.call(arg) === "[object Array]";
+           };
+         }
       },
 
       /**

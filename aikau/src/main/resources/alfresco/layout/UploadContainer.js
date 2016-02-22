@@ -32,8 +32,9 @@
  * can be configured to be false and the drag-and-drop upload highlight will only be applied
  * to the area containing the child widgets. Alternatively a
  * [proxyDragAndDropNode]{@link module:alfresco/layout/UploadContainer#proxyDragAndDropNode}
- * selectory query can be provided to place the overlay over another node on the screen.</p>
- * 
+ * selector query can be provided to place the overlay over another node on the screen. This can 
+ * be provided either as a string or as an array of strings and the first visible element found 
+ * will be used.</p>
  * 
  * @module alfresco/layout/VerticalWidgets
  * @extends module:alfresco/layout/VerticalWidgets
@@ -44,11 +45,12 @@
 define(["dojo/_base/declare",
         "alfresco/layout/VerticalWidgets",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
+        "dojo/_base/array",
         "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/query",
         "dojo/window"], 
-        function(declare, VerticalWidgets, _AlfDndDocumentUploadMixin, domGeom, domStyle, query, win) {
+        function(declare, VerticalWidgets, _AlfDndDocumentUploadMixin, array, domGeom, domStyle, query, win) {
    
    return declare([VerticalWidgets, _AlfDndDocumentUploadMixin], {
       
@@ -63,13 +65,15 @@ define(["dojo/_base/declare",
       fullScreenDndHighlight: true,
 
       /**
-       * This can be set to a CSS selector to find another element in the DOM on which to apply the overlay node.
-       * This use-case for this attribute is to allow the user to drop a file anywhere on the page but
-       * for the overlay to be applied to a [document list]{@link module:alfresco/documentlibrary/AlfDocumentList}.
-       * Note that the CSS selector query must only yield a single result.
+       * This can be set to a CSS selector or an array of css selectors to find another element in the 
+       * DOM on which to apply the overlay node. The use-case for this attribute is to allow the user 
+       * to drop a file anywhere on the page but for the overlay to be applied to a 
+       * [document list]{@link module:alfresco/documentlibrary/AlfDocumentList}. Note that the CSS 
+       * selector query will highlight the first visible item found, so if it is an array it will be the 
+       * first visible item or if any selector produces mroe than one result it will be the first found.
        * 
        * @instance
-       * @type {string}
+       * @type {string|string[]}
        * @default
        */
       proxyDragAndDropNode: null,
@@ -100,18 +104,40 @@ define(["dojo/_base/declare",
        * @instance
        */
       setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
-         if (this.proxyDragAndDropNode && query(this.proxyDragAndDropNode).length === 1)
+
+         // proxyDragAndDropNode can be an array of strings or a comma-separated list
+         if (this.proxyDragAndDropNode && !Array.isArray(this.proxyDragAndDropNode))
          {
-            var proxyNode = query(this.proxyDragAndDropNode)[0];
-            var computedStyle = domStyle.getComputedStyle(proxyNode);
-            var dndNodeDimensions = domGeom.getMarginBox(proxyNode, computedStyle);
-            var dndNodePosition = domGeom.position(proxyNode);
-            domStyle.set(this.dragAndDropOverlayNode, {
-               height: dndNodeDimensions.h + "px",
-               width: dndNodeDimensions.w + "px",
-               top: dndNodePosition.y + "px",
-               left: dndNodePosition.x + "px"
-            });
+            this.proxyDragAndDropNode = this.proxyDragAndDropNode.split(",");
+         }
+
+         // if the proxyDragAndDropNode is an array with items
+         if (Array.isArray(this.proxyDragAndDropNode) && this.proxyDragAndDropNode.length > 0)
+         {
+            array.some(this.proxyDragAndDropNode, function(proxyNodeId) {
+
+               // A node id could, disappointingly, match several items
+               var foundProxyNodes = query(proxyNodeId);
+               return array.some(foundProxyNodes, function(proxyNode) {
+
+                  // If the offsetHeight of the node is not 0, it is visible and therefore it becomes the target
+                  if (proxyNode.offsetHeight != 0)
+                  {
+                     var computedStyle = domStyle.getComputedStyle(proxyNode);
+                     var dndNodeDimensions = domGeom.getMarginBox(proxyNode, computedStyle);
+                     var dndNodePosition = domGeom.position(proxyNode);
+                     domStyle.set(this.dragAndDropOverlayNode, {
+                        height: dndNodeDimensions.h + "px",
+                        width: dndNodeDimensions.w + "px",
+                        top: dndNodePosition.y + "px",
+                        left: dndNodePosition.x + "px"
+                     });
+
+                     // Stop at first item found from the list
+                     return true;
+                  }
+               }, this);
+            }, this);
          }
          else if (this.fullScreenDndHighlight)
          {
