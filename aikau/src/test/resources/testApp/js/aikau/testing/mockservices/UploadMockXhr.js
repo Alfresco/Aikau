@@ -79,11 +79,8 @@ define(["dojo/_base/declare",
 
                // After progress has finished, send the final response
                setTimeout(function() {
-                  if (request.aborted) {
-                     return;
-                  }
                   request.readyState = 1; // Sinon won't send response unless it thinks the response is clean and only just opened
-                  request.respond(this.responseCode, headers, body);
+                  request.respond(request.aborted ? 0 : this.responseCode, headers, body);
                }, i * delay);
 
             }));

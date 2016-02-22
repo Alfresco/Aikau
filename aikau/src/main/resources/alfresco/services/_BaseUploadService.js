@@ -291,14 +291,8 @@ define(["alfresco/core/CoreXhr",
        * @param {string} fileId The unique id of the file being uploaded
        * @param {object} evt The cancellation event
        */
-      cancelListener: function alfresco_services__BaseUploadService__cancelListener(fileId, evt) {
-         var fileInfo = this.fileStore[fileId];
-         if (fileInfo) {
-            fileInfo.request = lang.mixin(fileInfo.request || {}, {
-               statusText: this.message("upload.cancelled")
-            });
-            this.processUploadFailure(fileId, evt);
-         }
+      cancelListener: function alfresco_services__BaseUploadService__cancelListener(/*jshint unused:false*/ fileId, /*jshint unused:false*/ evt) {
+         this.failureListener.apply(this, arguments); // Defer directly to the failure listener
       },
 
       /**

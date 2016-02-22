@@ -399,13 +399,29 @@ define(["alfresco/core/FileSizeMixin",
        * @param {object} request The request object used to attempt to upload the file
        */
       handleFailedUpload: function alfesco_upload_UploadMonitor__handleFailedUpload(fileId, /*jshint unused:false*/ failureEvt, request) {
+
+         // Get the upload
          var upload = this._uploads[fileId];
          if (upload) {
+
+            // Get the error message
+            var errorMessage = "upload.failure.unknown-reason";
+            if (request) {
+               if (request.status === 0) {
+                  errorMessage = "upload.cancelled";
+               } else if (request.statusText) {
+                  errorMessage = request.statusText;
+               }
+            }
+            errorMessage = this.message(errorMessage);
+
+            // Move the item to the unsuccessful items section and update the properties accordingly
             upload.completed = true;
             domConstruct.place(upload.nodes.row, this.unsuccessfulItemsNode, "first");
             upload.nodes.progress.textContent = "";
-            upload.nodes.error.textContent = (request && request.statusText) || this.message("upload.failure.unknown-reason");
+            upload.nodes.error.textContent = errorMessage;
             domClass.add(upload.nodes.row, this.baseClass + "__item--has-error");
+
          } else {
             this.alfLog("warn", "Attempt to mark as failed an upload that is not being tracked (id=" + fileId + ")");
          }
