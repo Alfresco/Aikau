@@ -106,13 +106,13 @@ define(["dojo/_base/declare",
       setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
 
          // proxyDragAndDropNode can be an array of strings or a comma-separated list
-         if (this.proxyDragAndDropNode && !(this.proxyDragAndDropNode instanceof Array))
+         if (this.proxyDragAndDropNode && !Array.isArray(this.proxyDragAndDropNode))
          {
             this.proxyDragAndDropNode = this.proxyDragAndDropNode.split(",");
          }
 
          // if the proxyDragAndDropNode is an array with items
-         if (this.proxyDragAndDropNode instanceof Array && this.proxyDragAndDropNode.length > 0)
+         if (Array.isArray(this.proxyDragAndDropNode) && this.proxyDragAndDropNode.length > 0)
          {
             array.some(this.proxyDragAndDropNode, function(proxyNodeId) {
 
