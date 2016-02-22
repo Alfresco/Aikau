@@ -47,6 +47,17 @@ define(["alfresco/forms/controls/BaseFormControl",
       createFormControl: function alfresco_forms_controls_FileSelect__createFormControl(config, /*jshint unused:false*/ domNode) {
          return new FileInput(config);
       },
+
+      recreateControl: function alfresco_forms_controls_FileSelect__recreateControl() {
+         var config = {
+            id: this.wrappedWidget.id,
+            name: this.name
+         };
+         this.wrappedWidget.destroy();
+         this.wrappedWidget = this.createFormControl(config);
+         this.wrappedWidget.placeAt(this._controlNode);
+         this.setupChangeEvents();
+      },
       
       /**
        * Overrides the default change events to use blur events on the text box. This is done so that we can validate
@@ -66,9 +77,10 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @param {object} evt The onchange event
        */
-      onFilesSelected: function alfresco_forms_controls_FileSelect__FileSelect(evt) {
+      onFilesSelected: function alfresco_forms_controls_FileSelect__onFilesSelected(evt) {
          this.alfLog("log", "Files selected", evt, this);
          this.onValueChangeEvent(this.name, this.lastValue, this.wrappedWidget.getValue());
+         this.recreateControl(); // This is needed to fix AKU-834
       }
    });
 });
