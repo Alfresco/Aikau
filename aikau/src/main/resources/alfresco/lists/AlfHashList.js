@@ -114,6 +114,36 @@ define(["dojo/_base/declare",
       ___filtersRemoved: 0,
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#postCreate} to ensure that all views
+       * have access to the [useHash]{@link module:alfresco/lists/AlfHashList#useHash} configuration. This is important 
+       * because it may be necessary for them to update child widgets to reflect hash data in some way (this has been 
+       * specifically added to address the issue of sort indication rendered by 
+       * [HeaderCells]{@link module:alfresco/lists/views/layouts/HeaderCell}).
+       * 
+       * @instance
+       * @since 1.0.56
+       */
+      postCreate: function alfresco_lists_AlfList__postCreate() {
+         if (this.useHash)
+         {
+            if (this.widgets) {
+               array.forEach(this.widgets, function(view) {
+                  if (view)
+                  {
+                     if (!view.config)
+                     {
+                        view.config = {};
+                     }
+                     view.config.useHash = true;
+                  }
+               });
+            }
+         }
+         this.inherited(arguments);
+      },
+
+
+      /**
        * The AlfHashList is intended to work co-operatively with other widgets on a page to assist with
        * setting the data that should be retrieved. As related widgets are created and publish their initial
        * state they may trigger requests to load data. As such, data loading should not be started until

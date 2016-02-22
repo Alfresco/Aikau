@@ -291,9 +291,8 @@ define(["alfresco/core/CoreXhr",
        * @param {string} fileId The unique id of the file being uploaded
        * @param {object} evt The cancellation event
        */
-      cancelListener: function alfresco_services__BaseUploadService__cancelListener( /*jshint unused:false*/ fileId, /*jshint unused:false*/ evt) {
-         this.alfLog("debug", "Cancelled uploads not yet handled");
-         this.onUploadFinished(fileId);
+      cancelListener: function alfresco_services__BaseUploadService__cancelListener(/*jshint unused:false*/ fileId, /*jshint unused:false*/ evt) {
+         this.failureListener.apply(this, arguments); // Defer directly to the failure listener
       },
 
       /**
@@ -347,6 +346,23 @@ define(["alfresco/core/CoreXhr",
             if (fileInfo.state !== this.STATE_FAILURE) {
                this.processUploadFailure(fileId, evt);
             }
+         }
+      },
+
+      /**
+       * Cancel the specified upload.
+       *
+       * @instance
+       * @param {object} payload The publication payload
+       * @since 1.0.56
+       */
+      onUploadCancelRequest: function alfresco_services__BaseUploadService__onUploadCancelRequest(payload) {
+         var fileId = payload && payload.fileId,
+            fileInfo = this.fileStore[fileId];
+         try {
+            fileInfo.request.abort();
+         } catch (e) {
+            this.alfLog("info", "Unable to cancel upload: ", fileInfo, e);
          }
       },
 
@@ -518,6 +534,7 @@ define(["alfresco/core/CoreXhr",
        */
       registerSubscriptions: function alfresco_services_FileUploadService__registerSubscriptions() {
          this.alfSubscribe(topics.UPLOAD_REQUEST, lang.hitch(this, this.onUploadRequest));
+         this.alfSubscribe(topics.CANCEL_INPROGRESS_UPLOAD, lang.hitch(this, this.onUploadCancelRequest));
       },
 
       /**
@@ -577,6 +594,7 @@ define(["alfresco/core/CoreXhr",
        * @param {object} Contains info about the file and its request.
        */
       startFileUpload: function alfresco_services__BaseUploadService__startFileUpload(fileInfo) {
+         /*jshint maxstatements:false*/
 
          // Ensure we only upload the maximum allowed at a time
          if (this._numUploadsInProgress === this.maxSimultaneousUploads) {

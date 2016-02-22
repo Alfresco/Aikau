@@ -30,8 +30,9 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/previews/Image.json",
         "dojo/text!./responseTemplates/previews/Video.json",
         "dojo/text!./responseTemplates/previews/Video_h264.json",
+        "dojo/text!./responseTemplates/previews/Video_ogg.json",
         "dojo/text!./responseTemplates/previews/Audio.json"], 
-        function(declare, MockXhr, imageNode, videoNode, videoH264Node, audioNode) {
+        function(declare, MockXhr, imageNode, videoNode, videoH264Node, videoOggNode, audioNode) {
    
    return declare([MockXhr], {
 
@@ -61,6 +62,12 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":5520127},
                                      videoH264Node]); 
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/b5973042-9f07-472f-980d-940eb117524b\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":5520127},
+                                     videoOggNode]); 
             this.server.respondWith("GET",
                                     /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/50e8fa78-86ee-4209-9de0-b5c996b7ee52\?(.*)/,
                                     [200,

@@ -62,6 +62,60 @@ define(["intern!object",
       var browser;
 
       return {
+         name: "Video Preview Tests (unsupported MIME type)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/VideoPreviewConditions", "Image Preview Tests (unsupported MIME type)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Video cannot be previewed": function () {
+            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview .previewer .message")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.include(text, "This document can't be previewed.");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Video Preview Tests (add condition)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/VideoPreviewConditions?addCondition=true", "Image Preview Tests (add condition)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Video cannot be previewed": function () {
+            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview video");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
          name: "Audio Previewer Tests",
 
          setup: function() {

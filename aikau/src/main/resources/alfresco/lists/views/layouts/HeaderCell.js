@@ -30,11 +30,12 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/HeaderCell.html",
         "alfresco/core/Core",
+        "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/query",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, lang, domClass, query, domAttr) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, hashUtils, lang, domClass, query, domAttr) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -56,6 +57,15 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
+       * Optional accessibility scope.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      a11yScope: null,
+
+      /**
        * Indicates whether or not this header can actually be used to trigger sort requests.
        * 
        * @instance
@@ -65,13 +75,22 @@ define(["dojo/_base/declare",
       sortable: false,
 
       /**
-       * Indicate whether or not this cell is currently being used as the sort field.
+       * Optional alt text for the sort ascending icon
        *
        * @instance
-       * @type boolean
+       * @type {string}
        * @default
        */
-      usedForSort: false,
+      sortAscAlt: null,
+
+      /**
+       * Optional alt text for the sort descending icon
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      sortDescAlt: null,
 
       /**
        * Indicates whether or not the column headed by this cell is sorted in ascending order or not.
@@ -103,31 +122,24 @@ define(["dojo/_base/declare",
       toolTipMsg: null,
 
       /**
-       * Optional accessibility scope.
+       * Indicate whether or not this cell is currently being used as the sort field.
        *
        * @instance
-       * @type {string}
+       * @type boolean
        * @default
        */
-      a11yScope: null,
+      usedForSort: false,
 
       /**
-       * Optional alt text for the sort ascending icon
-       *
+       * Indicates whether or not the current browser URL hash should be used to determine whether or not
+       * the header is currently marked as being sorted.
+       * 
        * @instance
-       * @type {string}
+       * @type {boolean}
        * @default
+       * @since 1.0.56
        */
-      sortAscAlt: null,
-
-      /**
-       * Optional alt text for the sort descending icon
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      sortDescAlt: null,
+      useHash: false,
 
       /**
        * @instance
@@ -146,6 +158,15 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_HeaderCell__postCreate() {
+         if (this.useHash && this.sortable)
+         {
+            var currHash = hashUtils.getHash();
+            if (currHash.sortField === this.sortValue)
+            {
+               this.usedForSort = true;
+               this.sortedAscending = currHash.sortAscending === "true";
+            }
+         }
 
          this.alfSubscribe("ALF_DOCLIST_SORT", lang.hitch(this, this.onExternalSortRequest));
          this.alfSubscribe("ALF_DOCLIST_SORT_FIELD_SELECTION", lang.hitch(this, this.onExternalSortRequest));

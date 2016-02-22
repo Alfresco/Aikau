@@ -1,8 +1,20 @@
 /* global page */
 /* jshint sub:true */
-var removeCondition = false;
-if (page.url.args["removeCondition"]) {
-   removeCondition = page.url.args["removeCondition"] === "true";
+var pluginOverrides = null;
+if (page.url.args["addCondition"] === "true") {
+   pluginOverrides = [
+      {
+         attributes:{
+            mimeType: "video/ogg"
+         },
+         plugins: [
+            {
+               name: "Video",
+               attributes: {}
+            }
+         ]
+      }
+   ];
 }
 
 model.jsonModel = {
@@ -23,31 +35,18 @@ model.jsonModel = {
       {
          name: "alfresco/html/Markdown",
          config: {
-            markdown: "Use the request parameter 'removeCondition=true' to update the conditions and prevent the preview from rendering"
+            markdown: "Use the request parameter 'addCondition=true' to update the conditions to support the video format"
          }
       },
       {
          name: "alfresco/documentlibrary/AlfDocument",
          config: {
-            nodeRef: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4",
+            nodeRef: "workspace://SpacesStore/b5973042-9f07-472f-980d-940eb117524b",
             widgets: [
                {
                   name: "alfresco/preview/AlfDocumentPreview",
                   config: {
-                     pluginConditionsOverides: [
-                        {
-                           attributes:{
-                              mimeType: "image/jpeg"
-                           },
-                           remove: removeCondition
-                        },
-                        {
-                           attributes:{
-                              thumbnail: "imgpreview"
-                           },
-                           remove: removeCondition
-                        }
-                     ]
+                     pluginConditionsOverides: pluginOverrides
                   }
                }
             ]

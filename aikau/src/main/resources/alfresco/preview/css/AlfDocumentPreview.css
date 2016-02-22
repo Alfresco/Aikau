@@ -1,8 +1,13 @@
 .alfresco-preview-AlfDocumentPreview {
 
-   .previewer {
-      background-color: @preview-background-color;
+   &--displayed {
+      .previewer {
+         background-color: @preview-background-color;
+      }
+   }
 
+   .previewer {
+      
       .message {
          text-align: center;
          margin: 100px 0;

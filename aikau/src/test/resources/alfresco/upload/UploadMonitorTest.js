@@ -101,11 +101,7 @@ define(["intern!object",
             .findAllByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item")
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "Should be three successful uploads");
-               })
-            .end()
-
-            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
-               .click();
+               });
          },
 
          "Close button enabled on upload complete": function() {
@@ -115,7 +111,30 @@ define(["intern!object",
                })
             .end()
 
-            .getLastPublish("ALF_STICKY_PANEL_ENABLE_CLOSE");
+            .getLastPublish("ALF_STICKY_PANEL_ENABLE_CLOSE")
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
+         },
+
+         "Can cancel in-progress upload": function() {
+            return browser.findById("SINGLE_UPLOAD_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector(".alfresco-upload-UploadMonitor__item__action__inprogress")
+               .click()
+            .end()
+
+            .findByCssSelector(".alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item__name__error")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Upload cancelled");
+               });
          },
 
          "Post Coverage Results": function() {
