@@ -18,6 +18,11 @@
  */
 
 /**
+ * This is a proof-of-concept widget introduced in version 1.0.56 that can be used to render SVG images from externally
+ * loaded source files. In future releases a full-suite of icons will be made available out-of-the-box but for the 
+ * current version there are only two icons defined and they are not guaranteed to remain available in future releases
+ * until the final icon suite has been determined.
+ * 
  * @module alfresco/html/SVGImage
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin

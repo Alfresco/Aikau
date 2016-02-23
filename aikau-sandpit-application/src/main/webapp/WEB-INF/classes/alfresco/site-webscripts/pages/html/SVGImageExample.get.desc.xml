@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SVG Images</shortname>
+  <description>Demonstrates the alfresco/html/SVGImage widget.</description>
+  <family>ExamplePage</family>
+  <url>/SVGImage</url>
+</webscript>
