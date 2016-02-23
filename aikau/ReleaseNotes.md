@@ -1,4 +1,4 @@
-Aikau 1.0.55 Release Notes
+Aikau 1.0.56 Release Notes
 ===
 
 Current deprecations:
@@ -42,6 +42,14 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.56:
+* [AKU-795](https://issues.alfresco.com/jira/browse/AKU-795)       - Cancel in-progress uploads from UploadMonitor
+* [AKU-796](https://issues.alfresco.com/jira/browse/AKU-796)       - Configurable action suppport in UploadMonitor
+* [AKU-840](https://issues.alfresco.com/jira/browse/AKU-840)       - Updates to preview MIME type conditions for video
+* [AKU-842](https://issues.alfresco.com/jira/browse/AKU-842)       - Added missing localization to dialog close icon
+* [AKU-843](https://issues.alfresco.com/jira/browse/AKU-843)       - Improve StickPanel overlay click handling
+* [AKU-847](https://issues.alfresco.com/jira/browse/AKU-847)       - Update PublishAction to support label config
+
 1.0.55:
 * [AKU-817](https://issues.alfresco.com/jira/browse/AKU-817)       - Prevent double encoding of tooltips on menu items
 * [AKU-819](https://issues.alfresco.com/jira/browse/AKU-819)       - Added non-Share create/edit site behaviour
