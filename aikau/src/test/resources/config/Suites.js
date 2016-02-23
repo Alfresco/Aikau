@@ -93,6 +93,7 @@ define({
       "src/test/resources/alfresco/documentlibrary/DocumentListTest",
       "src/test/resources/alfresco/documentlibrary/DocumentSelectorTest",
       "src/test/resources/alfresco/documentlibrary/FilteredDocumentListTest",
+      "src/test/resources/alfresco/documentlibrary/InfiniteScrollDocumentListTest",
       "src/test/resources/alfresco/documentlibrary/PaginationTest",
       "src/test/resources/alfresco/documentlibrary/SearchListScrollTest",
       "src/test/resources/alfresco/documentlibrary/SearchListTest",
@@ -158,6 +159,7 @@ define({
       "src/test/resources/alfresco/html/ImageTest",
       "src/test/resources/alfresco/html/LabelTest",
       "src/test/resources/alfresco/html/MarkdownTest",
+      "src/test/resources/alfresco/html/SVGImageTest",
 
       "src/test/resources/alfresco/layout/AlfSideBarContainerTest",
       "src/test/resources/alfresco/layout/AlfStackContainerTest",

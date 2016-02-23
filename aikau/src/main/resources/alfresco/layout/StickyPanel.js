@@ -18,9 +18,12 @@
  */
 
 /**
- * This widget is used by the [NotificationService]{@link module:alfresco/services/NotificationService}
+ * <p>This widget is used by the [NotificationService]{@link module:alfresco/services/NotificationService}
  * to display a sticky panel attached to the bottom of the screen. It should not be instantiated
- * directly.
+ * directly.</p>
+ *
+ * <p><strong>NOTE:</strong> There is a bug with older browsers (IE8/IE9/IE10 only) that means that it is
+ * not possible to click on elements to the left or right of the sticky panel.</p>
  * 
  * @module alfresco/layout/StickyPanel
  * @extends external:dijit/_WidgetBase

@@ -55,6 +55,15 @@ define(["dojo/_base/declare",
        */
       templateString: template,
 
+       /**
+       * The alt-text for the action.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      altText: "",
+
       /**
        * This should be set to the icon to use. Currently this is just mapped to an actual image that is located
        * in the css/images folder however it should ultimately map to a CSS selector that defines a section of 
@@ -66,16 +75,7 @@ define(["dojo/_base/declare",
        */
       iconClass: "add-icon-16",
 
-      /**
-       * The alt-text for the action.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      altText: "",
-
-      /**
+     /**
        * This defines the topic that will be published on when the associated image is clicked. The payload will be
        * the "currentItem" attribute.
        *
@@ -91,6 +91,15 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_PublishAction__postMixInProperties() {
+         if (this.label) 
+         {
+            this.label = this.message(this.label);
+         } 
+         else 
+         {
+            this.label = "";
+         }
+
          if (this.iconClass)
          {
             this.imageSrc = require.toUrl("alfresco/renderers/css/images/" + this.iconClass + ".png");
@@ -105,10 +114,6 @@ define(["dojo/_base/declare",
          this.altText = this.message(this.altText, {
             0: altTextId
          });
-
-         this.publishPayload = this.getGeneratedPayload();
-         this.publishGlobal = this.publishGlobal || false;
-         this.publishToParent = this.publishToParent || false;
       },
 
       /**
@@ -118,8 +123,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event object
        */
-      onClick: function alfresco_renderers_PublishAction__onClick(evt) {
-         this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal, this.publishToParent);
+      onClick: function alfresco_renderers_PublishAction__onClick(/*jshint unused:false*/ evt) {
+         this.publishPayload = this.getGeneratedPayload();
+         this.alfPublish(this.publishTopic, this.publishPayload, !!this.publishGlobal, !!this.publishToParent);
       }
    });
 });

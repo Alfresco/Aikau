@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>alfresco/preview/AlfDocumentPreview</shortname>
-  <description>Allows nodes to be previewed.</description>
-  <family>ExamplePage</family>
-  <url>/AlfDocumentPreview</url>
-</webscript>

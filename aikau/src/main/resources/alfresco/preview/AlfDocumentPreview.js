@@ -322,6 +322,67 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is used to update the [pluginConditions]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditions}
+       * with additional condition data from an entry defined in 
+       * [pluginConditionsOverides]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditionsOverides}. This function 
+       * is called from [setupPlugins]{@link module:alfresco/preview/AlfDocumentPreview#setupPlugins} for each entry
+       * in the [pluginConditionsOverides]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditionsOverides} array.
+       * 
+       * @instance
+       * @param {object} condition The plugin condition to update
+       * @since 1.0.56
+       */
+      updatePluginConditions: function alfresco_preview_AlfDocumentPreview__updatePluginConditions(condition) {
+         // Check to see if the plugin already exists...
+         var existingCondition = null,
+             existingConditionIndex = null;
+
+         // Get the MIME type and/or thumbnail of the condition to be updated (or added/removed)...
+         var mimeType = lang.getObject("attributes.mimeType", false, condition);
+         var thumbnail = lang.getObject("attributes.thumbnail", false, condition);
+
+         // Check to see if the condition already exists...
+         array.some(this.pluginConditions, function(currentCondition, index) {
+            var currMimeType = lang.getObject("attributes.mimeType", false, currentCondition);
+            var currThumbnail = lang.getObject("attributes.thumbnail", false, currentCondition);
+            if ((currMimeType && currMimeType === mimeType) || (currThumbnail && currThumbnail === thumbnail))
+            {
+               existingCondition = currentCondition;
+               existingConditionIndex = index;
+               return true;
+            }
+            return false;
+         });
+
+         if (existingCondition)
+         {
+            if (condition.remove)
+            {
+               // Remmove the existing condition...
+               this.pluginConditions.splice(existingConditionIndex, 1);
+            }
+            else if (condition.plugins)
+            {
+               if (condition.replace || !existingCondition.plugins)
+               {
+                  // Completely replace the plugins for the condition...
+                  existingCondition.plugins = condition.plugins;
+               }
+               else 
+               {
+                  // Add the plugins... 
+                  existingCondition.plugins = existingCondition.plugins.concat(condition.plugins);
+               }
+            }
+         }
+         else
+         {
+            // The condition provided does not already exist so add it now...
+            this.pluginConditions.push(condition);
+         }
+      },
+
+      /**
        *
        * @instance
        */
@@ -331,6 +392,11 @@ define(["dojo/_base/declare",
          if (this.widgetsForPluginsOverrides)
          {
             array.forEach(this.widgetsForPluginsOverrides, lang.hitch(this, this.updatePluginConfiguration));
+         }
+
+         if (this.pluginConditionsOverides)
+         {
+            array.forEach(this.pluginConditionsOverides, lang.hitch(this, this.updatePluginConditions));
          }
 
          array.forEach(this.widgetsForPlugins, function(plugin) {
@@ -449,64 +515,68 @@ define(["dojo/_base/declare",
                }
 
                // Conditions are valid, now create plugins and make sure they can run in this environment
-               for (var pi = 0, pil = condition.plugins.length; pi < pil; pi++)
+               if (condition.plugins)
                {
-                  pluginDescriptor = condition.plugins[pi];
-                  this.alfLog("log", "Checking plugin:", pluginDescriptor);
-
-                  // Check the plugin constructor actually exists, in case client-side dependencies
-                  // have not been loaded (ALF-12798)
-                  if (this.plugins[pluginDescriptor.name])
+                  for (var pi = 0, pil = condition.plugins.length; pi < pil; pi++)
                   {
-                     // Get plugin
-                     plugin = this.plugins[pluginDescriptor.name];
-                     plugin.setAttributes(pluginDescriptor.attributes);
+                     pluginDescriptor = condition.plugins[pi];
+                     this.alfLog("log", "Checking plugin:", pluginDescriptor);
 
-                     // Make sure it may run in this browser...
-                     var report = plugin.report();
-                     if (report)
+                     // Check the plugin constructor actually exists, in case client-side dependencies
+                     // have not been loaded (ALF-12798)
+                     if (this.plugins[pluginDescriptor.name])
                      {
-                        // ...the plugin can't be used in this browser, save report and try another plugin
-                        messages.push(report);
+                        // Get plugin
+                        plugin = this.plugins[pluginDescriptor.name];
+                        plugin.setAttributes(pluginDescriptor.attributes);
+
+                        // Make sure it may run in this browser...
+                        var report = plugin.report();
+                        if (report)
+                        {
+                           // ...the plugin can't be used in this browser, save report and try another plugin
+                           messages.push(report);
+                        }
+                        else
+                        {
+                           // ...yes, the plugin can be used in this browser, lets store a reference to it.
+                           this.plugin = plugin;
+
+                           // Ask the plugin to display the node
+                           var markup;
+                           try
+                           {
+                              domClass.add(this.previewerNode, pluginDescriptor.name);
+                              domClass.add(this.domNode, "alfresco-preview-AlfDocumentPreview--displayed");
+                              markup = plugin.display();
+                              if (markup)
+                              {
+                                 // Insert markup if plugin provided it
+                                 this.previewerNode.innerHTML = markup;
+                                 plugin._setPreviewerElementHeight();
+                                 plugin.onMarkupAdded();
+                              }
+
+                              // Finally! We found a plugin that works and didn't crash
+                              // TODO: Do we need to fire anything here? What's listening for it?
+                              //YAHOO.Bubbling.fire('webPreviewSetupComplete');
+                              this.alfLog("log", "Found a suitable plugin: ", pluginDescriptor.name);
+                              return;
+                           }
+                           catch(e)
+                           {
+                              // Oops a plugin failure, log it and try the next one instead...
+                              this.alfLog("error","Error:" + pluginDescriptor.name + " failed to display: " + e);
+                              messages.push(this.message("label.error", pluginDescriptor.name, e.message));
+                           }
+                        }
                      }
                      else
                      {
-                        // ...yes, the plugin can be used in this browser, lets store a reference to it.
-                        this.plugin = plugin;
-
-                        // Ask the plugin to display the node
-                        var markup;
-                        try
-                        {
-                           domClass.add(this.previewerNode, pluginDescriptor.name);
-                           markup = plugin.display();
-                           if (markup)
-                           {
-                              // Insert markup if plugin provided it
-                              this.previewerNode.innerHTML = markup;
-                              plugin._setPreviewerElementHeight();
-                              plugin.onMarkupAdded();
-                           }
-
-                           // Finally! We found a plugin that works and didn't crash
-                           // TODO: Do we need to fire anything here? What's listening for it?
-                           //YAHOO.Bubbling.fire('webPreviewSetupComplete');
-                           this.alfLog("log", "Found a suitable plugin: ", pluginDescriptor.name);
-                           return;
-                        }
-                        catch(e)
-                        {
-                           // Oops a plugin failure, log it and try the next one instead...
-                           this.alfLog("error","Error:" + pluginDescriptor.name + " failed to display: " + e);
-                           messages.push(this.message("label.error", pluginDescriptor.name, e.message));
-                        }
+                        // Plugin could not be instantiated, log it and try the next one instead...
+                        this.alfLog("error","Error, Alfresco.WebPreview.Plugins." + pluginDescriptor.name + " does not exist");
+                        messages.push(this.message("label.errorMissing", pluginDescriptor.name));
                      }
-                  }
-                  else
-                  {
-                     // Plugin could not be instantiated, log it and try the next one instead...
-                     this.alfLog("error","Error, Alfresco.WebPreview.Plugins." + pluginDescriptor.name + " does not exist");
-                     messages.push(this.message("label.errorMissing", pluginDescriptor.name));
                   }
                }
             }
@@ -641,6 +711,15 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.56
+       */
+      pluginConditionsOverides: null,
+
+      /**
        * A json representation of the .get.config.xml file.
        * This is evaluated on the client side since we need the plugins to make sure it is supported
        * the user's browser and browser plugins.
@@ -650,8 +729,7 @@ define(["dojo/_base/declare",
        */
       pluginConditions: [
          {
-            attributes:
-            {
+            attributes:{
                mimeType: "application/pdf"
             },
             plugins: [
@@ -662,8 +740,7 @@ define(["dojo/_base/declare",
             ]
          },
          {
-            attributes:
-            {
+            attributes: {
                thumbnail: "pdf"
             },
             plugins: [
@@ -677,74 +754,7 @@ define(["dojo/_base/declare",
             ]
          },
          {
-            attributes: {
-               thumbnail: "imgpreview",
-               mimeType: "video/mp4"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes: {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "imgpreview",
-               mimeType: "video/m4v"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes:
-                  {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "imgpreview",
-               mimeType: "video/ogg"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes:
-                  {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               thumbnail: "imgpreview",
-               mimeType: "video/webm"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes:
-                  {
-                     poster: "imgpreview",
-                     posterFileSuffix: ".png"
-                  }
-               }
-            ]
-         },
-         {
-            attributes:
-            {
+            attributes:{
                mimeType: "video/mp4"
             },
             plugins: [
@@ -755,44 +765,7 @@ define(["dojo/_base/declare",
             ]
          },
          {
-            attributes:
-            {
-               mimeType: "video/x-m4v"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes:{}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               mimeType: "video/ogg"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes:{}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
-               mimeType: "video/webm"
-            },
-            plugins: [
-               {
-                  name: "Video",
-                  attributes:{}
-               }
-            ]
-         },
-         {
-            attributes:
-            {
+            attributes: {
                mimeType: "audio/mpeg"
             },
             plugins: [
@@ -803,8 +776,7 @@ define(["dojo/_base/declare",
             ]
          },
          {
-            attributes:
-            {
+            attributes:{
                mimeType: "audio/x-wav"
             },
             plugins: [
@@ -815,60 +787,52 @@ define(["dojo/_base/declare",
             ]
          },
          {
-            attributes:
-            {
+            attributes: {
                thumbnail: "imgpreview"
             },
             plugins: [
                {
                   name: "Image",
-                  attributes:
-                  {
+                  attributes: {
                      src: "imgpreview"
                   }
                }
             ]
          },
          {
-            attributes:
-            {
+            attributes: {
                mimeType: "image/jpeg"
             },
             plugins: [
                {
                   name: "Image",
-                  attributes:
-                  {
+                  attributes: {
                      srcMaxSize: "2000000"
                   }
                }
             ]
          },
          {
-            attributes:
-            {
+            attributes: {
                mimeType: "image/png"
             },
             plugins: [
                {
                   name: "Image",
-                  attributes:
-                  {
+                  attributes: {
                      srcMaxSize: "2000000"
                   }
                }
             ]
          },
          {
-            attributes:
-            {
+            attributes: {
                mimeType: "image/gif"
             },
             plugins: [
                {
                   name: "Image",
-                  attributes:
-                  {
+                  attributes: {
                      srcMaxSize: "2000000"
                   }
                }

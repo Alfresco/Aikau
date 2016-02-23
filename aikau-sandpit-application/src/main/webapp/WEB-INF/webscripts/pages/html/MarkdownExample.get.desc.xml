@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Markdown Renderer</shortname>
-  <description>Demonstrates the alfresco/html/Markdown widget.</description>
-  <family>ExamplePage</family>
-  <url>/Markdown</url>
-</webscript>

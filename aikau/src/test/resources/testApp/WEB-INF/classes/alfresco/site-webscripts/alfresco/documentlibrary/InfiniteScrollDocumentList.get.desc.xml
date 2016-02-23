@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Infinite Scrolling Document List</shortname>
+  <description>This page demonstrates the alfresco/documentlibrary/AlfDocumentList configured with infinite scrolling. It was added to test sorting and pagination of data with infinite scrolling.</description>
+  <family>aikau-unit-tests</family>
+  <url>/InfiniteScrollDocumentList</url>
+</webscript>

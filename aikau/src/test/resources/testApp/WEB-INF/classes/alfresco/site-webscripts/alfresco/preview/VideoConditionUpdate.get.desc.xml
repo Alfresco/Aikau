@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Video Preview Condition Updates</shortname>
+  <description>This page shows up the AlfDocumentPreview can be configured to add in support for additional MIME types.</description>
+  <family>aikau-unit-tests</family>
+  <url>/VideoPreviewConditions</url>
+</webscript>

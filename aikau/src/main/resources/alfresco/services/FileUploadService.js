@@ -21,6 +21,10 @@
  * <p>This service can be used to control the uploading of content as well as
  * the updating the content of existing nodes on an Alfresco Repository.</p>
  * 
+ * <p><strong>NOTE:</strong> There is a bug with older browsers (IE8/IE9/IE10 only)
+ * that means that it is not possible to click on elements to the left or right of
+ * the upload panel.</p>
+ * 
  * @module alfresco/services/FileUploadService
  * @extends module:alfresco/services/_BaseUploadService
  * @author Martin Doyle

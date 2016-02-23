@@ -20,6 +20,7 @@ model.jsonModel = {
                   id: "PA_NO_TYPE",
                   name: "alfresco/renderers/PublishAction",
                   config: {
+                     label: "Label",
                      publishTopic: "TOPIC1",
                      publishPayload: {
                         data1: "value1"
@@ -185,10 +186,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
