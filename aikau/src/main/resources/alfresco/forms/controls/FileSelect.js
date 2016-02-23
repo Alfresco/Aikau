@@ -48,6 +48,12 @@ define(["alfresco/forms/controls/BaseFormControl",
          return new FileInput(config);
       },
 
+      /**
+       * Recreate the control (part of fix for AKU-834)
+       *
+       * @instance
+       * @since 1.0.57
+       */
       recreateControl: function alfresco_forms_controls_FileSelect__recreateControl() {
          var config = {
             id: this.wrappedWidget.id,
