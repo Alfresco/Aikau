@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SVGImage</shortname>
+  <description>Demonstrates the alfresco/html/SVGImage widget.</description>
+  <family>aikau-unit-tests</family>
+  <url>/SVGImage</url>
+</webscript>
