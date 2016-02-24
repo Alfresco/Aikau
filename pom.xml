@@ -149,6 +149,7 @@
       <module>aikau-archetype</module>
       <module>aikau-additional-languages</module>
       <module>aikau-sandpit-application</module>
+      <module>aikau-test-selectors</module>
    </modules>
 
 </project>
