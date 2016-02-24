@@ -1043,7 +1043,11 @@ define(["dojo/_base/declare",
        */
       filterPropertyExists: function alfresco_core_WidgetsProcessingFilterMixin__filterPropertyExists(renderFilterConfig) {
          var targetObject = this.currentItem;
-         if (renderFilterConfig.target && this[renderFilterConfig.target])
+         if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
+         {
+            targetObject = lang.getObject(renderFilterConfig.target);
+         }
+         else if (renderFilterConfig.target && this[renderFilterConfig.target])
          {
             targetObject = this[renderFilterConfig.target];
          }

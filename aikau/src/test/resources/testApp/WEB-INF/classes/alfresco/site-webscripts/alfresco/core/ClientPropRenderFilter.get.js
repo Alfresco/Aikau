@@ -43,7 +43,7 @@ model.jsonModel = {
                   name: "alfresco/layout/TitleDescriptionAndContent",
                   config: {
                      title: "Less Than",
-                     description: "A button will be displayed if the height of the window is LESS THAN 500px",
+                     description: "Button will be displayed if the height of the window is LESS THAN 500px",
                      widgets: [
                         {
                            id: "BUTTON1",
@@ -67,14 +67,70 @@ model.jsonModel = {
                {
                   name: "alfresco/layout/TitleDescriptionAndContent",
                   config: {
+                     title: "Less Than 2",
+                     description: "Button will be displayed if the height of the window is LESS THAN 500px",
+                     currentItem: {
+                        someProperty: "someValue"
+                     },
+                     widgets: [
+                        {
+                           id: "BUTTON1WITHITEM",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Button 1 with item",
+                              additionalCssClasses: "call-to-action",
+                              renderFilter: [
+                                 {
+                                    target: "window",
+                                    property: property,
+                                    comparator: "lessThan",
+                                    value: 500
+                                 }
+                              ]
+                           }
+                        }                        
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/layout/TitleDescriptionAndContent",
+                  config: {
                      title: "Greater Than",
-                     description: "A button will be displayed if the height of the window is GREATER THAN 500px",
+                     description: "Buttons will be displayed if the height of the window is GREATER THAN 500px",
                      widgets: [
                         {
                            id: "BUTTON2",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Button 2",
+                              additionalCssClasses: "call-to-action",
+                              renderFilter: [
+                                 {
+                                    target: "window",
+                                    property: property,
+                                    comparator: "greaterThan",
+                                    value: 500
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/layout/TitleDescriptionAndContent",
+                  config: {
+                     title: "Greater Than 2",
+                     description: "Button will be displayed if the height of the window is GREATER THAN 500px",
+                     currentItem: {
+                        someProperty: "someValue"
+                     },
+                     widgets: [
+                        {
+                           id: "BUTTON2WITHITEM",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Button 2 with item",
                               additionalCssClasses: "call-to-action",
                               renderFilter: [
                                  {
@@ -101,6 +157,36 @@ model.jsonModel = {
                            config: {
                               label: "Button 3",
                               additionalCssClasses: "call-to-action",
+                              renderFilter: [
+                                 {
+                                    target: "window",
+                                    property: property,
+                                    value: 500
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/layout/TitleDescriptionAndContent",
+                  config: {
+                     title: "Equal To 2",
+                     description: "A button will be displayed if the height of the window is EQUAL TO 500px",
+                     currentItem: {
+                        someProperty: "someValue"
+                     },
+                     widgets: [
+                        {
+                           id: "BUTTON3WITHITEM",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Button 3 with item",
+                              additionalCssClasses: "call-to-action",
+                              currentItem: {
+                                 someProperty: "someValue"
+                              },
                               renderFilter: [
                                  {
                                     target: "window",
