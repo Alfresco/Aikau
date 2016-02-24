@@ -46,6 +46,7 @@ define([], function() {
          this._addArrayReduce();
          this._addDateNow();
          this._addObjectKeys();
+         this._addRequestAnimationFrame();
          this._addTextContent();
          _applied = true;
       },
@@ -178,6 +179,43 @@ define([], function() {
                   return result;
                };
             }());
+         }
+      },
+
+      /**
+       * Shim for <=IE9 to add requestAnimationFrame to the global object. Uses code from
+       * http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+       *
+       * @protected
+       * @instance
+       * @since 1.0.57
+       */
+      _addRequestAnimationFrame: function alfresco_core_shim___addRequestAnimationFrame() {
+         var lastTime = 0;
+         var vendors = ["webkit", "moz"];
+         for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"];
+            window.cancelAnimationFrame =
+               window[vendors[x] + "CancelAnimationFrame"] || window[vendors[x] + "CancelRequestAnimationFrame"];
+         }
+
+         if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = function(callback, /*jshint unused:false*/ element) {
+               var currTime = new Date().getTime();
+               var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+               var id = window.setTimeout(function() {
+                     callback(currTime + timeToCall);
+                  },
+                  timeToCall);
+               lastTime = currTime + timeToCall;
+               return id;
+            };
+         }
+
+         if (!window.cancelAnimationFrame) {
+            window.cancelAnimationFrame = function(id) {
+               clearTimeout(id);
+            };
          }
       },
 

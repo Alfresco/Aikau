@@ -204,7 +204,7 @@ define(["dojo/_base/declare",
        * @listens alfLoggingTopic
        */
       handleSubscription: function alfresco_services_LoggingService__handleSubscription() {
-         // jshint maxcomplexity:false
+         // jshint maxcomplexity:false,maxstatements:false
          if (this.loggingPreferences.enabled)
          {
             if (!this.logSubscriptionHandle)
@@ -495,6 +495,7 @@ define(["dojo/_base/declare",
        * @param {logPayload} payload
        */
       onLogRequest: function alfresco_services_LoggingService__onLogRequest(payload) {
+         /*jshint maxcomplexity:false*/
          if (payload &&
              payload.severity &&
              payload.messageArgs &&
@@ -504,9 +505,45 @@ define(["dojo/_base/declare",
             // If the filter is mapped (or if there is no filter) output the log...
             if (this.passesLoggingFilter(payload.callerName))
             {
-               payload.messageArgs[0] = (payload.callerName || "") + " >> " + payload.messageArgs[0];
-               var logFunc = (typeof console[payload.severity] === "function" && payload.severity) || "log";
-               console[logFunc].apply(console, payload.messageArgs);
+               // Decorate the message with the source
+               payload.messageArgs[0] = (payload.callerName || payload.alfCallerName || "") + " >> " + payload.messageArgs[0];
+
+               // Make sure we can use the requested console method
+               if (typeof console[payload.severity].apply !== "function") {
+
+                  // Run through the message arguments (because apply doesn't work)
+                  var message;
+                  for (var i = 0, j = payload.messageArgs.length; i < j; i++) {
+
+                     // Get the next message
+                     message = payload.messageArgs[i];
+
+                     // If message is an object, try and be helpful and JSONify it
+                     if (typeof message !== "string") {
+                        try {
+                           message = JSON.stringify(message);
+                        } catch (e) {
+                           message = "Unable to JSONify: '" + message + "'";
+                        }
+                     }
+
+                     // Decorate the message according to its position in the array
+                     var prefix = (j === 1) ? "" : "[" + (i + 1) + "/" + j + "] ";
+
+                     // Log the message
+                     if (i === 0) {
+                        console.log("");
+                     }
+                     console.log(prefix + message);
+                     if (i + 1 === j) {
+                        console.log("");
+                     }
+                  }
+               } else {
+
+                  // All good here, carry on ...
+                  console[payload.severity].apply(console, payload.messageArgs);
+               }
             }
          }
       }
