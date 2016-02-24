@@ -685,7 +685,9 @@ define(["dojo/_base/declare",
          domClass.add(this.pageBack.domNode, paginatorClass + "__page-back");
          domClass.add(this.pageForward.domNode, paginatorClass + "__page-forward");
          domClass.add(this.pageMarker.domNode, paginatorClass + "__page-marker");
-         domClass.add(this.resultsPerPageGroup.domNode, paginatorClass + "__results-per-page");
+         if (this.compactMode === false) {
+            domClass.add(this.resultsPerPageGroup.domNode, paginatorClass + "__results-per-page");
+         }
 
          // Check to see if any document data was provided before widget instantiation completed and
          // if so process it with the now available widgets...
