@@ -39,10 +39,14 @@ define(["intern!object",
             },
             secondChoice: {
                content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "2"])
-            }
+            },
+            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_1"]),
+            fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "4"])
          },
          control2: {
-            loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_2"])
+            loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_2"]),
+            searchbox: TestCommon.getTestSelector(MultiInputSelectSelectors, "searchbox", ["MULTISELECT_2"]),
+            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_2"])
          }
       };
 
@@ -97,7 +101,7 @@ define(["intern!object",
                   .then(function(elements) {
                      assert.lengthOf(elements, 1, "First MultiSelect control not fully loaded");
                   })
-                  .end()
+               .end()
 
                .findAllByCssSelector(selectors.control2.loaded)
                   .then(function(elements) {
@@ -125,14 +129,14 @@ define(["intern!object",
                   .then(function(elements) {
                      assert.lengthOf(elements, 2, "Did not render two preset values for control");
                   })
-                  .end()
+               .end()
 
                .findByCssSelector(selectors.control1.firstChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "tag1", "Did not display first tag label correctly");
                   })
-                  .end()
+               .end()
 
                .findByCssSelector(selectors.control1.secondChoice.content)
                   .getVisibleText()
@@ -157,11 +161,11 @@ define(["intern!object",
             //    *focused element: Control 2
             //    
             "Clicking on control no longer loses responses to a second query": function() {
-               return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control2.searchbox)
                   .click()
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_2_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findAllByCssSelector(selectors.control2.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 14, "Did not bring up results");
                   });
@@ -186,9 +190,9 @@ define(["intern!object",
                return browser.findById("FOCUS_HELPER_BUTTON")
                   .click()
                   .pressKeys(keys.TAB)
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findAllByCssSelector(selectors.control1.searchbox)
                   .then(function(elements) {
                      assert.lengthOf(elements, 7, "Did not bring up initial results");
                   });
@@ -210,12 +214,12 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Selecting already-chosen item in dropdown does not choose item again": function() {
-               return browser.findByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(4)")
+               return browser.findByCssSelector(selectors.control1.fourthResult)
                   .click()
                   .pressKeys(keys.ESCAPE)
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .findAllByCssSelector(selectors.control1.choice)
                   .then(function(elements) {
                      assert.lengthOf(elements, 2, "Added already-selected choice to control");
                   });
