@@ -45,11 +45,11 @@
  *       "widgets": [
  *          {
  *             "name": "alfresco/logo/Logo",
- *             "widthPx" 300
+ *             "widthPx": 300
  *          },
  *          {
  *             "name": "alfresco/logo/Logo",
- *             "widthPc" 50
+ *             "widthPc": 50
  *          }
  *       ]
  *    }
