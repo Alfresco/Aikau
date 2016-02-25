@@ -28,6 +28,7 @@ define(["intern!object",
 
       // Get the selectors for the MultiInputSelect widget...
       var MultiInputSelectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiInputSelect");
+      var FormSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
 
       // Build a map of the selectors to use...
       var selectors = {
@@ -35,18 +36,46 @@ define(["intern!object",
             loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_1"]),
             choice: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice", ["MULTISELECT_1"]),
             firstChoice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "1"])
+               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_1", "1"]),
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "1"]),
+               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.delete", ["MULTISELECT_1", "1"])
             },
             secondChoice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "2"])
+               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_1", "2"]),
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "2"]),
+               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.delete", ["MULTISELECT_1", "2"])
+            },
+            thirdChoice: {
+               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_1", "3"]),
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "3"]),
+               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.delete", ["MULTISELECT_1", "3"])
             },
             result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_1"]),
-            fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "4"])
+            secondResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "2"]),
+            fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "4"]),
+            fifthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "5"]),
+            seventhResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "7"]),
+            searchbox: TestCommon.getTestSelector(MultiInputSelectSelectors, "searchbox", ["MULTISELECT_1"]),
          },
          control2: {
             loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_2"]),
             searchbox: TestCommon.getTestSelector(MultiInputSelectSelectors, "searchbox", ["MULTISELECT_2"]),
-            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_2"])
+            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_2"]),
+            firstChoice: {
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_2", "1"])
+            },
+            fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_2", "4"]),
+            seventhResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_2", "7"])
+         },
+         control3: {
+            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_1"])
+         }
+      };
+
+      var formSelectors = {
+         form1: {
+            confirmationButton: TestCommon.getTestSelector(FormSelectors, "confirmation.button", ["FORM1"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(FormSelectors, "confirmation.button.disabled", ["FORM1"])
          }
       };
 
@@ -192,7 +221,7 @@ define(["intern!object",
                   .pressKeys(keys.TAB)
                .end()
 
-               .findAllByCssSelector(selectors.control1.searchbox)
+               .findAllByCssSelector(selectors.control1.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 7, "Did not bring up initial results");
                   });
@@ -244,19 +273,19 @@ define(["intern!object",
                return browser.findById("FOCUS_HELPER_BUTTON")
                   .click()
                   .pressKeys(keys.TAB)
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
+               .findByCssSelector(selectors.control1.fifthResult)
                   .click()
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .findAllByCssSelector(selectors.control1.choice)
                   .then(function(elements) {
                      assert.lengthOf(elements, 3, "Did not add new choice to control");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(3) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control1.thirdChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "tag2", "Did not add selected tag at end of choices");
@@ -279,12 +308,12 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Typing into search box filters results": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control1.searchbox)
                   .type("tag2")
-                  .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
-                  .end()
+                  .waitForDeletedByCssSelector(selectors.control1.fifthResult)
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findAllByCssSelector(selectors.control1.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 1, "Did not filter results");
                   });
@@ -306,13 +335,13 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Typing into search box filters results for strings in middle of name": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control1.searchbox)
                   .clearValue()
                   .type("12")
-                  .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(2)")
-                  .end()
+                  .waitForDeletedByCssSelector(selectors.control1.secondResult)
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findAllByCssSelector(selectors.control1.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 1, "Did not filter results for string in middle of name" + elements);
                   });
@@ -334,19 +363,19 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Search box correctly filters on special reg exp chars": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control1.searchbox)
                   .clearValue()
                   .type("(a")
-                  .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
-                  .end()
+                  .waitForDeletedByCssSelector(selectors.control1.fifthResult)
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findAllByCssSelector(selectors.control1.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 1, "Did not filter results using special reg exp character");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
+               .findByCssSelector(selectors.control1.searchbox)
                   .clearValue();
             },
 
@@ -366,12 +395,12 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Clicking cross on a chosen item removes it": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(2) .alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
+               return browser.findByCssSelector(selectors.control1.secondChoice.delete)
                   .click()
-                  .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(3)")
-                  .end()
+                  .waitForDeletedByCssSelector(selectors.control1.thirdChoice.element)
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .findAllByCssSelector(selectors.control1.choice)
                   .then(function(elements) {
                      assert.lengthOf(elements, 2, "Did not remove choice");
                   });
@@ -393,7 +422,7 @@ define(["intern!object",
             //    *focused element: Form 1 submit
             //    
             "Submitting form submits correct values from control": function() {
-               return browser.findByCssSelector("#FORM1 .confirmationButton .dijitButtonNode")
+               return browser.findByCssSelector(formSelectors.form1.confirmationButton)
                   .click()
                   .end()
 
@@ -422,19 +451,19 @@ define(["intern!object",
             //    *focused element: Control 1
             //    
             "Keyboard can navigate and select items in dropdown": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control1.searchbox)
                   .type("new")
-                  .waitForDeletedByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
+                  .waitForDeletedByCssSelector(selectors.control1.seventhResult)
                   .pressKeys([keys.ARROW_DOWN, keys.ARROW_DOWN, keys.ARROW_UP, keys.ENTER])
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .findAllByCssSelector(selectors.control1.choice)
                   .then(function(elements) {
                      assert.lengthOf(elements, 3, "Did not add new choice to control");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(3) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control1.thirdChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "newtag13(a)", "Did not add selected tag at end of choices");
@@ -457,16 +486,18 @@ define(["intern!object",
             //    *focused element: Focus helper
             //    
             "Selecting item with keyboard does not persist previous search": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control1.searchbox)
                   .pressKeys(keys.ARROW_DOWN)
-                  .end()
-                  .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
-                  .end()
-                  .findAllByCssSelector("#MULTISELECT_1_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .end()
+               
+               .findAllByCssSelector(selectors.control1.seventhResult)
+               .end()
+               
+               .findAllByCssSelector(selectors.control1.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 7, "Did not return full list of results after keyboard choice selection");
                   })
-                  .end()
+               .end()
 
                .findById("FOCUS_HELPER_BUTTON")
                   .click();
@@ -488,22 +519,22 @@ define(["intern!object",
             //    *focused element: Control 1
             //    
             "Deleting all items disables confirmation button": function() {
-               return browser.findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
+               return browser.findByCssSelector(selectors.control1.firstChoice.delete)
                   .click()
-                  .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(3)")
+                  .waitForDeletedByCssSelector(selectors.control1.thirdChoice.element)
                   .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
+               .findByCssSelector(selectors.control1.secondChoice.delete)
                   .click()
-                  .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(2)")
+                  .waitForDeletedByCssSelector(selectors.control1.secondChoice.element)
                   .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
+               .findByCssSelector(selectors.control1.firstChoice.delete)
                   .click()
-                  .waitForDeletedByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1)")
+                  .waitForDeletedByCssSelector(selectors.control1.firstChoice.element)
                   .end()
 
-               .findAllByCssSelector("#FORM1 .confirmationButton.dijitDisabled")
+               .findAllByCssSelector(formSelectors.form1.disabledConfirmationButton)
                   .then(function(elements) {
                      assert.lengthOf(elements, 1, "The confirmation button was not disabled when all the items were removed");
                   });
@@ -525,7 +556,7 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Custom label format is used for choices": function() {
-               return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               return browser.findByCssSelector(selectors.control2.firstChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "Those that belong to the emperor", "Did not display custom label format (type=choice) for choice");
@@ -552,12 +583,12 @@ define(["intern!object",
             //    *focused element: Control 2
             //    
             "Custom label format is used for results": function() {
-               return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control2.searchbox)
                   .type("the")
-                  .waitForDeletedByCssSelector("#MULTISELECT_2_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(7)")
+                  .waitForDeletedByCssSelector(selectors.control2.seventhResult)
                   .end()
 
-               .findByCssSelector("#MULTISELECT_2_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(4)")
+               .findByCssSelector(selectors.control2.fourthResult)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "CAT_01: Those that belong to the emperor", "Did not display custom label format (type=result) for result");
