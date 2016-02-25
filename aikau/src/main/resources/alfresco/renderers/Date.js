@@ -111,6 +111,30 @@ define(["dojo/_base/declare",
             {
                this.renderedValue = this.renderDate(dateProperty);
             }
+            else if (this.warnIfNotAvailable)
+            {
+               // Get appropriate message
+               // Check message based on propertyToRender otherwise default to sensible alternative
+               var warningKey = this.warnIfNotAvailableMessage;
+               var warningMessage = "";
+               if (!warningKey) 
+               {
+                  warningKey = "no." + this.propertyToRender + ".message";
+                  warningMessage = this.message(warningKey);
+                  if (warningMessage === warningKey) 
+                  {
+                     warningMessage = this.message("no.property.message", {
+                        0: this.propertyToRender
+                     });
+                  }
+               } 
+               else 
+               {
+                  warningMessage = this.message(warningKey);
+               }
+               this.renderedValue = this.renderedValuePrefix + warningMessage + this.renderedValueSuffix;
+               this.warningDisplayed = true;
+            }
             else
             {
                this.alfLog("warn", "Could not find '" + this.propertyToRender + "' in currentItem", this);

@@ -57,6 +57,18 @@ model.jsonModel = {
          }
       },
       {
+         id: "NOT_AVAILABLE",
+         name: "alfresco/renderers/Date",
+         config: {
+            currentItem: {},
+            simple: true,
+            propertyToRender: "foo",
+            warnIfNotAvailable: true,
+            warnIfNotAvailableMessage: "Not available",
+            renderOnNewLine: true
+         }
+      },
+      {
          name: "alfresco/logging/SubscriptionLog"
       }
    ]
