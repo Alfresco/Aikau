@@ -353,6 +353,67 @@ model.jsonModel = {
                         }
                      ]
                   }
+               },
+               {
+                  id: "COMPACT_MODE_WINDOW",
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "Compact mode",
+                     pubSubScope: "COMPACT_MODE_",
+                     widgets: [
+                        {
+                           id: "COMPACT_MENU_BAR",
+                           name: "alfresco/menus/AlfMenuBar",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "COMPACT_MODE_PAGE_SIZE_PAGINATOR",
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       compactMode: true
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "COMPACT_MODE_LIST",
+                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/AlfListView",
+                                    config: {
+                                       itemKey: "index",
+                                       widgets: [
+                                          {
+                                             name: "alfresco/lists/views/layouts/Row",
+                                             config: {
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/lists/views/layouts/Cell",
+                                                      config: {
+                                                         widgets: [
+                                                            {
+                                                               name: "alfresco/renderers/Property",
+                                                               config: {
+                                                                  propertyToRender: "index"
+                                                               }
+                                                            }
+                                                         ]
+                                                      }
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
                }
             ]
          }
