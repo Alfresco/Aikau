@@ -29,6 +29,7 @@ define(["intern!object",
       // Get the selectors for the MultiInputSelect widget...
       var MultiInputSelectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiInputSelect");
       var FormSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
+      var DialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
 
       // Build a map of the selectors to use...
       var selectors = {
@@ -61,14 +62,40 @@ define(["intern!object",
             loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_2"]),
             searchbox: TestCommon.getTestSelector(MultiInputSelectSelectors, "searchbox", ["MULTISELECT_2"]),
             result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_2"]),
+            choice: {
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice.content", ["MULTISELECT_2"]),
+            },
+            selectedChoice: {
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "selected.choice.content", ["MULTISELECT_2"])
+            },
             firstChoice: {
                content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_2", "1"])
+            },
+            secondChoice: {
+               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_2", "2"]),
             },
             fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_2", "4"]),
             seventhResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_2", "7"])
          },
          control3: {
-            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_1"])
+            disabled: TestCommon.getTestSelector(MultiInputSelectSelectors, "disabled", ["MULTISELECT_3"])
+         },
+         control4: {
+            control: TestCommon.getTestSelector(MultiInputSelectSelectors, "control", ["MULTISELECT_4"]),
+            choice: {
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice.content", ["MULTISELECT_4"]),
+               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice", ["MULTISELECT_4"]),
+               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice.delete", ["MULTISELECT_4"])
+            },
+            secondChoice: {
+               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_4", "2"])
+            },
+            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_4"]),
+            results: TestCommon.getTestSelector(MultiInputSelectSelectors, "results", ["MULTISELECT_4"])
+         },
+         controlInDialog: {
+            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_IN_DIALOG_CONTROL_RESULTS"]),
+            fifthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_IN_DIALOG", "5"]),
          }
       };
 
@@ -76,6 +103,16 @@ define(["intern!object",
          form1: {
             confirmationButton: TestCommon.getTestSelector(FormSelectors, "confirmation.button", ["FORM1"]),
             disabledConfirmationButton: TestCommon.getTestSelector(FormSelectors, "confirmation.button.disabled", ["FORM1"])
+         },
+         form3: {
+            confirmationButton: TestCommon.getTestSelector(FormSelectors, "confirmation.button", ["FORM3"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(FormSelectors, "confirmation.button.disabled", ["FORM3"])
+         }
+      };
+
+      var dialogSelectors = {
+         dialog1: {
+            confirmationButton: TestCommon.getTestSelector(DialogSelectors, "form.dialog.confirmation.button", ["DIALOG_WITH_MULTISELECT"])
          }
       };
 
@@ -615,7 +652,7 @@ define(["intern!object",
             //    focused element: Control 2
             //    
             "Choices do not exceed max width": function() {
-               return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               return browser.findByCssSelector(selectors.control2.firstChoice.content)
                   .getSize()
                   .then(function(size) {
                      assert(size.width < 151, "Choice was not restricted to under 150px as requested");
@@ -638,25 +675,25 @@ define(["intern!object",
             //    focused element: Control 2
             //    
             "Arrow key selects choice and backspace key deletes selected choice only": function() {
-               return browser.findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
+               return browser.findByCssSelector(selectors.control2.searchbox)
                   .pressKeys(keys.ESCAPE)
                   .sleep(100)
                   .pressKeys(keys.ARROW_LEFT)
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-utilities-ChoiceMixin__choice--selected .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control2.selectedChoice.content)
                   .getVisibleText()
                   .then(function(visibleText) {
                      assert.equal(visibleText, "Innumerable ones", "Did not select correct choice");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-MultiSelect__search-box")
+               .findByCssSelector(selectors.control2.searchbox)
                   .pressKeys(keys.BACKSPACE)
-                  .waitForDeletedByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(2)")
-                  .end()
+                  .waitForDeletedByCssSelector(selectors.control2.secondChoice.element)
+               .end()
 
-               .findByCssSelector("#MULTISELECT_2 .alfresco-forms-controls-utilities-ChoiceMixin__choice .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control2.choice.content)
                   .getVisibleText()
                   .then(function(visibleText) {
                      assert.equal(visibleText, "Those that belong to the emperor", "Did not delete correct choice");
@@ -682,9 +719,9 @@ define(["intern!object",
             "Opening MultiSelect in dialog still displays dropdown properly": function() {
                return browser.findByCssSelector("[widgetid=\"CREATE_FORM_DIALOG\"] .dijitButtonNode")
                   .click()
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_IN_DIALOG_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
+               .findByCssSelector(selectors.controlInDialog.fifthResult)
                   .isDisplayed()
                   .then(function(isDisplayed) {
                      assert.isTrue(isDisplayed, "Unable to see result in dropdown");
@@ -708,13 +745,13 @@ define(["intern!object",
             //    *
             //    
             "Dialog MultiSelect submits correct data": function() {
-               return browser.findByCssSelector("#MULTISELECT_IN_DIALOG_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result:nth-child(5)")
+               return browser.findByCssSelector(selectors.controlInDialog.fifthResult)
                   .click()
-                  .end()
+               .end()
 
-               .findByCssSelector("#DIALOG_WITH_MULTISELECT .footer .confirmationButton .dijitButtonNode")
+               .findByCssSelector(dialogSelectors.dialog1.confirmationButton)
                   .click()
-                  .end()
+               .end()
 
                .getLastPublish("DIALOG_POST", "Could not find dialog submission")
                   .then(function(payload) {
@@ -739,7 +776,7 @@ define(["intern!object",
             //    focused element: Create dialog button
             //    
             "Third control is disabled": function() {
-               return browser.findByCssSelector("#FORM3 .alfresco-forms-controls-MultiSelect--disabled");
+               return browser.findByCssSelector(selectors.control3.disabled);
             },
 
             // STATE AFTER THIS TEST
@@ -760,22 +797,22 @@ define(["intern!object",
             "Setting a value replaces not appends": function() {
                return browser.findById("SET_TAGS_VALUE_BUTTON")
                   .click()
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .findAllByCssSelector(selectors.control1.choice)
                   .then(function(elements) {
                      assert.lengthOf(elements, 2, "Did not render two values for control");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control1.firstChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "tag1", "Did not display first tag label correctly");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(2) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control1.secondChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "tag11", "Did not display second tag label correctly");
@@ -784,22 +821,22 @@ define(["intern!object",
 
                .findById("SET_TAGS_VALUE_BUTTON")
                   .click()
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .findAllByCssSelector(selectors.control1.choice)
                   .then(function(elements) {
                      assert.lengthOf(elements, 2, "Does not still render two values for control");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(1) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control1.firstChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "tag1", "Did not display first tag label correctly");
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_1 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(2) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control1.secondChoice.content)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "tag11", "Did not display second tag label correctly");
@@ -828,13 +865,13 @@ define(["intern!object",
             },
 
             "Removing option from unfocused control does not induce dropdown": function() {
-               return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
+               return browser.findByCssSelector(selectors.control4.choice.delete)
                   .click()
-                  .end()
+               .end()
 
-               .waitForDeletedByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-utilities-ChoiceMixin__choice")
+               .waitForDeletedByCssSelector(selectors.control4.choice.content)
 
-               .findById("MULTISELECT_4_CONTROL_RESULTS")
+               .findByCssSelector(selectors.control4.results)
                   .isDisplayed()
                   .then(function(isDisplayed) {
                      assert.isFalse(isDisplayed);
@@ -842,15 +879,15 @@ define(["intern!object",
             },
 
             "Can click on control and choose an option": function() {
-               return browser.findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-MultiSelect")
+               return browser.findByCssSelector(selectors.control4.control)
                   .click()
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_4_CONTROL_RESULTS [title=\"Foam Strawberries\"]")
+               .findByCssSelector(selectors.control4.results + " [title=\"Foam Strawberries\"]")
                   .click()
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control4.choice.content)
                   .getVisibleText()
                   .then(function(visibleText) {
                      assert.equal(visibleText, "Foam Strawberries");
@@ -858,22 +895,22 @@ define(["intern!object",
             },
 
             "Can filter options and select second option": function() {
-               return browser.findById("MULTISELECT_4_CONTROL")
+               return browser.findById(selectors.control4.control)
                   .click()
                   .pressKeys("mi")
-                  .end()
+               .end()
 
-               .findAllByCssSelector("#MULTISELECT_4_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findAllByCssSelector(selectors.control4.result)
                   .then(function(elements) {
                      assert.lengthOf(elements, 1);
                   })
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_4_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result")
+               .findByCssSelector(selectors.control4.result)
                   .click()
-                  .end()
+               .end()
 
-               .findByCssSelector("#MULTISELECT_4 .alfresco-forms-controls-utilities-ChoiceMixin__choice:nth-child(2) .alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
+               .findByCssSelector(selectors.control4.secondChoice.content)
                   .getVisibleText()
                   .then(function(visibleText) {
                      assert.equal(visibleText, "White Chocolate Mice");
