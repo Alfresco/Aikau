@@ -895,7 +895,7 @@ define(["intern!object",
             },
 
             "Can filter options and select second option": function() {
-               return browser.findById(selectors.control4.control)
+               return browser.findByCssSelector(selectors.control4.control)
                   .click()
                   .pressKeys("mi")
                .end()
