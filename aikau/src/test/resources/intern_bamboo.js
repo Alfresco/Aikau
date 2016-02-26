@@ -77,7 +77,7 @@ define(["./config/Suites"],
                location: "./src/test/resources/alfresco"
             }, {
                name: "config",
-               location: "./src/test/resources/config/vm"
+               location: "./src/test/resources/config/bamboo"
             }, {
                name: "reporters",
                location: "./src/test/resources/reporters"
