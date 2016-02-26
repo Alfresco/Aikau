@@ -515,6 +515,86 @@ define(["intern!object",
       };
    });
 
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Pagination Tests (compact mode)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/Paginator", "Pagination Tests (compact mode)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Correct items displayed": function() {
+            return browser.findAllByCssSelector("#COMPACT_MODE_LIST tr")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 25);
+               })
+            .end()
+
+            .findByCssSelector("#COMPACT_MODE_LIST tr:first-child")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "1");
+               })
+            .end()
+
+            .findByCssSelector("#COMPACT_MODE_LIST tr:last-child")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "25");
+               });
+         },
+
+         "Correct pagination controls displayed": function() {
+            return browser.findAllByCssSelector("#COMPACT_MODE_PAGE_SIZE_PAGINATOR .dijitMenuItem")
+               .then(function(elements){
+                  assert.lengthOf(elements, 3);
+               })
+            .end()
+
+            .findById("COMPACT_MODE_PAGE_SIZE_PAGINATOR_PAGE_BACK")
+            .end()
+
+            .findById("COMPACT_MODE_PAGE_SIZE_PAGINATOR_PAGE_MARKER")
+            .end()
+
+            .findById("COMPACT_MODE_PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+         },
+
+         "Going to next page changes items": function() {
+            return browser.findById("COMPACT_MODE_PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("COMPACT_MODE_ALF_DOCLIST_REQUEST_FINISHED", true)
+
+            .findByCssSelector("#COMPACT_MODE_LIST tr:first-child")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "26");
+               })
+            .end()
+
+            .findByCssSelector("#COMPACT_MODE_LIST tr:last-child")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "50");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
    // See AKU-330...
    registerSuite(function(){
       var browser;
