@@ -213,6 +213,13 @@
                <exclude>testApp/WEB-INF/surf.xml</exclude>
             </excludes>
          </testResource>
+         <!-- <testResource>
+            <directory>src/test/resources/test-selectors</directory>
+            <filtering>false</filtering>
+            <includes>
+               <include>**/*.properties</include>
+            </includes>
+         </testResource> -->
       </testResources>
 
       <plugins>
@@ -275,7 +282,7 @@
                            <overWrite>true</overWrite>
                            <outputDirectory>${basedir}/target/classes/META-INF/js/lib</outputDirectory>
                         </artifactItem>
-                        <artifactItem>
+                        <!-- <artifactItem>
                            <groupId>org.alfresco</groupId>
                            <artifactId>aikau-test-selectors</artifactId>
                            <version>${project.version}</version>
@@ -284,10 +291,43 @@
                            <includes>**/*.properties</includes>
                            <excludes>META-INF/**</excludes>
                            <outputDirectory>${basedir}/src/test/resources/test-selectors</outputDirectory>
-                        </artifactItem>
+                        </artifactItem> -->
                      </artifactItems>
                   </configuration>
                 </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+               <execution>
+                  <id>build-jar</id>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+               <execution>
+                  <id>build-tests</id>
+                  <goals>
+                     <goal>test-jar</goal>
+                  </goals>
+                  <configuration> 
+                     <includes>
+                        <include>test-selectors/**/*.properties</include>
+                     </includes>
+                  </configuration>
+               </execution>
             </executions>
          </plugin>
 

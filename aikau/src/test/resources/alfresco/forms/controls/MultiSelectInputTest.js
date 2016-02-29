@@ -27,75 +27,75 @@ define(["intern!object",
    function(registerSuite, assert, TestCommon, keys) {
 
       // Get the selectors for the MultiInputSelect widget...
-      var MultiInputSelectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiInputSelect");
+      var MultiSelectInputSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiInputSelect");
       var FormSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
       var DialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
 
       // Build a map of the selectors to use...
       var selectors = {
          control1: {
-            loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_1"]),
-            choice: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice", ["MULTISELECT_1"]),
+            loaded: TestCommon.getTestSelector(MultiSelectInputSelectors, "options.loaded.state", ["MULTISELECT_1"]),
+            choice: TestCommon.getTestSelector(MultiSelectInputSelectors, "choice", ["MULTISELECT_1"]),
             firstChoice: {
-               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_1", "1"]),
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "1"]),
-               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.delete", ["MULTISELECT_1", "1"])
+               element: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice", ["MULTISELECT_1", "1"]),
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.content", ["MULTISELECT_1", "1"]),
+               delete: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.delete", ["MULTISELECT_1", "1"])
             },
             secondChoice: {
-               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_1", "2"]),
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "2"]),
-               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.delete", ["MULTISELECT_1", "2"])
+               element: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice", ["MULTISELECT_1", "2"]),
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.content", ["MULTISELECT_1", "2"]),
+               delete: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.delete", ["MULTISELECT_1", "2"])
             },
             thirdChoice: {
-               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_1", "3"]),
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_1", "3"]),
-               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.delete", ["MULTISELECT_1", "3"])
+               element: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice", ["MULTISELECT_1", "3"]),
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.content", ["MULTISELECT_1", "3"]),
+               delete: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.delete", ["MULTISELECT_1", "3"])
             },
-            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_1"]),
-            secondResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "2"]),
-            fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "4"]),
-            fifthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "5"]),
-            seventhResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_1", "7"]),
-            searchbox: TestCommon.getTestSelector(MultiInputSelectSelectors, "searchbox", ["MULTISELECT_1"]),
+            result: TestCommon.getTestSelector(MultiSelectInputSelectors, "result", ["MULTISELECT_1"]),
+            secondResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "2"]),
+            fourthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "4"]),
+            fifthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "5"]),
+            seventhResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "7"]),
+            searchbox: TestCommon.getTestSelector(MultiSelectInputSelectors, "searchbox", ["MULTISELECT_1"]),
          },
          control2: {
-            loaded: TestCommon.getTestSelector(MultiInputSelectSelectors, "options.loaded.state", ["MULTISELECT_2"]),
-            searchbox: TestCommon.getTestSelector(MultiInputSelectSelectors, "searchbox", ["MULTISELECT_2"]),
-            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_2"]),
+            loaded: TestCommon.getTestSelector(MultiSelectInputSelectors, "options.loaded.state", ["MULTISELECT_2"]),
+            searchbox: TestCommon.getTestSelector(MultiSelectInputSelectors, "searchbox", ["MULTISELECT_2"]),
+            result: TestCommon.getTestSelector(MultiSelectInputSelectors, "result", ["MULTISELECT_2"]),
             choice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice.content", ["MULTISELECT_2"]),
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "choice.content", ["MULTISELECT_2"]),
             },
             selectedChoice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "selected.choice.content", ["MULTISELECT_2"])
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "selected.choice.content", ["MULTISELECT_2"])
             },
             firstChoice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_2", "1"])
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.content", ["MULTISELECT_2", "1"])
             },
             secondChoice: {
-               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice", ["MULTISELECT_2", "2"]),
+               element: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice", ["MULTISELECT_2", "2"]),
             },
-            fourthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_2", "4"]),
-            seventhResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_2", "7"])
+            fourthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_2", "4"]),
+            seventhResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_2", "7"])
          },
          control3: {
-            disabled: TestCommon.getTestSelector(MultiInputSelectSelectors, "disabled", ["MULTISELECT_3"])
+            disabled: TestCommon.getTestSelector(MultiSelectInputSelectors, "disabled", ["MULTISELECT_3"])
          },
          control4: {
-            control: TestCommon.getTestSelector(MultiInputSelectSelectors, "control", ["MULTISELECT_4"]),
+            control: TestCommon.getTestSelector(MultiSelectInputSelectors, "control", ["MULTISELECT_4"]),
             choice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice.content", ["MULTISELECT_4"]),
-               element: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice", ["MULTISELECT_4"]),
-               delete: TestCommon.getTestSelector(MultiInputSelectSelectors, "choice.delete", ["MULTISELECT_4"])
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "choice.content", ["MULTISELECT_4"]),
+               element: TestCommon.getTestSelector(MultiSelectInputSelectors, "choice", ["MULTISELECT_4"]),
+               delete: TestCommon.getTestSelector(MultiSelectInputSelectors, "choice.delete", ["MULTISELECT_4"])
             },
             secondChoice: {
-               content: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.choice.content", ["MULTISELECT_4", "2"])
+               content: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.content", ["MULTISELECT_4", "2"])
             },
-            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_4"]),
-            results: TestCommon.getTestSelector(MultiInputSelectSelectors, "results", ["MULTISELECT_4"])
+            result: TestCommon.getTestSelector(MultiSelectInputSelectors, "result", ["MULTISELECT_4"]),
+            results: TestCommon.getTestSelector(MultiSelectInputSelectors, "results", ["MULTISELECT_4"])
          },
          controlInDialog: {
-            result: TestCommon.getTestSelector(MultiInputSelectSelectors, "result", ["MULTISELECT_IN_DIALOG_CONTROL_RESULTS"]),
-            fifthResult: TestCommon.getTestSelector(MultiInputSelectSelectors, "nth.result", ["MULTISELECT_IN_DIALOG", "5"]),
+            result: TestCommon.getTestSelector(MultiSelectInputSelectors, "result", ["MULTISELECT_IN_DIALOG_CONTROL_RESULTS"]),
+            fifthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_IN_DIALOG", "5"]),
          }
       };
 
