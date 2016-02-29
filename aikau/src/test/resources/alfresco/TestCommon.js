@@ -27,6 +27,7 @@
 define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
         "intern/dojo/node!os",
+        "intern/dojo/node!properties-reader",
         "intern/dojo/lang",
         "intern",
         "config/Config",
@@ -35,7 +36,7 @@ define(["intern/dojo/node!fs",
         "intern/chai!assert",
         "intern/dojo/node!leadfoot/keys",
         "lodash"], 
-        function(fs, http, os, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
+        function(fs, http, os, propertiesReader, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
 
    return {
 
@@ -125,6 +126,43 @@ define(["intern/dojo/node!fs",
                   dfd.reject(e);
                });
          }
+      },
+
+      /**
+       * This function returns the test selectors for a given widget. The wiget should be the passed
+       * as the full AMD module name, e.g. "alfresco/forms/controls/MultiInputSelect". The value
+       * returned can then be passed to the getTestSelector function to retrieve individual selectors
+       * for that widget.
+       * 
+       * @param  {string} widget The AMD module name for the widget to return selectors for.
+       * @return {object} The selectors object.
+       */
+      getTestSelectors: function(widget) {
+         var properties = propertiesReader("./src/test/resources/test-selectors/" + widget + ".properties");
+         return properties;
+      },
+
+      /**
+       * This function can be used to retrieve an individual test selector for a given key. It is possible to
+       * provide tokens to substitute into the selector as an array. Each entry in the token substitution array
+       * will try to be replaced against a substitution point in the selector matching the index, for example 
+       * in the selector "#{0} span:nth-child({1})" it would be expected to pass in an array of ["WIDGET_ID", "1"]
+       * in order to get the 1st span element in a widget with the id "WIDGET_ID".
+       * 
+       * @param  {object} selectors   The selectors object returned by calling getTestSelectors for a particular widget
+       * @param  {string} selectorKey The key that identifiers the particular selector to load
+       * @param  {string[]} tokens    An array of substitution tokens to apply to any selector string.
+       * @return {string}             The selector that can be used in a test.
+       */
+      getTestSelector: function(selectors, selectorKey, tokens) {
+         var selector = selectors.get(selectorKey);
+         if (tokens)
+         {
+            tokens.forEach(function(token, index) {
+               selector = selector.replace("{" + index + "}", token);
+            });
+         }
+         return selector;
       },
 
       /**
