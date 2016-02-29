@@ -23,7 +23,7 @@ define(["./config/Suites"],
       });
 
       // Define "constants"
-      var isoTimestamp = (new Date()).toISOString(),
+      var isoTimestamp = (new Date()).toISOString().replace(/\D/g, ""),
          settings = {
             project: "Aikau",
             name: "[AKU] BrowserStack Tests @ " + isoTimestamp,
