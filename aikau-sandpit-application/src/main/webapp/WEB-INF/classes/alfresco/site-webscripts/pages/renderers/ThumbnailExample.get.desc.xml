@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>alfresco/renderers/Thumbnail</shortname>
+  <description>Examples of how to configure the thumbnails.</description>
+  <family>ExamplePage</family>
+  <url>/Thumbnail</url>
+</webscript>
