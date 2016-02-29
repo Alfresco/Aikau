@@ -2,6 +2,27 @@
 <!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN" ".dtd/urlrewrite3.0.dtd">
 <urlrewrite use-query-string="true">
 
+   <!-- DocLib Thumbnail Landscape -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Landscape/content/thumbnails/doclib(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/thumbnails/doclib_landscape.png</to>
+   </rule>
+   <!-- DocLib Thumbnail Portrait -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Portrait/content/thumbnails/doclib(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/thumbnails/doclib_portrait.png</to>
+   </rule>
+   <!-- Gallery Thumbnail Landscape -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Landscape/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/thumbnails/imgpreview_landscape.jpg</to>
+   </rule>
+   <!-- Gallery Thumbnail Portrait -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/Portrait/content/thumbnails/imgpreview(.*)</from>
+      <to>/page/resource/js/sandpit/mockdata/thumbnails/imgpreview_portrait.jpg</to>
+   </rule>
+   
    <!-- Video Preview -->
    <rule>
       <from>/proxy/alfresco/api/node/workspace/SpacesStore/(.*)/content/(.*).mp4(.*)</from>
@@ -22,7 +43,6 @@
       <from>/proxy/alfresco/api/node/workspace/SpacesStore/(.*)/content/thumbnails/imgpreview(.*)</from>
       <to>/page/resource/js/sandpit/mockdata/previews/Image.jpg</to>
    </rule>
-   
 
    <!-- Spring Surf -->
    <rule>
