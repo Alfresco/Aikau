@@ -34,7 +34,7 @@ model.jsonModel = {
                {
                   name: "alfresco/preview/AlfDocumentPreview",
                   config: {
-                     pluginConditionsOverides: [
+                     pluginConditionsOverrides: [
                         {
                            attributes:{
                               mimeType: "image/jpeg"
