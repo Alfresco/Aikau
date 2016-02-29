@@ -101,7 +101,6 @@ define(["dojo/_base/declare",
             id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
             name: "alfresco/buttons/AlfButton",
             assignTo: "dialogButton",
-            assignToScope: this,
             config: {
                label: "progress-dialog.cancel-button.label",
                publishTopic: topics.UPLOAD_CANCELLATION,
@@ -153,6 +152,13 @@ define(["dojo/_base/declare",
          if (this.progressDialogTitleKey) {
             this.alfLog("warn", "'progressDialogTitleKey' in UploadService has been deprecated - use 'uploadsContainerTitle' instead");
             this.uploadsContainerTitle = this.progressDialogTitleKey;
+         }
+         if (this.widgetsButtons && this.widgetsButtons.length) {
+            array.forEach(this.widgetsButtons, function(dialogButton) {
+               if(dialogButton.assignTo) {
+                  dialogButton.assignToScope = this;
+               }
+            }, this);
          }
          this.inherited(arguments);
       },
