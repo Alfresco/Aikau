@@ -51,7 +51,7 @@ define(["intern!object",
             .findByCssSelector(".alfresco-upload-UploadMonitor__item__name__error")
                .getVisibleText()
                .then(function(visibleText) {
-                  assert.equal(visibleText, "0kb files cannot be uploaded");
+                  assert.equal(visibleText, "0kb files can't be uploaded");
                })
                .end()
                .end() // Escape previous extra nesting

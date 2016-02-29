@@ -413,7 +413,7 @@ define(["intern!object",
             return browser.findByCssSelector("#HASH_LIST .rendered-view")
                .getVisibleText()
                .then(function(text) {
-                  assert.equal(text, "There is no data to render a view from", "No data message not displayed");
+                  assert.equal(text, "There's nothing to display", "No data message not displayed");
                });
          },
 
