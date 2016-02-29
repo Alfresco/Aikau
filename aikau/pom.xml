@@ -213,13 +213,6 @@
                <exclude>testApp/WEB-INF/surf.xml</exclude>
             </excludes>
          </testResource>
-         <!-- <testResource>
-            <directory>src/test/resources/test-selectors</directory>
-            <filtering>false</filtering>
-            <includes>
-               <include>**/*.properties</include>
-            </includes>
-         </testResource> -->
       </testResources>
 
       <plugins>
@@ -282,16 +275,6 @@
                            <overWrite>true</overWrite>
                            <outputDirectory>${basedir}/target/classes/META-INF/js/lib</outputDirectory>
                         </artifactItem>
-                        <!-- <artifactItem>
-                           <groupId>org.alfresco</groupId>
-                           <artifactId>aikau-test-selectors</artifactId>
-                           <version>${project.version}</version>
-                           <type>jar</type>
-                           <overWrite>true</overWrite>
-                           <includes>**/*.properties</includes>
-                           <excludes>META-INF/**</excludes>
-                           <outputDirectory>${basedir}/src/test/resources/test-selectors</outputDirectory>
-                        </artifactItem> -->
                      </artifactItems>
                   </configuration>
                 </execution>
