@@ -46,7 +46,7 @@ model.jsonModel = {
                {
                   name: "alfresco/preview/AlfDocumentPreview",
                   config: {
-                     pluginConditionsOverides: pluginOverrides
+                     pluginConditionsOverrides: pluginOverrides
                   }
                }
             ]

@@ -1,0 +1,164 @@
+{
+   "metadata": {
+      "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+
+      "custom": {
+         "vtiServer": null,
+         "aos": {
+            "baseUrl": "http://dave-Latitude-E6530:8080/alfresco/aos"
+         }
+      },
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "http:\/\/localhost:8081\/share",
+      "serverURL": "http:\/\/localhost:8080"
+   },
+
+   "item": {
+      "thumbnailDefinitions": ["avatar32", "doclib", "avatar", "medium", "imgpreview"],
+      "node": {
+         "isLink": false,
+         "aspects": ["cm:auditable", "cm:thumbnailModification", "sys:referenceable", "exif:exif", "cm:titled", "cm:author", "rn:renditioned", "cm:taggable", "sys:localized", "cm:versionable"],
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 07 13:25:27 GMT 2016",
+               "iso8601": "2016-01-07T13:25:27.130Z"
+            },
+            "sys:node-uuid": null,
+            "exif:pixelXDimension": "3264",
+            "exif:exposureTime": "0.01",
+            "cm:lastThumbnailModification": ["doclib:1452172525840", "imgpreview:1452172530897"],
+            "sys:node-dbid": null,
+            "exif:fNumber": "2.6",
+            "cm:creator": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "exif:software": "Exif Software Version 1.0.2.0",
+            "exif:model": "GT-I9305",
+            "cm:title": "Southampton Common",
+            "exif:isoSpeedRatings": "80",
+            "exif:orientation": "1",
+            "sys:store-identifier": null,
+            "exif:pixelYDimension": "2448",
+            "cm:taggable": null,
+            "cm:content": null,
+            "cm:name": "Landscape.jpg",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "exif:dateTimeOriginal": {
+               "value": "Sat Jul 19 10:55:31 BST 2014",
+               "iso8601": "2014-07-19T09:55:31.000Z"
+            },
+            "cm:autoVersion": "true",
+            "cm:initialVersion": "true",
+            "exif:manufacturer": "SAMSUNG",
+            "cm:description": "A photo taken walking on Southampton Common",
+            "cm:created": {
+               "value": "Thu Jan 07 13:15:23 GMT 2016",
+               "iso8601": "2016-01-07T13:15:23.635Z"
+            },
+            "exif:flash": "false",
+            "cm:versionLabel": "1.0",
+            "cm:autoVersionOnUpdateProps": "false",
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "exif:focalLength": "3.7"
+         },
+         "type": "cm:content",
+         "isLocked": false,
+         "size": 2940496,
+         "mimetypeDisplayName": "JPEG Image",
+         "mimetype": "image\/jpeg",
+         "encoding": "UTF-8",
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;INHERITED"],
+            "inherited": true,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/f797a816-6757-4b24-a771-b73bd6399928",
+         "isContainer": false,
+         "contentURL": "\/slingshot\/node\/content\/workspace\/SpacesStore\/f797a816-6757-4b24-a771-b73bd6399928\/Landscape.jpg"
+      },
+      "parent": {
+         "isLink": false,
+         "aspects": ["app:uifacets", "cm:auditable", "sys:referenceable", "cm:titled", "sys:localized"],
+         "permissions": {
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;DIRECT"],
+            "inherited": false,
+            "user": {
+               "ChangePermissions": true,
+               "CancelCheckOut": false,
+               "CreateChildren": true,
+               "Write": true,
+               "Delete": true,
+               "Unlock": false
+            }
+         },
+         "nodeRef": "workspace:\/\/SpacesStore\/f3b17e12-740a-4395-8bb2-f637c69d0246",
+         "properties": {
+            "cm:modified": {
+               "value": "Thu Jan 07 13:20:56 GMT 2016",
+               "iso8601": "2016-01-07T13:20:56.371Z"
+            },
+            "sys:node-dbid": null,
+            "cm:description": "Folder to store shared stuff ",
+            "cm:creator": {
+               "lastName": "User",
+               "userName": "System",
+               "displayName": "System User",
+               "firstName": "System"
+            },
+            "sys:node-uuid": null,
+            "cm:created": {
+               "value": "Mon Sep 14 10:52:47 BST 2015",
+               "iso8601": "2015-09-14T09:52:47.017Z"
+            },
+            "cm:name": "Shared",
+            "cm:title": "Shared Folder",
+            "sys:store-protocol": null,
+            "sys:locale": null,
+            "cm:modifier": {
+               "lastName": "",
+               "userName": "admin",
+               "displayName": "Administrator",
+               "firstName": "Administrator"
+            },
+            "sys:store-identifier": null,
+            "app:icon": "space-icon-default"
+         },
+         "type": "cm:folder",
+         "isContainer": true,
+         "isLocked": false
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Shared\/Landscape.jpg",
+
+      "isFavourite": false,
+
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b6e41981-597d-44e2-b6e0-d2dbb613e122",
+         "path": "\/Shared",
+         "repoPath": "\/Shared",
+         "file": "Landscape.jpg",
+         "parent": {}
+      }
+   }
+}

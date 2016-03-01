@@ -111,6 +111,12 @@ define(["dojo/_base/declare",
             {
                this.renderedValue = this.renderDate(dateProperty);
             }
+            else if (this.warnIfNotAvailable)
+            {
+               var warningMessage = this.getNotAvailableMessage();
+               this.renderedValue = this.renderedValuePrefix + warningMessage + this.renderedValueSuffix;
+               this.warningDisplayed = true;
+            }
             else
             {
                this.alfLog("warn", "Could not find '" + this.propertyToRender + "' in currentItem", this);

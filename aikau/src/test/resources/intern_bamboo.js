@@ -23,7 +23,7 @@ define(["./config/Suites"],
       });
 
       // Define "constants"
-      var isoTimestamp = (new Date()).toISOString(),
+      var isoTimestamp = (new Date()).toISOString().replace(/\D/g, ""),
          settings = {
             project: "Aikau",
             name: "[AKU] BrowserStack Tests @ " + isoTimestamp,
@@ -77,7 +77,7 @@ define(["./config/Suites"],
                location: "./src/test/resources/alfresco"
             }, {
                name: "config",
-               location: "./src/test/resources/config/vm"
+               location: "./src/test/resources/config/bamboo"
             }, {
                name: "reporters",
                location: "./src/test/resources/reporters"
@@ -88,6 +88,9 @@ define(["./config/Suites"],
                name: "lodash",
                location: "./src/test/resources/lib/lodash",
                main: "lodash.compat"
+            }, {
+               name: "properties",
+               location: "./node_modules/properties/lib"
             }]
          },
 

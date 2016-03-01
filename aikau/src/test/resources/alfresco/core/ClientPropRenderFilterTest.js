@@ -49,6 +49,10 @@ define(["intern!object",
                .findDisplayedById("BUTTON1");
          },
 
+         "LessThan Comparator passes with item": function() {
+            return browser.findDisplayedById("BUTTON1WITHITEM");
+         },
+
          "GreaterThan Comparator fails": function() {
             return browser.findAllByCssSelector("#BUTTON2")
                .then(function(elements) {
@@ -56,8 +60,22 @@ define(["intern!object",
                });
          },
 
+         "GreaterThan Comparator fails with item": function() {
+            return browser.findAllByCssSelector("#BUTTON2WITHITEM")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+         },
+
          "EqualTo Comparator fails": function() {
             return browser.findAllByCssSelector("#BUTTON3")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+         },
+
+         "EqualTo Comparator fails with item": function() {
+            return browser.findAllByCssSelector("#BUTTON3WITHITEM")
                .then(function(elements) {
                   assert.lengthOf(elements, 0);
                });
@@ -79,12 +97,31 @@ define(["intern!object",
             
          },
 
+         "LessThan Comparator fails with item (after resize 1)": function() {
+            return browser.findAllByCssSelector("#BUTTON1WITHITEM")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+            
+         },
+
          "GreaterThan Comparator passes (after resize 1)": function() {
             return browser.findDisplayedById("BUTTON2");
          },
 
+         "GreaterThan Comparator passes with item (after resize 1)": function() {
+            return browser.findDisplayedById("BUTTON2WITHITEM");
+         },
+
          "EqualTo Comparator fails (after resize 1)": function() {
             return browser.findAllByCssSelector("#BUTTON3")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+         },
+
+         "EqualTo Comparator fails with item (after resize 1)": function() {
+            return browser.findAllByCssSelector("#BUTTON3WITHITEM")
                .then(function(elements) {
                   assert.lengthOf(elements, 0);
                });
@@ -106,15 +143,34 @@ define(["intern!object",
             
          },
 
-         "GreaterThan Comparator passes (after resize 2)": function() {
+         "LessThan Comparator fails with item (after resize 2)": function() {
+            return browser.findAllByCssSelector("#BUTTON1WITHITEM")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+            
+         },
+
+         "GreaterThan Comparator fails (after resize 2)": function() {
             return browser.findAllByCssSelector("#BUTTON2")
                .then(function(elements) {
                   assert.lengthOf(elements, 0);
                });
          },
 
-         "EqualTo Comparator fails (after resize 2)": function() {
+         "GreaterThan Comparator fails with item (after resize 2)": function() {
+            return browser.findAllByCssSelector("#BUTTON2WITHITEM")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               });
+         },
+
+         "EqualTo Comparator passes (after resize 2)": function() {
             return browser.findDisplayedById("BUTTON3");
+         },
+
+         "EqualTo Comparator passes with item (after resize 2)": function() {
+            return browser.findDisplayedById("BUTTON3WITHITEM");
          },
 
          "Post Coverage Results (3)": function() {

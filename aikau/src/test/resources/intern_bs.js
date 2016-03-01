@@ -87,7 +87,7 @@ define(["./config/Suites"],
                location: "./src/test/resources/alfresco"
             }, {
                name: "config",
-               location: "./src/test/resources/config/vm"
+               location: "./src/test/resources/config/bs"
             }, {
                name: "reporters",
                location: "./src/test/resources/reporters"
@@ -98,6 +98,9 @@ define(["./config/Suites"],
                name: "lodash",
                location: "./src/test/resources/lib/lodash",
                main: "lodash.compat"
+            }, {
+               name: "properties",
+               location: "./node_modules/properties/lib"
             }]
          },
 

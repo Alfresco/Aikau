@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FileSelect Test</shortname>
+  <description>This WebScript exercises the alfresco/forms/controls/FileSelect widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/FileSelect</url>
+</webscript>

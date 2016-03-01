@@ -5,8 +5,8 @@ var data = {
       {
          nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
          type: "folder",
-         name: "test1 & test2",
-         displayName: "Normal result",
+         name: "test1",
+         displayName: "Normal result 1",
          title: "Normal result title",
          modifiedBy: "Barry Smith",
          modifiedOn: "13th December 2010",
@@ -36,8 +36,111 @@ var data = {
                }
             }
          }
-         
-         
+      },
+      {
+         nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
+         type: "folder",
+         name: "test2",
+         displayName: "Normal result 2",
+         title: "Normal result title",
+         modifiedBy: "Barry Smith",
+         modifiedOn: "13th December 2010",
+         modifiedByUser: "bsmith",
+         description: "Normal result description",
+         site: {
+            title: "Normal result site title",
+            shortName: "normalResult"
+         },
+         path: "/one/two/three/four",
+         size: 283746,
+
+         // From regular node
+         node: {
+            nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
+            isContainer: true,
+            permissions: {
+               roles: ["ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;DIRECT", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;DIRECT", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;DIRECT", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;DIRECT"],
+               inherited: false,
+               user: {
+                  ChangePermissions: true,
+                  CancelCheckOut: false,
+                  CreateChildren: true,
+                  Write: true,
+                  Delete: true,
+                  Unlock: false
+               }
+            }
+         }
+      },
+      {
+         nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
+         type: "folder",
+         name: "test3",
+         displayName: "Normal result 3",
+         title: "Normal result title",
+         modifiedBy: "Barry Smith",
+         modifiedOn: "13th December 2010",
+         modifiedByUser: "bsmith",
+         description: "Normal result description",
+         site: {
+            title: "Normal result site title",
+            shortName: "normalResult"
+         },
+         path: "/one/two/three/four",
+         size: 283746,
+
+         // From regular node
+         node: {
+            nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
+            isContainer: true,
+            permissions: {
+               roles: ["ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;DIRECT", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;DIRECT", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;DIRECT", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;DIRECT"],
+               inherited: false,
+               user: {
+                  ChangePermissions: true,
+                  CancelCheckOut: false,
+                  CreateChildren: true,
+                  Write: true,
+                  Delete: true,
+                  Unlock: false
+               }
+            }
+         }
+      },
+      {
+         nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
+         type: "folder",
+         name: "test4",
+         displayName: "Normal result 4",
+         title: "Normal result title",
+         modifiedBy: "Barry Smith",
+         modifiedOn: "13th December 2010",
+         modifiedByUser: "bsmith",
+         description: "Normal result description",
+         site: {
+            title: "Normal result site title",
+            shortName: "normalResult"
+         },
+         path: "/one/two/three/four",
+         size: 283746,
+
+         // From regular node
+         node: {
+            nodeRef: "workspace://SpacesStore/f8394454-0651-48a5-b583-d067c7d03339",
+            isContainer: true,
+            permissions: {
+               roles: ["ALLOWED;GROUP_site_site1_SiteConsumer;SiteConsumer;DIRECT", "ALLOWED;GROUP_site_site1_SiteManager;SiteManager;DIRECT", "ALLOWED;GROUP_site_site1_SiteCollaborator;SiteCollaborator;DIRECT", "ALLOWED;GROUP_site_site1_SiteContributor;SiteContributor;DIRECT"],
+               inherited: false,
+               user: {
+                  ChangePermissions: true,
+                  CancelCheckOut: false,
+                  CreateChildren: true,
+                  Write: true,
+                  Delete: true,
+                  Unlock: false
+               }
+            }
+         }
       }
    ]
 };
@@ -164,8 +267,7 @@ model.jsonModel = {
             proxyDragAndDropNode: [
                "#NOT_REALLY_AN_ID",
                "#LIST_TWO",
-               "#LIST_ONE",
-               "#LIST_THREE"
+               "#LIST_ONE"
             ],
             widgets: [
                {

@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.57-SNAPSHOT</version>
+   <version>1.0.58-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -278,6 +278,40 @@
                      </artifactItems>
                   </configuration>
                 </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+               <execution>
+                  <id>build-jar</id>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+               <execution>
+                  <id>build-tests</id>
+                  <goals>
+                     <goal>test-jar</goal>
+                  </goals>
+                  <configuration>
+                     <testClassesDirectory>${project.build.testOutputDirectory}/test-selectors</testClassesDirectory>
+                     <includes>
+                        <include>**/*.properties</include>
+                     </includes>
+                  </configuration>
+               </execution>
             </executions>
          </plugin>
 

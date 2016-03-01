@@ -324,9 +324,9 @@ define(["dojo/_base/declare",
       /**
        * This function is used to update the [pluginConditions]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditions}
        * with additional condition data from an entry defined in 
-       * [pluginConditionsOverides]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditionsOverides}. This function 
+       * [pluginConditionsOverrides]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditionsOverrides}. This function 
        * is called from [setupPlugins]{@link module:alfresco/preview/AlfDocumentPreview#setupPlugins} for each entry
-       * in the [pluginConditionsOverides]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditionsOverides} array.
+       * in the [pluginConditionsOverrides]{@link module:alfresco/preview/AlfDocumentPreview#pluginConditionsOverrides} array.
        * 
        * @instance
        * @param {object} condition The plugin condition to update
@@ -394,9 +394,9 @@ define(["dojo/_base/declare",
             array.forEach(this.widgetsForPluginsOverrides, lang.hitch(this, this.updatePluginConfiguration));
          }
 
-         if (this.pluginConditionsOverides)
+         if (this.pluginConditionsOverrides)
          {
-            array.forEach(this.pluginConditionsOverides, lang.hitch(this, this.updatePluginConditions));
+            array.forEach(this.pluginConditionsOverrides, lang.hitch(this, this.updatePluginConditions));
          }
 
          array.forEach(this.widgetsForPlugins, function(plugin) {
@@ -618,6 +618,11 @@ define(["dojo/_base/declare",
        * @return {boolean} true if conditions are fulfilled for plugins to be used.
        */
       conditionsMatch: function alfresco_preview_AlfDocumentPreview__conditionsMatch(condition) {
+         if (!condition.attributes.mimeType && !condition.attributes.thumbnail)
+         {
+            // Only continue with the test if either a thumbnail or mimeType condition has been provided.
+            return false;
+         }
          if (condition.attributes.mimeType && condition.attributes.mimeType !== this.mimeType)
          {
             return false;
@@ -717,7 +722,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.56
        */
-      pluginConditionsOverides: null,
+      pluginConditionsOverrides: null,
 
       /**
        * A json representation of the .get.config.xml file.

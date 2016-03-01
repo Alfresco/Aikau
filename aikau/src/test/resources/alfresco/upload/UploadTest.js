@@ -87,7 +87,7 @@ define(["intern!object",
          beforeEach: function() {
             browser.end();
          },
-         
+
          "Test bad file data": function () {
             // Simulate providing a zero byte file and check the output...
             return browser.findById("BAD_FILE_DATA_label")
@@ -217,6 +217,13 @@ define(["intern!object",
                })
             .end()
             
+            .findByCssSelector("[widgetid=\"ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION\"] .dijitButtonNode")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "OK", "Button label didn't change after uploads complete");
+               })
+            .end()
+
             .findById("ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
                .click()
             .end()
@@ -225,6 +232,35 @@ define(["intern!object",
 
             // Check that alfResponseTopic is published on completion
             .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED");
+         },
+
+         // NOTE: Upload does NOT work here because of scoping, however scoping is only used
+         // to have multiple upload services on one page, something which is not expected
+         // to happen in the wild. If it does, then we will address that problem when it occurs.
+         "Dialog button-label and title can be customised": function() {
+            return browser.findByCssSelector("[widgetid=\"SINGLE_UPLOAD_CUSTOM_BUTTON\"] .dijitButtonNode")
+               .click()
+            .end()
+
+            .findByCssSelector("#ALF_UPLOAD_PROGRESS_DIALOG_title")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "Custom Title", "Dialog title not updated");
+               })
+            .end()
+
+            .findByCssSelector(".dialogDisplayed #ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION_label")
+               .getVisibleText()
+               .then(function(visibleText){
+                  assert.equal(visibleText, "Custom Label", "Button label not updated");
+               })
+            .end()
+
+            .findByCssSelector("[widgetid=\"ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION\"] .dijitButtonNode")
+               .click()
+            .end()
+
+            .waitForDeletedByCssSelector(".dialogDisplayed");   
          },
 
          "Post Coverage Results": function() {

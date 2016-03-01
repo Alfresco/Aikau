@@ -18,7 +18,32 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
-      "alfresco/services/UploadService"
+      {
+         name: "alfresco/services/UploadService",
+         config: {
+            widgetsForUploadDisplay: [{
+               name: "alfresco/upload/AlfUploadDisplay"
+           }]
+         }
+      },
+      {
+         name: "alfresco/services/UploadService",
+         config: {
+            pubSubScope: "CUSTOM_BUTTON_",
+            uploadsContainerTitle: "Custom Title",
+            widgetsButtons: [
+               {
+                  id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "Custom Label",
+                     publishTopic: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
+                     additionalCssClasses: "call-to-action"
+                  }
+               }
+            ]
+         }
+      }
    ],
    widgets: [
       {
@@ -65,6 +90,26 @@ model.jsonModel = {
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Single File Upload",
+            publishTopic: "ALF_UPLOAD_REQUEST",
+            publishPayload: {
+               files: [
+                  {
+                     size: 100,
+                     name: "100 Bytes File"
+                  }
+               ],
+               targetData: {
+                  destination: "some://fake/node"
+               }
+            }
+         }
+      },
+      {
+         id: "SINGLE_UPLOAD_CUSTOM_BUTTON",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Single File Upload (Custom Button Label)",
+            pubSubScope: "CUSTOM_BUTTON_",
             publishTopic: "ALF_UPLOAD_REQUEST",
             publishPayload: {
                files: [
