@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
       _processedWidgetsLocationPrefix: "_processedWidgets",
 
       /**
-       * This string is used to identify locations of arrays where widgets that are being created will be stored. 
+       * This string is used to identify locations of arrays where widgets that are being created will be stored.
        * THis should not be set or configured.
        *
        * @instance
@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
       _processingWidgetsLocationPrefix: "_processingWidgets",
 
       /**
-       * Used to keep track of all the widgets created as a result of a call to the 
+       * Used to keep track of all the widgets created as a result of a call to the
        * [processWidgets]{@link module:alfresco/core/Core#processWidgets} function. This should not be referenced directly,
        * instead the [getProcessedWidgets]{@link module:alfresco/core/Core#getProcessedWidgets} should be called.
        *
@@ -115,16 +115,16 @@ define(["dojo/_base/declare",
        * @deprecated Since 1.0.36
        */
       _processedWidgetCountdown: null,
-      
+
       /**
-       * This function can be used to retrieve the widgets that have been processed by a call to 
+       * This function can be used to retrieve the widgets that have been processed by a call to
        * [processWidgets]{@link module:alfresco/core/CoreWidgetProcessing#processWidgets}. It return a promise
        * of the widgets that will be created an as such calls to this function should be protected through
        * the use of dojo/when. It is not recommended to use this function, instead it is better to extend
        * the [allWidgetsProcessed]{@link module:alfresco/core/CoreWidgetProcessing#allWidgetsProcessed} function
        * as this will only be called when widget processing has completed and is passed an argument of the
        * widgets that were created.
-       * 
+       *
        * @instance
        * @param  {string} processWidgetsId The ID mapped to the original processWidgets call
        * @return {object[]|promise} The array of processed widgets or a promise of them
@@ -149,7 +149,7 @@ define(["dojo/_base/declare",
        * a processWidgetsId is provided, the location will be a location within a map. The supplied prefix indicates
        * the type of property required - this will either be the remaining count of widgets to process, the array of
        * widgets processed so far or the promise of all the widgets when processing is complete.
-       * 
+       *
        * @instance
        * @param  {string} processWidgetsId The ID mapped to the original processWidgets call
        * @param {string} prefix Expected to be either [_processedWidgetsLocationPrefix]{@link module:alfresco/core/CoreWidgetProcessing#_processedWidgetsLocationPrefix}
@@ -195,9 +195,13 @@ define(["dojo/_base/declare",
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), widgets.length, this);
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), new Deferred(), this);
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingWidgetsLocationPrefix), [], this);
-               
+
                // Iterate over all the widgets in the configuration object and add them...
                array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode, processWidgetsId));
+            }
+            else
+            {
+               throw "widgets is missing or not an array";
             }
          }
          catch(e)
@@ -255,7 +259,7 @@ define(["dojo/_base/declare",
          lang.setObject(countDownLocation, countdown, this);
 
          this.alfLog("log", "Widgets expected: ", countdown, this.id);
-         
+
          // 1.0.35 UPDATE
          // If an "processWidgetsId" attribute is provided then we want to make sure that multiple calls to processWidgets
          // will not result in a _processedWidgets attribute containing results different calls. Therefore we want to map each
@@ -264,7 +268,7 @@ define(["dojo/_base/declare",
          // is handled correctly.
          var location = this.getWidgetProcessingLocation(processWidgetsId, this._processingWidgetsLocationPrefix);
          var processedWidgets = lang.getObject(location, false, this);
-         
+
          if (widget)
          {
             if (!index || index === 0 || isNaN(index))
@@ -305,7 +309,7 @@ define(["dojo/_base/declare",
 
       /**
        * Sets up the dynamic visibility handling for the supplied widget.
-       * 
+       *
        * @instance
        * @param {object} widget The widget to process the config of
        * @param {string} configAttribute The attribute to use in the widget config for rules
@@ -423,7 +427,7 @@ define(["dojo/_base/declare",
          var evaluationPassed = isValidValue && !isInvalidValue;
          if (evaluationPassed)
          {
-            // Handle successful evaluation, the widget will be displayed or hidden depending on the 
+            // Handle successful evaluation, the widget will be displayed or hidden depending on the
             // negate value (e.g. if negated the evaluated position is hidden, not displayed)...
             if (negate)
             {
@@ -544,7 +548,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is used to build the configuration used to instantiate a widget.
-       * 
+       *
        * @instance
        * @param  {object} widget The widget configuration build configuration for
        * @return {object} The arguments that can be used when instantiating the widget configuration processed
@@ -702,7 +706,7 @@ define(["dojo/_base/declare",
                   {
                      instantiatedWidget.startup();
                   }
-               
+
                   var assignToScope = widget.assignToScope || _this;
                   if (widget.assignTo)
                   {
@@ -808,12 +812,12 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is used to to determine whether or not a filter containing multiple sub-filters evaluates to true. 
+       * This function is used to to determine whether or not a filter containing multiple sub-filters evaluates to true.
        * The sub-filters themselves can contain further nested filters.
        *
        * @instance
        * @param  {object[]} renderFilterConfig The configuration for the filter array
-       * @param  {string} renderFilterMethod Either ANY or ALL 
+       * @param  {string} renderFilterMethod Either ANY or ALL
        * @return {boolean} True if the filter passes and false otherwise
        */
       processMultipleFilters: function alfresco_core_CoreWidgetProcessing__processMultipleFilters(renderFiltersConfig, renderFilterMethod) {
@@ -848,7 +852,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param  {object[]} renderFilterConfig The configuration for the filter array
-       * @param  {string} renderFilterMethod Either ANY or ALL 
+       * @param  {string} renderFilterMethod Either ANY or ALL
        * @return {boolean} True if the filter passes and false otherwise
        */
       processSingleFilter: function alfresco_core_CoreWidgetProcessing__processSingleFilter(renderFilterConfig, renderFilterMethod) {
@@ -940,9 +944,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is used to compare the value of all the elements in the supplied targetArray against the 
+       * This function is used to compare the value of all the elements in the supplied targetArray against the
        * value of the supplied currValue. If a match is found then this will return true.
-       * 
+       *
        * @instance
        * @param  {object} renderFilterConfig The complete configuration for the render filter
        * @param  {array} targetArray The array of values to compare against the supplied currValue
@@ -963,7 +967,7 @@ define(["dojo/_base/declare",
             {
                currValue = this.substituteFilterTokens(currValue);
             }
-            
+
             foundCurrValue = array.some(targetArray, function(arrayValue) {
                if (typeof arrayValue === "boolean")
                {
@@ -980,7 +984,7 @@ define(["dojo/_base/declare",
        * and [processFilterArray]{@link module:alfresco/core/CoreWidgetProcessing#processFilterArray} to substitute
        * any tokens found in the target values with matching dot-notation properties found in the currentItem and
        * currentMetadata objects if they are available.
-       * 
+       *
        * @instance
        * @param  {*} value The value to look for tokens in
        * @return {string} The value with any tokens substituted
@@ -1018,7 +1022,7 @@ define(["dojo/_base/declare",
          {
             currValue = this.substituteFilterTokens(currValue);
          }
-         
+
          // Convert booleans to strings for simple comparison...
          // This is necessary because when creating pages dynamically the boolean values
          // will end up as strings so the comparison won't work.
