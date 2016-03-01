@@ -241,18 +241,20 @@ define(["dojo/_base/declare",
        */
       showUploadsWidget: function alfresco_services_UploadService__showUploadsWidget() {
          var dfd = new Deferred(),
-            dialogDisplayedTopic = "PROGRESS_DIALOG_DISPLAYED",
-            displayedSubHandle = this.alfSubscribe(dialogDisplayedTopic, lang.hitch(this, function() {
+             dialogDisplayedTopic = "PROGRESS_DIALOG_DISPLAYED",
+             displayedSubHandle = this.alfSubscribe(dialogDisplayedTopic, lang.hitch(this, function() {
                this.alfUnsubscribe(displayedSubHandle);
                dfd.resolve();
-            }));
+             }));
+
+         var widgetsForUploadDisplay = this.processWidgetsForUploadDisplay();
          this.alfServicePublish(topics.CREATE_DIALOG, {
             dialogId: "ALF_UPLOAD_PROGRESS_DIALOG",
             dialogTitle: this.createProgressDialogTitle(),
             publishOnShow: [{
                publishTopic: dialogDisplayedTopic
             }],
-            widgetsContent: this.widgetsForUploadDisplay,
+            widgetsContent: widgetsForUploadDisplay,
             widgetsButtons: this.widgetsButtons
          });
          return dfd.promise;

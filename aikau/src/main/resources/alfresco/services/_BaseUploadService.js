@@ -258,16 +258,6 @@ define(["alfresco/core/CoreXhr",
        */
       initService: function alfresco_services__BaseUploadService__initService() {
          this.inherited(arguments);
-         this.widgetsForUploadDisplay = lang.clone(this.widgetsForUploadDisplay);
-         var widgets = this.widgetsForUploadDisplay;
-         if (widgets && widgets.constructor === Array && widgets.length === 1) {
-            lang.mixin(widgets[0], {
-               assignTo: "uploadDisplayWidget",
-               assignToScope: this
-            });
-         } else {
-            this.alfLog("error", "Must define a widget for displaying upload progress in property 'widgetsForUploadDisplay'");
-         }
          this.reset();
       },
 
@@ -523,6 +513,30 @@ define(["alfresco/core/CoreXhr",
             this.uploadDisplayWidget.handleFailedUpload(fileId, evt, fileInfo.request);
             this.onUploadFinished(fileId);
          }
+      },
+
+      /**
+       * This function can be called when creating the upload display. It ensures that the root widget is correctly
+       * configured to be assigned to the [widgetsForUploadDisplay]{@link module:alfresco/services/_BaseUploadService#widgetsForUploadDisplay}
+       * reference. Care should be taken When overriding the 
+       * [showUploadsWidget]{@link module:alfresco/services/_BaseUploadService#showUploadsWidget} to ensure that any model
+       * is correctly setup by calling this function.
+       * 
+       * @return {object[]} The object model for rendering the upload display
+       * @instance 1.0.57
+       */
+      processWidgetsForUploadDisplay: function alfresco_services__BaseUploadService__processWidgetsForUploadDisplay() {
+         var widgets = lang.clone(this.widgetsForUploadDisplay);
+         if (widgets && widgets.constructor === Array && widgets.length === 1) {
+            lang.mixin(widgets[0], {
+               assignTo: "uploadDisplayWidget",
+               assignToScope: this
+            });
+         } 
+         else {
+            this.alfLog("error", "Must define a widget for displaying upload progress in property 'widgetsForUploadDisplay'");
+         }
+         return widgets;
       },
 
       /**
