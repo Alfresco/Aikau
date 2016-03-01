@@ -1,4 +1,4 @@
-Aikau 1.0.56 Release Notes
+Aikau 1.0.57 Release Notes
 ===
 
 Current deprecations:
@@ -42,6 +42,16 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.57:
+* [AKU-834](https://issues.alfresco.com/jira/browse/AKU-834)       - Ensure FileSelect does not fire change event on selection of same file
+* [AKU-837](https://issues.alfresco.com/jira/browse/AKU-837)       - Externalise MultiSelectInput selectors for testing
+* [AKU-844](https://issues.alfresco.com/jira/browse/AKU-844)       - Added requestAnimationFrame shim for IE9 (for list fix)
+* [AKU-851](https://issues.alfresco.com/jira/browse/AKU-851)       - Ensure widgetsForUploadDisplay can be customized for upload services
+* [AKU-853](https://issues.alfresco.com/jira/browse/AKU-853)       - Improve customization options for upload dialogs
+* [AKU-855](https://issues.alfresco.com/jira/browse/AKU-855)       - Support warnIfNotAvailable message for Date renderer
+* [AKU-859](https://issues.alfresco.com/jira/browse/AKU-859)       - Ensure compactMode option on Paginator works correctly
+* [AKU-863](https://issues.alfresco.com/jira/browse/AKU-863)       - Support for renderFilter client properties for models defined within widgets with currentItem
+
 1.0.56:
 * [AKU-795](https://issues.alfresco.com/jira/browse/AKU-795)       - Cancel in-progress uploads from UploadMonitor
 * [AKU-796](https://issues.alfresco.com/jira/browse/AKU-796)       - Configurable action suppport in UploadMonitor
