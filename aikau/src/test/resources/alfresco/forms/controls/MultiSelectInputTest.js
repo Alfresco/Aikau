@@ -27,7 +27,7 @@ define(["intern!object",
    function(registerSuite, assert, TestCommon, keys) {
 
       // Get the selectors for the MultiInputSelect widget...
-      var MultiSelectInputSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiInputSelect");
+      var MultiSelectInputSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiSelectInput");
       var FormSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
       var DialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
 
