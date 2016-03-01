@@ -18,7 +18,14 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
-      "alfresco/services/UploadService",
+      {
+         name: "alfresco/services/UploadService",
+         config: {
+            widgetsForUploadDisplay: [{
+               name: "alfresco/upload/AlfUploadDisplay"
+           }]
+         }
+      },
       {
          name: "alfresco/services/UploadService",
          config: {

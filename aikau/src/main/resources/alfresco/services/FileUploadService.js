@@ -101,10 +101,11 @@ define(["alfresco/core/topics",
        */
       showUploadsWidget: function alfresco_services_FileUploadService__showUploadsWidget() {
          var dfd = new Deferred();
+         var widgetsForUploadDisplay = this.processWidgetsForUploadDisplay();
          this.alfServicePublish(topics.DISPLAY_STICKY_PANEL, {
             title: this.message(this.uploadsContainerTitle, 0),
             padding: 0,
-            widgets: this.widgetsForUploadDisplay,
+            widgets: widgetsForUploadDisplay,
             callback: lang.hitch(this, function(panel) {
                this.uploadsContainer = panel;
                dfd.resolve();
