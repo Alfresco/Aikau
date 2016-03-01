@@ -27,89 +27,101 @@
  */
 define(["intern!object", 
         "intern/chai!assert", 
-        "require", 
         "alfresco/TestCommon"], 
-        function(registerSuite, assert, require, TestCommon) {
+        function(registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Indicators Tests",
+      return {
+         name: "Indicators Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Indicators", "Indicators Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/Indicators", "Indicators Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Indicators without actions do not respond to clicks": function() {
-         var currentLogRows;
-         return browser.findAllByCssSelector(".log > tbody > tr")
-            .then(function(elements) {
-               currentLogRows = elements.length;
-            })
+         "Indicators without actions do not respond to clicks": function() {
+            var currentLogRows;
+            return browser.findAllByCssSelector(".log > tbody > tr")
+               .then(function(elements) {
+                  currentLogRows = elements.length;
+               })
             .end()
 
-         .findByCssSelector(".indicator[alt=geographic]")
-            .click()
+            .findByCssSelector(".indicator[alt=geographic]")
+               .click()
             .end()
 
-         .findAllByCssSelector(".log > tbody > tr")
-            .then(function(elements) {
-               assert.equal(currentLogRows, elements.length, "New action occurred when clicking indicator without action");
-            });
-      },
+            .findAllByCssSelector(".log > tbody > tr")
+               .then(function(elements) {
+                  assert.equal(currentLogRows, elements.length, "New action occurred when clicking indicator without action");
+               });
+         },
 
-      "Indicators with actions publish to the ALF_SINGLE_DOCUMENT_ACTION_REQUEST topic": function() {
-         return browser.findByCssSelector(".indicator[alt=cloud-indirect-sync]")
-            .click()
+         "Indicators with actions publish to the ALF_SINGLE_DOCUMENT_ACTION_REQUEST topic": function() {
+            return browser.findByCssSelector(".indicator[alt=cloud-indirect-sync]")
+               .click()
             .end()
 
-         .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_SINGLE_DOCUMENT_ACTION_REQUEST", "action", "onCloudIndirectSyncIndicatorAction"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Action indicator did not publish topic");
-            });
-      },
+            .getLastPublish("ALF_SINGLE_DOCUMENT_ACTION_REQUEST")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "action", "onCloudIndirectSyncIndicatorAction", "Action indicator did not publish topic");
+               });
+         },
 
-      "Indicators with custom actions publish to their custom topic": function() {
-         return browser.findByCssSelector(".indicator[alt=bob]")
-            .click()
+         "Indicators with custom actions publish to their custom topic": function() {
+            return browser.findByCssSelector(".indicator[alt=bob]")
+               .click()
             .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("CUSTOM_ACTION", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Custom action did not publish custom topic");
-            });
-      },
+            .getLastPublish("CUSTOM_ACTION");
+         },
 
-      "Indicator titles are correct": function() {
-         return browser.findByCssSelector(".indicator[alt=geographic]")
-            .getAttribute("title")
-            .then(function(titleValue) {
-               assert.equal("Geolocation metadata available", titleValue, "Title attribute of indicator incorrect");
-            });
-      },
+         "Indicator titles are correct": function() {
+            return browser.findByCssSelector(".indicator[alt=geographic]")
+               .getAttribute("title")
+               .then(function(titleValue) {
+                  assert.equal("Geolocation metadata available", titleValue, "Title attribute of indicator incorrect");
+               });
+         },
 
-      "Indicators handle overrides and sorting appropriately": function() {
-         return browser.findAllByCssSelector(".indicator")
-            .then(function(elements) {
-               assert.lengthOf(elements, 3, "Incorrect number of display indicators (overrides not working)");
-            })
+         "Indicators handle overrides and sorting appropriately": function() {
+            return browser.findAllByCssSelector("#INDICATORS1 .indicator")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 3, "Incorrect number of display indicators (overrides not working)");
+               })
             .end()
 
-         .findAllByCssSelector(".indicator[alt=bob] + .indicator[alt=geographic] + .indicator[alt=cloud-indirect-sync]")
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Indicators not sorted correctly, or overrides incorrect");
-            });
-      },
+            .findAllByCssSelector(".indicator[alt=bob] + .indicator[alt=geographic] + .indicator[alt=cloud-indirect-sync]")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 1, "Indicators not sorted correctly, or overrides incorrect");
+               });
+         },
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+         "Indicator in legacyMode has correct URL": function() {
+            return browser.findByCssSelector("#INDICATORS3 .indicator:nth-of-type(1)")
+               .getAttribute("src")
+               .then(function(src) {
+                  assert.equal(src, "/aikau/res/components/documentlibrary/indicators/exif-16.png");
+               });
+         },
+
+         "Indicator icon can be mapped": function() {
+            return browser.findByCssSelector("#INDICATORS3 .indicator:nth-of-type(2)")
+               .getAttribute("src")
+               .then(function(src) {
+                  assert.equal(src, "/aikau/res/some/custom/image.jpg");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

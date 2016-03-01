@@ -7,8 +7,8 @@ var multipleWidgets = [],
          label: "This is a heading"
       }
    },
-   numWidgets = 10;
-for(var i = 0; i < numWidgets; i++) {
+   numWidgets = 8;
+for (var i = 0; i < numWidgets; i++) {
    multipleWidgets.push(singleWidget);
 }
 
@@ -22,27 +22,63 @@ model.jsonModel = {
                all: true
             }
          }
-      }
+      },
+      "alfresco/services/NotificationService"
    ],
-   widgets:[
+   widgets: [
       {
-         name: "alfresco/html/Heading",
-         id: "PAGE_HEADING",
+         name: "alfresco/layout/FixedHeaderFooter",
          config: {
-            level: 3,
-            label: "Page used for development only. This widget should be instantiated through the NotificationService."
+            height: "auto",
+            widgetsForHeader: [
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  id: "OPEN_STICKY_PANEL",
+                  config: {
+                     label: "Open StickyPanel",
+                     publishTopic: "ALF_DISPLAY_STICKY_PANEL",
+                     publishPayload: {
+                        title: "This is a sticky panel",
+                        widgets: multipleWidgets,
+                        width: 500,
+                        warnIfOpen: false
+                     }
+                  }
+               }
+            ],
+            widgets: [
+               {
+                  name: "alfresco/logging/DebugLog"
+               }
+            ],
+            widgetsForFooter: [
+               {
+                  name: "alfresco/layout/LeftAndRight",
+                  config: {
+                     widgetsLeft: [
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           id: "LEFT_BUTTON",
+                           config: {
+                              label: "Left button",
+                              publishTopic: "LEFT_BUTTON_PUSHED"
+                           }
+                        }
+                     ],
+                     widgetsRight: [
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           id: "RIGHT_BUTTON",
+                           config: {
+                              label: "Right button",
+                              publishTopic: "RIGHT_BUTTON_PUSHED"
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
          }
-      },
-      {
-         name: "alfresco/layout/StickyPanel",
-         id: "STICKY_PANEL",
-         config: {
-            panelWidth: 400,
-            widgets: multipleWidgets
-         }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
    ]
 };

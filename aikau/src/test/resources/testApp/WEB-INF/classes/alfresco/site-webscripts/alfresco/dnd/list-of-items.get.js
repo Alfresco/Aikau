@@ -38,7 +38,7 @@ model.jsonModel = {
                            },
                            {
                               type: [ "widget" ],
-                              label: "Value 2",
+                              label: "dnd.item.xss",
                               value: {
                                  name: "1",
                                  b: "2"
@@ -86,7 +86,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

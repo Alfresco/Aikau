@@ -84,6 +84,9 @@
          &--focused {
             background: #06a;
             color: @highlighted-font-color;
+            * {
+               color: @highlighted-font-color;
+            }
          }
          &--already-chosen {
             background: @list-background-color;

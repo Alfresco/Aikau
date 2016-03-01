@@ -102,6 +102,19 @@ define([],function() {
       CANCEL_EDIT: "ALF_DOC_CANCEL_EDITING",
 
       /**
+       * Cancel an in-progress upload.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.56
+       *
+       * @event
+       * @property {string} fileId The ID of the file to cancel
+       */
+      CANCEL_INPROGRESS_UPLOAD: "CANCEL_INPROGRESS_UPLOAD",
+
+      /**
        * This can be published to clear any selected items that are logged by widgets
        * such as the [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
        *
@@ -227,6 +240,19 @@ define([],function() {
       CREATE_TAG: "ALF_CREATE_TAG",
 
       /**
+       * This can be published to make a request to show a new dialog for creating sites. This is typically handled by
+       * the [SiteService]{@link module:alfresco/services/SiteService}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      CREATE_SITE: "ALF_CREATE_SITE",
+
+      /**
        * Delete the archive created for downloading.
        *
        * @instance
@@ -257,7 +283,7 @@ define([],function() {
        * @event module:alfresco/core/topics~DELETE_SITE
        * @property {object} [redirect] - The redirect data to use after successfully deleting the site
        * @property {string} [redirect.url] - The URL to navigate to
-       * @property {string} [redirect.type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
+       * @property {string} [redirect.type=PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes}
        * @property {string} [redirect.target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        */
       DELETE_SITE: "ALF_DELETE_SITE",
@@ -447,6 +473,19 @@ define([],function() {
        * @property {object} response.item The metadata for the requested node
        */
       DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS: "ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS",
+
+      /**
+       * This topic can be published to display a dialog that allow the details of a site to be edited.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       * @parameter {string} site The shortName of the site to be edited
+       */
+      EDIT_SITE: "ALF_EDIT_SITE",
 
       /**
        * This topic can be fired when the enter key is pressed (but normally is not by default).
@@ -668,9 +707,10 @@ define([],function() {
        * @since 1.0.35
        *
        * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
-       * @property {string} url - The URL to navigate to
-       * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
-       * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
+       * @property {string} url The URL to navigate to
+       * @property {string} [type=PAGE_RELATIVE] The [type of navigation]{@link module:alfresco/enums/urlTypes}
+       * @property {string} [target=CURRENT] Whether to use the "CURRENT" tab, open in a "NEW" tab, or use a "NAMED" tab
+       * @property {string} [targetName] The name of the tab to create when using "NAMED" as the target value
        * @property {string} [modifyCurrent=false] Whether to modify the current hash (default is to completely replace it)
        */
       NAVIGATE_TO_PAGE: "ALF_NAVIGATE_TO_PAGE",
@@ -733,7 +773,7 @@ define([],function() {
        *
        * @event module:alfresco/core/topics~POST_TO_PAGE
        * @property {string} url - The URL to navigate to
-       * @property {string} [type=module:alfresco/enums/urlTypes#PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes#PAGE_RELATIVE}
+       * @property {string} [type=PAGE_RELATIVE] - The [type of navigation]{@link module:alfresco/enums/urlTypes}
        * @property {string} [target=CURRENT"] - Whether to use the current tab ("CURRENT") or open in a new tab ("NEW")
        * @property {object} [parameters={}] - The parameters to include in the POST
        */
@@ -993,6 +1033,73 @@ define([],function() {
       SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
 
       /**
+       * This topic can be published to perform the actual creation of a site. Unlike 
+       * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
+       * details for the new site (as it performs the actual creation on the Alfresco Repository rather than
+       * just showing a site creation dialog).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       * @property {string} title The display title of the site
+       * @property {string} shortName The unique site identifier
+       * @property {string} description The site description
+       * @property {string} preset The Surf preset to use for the site
+       * @property {string} visibility The visibility of the site ("PUBLIC" or "PRIVATE")
+       * @property {boolean} moderated Indicates whether "PUBLIC" sites should have moderated membership
+       */
+      SITE_CREATION_REQUEST: "ALF_SITE_CREATION_REQUEST",
+
+      /**
+       * This topic is published in response to [SITE_CREATION_REQUEST]{@link module:alfresco/core/topics#SITE_CREATION_REQUEST}
+       * to indicate that the site creation attempt was successful.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      SITE_CREATION_SUCCESS: "ALF_SITE_CREATION_SUCCESS",
+
+      /**
+       * This topic can be published to perform the actual creation of a site. Unlike 
+       * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
+       * details for the new site (as it performs the actual creation on the Alfresco Repository rather than
+       * just showing a site creation dialog).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       * @property {string} title The display title of the site
+       * @property {string} shortName The unique site identifier
+       * @property {string} description The site description
+       * @property {string} visibility The visibility of the site ("PUBLIC" or "PRIVATE")
+       * @property {boolean} moderated Indicates whether "PUBLIC" sites should have moderated membership 
+       */
+      SITE_EDIT_REQUEST: "ALF_SITE_EDIT_REQUEST",
+
+      /**
+       * This topic is published in response to [SITE_EDIT_REQUEST]{@link module:alfresco/core/topics#SITE_EDIT_REQUEST}
+       * to indicate that the site edit attempt was successful.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      SITE_EDIT_SUCCESS: "ALF_SITE_EDIT_SUCCESS",
+
+      /**
        * This can be published to request a "smart" download. It is smart because it will determine whether
        * or not to download a single item individually or multiple items as a ZIP.
        * 
@@ -1055,6 +1162,30 @@ define([],function() {
        * @event
        */
       STICKY_PANEL_ENABLE_CLOSE: "ALF_STICKY_PANEL_ENABLE_CLOSE",
+
+      /**
+       * This can be called to minimise the StickyPanel.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      STICKY_PANEL_MINIMISE: "ALF_STICKY_PANEL_MINIMISE",
+
+      /**
+       * This can be called to restore the StickyPanel from a minimised state.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       *
+       * @event
+       */
+      STICKY_PANEL_RESTORE: "ALF_STICKY_PANEL_RESTORE",
 
       /**
        * This can be called to set the title of the StickyPanel.

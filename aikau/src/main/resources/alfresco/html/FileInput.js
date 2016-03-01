@@ -72,13 +72,6 @@ define(["dojo/_base/declare",
       label: "",
 
       /**
-       * @instance
-       */
-      postMixinProperties: function alfresco_html_FileInput__postMixinProperties() {
-         // No action
-      },
-
-      /**
        * This returns the files attribute of the input element
        *
        * @instance

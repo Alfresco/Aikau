@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Render Filters</shortname>
-  <description>Examples of how you can use the 'renderFilter' configuration to control when widgets are rendered on page load.</description>
-  <family>ExamplePage</family>
-  <url>/RenderFilter</url>
-</webscript>

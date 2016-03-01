@@ -87,7 +87,7 @@ define(["intern!object",
 
             .getLastPublish("ALF_DISPLAY_NOTIFICATION")
                .then(function(payload) {
-                  assert.propertyVal(payload, "message", "You cannot edit 'Another document'.");
+                  assert.propertyVal(payload, "message", "You can't edit 'Another document'.");
                });
          },
 

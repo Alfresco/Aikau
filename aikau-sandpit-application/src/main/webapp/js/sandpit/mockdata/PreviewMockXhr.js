@@ -27,10 +27,11 @@
 define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/image.json",
+        "dojo/text!./responseTemplates/landscape.json",
         "dojo/text!./responseTemplates/video.json",
         "dojo/text!./responseTemplates/audio.json",
         "dojo/text!./responseTemplates/pdf.json"], 
-        function(declare, MockXhr, imageNode, videoNode, audioNode, pdfNode, pdfContent) {
+        function(declare, MockXhr, imageNode, landscapeNode, videoNode, audioNode, pdfNode) {
    
    return declare([MockXhr], {
 
@@ -53,6 +54,12 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":7962},
                                      imageNode]);
+            this.server.respondWith("GET",
+                                    /\/(.*)\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/Landscape\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":7962},
+                                     landscapeNode]);
             this.server.respondWith("GET",
                                     /\/(.*)\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/video\?(.*)/,
                                     [200,

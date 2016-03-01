@@ -21,6 +21,10 @@
  * <p>This service can be used to control the uploading of content as well as
  * the updating the content of existing nodes on an Alfresco Repository.</p>
  * 
+ * <p><strong>NOTE:</strong> There is a bug with older browsers (IE8/IE9/IE10 only)
+ * that means that it is not possible to click on elements to the left or right of
+ * the upload panel.</p>
+ * 
  * @module alfresco/services/FileUploadService
  * @extends module:alfresco/services/_BaseUploadService
  * @author Martin Doyle
@@ -72,7 +76,7 @@ define(["alfresco/core/topics",
        */
       resetTotalUploads: function alfresco_services_FileUploadService__resetTotalUploads() {
          this.inherited(arguments);
-         this.alfPublish(topics.STICKY_PANEL_ENABLE_CLOSE);
+         this.alfServicePublish(topics.STICKY_PANEL_ENABLE_CLOSE);
       },
 
       /**
@@ -84,7 +88,7 @@ define(["alfresco/core/topics",
        */
       registerSubscriptions: function alfresco_services_FileUploadService__registerSubscriptions() {
          this.inherited(arguments);
-         this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, this.onUploadsContainerClosed));
+         this.alfSubscribe(topics.STICKY_PANEL_CLOSED, lang.hitch(this, this.onUploadsContainerClosed), true);
       },
 
       /**
@@ -97,16 +101,17 @@ define(["alfresco/core/topics",
        */
       showUploadsWidget: function alfresco_services_FileUploadService__showUploadsWidget() {
          var dfd = new Deferred();
+         var widgetsForUploadDisplay = this.processWidgetsForUploadDisplay();
          this.alfServicePublish(topics.DISPLAY_STICKY_PANEL, {
             title: this.message(this.uploadsContainerTitle, 0),
             padding: 0,
-            widgets: this.widgetsForUploadDisplay,
+            widgets: widgetsForUploadDisplay,
             callback: lang.hitch(this, function(panel) {
                this.uploadsContainer = panel;
                dfd.resolve();
             })
          });
-         this.alfPublish(topics.STICKY_PANEL_DISABLE_CLOSE);
+         this.alfServicePublish(topics.STICKY_PANEL_DISABLE_CLOSE);
          return dfd.promise;
       }
    });

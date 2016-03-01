@@ -1,43 +1,47 @@
-.alfresco-dnd-DragAndDropItem.dragTemplate {
-   border: 1px solid #CCC;
-   margin: 5px;
-   padding: 5px;
-   width: 150px;
-   display: inline-block;
-   box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.3);
-   background-color: #fff;
-   background-image: none;
-}
+.alfresco-dnd-DragAndDropItem {
 
-.alfresco-dnd-DragAndDropItem.dragTemplate:focus {
-   border: 4px solid orange;
-}
+   &.dragTemplate {
+      border: @standard-form-border;
+      margin: @dnd-item-margin;
+      padding: @dnd-item-padding;
+      width: @dnd-item-width;
+      display: inline-block;
+      box-shadow: @standard-box-shadow;
+      background-color: @primary-background-color;
+      background-image: none;
 
-.alfresco-dnd-DragAndDropItem.dragTemplate.selected {
-   border: 4px solid green;
-}
+      &:focus {
+         border: @dnd-focused-border;
+      }
 
-.alfresco-dnd-DragAndDropItem.dragTemplate.dojoDndItemAnchor {
-   background-color: #fff;
-   background-image: none;
-}
+      span {
+         vertical-align: middle;
+         display: inline-block;
+      }
 
-.alfresco-dnd-DragAndDropItem.dragTemplate.dojoDndItemOver {
-   background-color: #eee;
-   background-image: none;
-}
+      .icon {
+         background-repeat: no-repeat;
+         height: 20px;
+         width: 20px;
+      }
 
-.alfresco-dnd-DragAndDropItem.dragTemplate span {
-   vertical-align: middle;
-   display: inline-block;
-}
+      .title {
+         width: @dnd-item-title-width;
+         word-wrap: break-word;
+      }
 
-.alfresco-dnd-DragAndDropItem.dragTemplate .icon {
-   background-repeat: no-repeat;
-   height: 20px;
-   width: 20px;
-}
+      &.selected {
+         border: @dnd-selected-border;
+      }
 
-.alfresco-dnd-DragAndDropItem.dragTemplate .title {
-   width: 90px;
+      &.dojoDndItemAnchor {
+         background-color: @primary-background-color;
+         background-image: none;
+      }
+
+      &.dojoDndItemOver {
+         background-color: @dnd-item-hover-background;
+         background-image: none;
+      }
+   }
 }

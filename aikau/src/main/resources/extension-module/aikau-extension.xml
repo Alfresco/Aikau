@@ -17,16 +17,17 @@
                      <base-url>/res/</base-url>
                      <default-less-configuration>/js/aikau/${project.version}/alfresco/css/less/defaults.less</default-less-configuration><messages-object>Alfresco</messages-object>
                      <packages>
-                         <package name="service"      location="../service"/>
-                         <package name="dojo"         location="js/lib/dojo-${dependency.dojo.version}/dojo"/>
-                         <package name="dijit"        location="js/lib/dojo-${dependency.dojo.version}/dijit"/>
-                         <package name="dojox"        location="js/lib/dojo-${dependency.dojo.version}/dojox"/>
-                         <package name="alfresco"     location="js/aikau/${project.version}/alfresco"/>
-                         <package name="surf"         location="js/surf"/>
-                         <package name="cm"           location="js/lib/code-mirror"/>
-                         <package name="jquery"       location="js/lib/jquery-${dependency.jquery.version}" main="jquery-${dependency.jquery.version}.min"/>
-                         <package name="jqueryui"     location="js/lib/jquery-ui-${dependency.jquery-ui.version}" main="jquery-ui.min"/>
-                         <package name="showdown"     location="js/lib/showdown-1.3.0" main="showdown.min"/>
+                        <package name="service"       location="../service"/>
+                        <package name="dojo"          location="js/lib/dojo-${dependency.dojo.version}/dojo"/>
+                        <package name="dijit"         location="js/lib/dojo-${dependency.dojo.version}/dijit"/>
+                        <package name="dojox"         location="js/lib/dojo-${dependency.dojo.version}/dojox"/>
+                        <package name="alfresco"      location="js/aikau/${project.version}/alfresco"/>
+                        <package name="surf"          location="js/surf"/>
+                        <package name="cm"            location="js/lib/code-mirror"/>
+                        <package name="jquery"        location="js/lib/jquery-${dependency.jquery.version}" main="jquery-${dependency.jquery.version}.min"/>
+                        <package name="jqueryui"      location="js/lib/jquery-ui-${dependency.jquery-ui.version}" main="jquery-ui.min"/>
+                        <package name="showdown"      location="js/lib/showdown-1.3.0" main="showdown.min"/>
+                        <package name="svg4everybody" location="js/lib/svg4everybody" main="svg4everybody.min"/>
                      </packages>
                   </dojo-pages>
                </web-framework>

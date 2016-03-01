@@ -21,51 +21,76 @@
  * @author Dave Draper
  */
 define(["intern!object",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        function (registerSuite, assert, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   registerSuite(function(){
+      var browser;
 
-   return {
-      name: "Image Preview Tests",
+      return {
+         name: "Image Preview Tests",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/ImagePreview", "Image Preview Tests").end();
-      },
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/ImagePreview", "Image Preview Tests").end();
+         },
 
-      beforeEach: function() {
-         browser.end();
-      },
+         beforeEach: function() {
+            browser.end();
+         },
 
-      "Tests": function () {
-         return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer")
-            .then(null, function() {
-               assert(false, "Test #1a - Couldn't find preview node");
-            })
+         "Find image preview node": function () {
+            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer");
+         },
+
+         "Find image source request": function() {
+            return browser.findAllByCssSelector(".alfresco-testing-MockXhr table tbody tr")
+               .then(function(elements) {
+                  assert.lengthOf(elements,1, "Expected just one XHR request");
+               })
             .end()
 
-         .findAllByCssSelector(".alfresco-testing-MockXhr table tbody tr")
-            .then(function(elements) {
-               assert(elements.length === 1, "Test #2a - Expected just one XHR request, found: " + elements.length);
-            })
-            .end()
+            .findByCssSelector(".alfresco-testing-MockXhr table tbody tr:first-child td.mx-url")
+               .getVisibleText()
+                  .then(function(text) {
+                     var result = text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1;
+                     assert(result, "Test #2b - AlfDocument didn't request node details: " + text);
+                  });
+         },
 
-         .findByCssSelector(".alfresco-testing-MockXhr table tbody tr:first-child td.mx-url")
-            .getVisibleText()
-            .then(function(text) {
-               var result = text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1;
-               assert(result, "Test #2b - AlfDocument didn't request node details: " + text);
-            });
-      },
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
 
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Image Preview Tests (plugin removal)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/ImagePreview?removeCondition=true", "Image Preview Tests (plugin removal)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Image cannot be previewed": function () {
+            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview .previewer .message")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.include(text, "This document can't be previewed.");
+               });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
    });
 });

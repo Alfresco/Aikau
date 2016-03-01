@@ -31,6 +31,18 @@ define(["alfresco/forms/controls/BaseFormControl",
    return declare([BaseFormControl], {
       
       /**
+       * Configuring this attribute to be true will result in the wrapped [FileInput]{@link module:alfresco/html/FileInput}
+       * widget being recreated each time that file or files are selected. This option was added to support a specific
+       * use case, see https://issues.alfresco.com/jira/browse/AKU-834 for details.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.57
+       */
+      recreateControlOnSelect: false,
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_FileSelect__getWidgetConfig() {
@@ -46,6 +58,23 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       createFormControl: function alfresco_forms_controls_FileSelect__createFormControl(config, /*jshint unused:false*/ domNode) {
          return new FileInput(config);
+      },
+
+      /**
+       * Recreate the control (part of fix for AKU-834)
+       *
+       * @instance
+       * @since 1.0.57
+       */
+      recreateControl: function alfresco_forms_controls_FileSelect__recreateControl() {
+         var config = {
+            id: this.wrappedWidget.id,
+            name: this.name
+         };
+         this.wrappedWidget.destroy();
+         this.wrappedWidget = this.createFormControl(config);
+         this.wrappedWidget.placeAt(this._controlNode);
+         this.setupChangeEvents();
       },
       
       /**
@@ -66,9 +95,13 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @param {object} evt The onchange event
        */
-      onFilesSelected: function alfresco_forms_controls_FileSelect__FileSelect(evt) {
+      onFilesSelected: function alfresco_forms_controls_FileSelect__onFilesSelected(evt) {
          this.alfLog("log", "Files selected", evt, this);
          this.onValueChangeEvent(this.name, this.lastValue, this.wrappedWidget.getValue());
+         if (this.recreateControlOnSelect)
+         {
+            this.recreateControl(); // This is needed to fix AKU-834
+         }
       }
    });
 });

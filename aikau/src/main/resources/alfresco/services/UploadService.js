@@ -88,6 +88,28 @@ define(["dojo/_base/declare",
       uploadsContainerTitleUpdateTopic: topics.DIALOG_CHANGE_TITLE,
 
       /**
+       * The buttons to use in the dialog. Note that if this is overridden then be cautious of re-using
+       * the "assignTo/assignToScope" properties, and to only use them if you fully understand their
+       * purpose.
+       *
+       * @instance
+       * @type {object[]}
+       * @since 1.0.57
+       */
+      widgetsButtons: [
+         {
+            id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
+            name: "alfresco/buttons/AlfButton",
+            assignTo: "dialogButton",
+            config: {
+               label: "progress-dialog.cancel-button.label",
+               publishTopic: topics.UPLOAD_CANCELLATION,
+               additionalCssClasses: "call-to-action"
+            }
+         }
+      ],
+
+      /**
        * This defines the JSON structure for the widgets to be displayed in the progress dialog. This
        * can be overridden by extending widgets to render a different display in the dialog
        *
@@ -130,6 +152,13 @@ define(["dojo/_base/declare",
          if (this.progressDialogTitleKey) {
             this.alfLog("warn", "'progressDialogTitleKey' in UploadService has been deprecated - use 'uploadsContainerTitle' instead");
             this.uploadsContainerTitle = this.progressDialogTitleKey;
+         }
+         if (this.widgetsButtons && this.widgetsButtons.length) {
+            array.forEach(this.widgetsButtons, function(dialogButton) {
+               if(dialogButton.assignTo) {
+                  dialogButton.assignToScope = this;
+               }
+            }, this);
          }
          this.inherited(arguments);
       },
@@ -180,10 +209,12 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload containing the original upload request
        * @since 1.0.52
        */
-      onUploadsBatchComplete: function alfresco_services__BaseUploadService__onUploadsBatchComplete(/*jshint unused:false*/ payload) {
+      onUploadsBatchComplete: function alfresco_services__BaseUploadService__onUploadsBatchComplete( /*jshint unused:false*/ payload) {
          this.inherited(arguments);
-         this.dialogButton.setLabel(this.message("progress-dialog.ok-button.label"));
-         this.dialogButton.publishTopic = topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT;
+         if (this.dialogButton) {
+            this.dialogButton.setLabel(this.message("progress-dialog.ok-button.label"));
+            this.dialogButton.publishTopic = topics.UPLOAD_COMPLETION_ACKNOWLEDGEMENT;
+         }
       },
 
       /**
@@ -210,29 +241,21 @@ define(["dojo/_base/declare",
        */
       showUploadsWidget: function alfresco_services_UploadService__showUploadsWidget() {
          var dfd = new Deferred(),
-            dialogDisplayedTopic = "PROGRESS_DIALOG_DISPLAYED",
-            displayedSubHandle = this.alfSubscribe(dialogDisplayedTopic, lang.hitch(this, function() {
+             dialogDisplayedTopic = "PROGRESS_DIALOG_DISPLAYED",
+             displayedSubHandle = this.alfSubscribe(dialogDisplayedTopic, lang.hitch(this, function() {
                this.alfUnsubscribe(displayedSubHandle);
                dfd.resolve();
-            }));
+             }));
+
+         var widgetsForUploadDisplay = this.processWidgetsForUploadDisplay();
          this.alfServicePublish(topics.CREATE_DIALOG, {
             dialogId: "ALF_UPLOAD_PROGRESS_DIALOG",
             dialogTitle: this.createProgressDialogTitle(),
             publishOnShow: [{
                publishTopic: dialogDisplayedTopic
             }],
-            widgetsContent: this.widgetsForUploadDisplay,
-            widgetsButtons: [{
-               id: "ALF_UPLOAD_PROGRESS_DIALOG_CANCELLATION",
-               name: "alfresco/buttons/AlfButton",
-               assignTo: "dialogButton",
-               assignToScope: this,
-               config: {
-                  label: this.message("progress-dialog.cancel-button.label"),
-                  publishTopic: topics.UPLOAD_CANCELLATION,
-                  additionalCssClasses: "call-to-action"
-               }
-            }]
+            widgetsContent: widgetsForUploadDisplay,
+            widgetsButtons: this.widgetsButtons
          });
          return dfd.promise;
       }

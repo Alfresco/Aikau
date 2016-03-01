@@ -73,6 +73,19 @@ define(["alfresco/core/CoreXhr",
       }],
 
       /**
+       * The Alfresco repository features multiple upload REST APIs. Up to and including version 5.1 of Alfresco
+       * supports the "version zero" REST API (also known as Share Services API) for Upload. In addition post 5.1
+       * there is a "version one" Public Upload API also. Set this value to 1 to use the new version one API, else
+       * the classic v0 API will be used and Share Services AMP must be applied to the repository.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.55
+       */
+      apiVersion: 0,
+
+      /**
        * Stores references and state for each file that is in the file list. The fileId is used as
        * the key and the value is a [File object]{@link module:alfresco/services/_BaseUploadService#File}.
        *
@@ -205,6 +218,17 @@ define(["alfresco/core/CoreXhr",
       uploadTopic: topics.UPLOAD_REQUEST,
 
       /**
+       * The location of the upload endpoint, used when using an
+       * [apiVersion]{@link module:alfresco/services/_BaseUploadService#apiVersion} of 0.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.55
+       */
+      uploadURL: "api/upload",
+
+      /**
        * The widget definition that displays the uploads' progress. This should
        * be a single widget that implements the interface defined by
        * [_UploadsDisplayMixin]{@link module:alfresco/services/_UploadsDisplayMixin}.
@@ -234,15 +258,6 @@ define(["alfresco/core/CoreXhr",
        */
       initService: function alfresco_services__BaseUploadService__initService() {
          this.inherited(arguments);
-         var widgets = this.widgetsForUploadDisplay;
-         if (widgets && widgets.constructor === Array && widgets.length === 1) {
-            lang.mixin(widgets[0], {
-               assignTo: "uploadDisplayWidget",
-               assignToScope: this
-            });
-         } else {
-            this.alfLog("error", "Must define a widget for displaying upload progress in property 'widgetsForUploadDisplay'");
-         }
          this.reset();
       },
 
@@ -266,9 +281,8 @@ define(["alfresco/core/CoreXhr",
        * @param {string} fileId The unique id of the file being uploaded
        * @param {object} evt The cancellation event
        */
-      cancelListener: function alfresco_services__BaseUploadService__cancelListener( /*jshint unused:false*/ fileId, /*jshint unused:false*/ evt) {
-         this.alfLog("debug", "Cancelled uploads not yet handled");
-         this.onUploadFinished(fileId);
+      cancelListener: function alfresco_services__BaseUploadService__cancelListener(/*jshint unused:false*/ fileId, /*jshint unused:false*/ evt) {
+         this.failureListener.apply(this, arguments); // Defer directly to the failure listener
       },
 
       /**
@@ -322,6 +336,23 @@ define(["alfresco/core/CoreXhr",
             if (fileInfo.state !== this.STATE_FAILURE) {
                this.processUploadFailure(fileId, evt);
             }
+         }
+      },
+
+      /**
+       * Cancel the specified upload.
+       *
+       * @instance
+       * @param {object} payload The publication payload
+       * @since 1.0.56
+       */
+      onUploadCancelRequest: function alfresco_services__BaseUploadService__onUploadCancelRequest(payload) {
+         var fileId = payload && payload.fileId,
+            fileInfo = this.fileStore[fileId];
+         try {
+            fileInfo.request.abort();
+         } catch (e) {
+            this.alfLog("info", "Unable to cancel upload: ", fileInfo, e);
          }
       },
 
@@ -437,17 +468,33 @@ define(["alfresco/core/CoreXhr",
 
             // Get the response and update the file-info object
             var response = JSON.parse(fileInfo.request.responseText);
-            fileInfo.nodeRef = response.nodeRef;
-            fileInfo.fileName = response.fileName;
-            fileInfo.state = this.STATE_SUCCESS;
+            switch (this.apiVersion)
+            {
+               case 0:
+               {
+                  fileInfo.nodeRef = response.nodeRef;
+                  fileInfo.fileName = response.fileName;
+                  fileInfo.state = this.STATE_SUCCESS;
+                  break;
+               }
+               case 1:
+               {
+                  fileInfo.nodeRef = "workspace://SpacesStore/" + response.id;
+                  fileInfo.fileName = response.name;
+                  fileInfo.state = this.STATE_SUCCESS;
+                  break;
+               }
+               default:
+                  this.alfLog("error", "Unknown Upload API version specified: " + this.apiVersion);
+            }
 
             // Notify uploads-display widget of completion
             this.uploadDisplayWidget.handleCompletedUpload(fileId, evt, fileInfo.request);
 
             // Execute post-upload actions
             this.onUploadFinished(fileId);
-
-         } else {
+         }
+         else {
             this.processUploadFailure(fileId, evt);
          }
       },
@@ -469,6 +516,30 @@ define(["alfresco/core/CoreXhr",
       },
 
       /**
+       * This function can be called when creating the upload display. It ensures that the root widget is correctly
+       * configured to be assigned to the [widgetsForUploadDisplay]{@link module:alfresco/services/_BaseUploadService#widgetsForUploadDisplay}
+       * reference. Care should be taken When overriding the 
+       * [showUploadsWidget]{@link module:alfresco/services/_BaseUploadService#showUploadsWidget} to ensure that any model
+       * is correctly setup by calling this function.
+       * 
+       * @return {object[]} The object model for rendering the upload display
+       * @instance 1.0.57
+       */
+      processWidgetsForUploadDisplay: function alfresco_services__BaseUploadService__processWidgetsForUploadDisplay() {
+         var widgets = lang.clone(this.widgetsForUploadDisplay);
+         if (widgets && widgets.constructor === Array && widgets.length === 1) {
+            lang.mixin(widgets[0], {
+               assignTo: "uploadDisplayWidget",
+               assignToScope: this
+            });
+         } 
+         else {
+            this.alfLog("error", "Must define a widget for displaying upload progress in property 'widgetsForUploadDisplay'");
+         }
+         return widgets;
+      },
+
+      /**
        * Register this service's subscriptions.
        * 
        * @instance
@@ -477,6 +548,7 @@ define(["alfresco/core/CoreXhr",
        */
       registerSubscriptions: function alfresco_services_FileUploadService__registerSubscriptions() {
          this.alfSubscribe(topics.UPLOAD_REQUEST, lang.hitch(this, this.onUploadRequest));
+         this.alfSubscribe(topics.CANCEL_INPROGRESS_UPLOAD, lang.hitch(this, this.onUploadCancelRequest));
       },
 
       /**
@@ -536,6 +608,7 @@ define(["alfresco/core/CoreXhr",
        * @param {object} Contains info about the file and its request.
        */
       startFileUpload: function alfresco_services__BaseUploadService__startFileUpload(fileInfo) {
+         /*jshint maxstatements:false*/
 
          // Ensure we only upload the maximum allowed at a time
          if (this._numUploadsInProgress === this.maxSimultaneousUploads) {
@@ -548,34 +621,73 @@ define(["alfresco/core/CoreXhr",
          // Mark file as being uploaded
          fileInfo.state = this.STATE_UPLOADING;
 
-         var url = AlfConstants.PROXY_URI + (this.uploadURL || "api/upload");
-         if (this.isCsrfFilterEnabled()) {
-            url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
-         }
+         // Setup variables
+         var formData = new FormData(),
+            uploadData = fileInfo.uploadData,
+            url;
 
-         // Setup the form data object
-         // NOTE: This is IE10+ but code is unchanged from existing UploadService, so maybe there's a hidden polyfill somewhere
-         var formData = new FormData();
-         formData.append("filedata", fileInfo.uploadData.filedata);
-         formData.append("filename", fileInfo.uploadData.filename);
-         formData.append("destination", fileInfo.uploadData.destination);
-         formData.append("siteId", fileInfo.uploadData.siteId);
-         formData.append("containerId", fileInfo.uploadData.containerId);
-         formData.append("uploaddirectory", fileInfo.uploadData.uploaddirectory);
-         formData.append("majorVersion", fileInfo.uploadData.majorVersion ? fileInfo.uploadData.majorVersion : "false");
-         formData.append("username", fileInfo.uploadData.username);
-         formData.append("overwrite", fileInfo.uploadData.overwrite);
-         formData.append("thumbnails", fileInfo.uploadData.thumbnails);
-         if (fileInfo.uploadData.updateNodeRef) {
-            formData.append("updateNodeRef", fileInfo.uploadData.updateNodeRef);
+         // resolve final API URL and Form structure based on configuration and apiVersion setting
+         switch (this.apiVersion)
+         {
+            case 0:
+            {
+               // Set-up the API URL
+               url = AlfConstants.PROXY_URI + this.uploadURL;
+               if (this.isCsrfFilterEnabled()) {
+                  url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
+               }
+               
+               // Set-up the form data object
+               formData.append("filedata", uploadData.filedata);
+               formData.append("filename", uploadData.filename);
+               formData.append("destination", uploadData.destination);
+               formData.append("siteId", uploadData.siteId);
+               formData.append("containerId", uploadData.containerId);
+               formData.append("uploaddirectory", uploadData.uploaddirectory);
+               formData.append("majorVersion", uploadData.majorVersion ? uploadData.majorVersion : "false");
+               formData.append("username", uploadData.username);
+               formData.append("overwrite", uploadData.overwrite);
+               formData.append("thumbnails", uploadData.thumbnails);
+               if (uploadData.updateNodeRef) {
+                  formData.append("updateNodeRef", uploadData.updateNodeRef);
+               }
+               if (uploadData.description) {
+                  formData.append("description", uploadData.description);
+               }
+               
+               break;
+            }
+            
+            case 1:
+            {
+               // Set-up the API URL
+               url = AlfConstants.PROXY_URI + "public/alfresco/versions/1/nodes/{nodeId}/children";
+               // extract node id only from expected NodeRef
+               url = lang.replace(url, {
+                  nodeId: uploadData.destination.split("/")[3]
+               });
+               if (this.isCsrfFilterEnabled()) {
+                  url += "?" + this.getCsrfParameter() + "=" + encodeURIComponent(this.getCsrfToken());
+               }
+               
+               // Set-up the form data object
+               formData.append("fileData", uploadData.filedata);
+               formData.append("fileName", uploadData.filename);
+               formData.append("autoRename", !uploadData.overwrite);
+               
+               break;
+            }
+            
+            default:
+               this.alfLog("error", "Unknown Upload API version specified: " + this.apiVersion);
          }
-         if (fileInfo.uploadData.description) {
-            formData.append("description", fileInfo.uploadData.description);
-         }
-
+         
          // Open and send the request
-         fileInfo.request.open("POST", url, true);
-         fileInfo.request.send(formData);
+         if (url)
+         {
+            fileInfo.request.open("POST", url, true);
+            fileInfo.request.send(formData);
+         }
       },
 
       /**
@@ -683,7 +795,9 @@ define(["alfresco/core/CoreXhr",
          cumulativeProgress += (this.totalNewUploads - inProgressFiles) * 100;
 
          // Calculate total percentage and send to widget
-         var currentProgressPercent = inProgressFiles ? Math.floor(cumulativeProgress / totalPercent * 100) : 100;
+         // NOTE: If no in-progress files, or race-condition causes zero total percent, then
+         // just call it 100, because it will mean that essentially there are no pending uploads
+         var currentProgressPercent = (inProgressFiles && totalPercent) ? Math.floor(cumulativeProgress / totalPercent * 100) : 100;
          this.uploadDisplayWidget.updateAggregateProgress(currentProgressPercent / 100);
 
          // If no longer have uploads pending, update the total-completed variable
@@ -697,7 +811,7 @@ define(["alfresco/core/CoreXhr",
             if (currentProgressPercent === 100) {
                title = this.message(this.uploadsContainerTitleComplete);
             }
-            this.alfPublish(this.uploadsContainerTitleUpdateTopic, {
+            this.alfServicePublish(this.uploadsContainerTitleUpdateTopic, {
                title: title
             });
          }

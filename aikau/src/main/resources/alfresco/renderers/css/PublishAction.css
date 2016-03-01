@@ -1,3 +1,8 @@
 .alfresco-renderers-PublishAction {
+
    cursor: pointer;
+   
+   &__image {
+      vertical-align: text-bottom;
+   }
 }

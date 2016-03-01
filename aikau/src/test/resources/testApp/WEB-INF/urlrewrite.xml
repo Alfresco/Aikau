@@ -23,6 +23,11 @@
       <from>/proxy/alfresco/api/node/workspace/SpacesStore/8a93f2cc-5276-45b6-929a-f5112e7a645d/content/thumbnails/h264-720?(.*)</from>
       <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Video_h264.mp4</to>
    </rule>
+   <!-- Video plugin (OGG format) -->
+   <rule>
+      <from>/proxy/alfresco/api/node/workspace/SpacesStore/b5973042-9f07-472f-980d-940eb117524b/content/out.ogv?(.*)</from>
+      <to>/page/resource/js/aikau/testing/mockservices/responseTemplates/previews/Video.ogv</to>
+   </rule>
    <!-- Audio plugin -->
    <rule>
       <from>/proxy/alfresco/api/node/workspace/SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52/content/Demo 3.mp3(.*)</from>

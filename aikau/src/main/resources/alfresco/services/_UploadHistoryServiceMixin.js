@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        */
       initUploadHistory: function alfresco_services__UploadHistoryServiceMixin__initUploadHistory() {
          this.uploadHistory = [];
-         this.alfPublish(topics.GET_PREFERENCE, {
+         this.alfServicePublish(topics.GET_PREFERENCE, {
             preference: this.uploadHistoryPreferenceName,
             callback: this.setUploadHistory,
             callbackScope: this
@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
 
          // Always update the latest history, even if no new NodeRef has
          // been added as it may have been re-ordered
-         this.alfPublish(topics.SET_PREFERENCE, {
+         this.alfServicePublish(topics.SET_PREFERENCE, {
             preference: this.uploadHistoryPreferenceName,
             value: this.uploadHistory.join(",")
          });

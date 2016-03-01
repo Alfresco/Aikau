@@ -122,14 +122,14 @@ define(["dojo/_base/declare",
 
       /**
        * This is set to a reference to a panel expanded within the grid showing more details of one of the
-       * rendered items.
+       * rendered items. It should not be configured in models, but can be referenced in extending modules.
        *
        * @instance
        * @type {string}
        * @default
        * @since 1.0.44
        */
-      exandedPanel: null,
+      expandedPanel: null,
 
       /**
        * This is an array of optional topics that can be subscribed to to create a panel within the grid for
@@ -267,14 +267,14 @@ define(["dojo/_base/declare",
 
 
       /**
-       * Destroys the [exandedPanel]{@link module:alfresco/lists/views/layouts/Grid#exandedPanel} and
+       * Destroys the [expandedPanel]{@link module:alfresco/lists/views/layouts/Grid#expandedPanel} and
        * restores the focus to the cell that was selected to be expanded.
        * 
        * @instance
        * @since 1.0.44
        */
       collapsePanel: function alfresco_lists_views_layouts_Grid__collapsePanel() {
-         if (this.exandedPanel)
+         if (this.expandedPanel)
          {
             if (this.expandedItemKey)
             {
@@ -290,16 +290,16 @@ define(["dojo/_base/declare",
 
             // NOTE: This needs to be done after resetting focus to prevent exceptions trying to
             //       blur a destroyed widget...
-            var widgets = registry.findWidgets(this.exandedPanel);
+            var widgets = registry.findWidgets(this.expandedPanel);
             array.forEach(widgets, function(widget) {
                widget.destroy();
             });
-            domConstruct.destroy(this.exandedPanel);
+            domConstruct.destroy(this.expandedPanel);
          }
       },
 
       /**
-       * Creates a new [exandedPanel]{@link module:alfresco/lists/views/layouts/Grid#exandedPanel}
+       * Creates a new [expandedPanel]{@link module:alfresco/lists/views/layouts/Grid#expandedPanel}
        * for an item rendered in the grid or 
        * [collapses]{@link module:alfresco/lists/views/layouts/Grid#collapsePanel} the currently
        * expanded panel if it represents the requested item.
@@ -334,14 +334,14 @@ define(["dojo/_base/declare",
                domClass.add(cell, "alfresco-lists-views-layouts-Grid__cell--expanded");
 
                // Create a new row...
-               this.exandedPanel = domConstruct.create("tr", {
+               this.expandedPanel = domConstruct.create("tr", {
                   className: "alfresco-lists-views-layouts-Grid__expandedPanel"
                }, row, "after");
 
                // Add a single cell that spans all the columns in the row...
                var spanningCell = domConstruct.create("td", {
                   colspan: this.columns
-               }, this.exandedPanel);
+               }, this.expandedPanel);
 
                var forWidgets = domConstruct.create("div", {
                }, spanningCell);

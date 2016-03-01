@@ -291,25 +291,7 @@ define(["dojo/_base/declare",
          {
             if (this.warnIfNotAvailable)
             {
-               // Get appropriate message
-               // Check message based on propertyToRender otherwise default to sensible alternative
-               var warningKey = this.warnIfNotAvailableMessage;
-               var warningMessage = "";
-               if (!warningKey) 
-               {
-                  warningKey = "no." + this.propertyToRender + ".message";
-                  warningMessage = this.message(warningKey);
-                  if (warningMessage === warningKey) 
-                  {
-                     warningMessage = this.message("no.property.message", {
-                        0: this.propertyToRender
-                     });
-                  }
-               } 
-               else 
-               {
-                  warningMessage = this.message(warningKey);
-               }
+               var warningMessage = this.getNotAvailableMessage();
                valueRendering = this.renderedValuePrefix + warningMessage + this.renderedValueSuffix;
                this.warningDisplayed = true;
             }
@@ -325,6 +307,33 @@ define(["dojo/_base/declare",
          }
 
          return valueRendering;
+      },
+
+      /**
+       * Get the message to display if the property isn't available. Note that
+       * this does not check the [warnIfNotAvailable property]{@link module:alfresco/renderers/Property#warnIfNotAvailable} because it could then not be easily used by subclasses.
+       *
+       * @instance
+       * @returns {string} The warning message
+       * @since 1.0.57
+       */
+      getNotAvailableMessage: function alfresco_renderers_Property__getNotAvailableMessage() {
+         // Get appropriate message
+         // Check message based on propertyToRender otherwise default to sensible alternative
+         var warningKey = this.warnIfNotAvailableMessage;
+         var warningMessage = "";
+         if (!warningKey) {
+            warningKey = "no." + this.propertyToRender + ".message";
+            warningMessage = this.message(warningKey);
+            if (warningMessage === warningKey) {
+               warningMessage = this.message("no.property.message", {
+                  0: this.propertyToRender
+               });
+            }
+         } else {
+            warningMessage = this.message(warningKey);
+         }
+         return warningMessage;
       },
 
       /**

@@ -69,6 +69,14 @@ registerSuite(function(){
             });
       },
 
+      "Ensure warnIfNotAvailable works": function() {
+         return browser.findByCssSelector("#NOT_AVAILABLE .value")
+            .getVisibleText()
+            .then(function(visibleText){
+               assert.equal(visibleText, "Not available");
+            });
+      },
+
       "Post Coverage Results": function() {
          TestCommon.alfPostCoverageResults(this, browser);
       }
