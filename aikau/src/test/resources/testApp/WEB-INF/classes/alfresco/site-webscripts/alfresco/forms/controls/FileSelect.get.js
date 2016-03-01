@@ -35,6 +35,19 @@ model.jsonModel = {
                                  initialValue: true
                               }
                            }
+                        },
+                        {
+                           id: "FILE_SELECT",
+                           name: "alfresco/forms/controls/FileSelect",
+                           config: {
+                              label: "File(s) selector (clear on select)",
+                              name: "files_field",
+                              value: "",
+                              recreateControlOnSelect: true,
+                              requirementConfig: {
+                                 initialValue: true
+                              }
+                           }
                         }
                      ]
                   }
