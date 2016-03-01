@@ -31,6 +31,18 @@ define(["alfresco/forms/controls/BaseFormControl",
    return declare([BaseFormControl], {
       
       /**
+       * Configuring this attribute to be true will result in the wrapped [FileInput]{@link module:alfresco/html/FileInput}
+       * widget being recreated each time that file or files are selected. This option was added to support a specific
+       * use case, see https://issues.alfresco.com/jira/browse/AKU-834 for details.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.57
+       */
+      recreateControlOnSelect: false,
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_FileSelect__getWidgetConfig() {
@@ -86,7 +98,10 @@ define(["alfresco/forms/controls/BaseFormControl",
       onFilesSelected: function alfresco_forms_controls_FileSelect__onFilesSelected(evt) {
          this.alfLog("log", "Files selected", evt, this);
          this.onValueChangeEvent(this.name, this.lastValue, this.wrappedWidget.getValue());
-         this.recreateControl(); // This is needed to fix AKU-834
+         if (this.recreateControlOnSelect)
+         {
+            this.recreateControl(); // This is needed to fix AKU-834
+         }
       }
    });
 });
