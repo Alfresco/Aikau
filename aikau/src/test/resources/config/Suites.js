@@ -35,10 +35,13 @@ define({
       "src/test/resources/alfresco/upload/UploadMonitorTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
-      // "src/test/resources/alfresco/dnd/NestedConfigurationTest",
-      // "src/test/resources/alfresco/layout/AlfTabContainerTest",
-      // "src/test/resources/alfresco/preview/PdfJsPreviewTest",
-      // "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
+      // "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
+      // "src/test/resources/alfresco/documentlibrary/views/FilmStripViewTest",
+      // "src/test/resources/alfresco/documentlibrary/views/MediaFilmStripViewTest",
+      // "src/test/resources/alfresco/forms/controls/ContainerPickerTest",
+      // "src/test/resources/alfresco/forms/controls/SitePickerTest",
+      // "src/test/resources/alfresco/renderers/CommentsListTest",
+      // "src/test/resources/alfresco/services/DialogServiceTest"
    ],
 
    /**
