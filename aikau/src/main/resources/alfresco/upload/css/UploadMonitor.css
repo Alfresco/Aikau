@@ -29,19 +29,12 @@
             padding-right: @upload-monitor-item-padding-right;
          }
       }
-      &__name__error {
-         color: @upload-monitor-error-message-color;
-         display: none;
-         line-height: @upload-monitor-error-message-line-height;
-         position: relative;
-         top: @upload-monitor-error-message-top;
-      }
       &__progress {
          width: @upload-monitor-progress-column-width;
       }
       &__status {
          width: @upload-monitor-status-column-width;
-         &__inprogress, &__successful, &__unsuccessful {
+         &__inprogress, &__successful, &__unsuccessful, &__unsuccessful_icon {
             display: none;
          }
          &__inprogress {
@@ -62,13 +55,6 @@
       }
       &__action {
          display: none;
-      }
-      &--has-error {
-         .alfresco-upload-UploadMonitor {
-            &__item__name__error {
-               display: block;
-            }
-         }
       }
    }
    &__inprogress-items {
@@ -108,6 +94,11 @@
             }
             &__action__unsuccessful {
                display: inline-block;
+            }
+            &__status__unsuccessful_icon {
+               display: inline-block;
+               margin-left: 10px;
+               vertical-align: middle;
             }
          }
       }

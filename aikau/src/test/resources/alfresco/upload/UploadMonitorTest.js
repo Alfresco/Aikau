@@ -48,13 +48,14 @@ define(["intern!object",
 
             .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
 
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item__name__error")
-               .getVisibleText()
-               .then(function(visibleText) {
-                  assert.equal(visibleText, "0kb files can't be uploaded");
-               })
+               .findByCssSelector(".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title")
+                  .getProperty("innerHTML")
+                  .then(function(text) {
+                     assert.equal(text, "The file ''This file is empty.txt'' could not be uploaded for the following reason. 0kb files can't be uploaded");
+                  })
                .end()
-               .end() // Escape previous extra nesting
+
+            .end() // Escape previous extra nesting
 
             .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
                .click();
@@ -130,10 +131,10 @@ define(["intern!object",
                .click()
             .end()
 
-            .findByCssSelector(".alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item__name__error")
-               .getVisibleText()
-               .then(function(visibleText) {
-                  assert.equal(visibleText, "Upload cancelled");
+            .findByCssSelector(".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title")
+               .getProperty("innerHTML")
+               .then(function(text) {
+                  assert.equal(text, "The file ''Tiny dataset.csv'' could not be uploaded for the following reason. The upload was cancelled");
                });
          },
 
