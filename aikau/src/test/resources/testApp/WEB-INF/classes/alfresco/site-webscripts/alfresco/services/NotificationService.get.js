@@ -16,6 +16,37 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "20vh"
+         }
+      },
+      {
+         name: "alfresco/layout/LeftAndRight",
+         config: {
+            widgetsLeft: [
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  id: "LEFT_BUTTON",
+                  config: {
+                     label: "Left button",
+                     publishTopic: "LEFT_BUTTON_PUSHED"
+                  }
+               }
+            ],
+            widgetsRight: [
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  id: "RIGHT_BUTTON",
+                  config: {
+                     label: "Right button",
+                     publishTopic: "RIGHT_BUTTON_PUSHED"
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "alfresco/buttons/AlfButton",
          id: "NOTIFICATION_BUTTON_SMALL",
          config: {
