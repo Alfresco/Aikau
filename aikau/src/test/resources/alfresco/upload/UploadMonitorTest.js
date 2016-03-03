@@ -25,6 +25,11 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, assert, TestCommon) {
 
+   function getTextContent(selector) {
+      var elem = document.querySelector(selector);
+      return elem && elem.textContent;
+   }
+
    registerSuite(function() {
       var browser;
 
@@ -48,8 +53,7 @@ define(["intern!object",
 
             .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
 
-               .findByCssSelector(".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title")
-                  .getProperty("innerHTML")
+               .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
                   .then(function(text) {
                      assert.equal(text, "The file ''This file is empty.txt'' could not be uploaded for the following reason. 0kb files can't be uploaded");
                   })
@@ -131,11 +135,38 @@ define(["intern!object",
                .click()
             .end()
 
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title")
-               .getProperty("innerHTML")
+            .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
                .then(function(text) {
                   assert.equal(text, "The file ''Tiny dataset.csv'' could not be uploaded for the following reason. The upload was cancelled");
-               });
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
+         },
+
+         "Progress bar displayed when upload in-progress": function() {
+            return browser.findById("SINGLE_UPLOAD_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector(".alfresco-upload-UploadMonitor__item__progress-bar")
+            .end()
+
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
+
+            .waitForDeletedByCssSelector(".alfresco-upload-UploadMonitor__item__progress-bar")
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
          },
 
          "Post Coverage Results": function() {

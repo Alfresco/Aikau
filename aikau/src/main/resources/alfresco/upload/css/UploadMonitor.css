@@ -8,7 +8,6 @@
       border-spacing: 0;
       position: relative;
       table-layout: fixed;
-      top: -1px;
       width: 100%;
       td {
          padding: 0;
@@ -55,6 +54,17 @@
       }
       &__action {
          display: none;
+      }
+      &__progress-cell {
+         font-size: 0;
+         padding: 0;
+      }
+      &__progress-bar {
+         background: @upload-monitor-progress-bar-background;
+         box-shadow: @upload-monitor-progress-bar-box-shadow;
+         height: @upload-monitor-progress-bar-height;
+         width: 0;
+         transition: width .3s ease;
       }
    }
    &__inprogress-items {
