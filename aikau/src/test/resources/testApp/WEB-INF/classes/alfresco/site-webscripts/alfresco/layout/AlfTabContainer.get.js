@@ -229,7 +229,7 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           id: "DISABLE_TAB_1",
+                           id: "DISABLE_TAB_BY_INDEX",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Disable tab 1 (idx 0)",
@@ -241,7 +241,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DISABLE_TAB_2",
+                           id: "ENABLE_TAB_BY_INDEX",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Enable tab 1 (idx 0)",
@@ -253,7 +253,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DISABLE_TAB_3",
+                           id: "DISABLE_TAB_BY_TITLE",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Disable tab titled 'Logo 1'",
@@ -265,7 +265,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DISABLE_TAB_4",
+                           id: "ENABLE_TAB_BY_TITLE",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Enable tab titled 'Logo 1'",
@@ -277,7 +277,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DISABLE_TAB_5",
+                           id: "DISABLE_TAB_BY_ID",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Disable tab with id 'Logo1'",
@@ -289,7 +289,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DISABLE_TAB_6",
+                           id: "ENABLE_TAB_BY_ID",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Enable tab with id 'Logo1'",
@@ -308,7 +308,7 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           id: "DELETE_TAB_1",
+                           id: "DELETE_TAB_BY_INDEX",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Delete tab 7 (idx 6)",
@@ -319,7 +319,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DELETE_TAB_2",
+                           id: "DELETE_TAB_BY_TITLE",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Delete tab titled 'Logo 8'",
@@ -330,7 +330,7 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "DELETE_TAB_3",
+                           id: "DELETE_TAB_BY_ID",
                            name: "alfresco/buttons/AlfButton",
                            config: {
                               label: "Delete tab with id 'Logo9'",
