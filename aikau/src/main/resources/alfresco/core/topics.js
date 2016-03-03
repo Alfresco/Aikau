@@ -344,6 +344,9 @@ define([],function() {
        * @event
        * @property {object[]} widgets The widgets to appear in the panel
        * @property {string} [title=default.title] The title to display (uses i18n)
+       * @property {string} [closeButtonLabel=Close this panel] The text-label that decorates the close button for accessibility reasons
+       * @property {string} [minimiseButtonLabel=Minimize this panel] The text-label that decorates the minimise button for accessibility reasons
+       * @property {string} [restoreButtonLabel=Restore this panel] The text-label that decorates the restore button for accessibility reasons
        * @property {number} [padding=10] The padding to be applied to the widgets area
        * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
        * @property {boolean} [warnIfOpen=true] Whether to put a warning in the console if the panel is

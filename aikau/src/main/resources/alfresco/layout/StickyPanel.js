@@ -83,6 +83,26 @@ define(["alfresco/core/Core",
       baseClass: "alfresco-layout-StickyPanel",
 
       /**
+       * The label to display on the minimise button for accessibility reasons
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      closeButtonLabel: "button.close.label",
+
+      /**
+       * The label to display on the minimise button for accessibility reasons
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      minimiseButtonLabel: "button.minimise.label",
+
+      /**
        * The width of the panel. Can be provided as a CSS dimension (e.g. 50%, 100px)
        * or a pure number, which will be treated as pixels.
        *
@@ -91,6 +111,16 @@ define(["alfresco/core/Core",
        * @default
        */
       panelWidth: "50%",
+
+      /**
+       * The label to display on the minimise button for accessibility reasons
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      restoreButtonLabel: "button.restore.label",
 
       /**
        * The title to display in the title-bar of the panel
@@ -146,6 +176,14 @@ define(["alfresco/core/Core",
             domStyle.set(this.widgetsNode, "padding", this.widgetsPadding + "px");
          }
          this.sizePanel();
+
+         // Setup mouse-hover and screenreader text labels for the panel buttons
+         this.minimiseButtonNode.setAttribute("title", this.message(this.minimiseButtonLabel));
+         this.restoreButtonNode.setAttribute("title", this.message(this.restoreButtonLabel));
+         this.closeButtonNode.setAttribute("title", this.message(this.closeButtonLabel));
+         this.minimiseButtonNode.setAttribute("aria-label", this.message(this.minimiseButtonLabel));
+         this.restoreButtonNode.setAttribute("aria-label", this.message(this.restoreButtonLabel));
+         this.closeButtonNode.setAttribute("aria-label", this.message(this.closeButtonLabel));
       },
 
       /**
@@ -197,9 +235,22 @@ define(["alfresco/core/Core",
        * Handle clicks on the minimise or restore buttons.
        *
        * @instance
+       * @since 1.0.58
        */
-      onClickMinimiseRestore: function alfresco_layout_StickyPanel__onClickMinimiseRestore() {
-         this.toggleMinimised();
+      onClickMinimise: function alfresco_layout_StickyPanel__onClickMinimise() {
+         this.setMinimised(true);
+         this.restoreButtonNode.focus();
+      },
+
+      /**
+       * Handle clicks on the minimise or restore buttons.
+       *
+       * @instance
+       * @since 1.0.58
+       */
+      onClickRestore: function alfresco_layout_StickyPanel__onClickRestore() {
+         this.setMinimised(false);
+         this.minimiseButtonNode.focus();
       },
 
       /**
@@ -218,8 +269,8 @@ define(["alfresco/core/Core",
          this.alfSubscribe(topics.STICKY_PANEL_SET_TITLE, lang.hitch(this, this.setTitle));
          this.alfSubscribe(topics.STICKY_PANEL_DISABLE_CLOSE, lang.hitch(this, this.disableCloseButton));
          this.alfSubscribe(topics.STICKY_PANEL_ENABLE_CLOSE, lang.hitch(this, this.enableCloseButton));
-         this.alfSubscribe(topics.STICKY_PANEL_RESTORE, lang.hitch(this, this.toggleMinimised, "restore"));
-         this.alfSubscribe(topics.STICKY_PANEL_MINIMISE, lang.hitch(this, this.toggleMinimised, "minimise"));
+         this.alfSubscribe(topics.STICKY_PANEL_RESTORE, lang.hitch(this, this.setMinimised, false));
+         this.alfSubscribe(topics.STICKY_PANEL_MINIMISE, lang.hitch(this, this.setMinimised, true));
       },
 
       /**
@@ -252,17 +303,14 @@ define(["alfresco/core/Core",
       },
 
       /**
-       * Toggle between minimised/restored states.
+       * Set the minimised state
        *
        * @instance
-       * @param {string} [forceTo] This can be used to force the panel to either "minimise" or "restore".
-       * @since 1.0.55
+       * @param {boolean} minimise Whether to minimise the panel (true will minimise, false will restore)
+       * @since 1.0.58
        */
-      toggleMinimised: function alfresco_layout_StickyPanel__toggleMinimised(forceTo) {
-         var doOpen = (forceTo === "restore"),
-            doMinimise = (forceTo === "minimise"),
-            funcName = doOpen ? "remove" : doMinimise ? "add" : "toggle";
-         domClass[funcName](this.domNode, this.baseClass + "--minimised");
+      setMinimised: function alfresco_layout_StickyPanel__setMinimised(minimise) {
+         domClass[minimise ? "add" : "remove"](this.domNode, this.baseClass + "--minimised");
       },
 
       /**
