@@ -41,6 +41,45 @@ define(["alfresco/core/topics",
    return declare([_BaseUploadService], {
 
       /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @since 1.0.58
+       */
+      i18nRequirements: [{i18nFile: "./i18n/FileUploadService.properties"}],
+
+      /**
+       * The label to display on the minimise button for accessibility reasons
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      closeButtonLabel: "upload-panel.close.label",
+
+      /**
+       * The label to display on the minimise button for accessibility reasons
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      minimiseButtonLabel: "upload-panel.minimise.label",
+
+      /**
+       * The label to display on the minimise button for accessibility reasons
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      restoreButtonLabel: "upload-panel.restore.label",
+
+      /**
        * This is the topic on which to publish updates to the title container.
        *
        * @instance
@@ -104,6 +143,9 @@ define(["alfresco/core/topics",
          var widgetsForUploadDisplay = this.processWidgetsForUploadDisplay();
          this.alfServicePublish(topics.DISPLAY_STICKY_PANEL, {
             title: this.message(this.uploadsContainerTitle, 0),
+            closeButtonLabel: this.message(this.closeButtonLabel),
+            minimiseButtonLabel: this.message(this.minimiseButtonLabel),
+            restoreButtonLabel: this.message(this.restoreButtonLabel),
             padding: 0,
             widgets: widgetsForUploadDisplay,
             callback: lang.hitch(this, function(panel) {
