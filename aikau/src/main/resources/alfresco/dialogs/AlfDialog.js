@@ -258,6 +258,17 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Returns a promise to provide an array of all the buttons in the dialog.
+       * 
+       * @instance
+       * @return {promise} An array of the buttons widgets for the dialog
+       * @since 1.0.58
+       */
+      getButtons: function alfresco_dialogs_AlfDialog__getButtons() {
+         return this.getProcessedWidgets("BUTTONS");
+      },
+
+      /**
        * Extends the superclass implementation to set the dialog as not closeable (by clicking an "X"
        * in the corner).
        * 
@@ -599,7 +610,7 @@ define(["dojo/_base/declare",
                   button.publishPayload.dialogContent = [];
                }
                button.publishPayload.dialogRef = this; // Add a reference to the dialog itself so that it can be destroyed
-            });
+            }, this);
          }
       },
       
