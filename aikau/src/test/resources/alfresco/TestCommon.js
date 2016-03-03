@@ -159,7 +159,8 @@ define(["intern/dojo/node!fs",
          if (tokens)
          {
             tokens.forEach(function(token, index) {
-               selector = selector.replace("{" + index + "}", token);
+               var re = new RegExp("\\{" + index + "\\}", "g");
+               selector = selector.replace(re, token);
             });
          }
          return selector;

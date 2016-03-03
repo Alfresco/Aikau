@@ -18,7 +18,7 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         id: "TABS",
+         id: "TC",
          name: "alfresco/layout/AlfTabContainer",
          config: {
             widgets: [
@@ -98,6 +98,7 @@ model.jsonModel = {
                   }
                },
                {
+                  id: "DEBUG_TAB",
                   name: "alfresco/logging/DebugLog",
                   title: "Debug Log"
                }
