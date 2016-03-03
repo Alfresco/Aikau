@@ -61,6 +61,51 @@ define(["intern!object",
                .click();
          },
 
+         "Panel buttons carry correct attributes": function() {
+            return browser.findById("BAD_FILE_DATA_label")
+               .click()
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
+               .getAttribute("title")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Minimize the upload window", "Minimise button does not have correct title attribute");
+               })
+               .getAttribute("aria-label")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Minimize the upload window", "Minimise button does not have correct aria-label attribute");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__restore")
+               .getAttribute("title")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Restore the upload window", "Restore button does not have correct title attribute");
+               })
+               .getAttribute("aria-label")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Restore the upload window", "Restore button does not have correct aria-label attribute");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .getAttribute("title")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Close the upload window", "Close button does not have correct title attribute");
+               })
+               .getAttribute("aria-label")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Close the upload window", "Close button does not have correct aria-label attribute");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
+         },
+
          "Single file upload succeeds": function() {
             return browser.findById("SINGLE_UPLOAD_label")
                .click()
