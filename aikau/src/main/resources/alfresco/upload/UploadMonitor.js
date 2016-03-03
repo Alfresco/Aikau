@@ -36,9 +36,10 @@ define(["alfresco/core/FileSizeMixin",
         "dojo/_base/lang", 
         "dojo/dom-class", 
         "dojo/dom-construct",
+        "dojo/dom-style",
         "dojo/when", 
         "dojo/text!./templates/UploadMonitor.html"], 
-        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, when, template) {
+        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, domStyle, when, template) {
 
    return declare([FileSizeMixin, CoreWidgetProcessing, _UploadsDisplayMixin], {
 
@@ -273,7 +274,15 @@ define(["alfresco/core/FileSizeMixin",
             }, itemRow),
             itemActions = domConstruct.create("td", {
                className: this.baseClass + "__item__actions"
-            }, itemRow);
+            }, itemRow),
+            progressRow = domConstruct.create("tr", {}, this.inProgressItemsNode),
+            progressCell = domConstruct.create("td", {
+               colspan: 4,
+               className: this.baseClass + "__item__progress-cell"
+            }, progressRow),
+            progressBar = domConstruct.create("div", {
+               className: this.baseClass + "__item__progress-bar"
+            }, progressCell);
 
          // Add localised status messages
          domConstruct.create("span", {
@@ -305,7 +314,9 @@ define(["alfresco/core/FileSizeMixin",
                row: itemRow,
                name: itemNameContent,
                errorIcon: errorIconNode,
-               progress: itemProgressContent
+               progress: itemProgressContent,
+               progressRow: progressRow,
+               progressBar: progressBar
             }
          };
 
@@ -393,6 +404,7 @@ define(["alfresco/core/FileSizeMixin",
 
             // Mark as completed and move to successful section
             upload.completed = true;
+            upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
             upload.nodes.progress.textContent = this.displayUploadPercentage ? "100%" : "";
             domConstruct.place(upload.nodes.row, this.successfulItemsNode, "first");
 
@@ -444,6 +456,7 @@ define(["alfresco/core/FileSizeMixin",
 
             // Move the item to the unsuccessful items section and update the properties accordingly
             upload.completed = true;
+            upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
             domConstruct.place(upload.nodes.row, this.unsuccessfulItemsNode, "first");
             upload.nodes.progress.textContent = "";
             
@@ -506,6 +519,7 @@ define(["alfresco/core/FileSizeMixin",
          if (upload) {
             if (!upload.completed) {
                upload.nodes.progress.textContent = percentageComplete + "%";
+               domStyle.set(upload.nodes.progressBar, "width", percentageComplete + "%");
             }
          } else {
             this.alfLog("warn", "Attempt to update upload that is not being tracked (id=" + fileId + ")");
