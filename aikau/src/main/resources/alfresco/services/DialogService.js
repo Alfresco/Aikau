@@ -138,7 +138,9 @@
  * @property {string} [dialogConfirmationButtonTitle="OK"] - The label for the dialog confirmation button
  * @property {string} [dialogConfirmAndRepeatButtonTitle="OK (and repeat)"] The label for the button indicating the dialog should be repeated
  * @property {string} [dialogCancellationButtonTitle="Cancel"] - The label for the dialog cancellation button
- * @property {string} [dialogCloseTopic=null] If this is set the the dialog will not automatically be closed when the confirmation button is pressed. Instead the dialog will remain open until this topic is published on.
+ * @property {string} [dialogCloseTopic=null] If this is set then the dialog will not automatically be closed when the confirmation button is pressed. Instead the dialog will remain open until this topic is published on.
+ * @property {string} [dialogEnableTopic=null] If this is set then the dialog buttons will automatically be disabled when the form is submitted. When this topic is published, the buttons will be re-enabled. This topic should 
+ * be published on submission faiure.
  * @property {array} [widgets=null] - An array of form controls to include in the dialog
  * @property {string} [dialogWidth=null] The width to make the dialog panel (needs to include units, e.g. "px")
  * @property {string} [contentWidth=null] - The width to set the dialog body (needs to include units, e.g. "px")
@@ -581,6 +583,11 @@ define(["dojo/_base/declare",
                   var closeHandle = this.alfSubscribe(config.dialogCloseTopic, lang.hitch(this, this.onCloseDialog, dialog));
                   this.mapRequestedIdToHandle(payload, "dialog.close", closeHandle);
                }
+               if (config.dialogEnableTopic)
+               {
+                  var enableHandle = this.alfSubscribe(config.dialogEnableTopic, lang.hitch(this, this.onFailedSubmission, dialog));
+                  this.mapRequestedIdToHandle(payload, "dialog.enable", enableHandle);
+               }
 
                if (payload.dialogRepeats)
                {
@@ -661,6 +668,25 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles failed form submission by re-enabling the dialog buttons so that the user to submit
+       * alternative data.
+       * 
+       * @instance
+       * @param {object} dialog The dialog to enable the buttons for
+       * @since 1.0.58
+       */
+      onFailedSubmission: function alfresco_services_DialogService___onFailedSubmission(dialog) {
+         if (dialog)
+         {
+            when(dialog.getButtons(), lang.hitch(this, function(buttons) {
+               array.forEach(buttons, function(button) {
+                  button.set("disabled", false);
+               });
+            }));
+         }
+      },
+
+      /**
        * Creates the configuration object to pass to the dialog.
        *
        * @instance
@@ -716,7 +742,8 @@ define(["dojo/_base/declare",
                            formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                            formSubmissionGlobal: config.formSubmissionGlobal,
                            formSubmissionScope: config.formSubmissionScope,
-                           responseScope: config.alfResponseScope
+                           responseScope: config.alfResponseScope,
+                           dialogEnableTopic: config.dialogEnableTopic
                         }
                      }
                   },
@@ -747,7 +774,8 @@ define(["dojo/_base/declare",
                      formSubmissionPayloadMixin: config.formSubmissionPayloadMixin,
                      formSubmissionGlobal: config.formSubmissionGlobal,
                      formSubmissionScope: config.formSubmissionScope,
-                     responseScope: config.alfResponseScope
+                     responseScope: config.alfResponseScope,
+                     dialogEnableTopic: config.dialogEnableTopic
                   }
                }
             });
@@ -796,6 +824,18 @@ define(["dojo/_base/declare",
                {
                   var data = {};
                   var formData = dialogContent[0].getValue();
+
+                  // See AKU-846 - If the dialog has been configured with an enablement topic then we can disable
+                  // all the buttons in the dialog, in the knowledge that they will be re-enabled if form submission
+                  // fails.
+                  if (payload.dialogEnableTopic && payload.dialogRef)
+                  {
+                     when(payload.dialogRef.getButtons(), lang.hitch(this, function(buttons) {
+                        array.forEach(buttons, function(button) {
+                           button.set("disabled", true);
+                        });
+                     }));
+                  }
 
                   // Destroy the dialog if a reference is provided...
                   if (payload.dialogReference && typeof payload.dialogReference.destroyRecursive === "function")
