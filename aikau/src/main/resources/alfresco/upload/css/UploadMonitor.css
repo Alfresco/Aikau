@@ -60,9 +60,9 @@
          padding: 0;
       }
       &__progress-bar {
-         background: #6bf;
-         box-shadow: 0 0 2px 1px #dff;
-         height: 2px;
+         background: @upload-monitor-progress-bar-background;
+         box-shadow: @upload-monitor-progress-bar-box-shadow;
+         height: @upload-monitor-progress-bar-height;
          width: 0;
          transition: width .3s ease;
       }
