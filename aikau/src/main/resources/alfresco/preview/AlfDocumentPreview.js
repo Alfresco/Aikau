@@ -379,7 +379,7 @@ define(["dojo/_base/declare",
          else
          {
             // The condition provided does not already exist so add it now...
-            this.pluginConditions.push(condition);
+            this.pluginConditions.unshift(condition);
          }
       },
 
