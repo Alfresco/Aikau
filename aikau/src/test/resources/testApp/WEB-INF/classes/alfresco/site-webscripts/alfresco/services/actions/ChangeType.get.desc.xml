@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Change Type</shortname>
+  <description>Displays buttons that use the ChangeType service to display type selection dialogs.</description>
+  <family>aikau-unit-tests</family>
+  <url>/ChangeType</url>
+</webscript>

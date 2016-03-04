@@ -290,6 +290,7 @@ define({
       "src/test/resources/alfresco/services/SiteServiceTest",
       "src/test/resources/alfresco/services/UserServiceTest",
 
+      "src/test/resources/alfresco/services/actions/ChangeTypeTest",
       "src/test/resources/alfresco/services/actions/CopyMoveTest",
       "src/test/resources/alfresco/services/actions/DownloadTest",
       "src/test/resources/alfresco/services/actions/DownloadAsZipTest",
