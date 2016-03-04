@@ -26,6 +26,7 @@ model.jsonModel = {
          }
       },
       {
+         id: "FORM",
          name: "alfresco/forms/Form",
          config: {
             okButtonPublishTopic: "POST_FORM",
@@ -106,7 +107,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

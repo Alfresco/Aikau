@@ -16,8 +16,8 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/forms/Form",
          id: "TEST_FORM",
+         name: "alfresco/forms/Form",
          config: {
             widgets: [
                {

@@ -29,6 +29,50 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, assert, keys, TestCommon) {
 
+   var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
+   var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+
+   var selectors = {
+      forms: {
+         basic: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["BASIC_FORM"]),
+            cancelButton: TestCommon.getTestSelector(formSelectors, "cancellation.button", ["BASIC_FORM"]),
+            hiddenConfirmationButton: TestCommon.getTestSelector(formSelectors, "hidden.confirmation.button", ["BASIC_FORM"]),
+            hiddenCancelButton: TestCommon.getTestSelector(formSelectors, "hidden.cancellation.button", ["BASIC_FORM"])
+         },
+         autoSave: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["AUTOSAVE_FORM"]),
+            cancelButton: TestCommon.getTestSelector(formSelectors, "cancellation.button", ["AUTOSAVE_FORM"])
+         },
+         enterForm: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["ENTER_FORM"]),
+         }
+      },
+      textBoxes: {
+         basic: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["FORM_FIELD"])
+         },
+         autoSave: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["AUTOSAVE_FORM_FIELD"])
+         },
+         invalidAutoSave: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["AUTOSAVE_INVALID_FORM_FIELD"])
+         },
+         submitOnEnter: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["ENTER_TEXT_FIELD"])
+         }
+      },
+      buttons: {
+         setValue1: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE_1"]),
+         setValue2: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE_2"]),
+         setValue3: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE_3"]),
+         setValue4: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE_4"]),
+         setValue5: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE_5"]),
+         clearAutoSave: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CLEAR_AUTOSAVE_1"])
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -45,7 +89,7 @@ define(["intern!object",
          },
 
          "Checking the form field is initially empty": function() {
-            return browser.findByCssSelector("div#FORM_FIELD div.control input[name='control']")
+            return browser.findByCssSelector(selectors.textBoxes.basic.input)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "", "Form field not initially empty");
@@ -53,11 +97,11 @@ define(["intern!object",
          },
 
          "No payload does not update value": function() {
-            return browser.findById("SET_FORM_VALUE_1")
+            return browser.findByCssSelector(selectors.buttons.setValue1)
                .click()
-               .end()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .findByCssSelector(selectors.textBoxes.basic.input)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "", "No payload published but field value updated");
@@ -65,11 +109,11 @@ define(["intern!object",
          },
 
          "Invalid field name does not update value": function() {
-            return browser.findById("SET_FORM_VALUE_2")
+            return browser.findByCssSelector(selectors.buttons.setValue2)
                .click()
-               .end()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .findByCssSelector(selectors.textBoxes.basic.input)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "", "Invalid field name provided but value updated");
@@ -77,11 +121,11 @@ define(["intern!object",
          },
 
          "Setting string value updates field appropriately": function() {
-            return browser.findById("SET_FORM_VALUE_3")
+            return browser.findByCssSelector(selectors.buttons.setValue3)
                .click()
-               .end()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .findByCssSelector(selectors.textBoxes.basic.input)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "this is the new value", "Field value not updated to published string value");
@@ -89,11 +133,11 @@ define(["intern!object",
          },
 
          "Setting number value updates field appropriately": function() {
-            return browser.findById("SET_FORM_VALUE_4")
+            return browser.findByCssSelector(selectors.buttons.setValue4)
                .click()
-               .end()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .findByCssSelector(selectors.textBoxes.basic.input)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "3.14159265", "Field value not updated to published numeric value");
@@ -101,11 +145,11 @@ define(["intern!object",
          },
 
          "Setting boolean value updates field appropriately": function() {
-            return browser.findById("SET_FORM_VALUE_5")
+            return browser.findByCssSelector(selectors.buttons.setValue5)
                .click()
-               .end()
+            .end()
 
-            .findByCssSelector("div#FORM_FIELD div.control input[name=\"control\"]")
+            .findByCssSelector(selectors.textBoxes.basic.input)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "true", "Field value not updated to published boolean value");
@@ -113,20 +157,20 @@ define(["intern!object",
          },
 
          "Autosave on a form removes OK/Cancel buttons": function() {
-            return browser.findAllByCssSelector("#BASIC_FORM .confirmationButton, #BASIC_FORM .cancelButton")
+            return browser.findAllByCssSelector(selectors.forms.basic.confirmationButton+ ", " + selectors.forms.basic.cancelButton)
                .then(function(elements) {
                   assert.lengthOf(elements, 2, "OK/Cancel buttons not found on basic form");
                })
                .end()
 
-            .findAllByCssSelector("#AUTOSAVE_FORM .confirmationButton, #AUTOSAVE_FORM .cancelButton")
+            .findAllByCssSelector(selectors.forms.autoSave.confirmationButton+ ", " + selectors.forms.autoSave.cancelButton)
                .then(function(elements) {
                   assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
                });
          },
 
          "Updating autosave value publishes form": function() {
-            return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD .dijitInputInner")
+            return browser.findByCssSelector(selectors.textBoxes.autoSave.input)
                .clearValue()
                .type("wibble")
                .getLastPublish("AUTOSAVE_FORM_1")
@@ -137,7 +181,7 @@ define(["intern!object",
          },
 
          "Updating to invalid value does not autosave form": function() {
-            return browser.findById("CLEAR_AUTOSAVE_1")
+            return browser.findByCssSelector(selectors.buttons.clearAutoSave)
                .click()
                .clearLog()
                .getAllPublishes("AUTOSAVE_FORM_1")
@@ -147,7 +191,7 @@ define(["intern!object",
          },
 
          "Autosave on invalid flag publishes invalid form": function() {
-            return browser.findByCssSelector("#AUTOSAVE_INVALID_FORM_FIELD .dijitInputInner")
+            return browser.findByCssSelector(selectors.textBoxes.invalidAutoSave.input)
                .clearLog()
                .clearValue()
                .pressKeys(keys.BACKSPACE) // Need to trigger an update!
@@ -159,7 +203,7 @@ define(["intern!object",
          },
 
          "Autosaving with defined payload mixes payload into form values": function(){
-            return browser.findByCssSelector("#AUTOSAVE_FORM_FIELD") // Need to get session to check for publish
+            return browser.findByCssSelector("body") // Need to get session to check for publish
                .getLastPublish("AUTOSAVE_FORM_2")
                .then(function(payload) {
                   assert.propertyVal(payload, "customProperty", "awooga", "Did not mix custom payload into form values");
@@ -167,14 +211,14 @@ define(["intern!object",
          },
 
          "Ensure hidden button inputs have value": function() {
-            return browser.findByCssSelector("#BASIC_FORM .alfresco-buttons-AlfButton:nth-child(1) input[type=\"button\"]")
+            return browser.findByCssSelector(selectors.forms.basic.hiddenConfirmationButton)
                .getAttribute("value")
                .then(function(value) {
                   assert.equal(value, "OK");
                })
                .end()
 
-            .findByCssSelector("#BASIC_FORM .alfresco-buttons-AlfButton:nth-child(2) input[type=\"button\"]")
+            .findByCssSelector(selectors.forms.basic.hiddenCancelButton)
                .getAttribute("value")
                .then(function(value) {
                   assert.equal(value, "CANCEL");
@@ -184,21 +228,21 @@ define(["intern!object",
          "Enter key can submit form": function() {
             var firstPublish;
 
-            return browser.findByCssSelector("#ENTER_TEXT_FIELD .dijitInputInner")
+            return browser.findByCssSelector(selectors.textBoxes.submitOnEnter.input)
                .clearLog()
                .type("wibble")
                .pressKeys(keys.ENTER)
-               .end()
+            .end()
 
             .getLastPublish("FORM_PUBLISH")
                .then(function(payload) {
                   firstPublish = payload;
                })
 
-            .findByCssSelector("#ENTER_FORM .confirmationButton .dijitButtonNode")
+            .findByCssSelector(selectors.forms.enterForm.confirmationButton)
                .clearLog()
                .click()
-               .end()
+            .end()
 
             .getLastPublish("FORM_PUBLISH")
                .then(function(payload) {
