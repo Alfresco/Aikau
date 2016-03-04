@@ -25,6 +25,30 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, TestCommon) {
 
+   var baseFormControlSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/BaseFormControl");
+   var tabSelectors = TestCommon.getTestSelectors("alfresco/layout/AlfTabContainer");
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
+
+   var selectors = {
+      buttons: {
+         create: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CREATE_DIALOG_BUTTON"])
+      },
+      dialogs: {
+         dialog1: {
+            visible: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["DIALOG1"])
+         }
+      },
+      tabs: {
+         tab1: TestCommon.getTestSelector(tabSelectors, "identified.tab", ["TABS","DYNAMIC"])
+      },
+      checkBoxes: {
+         initialVisibility: {
+            label: TestCommon.getTestSelector(baseFormControlSelectors, "label", ["INITIALLY_VISIBLE"])
+         }
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -42,24 +66,20 @@ define(["intern!object",
 
          "Check that controls all load": function() {
             // Open the dialog...
-            return browser.findById("CREATE_DILAOG_BUTTON_label")
+            return browser.findByCssSelector(selectors.buttons.create)
                .click()
             .end()
 
             // ...wait for it to be displayed...
-            .findByCssSelector("#DIALOG1.dialogDisplayed")
+            .findByCssSelector(selectors.dialogs.dialog1.visible)
             .end()
 
             // Select the "DYNAMIC" tab...
-            .findById("TABS_TABCONTAINER_tablist_TABS_DYNAMIC")
+            .findByCssSelector(selectors.tabs.tab1)
                .click()
             .end()
 
-            .findByCssSelector("#DIALOG1 #DYNAMIC .alfresco-forms-controls-CheckBox .label")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "The form control label should have been displayed");
-               });
+            .findDisplayedByCssSelector(selectors.checkBoxes.initialVisibility.label);
          },
 
          "Post Coverage Results": function() {
