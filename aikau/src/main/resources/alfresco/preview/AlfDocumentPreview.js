@@ -169,7 +169,8 @@ define(["dojo/_base/declare",
 
       /**
        * The proxy to use for the rest api call for the node's content or thumbnails.
-       * I.e. "alfresco" (or "alfresco-noauth" for public content & pages)
+       * I.e. "alfresco" (or "alfresco-noauth" for public content & pages). Can be set as null or empty
+       * value for URLs that do not require a specific proxy id endpoint.
        *
        * @instance
        * @type {string}
@@ -643,7 +644,7 @@ define(["dojo/_base/declare",
        * @return {string} The "main" element holding the actual previewer.
        */
       getContentUrl: function alfresco_preview_AlfDocumentPreview__getContentUrl(download) {
-         var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + this.proxy + "/",
+         var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + (this.proxy ? this.proxy + "/" : ""),
             nodeRefAsLink = this.nodeRef.replace(":/", ""),
             noCache = "noCache=" + new Date().getTime();
          download = download ? "a=true" : "a=false";
@@ -660,7 +661,7 @@ define(["dojo/_base/declare",
        * @return {String} The url to the thumbnail content.
        */
       getThumbnailUrl: function alfresco_preview_AlfDocumentPreview__getThumbnailUrl(thumbnail, fileSuffix) {
-         var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + this.proxy + "/",
+         var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + (this.proxy ? this.proxy + "/" : ""),
             nodeRefAsLink = this.nodeRef.replace(":/", ""),
             noCache = "noCache=" + new Date().getTime(),
             force = "c=force";
@@ -740,7 +741,9 @@ define(["dojo/_base/declare",
             plugins: [
                {
                   name: "PdfJs",
-                  attributes: {}
+                  attributes: {
+                     src: ""
+                  }
                }
             ]
          },
