@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
         "dojo/io-query",
         "dojo/sniff"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
-                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct, 
+                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct,
                  domClass, ioQuery, sniff) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
@@ -191,7 +191,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not a request for data should be loaded as soon as the widget is created.
        * This will have no effect when [currentData]{@link module:alfresco/listsl/AlfList#currentData}
        * is configured.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -271,7 +271,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not views should apply drag-and-drop highlighting. Each view used by the
        * list will have this value applied (even if it overrides custom configuration) as it is up to
        * the list to control whether or not it supported drag-and-drop behaviour.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -329,9 +329,9 @@ define(["dojo/_base/declare",
 
       /**
        * This is the string that is used to map the call to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       * to create the views defined for the list to the resulting callback in 
+       * to create the views defined for the list to the resulting callback in
        * [allWidgetsProcessed]{@link module:alfresco/core/Core#allWidgetsProcessed}
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -364,7 +364,7 @@ define(["dojo/_base/declare",
       /**
        * An optional JSON model defining the widgets to display when an error occurs attempting to
        * load data to display.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default
@@ -382,11 +382,11 @@ define(["dojo/_base/declare",
       _currentlySelectedView: null,
 
       /**
-       * A flag to indicate whether or not the 
+       * A flag to indicate whether or not the
        * [widgetsForDataFailureDisplay]{@link module:alfresco/lists/AlfList#widgetsForDataFailureDisplay}
        * have been rendered. This prevents them from being repeatedly set. It should not be explicitly
        * configured in the list - it is for internal use only.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -608,7 +608,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        * @param {object[]} widgets The array of widgets created (this should just contain a single view instance)
        * @since 1.0.48
@@ -622,7 +622,7 @@ define(["dojo/_base/declare",
                // There should only be one view rendered...
                var newView = widgets[0];
                newView.noItemsMessage = this.noDataMessage;
-               
+
                // Pass useInfiniteScroll to the view
                if (this.useInfiniteScroll) {
                   newView.useInfiniteScroll = true;
@@ -652,7 +652,7 @@ define(["dojo/_base/declare",
        * This is called from [handleNewViewInstances]{@link module:alfresco/lists/AlfList#handleNewViewInstances}
        * when a new view is created to replace the existing view. It allows all relevant data to be copied from
        * the old view to the new view.
-       * 
+       *
        * @instance
        * @extendable
        * @since 1.0.51
@@ -666,7 +666,7 @@ define(["dojo/_base/declare",
       /**
        * Create the subscriptions for the [filteringTopics]{@link module:alfresco/lists/AlfList#filteringTopics}. This is
        * called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}.
-       * 
+       *
        * @instance
        * @param {object[]} The created widgets
        * @since 1.0.36.4
@@ -681,10 +681,10 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed} to 
+       * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed} to
        * determine whether or not to immediately load data or to wait for all of the widgets on the page to be
        * created first.
-       * 
+       *
        * @instance
        * @param {object[]} The created widgets
        * @since 1.0.36.4
@@ -714,11 +714,11 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Iterate of the supplied list of widgets (which should all be views) and calling the 
+       * Iterate of the supplied list of widgets (which should all be views) and calling the
        * [registerView]{@link module:alfresco/lists/AlfList#registerView} function for each of them. Once
        * the views are all registered ensure that the requested view to be initially displayed is rendered.
        * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed}.
-       * 
+       *
        * @instance
        * @param {object[]} The created widgets
        * @since 1.0.36.4
@@ -1059,7 +1059,10 @@ define(["dojo/_base/declare",
        */
       hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
          setTimeout(lang.hitch(this, function() {
-            domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading","alfresco-lists-AlfList--rendering"]);
+            //
+            if (this.domNode) {
+               domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering"]);
+            }
          }), this.hideLoadingDelay);
       },
 
