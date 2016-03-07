@@ -115,6 +115,21 @@ define([],function() {
       CANCEL_INPROGRESS_UPLOAD: "CANCEL_INPROGRESS_UPLOAD",
 
       /**
+       * This topic is published to request the options to change the type of a node. It doesn't perform the
+       * actual change, but simply provides the type change options in a dialog.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       * 
+       * @event
+       * @property {object} [node] An object representing the full metadata of the Node to change the type of
+       * @property {string} [nodeRef] The NodeRef of the Node to retrieve the full metadata of in order to change its type
+       */
+      CHANGE_TYPE_REQUEST: "ALF_CHANGE_TYPE_REQUEST",
+
+      /**
        * This can be published to clear any selected items that are logged by widgets
        * such as the [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
        *

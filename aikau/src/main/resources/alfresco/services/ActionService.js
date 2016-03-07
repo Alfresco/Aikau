@@ -941,6 +941,17 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to change the type of a node.
+       * 
+       * @instance
+       * @param {object} payload The payload from the original request
+       * @since 1.0.58
+       */
+      onActionChangeType: function alfresco_services_ActionService__onActionChangeType(payload) {
+         this.alfPublish(topics.CHANGE_TYPE_REQUEST, payload.document);
+      },
+
+      /**
        * Handles requests to download multiple items as a single archive file. This is only expected to
        * be called as a multiple item selection action
        * 
