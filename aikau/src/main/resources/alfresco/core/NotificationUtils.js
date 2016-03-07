@@ -25,9 +25,10 @@
  * @deprecated Since 1.0.17 - use the [NotificationService]{@link module:alfresco/services/NotificationService} instead.
  */
 define(["dojo/_base/declare",
+        "dojo/_base/lang",
         "alfresco/core/topics",
         "alfresco/core/Core"],
-        function(declare, topics, AlfCore) {
+        function(declare, lang, topics, AlfCore) {
 
    return declare([AlfCore], {
 
@@ -35,13 +36,22 @@ define(["dojo/_base/declare",
        * This function handles displaying popup messages. 
        *
        * @instance
-       * @param msg {String} The message to be displayed.
+       * @param {string} msg The message to be displayed.
+       * @param {object} postMessagePublish A publication to occur after the message has displayed, provided as a mixin to the payload.
+       * @param {string} postMessagePublish.publishTopic The topic to publish
+       * @param {string} postMessagePublish.publishPayload The payload to publish
+       * @param {string} postMessagePublish.publishGlobal Whether to publish globally
+       * @param {string} postMessagePublish.publishToParent Whether to publish to parent
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
-      displayMessage: function alfresco_core_Core__displayMessage(msg) {
-         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
+      displayMessage: function alfresco_core_Core__displayMessage(msg, postMessagePublish) {
+         var payload = {
             message: msg
-         });
+         };
+         if (postMessagePublish) {
+            lang.mixin(payload, postMessagePublish);
+         }
+         this.alfServicePublish(topics.DISPLAY_NOTIFICATION, payload);
       },
 
       /**
