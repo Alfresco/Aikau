@@ -1059,7 +1059,7 @@ define(["dojo/_base/declare",
        */
       hideLoadingMessage: function alfresco_lists_AlfList__hideLoadingMessage() {
          setTimeout(lang.hitch(this, function() {
-            //
+            // AKU-875: Test domNode exists before using it.
             if (this.domNode) {
                domClass.remove(this.domNode, ["alfresco-lists-AlfList--loading", "alfresco-lists-AlfList--rendering"]);
             }
