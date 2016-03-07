@@ -124,6 +124,8 @@ define([],function() {
        * @since 1.0.58
        * 
        * @event
+       * @property {object} [node] An object representing the full metadata of the Node to change the type of
+       * @property {string} [nodeRef] The NodeRef of the Node to retrieve the full metadata of in order to change its type
        */
       CHANGE_TYPE_REQUEST: "ALF_CHANGE_TYPE_REQUEST",
 
