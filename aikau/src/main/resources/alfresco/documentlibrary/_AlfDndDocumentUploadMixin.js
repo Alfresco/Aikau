@@ -172,6 +172,19 @@ define(["dojo/_base/declare",
       suppressDndUploading: false,
     
       /**
+       * This is a custom event that is emitted when the drag-and-drop upload highlight is 
+       * [applied]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#addDndHighlight} to the node
+       * and results in any outer elements removing any previously applied highlight. This ensures that only
+       * one highlight is displayed at a time.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       */
+      _removeHighlightEvent: "ALF_REMOVE_DND_UPLOAD_HIGHLIGHT",
+
+      /**
        * Determines whether or not the browser supports drag and drop file upload.
        * 
        * @instance
@@ -328,6 +341,10 @@ define(["dojo/_base/declare",
          this.dndUploadEventHandlers.push(on(win.body(), "dragenter", lang.hitch(this, this.onDndUploadDragEnter)));
          this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "dragover", lang.hitch(this, this.onDndUploadDragOver)));
          this.dndUploadEventHandlers.push(on(this.dragAndDropNode, "drop", lang.hitch(this, this.onDndUploadDrop)));
+
+         // This detects the custom event bubbled by nested elements that have had the DND highlight applied. When this occurs
+         // the highlight should be removed from the current widget (because only one highlight should be displayed at a time)
+         on(this.domNode, this._removeHighlightEvent, lang.hitch(this, this.removeDndHighlight));
       },
 
       /**
@@ -529,6 +546,14 @@ define(["dojo/_base/declare",
             this.setDndHighlightDimensions();
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
+
+            // Emit a custom event that tells all outer elements to remove the DND highlight as only one highlight should
+            // be displayed at a time.
+            on.emit(this.domNode.parentNode, this._removeHighlightEvent, {
+               bubbles: true,
+               cancelable: true,
+               targetWidget: this
+            });
          }
       },
 
