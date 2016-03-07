@@ -528,6 +528,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url : url,
                              method: "POST",
                              site: config.site,
+                             siteTitle: config.siteTitle,
                              user: config.user,
                              data: data,
                              successCallback: this.siteMembershipRequestComplete,
@@ -558,7 +559,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "User has successfully requested to join a moderated site", response, originalRequestConfig);
          this.alfServicePublish(topics.CREATE_DIALOG, {
             dialogTitle: this.message("message.request-join-success-title"),
-            textContent: this.message("message.request-join-success", {"0": originalRequestConfig.user, "1": originalRequestConfig.site}),
+            textContent: this.message("message.request-join-success", {"0": originalRequestConfig.user, "1": originalRequestConfig.siteTitle || originalRequestConfig.site}),
             widgetsButtons: [
                {
                   name: "alfresco/buttons/AlfButton",
