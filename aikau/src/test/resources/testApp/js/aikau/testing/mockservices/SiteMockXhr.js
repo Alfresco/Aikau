@@ -25,23 +25,12 @@
 define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/testing/MockXhr",
-        "dojo/text!./responseTemplates/SiteTest/GetSites.json",
-        "dojo/text!./responseTemplates/SiteTest/GetAdminSites.json",
         "dojo/text!./responseTemplates/SiteTest/GetSite.json",
         "dojo/text!./responseTemplates/SiteTest/PutSite.json",
         "dojo/text!./responseTemplates/SiteTest/DeleteSite.json",
-        "dojo/text!./responseTemplates/SiteTest/PostSiteAsFavourite.json",
-        "dojo/text!./responseTemplates/SiteTest/DeleteSiteAsFavourite.json",
-        "dojo/text!./responseTemplates/SiteTest/GetSiteMemberships.json",
         "dojo/text!./responseTemplates/SiteTest/PostBecomeSiteManager.json",
-        "dojo/text!./responseTemplates/SiteTest/PostRequestSiteMembership.json",
-        "dojo/text!./responseTemplates/SiteTest/PutJoinSite.json",
-        "dojo/text!./responseTemplates/SiteTest/DeleteLeaveSite.json",
-        "dojo/text!./responseTemplates/SiteTest/GetRecentSites.json",
-        "dojo/text!./responseTemplates/SiteTest/GetFavouriteSites.json"], 
-        function(declare, lang, MockXhr, getSites, getAdminSites, getSite, putSite, deleteSite, postSiteAsFavourite, 
-         deleteSiteAsFavourite, getSiteMemberships, postBecomeSiteManager, postRequestSiteMembership, putJoinSite, 
-         deleteLeaveSite, getRecentSites, getFavouriteSites) {
+        "dojo/text!./responseTemplates/SiteTest/PostRequestSiteMembership.json"], 
+        function(declare, lang, MockXhr, getSite, putSite, deleteSite, postBecomeSiteManager, postRequestSiteMembership) {
    
    return declare([MockXhr], {
 
@@ -84,26 +73,6 @@ define(["dojo/_base/declare",
             
             this.server.respondWith(
                "GET",
-               /\/aikau\/proxy\/alfresco\/api\/sites[^\/]*/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  getSites
-               ]
-            );
-
-            this.server.respondWith(
-               "GET",
-               /\/aikau\/proxy\/alfresco\/api\/admin-sites[^\/]*/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  getAdminSites
-               ]
-            );
-
-            this.server.respondWith(
-               "GET",
                /\/aikau\/proxy\/alfresco\/api\/sites\/[^\/]*/,
                [
                   200,
@@ -134,36 +103,6 @@ define(["dojo/_base/declare",
 
             this.server.respondWith(
                "POST",
-               /\/aikau\/proxy\/alfresco\/api\/people\/(.*)\/preferences/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  postSiteAsFavourite
-               ]
-            );
-
-            this.server.respondWith(
-               "DELETE",
-               /\/aikau\/proxy\/alfresco\/api\/people\/(.*)\/preferences?pf=org.alfresco.share.sites.favourites.(.*)/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  deleteSiteAsFavourite
-               ]
-            );
-
-            this.server.respondWith(
-               "GET",
-               /\/aikau\/proxy\/alfresco\/api\/sites\/(.*)\/memberships/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  getSiteMemberships
-               ]
-            );
-
-            this.server.respondWith(
-               "POST",
                /\/aikau\/proxy\/alfresco\/api\/sites\/(.*)\/memberships/,
                [
                   200,
@@ -175,57 +114,42 @@ define(["dojo/_base/declare",
             this.server.respondWith(
                "POST",
                /\/aikau\/proxy\/alfresco\/api\/sites\/(.*)\/invitations/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  postRequestSiteMembership
-               ]
-            );
-
-            this.server.respondWith(
-               "PUT",
-               /\/aikau\/proxy\/alfresco\/api\/sites\/(.*)\/memberships/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  putJoinSite
-               ]
-            );
-
-            this.server.respondWith(
-               "DELETE",
-               /\/aikau\/proxy\/alfresco\/api\/sites\/(.*)\/memberships\/(.*)/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  deleteLeaveSite
-               ]
-            );
-
-            this.server.respondWith(
-               "GET",
-               /\/aikau\/proxy\/alfresco\/api\/people\/(.*)\/sites\/recent/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  getRecentSites
-               ]
-            );
-
-            this.server.respondWith(
-               "GET",
-               /\/aikau\/proxy\/alfresco\/api\/people\/(.*)\/sites\/favourites/,
-               [
-                  200,
-                  {"Content-Type":"application/json;charset=UTF-8"},
-                  getFavouriteSites
-               ]
+               lang.hitch(this, this.requestSiteMembership)
             );
 
          }
          catch(e)
          {
             this.alfLog("error", "The following error occurred setting up the mock server", e);
+         }
+      },
+
+      /**
+       * Handle site-join requests
+       *
+       * @instance
+       * @param {object} request The request object
+       * @since 1.0.58
+       */
+      requestSiteMembership: function alfresco_testing_SiteMockXhr__requestSiteMembership(request) {
+         var body = request && request.requestBody && JSON.parse(request.requestBody),
+            comments = body && body.inviteeComments;
+         if (comments === "Request pending") {
+            request.respond(400, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, JSON.stringify({
+               error: "A request to join this site is in pending"
+            }));
+         } else if (comments === "Error") {
+            request.respond(500, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, JSON.stringify({
+               error: "Unexpected error occurred"
+            }));
+         } else {
+            request.respond(200, {
+               "Content-Type": "application/json;charset=UTF-8"
+            }, JSON.stringify(postRequestSiteMembership));
          }
       }
    });
