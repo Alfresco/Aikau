@@ -123,6 +123,10 @@ define([],function() {
        * @since 1.0.58
        *
        * @event
+       * @property {string} siteId The ID of the site
+       * @property {string} siteTitle The "friendly" name of the site
+       * @property {object} pendingInvite The object describing the pending invite
+       * @property {string} pendingInvite.id The ID of the pending site-join request
        */
       CANCEL_JOIN_SITE_REQUEST: "ALF_CANCEL_JOIN_SITE_REQUEST",
 

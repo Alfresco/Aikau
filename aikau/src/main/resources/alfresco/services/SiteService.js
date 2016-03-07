@@ -130,7 +130,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_REMOVE_FAVOURITE_SITE", lang.hitch(this, this.removeSiteFromFavourites));
          this.alfSubscribe("ALF_GET_RECENT_SITES", lang.hitch(this, this.getRecentSites));
          this.alfSubscribe("ALF_GET_FAVOURITE_SITES", lang.hitch(this, this.getFavouriteSites));
-         this.alfSubscribe("ALF_CANCEL_JOIN_SITE_REQUEST", lang.hitch(this, this.cancelJoinSiteRequest));
+         this.alfSubscribe(topics.CANCEL_JOIN_SITE_REQUEST, lang.hitch(this, this.cancelJoinSiteRequest));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
          // editing. At some stage this will not be needed when a new edit site dialog is provided.
