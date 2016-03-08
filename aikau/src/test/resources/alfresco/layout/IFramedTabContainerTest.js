@@ -25,6 +25,17 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, TestCommon) {
 
+   var tabContainerSelectors = TestCommon.getTestSelectors("alfresco/layout/AlfTabContainer");
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var selectors = {
+      tc1: {
+         logo1Tab: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","Logo1"])
+      },
+      buttons: {
+         showIFrame: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SHOW_IFRAME"])
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -42,13 +53,13 @@ define(["intern!object",
 
          // See AKU-692...
          "Reveal the iframe and check for tab container": function () {
-            return browser.findById("SHOW_IFRAME_label")
+            return browser.findByCssSelector(selectors.buttons.showIFrame)
                .click()
             .end()
 
             .switchToFrame("IFRAME_IFRAME")
 
-            .findById("TC_TABCONTAINER_tablist_TC_Logo1");
+            .findByCssSelector(selectors.tc1.logo1Tab);
          },
 
          "Post Coverage Results": function() {

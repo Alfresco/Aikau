@@ -129,10 +129,9 @@ define(["dojo/_base/declare",
          {
             src = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl();
          }
-         var mimeType = this.attributes.srcMimeType ? this.attributes.srcMimeType : this.previewManager.mimeType;
          var str = "";
          str += "<video controls alt=\"" + this.previewManager.name  + "\" title=\"" + this.previewManager.name  + "\">";
-         str += "   <source src=\"" + src + "\"  type=\"" + mimeType + "\">";
+         str += "   <source src=\"" + src + "\"  >";
          str += "</video>";
          return str;
       }

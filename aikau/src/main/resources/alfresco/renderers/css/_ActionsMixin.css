@@ -9,6 +9,9 @@
          &.alf-delete-icon {
             background-image: url("./images/actions/document-delete-16.png");
          }
+         &.alf-change-type-icon {
+            background-image: url("./images/actions/document-change-type-16.png");
+         }
          &.alf-copy-to-icon {
             background-image: url("./images/actions/document-copy-to-16.png");
          }

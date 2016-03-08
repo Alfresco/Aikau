@@ -13,6 +13,7 @@ model.jsonModel = {
    ],
    widgets:[ 
       {
+         id: "TC",
          name: "alfresco/layout/AlfTabContainer",
          config: {
             height: "500px",

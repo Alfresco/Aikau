@@ -36,9 +36,10 @@ define(["alfresco/core/FileSizeMixin",
         "dojo/_base/lang", 
         "dojo/dom-class", 
         "dojo/dom-construct",
+        "dojo/dom-style",
         "dojo/when", 
         "dojo/text!./templates/UploadMonitor.html"], 
-        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, when, template) {
+        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, domStyle, when, template) {
 
    return declare([FileSizeMixin, CoreWidgetProcessing, _UploadsDisplayMixin], {
 
@@ -150,6 +151,29 @@ define(["alfresco/core/FileSizeMixin",
       widgetsForUnsuccessfulActions: null,
 
       /**
+       * This defines the widget model for rendering an error icon. This is expected to be a single 
+       * [SVGImage]{@link module:alfresco/html/SVGImage} but is made configurable in order to support customization
+       * of dimensions and the image rendered. If a radically different widget model is provided then it may
+       * be necessary to use an extension of this widget with an extension to the 
+       * [handleFailedUpload]{@link module:alfresco/upload/UploadMonitor#handleFailedUpload} function.
+       * 
+       * @instance
+       * @type {object[]}
+       * @since 1.0.58
+       */
+      widgetsForErrorIcon: [
+         {
+            name: "alfresco/html/SVGImage",
+            config: {
+               source: "alfresco/html/svg/error.svg",
+               symbolId: "error",
+               height: 16,
+               width: 16
+            }
+         }
+      ],
+
+      /**
        * A map of all uploads.
        *
        * @instance
@@ -238,9 +262,6 @@ define(["alfresco/core/FileSizeMixin",
                className: this.baseClass + "__item__name__content",
                textContent: this.getDisplayText(file)
             }, itemName),
-            itemNameError = domConstruct.create("div", {
-               className: this.baseClass + "__item__name__error"
-            }, itemName),
             itemProgress = domConstruct.create("td", {
                className: this.baseClass + "__item__progress"
             }, itemRow),
@@ -253,7 +274,15 @@ define(["alfresco/core/FileSizeMixin",
             }, itemRow),
             itemActions = domConstruct.create("td", {
                className: this.baseClass + "__item__actions"
-            }, itemRow);
+            }, itemRow),
+            progressRow = domConstruct.create("tr", {}, this.inProgressItemsNode),
+            progressCell = domConstruct.create("td", {
+               colspan: 4,
+               className: this.baseClass + "__item__progress-cell"
+            }, progressRow),
+            progressBar = domConstruct.create("div", {
+               className: this.baseClass + "__item__progress-bar"
+            }, progressCell);
 
          // Add localised status messages
          domConstruct.create("span", {
@@ -268,6 +297,9 @@ define(["alfresco/core/FileSizeMixin",
             className: this.baseClass + "__item__status__unsuccessful",
             textContent: this.message("upload.status.unsuccessful")
          }, itemStatus);
+         var errorIconNode = domConstruct.create("span", {
+            className: this.baseClass + "__item__status__unsuccessful_icon"
+         }, itemStatus);
 
          // Store in uploads map
          var upload = this._uploads[fileId] = {
@@ -281,8 +313,10 @@ define(["alfresco/core/FileSizeMixin",
             nodes: {
                row: itemRow,
                name: itemNameContent,
-               error: itemNameError,
-               progress: itemProgressContent
+               errorIcon: errorIconNode,
+               progress: itemProgressContent,
+               progressRow: progressRow,
+               progressBar: progressBar
             }
          };
 
@@ -370,6 +404,7 @@ define(["alfresco/core/FileSizeMixin",
 
             // Mark as completed and move to successful section
             upload.completed = true;
+            upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
             upload.nodes.progress.textContent = this.displayUploadPercentage ? "100%" : "";
             domConstruct.place(upload.nodes.row, this.successfulItemsNode, "first");
 
@@ -413,13 +448,29 @@ define(["alfresco/core/FileSizeMixin",
                   errorMessage = request.statusText;
                }
             }
-            errorMessage = this.message(errorMessage);
+
+            errorMessage = this.message("upload.failure.icon.title", {
+               "0": upload.file.name,
+               "1": this.message(errorMessage)
+            });
 
             // Move the item to the unsuccessful items section and update the properties accordingly
             upload.completed = true;
+            upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
             domConstruct.place(upload.nodes.row, this.unsuccessfulItemsNode, "first");
             upload.nodes.progress.textContent = "";
-            upload.nodes.error.textContent = errorMessage;
+            
+            var processId = Date.now() + "_actionWidgets";
+            var widgets = lang.clone(this.widgetsForErrorIcon);
+            array.forEach(widgets, function(widget) {
+               widget.config = lang.mixin({
+                  title: errorMessage,
+                  description: this.message("upload.failure.icon.description")
+               }, widget.config);
+            }, this);
+            domConstruct.empty(upload.nodes.errorIcon);
+            this.processWidgets(widgets, upload.nodes.errorIcon, processId);
+            
             domClass.add(upload.nodes.row, this.baseClass + "__item--has-error");
 
          } else {
@@ -468,6 +519,7 @@ define(["alfresco/core/FileSizeMixin",
          if (upload) {
             if (!upload.completed) {
                upload.nodes.progress.textContent = percentageComplete + "%";
+               domStyle.set(upload.nodes.progressBar, "width", percentageComplete + "%");
             }
          } else {
             this.alfLog("warn", "Attempt to update upload that is not being tracked (id=" + fileId + ")");

@@ -115,6 +115,37 @@ define([],function() {
       CANCEL_INPROGRESS_UPLOAD: "CANCEL_INPROGRESS_UPLOAD",
 
       /**
+       * Cancel a request to join a site.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       *
+       * @event
+       * @property {string} siteId The ID of the site
+       * @property {string} siteTitle The "friendly" name of the site
+       * @property {object} pendingInvite The object describing the pending invite
+       * @property {string} pendingInvite.id The ID of the pending site-join request
+       */
+      CANCEL_JOIN_SITE_REQUEST: "ALF_CANCEL_JOIN_SITE_REQUEST",
+
+      /**
+       * This topic is published to request the options to change the type of a node. It doesn't perform the
+       * actual change, but simply provides the type change options in a dialog.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       * 
+       * @event
+       * @property {object} [node] An object representing the full metadata of the Node to change the type of
+       * @property {string} [nodeRef] The NodeRef of the Node to retrieve the full metadata of in order to change its type
+       */
+      CHANGE_TYPE_REQUEST: "ALF_CHANGE_TYPE_REQUEST",
+
+      /**
        * This can be published to clear any selected items that are logged by widgets
        * such as the [AlfSelectedItemsMenuBarPopup]{@link module:alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup}.
        *
@@ -344,6 +375,9 @@ define([],function() {
        * @event
        * @property {object[]} widgets The widgets to appear in the panel
        * @property {string} [title=default.title] The title to display (uses i18n)
+       * @property {string} [closeButtonLabel=Close this panel] The text-label that decorates the close button for accessibility reasons
+       * @property {string} [minimiseButtonLabel=Minimize this panel] The text-label that decorates the minimise button for accessibility reasons
+       * @property {string} [restoreButtonLabel=Restore this panel] The text-label that decorates the restore button for accessibility reasons
        * @property {number} [padding=10] The padding to be applied to the widgets area
        * @property {string|number} [width=50%] The width of the panel (CSS dimension or number of pixels)
        * @property {boolean} [warnIfOpen=true] Whether to put a warning in the console if the panel is

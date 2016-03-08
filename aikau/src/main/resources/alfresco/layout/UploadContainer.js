@@ -121,7 +121,7 @@ define(["dojo/_base/declare",
                return array.some(foundProxyNodes, function(proxyNode) {
 
                   // If the offsetHeight of the node is not 0, it is visible and therefore it becomes the target
-                  if (proxyNode.offsetHeight != 0)
+                  if (proxyNode.offsetHeight !== 0)
                   {
                      var computedStyle = domStyle.getComputedStyle(proxyNode);
                      var dndNodeDimensions = domGeom.getMarginBox(proxyNode, computedStyle);

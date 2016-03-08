@@ -26,8 +26,18 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/helpers/pollUntil"],
         function(registerSuite, assert, TestCommon, pollUntil) {
 
+   var DialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
+   var dialogSelectors = {
+      enableTopicDialog: {
+         confirmationButton: TestCommon.getTestSelector(DialogSelectors, "form.dialog.confirmation.button", ["FD4"]),
+         disabledConfirmationButton: TestCommon.getTestSelector(DialogSelectors, "disabled.form.dialog.confirmation.button", ["FD4"]),
+         displayed: TestCommon.getTestSelector(DialogSelectors, "visible.dialog", ["FD4"]),
+         hidden: TestCommon.getTestSelector(DialogSelectors, "hidden.dialog", ["FD4"]),
+      }
+   };
+
    function closeAllDialogs(browser) {
-      // Todo: this fails to close multiple dialogs in Chrome
+      // TODO: this fails to close multiple dialogs in Chrome
       return browser.end()
          .findAllByCssSelector(".dijitDialogCloseIcon")
          .then(function(closeButtons) {
@@ -173,6 +183,46 @@ define(["intern!object",
                         .then(function(height) {
                            assert.equal(height, "300px", "Height was not set correctly");
                         });
+               });
+         },
+
+         // See AKU-846...
+         "Dialog buttons are disabled when enableCloseTopic is set": function() {
+            return closeAllDialogs(browser)
+               .then(function() {
+                  return browser.findById("LAUNCH_FAILURE_DIALOG_2")
+                     .click()
+                  .end()
+
+                  .findByCssSelector(dialogSelectors.enableTopicDialog.displayed)
+                  .end()
+
+                  .findByCssSelector("#TB4 .dijitInputContainer input")
+                     .clearValue()
+                     .type("fail")
+                  .end()
+
+                  .findByCssSelector(dialogSelectors.enableTopicDialog.confirmationButton)
+                     .click()
+                  .end()
+
+                  // Check that the confirmation button is now disabled (this also demonstrates that the dialog is still visible)...
+                  .findByCssSelector(dialogSelectors.enableTopicDialog.disabledConfirmationButton)
+                  .end()
+
+                  // Wait for the confirmation button to be reanabled (there is a timeout on the failure topic publication)...
+                  .waitForDeletedByCssSelector(dialogSelectors.enableTopicDialog.disabledConfirmationButton)
+
+                  .findByCssSelector("#TB4 .dijitInputContainer input")
+                     .clearValue()
+                     .type("Succeed")
+                  .end()
+
+                  .findByCssSelector(dialogSelectors.enableTopicDialog.confirmationButton)
+                     .click()
+                  .end()
+
+                  .findByCssSelector(dialogSelectors.enableTopicDialog.hidden);
                });
          },
 

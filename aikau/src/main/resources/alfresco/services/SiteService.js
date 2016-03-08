@@ -130,6 +130,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe("ALF_REMOVE_FAVOURITE_SITE", lang.hitch(this, this.removeSiteFromFavourites));
          this.alfSubscribe("ALF_GET_RECENT_SITES", lang.hitch(this, this.getRecentSites));
          this.alfSubscribe("ALF_GET_FAVOURITE_SITES", lang.hitch(this, this.getFavouriteSites));
+         this.alfSubscribe(topics.CANCEL_JOIN_SITE_REQUEST, lang.hitch(this, this.cancelJoinSiteRequest));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
          // editing. At some stage this will not be needed when a new edit site dialog is provided.
@@ -528,9 +529,11 @@ define(["dojo/_base/declare",
             this.serviceXhr({url : url,
                              method: "POST",
                              site: config.site,
+                             siteTitle: config.siteTitle,
                              user: config.user,
                              data: data,
                              successCallback: this.siteMembershipRequestComplete,
+                             failureCallback: this.siteMembershipRequestFailed,
                              callbackScope: this});
          }
          else
@@ -548,6 +551,44 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Cancel a pending request to join a site
+       *
+       * @instance
+       * @param {object} payload The publication payload
+       * @since 1.0.58
+       */
+      cancelJoinSiteRequest: function alfresco_services_SiteService__cancelJoinSiteRequest(payload) {
+         var siteId = payload.siteId,
+            siteTitle = payload.siteTitle,
+            encodedSiteId = encodeURIComponent(siteId),
+            pendingInvite = encodeURIComponent(payload.pendingInvite.id),
+            url = AlfConstants.PROXY_URI + "api/sites/" + encodedSiteId + "/invitations/" + pendingInvite;
+         this.serviceXhr({
+            url: url,
+            siteTitle: siteTitle || siteId,
+            method: "DELETE",
+            successCallback: this._cancelJoinSiteRequestSuccess,
+            callbackScope: this
+         });
+      },
+
+      /**
+       * Success-handler for the request to cancel a join-site request.
+       *
+       * @instance
+       * @param {object} response The response object
+       * @param {object} originalRequestConfig The original configuration passed when the request was made
+       * @since 1.0.58
+       */
+      _cancelJoinSiteRequestSuccess: function alfresco_services_SiteService___cancelJoinSiteRequestSuccess(response, originalRequestConfig) {
+         this.displayMessage(this.message("message.cancel-join-request-success", {
+            "0": originalRequestConfig.siteTitle
+         }), {
+            publishTopic: topics.RELOAD_PAGE // This is more reliable than an arbitrary timeout in ensuring the message will be displayed before reloading
+         });
+      },
+
+      /**
        * Callback that occurs after a request to join a moderated site is complete.
        *
        * @instance
@@ -558,7 +599,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "User has successfully requested to join a moderated site", response, originalRequestConfig);
          this.alfServicePublish(topics.CREATE_DIALOG, {
             dialogTitle: this.message("message.request-join-success-title"),
-            textContent: this.message("message.request-join-success", {"0": originalRequestConfig.user, "1": originalRequestConfig.site}),
+            textContent: this.message("message.request-join-success", {"0": originalRequestConfig.user, "1": originalRequestConfig.siteTitle || originalRequestConfig.site}),
             widgetsButtons: [
                {
                   name: "alfresco/buttons/AlfButton",
@@ -575,6 +616,23 @@ define(["dojo/_base/declare",
                }
             ]
          });
+      },
+
+      /**
+       * Callback that occurs after a request to join a moderated site has failed.
+       *
+       * @instance
+       * @param {object} response The response from the XHR request to join the site.
+       * @param {object} originalRequestConfig The original configuration passed when the request was made.
+       * @since 1.0.58
+       */
+      siteMembershipRequestFailed: function alfresco_services_SiteService__siteMembershipRequestFailed(response, originalRequestConfig) {
+         this.alfLog("warn", "Request to join site failed:", originalRequestConfig);
+         var responseMessage = lang.getObject("response.text", false, response),
+            requestPendingMessage = "A request to join this site is in pending", // NOTE: This is a string-literal in Share's "Site.java" file
+            failedBecausePending = responseMessage && responseMessage.indexOf(requestPendingMessage) !== -1,
+            failureMessage = failedBecausePending ? "message.request-join-site-pending-failure" : "message.request-join-site-failure";
+         this.displayMessage(this.message(failureMessage));
       },
 
       /**

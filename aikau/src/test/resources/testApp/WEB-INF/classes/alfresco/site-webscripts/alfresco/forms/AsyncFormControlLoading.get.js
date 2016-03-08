@@ -274,6 +274,7 @@ function getFormControlConfigWidgets() {
                   config: {
                      widgets: [
                         {
+                           id: "INITIALLY_VISIBLE",
                            name: "alfresco/forms/controls/CheckBox",
                            config: {
                               name: "config.visibilityConfig.initialValue",
@@ -449,7 +450,7 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         id: "CREATE_DILAOG_BUTTON",
+         id: "CREATE_DIALOG_BUTTON",
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Create form dialog",

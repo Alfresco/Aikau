@@ -22,9 +22,8 @@
  */
 define(["intern!object",
         "intern/chai!assert", 
-        "alfresco/TestCommon", 
-        "intern/dojo/node!leadfoot/keys"],
-        function(registerSuite, assert, TestCommon, keys) {
+        "alfresco/TestCommon"],
+        function(registerSuite, assert, TestCommon) {
 
    registerSuite(function() {
       var browser;

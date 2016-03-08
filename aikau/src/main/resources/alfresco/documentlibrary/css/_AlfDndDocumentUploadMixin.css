@@ -1,17 +1,18 @@
 .alfresco-documentlibrary-_AlfDndDocumentUploadMixin {
    
    &--dndHighlight {
-      opacity: 0.2;
+      opacity: @upload-highlight-opacity;
    }
 }
 
 .alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay {
    display: none;
-   opacity: 1;
+   opacity: @upload-highlight-overlay-opacity;
    position: absolute;
    border: @upload-highlight-border;
    border-radius: 10px;
    pointer-events: none;
+   background-color: @upload-highlight-overlay-background;
    
    &--display {
       display: table;

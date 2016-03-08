@@ -15,18 +15,18 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         id: "SET_FORM_VALUE_1",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "SET_FORM_VALUE_1",
             label: "Publish update without payload",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_"
          }
       },
       {
+         id: "SET_FORM_VALUE_2",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "SET_FORM_VALUE_2",
             label: "Incorrect fieldname in update payload",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
@@ -36,9 +36,9 @@ model.jsonModel = {
          }
       },
       {
+         id: "SET_FORM_VALUE_3",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "SET_FORM_VALUE_3",
             label: "Update and set string value",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
@@ -48,9 +48,9 @@ model.jsonModel = {
          }
       },
       {
+         id: "SET_FORM_VALUE_4",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "SET_FORM_VALUE_4",
             label: "Update and set number value",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",
@@ -60,9 +60,9 @@ model.jsonModel = {
          }
       },
       {
+         id: "SET_FORM_VALUE_5",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "SET_FORM_VALUE_5",
             label: "Update and set boolean value",
             publishTopic: "SET_FORM_CONTROL_VALUE",
             pubSubScope: "TEST_SCOPE_",

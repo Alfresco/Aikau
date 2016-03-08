@@ -172,7 +172,41 @@ registerSuite(function(){
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "<img src=\"1\" onerror=\"window.hackedPanel=true\">");
-            });
+            })
+            .end()
+
+         .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("ALF_STICKY_PANEL_CLOSED");
+      },
+
+      "Notification does not prevent clicking to sides": function(){
+         return browser.findByCssSelector("[widgetid=\"NOTIFICATION_BUTTON_LARGE\"] .dijitButtonNode")
+            .click()
+            .clearLog()
+         .end()
+
+         .findByCssSelector("[widgetid=\"LEFT_BUTTON\"] .dijitButtonNode")
+            .click()
+         .end()
+
+         .getLastPublish("LEFT_BUTTON_PUSHED")
+
+         .findByCssSelector("[widgetid=\"RIGHT_BUTTON\"] .dijitButtonNode")
+            .click()
+         .end()
+
+         .getLastPublish("RIGHT_BUTTON_PUSHED")
+
+         .findByCssSelector(".alfresco-notifications-AlfNotification__close")
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("ALF_NOTIFICATION_CLOSED");
       },
       
       "Post Coverage Results": function() {

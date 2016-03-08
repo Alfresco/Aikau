@@ -45,6 +45,21 @@ define(["dojo/_base/declare",
        * @type {String[]}
        */
       nonAmdDependencies: ["/js/lib/3rd-party/lightbox.js"],
+      
+      /**
+       * If a service needs to act upon its post-mixed-in state before registering subscriptions then
+       * this is where it should be done. It is comparable to postMixInProperties in a widget in the
+       * class lifecycle.
+       * 
+       * @instance
+       */
+      initService: function alfresco_services_LightboxService__initService() {
+         
+         Alfresco.AikauLightbox.init({
+            loadingImage: require.toUrl("alfresco/services/css/images/loading.gif"),
+            closeButton: require.toUrl("alfresco/services/css/images/close.gif")
+         });
+      },
 
       /**
        * Sets up the subscriptions for the LightboxService
@@ -53,6 +68,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       registerSubscriptions: function alfresco_services_LightboxService__registerSubscriptions() {
+         
          this.alfSubscribe("ALF_DISPLAY_LIGHTBOX", lang.hitch(this, this.onDisplayLightbox));
       },
       
@@ -63,6 +79,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the image.
        */
       onDisplayLightbox: function alfresco_services_LightboxService__onDisplayLightbox(payload) {
+         
          var src = lang.getObject("src", false, payload),
              title = lang.getObject("title", false, payload);
          if (!src)
@@ -74,9 +91,7 @@ define(["dojo/_base/declare",
             // call the non-AMD Lightbox JS to perform the actual work of displaying the image in a lightbox
             Alfresco.AikauLightbox.show({
                src: src,
-               title: title,
-               loadingImage: require.toUrl("alfresco/services/css/images/loading.gif"),
-               closeButton: require.toUrl("alfresco/services/css/images/close.gif")
+               title: title
             });
          }
       }

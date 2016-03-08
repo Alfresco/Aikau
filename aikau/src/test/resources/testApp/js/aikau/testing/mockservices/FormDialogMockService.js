@@ -49,10 +49,18 @@ define(["dojo/_base/declare",
             this.alfPublish("ALF_DISPLAY_PROMPT", {
                message: "Post failure"
             });
+
+            // Intentionally wait before publishing failure message so that the unit test can detect the
+            // disabled buttons.
+            var _this = this;
+            setTimeout(function() {
+               _this.alfPublish(payload.alfPublishScope + "FORM_POST_FAILURE");
+            }, 2000);
+            
          }
          else
          {
-            this.alfPublish(payload.alfPublishScope + "FORM_POST_SUCCESS", {});
+            this.alfPublish(payload.alfPublishScope + "FORM_POST_SUCCESS");
          }
       }
    });

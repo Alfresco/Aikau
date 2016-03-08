@@ -25,6 +25,11 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function(registerSuite, assert, TestCommon) {
 
+   function getTextContent(selector) {
+      var elem = document.querySelector(selector);
+      return elem && elem.textContent;
+   }
+
    registerSuite(function() {
       var browser;
 
@@ -48,16 +53,61 @@ define(["intern!object",
 
             .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
 
-            .findByCssSelector(".alfresco-upload-UploadMonitor__item__name__error")
-               .getVisibleText()
-               .then(function(visibleText) {
-                  assert.equal(visibleText, "0kb files can't be uploaded");
-               })
+               .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
+                  .then(function(text) {
+                     assert.equal(text, "The file ''This file is empty.txt'' could not be uploaded for the following reason. 0kb files can't be uploaded");
+                  })
                .end()
-               .end() // Escape previous extra nesting
+
+            .end() // Escape previous extra nesting
 
             .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
                .click();
+         },
+
+         "Panel buttons carry correct attributes": function() {
+            return browser.findById("BAD_FILE_DATA_label")
+               .click()
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
+               .getAttribute("title")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Minimize the upload window", "Minimise button does not have correct title attribute");
+               })
+               .getAttribute("aria-label")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Minimize the upload window", "Minimise button does not have correct aria-label attribute");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__restore")
+               .getAttribute("title")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Restore the upload window", "Restore button does not have correct title attribute");
+               })
+               .getAttribute("aria-label")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Restore the upload window", "Restore button does not have correct aria-label attribute");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .getAttribute("title")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Close the upload window", "Close button does not have correct title attribute");
+               })
+               .getAttribute("aria-label")
+               .then(function(attrValue){
+                  assert.equal(attrValue, "Close the upload window", "Close button does not have correct aria-label attribute");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
          },
 
          "Single file upload succeeds": function() {
@@ -130,11 +180,38 @@ define(["intern!object",
                .click()
             .end()
 
-            .findByCssSelector(".alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item__name__error")
-               .getVisibleText()
-               .then(function(visibleText) {
-                  assert.equal(visibleText, "Upload cancelled");
-               });
+            .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
+               .then(function(text) {
+                  assert.equal(text, "The file ''Tiny dataset.csv'' could not be uploaded for the following reason. The upload was cancelled");
+               })
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
+         },
+
+         "Progress bar displayed when upload in-progress": function() {
+            return browser.findById("SINGLE_UPLOAD_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector(".alfresco-upload-UploadMonitor__item__progress-bar")
+            .end()
+
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
+
+            .waitForDeletedByCssSelector(".alfresco-upload-UploadMonitor__item__progress-bar")
+            .end()
+
+            .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
+               .click()
+            .end()
+
+            .getLastPublish("ALF_STICKY_PANEL_CLOSED");
          },
 
          "Post Coverage Results": function() {

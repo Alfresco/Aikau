@@ -126,9 +126,6 @@ Alfresco.AikauLightbox = (function() {
    //
    var showLightbox = function showLightbox(objLink)
    {
-      loadingImage = objLink.loadingImage;
-      closeButton = objLink.closeButton;
-
       // prep objects
       var objOverlay = document.getElementById("aikauOverlay");
       var objLightbox = document.getElementById("aikauLightbox");
@@ -153,8 +150,7 @@ Alfresco.AikauLightbox = (function() {
 
       // preload image
       imgPreload = new Image();
-   
-      imgPreload.onload=function(){
+      imgPreload.onload = function() {
          objImage.src = objLink.href || objLink.src;
    
          // center lightbox and make sure that the top and left values are not negative
@@ -188,15 +184,21 @@ Alfresco.AikauLightbox = (function() {
             // An HTMLELement weas passed in
             title = objLink.getAttribute("title");
          }
-         if (title){
+         if (title)
+         {
             objCaption.style.display = "block";
             //objCaption.style.width = imgPreload.width + "px";
             objCaption.innerHTML = title;
-         } else {
+         }
+         else
+         {
             objCaption.style.display = "none";
          }
    
-         if (objLoadingImage) {  objLoadingImage.style.display = "none"; }
+         if (objLoadingImage)
+         {
+            objLoadingImage.style.display = "none";
+         }
    
          objLightbox.style.display = "block";
    
@@ -219,31 +221,6 @@ Alfresco.AikauLightbox = (function() {
       };
    
       imgPreload.src = objLink.href || objLink.src;
-
-      // preload and create close button image
-      if (!document.getElementById("aikauCloseButton") && document.getElementById("aikauLink"))
-      {
-         var imgPreloadCloseButton = new Image();
-   
-         // if close button image found, 
-         imgPreloadCloseButton.onload=function(){
-      
-            var objCloseButton = document.createElement("img");
-            objCloseButton.src = closeButton;
-            objCloseButton.setAttribute("id","aikauCloseButton");
-            if (Alfresco && Alfresco.util && typeof Alfresco.util.message === "function")
-            {
-               objCloseButton.setAttribute("alt",Alfresco.util.message.call(this, "lightbox.close"));
-            }
-            objCloseButton.style.position = "absolute";
-            objCloseButton.style.zIndex = "200";
-            objCloseButton.style.right = "8px";
-            document.getElementById("aikauLink").appendChild(objCloseButton);
-            return false;
-         };
-      
-         imgPreloadCloseButton.src = closeButton;
-      }
    };
    
    
@@ -278,8 +255,11 @@ Alfresco.AikauLightbox = (function() {
    // The function also inserts html markup at the top of the page which will be used as a
    // container for the overlay pattern and the inline image.
    //
-   var initLightbox = function initLightbox()
+   var initLightbox = function initLightbox(config)
    {
+      loadingImage = config.loadingImage;
+      closeButton = config.closeButton;
+      
       var objBody = document.getElementsByTagName("body").item(0);
       
       // create overlay div and hardcode some functional styles (aesthetic styles are in CSS file)
@@ -303,11 +283,11 @@ Alfresco.AikauLightbox = (function() {
       var imgPreloader = new Image();
       
       // if loader image found, create link to hide lightbox and create loadingimage
-      imgPreloader.onload=function(){
-   
+      imgPreloader.onload = function() {
+         
          var objLoadingImageLink = document.createElement("a");
          objLoadingImageLink.setAttribute("href","#");
-         objLoadingImageLink.onclick = function () {
+         objLoadingImageLink.onclick = function() {
             hideLightbox(); return false;
          };
          objOverlay.appendChild(objLoadingImageLink);
@@ -317,17 +297,17 @@ Alfresco.AikauLightbox = (function() {
          objLoadingImage.setAttribute("id","aikauLoadingImage");
          if (Alfresco && Alfresco.util && typeof Alfresco.util.message === "function")
          {
-            objLoadingImage.setAttribute("alt",Alfresco.util.message.call(this, "lightbox.loading"));
+            objLoadingImage.setAttribute("alt", Alfresco.util.message.call(this, "lightbox.loading"));
          }
          objLoadingImage.style.position = "absolute";
          objLoadingImage.style.zIndex = "150";
          objLoadingImageLink.appendChild(objLoadingImage);
-   
+         
          imgPreloader.onload=function(){};   // clear onLoad, as IE will flip out w/animated gifs
-   
+         
          return false;
       };
-   
+      
       imgPreloader.src = loadingImage;
    
       // create lightbox div, same note about styles as above
@@ -348,6 +328,25 @@ Alfresco.AikauLightbox = (function() {
          return false;
       };
       objLightbox.appendChild(objLink);
+      
+      // create close button image
+      var imgPreloadCloseButton = new Image();
+      imgPreloadCloseButton.onload = function() {
+         
+         var objCloseButton = document.createElement("img");
+         objCloseButton.src = closeButton;
+         objCloseButton.setAttribute("id","aikauCloseButton");
+         if (Alfresco && Alfresco.util && typeof Alfresco.util.message === "function")
+         {
+            objCloseButton.setAttribute("alt",Alfresco.util.message.call(this, "lightbox.close"));
+         }
+         objCloseButton.style.position = "absolute";
+         objCloseButton.style.zIndex = "200";
+         objCloseButton.style.right = "8px";
+         objLink.appendChild(objCloseButton);
+         return false;
+      };
+      imgPreloadCloseButton.src = closeButton;
    
       // create image
       var objImage = document.createElement("img");
@@ -367,16 +366,8 @@ Alfresco.AikauLightbox = (function() {
       objLightboxDetails.appendChild(objCaption);
    };
    
-   if (window.addEventListener)
-   {
-      window.addEventListener("load", initLightbox, false);
-   }
-   else
-   {
-      window.attachEvent("onload", initLightbox);
-   }
-   
    return {
+       init: initLightbox,
        show: showLightbox
    };
 })();

@@ -134,8 +134,8 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/buttons/AlfButton",
          id: "LAUNCH_FAILURE_DIALOG",
+         name: "alfresco/buttons/AlfButton",
          config: {
             label: "Launch Failing Form Dialog",
             publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
@@ -158,6 +158,33 @@ model.jsonModel = {
             }
          }
       }, 
+      {
+         id: "LAUNCH_FAILURE_DIALOG_2",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Launch Failing Form Dialog (DISABLE BUTTONS)",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Failure Test Dialog",
+               dialogId: "FD4",
+               formSubmissionTopic: "POST_FORM_DIALOG",
+               dialogCloseTopic: "FORM_POST_SUCCESS",
+               dialogEnableTopic: "FORM_POST_FAILURE",
+               widgets: [
+                  {
+                     id: "TB4",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        description: "The service will fail when value is 'fail'"
+                     }
+                  }
+               ]
+            }
+         }
+      }, 
+      
       {
          name: "alfresco/buttons/AlfButton",
          id: "LAUNCH_CUSTOM_BUTTON_ID_DIALOG",

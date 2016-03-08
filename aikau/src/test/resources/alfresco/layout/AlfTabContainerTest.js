@@ -29,6 +29,56 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, expect, assert, TestCommon, keys) {
 
+   // Get the selectors required for the tests...
+   var tabContainerSelectors = TestCommon.getTestSelectors("alfresco/layout/AlfTabContainer");
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+
+   var selectors = {
+      tc1: {
+         container: TestCommon.getTestSelector(tabContainerSelectors, "container", ["TC"]),
+         debugTab: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","DEBUG_TAB"]),
+         eleventhPanel: TestCommon.getTestSelector(tabContainerSelectors, "nth.panel", ["TC", "11"]),
+         eleventhTab: TestCommon.getTestSelector(tabContainerSelectors, "nth.tab", ["TC", "11"]),
+         firstPanel: TestCommon.getTestSelector(tabContainerSelectors, "nth.panel", ["TC", "1"]),
+         firstTab: TestCommon.getTestSelector(tabContainerSelectors, "nth.tab", ["TC", "1"]),
+         formControlTab1: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","FormControl1"]),
+         formControlTab2: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","FormControl2"]),
+         fourthPanel: TestCommon.getTestSelector(tabContainerSelectors, "nth.panel", ["TC", "4"]),
+         fourthTab: TestCommon.getTestSelector(tabContainerSelectors, "nth.tab", ["TC", "4"]),
+         hiddenPanels: TestCommon.getTestSelector(tabContainerSelectors, "hidden.panels", ["TC"]),
+         panels: TestCommon.getTestSelector(tabContainerSelectors, "panels", ["TC"]),
+         searchListTab: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","SEARCH_LIST"]),
+         secondPanel: TestCommon.getTestSelector(tabContainerSelectors, "nth.panel", ["TC", "2"]),
+         secondTab: TestCommon.getTestSelector(tabContainerSelectors, "nth.tab", ["TC", "2"]),
+         secondTabLabel: TestCommon.getTestSelector(tabContainerSelectors, "nth.tab.label", ["TC", "2"]),
+         sidebarTab: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","SIDEBAR"]),
+         tabs: TestCommon.getTestSelector(tabContainerSelectors, "tabs", ["TC"]),
+         thirdPanel: TestCommon.getTestSelector(tabContainerSelectors, "nth.panel", ["TC", "3"]),
+         thirdTab: TestCommon.getTestSelector(tabContainerSelectors, "nth.tab", ["TC", "3"]),
+         visiblePanel: TestCommon.getTestSelector(tabContainerSelectors, "visible.panel", ["TC"])
+      },
+      buttons: {
+         create: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CREATE_TAB"]),
+         createViaPub: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CREATE_TAB_WITH_PUBLICATION"]),
+         deleteTabById: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DELETE_TAB_BY_ID"]),
+         deleteTabByIndex: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DELETE_TAB_BY_INDEX"]),
+         deleteTabByTitle: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DELETE_TAB_BY_TITLE"]),
+         disableTabById: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DISABLE_TAB_BY_ID"]),
+         disableTabByIndex: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DISABLE_TAB_BY_INDEX"]),
+         disableTabByTitle: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DISABLE_TAB_BY_TITLE"]),
+         enableTabById: TestCommon.getTestSelector(buttonSelectors, "button.label", ["ENABLE_TAB_BY_ID"]),
+         enableTabByIndex: TestCommon.getTestSelector(buttonSelectors, "button.label", ["ENABLE_TAB_BY_INDEX"]),
+         enableTabByTitle: TestCommon.getTestSelector(buttonSelectors, "button.label", ["ENABLE_TAB_BY_TITLE"]),
+         reload: TestCommon.getTestSelector(buttonSelectors, "button.label", ["RELOAD_BUTTON"]),
+         selectTab1: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SELECT_TAB_1"]),
+         selectTab2: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SELECT_TAB_2"]),
+         selectTab3: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SELECT_TAB_3"]),
+         selectTab4: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SELECT_TAB_4"]),
+         selectTab5: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SELECT_TAB_5"]),
+         selectTab6: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SELECT_TAB_6"])
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -45,120 +95,102 @@ define(["intern!object",
          },
 
          "Check the tab container is present": function () {
-            return browser.findByCssSelector("div.alfresco-layout-AlfTabContainer > div.dijitTabContainer")
-               .then(function () {
-                  
-               },
-               function () {
+            return browser.findByCssSelector(selectors.tc1.container)
+               .then(function () {}, function () {
                   assert(false, "Tab container not rendered");
                });
          },
 
          "Check the correct number of tabs is present": function() {
-            return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-               .then(
-                  function (tabs) {
-                     expect(tabs.length).to.equal(11, "There are not 11 tabs");
-                  }
-               );
+            return browser.findAllByCssSelector(selectors.tc1.tabs)
+               .then(function (tabs) {
+                  assert.lengthOf(tabs, 11);
+               });
          },
 
          "Check the correct number of panels is present": function() {
-            return browser.findAllByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper")
-               .then(
-                  function (panels) {
-                     expect(panels.length).to.equal(11, "There are not 11 panels");
-                  }
-               );
+            return browser.findAllByCssSelector(selectors.tc1.panels)
+               .then(function (panels) {
+                  assert.lengthOf(panels, 11);
+               });
          },
 
          "Visible panel not rendered": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper.dijitVisible")
-               .then(
-                  function () {
-                  },
-                  function () {
-                     assert(false, "Visible panel not rendered");
-                  });
+            return browser.findByCssSelector(selectors.tc1.visiblePanel)
+               .then(function () {}, function () {
+                  assert(false, "Visible panel not rendered");
+               });
          },
 
-         "Check the correct number of panels is present (2)": function() {
-            return browser.findAllByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper.dijitHidden")
-               .then(
-                  function (panels) {
-                     expect(panels.length).to.equal(10, "There are not 10 panels");
-                  }
-               );
+         "Check the correct number of hidden panels is present": function() {
+            return browser.findAllByCssSelector(selectors.tc1.hiddenPanels)
+               .then(function (panels) {
+                  assert.lengthOf(panels, 10);
+               });
          },
 
          "Checking 3rd panel is visible": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            return browser.findByCssSelector(selectors.tc1.thirdPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitVisible", "The 3rd panel should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd panel should not be hidden");
+               });
          },
 
-         "Checking last panel is hidden": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:last-of-type")
+         "Checking 11th panel is hidden": function() {
+            return browser.findByCssSelector(selectors.tc1.eleventhPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitHidden", "The last panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The last panel should not be visible");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitHidden", "The 11th panel should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 11th panel should not be visible");
+               });
          },
 
-         "Checking 3rd panel is hidden": function() {
-            return browser.findByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab:last-of-type")
+         "Select 11th tab, check 3rd panel is hidden": function() {
+            return browser.findByCssSelector(selectors.tc1.eleventhTab)
                .click()
             .end()
 
             // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .findByCssSelector(selectors.tc1.thirdPanel)
+               .getAttribute("class")
+               .then(function(currClasses) {
+                  assert.notInclude(currClasses, "dijitVisible", "The 3rd panel should not be visible");
+                  assert.include(currClasses, "dijitHidden", "The 3rd panel should be hidden");
+               });
+         },
+
+         "Checking 11th panel is visible": function() {
+            return browser.findByCssSelector(selectors.tc1.eleventhPanel)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitVisible", "The 3rd panel should not be visible");
-                     expect(currClasses).to.contain("dijitHidden", "The 3rd panel should be hidden");
+                     assert.notInclude(currClasses, "dijitHidden", "The 11th panel should not be hidden");
+                     assert.include(currClasses, "dijitVisible", "The 11th panel should be visible");
                   });
          },
 
-         "Checking last panel is visible": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:last-of-type")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitHidden", "The last panel should not be hidden");
-                     expect(currClasses).to.contain("dijitVisible", "The last panel should be visible");
-                  });
-         },
-
-         "Checking 3rd panel is visible (2)": function() {
-            return browser.findByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab:nth-of-type(3)")
+         "Select 3rd tab, check 3rd panel becomes visible": function() {
+            return browser.findByCssSelector(selectors.tc1.thirdTab)
                .click()
             .end()
 
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .findByCssSelector(selectors.tc1.thirdPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitVisible", "The 3rd panel should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd panel should not be hidden");
+               });
          },
 
          "Checking last panel is hidden (2)": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:last-of-type")
+            return browser.findByCssSelector(selectors.tc1.eleventhPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitHidden", "The last panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The last panel should not be visible");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitHidden", "The last panel should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The last panel should not be visible");
+               });
          },
 
          "Post Coverage Results": function() {
@@ -185,70 +217,62 @@ define(["intern!object",
          },
 
          "Checking 3rd panel is visible": function () {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            return browser.findByCssSelector(selectors.tc1.thirdPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitVisible", "The 3rd panel should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd panel should not be hidden");
+               });
          },
 
          "Checking 4th is hidden": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            return browser.findByCssSelector(selectors.tc1.fourthPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitHidden", "The 4th panel should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 4th panel should not be visible");
+               });
          },
 
          "Checking 3rd panel is hidden": function() {
             return browser.pressKeys(keys.TAB)
-            .pressKeys(keys.ARROW_RIGHT)
+               .pressKeys(keys.ARROW_RIGHT)
 
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitVisible", "The 3rd panel should not be visible");
-                     expect(currClasses).to.contain("dijitHidden", "The 3rd panel should be hidden");
+               .findByCssSelector(selectors.tc1.thirdPanel)
+                  .getAttribute("class")
+                  .then(function(currClasses) {
+                     assert.notInclude(currClasses, "dijitVisible", "The 3rd panel should not be visible");
+                     assert.include(currClasses, "dijitHidden", "The 3rd panel should be hidden");
                   });
          },
 
          "Checking 4th panel is visible": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            return browser.findByCssSelector(selectors.tc1.fourthPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitHidden", "The 4th panel should not be hidden");
-                     expect(currClasses).to.contain("dijitVisible", "The 4th panel should be visible");
-                  });
+               .then(function(currClasses) {
+                  assert.notInclude(currClasses, "dijitHidden", "The 4th panel should not be hidden");
+                  assert.include(currClasses, "dijitVisible", "The 4th panel should be visible");
+               });
          },
 
          "Checking 3rd panel is visible (2)": function() {
             return browser.pressKeys(keys.ARROW_LEFT)
 
-            // Test current panel states
-            .findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(3)")
+            .findByCssSelector(selectors.tc1.thirdPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitVisible", "The 3rd panel should be visible");
-                     expect(currClasses).to.not.contain("dijitHidden", "The 3rd panel should not be hidden");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitVisible", "The 3rd panel should be visible");
+                  assert.notInclude(currClasses, "dijitHidden", "The 3rd panel should not be hidden");
+               });
          },
 
          "Checking 4th panel is hidden": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(4)")
+            return browser.findByCssSelector(selectors.tc1.fourthPanel)
                .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     expect(currClasses).to.contain("dijitHidden", "The 4th panel should be hidden");
-                     expect(currClasses).to.not.contain("dijitVisible", "The 4th panel should not be visible");
-                  });
+               .then(function(currClasses) {
+                  assert.include(currClasses, "dijitHidden", "The 4th panel should be hidden");
+                  assert.notInclude(currClasses, "dijitVisible", "The 4th panel should not be visible");
+               });
          },
 
          "Post Coverage Results": function() {
@@ -258,7 +282,7 @@ define(["intern!object",
    });
 
 
-   // This test reloads the page to clear any previous focus and make keyboard actions more predictable
+   // // This test reloads the page to clear any previous focus and make keyboard actions more predictable
    registerSuite(function(){
       var browser;
 
@@ -283,7 +307,7 @@ define(["intern!object",
          },
 
          "Checking 1st panel is visible after external selection by index": function() {
-            return browser.findById("SELECT_TAB_1")
+            return browser.findByCssSelector(selectors.buttons.selectTab1)
                .click()
             .end()
 
@@ -303,7 +327,7 @@ define(["intern!object",
          },
 
          "Checking 2nd panel is visible after external selection by index": function() {
-            return browser.findById("SELECT_TAB_2")
+            return browser.findByCssSelector(selectors.buttons.selectTab2)
                .click()
             .end()
 
@@ -323,7 +347,7 @@ define(["intern!object",
          },
 
          "Checking 1st panel is visible after external selection by title": function() {
-            return browser.findById("SELECT_TAB_3")
+            return browser.findByCssSelector(selectors.buttons.selectTab3)
                .click()
             .end()
 
@@ -343,7 +367,7 @@ define(["intern!object",
          },
 
          "Checking 2nd panel is visible after external selection by title": function() {
-            return browser.findById("SELECT_TAB_4")
+            return browser.findByCssSelector(selectors.buttons.selectTab4)
                .click()
             .end()
 
@@ -363,7 +387,7 @@ define(["intern!object",
          },
 
          "Checking 1st panel is visible after external selection by id": function() {
-            return browser.findById("SELECT_TAB_5")
+            return browser.findByCssSelector(selectors.buttons.selectTab5)
                .click()
             .end()
 
@@ -383,7 +407,7 @@ define(["intern!object",
          },
 
          "Checking 2nd panel is visible after external selection by id": function() {
-            return browser.findById("SELECT_TAB_6")
+            return browser.findByCssSelector(selectors.buttons.selectTab6)
                .click()
             .end()
 
@@ -403,98 +427,98 @@ define(["intern!object",
          },
 
          "Checking 1st tab is disabled after external selection by index": function() {
-            return browser.findById("DISABLE_TAB_1")
+            return browser.findByCssSelector(selectors.buttons.disableTabByIndex)
                .click()
             .end()
 
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .findByCssSelector(selectors.tc1.firstTab)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
+                     assert.include(currClasses, "dijitDisabled", "The 1st panel should be disabled");
                   });
          },
 
          "Checking 1st tab is enabled after external selection by index": function() {
-            return browser.findById("DISABLE_TAB_2")
+            return browser.findByCssSelector(selectors.buttons.enableTabByIndex)
                .click()
             .end()
 
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .findByCssSelector(selectors.tc1.firstTab)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+                     assert.notInclude(currClasses, "dijitDisabled", "The 1st panel should not be disabled");
                   });
          },
 
          "Checking 1st tab is disabled after external selection by title": function() {
-            return browser.findById("DISABLE_TAB_3")
+            return browser.findByCssSelector(selectors.buttons.disableTabByTitle)
                .click()
             .end()
 
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .findByCssSelector(selectors.tc1.firstTab)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
+                     assert.include(currClasses, "dijitDisabled", "The 1st panel should be disabled");
                   });
          },
 
          "Checking 1st tab is enabled after external selection by title": function() {
-            return browser.findById("DISABLE_TAB_4")
+            return browser.findByCssSelector(selectors.buttons.enableTabByTitle)
                .click()
             .end()
 
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .findByCssSelector(selectors.tc1.firstTab)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+                     assert.notInclude(currClasses, "dijitDisabled", "The 1st panel should not be disabled");
                   });
          },
 
          "Checking 1st tab is disabled after external selection by id": function() {
-            return browser.findById("DISABLE_TAB_5")
+            return browser.findByCssSelector(selectors.buttons.disableTabById)
                .click()
             .end()
 
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .findByCssSelector(selectors.tc1.firstTab)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.contain("dijitDisabled", "The 1st panel should be disabled");
+                     assert.include(currClasses, "dijitDisabled", "The 1st panel should be disabled");
                   });
          },
 
          "Checking 1st tab is enabled after external selection by id": function() {
-            return browser.findById("DISABLE_TAB_6")
+            return browser.findByCssSelector(selectors.buttons.enableTabById)
                .click()
             .end()
 
-            .findByCssSelector("div.dijitTabContainerTop-tabs > div:first-of-type")
+            .findByCssSelector(selectors.tc1.firstTab)
                .getAttribute("class")
                .then(
                   function(currClasses) {
-                     expect(currClasses).to.not.contain("dijitDisabled", "The 1st panel should not be disabled");
+                     assert.notInclude(currClasses, "dijitDisabled", "The 1st panel should not be disabled");
                   });
          },
 
          "Check the correct number of tabs is present": function() {
-            return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            return browser.findAllByCssSelector(selectors.tc1.tabs)
                .then(
                   function (tabs) {
-                     expect(tabs.length).to.equal(11, "There are not 11 tabs");
+                     assert.lengthOf(tabs, 11, "There are not 11 tabs");
                   }
                );
          },
 
          "Check the correct number of tabs is present after deleting tab 7": function() {
-            return browser.findById("DELETE_TAB_1")
+            return browser.findByCssSelector(selectors.buttons.deleteTabByIndex)
                .click()
             .end()
 
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .findAllByCssSelector(selectors.tc1.tabs)
                .then(
                   function (tabs) {
                      expect(tabs.length).to.equal(10, "There are not 10 tabs");
@@ -503,11 +527,11 @@ define(["intern!object",
          },
 
          "Check the correct number of tabs is present after deleting tab titled 'Logo 8'": function() {
-            return browser.findById("DELETE_TAB_2")
+            return browser.findByCssSelector(selectors.buttons.deleteTabByTitle)
                .click()
             .end()
 
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .findAllByCssSelector(selectors.tc1.tabs)
                .then(
                   function (tabs) {
                      expect(tabs.length).to.equal(9, "There are not 9 tabs");
@@ -516,11 +540,11 @@ define(["intern!object",
          },
 
          "Check the correct number of tabs is present after deleting tab with id 'dijit_layout_ContentPane_8": function() {
-            return browser.findById("DELETE_TAB_3")
+            return browser.findByCssSelector(selectors.buttons.deleteTabById)
                .click()
             .end()
 
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .findAllByCssSelector(selectors.tc1.tabs)
                .then(
                   function (tabs) {
                      expect(tabs.length).to.equal(8, "There are not 8 tabs");
@@ -529,9 +553,10 @@ define(["intern!object",
          },
 
          "Check that delayed processing form control is displayed correctly": function() {
-            return browser.findById("TC_TABCONTAINER_tablist_TC_FormControl1")
+            return browser.findByCssSelector(selectors.tc1.formControlTab1)
                .click()
             .end()
+
             .findByCssSelector("#FormControl1 .label")
                .getVisibleText()
                .then(function(text) {
@@ -540,7 +565,7 @@ define(["intern!object",
          },
 
           "Check that non-delayed processing form control is displayed correctly": function() {
-            return browser.findById("TC_TABCONTAINER_tablist_TC_FormControl2")
+            return browser.findByCssSelector(selectors.tc1.formControlTab2)
                .click()
             .end()
             .findByCssSelector("#FormControl2 .label")
@@ -573,26 +598,24 @@ define(["intern!object",
          },
 
          "Check the correct number of tabs is present": function() {
-            return browser.findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
-               .then(
-                  function (tabs) {
-                     assert.lengthOf(tabs, 1, "Only one tab should be initially shown");
-                  }
-               );
+            return browser.findAllByCssSelector(selectors.tc1.tabs)
+               .then(function (tabs) {
+                  assert.lengthOf(tabs, 1, "Only one tab should be initially shown");
+               });
          },
 
          "Add a new panel to display first item": function () {
             return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:first-child .alfresco-renderers-Property .value")
                .click()
             .end()
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .findAllByCssSelector(selectors.tc1.tabs)
                .then(function (tabs) {
                   assert.lengthOf(tabs, 2, "A second tab should have been added");
                });
          },
 
          "Checking new panel is selected": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2)")
+            return browser.findByCssSelector(selectors.tc1.secondPanel)
                .isDisplayed()
                .then(function(displayed) {
                   assert.isTrue(displayed, "The new tab should have been selected");
@@ -600,7 +623,7 @@ define(["intern!object",
          },
 
          "Check that the new panel has rendered content correctly": function() {
-            return browser.findByCssSelector("div.dijitTabPaneWrapper > div.dijitTabContainerTopChildWrapper:nth-of-type(2) .alfresco-html-Label")
+            return browser.findByCssSelector(selectors.tc1.secondPanel + " .alfresco-html-Label")
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "One", "The new tab content was rendered correctly");
@@ -637,11 +660,13 @@ define(["intern!object",
          },
 
          "Select second tab and check search is not in progress": function() {
-            return browser.findByCssSelector(".dijitTabInner:nth-child(2) .tabLabel")
+            return browser.findByCssSelector(selectors.tc1.secondTabLabel)
                .click()
             .end()
+
             .findById("SEARCH_LIST")
             .end()
+
             .getAllPublishes("ALF_SEARCH_REQUEST")
                .then(function(payloads){
                   assert.lengthOf(payloads, 0, "Search request should not have been made");
@@ -649,20 +674,22 @@ define(["intern!object",
          },
 
          "Click a button to trigger a reload and check reload request occurs": function() {
-            return browser.findById("RELOAD_BUTTON_label")
+            return browser.findByCssSelector(selectors.buttons.reload)
                .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST", "Search request did not occur");
          },
 
          "Create a new tab": function() {
-            return browser.findById("CREATE_TAB_label")
+            return browser.findByCssSelector(selectors.buttons.create)
                .click()
             .end()
+
             .waitForDeletedByCssSelector("#ADDED_LIST .rendered-view.share-hidden")
             .end()
+
             .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
-            .end()
+            
             .findById("ADDED_LIST_VIEW")
                .isDisplayed()
                .then(function(displayed) {
@@ -672,7 +699,7 @@ define(["intern!object",
 
          "Attempt to create the same tab": function() {
             // Switch back to the 2nd tab...
-            return browser.findById("TC1_TABCONTAINER_tablist_TC1_SEARCH_LIST")
+            return browser.findByCssSelector(selectors.tc1.searchListTab)
                .click()
             .end()
 
@@ -681,7 +708,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .findAllByCssSelector("div.dijitTabListWrapper > div.dijitTabContainerTop-tabs > div.dijitTab")
+            .findAllByCssSelector(selectors.tc1.tabs)
                .then(function (tabs) {
                   assert.lengthOf(tabs, 3, "Wrong number of tabs!");
                })
@@ -696,12 +723,12 @@ define(["intern!object",
 
          "Create a tab with a follow-on publication": function() {
             // Switch back to the 2nd tab...
-            return browser.findById("TC1_TABCONTAINER_tablist_TC1_SEARCH_LIST")
+            return browser.findByCssSelector(selectors.tc1.searchListTab)
                .click()
             .end()
 
             // Click the button to create a tab with a publication on addition...
-            .findDisplayedById("CREATE_TAB_WITH_PUBLICATION_label")
+            .findDisplayedByCssSelector(selectors.buttons.createViaPub)
                .click()
             .end()
 
@@ -710,7 +737,7 @@ define(["intern!object",
             .end()
             
             // Switch back to the debug log...
-            .findById("TC1_TABCONTAINER_tablist_TC1_DEBUG_TAB")
+            .findByCssSelector(selectors.tc1.debugTab)
                .click()
             .end()
 
@@ -743,15 +770,17 @@ define(["intern!object",
          // it's height should be the body height, minus the offset (approx 36px) and the configured footer (10px)
          "Check inner sidebar height": function() {
             var height;
-            return browser.findByCssSelector(".dijitTabInner:nth-child(2) .tabLabel")
+            return browser.findByCssSelector(selectors.tc1.sidebarTab)
                .click()
             .end()
+
             .findByCssSelector("body")
                .getSize()
                .then(function(size) {
                   height = size.height;
                })
             .end()
+
             .findById("SIDEBAR")
                .getSize()
                   .then(function(size) {
@@ -763,7 +792,7 @@ define(["intern!object",
          // See AKU-506 - make sure that widgets waiting for page readiness (in this case a list) get informed that
          // they can do their stuff (in this case, load data)
          "Check that list data is loaded": function() {
-            return browser.findByCssSelector(".dijitTabInner:nth-child(3) .tabLabel")
+            return browser.findByCssSelector(selectors.tc1.debugTab)
                .click()
             .end()
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "List data was not requested on tab load");

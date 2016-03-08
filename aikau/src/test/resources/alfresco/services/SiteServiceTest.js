@@ -159,6 +159,56 @@ define(["alfresco/TestCommon",
             .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
          },
 
+         "Requesting to join site with request already pending displays suitable error message": function() {
+            return browser.findById("REQUEST_SITE_MEMBERSHIP_ALREADY_PENDING_label")
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "A request to join this site is already pending");
+               })
+            .end()
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
+         },
+
+         "Error occurring when requesting to join site displays error message": function() {
+            return browser.findById("REQUEST_SITE_MEMBERSHIP_ERROR_label")
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "The request to join the site failed");
+               })
+            .end()
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
+         },
+
+         "Can cancel request to join site": function() {
+            return browser.findById("CANCEL_PENDING_REQUEST_label")
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastXhr("api/sites/my-site/invitations/foo")
+
+            .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Successfully cancelled request to join site My Site");
+               })
+            .end()
+
+            .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification")
+
+            .getLastPublish("ALF_RELOAD_PAGE");
+         },
+
          "Leave site and confirm user home page override works": function(){
             return browser.findById("LEAVE_SITE_label")
                .click()
