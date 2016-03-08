@@ -640,6 +640,7 @@ define(["dojo/_base/declare",
                var updatedConfig = lang.mixin(defaultConfig, config);
                
                var walkFileSystem = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem(directory, callback, error) {
+                  
                   callback.limit = this.dndMaxFileLimit;
                   callback.pending = callback.pending || 0;
                   callback.files = callback.files || [];
@@ -684,6 +685,12 @@ define(["dojo/_base/declare",
                });
                
                var addSelectedFiles = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__addSelectedFiles(files) {
+                  
+                  if (this.dndMaxFileLimit && files.length > this.dndMaxFileLimit)
+                  {
+                     throw new Error("Maximum dnd file limit reached: " + this.dndMaxFileLimit);
+                  }
+                  
                   // Check to see whether or not the generated upload configuration indicates
                   // that an existing node will be created or not. If node is being updated then
                   // we need to generate an intermediary step to capture version and comments...
