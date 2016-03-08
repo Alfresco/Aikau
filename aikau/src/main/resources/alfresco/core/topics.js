@@ -518,6 +518,17 @@ define([],function() {
       ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
 
       /**
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.60
+       *
+       * @event
+       */
+      EDIT_ONLINE_REQUEST: "ALF_EDIT_ONLINE_REQUEST",
+
+      /**
        * This topic can be used to request Cloud specific paths to use in an
        * [Tree form control]{@link module:alfresco/forms/controls/Tree}.
        *

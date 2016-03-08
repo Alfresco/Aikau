@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Edit Online</shortname>
+  <description>Provides the means to test the edit online capabilities.</description>
+  <family>aikau-unit-tests</family>
+  <url>/EditOnline</url>
+</webscript>

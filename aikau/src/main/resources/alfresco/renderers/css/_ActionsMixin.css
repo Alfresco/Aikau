@@ -21,6 +21,9 @@
          &.alf-download-as-zip-icon {
             background-image: url("./images/actions/document-download-16.png");
          }
+         &.alf-edit-online-icon {
+            background-image: url("./images/actions/document-edit-online-16.png");
+         }
          &.alf-manage-aspects-icon {
             background-image: url("./images/actions/document-manage-aspects-16.png");
          }

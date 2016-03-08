@@ -872,6 +872,18 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to edit a document online.
+       *
+       * @instance
+       * @param {object} payload The response from the request
+       * @param {object} document The document to edit.
+       * @since 1.0.60
+       */
+      onActionEditOnlineAos: function alfresco_services_ActionService__onActionEditOnline(payload) {
+         this.alfPublish(topics.EDIT_ONLINE_REQUEST, payload.document);
+      },
+
+      /**
        * Handles requests to copy the supplied documents to another location.
        *
        * @instance
