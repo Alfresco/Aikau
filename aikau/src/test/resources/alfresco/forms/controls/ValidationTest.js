@@ -81,7 +81,7 @@ define(["intern!object",
          },
 
          "Check that the form is initially invalid": function () {
-            return browser.findCssSelector(selectors.form.disabledConfirmationButton);
+            return browser.findByCssSelector(selectors.form.disabledConfirmationButton);
          },
 
          "Check the initial error messages (1)": function() {
@@ -301,7 +301,7 @@ define(["intern!object",
          },
 
          "Test Match Validation - Target Mismatch": function () {
-            return browser.findByCssSelector(selectors.textBoxes.matchSource.input)
+            return browser.findByCssSelector(selectors.textBoxes.matchTarget.input)
                .clearValue()
                .type("AB")
             .end()
