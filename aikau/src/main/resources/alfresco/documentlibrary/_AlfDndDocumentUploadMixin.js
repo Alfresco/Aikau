@@ -169,7 +169,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {integer}
        * @default
-       * @since 1.0.58
+       * @since 1.0.59
        */
       dndMaxFileLimit: 0,
 
