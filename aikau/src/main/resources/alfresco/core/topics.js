@@ -115,6 +115,22 @@ define([],function() {
       CANCEL_INPROGRESS_UPLOAD: "CANCEL_INPROGRESS_UPLOAD",
 
       /**
+       * Cancel a request to join a site.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.58
+       *
+       * @event
+       * @property {string} siteId The ID of the site
+       * @property {string} siteTitle The "friendly" name of the site
+       * @property {object} pendingInvite The object describing the pending invite
+       * @property {string} pendingInvite.id The ID of the pending site-join request
+       */
+      CANCEL_JOIN_SITE_REQUEST: "ALF_CANCEL_JOIN_SITE_REQUEST",
+
+      /**
        * This topic is published to request the options to change the type of a node. It doesn't perform the
        * actual change, but simply provides the type change options in a dialog.
        *
