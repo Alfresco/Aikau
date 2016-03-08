@@ -1,4 +1,4 @@
-Aikau 1.0.57 Release Notes
+Aikau 1.0.58 Release Notes
 ===
 
 Current deprecations:
@@ -42,6 +42,21 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.58:
+* [AKU-207](https://issues.alfresco.com/jira/browse/AKU-207)       - Add support for change type action
+* [AKU-820](https://issues.alfresco.com/jira/browse/AKU-820)       - Added visual progress indicator to UploadMonitor
+* [AKU-832](https://issues.alfresco.com/jira/browse/AKU-832)       - Update min/max actions on StickyPanel
+* [AKU-838](https://issues.alfresco.com/jira/browse/AKU-838)       - Test selectors for BaseFormControl
+* [AKU-839](https://issues.alfresco.com/jira/browse/AKU-839)       - Test selectors for AlfTabContainer
+* [AKU-846](https://issues.alfresco.com/jira/browse/AKU-846)       - Form dialog disable button behaviour
+* [AKU-852](https://issues.alfresco.com/jira/browse/AKU-852)       - Add fail icon to UploadMonitor
+* [AKU-860](https://issues.alfresco.com/jira/browse/AKU-860)       - Support for cancel request to join site
+* [AKU-862](https://issues.alfresco.com/jira/browse/AKU-862)       - Improve DND file upload highlighting behaviour
+* [AKU-864](https://issues.alfresco.com/jira/browse/AKU-864)       - UploadContainer style changes
+* [AKU-865](https://issues.alfresco.com/jira/browse/AKU-865)       - Prevent notification interaction blocking
+* [AKU-867](https://issues.alfresco.com/jira/browse/AKU-867)       - Improve error handling output
+* [AKU-875](https://issues.alfresco.com/jira/browse/AKU-875)       - Defensive coding around list loading message hiding
+
 1.0.57:
 * [AKU-834](https://issues.alfresco.com/jira/browse/AKU-834)       - Ensure FileSelect does not fire change event on selection of same file
 * [AKU-837](https://issues.alfresco.com/jira/browse/AKU-837)       - Externalise MultiSelectInput selectors for testing
