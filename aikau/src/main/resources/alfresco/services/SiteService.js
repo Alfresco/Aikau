@@ -624,6 +624,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response The response from the XHR request to join the site.
        * @param {object} originalRequestConfig The original configuration passed when the request was made.
+       * @since 1.0.58
        */
       siteMembershipRequestFailed: function alfresco_services_SiteService__siteMembershipRequestFailed(response, originalRequestConfig) {
          this.alfLog("warn", "Request to join site failed:", originalRequestConfig);
