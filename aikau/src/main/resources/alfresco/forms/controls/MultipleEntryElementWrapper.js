@@ -294,7 +294,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Edit element clicked", {});
          
          // Switch the widget into edit mode...
-         if (this.widget && typeof this.widget.editMode == "function")
+         if (this.widget && typeof this.widget.editMode === "function")
          {
             this.widget.editMode(true);
             

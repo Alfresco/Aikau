@@ -38,7 +38,7 @@
                name: name
             };
 
-            if (typeof value != 'undefined')
+            if (typeof value !== "undefined")
             {
                message.value = value;
             }
@@ -92,7 +92,7 @@
 
       _addEventListener: function(el, event, callback)
       {
-         if (typeof el.addEventListener == 'function')
+         if (typeof el.addEventListener === "function")
          {
             el.addEventListener(event, this._bind(callback), false);
          }

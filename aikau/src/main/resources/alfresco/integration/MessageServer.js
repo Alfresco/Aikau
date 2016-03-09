@@ -72,7 +72,7 @@
             {
                var name = data.name;
                var fn = this._messageHandlerResolver(name);
-               if (typeof fn == 'function')
+               if (typeof fn === "function")
                {
                   fn(data.value, function(result){
                      var message = {
@@ -121,7 +121,7 @@
 
       _addEventListener: function(el, event, callback)
       {
-         if (typeof el.addEventListener == 'function')
+         if (typeof el.addEventListener === "function")
          {
             el.addEventListener(event, this._bind(callback), false);
          }

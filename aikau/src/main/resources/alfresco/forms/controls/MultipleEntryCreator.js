@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
          // The supplied value should correspond to the JSON that we want to represent...
          // We need to construct the element configuration from this...
          
-         if (typeof this.value == "undefined" || this.value == null)
+         if (typeof this.value === "undefined" || this.value === null)
          {
             // If no value has been set then we can just make the value an empty array and
             // also make the elements attribute an empty array.
@@ -450,7 +450,7 @@ define(["dojo/_base/declare",
          var wrappers = registry.findWidgets(this.currentEntries);
          array.forEach(wrappers, function(wrapper, index) {
             var widget = wrapper.widget;
-            if (typeof widget.getValue == "function")
+            if (typeof widget.getValue === "function")
             {
                value.push(widget.getValue());
             }
