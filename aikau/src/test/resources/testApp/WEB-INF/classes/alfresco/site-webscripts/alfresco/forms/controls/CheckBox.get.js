@@ -15,12 +15,14 @@ model.jsonModel = {
    widgets: [
       {
          name: "alfresco/buttons/AlfButton",
+         id: "UPDATE_CHECKBOXES",
          config: {
-            id: "UNCHECK_CHECKBOX",
-            label: "Uncheck checkbox",
+            label: "Update checkboxes",
             publishTopic: "SET_FORM_VALUE",
             publishPayload: {
-               canbuild: false
+               defaultCheckbox: false,
+               o1: 1,
+               offon: "false"
             }
          }
       },
@@ -38,16 +40,37 @@ model.jsonModel = {
             setValueTopic: "SET_FORM_VALUE",
             scopeFormControls: false,
             value: {
-               canbuild: true
+               defaultCheckbox: true
             },
             widgets: [
                {
                   name: "alfresco/forms/controls/CheckBox",
+                  id: "DEFAULT_CHECKBOX",
                   config: {
-                     name: "canbuild",
-                     id: "CAN_BUILD",
-                     label: "Yes we can",
-                     description: "Can we build it?"
+                     name: "defaultCheckbox",
+                     label: "Possible values default (true/false), initial value true (via form values-object)"
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/CheckBox",
+                  id: "O1_CHECKBOX",
+                  config: {
+                     name: "o1",
+                     label: "Possible values 0 (unchecked) or 1 (checked), initial value \"1\"",
+                     offValue: 0,
+                     onValue: 1,
+                     value: "1"
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/CheckBox",
+                  id: "OFFON_CHECKBOX",
+                  config: {
+                     name: "offon",
+                     label: "Possible values \"off\" (unchecked) or \"on\" (checked), initial value \"on\"",
+                     offValue: "off",
+                     onValue: "on",
+                     value: "on"
                   }
                }
             ]
