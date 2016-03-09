@@ -37,7 +37,7 @@ define(["dojo/_base/declare",
              *
              * @instance
              */
-            explodedSliceRadius: '1%',
+            explodedSliceRadius: "1%",
 
             /**
              * Adds a margin into the centre of the pie chart, making it look like a donut instead.
@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
              * @instance
              */
             extensionPoints: {
-               slice_innerRadiusEx: '20%'
+               slice_innerRadiusEx: "20%"
             }
 
          });

@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
        */
       hideDropDown: function alfresco_buttons_DropDownButton__hideDropDown() {
          // NOTE: Tried this using dijit/popup dependency and it didn't work...
-         dijit.popup.close(this._dropDownDisplay)
+         dijit.popup.close(this._dropDownDisplay);
       },
 
       /**
@@ -186,7 +186,7 @@ define(["dojo/_base/declare",
          this._dropDownButton = new DropDownButton({
             id: this.id + "_DROP_DOWN_BUTTON",
             label: this.label ? this.message(this.label) : "",
-            dropDown: this._dropDownDisplay,
+            dropDown: this._dropDownDisplay
          });
 
          this._dropDownButton.placeAt(this.domNode);

@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        * @param {element} innerNode The DOM node that should be moved into the created semantic wrapper
        */
       generateSemanticWrapper: function alfresco_accessibility__SemanticWrapperMixin__generateSemanticWrapper(outerNode, innerNode) {
-         if(this.semanticWrapper && array.indexOf(this._semanticWrapperOptions, this.semanticWrapper) != -1)
+         if(this.semanticWrapper && array.indexOf(this._semanticWrapperOptions, this.semanticWrapper) !== -1)
          {
             var wrapper = domConstruct.create(this.semanticWrapper, null, outerNode, "first");
             if(innerNode)
