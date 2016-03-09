@@ -25,6 +25,26 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, TestCommon) {
 
+   var rowSelectors = TestCommon.getTestSelectors("alfresco/lists/views/layouts/Row");
+   var headerCellSelectors = TestCommon.getTestSelectors("alfresco/lists/views/layouts/HeaderCell");
+
+   var selectors = {
+      rows: {
+         all:  TestCommon.getTestSelector(rowSelectors, "row")
+      },
+      headerCells: {
+         all: {
+            indicators: TestCommon.getTestSelector(headerCellSelectors, "all.indicators")
+         },
+         name: {
+            indicators: TestCommon.getTestSelector(headerCellSelectors, "indicator", ["TABLE_VIEW_NAME_HEADING"]),
+            ascending: TestCommon.getTestSelector(headerCellSelectors, "ascending.indicator", ["TABLE_VIEW_NAME_HEADING"]),
+            descending: TestCommon.getTestSelector(headerCellSelectors, "descending.indicator", ["TABLE_VIEW_NAME_HEADING"]),
+            label: TestCommon.getTestSelector(headerCellSelectors, "label", ["TABLE_VIEW_NAME_HEADING"])
+         }
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -41,7 +61,7 @@ define(["intern!object",
          },
 
          "No initial sorting indicated": function() {
-            return browser.findDisplayedByCssSelector(".alfresco-lists-views-layouts-HeaderCell img")
+            return browser.findDisplayedByCssSelector(selectors.headerCells.all.indicators)
                .then(function() {
                   assert(false, "Should not have found any displayed sort indicators");
                },
@@ -55,14 +75,14 @@ define(["intern!object",
 
             .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-            .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
+            .findAllByCssSelector(selectors.rows.all)
                .then(function(elements) {
                   assert.lengthOf(elements, 4);
                });
          },
 
          "Sort on name, check four results are still shown": function() {
-            return browser.findByCssSelector("#TABLE_VIEW_NAME_HEADING .label")
+            return browser.findByCssSelector(selectors.headerCells.name.label)
                .clearLog()
                .click()
             .end()
@@ -70,7 +90,7 @@ define(["intern!object",
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-            .findAllByCssSelector(".alfresco-lists-views-layouts-Row")
+            .findAllByCssSelector(selectors.rows.all)
                .then(function(elements) {
                   assert.lengthOf(elements, 4);
                });
@@ -84,10 +104,103 @@ define(["intern!object",
             return browser.refresh().findByCssSelector("body").end()
             .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-            .findDisplayedByCssSelector("#TABLE_VIEW_NAME_HEADING img");
+            .findDisplayedByCssSelector(selectors.headerCells.all.indicators);
          },
 
          "Post Coverage Results (1)": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "AlfDocumentList Sorting Tests (no hash, no infinite scroll)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/InfiniteScrollDocumentList?useHash=false&useInfiniteScroll=false", "AlfDocumentList Sorting Tests (no hash, no infinite scroll)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "No initial sorting indicated": function() {
+            return browser.findDisplayedByCssSelector(selectors.headerCells.all.indicators)
+               .then(function() {
+                  assert(false, "Should not have found any displayed sort indicators");
+               },
+               function() {
+                  assert(true);
+               });
+         },
+
+         "Four results shown initially": function() {
+            return browser.findByCssSelector("body").end()
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+            .findAllByCssSelector(selectors.rows.all)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4);
+               });
+         },
+
+         "Sort on name, check four results are still shown": function() {
+            return browser.findByCssSelector(selectors.headerCells.name.label)
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+            .findAllByCssSelector(selectors.rows.all)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4);
+               });
+         },
+
+         "Ascending icon is shown": function() {
+            return browser.findDisplayedByCssSelector(selectors.headerCells.name.ascending);
+         },
+
+         "Change sort order of name": function() {
+            return browser.findByCssSelector(selectors.headerCells.name.label)
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "sortAscending", false);
+               })
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+            .findDisplayedByCssSelector(selectors.headerCells.name.descending);
+         },
+
+         "Change sort order again": function() {
+            return browser.findByCssSelector(selectors.headerCells.name.label)
+               .clearLog()
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "sortAscending", true);
+               })
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+            .findDisplayedByCssSelector(selectors.headerCells.name.ascending);
+         },
+
+         "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
          }
       };

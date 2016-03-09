@@ -30,12 +30,21 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         name: "alfresco/html/Label",
+         config: {
+            label: "Use ?useHash=false&useInfiniteScroll=false request parameters to disable infinite scroll and hashing"
+         }
+      },
+      {
+         id: "DOCUMENT_LIST",
          name: "alfresco/documentlibrary/AlfDocumentList",
          config: {
+            sortField: null,
             useHash: useHash,
             useInfiniteScroll: useInfiniteScroll,
              widgets: [
                {
+                  id: "TABLE_VIEW",
                   name: "alfresco/documentlibrary/views/AlfTableView"
                }
             ]

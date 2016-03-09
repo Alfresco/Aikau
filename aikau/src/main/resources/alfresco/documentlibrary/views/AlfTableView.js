@@ -167,11 +167,13 @@ define(["dojo/_base/declare",
             config: {
                widgets: [
                   {
+                     id: "TABLE_SELECTOR_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_SELECTOR",
                               name: "alfresco/renderers/Selector",
                               config: {
                                  itemKey: "node.nodeRef"
@@ -181,22 +183,26 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_INDICATORS_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_INDICATORS",
                               name: "alfresco/renderers/Indicators"
                            }
                         ]
                      }
                   },
                   {
+                     id: "TABLE_NAME_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_NAME",
                               name: "alfresco/renderers/InlineEditPropertyLink",
                               config: {
                                  propertyToRender: "node.properties.cm:name",
@@ -209,11 +215,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_TITLE_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_TITLE",
                               name: "alfresco/renderers/InlineEditProperty",
                               config: {
                                  propertyToRender: "node.properties.cm:title",
@@ -227,11 +235,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_DESCRIPTION_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_DESCRIPTION",
                               name: "alfresco/renderers/InlineEditProperty",
                               config: {
                                  propertyToRender: "node.properties.cm:description",
@@ -245,11 +255,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_CREATOR_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_CREATOR",
                               name: "alfresco/renderers/PropertyLink",
                               config: {
                                  propertyToRender: "node.properties.cm:creator",
@@ -269,11 +281,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_CREATED_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_CREATED",
                               name: "alfresco/renderers/Property",
                               config: {
                                  propertyToRender: "node.properties.cm:created",
@@ -284,11 +298,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_MODIFIER_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_MODIFIER",
                               name: "alfresco/renderers/PropertyLink",
                               config: {
                                  propertyToRender: "node.properties.cm:modifier",
@@ -308,11 +324,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_MODIFIED_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_MODIFIED",
                               name: "alfresco/renderers/Property",
                               config: {
                                  propertyToRender: "node.properties.cm:modified",
@@ -323,11 +341,13 @@ define(["dojo/_base/declare",
                      }
                   },
                   {
+                     id: "TABLE_ACTIONS_CELL",
                      name: "alfresco/lists/views/layouts/Cell",
                      config: {
                         additionalCssClasses: "mediumpad",
                         widgets: [
                            {
+                              id: "TABLE_ACTIONS",
                               name: "alfresco/renderers/Actions"
                            }
                         ]

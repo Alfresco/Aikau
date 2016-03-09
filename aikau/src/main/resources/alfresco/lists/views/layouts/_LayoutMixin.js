@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget configuration build configuration for
        * @return {object} The arguments that can be used when instantiating the widget configuration processed
        */
-      processWidgetConfig: function alfresco_lists_views_layouts_Cell__processWidgetConfig(widget) {
+      processWidgetConfig: function alfresco_lists_views_layouts__LayoutMixin__processWidgetConfig(widget) {
          if (widget.id)
          {
             widget.id = widget.id + "_ITEM_" + this.currentItem.index;
