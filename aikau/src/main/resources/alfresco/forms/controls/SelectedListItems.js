@@ -20,7 +20,7 @@
 /**
  * This form control uses a [list]{@link module:alfresco/lists/AlfList} as its 
  * [wrapped widget]{@link module:alfresco/forms/controls/BaseFormControl#wrappedWidget} and uses the
- * the [currently selected items]{@link module:alfresco/lists/SelectedItemStateMixin#selectedItems}
+ * [currently selected items]{@link module:alfresco/lists/SelectedItemStateMixin#selectedItems}
  * as its value. This relies on the view defined by the 
  * [configured widget model]{@link module:alfresco/forms/controls/SelectedListItems#widgets} to contain
  * [selectors]{@link module:alfresco/renderers/Selector} (or some other renderer that inherits from
