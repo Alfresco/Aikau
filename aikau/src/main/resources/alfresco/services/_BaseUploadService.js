@@ -312,7 +312,7 @@ define(["alfresco/core/CoreXhr",
             destination: destination,
             siteId: targetData.siteId,
             containerId: targetData.containerId,
-            uploaddirectory: targetData.uploadDirectory,
+            uploaddirectory: targetData.uploadDirectory || file.relativePath,
             majorVersion: targetData.majorVersion ? targetData.majorVersion : "true",
             updateNodeRef: targetData.updateNodeRef,
             description: targetData.description,
@@ -674,6 +674,9 @@ define(["alfresco/core/CoreXhr",
                formData.append("fileData", uploadData.filedata);
                formData.append("fileName", uploadData.filename);
                formData.append("autoRename", !uploadData.overwrite);
+               if (uploadData.uploaddirectory) {
+                  formData.append("relativePath", uploadData.uploaddirectory);
+               }
                
                break;
             }

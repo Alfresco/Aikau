@@ -649,7 +649,7 @@ define(["dojo/_base/declare",
                   
                   // get a dir reader and cleanup file path
                   var reader = directory.createReader(),
-                      relativePath = directory.fullPath.replace(/^\//, "").replace(/(.+?)\/?$/, "$1/");
+                      relativePath = directory.fullPath.replace(/^\//, "");
                   reader.readEntries(function(entries) {
                      callback.pending--;
                      array.forEach(entries, function(entry) {
@@ -659,7 +659,7 @@ define(["dojo/_base/declare",
                            entry.file(function(File) {
                               // add the relativePath property to each file - this can be used to rebuild the contents of
                               // a nested tree folder structure if an appropriate API is available to do so
-                              File.relativePath = relativePath + File.name;
+                              File.relativePath = relativePath;
                               callback.files.push(File);
                               if (callback.limit && callback.files.length > callback.limit)
                               {
