@@ -143,6 +143,7 @@ define({
       "src/test/resources/alfresco/forms/controls/NumberSpinnerTest",
       "src/test/resources/alfresco/forms/controls/PushButtonsTest",
       "src/test/resources/alfresco/forms/controls/RadioButtonsTest",
+      "src/test/resources/alfresco/forms/controls/SelectedListItemsTest",
       "src/test/resources/alfresco/forms/controls/SelectTest",
       "src/test/resources/alfresco/forms/controls/SimplePickerTest",
       "src/test/resources/alfresco/forms/controls/SitePickerTest",

@@ -1,3 +1,16 @@
+/* global page */
+/* jshint sub:true */
+var useHash = true;
+if (page.url.args["useHash"])
+{
+   useHash = page.url.args["useHash"] === "true";
+}
+var useInfiniteScroll = true;
+if (page.url.args["useInfiniteScroll"])
+{
+   useInfiniteScroll = page.url.args["useInfiniteScroll"] === "true";
+}
+
 model.jsonModel = {
    services: [
       {
@@ -19,8 +32,8 @@ model.jsonModel = {
       {
          name: "alfresco/documentlibrary/AlfDocumentList",
          config: {
-            useHash: true,
-            useInfiniteScroll: true,
+            useHash: useHash,
+            useInfiniteScroll: useInfiniteScroll,
              widgets: [
                {
                   name: "alfresco/documentlibrary/views/AlfTableView"

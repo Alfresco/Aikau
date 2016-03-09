@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>alfresco/forms/controls/SelectedListItems</shortname>
+  <description>A form control that can be used to render a list where the value of the field is the items selected in that list.</description>
+  <family>ExamplePage</family>
+  <url>/SelectedListItems</url>
+</webscript>
