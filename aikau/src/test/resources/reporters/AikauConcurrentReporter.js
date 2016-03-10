@@ -409,7 +409,7 @@ define([
             return input;
          }
          return input.split(" ").map(function(word) {
-            return word[0].toUpperCase() + word.substr(1).toLowerCase()
+            return word[0].toUpperCase() + word.substr(1).toLowerCase();
          }).join(" ");
       },
 
@@ -479,7 +479,7 @@ define([
        * @param {Object} testOrSuite The test or suite
        * @returns {Object} The environment names with two properties "full" and "short"
        */
-      getEnv: function(testOrSuite, shortened) {
+      getEnv: function(testOrSuite, /*jshint unused:false*/ shortened) {
          try {
             var env = (testOrSuite.remote && testOrSuite.remote.environmentType),
                shortName = "Unknown",
@@ -791,6 +791,7 @@ define([
        * @instance
        */
       outputFinalResults: function() {
+         /*jshint maxstatements:false*/
 
          // Function variables
          var loggedSectionTitle = false;
@@ -1099,6 +1100,107 @@ define([
       resetCursor: function() {
          charm.position(0, this.state.charm.finalRow);
          charm.cursor(true);
+      },
+
+      /**
+       * Safely JSONify as much of an object as possible
+       *
+       * @instance
+       * @param {Object} obj The object to JSONify
+       * @param {Object} [opts] Options for the safeification
+       * @returns {String} The JSONified object
+       */
+      safelyJsonify: function(obj, opts) {
+
+         // Make the opts safe
+         opts = Object.assign({
+            maxDepth: -1,
+            maxChildren: -1,
+            excludedKeys: []
+         }, opts || {});
+
+         // Create the safe object
+         var safeObj = (function makeSafe(unsafe, ancestors) {
+            /*jshint maxcomplexity:false,maxstatements:false*/
+
+            // Setup return value
+            var safeValue = {};
+
+            // Deal with data appropriately
+            if (typeof unsafe === "function") {
+
+               // Ignore functions
+               var functionName = unsafe.name && unsafe.name + "()";
+               safeValue = functionName || "function";
+
+            } else if (!unsafe || typeof unsafe !== "object") {
+
+               // Falsy values and non-objects are already safe
+               safeValue = unsafe;
+
+            } else if (unsafe.constructor === Array) {
+
+               // Arrays are safe in themselves, but make their items safe
+               safeValue = unsafe.map(function(unsafeChild) {
+                  return makeSafe(unsafeChild, ancestors);
+               });
+
+            } else if (ancestors.indexOf(unsafe) !== -1) {
+
+               // Recursion avoidance!
+               safeValue = "[recursive object]";
+
+            } else if (opts.maxDepth !== -1 && ancestors.length === opts.maxDepth) {
+
+               // Handle max-depth exceptions
+               safeValue = "[object beyond max-depth]";
+
+            } else {
+
+               // A normal object, so recurse through its properties
+               var keys = Object.keys(unsafe),
+                  key,
+                  value;
+               for (var i = 0; i < keys.length; i++) {
+
+                  // Variables
+                  key = keys[i];
+                  try {
+                     value = unsafe[key];
+                  } catch (e) {
+                     value = "Error (see console for details): " + e.message;
+                     console.warn("Unable to access '" + key + "' property on object: ", unsafe);
+                  }
+
+                  // Check against max children
+                  if (opts.maxChildren !== -1 && i === opts.maxChildren) {
+                     safeValue["MAXIMUM CHILDREN"] = "Maximum child-property count reached";
+                     break;
+                  }
+
+                  // Ensure key isn't explicitly excluded
+                  if (opts.excludedKeys.indexOf(key) !== -1) {
+                     safeValue[key] = "[key excluded]";
+                     continue;
+                  }
+
+                  // Make the value safe before adding to the return object
+                  safeValue[key] = makeSafe(value, ancestors.concat(unsafe));
+               }
+            }
+
+            // If we end up with a string, make the linebreaks safe
+            if (typeof safeValue === "string") {
+               safeValue = safeValue.replace(/\r/g, "").replace(/\n/g, "\\n");
+            }
+
+            // Pass back the safe object
+            return safeValue;
+
+         })(obj, []);
+
+         // Pass back the safely JSONified object
+         return JSON.stringify(safeObj, null, 2);
       },
 
       /**
