@@ -23,6 +23,4 @@
  * @author Dave Draper
  * @deprecated Since 1.0.3 - Use [alfresco/forms/controls/RadioButtons]{@link module:alfresco/forms/controls/RadioButtons} instead
  */
-define(["dojo/_base/declare",
-        "alfresco/forms/controls/RadioButtons"], 
-        function(declare, RadioButtons) {});
+define([], function() {});

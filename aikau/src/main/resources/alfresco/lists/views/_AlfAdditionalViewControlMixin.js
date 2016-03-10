@@ -67,6 +67,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published on the filter topic 
        */
       filter: function alfresco_lists_views__AlfAdditionalViewControlMixin__filter(payload) {
+         /*jshint eqnull:true*/
          if (this.relatedViewName == null)
          {
             this.alfLog("warn", "Unable to filter additional view control due to the 'relatedViewName' not being configured", this);

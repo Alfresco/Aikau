@@ -27,9 +27,8 @@
  */
 define(["alfresco/forms/controls/MultipleEntryFormControl",
         "dojo/_base/declare",
-        "alfresco/forms/controls/MultipleKeyValuePairCreator",
-        "dojo/_base/array"], 
-        function(MultipleEntryFormControl, declare, MultipleKeyValuePairCreator, array) {
+        "alfresco/forms/controls/MultipleKeyValuePairCreator"], 
+        function(MultipleEntryFormControl, declare, MultipleKeyValuePairCreator) {
    
    return declare([MultipleEntryFormControl], {
       
@@ -40,8 +39,8 @@ define(["alfresco/forms/controls/MultipleEntryFormControl",
        * @param {Element} domNode
        * @returns A new [MultipleKeyValuePairCreator]{@link module:alfresco/forms/controls/MultipleKeyValuePairCreator}
        */
-      createFormControl: function(config, domNode) {
+      createFormControl: function(config, /*jshint unused:false*/ domNode) {
          return new MultipleKeyValuePairCreator(config);
       }
-   })
+   });
 });

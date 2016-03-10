@@ -16,13 +16,13 @@
    {
       if (!origins || !channel)
       {
-         throw new Error('MessageServer constructor requires all ("origins" and "channel") ' +
-               'parameters to be set');
+         throw new Error("MessageServer constructor requires all (\"origins\" and \"channel\") " +
+               "parameters to be set");
       }
 
       if (CHANNELS[channel])
       {
-         throw new Error('Cannot construct MessageServer since channel "' + channel + '"already is in use');
+         throw new Error("Cannot construct MessageServer since channel \"" + channel + "\"already is in use");
       }
 
       CHANNELS[channel] = true;
@@ -31,7 +31,7 @@
       this._channel = channel;
       this._messageHandlerResolver = messageHandlerResolver || this._messageHandlerResolver;
 
-      this._addEventListener(window, 'message', this._receiveMessage);
+      this._addEventListener(window, "message", this._receiveMessage);
    }
 
    MessageServer.prototype = {
@@ -57,7 +57,7 @@
          var allowed = false;
          for (var i = 0, il = this._origins.length; i < il; i++)
          {
-            if (event.origin == this._origins[i])
+            if (event.origin === this._origins[i])
             {
                allowed = true;
                break;
@@ -68,7 +68,7 @@
          {
             // event.source
             var data = JSON.parse(event.data);
-            if (data.name && data.channel == this._channel)
+            if (data.name && data.channel === this._channel)
             {
                var name = data.name;
                var fn = this._messageHandlerResolver(name);
@@ -83,14 +83,14 @@
                      message = JSON.stringify(message);
                      event.source.postMessage(message, event.origin);
                   }, function(code, message){
-                     var message = {
+                     var messageToPost = {
                         callback: data.callback,
                         failure: true,
                         code: code,
                         message: message
                      };
-                     message = JSON.stringify(message);
-                     event.source.postMessage(message, event.origin);
+                     messageToPost = JSON.stringify(messageToPost);
+                     event.source.postMessage(messageToPost, event.origin);
                   });
                }
                else
@@ -100,7 +100,7 @@
                      callback: data.callback,
                      failure: true,
                      code: 1,
-                     message: 'Message named "' + name + '" was not recognized.'
+                     message: "Message named \"" + name + "\" was not recognized."
                   };
                   message = JSON.stringify(message);
                   event.source.postMessage(message, event.origin);
@@ -113,10 +113,10 @@
       {
          var args = Array.prototype.slice.call(arguments).slice(2);
          var me = this;
-         return (function()
+         return function()
          {
             return fn.apply(me, args.concat(Array.prototype.slice.call(arguments)));
-         });
+         };
       },
 
       _addEventListener: function(el, event, callback)
@@ -127,7 +127,7 @@
          }
          else
          {
-            el.attachEvent('on' + event, this._bind(callback));
+            el.attachEvent("on" + event, this._bind(callback));
          }
       }
    };

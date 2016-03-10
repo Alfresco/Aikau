@@ -31,11 +31,8 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/DropZoneWrapper.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "dojo/on",
-        "dijit/registry",
-        "dojo/_base/lang",
-        "dojo/_base/array"], 
-        function(declare, _Widget, _Templated, template, AlfCore, CoreWidgetProcessing, on, registry, lang, array) {
+        "dojo/on"], 
+        function(declare, _Widget, _Templated, template, AlfCore, CoreWidgetProcessing, on) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing], {
       
@@ -73,6 +70,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_creation_DropZoneWrapper__postCreate() {
+         /*jshint eqnull:true*/
          if (this.widgets != null)
          {
             this.processWidgets(this.widgets, this.controlNode);
@@ -87,7 +85,8 @@ define(["dojo/_base/declare",
        * @param {object} widgetConfig The configuration for the widget to be created
        * @param {number} index The index of the widget configuration in the array that it was taken from
        */
-      processWidget: function alfresco_creation_DropZoneWrapper__processWidget(rootNode, widgetConfig, index) {
+      processWidget: function alfresco_creation_DropZoneWrapper__processWidget(rootNode, widgetConfig, /*jshint unused:false*/ index) {
+         /*jshint eqnull:true*/
          if (widgetConfig != null && widgetConfig.config != null)
          {
             widgetConfig.config._dropZoneWrapperId = this.fieldId;
@@ -101,7 +100,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event that triggers the delete.
        */
-      onWidgetDelete: function alfresco_creation_DropZoneWrapper__onWidgetDelete(evt) {
+      onWidgetDelete: function alfresco_creation_DropZoneWrapper__onWidgetDelete(/*jshint unused:false*/ evt) {
          on.emit(this.domNode, "onWidgetDelete", {
             bubbles: true,
             cancelable: true,

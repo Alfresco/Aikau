@@ -66,14 +66,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       render: function alfresco_preview_PdfJs_DocumentPage__render() {
-         var div = document.createElement('div');
-         div.id = this.parent.id + '-pageContainer-' + this.id;
+         var div = document.createElement("div");
+         div.id = this.parent.id + "-pageContainer-" + this.id;
          domClass.add(div, "page");
          this.parent.viewer.appendChild(div);
 
          // Create the loading indicator div
-         var loadingIconDiv = document.createElement('div');
-         domClass.add(loadingIconDiv, 'loadingIcon');
+         var loadingIconDiv = document.createElement("div");
+         domClass.add(loadingIconDiv, "loadingIcon");
          div.appendChild(loadingIconDiv);
 
          this.container = div;
@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns The vertical position of the page relative to the top of the parent element
        */
-      getVPos: function alfresco_preview_PdfJs_DocumentPage__getVPos(page) {
+      getVPos: function alfresco_preview_PdfJs_DocumentPage__getVPos(/*jshint unused:false*/ page) {
          return this.container.getBoundingClientRect().top + $(document).scrollTop() - this.parent.viewerRegion.t;
       },
 
@@ -112,8 +112,8 @@ define(["dojo/_base/declare",
        */
       renderContent: function alfresco_preview_PdfJs_DocumentPage__renderContent() {
          var region = this.getRegion(),
-             canvas = document.createElement('canvas');
-         canvas.id = this.container.id.replace('-pageContainer-', '-canvas-');
+             canvas = document.createElement("canvas");
+         canvas.id = this.container.id.replace("-pageContainer-", "-canvas-");
          canvas.mozOpaque = true;
          this.container.appendChild(canvas);
 
@@ -130,8 +130,8 @@ define(["dojo/_base/declare",
          var textLayerDiv = null;
          if (!this.parent.disableTextLayer)
          {
-            textLayerDiv = document.createElement('div');
-            textLayerDiv.className = 'textLayer';
+            textLayerDiv = document.createElement("div");
+            textLayerDiv.className = "textLayer";
             this.container.appendChild(textLayerDiv);
          }
          this.textLayerDiv = textLayerDiv;
@@ -139,7 +139,7 @@ define(["dojo/_base/declare",
 
          var content = this.content,
              // view = content.view,
-             ctx = canvas.getContext('2d');
+             ctx = canvas.getContext("2d");
 
          // Render the content itself
          var renderContext = {

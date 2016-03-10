@@ -30,7 +30,6 @@ define(["dojo/_base/declare",
    "alfresco/dashlets/Dashlet"],
       function(declare, AlfCore, I18nUtils, Dashlet) {
 
-         var i18nScope = "alfresco.reports.SiteContentReportDashlet";
          return declare([Dashlet], {
 
             /**

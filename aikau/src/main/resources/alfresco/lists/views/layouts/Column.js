@@ -76,7 +76,7 @@ define(["dojo/_base/declare",
        * @param {String} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
        * @returns {element} A new DOM node for a processed widget to attach to
        */
-      createWidgetDomNode: function alfresco_renderers_Column__createWidgetDomNode(widget, rootNode, rootClassName) {
+      createWidgetDomNode: function alfresco_renderers_Column__createWidgetDomNode(widget, rootNode, /*jshint unused:false*/ rootClassName) {
          var nodeToAdd = domConstruct.create("TR", {}, rootNode);
          return domConstruct.create("TD", {}, nodeToAdd);
       }

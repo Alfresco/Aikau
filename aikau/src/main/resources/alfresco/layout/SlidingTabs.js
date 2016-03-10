@@ -116,13 +116,14 @@ define(["dojo/_base/declare",
        * @instance
        * @param {Element} rootNode
        * @param {object} widgetConfig
-       * @param {number} index
+       * @param {number} idx
        */
-      processWidget: function alfresco_layout_SlidingTabs__processWidget(rootNode, widgetConfig, index) {
+      processWidget: function alfresco_layout_SlidingTabs__processWidget(rootNode, widgetConfig, /*jshint unused:false*/ idx) {
+         /*jshint eqnull:true*/
          if (this.filterWidget(widgetConfig))
          {
             // Only add the widget if it has a title...
-            if (widgetConfig.title != null && widgetConfig.title != "")
+            if (widgetConfig.title != null && widgetConfig.title !== "")
             {
                // Increment the count of tabs...
                this.tabCount++;
@@ -179,7 +180,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      allWidgetsProcessed: function alfresco_layout_SlidingTabs__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_layout_SlidingTabs__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
          // Initially set the first and second tabs as "selected" and "next"...
          // TODO: Set these based on a # filter...
          query(".navigation", this.domNode).children().first().addClass("selected").next().addClass("next");

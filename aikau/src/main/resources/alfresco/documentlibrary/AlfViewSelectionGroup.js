@@ -68,6 +68,7 @@ define(["dojo/_base/declare",
        * @param {Object} menuItem The menu item to add.
        */
       addViewSelectionMenuItem: function alfresco_documentlibrary_AlfViewSelectionGroup__addViewSelectionMenuItem(payload) {
+         /*jshint eqnull:true*/
          if (payload == null || !payload.menuItem.isInstanceOf(AlfCheckableMenuItem))
          {
             this.alfLog("warn", "A request was made to register a view selection menu item that was not an instance of 'alfresco/documentlibrary/AlfCheckableMenuItem'", payload.menuItem);

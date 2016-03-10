@@ -212,7 +212,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onSortClick: function alfresco_lists_views_layouts_HeaderCell__onSortClick(evt) {
+      onSortClick: function alfresco_lists_views_layouts_HeaderCell__onSortClick(/*jshint unused:false*/ evt) {
          if (this.sortable === true)
          {
             this.alfLog("log", "Sort request received");

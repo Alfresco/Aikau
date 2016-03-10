@@ -91,6 +91,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       creator: function alfresco_creation_DragWidgetPalette__creator(item, hint) {
+         /*jshint eqnull:true*/
          this.alfLog("log", "Creating", item, hint);
          var node = domConstruct.toDom(stringUtil.substitute(WidgetTemplate, {
             title: (item.name != null) ? item.name : "",

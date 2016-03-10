@@ -32,10 +32,8 @@ define(["dojo/_base/declare",
         "alfresco/forms/Form",
         "dojo/_base/lang",
         "dijit/registry",
-        "dojo/_base/array",
-        "dijit/form/Button",
-        "dojo/dom-class"], 
-        function(declare, _Widget, _Templated, template, AlfCore, Form, lang, registry, array, Button, domClass) {
+        "dojo/_base/array"], 
+        function(declare, _Widget, _Templated, template, AlfCore, Form, lang, registry, array) {
    
    return declare([_Widget, _Templated, AlfCore], {
       
@@ -111,6 +109,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       saveWidgetConfig: function alfresco_creation_WidgetConfig__saveWidgetConfig() {
+         /*jshint eqnull:true*/
          if (this.currentWidgetConfig != null)
          {
             // Get the values for the current widgets...
@@ -155,6 +154,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       displayWidgetConfig: function alfresco_creation_WidgetConfig__displayWidgetConfig(payload) {
+         /*jshint eqnull:true*/
          
          // Clear the previous widgets...
          this.clearCurrentDisplay();
@@ -196,7 +196,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object[]} widgets The widgets that have been created.
        */
-      allWidgetsProcessed: function alfresco_creation_WidgetConfig__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_creation_WidgetConfig__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
          this.alfLog("log", "Widget config processed");
       },
       
@@ -208,7 +208,7 @@ define(["dojo/_base/declare",
        * @param {object} The widget to destroy
        * @param {number} The index of the widget in the config panel
        */
-      destroyOldConfigWidget: function alfresco_creation_WidgetConfig__destroyOldConfigWidget(widget, index) {
+      destroyOldConfigWidget: function alfresco_creation_WidgetConfig__destroyOldConfigWidget(widget, /*jshint unused:false*/ index) {
          widget.destroyRecursive(false);
       }
    });

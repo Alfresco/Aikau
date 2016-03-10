@@ -23,13 +23,8 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/forms/controls/MultipleEntryElement", 
-        "dijit/form/TextBox",
-        "dojo/_base/lang",
-        "dojo/dom-construct",
-        "dojo/dom-class",
-        "dijit/registry"], 
-        function(declare, MultipleEntryElement, TextBox, lang, domConstruct, domClass, registry) {
+        "alfresco/forms/controls/MultipleEntryElement"], 
+        function(declare, MultipleEntryElement) {
    
    return declare([MultipleEntryElement], {
       

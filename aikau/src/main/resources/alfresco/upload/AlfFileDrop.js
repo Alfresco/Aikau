@@ -72,7 +72,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      onDndDragEnter: function alfresco_upload_AlfFileDrop__onDndDragEnter(evt) {
+      onDndDragEnter: function alfresco_upload_AlfFileDrop__onDndDragEnter(/*jshint unused:false*/ evt) {
         
       },
 

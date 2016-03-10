@@ -31,11 +31,12 @@ define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/ObjectTypeUtils",
+
+        // Following items required in order to be built into the bundle, but not used directly
         "alfresco/pickers/Picker",
         "alfresco/pickers/PropertyPicker",
         "alfresco/pickers/PickedItems"], 
-        function(BaseFormControl, declare, CoreWidgetProcessing, ObjectProcessingMixin, lang, array, ObjectTypeUtils, 
-                 Picker, PropertyPicker, PickedItems) {
+        function(BaseFormControl, declare, CoreWidgetProcessing, ObjectProcessingMixin, lang, array, ObjectTypeUtils) {
    
    return declare([BaseFormControl, CoreWidgetProcessing, ObjectProcessingMixin], {
       
@@ -53,7 +54,7 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_SimplePicker__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_SimplePicker__createFormControl(/*jshint unused:false*/ config, /*jshint unused:false*/ domNode) {
          this.lastValue = ObjectTypeUtils.isArray(this.value) ? this.value : [];
 
          // Create a specific item selection scope to ensure that the picker publications don't interfere

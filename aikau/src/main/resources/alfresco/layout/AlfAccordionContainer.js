@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to add
        * @param {integer} index The index of the widget
        */
-      addWidget: function alfresco_layout_AlfAccordionContainer__addWidget(widget, index) {
+      addWidget: function alfresco_layout_AlfAccordionContainer__addWidget(widget, /*jshint unused:false*/ index) {
          var domNode = domConstruct.create("div", {});
          var widgetNode = this.createWidgetDomNode(widget, domNode);
          var w = this.createWidget(widget, widgetNode);

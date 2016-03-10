@@ -29,9 +29,8 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "dojo/on",
         "dojo/_base/lang",
-        "dijit/popup",
-        "dijit/focus"], 
-        function(declare, AlfCore, on, lang, popup, focusUtil) {
+        "dijit/popup"], 
+        function(declare, AlfCore, on, lang, popup) {
    
    return declare([AlfCore], {
 
@@ -73,6 +72,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       closePopupMenu: function alfresco_menus__AlfPopupCloseMixin__closePopupMenu() {
+         /*jshint eqnull:true*/
          if (this.popup)
          {
             // Focus the main node again (this is require for keyboard accessibility)

@@ -281,6 +281,7 @@ define(["dojo/_base/lang",
        * @return {string} File extension or null
        */
       getFileExtension: function alfresco_core_FileIconUtils(filePath) {
+         /*jshint eqnull:true*/
          if (filePath != null)
          {
             var match = filePath.match(/^.*\.([^\.]*)$/);

@@ -66,6 +66,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_creation_WidgetDragWrapper__postCreate() {
+         /*jshint eqnull:true*/
          if (this.widgets != null)
          {
             this.processWidgets(this.widgets, this.controlNode);
@@ -78,7 +79,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event that triggers the delete.
        */
-      onWidgetDelete: function alfresco_creation_WidgetDragWrapper__onWidgetDelete(evt) {
+      onWidgetDelete: function alfresco_creation_WidgetDragWrapper__onWidgetDelete(/*jshint unused:false*/ evt) {
          on.emit(this.domNode, "onWidgetDelete", {
             bubbles: true,
             cancelable: true,
@@ -105,7 +106,8 @@ define(["dojo/_base/declare",
        * @param {object} widget The current widget to inspect for widget defintions
        * @param {number} index The index of the current widget to inspect.
        */
-      getSubWidgetDefinitions: function alfresco_creation_WidgetDragWrapper__getSubWidgetDefinitions(widgetDefs, widget, index) {
+      getSubWidgetDefinitions: function alfresco_creation_WidgetDragWrapper__getSubWidgetDefinitions(widgetDefs, widget, /*jshint unused:false*/ index) {
+         /*jshint eqnull:true*/
          if (typeof widget.getWidgetDefinitions === "function")
          {
             var defs = widget.getWidgetDefinitions();

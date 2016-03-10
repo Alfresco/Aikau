@@ -72,7 +72,8 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_TextArea__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_TextArea__createFormControl(config, /*jshint unused:false*/ domNode) {
+         /*jshint eqnull:true*/
          var textArea = new Textarea(config);
          // Handle adding classes
          var additionalCssClasses = "";

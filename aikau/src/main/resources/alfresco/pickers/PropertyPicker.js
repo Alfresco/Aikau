@@ -81,7 +81,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onFolderClick: function alfresco_pickers_PropertyPicker__onFolderClick(payload) {
+      onFolderClick: function alfresco_pickers_PropertyPicker__onFolderClick(/*jshint unused:false*/ payload) {
          // No action.
       },
 
@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        */
-      onDocumentClick: function alfresco_pickers_PropertyPicker__onFolderClick(payload) {
+      onDocumentClick: function alfresco_pickers_PropertyPicker__onFolderClick(/*jshint unused:false*/ payload) {
          // No action.
       },
 
