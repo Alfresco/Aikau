@@ -1301,17 +1301,6 @@ define([],function() {
       TINYMCE_EDITOR_FOCUSED: "ALF_TINYMCE_EDITOR_FOCUSED",
 
       /**
-       * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
-       * [Title widget]{@link module:alfresco/header/Title} and published by the 
-       * [SetTitle widget]{@link module:alfresco/header/SetTitle}
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
-
-      /**
        * This can be published to change the current field being used to sort lists.
        * 
        * @instance
@@ -1326,6 +1315,17 @@ define([],function() {
        * @property {object}  [requester] The widget making the request (include to avoid cycling publications).
        */
       UPDATE_LIST_SORT_FIELD: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+
+      /**
+       * This topic can be used to publish a request to change the title of a page. It is subscribed to by the
+       * [Title widget]{@link module:alfresco/header/Title} and published by the 
+       * [SetTitle widget]{@link module:alfresco/header/SetTitle}
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
 
       /**
        * This topic is published when the user acknowledges the completion of uploading files to the
