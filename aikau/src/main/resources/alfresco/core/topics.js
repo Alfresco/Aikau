@@ -1148,6 +1148,22 @@ define([],function() {
       SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
 
       /**
+       * This can be published to request that a [list]{@link module:alfresco/lists/AlfSortablePaginatedList}
+       * changes the way that its data is sorted.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       * @property {string} direction Either "ascending" or "descending"
+       * @property {string} value The field to sort on
+       * @property {object} [requester] The widget making the request (include to avoid cycling publications).
+       */
+      SORT_LIST: "ALF_DOCLIST_SORT",
+
+      /**
        * This can be called to close the StickyPanel.
        *
        * @instance
@@ -1283,6 +1299,22 @@ define([],function() {
        * @event
        */
       TINYMCE_EDITOR_FOCUSED: "ALF_TINYMCE_EDITOR_FOCUSED",
+
+      /**
+       * This can be published to change the current field being used to sort lists.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       * @property {string}  direction Either "ascending" or "descending"
+       * @property {string}  [label] A label that represents the field to be sorted on
+       * @property {boolean} [sortable] Whether or not this field can be have the sort direction changed on it
+       * @property {object}  [requester] The widget making the request (include to avoid cycling publications).
+       */
+      UPDATE_LIST_SORT_FIELD: "ALF_DOCLIST_SORT_FIELD_SELECTION",
 
       /**
        * This topic can be used to publish a request to change the title of a page. It is subscribed to by the

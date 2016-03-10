@@ -220,17 +220,17 @@ define(["dojo/_base/declare",
        * @event sortRequestTopic
        * @instance
        * @type {string} 
-       * @default
+       * @default [SORT_LIST]{@link module:alfresco/core/topics#SORT_LIST}
        */
-      sortRequestTopic: "ALF_DOCLIST_SORT",
+      sortRequestTopic: topics.SORT_LIST,
       
       /**
        * @event
        * @instance
        * @type {string} 
-       * @default
+       * @default [UPDATE_LIST_SORT_FIELD]{@link module:alfresco/core/topics#UPDATE_LIST_SORT_FIELD}
        */
-      sortFieldSelectionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+      sortFieldSelectionTopic: topics.UPDATE_LIST_SORT_FIELD,
       
       /**
        * @event showFoldersTopic

@@ -30,12 +30,13 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/HeaderCell.html",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/query",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, hashUtils, lang, domClass, query, domAttr) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, topics, hashUtils, lang, domClass, query, domAttr) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -156,6 +157,8 @@ define(["dojo/_base/declare",
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate
+       * @listens module:alfresco/core/topics#SORT_LIST
+       * @listens module:alfresco/core/topics#UPDATE_LIST_SORT_FIELD
        */
       postCreate: function alfresco_lists_views_layouts_HeaderCell__postCreate() {
          if (this.useHash && this.sortable)
@@ -168,8 +171,8 @@ define(["dojo/_base/declare",
             }
          }
 
-         this.alfSubscribe("ALF_DOCLIST_SORT", lang.hitch(this, this.onExternalSortRequest));
-         this.alfSubscribe("ALF_DOCLIST_SORT_FIELD_SELECTION", lang.hitch(this, this.onExternalSortRequest));
+         this.alfSubscribe(topics.SORT_LIST, lang.hitch(this, this.onExternalSortRequest));
+         this.alfSubscribe(topics.UPDATE_LIST_SORT_FIELD, lang.hitch(this, this.onExternalSortRequest));
 
          domAttr.set(this.ascendingSortNode, "alt", this.sortAscAlt ? this.sortAscAlt : "");
          domAttr.set(this.descendingSortNode, "alt", this.sortDescAlt ? this.sortDescAlt : "");
@@ -212,7 +215,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onSortClick: function alfresco_lists_views_layouts_HeaderCell__onSortClick(evt) {
+      onSortClick: function alfresco_lists_views_layouts_HeaderCell__onSortClick(/*jshint unused:false*/ evt) {
          if (this.sortable === true)
          {
             this.alfLog("log", "Sort request received");
@@ -244,9 +247,10 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
+       * @fires module:alfresco/core/topics#SORT_LIST
        */
       publishSortRequest: function alfresco_lists_views_layouts_HeaderCell__publishSortRequest() {
-         this.alfPublish("ALF_DOCLIST_SORT", {
+         this.alfPublish(topics.SORT_LIST, {
             direction: (this.sortedAscending) ? "ascending" : "descending",
             value: this.sortValue,
             requester: this
