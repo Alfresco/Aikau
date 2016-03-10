@@ -24,9 +24,8 @@
  */
 define(["dojo/_base/declare",
         "alfresco/menus/AlfCascadingMenu",
-        "dojo/dom-class",
-        "dojo/dom-construct"], 
-        function(declare, AlfCascadingMenu, domClass, domConstruct) {
+        "dojo/dom-class"], 
+        function(declare, AlfCascadingMenu, domClass) {
    
    return declare([AlfCascadingMenu], {
       

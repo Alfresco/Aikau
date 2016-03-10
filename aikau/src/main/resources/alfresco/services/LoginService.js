@@ -50,6 +50,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       doLogin: function alfresco_services_LoginService__doLogout(payload) {
+         /*jshint eqnull:true*/
          // Publish an event to indicate that a login attempt is about to begin, this is done so that
          // the login page has the opportunity to clear previously displayed messages and display
          // an indication that login has begun...
@@ -83,6 +84,7 @@ define(["dojo/_base/declare",
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
       onLoginSuccess: function alfresco_services_LoginService__onLoginSuccess(response, originalRequestConfig) {
+         /*jshint eqnull:true*/
          this.alfLog("info", "Login success");
          var url = lang.getObject("data.successUrl", false, originalRequestConfig);
          if (url != null)
@@ -102,7 +104,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response from the request
        * @param {object} originalRequestConfig The configuration passed on the original request
        */
-      onLoginFailure: function alfresco_services_LoginService__onLoginFailure(response, originalRequestConfig) {
+      onLoginFailure: function alfresco_services_LoginService__onLoginFailure(/*jshint unused:false*/ response, /*jshint unused:false*/ originalRequestConfig) {
          this.alfLog("info", "Login failure");
          this.alfPublish("ALF_LOGIN_STATUS", {
             status: "FAILURE"

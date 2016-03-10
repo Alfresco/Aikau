@@ -75,6 +75,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onAddQuickShare: function alfresco_services_QuickShareService__onAddRating(payload) {
+         /*jshint eqnull:true*/
          var url = lang.getObject("node.jsNode.nodeRef.uri", false, payload);
          if (url != null)
          {
@@ -94,6 +95,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onRemoveQuickShare: function alfresco_services_QuickShareService__onRemoveQuickShare(payload) {
+         /*jshint eqnull:true*/
          var quickShareId = lang.getObject("node.jsNode.properties.qshare:sharedId", false, payload);
          if (quickShareId != null)
          {

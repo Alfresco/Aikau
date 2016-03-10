@@ -82,6 +82,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_EditTag__postMixInProperties() {
+         /*jshint eqnull:true*/
          if (this.tagName != null)
          {
             this.tagName = this.encodeHTML(this.tagName);
@@ -105,7 +106,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event
        */
-      onRemoveTag: function alfresco_renderers_EditTag__onRemoveTag(evt) {
+      onRemoveTag: function alfresco_renderers_EditTag__onRemoveTag(/*jshint unused:false*/ evt) {
          on.emit(this.domNode, "ALF_REMOVE_TAG", { bubbles: true, cancelable: true });
       },
       

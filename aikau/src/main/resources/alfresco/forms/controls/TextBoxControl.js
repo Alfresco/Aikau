@@ -26,57 +26,52 @@
  * @author Martin Doyle
  * @since 1.0.45
  */
-define([
-      "alfresco/core/Core",
-      "dijit/form/ValidationTextBox",
-      "dojo/_base/declare",
-      "dojo/_base/lang",
-      "dojo/dom-construct",
-      "dojo/on"
-   ],
-   function(Core, ValidationTextBox, declare, lang, domConstruct, on) {
+define(["alfresco/core/Core", 
+        "dijit/form/ValidationTextBox", 
+        "dojo/_base/declare"], 
+        function(Core, ValidationTextBox, declare) {
 
-      // We only want to run this once
-      var supportsPlaceholder = document.createElement("input").placeholder === "";
+   // We only want to run this once
+   var supportsPlaceholder = document.createElement("input").placeholder === "";
 
-      return declare([ValidationTextBox], {
+   return declare([ValidationTextBox], {
 
-         /**
-          * Whether to enable autocomplete on the textbox. Further details available against the
-          * [alfresco/forms/controls/TextBox property]{@link module:alfresco/forms/controls/TextBox#autocomplete}.
-          *
-          * @instance
-          * @type {string}
-          * @default
-          */
-         autocomplete: null,
+      /**
+       * Whether to enable autocomplete on the textbox. Further details available against the
+       * [alfresco/forms/controls/TextBox property]{@link module:alfresco/forms/controls/TextBox#autocomplete}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      autocomplete: null,
 
-         /**
-          * Run after the widget has been created.
-          *
-          * @instance
-          * @override
-          */
-         postCreate: function alfresco_forms_controls_TextBoxControl__postCreate() {
-            this.inherited(arguments);
-            if(this.autocomplete) {
-               this.textbox && this.textbox.setAttribute("autocomplete", this.autocomplete);
-            }
-         },
-
-         /**
-          * If we can use native placeholder, use it instead of the Dojo one.
-          *
-          * @instance
-          * @override
-          * @param {string} placeholderValue The placeholder value.
-          */
-         _setPlaceHolderAttr: function alfresco_forms_controls_TextBoxControl___setPlaceHolderAttr(placeholderValue) {
-            if (supportsPlaceholder) {
-               this.textbox.placeholder = placeholderValue;
-            } else {
-               this.inherited(arguments);
-            }
+      /**
+       * Run after the widget has been created.
+       *
+       * @instance
+       * @override
+       */
+      postCreate: function alfresco_forms_controls_TextBoxControl__postCreate() {
+         this.inherited(arguments);
+         if(this.autocomplete) {
+            this.textbox && this.textbox.setAttribute("autocomplete", this.autocomplete);
          }
-      });
+      },
+
+      /**
+       * If we can use native placeholder, use it instead of the Dojo one.
+       *
+       * @instance
+       * @override
+       * @param {string} placeholderValue The placeholder value.
+       */
+      _setPlaceHolderAttr: function alfresco_forms_controls_TextBoxControl___setPlaceHolderAttr(placeholderValue) {
+         if (supportsPlaceholder) {
+            this.textbox.placeholder = placeholderValue;
+         } else {
+            this.inherited(arguments);
+         }
+      }
    });
+});

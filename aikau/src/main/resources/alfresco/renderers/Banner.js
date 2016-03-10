@@ -84,7 +84,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_renderers_Banner__postCreate() {
-         if (this.bannerMessage != null && this.bannerMessage != "")
+         /*jshint eqnull:true*/
+         if (this.bannerMessage != null && this.bannerMessage !== "")
          {
             domClass.remove(this.bannerNode, "hidden");
          }

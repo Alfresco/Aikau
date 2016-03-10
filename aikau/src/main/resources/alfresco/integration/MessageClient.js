@@ -15,15 +15,15 @@
    {
       if (!otherWindow || !origin || !channel)
       {
-         throw new Error('MessageClient constructor requires all ("otherWindow", "origin" and "channel") ' +
-               'parameters to be set');
+         throw new Error("MessageClient constructor requires all (\"otherWindow\", \"origin\" and \"channel\") " +
+               "parameters to be set");
       }
       this._otherWindow = otherWindow;
       this._origin = origin;
       this._channel = channel;
 
       this._callbacks = {};
-      this._addEventListener(window, 'message', this._receiveMessage);
+      this._addEventListener(window, "message", this._receiveMessage);
    }
 
    MessageClient.prototype = {
@@ -38,7 +38,7 @@
                name: name
             };
 
-            if (typeof value != 'undefined')
+            if (typeof value !== "undefined")
             {
                message.value = value;
             }
@@ -69,11 +69,11 @@
          {
             var callback = this._callbacks[data.callback];
             delete this._callbacks[data.callback];
-            if (data.success && typeof callback[0] == "function")
+            if (data.success && typeof callback[0] === "function")
             {
                callback[0](data.result);
             }
-            else if (data.failure && typeof callback[1] == "function")
+            else if (data.failure && typeof callback[1] === "function")
             {
                callback[1](data.code, data.message);
             }
@@ -84,21 +84,21 @@
       {
          var args = Array.prototype.slice.call(arguments).slice(2);
          var me = this;
-         return (function()
+         return function()
          {
             return fn.apply(me, args.concat(Array.prototype.slice.call(arguments)));
-         });
+         };
       },
 
       _addEventListener: function(el, event, callback)
       {
-         if (typeof el.addEventListener == 'function')
+         if (typeof el.addEventListener === "function")
          {
             el.addEventListener(event, this._bind(callback), false);
          }
          else
          {
-            el.attachEvent('on' + event, this._bind(callback));
+            el.attachEvent("on" + event, this._bind(callback));
          }
       }
 

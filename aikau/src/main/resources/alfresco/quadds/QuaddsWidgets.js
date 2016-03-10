@@ -53,6 +53,7 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       postCreate: function alfresco_quadds_QuaddsWidgets__postCreate() {
+         /*jshint eqnull:true*/
 
          if (this.quadds != null)
          {
@@ -73,21 +74,25 @@ define(["alfresco/core/ProcessWidgets",
       /**
        * @instance
        */
-      updatePage: function alfresco_prototyping_Preview__updatePage(response, originalRequestConfig) {
+      updatePage: function alfresco_prototyping_Preview__updatePage(response, /*jshint unused:false*/ originalRequestConfig) {
+         /*jshint devel:true*/
          // Iterate over the CSS map and append a new <link> element into the <head> element to ensure that all the
          // widgets CSS dependencies are loaded... 
          for (var media in response.cssMap)
          {
-            // TODO: query for the node outside of the loop
-            // TODO: keep a reference to each node appended and then remove it when the preview is regenerated
-            query("head").append('<link rel="stylesheet" type="text/css" href="' + appContext + response.cssMap[media] + '" media="' + media + '">');
+            if (response.cssMap.hasOwnProperty(media))
+            {
+               // TODO: query for the node outside of the loop
+               // TODO: keep a reference to each node appended and then remove it when the preview is regenerated
+               query("head").append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + appContext + response.cssMap[media] + "\" media=\"" + media + "\">");
+            }
          }
 
          
          // Build in the i18n properties into the global object...
          for (var scope in response.i18nMap)
          {
-            if (typeof window[response.i18nGlobalObject].messages.scope[scope] == "undefined")
+            if (typeof window[response.i18nGlobalObject].messages.scope[scope] === "undefined")
             {
                // If the scope hasn't already been used then we can just assign it directly...
                window[response.i18nGlobalObject].messages.scope[scope] = response.i18nMap[scope];
@@ -149,7 +154,8 @@ define(["alfresco/core/ProcessWidgets",
        * Extract any widget configuration from the QuADDS item and add it to the supplied array.
        * @instance
        */
-      processQuaddsItem: function alfresco_quadds_QuaddsWidgets__processQuaddsItem(widgets, quaddsItem, index) {
+      processQuaddsItem: function alfresco_quadds_QuaddsWidgets__processQuaddsItem(widgets, quaddsItem, /*jshint unused:false*/ index) {
+         /*jshint eqnull:true*/
          var widgetConfig = lang.getObject("data.widget", false, quaddsItem);
          if (widgetConfig != null)
          {

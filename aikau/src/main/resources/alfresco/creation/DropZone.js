@@ -97,6 +97,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_creation_DropZone__postCreate() {
+         /*jshint eqnull:true*/
          if (this.acceptTypes == null)
          {
             this.acceptTypes = ["widget"];
@@ -148,7 +149,7 @@ define(["dojo/_base/declare",
 
          if (this.value != null && this.value !== "")
          {
-            array.forEach(this.value, function(widget, i) {
+            array.forEach(this.value, function(widget) {
                var data = {
                   name: widget.name,
                   module: widget.module,
@@ -167,27 +168,31 @@ define(["dojo/_base/declare",
        * @returns {object[]} The currently available fields.
        */
       getAvailableFields: function alfresco_creation_DropZone__getAvailableFields() {
+         /*jshint eqnull:true*/
          var currentFields = [];
          for (var key in this.previewTarget.map)
          {
-            var currentField = this.previewTarget.map[key];
-            
-            // Get the field name to use as the label (this can change) and the id (which should remain
-            // static once created) to populate an individual option.
-            var fieldName = lang.getObject("updatedConfig.defaultConfig.name", false, currentField.data);
-            if (fieldName == null)
+            if (this.previewTarget.map.hasOwnProperty(key))
             {
-               fieldName = lang.getObject("defaultConfig.name", false, currentField.data);
+               var currentField = this.previewTarget.map[key];
+               
+               // Get the field name to use as the label (this can change) and the id (which should remain
+               // static once created) to populate an individual option.
+               var fieldName = lang.getObject("updatedConfig.defaultConfig.name", false, currentField.data);
+               if (fieldName == null)
+               {
+                  fieldName = lang.getObject("defaultConfig.name", false, currentField.data);
+               }
+               var fieldId = lang.getObject("updatedConfig.defaultConfig.fieldId", false, currentField.data);
+               if (fieldId == null)
+               {
+                  fieldId = lang.getObject("defaultConfig.fieldId", false, currentField.data);
+               }
+               currentFields.push({
+                  label: fieldName,
+                  value: fieldId
+               });
             }
-            var fieldId = lang.getObject("updatedConfig.defaultConfig.fieldId", false, currentField.data);
-            if (fieldId == null)
-            {
-               fieldId = lang.getObject("defaultConfig.fieldId", false, currentField.data);
-            }
-            currentFields.push({
-               label: fieldName,
-               value: fieldId
-            });
          }
          return currentFields;
       },
@@ -209,6 +214,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The event.
        */
       deleteItem: function alfresco_creation_DropZone__deleteItem(evt) {
+         /*jshint eqnull:true*/
          this.alfLog("log", "Delete widget request detected", evt);
          
          if (evt.target != null && 
@@ -255,12 +261,13 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateItem: function alfresco_creation_DropZone__updateItem(payload) {
+         /*jshint eqnull:true,maxstatements:false,maxcomplexity:false*/
          // Check that the updated item belongs to this DropZone instance (this is done to prevent
          // multiple DropZone instances trying to modify the wrong objects)...
          if (payload.node != null)
          {
-            var myNode = array.some(this.previewTarget.getAllNodes(), function(node, i) {
-               return payload.node.id == node.id;
+            var myNode = array.some(this.previewTarget.getAllNodes(), function(node) {
+               return payload.node.id === node.id;
             });
             if (myNode === true)
             {
@@ -294,17 +301,23 @@ define(["dojo/_base/declare",
                   var v;
                   for (var key in payload.updatedConfig.defaultConfig)
                   {
-                     v = payload.updatedConfig.defaultConfig[key];
-                     config.widgetConfig[itemConfigKey][key] = v;
-                     lang.setObject(key, v, config.updatedConfig.defaultConfig);
+                     if (payload.updatedConfig.defaultConfig.hasOwnProperty(key))
+                     {
+                        v = payload.updatedConfig.defaultConfig[key];
+                        config.widgetConfig[itemConfigKey][key] = v;
+                        lang.setObject(key, v, config.updatedConfig.defaultConfig);
+                     }
                   }
 
                   // Set additional config...
                   for (key in payload.updatedConfig.additionalConfig)
                   {
-                     v = payload.updatedConfig.additionalConfig[key];
-                     config.widgetConfig[key] = v;
-                     lang.setObject(key, v, config.updatedConfig.additionalConfig);
+                     if (payload.updatedConfig.additionalConfig.hasOwnProperty(key))
+                     {
+                        v = payload.updatedConfig.additionalConfig[key];
+                        config.widgetConfig[key] = v;
+                        lang.setObject(key, v, config.updatedConfig.additionalConfig);
+                     }
                   }
 
                   array.forEach(config.widgetsForConfig, lang.hitch(this, this.updateWidgetConfig, payload.updatedConfig));
@@ -322,7 +335,7 @@ define(["dojo/_base/declare",
                // Remove any existing widgets associated with the currently selected node,
                // however preserve the DOM so that it can be used as a reference for adding
                // the replacement widget (it will be removed afterwards)...
-               array.forEach(this.previewTarget.getSelectedNodes(), function(node, i) {
+               array.forEach(this.previewTarget.getSelectedNodes(), function(node) {
                   var widget = registry.byNode(node);
                   if (widget)
                   {
@@ -363,6 +376,7 @@ define(["dojo/_base/declare",
        * @param {string} childIdToRemove The ID of the child to remove
        */
       removeReferencesFromParent: function alfresco_creation_DropZone__removeReferencesFromParent(parentId, childIdToRemove) {
+         /*jshint eqnull:true*/
          if (parentId != null)
          {
             // The current item already has a parent - this means that we're doing a move...
@@ -372,8 +386,8 @@ define(["dojo/_base/declare",
             {
                // Filter out the current child...
                // TODO: This should ONLY be done on drop - not drag !!
-               oldParentConfig.children = array.filter(oldParentConfig.children, function(childId, index) {
-                  return childId != childIdToRemove;
+               oldParentConfig.children = array.filter(oldParentConfig.children, function(childId) {
+                  return childId !== childIdToRemove;
                }, this);
             }
             else
@@ -389,6 +403,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       creator: function alfresco_creation_DropZone__creator(item, hint) {
+         /*jshint maxcomplexity:false,maxstatements:false,eqnull:true*/
          this.alfLog("log", "Creating", item, hint);
          
          var node = domConstruct.create("div");
@@ -425,8 +440,11 @@ define(["dojo/_base/declare",
                clonedItem.widgetConfig[itemConfigKey] = {};
                for (var key in clonedItem.defaultConfig)
                {
-                  var v = clonedItem.defaultConfig[key];
-                  clonedItem.widgetConfig[itemConfigKey][key] = v;
+                  if (clonedItem.defaultConfig.hasOwnProperty(key))
+                  {
+                     var v = clonedItem.defaultConfig[key];
+                     clonedItem.widgetConfig[itemConfigKey][key] = v;
+                  }
                }
 
                // Initialise widgets for display...
@@ -462,7 +480,7 @@ define(["dojo/_base/declare",
                if (savedConfig != null && savedConfig.updatedConfig != null)
                {
                   // Update the normal config values with the latest saved data...
-                  array.forEach(clonedItem.originalConfigWidgets, function(widget, i) {
+                  array.forEach(clonedItem.originalConfigWidgets, function(widget) {
                      if (widget.config.name)
                      {
                         this.updateWidgetConfig(savedConfig.updatedConfig, widget, 0);
@@ -506,7 +524,7 @@ define(["dojo/_base/declare",
             }
 
             // Update the pubSubScope so that they can request available fields on the correct pubSubScope...
-            array.forEach(clonedItem.widgetsForConfig, function(widget, index) {
+            array.forEach(clonedItem.widgetsForConfig, function(widget) {
                lang.setObject("config.pubSubScope", this.childPubSubScope, widget);
             }, this);
 
@@ -569,7 +587,8 @@ define(["dojo/_base/declare",
        * @param {object} widget The widget to update
        * @param {number} i The index of the widget
        */
-      updateWidgetConfig: function alfresco_creation_DropZone__updateValues(configToUpdateFrom, widget, i) {
+      updateWidgetConfig: function alfresco_creation_DropZone__updateValues(configToUpdateFrom, widget, /*jshint unused:false*/ i) {
+         /*jshint eqnull:true*/
          if (widget.config.name)
          {
             var updatedValue = lang.getObject(widget.config.name, false, configToUpdateFrom);
@@ -591,6 +610,7 @@ define(["dojo/_base/declare",
        * @return {string} The UUID of the widget associated with this DropZone.
        */
       getMyUuid: function alfresco_creation_DropZone__getMyUuid() {
+         /*jshint eqnull:true*/
          // Update the configuration to set the ID of the parent...
          // The ID is either that of the parent DropZoneWrapper or the actual ID if there is no DropZoneWrapper
          // There won't be a DropZoneWrapper if this is the root DropZone (e.g. one created by a DropZoneFormControl)...
@@ -609,7 +629,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} e The selection event
        */
-      onWidgetSelected: function alfresco_creation_DropZone__onWidgetSelected(e) {
+      onWidgetSelected: function alfresco_creation_DropZone__onWidgetSelected(/*jshint unused:false*/ e) {
+         /*jshint eqnull:true*/
          var selectedNodes = this.previewTarget.getSelectedNodes();
          if (selectedNodes.length > 0 && selectedNodes[0] != null)
          {
@@ -631,6 +652,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       refreshChildren: function alfresco_creation_DropZone__refreshChildren() {
+         /*jshint eqnull:true*/
          this.alfLog("log", "Widgets updated");
          
          var myUuid = this.getMyUuid();
@@ -656,7 +678,7 @@ define(["dojo/_base/declare",
          // matches the current order of the nodes representing each data item...
          var items = [];
          var updatedChildren = [];
-         array.forEach(myConfig.children, function (item, index) {
+         array.forEach(myConfig.children, function (item) {
             var itemData = this.alfGetData(item);
             var id = lang.getObject("updatedConfig.defaultConfig.fieldId", false, itemData);
             if (id == null)

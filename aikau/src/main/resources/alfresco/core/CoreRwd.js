@@ -68,6 +68,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_core_CoreRwd__postCreate() {
+         /*jshint eqnull:true*/
          this.inherited(arguments);
          
          if (this.domNode != null && (this.minRwdWidth != null || this.maxRwdWidth != null))
@@ -88,6 +89,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       applyRwd: function alfresco_core_CoreRwd__applyRwd() {
+         /*jshint eqnull:true*/
          var winBox = win.getBox();
          if ((this.minRwdWidth == null && winBox.w < this.maxRwdWidth) ||
              (this.maxRwdWidth == null && winBox.w > this.minRwdWidth) ||

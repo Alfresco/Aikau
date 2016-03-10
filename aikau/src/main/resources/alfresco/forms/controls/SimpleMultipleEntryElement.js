@@ -43,6 +43,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       determineKeyAndValue: function alfresco_forms_controls_SimpleMultipleEntryElement__determineKeyAndValue() {
+         /*jshint eqnull:true*/
          this.alfLog("log", "DetermineKeyAndValue", this);
          if (ObjectTypeUtils.isString(this.elementConfig))
          {
@@ -74,7 +75,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      setFormValue: function alfresco_forms_controls_SimpleMultipleEntryElement__setFormValue(value) {
+      setFormValue: function alfresco_forms_controls_SimpleMultipleEntryElement__setFormValue(/*jshint unused:false*/ value) {
          this.form.setValue({
             value: this.elementValue
          });
@@ -87,6 +88,7 @@ define(["dojo/_base/declare",
        * @returns {object[]}
        */
       getFormWidgets: function alfresco_forms_controls_SimpleMultipleEntryElement__getFormWidgets() {
+         /*jshint eqnull:true*/
          if (this.widgets != null)
          {
             return this.widgets;
@@ -115,6 +117,7 @@ define(["dojo/_base/declare",
        * @returns {object}
        */
       getValue: function alfresco_forms_controls_SimpleMultipleEntryElement__getValue() {
+         /*jshint eqnull:true*/
          var value = "";
          if (this.form != null) 
          {

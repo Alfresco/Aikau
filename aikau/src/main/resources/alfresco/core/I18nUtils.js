@@ -34,7 +34,7 @@ define(["alfresco/core/Core"], function(AlfCore){
     * @param key
     * @returns {*}
     */
-   function msg(i18nScope, key){
+   function msg(i18nScope, /*jshint unused:false*/ key){
       var msgArgs = [];
       if (arguments.length > 1)
       {

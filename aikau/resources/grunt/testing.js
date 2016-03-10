@@ -12,6 +12,7 @@ var networkInterfaces = os.networkInterfaces(),
 interfaceNames.forEach(function(interfaceName) {
    var lowerName = interfaceName && interfaceName.toLowerCase();
    networkInterfaces[interfaceName].forEach(function(interface) {
+      /*jshint noempty:false*/
       if (interface.family === "IPv4" && !interface.internal) {
          if (!lowerName) {
             // Ignore unnamed interfaces (for the moment)

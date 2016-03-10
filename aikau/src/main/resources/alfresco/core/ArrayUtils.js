@@ -24,8 +24,7 @@
  * @module alfresco/core/ArrayUtils
  * @author Dave Draper
  */
-define(["dojo/_base/lang"], 
-        function(lang) {
+define([], function() {
    
    return {
       
@@ -82,6 +81,7 @@ define(["dojo/_base/lang"],
        * @returns {integer} -1 if not found, other wise the index
        */
       arrayIndex: function alfresco_core_ArrayUtils__arrayIndex(arr, value, attr) {
+         /*jshint eqeqeq:false*/
          if (arr)
          {
             for (var i = 0, ii = arr.length; i < ii; i++)

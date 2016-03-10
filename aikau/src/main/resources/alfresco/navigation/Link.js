@@ -100,7 +100,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_navigation_Link__postMixInProperties() {
-         if (this.label != null && this.label != "")
+         /*jshint eqnull:true*/
+         if (this.label != null && this.label !== "")
          {
             this.label = this.message(this.label);
          }
@@ -109,7 +110,7 @@ define(["dojo/_base/declare",
             this.label = "";
             this.alfLog("warn", "No sensible 'label' attribute set for a link", this);
          }
-         if (this.title != null && this.title != "")
+         if (this.title != null && this.title !== "")
          {
             this.title = this.message(this.title);
          }
@@ -122,7 +123,7 @@ define(["dojo/_base/declare",
          {
             this.publishPayload = {};
          }
-         if (this.publishTopic == null || this.publishTopic == "")
+         if (this.publishTopic == null || this.publishTopic === "")
          {
             this.alfLog("warn", "A link has been created without a 'publishTopic' attribute, clicking it will have no effect", this);
          }
@@ -135,6 +136,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onClick: function alfresco_navigation_Link__onClick(evt) {
+         /*jshint eqnull:true*/
          event.stop(evt);
          if (this.publishTopic != null)
          {

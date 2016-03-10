@@ -608,7 +608,7 @@ define(["alfresco/core/CoreXhr",
        * @param {object} Contains info about the file and its request.
        */
       startFileUpload: function alfresco_services__BaseUploadService__startFileUpload(fileInfo) {
-         /*jshint maxstatements:false*/
+         /*jshint maxstatements:false,maxcomplexity:false*/
 
          // Ensure we only upload the maximum allowed at a time
          if (this._numUploadsInProgress === this.maxSimultaneousUploads) {

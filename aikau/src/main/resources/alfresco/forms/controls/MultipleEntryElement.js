@@ -181,7 +181,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      setFormValue: function alfresco_forms_controls_MultipleEntryElement__setFormValue(value) {
+      setFormValue: function alfresco_forms_controls_MultipleEntryElement__setFormValue(/*jshint unused:false*/ value) {
          this.form.setValue(this.elementValue);
       },
       

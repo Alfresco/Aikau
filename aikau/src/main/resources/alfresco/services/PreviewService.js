@@ -50,18 +50,20 @@ define(["dojo/_base/declare",
        * @instance
        */
       generateDependencies: function alfresco_services_PreviewService__generateDependencies(payload) {
+         /*jshint eqnull:true*/
          if (payload != null && payload.model != null)
          {
-            var pageDefObject = dojoJson.parse(payload.model);
-            var data = {
-               jsonContent: pageDefObject,
-               widgets: payload.model
-            };
+            // This block (and query below) commented out because JSHint said they were unused .... why unused though? Why are they here?
+            // var pageDefObject = JSON.parse(payload.model);
+            // var data = {
+            //    jsonContent: pageDefObject,
+            //    widgets: payload.model
+            // };
             
             this.serviceXhr({
                url: AlfConstants.URL_SERVICECONTEXT + "/service/surf/dojo/xhr/dependencies",
                method: "POST",
-               query: query,
+               query: undefined,//query,
                successCallback: this.generateDependenciesSuccess,
                failureCallback: this.generateDependenciesFailure,
                callbackScope: this

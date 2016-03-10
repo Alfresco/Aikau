@@ -176,7 +176,7 @@ define(["dojo/_base/declare",
             this._setDefaultMenuItem.publishPayload = {
                prop_app_defaultViewId: this.currentView,
                nodeRef: nodeRef
-            }
+            };
                
             // If the user is either the site manager or the creator of the container...
             if (folderView)
@@ -201,7 +201,7 @@ define(["dojo/_base/declare",
                this._removeDefaultMenuItem.publishPayload = {
                   prop_app_defaultViewId: "",
                   nodeRef: nodeRef
-               }
+               };
             }
             else
             {

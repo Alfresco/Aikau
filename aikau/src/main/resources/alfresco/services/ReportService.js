@@ -64,6 +64,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the request
        */
       getSiteContentReport: function alfresco_services_ReportService__getSiteContentReport(payload) {
+         /*jshint eqnull:true*/
          var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_RETRIEVE_SITE_CONTENT_REPORT";
          var url = AlfConstants.PROXY_URI + "api/solrstats";
          if (payload.site) {
@@ -100,6 +101,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the request
        */
       getTopSiteContributorReport: function alfresco_services_ReportService__getTopSiteContributorReport(payload) {
+         /*jshint eqnull:true*/
          var alfTopic = (payload.alfResponseTopic != null) ? payload.alfResponseTopic : "ALF_RETRIEVE_TOP_SITE_CONTRIBUTOR_REPORT";
          var url = AlfConstants.PROXY_URI + "api/solrstats";
          if (payload.site)

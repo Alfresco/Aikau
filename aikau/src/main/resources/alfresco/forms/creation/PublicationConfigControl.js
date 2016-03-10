@@ -45,7 +45,7 @@ define(["alfresco/forms/controls/MultipleEntryFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_creation_PublicationConfigControl__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_creation_PublicationConfigControl__createFormControl(config, /*jshint unused:false*/ domNode) {
          return new PublicationConfigCreator(config);
       }
    });

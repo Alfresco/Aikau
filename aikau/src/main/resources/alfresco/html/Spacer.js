@@ -89,6 +89,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_html_Spacer__postCreate() {
+         /*jshint eqnull:true*/
          if (this.additionalCssClasses != null)
          {
             domClass.add(this.domNode, this.additionalCssClasses);

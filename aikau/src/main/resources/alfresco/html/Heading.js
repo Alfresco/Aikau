@@ -151,6 +151,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_html_Label__postMixInProperties() {
+         /*jshint eqnull:true*/
          if (this.subscriptionTopic != null && lang.trim(this.subscriptionTopic) !== "")
          {
             this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.onHeadingUpdate));
@@ -163,6 +164,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the label update
        */
       onHeadingUpdate: function alfresco_html_Heading__onHeadingUpdate(payload) {
+         /*jshint eqnull:true*/
          var update = lang.getObject("label", false, payload);
          if (update != null)
          {

@@ -38,9 +38,8 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/MultipleEntryElementWrapper.html",
         "alfresco/core/Core",
         "dojo/_base/array",
-        "dojo/dom-class",
-        "dijit/focus"], 
-        function(declare, _Widget, _Templated, _OnDijitClickMixin, _FocusMixin, template, AlfCore, array, domClass, focusUtil) {
+        "dojo/dom-class"], 
+        function(declare, _Widget, _Templated, _OnDijitClickMixin, _FocusMixin, template, AlfCore, array, domClass) {
    
    return declare([_Widget, _Templated, _OnDijitClickMixin, _FocusMixin, AlfCore], {
       
@@ -201,22 +200,23 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_forms_controls_MultipleEntryElementWrapper__postMixInProperties() {
-         if (this.saveEntryImageSrc == null || this.saveEntryImageSrc == "")
+         /*jshint eqnull:true*/
+         if (this.saveEntryImageSrc == null || this.saveEntryImageSrc === "")
          {
             this.saveEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.saveEntryImage);
          }
          this.saveEntryAltText = this.message(this.saveEntryAltText);
-         if (this.cancelEditImageSrc == null || this.cancelEditImageSrc == "")
+         if (this.cancelEditImageSrc == null || this.cancelEditImageSrc === "")
          {
             this.cancelEditImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.cancelEditImage);
          }
          this.cancelEditAltText = this.message(this.cancelEditAltText);
-         if (this.deleteEntryImageSrc == null || this.deleteEntryImageSrc == "")
+         if (this.deleteEntryImageSrc == null || this.deleteEntryImageSrc === "")
          {
             this.deleteEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.deleteEntryImage);
          }
          this.deleteEntryAltText = this.message(this.deleteEntryAltText);
-         if (this.editEntryImageSrc == null || this.editEntryImageSrc == "")
+         if (this.editEntryImageSrc == null || this.editEntryImageSrc === "")
          {
             this.editEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.editEntryImage);
          }
@@ -236,6 +236,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_forms_controls_MultipleEntryElementWrapper__postCreate() {
+         /*jshint eqnull:true*/
          
          // Check that a widget has been provided and then add it into the correct node...
          if (this.widget != null)
@@ -294,7 +295,7 @@ define(["dojo/_base/declare",
          this.alfLog("log", "Edit element clicked", {});
          
          // Switch the widget into edit mode...
-         if (this.widget && typeof this.widget.editMode == "function")
+         if (this.widget && typeof this.widget.editMode === "function")
          {
             this.widget.editMode(true);
             
@@ -321,7 +322,7 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      deleteElement: function alfresco_forms_controls_MultipleEntryElementWrapper__deleteElement(e) {
+      deleteElement: function alfresco_forms_controls_MultipleEntryElementWrapper__deleteElement(/*jshint unused:false*/ e) {
          this.alfLog("log", "Delete element clicked", {});
          
          // When the delete button is clicked the wrapper should be removed and it's data should also be removed from

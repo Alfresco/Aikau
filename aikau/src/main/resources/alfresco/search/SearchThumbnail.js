@@ -28,9 +28,8 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Thumbnail",
-        "alfresco/search/SearchThumbnailMixin",
-        "dojo/dom-class"], 
-        function(declare, Thumbnail, SearchThumbnailMixin, domClass) {
+        "alfresco/search/SearchThumbnailMixin"], 
+        function(declare, Thumbnail, SearchThumbnailMixin) {
 
    return declare([Thumbnail, SearchThumbnailMixin], {
 

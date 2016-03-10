@@ -57,8 +57,9 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       allWidgetsProcessed: function alfresco_layout_AbsoluteCenterWidgets__allWidgetsProcessed(widgets) {
+         /*jshint eqnull:true*/
          var heightRequired = 0;
-         array.forEach(widgets, function(widget, index) {
+         array.forEach(widgets, function(widget) {
             var computedStyle = domStyle.getComputedStyle(widget.domNode);
             var output = domGeom.getMarginBox(widget.domNode, computedStyle);
             heightRequired += output.h;

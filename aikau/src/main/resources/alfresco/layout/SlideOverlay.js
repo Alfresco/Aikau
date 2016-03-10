@@ -141,10 +141,10 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_layout_SlideOverlay__postCreate() {
          
          // Set up all the subscription and event handlers...
-         array.forEach(this.showTopics, function(topic, i) {
+         array.forEach(this.showTopics, function(topic) {
             this.alfSubscribe(topic, lang.hitch(this, "showOverlay"));
          }, this);
-         array.forEach(this.hideTopics, function(topic, i) {
+         array.forEach(this.hideTopics, function(topic) {
             this.alfSubscribe(topic, lang.hitch(this, "hideOverlay"));
          }, this);
          array.forEach(this.showEvents, function(eventName) {
@@ -153,7 +153,7 @@ define(["dojo/_base/declare",
          array.forEach(this.hideEvents, function(eventName) {
             on(this.domNode, eventName, lang.hitch(this, "hideOverlay"));
          }, this);
-         array.forEach(this.adjustHeightTopics, function(topic, i) {
+         array.forEach(this.adjustHeightTopics, function(topic) {
             this.alfSubscribe(topic, lang.hitch(this, "adjustHeight"));
          }, this);
          array.forEach(this.adjustHeightEvents, function(eventName) {
@@ -186,11 +186,11 @@ define(["dojo/_base/declare",
        * @param {object} widgetConfig
        * @param {number} index
        */
-      processWidget: function alfresco_layout_SlideOverlay__processWidget(rootNode, widgetConfig, index) {
+      processWidget: function alfresco_layout_SlideOverlay__processWidget(rootNode, widgetConfig, /*jshint unused:false*/ index) {
          if (this.filterWidget(widgetConfig))
          {
             var domNode = null;
-            if (widgetConfig.align == "overlay")
+            if (widgetConfig.align === "overlay")
             {
                domNode = this.createWidgetDomNode(widgetConfig, this.overlayNode, widgetConfig.className);
             }

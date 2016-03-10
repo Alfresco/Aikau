@@ -24,11 +24,8 @@
  */
 define(["alfresco/forms/controls/MultipleEntryCreator",
         "alfresco/forms/creation/FormRulesConfigCreatorElement",
-        "dojo/_base/declare",
-        "dojo/_base/array",
-        "dijit/registry",
-        "dojo/_base/lang"], 
-        function(MultipleEntryCreator, FormRulesConfigCreatorElement, declare, array, registry, lang) {
+        "dojo/_base/declare"], 
+        function(MultipleEntryCreator, FormRulesConfigCreatorElement, declare) {
    
    return declare([MultipleEntryCreator], {
       /**

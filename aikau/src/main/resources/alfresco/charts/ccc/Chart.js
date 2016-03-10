@@ -1,3 +1,5 @@
+/*globals pvc*/
+
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -329,11 +331,14 @@ define(["dojo/_base/declare",
                config.colors = styles.backgroundColor;
 
                // Set any additional chart options
-               if (typeof this.chartConfig == "object")
+               if (typeof this.chartConfig === "object")
                {
                   for (var p in this.chartConfig)
                   {
-                     config[p] = this.chartConfig[p];
+                     if (this.chartConfig.hasOwnProperty(p))
+                     {
+                        config[p] = this.chartConfig[p];
+                     }
                   }
                }
 
@@ -455,9 +460,9 @@ define(["dojo/_base/declare",
                try {
                   var style = domStyle.getComputedStyle(this.domNode);
                   var s = domGeom.getContentBox(this.domNode, style);
-                  var w = (s.w + "").split('.')[0];
-                  w = w.split('px')[0];
-                  w = parseInt(w);
+                  var w = (s.w + "").split(".")[0];
+                  w = w.split("px")[0];
+                  w = parseInt(w, 10);
                   return w;
                }
                catch(e) {
@@ -479,7 +484,7 @@ define(["dojo/_base/declare",
              *
              * @param payload {object}
              */
-            onDataLoadFailure: function(payload){
+            onDataLoadFailure: function(/*jshint unused:false*/payload){
                this.showData({}, {});
             }
 

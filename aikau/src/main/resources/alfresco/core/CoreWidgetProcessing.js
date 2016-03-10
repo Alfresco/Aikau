@@ -316,6 +316,7 @@ define(["dojo/_base/declare",
        * @param {boolean} negate Whether or not to negate the evaluated rule
        */
       setupVisibilityConfigProcessing: function alfresco_core_CoreWidgetProcessing__setupVisibilityConfigProcessing(widget, negate) {
+         /*jshint eqnull:true*/
          // Set a default for negation if not provided...
          negate = (negate != null) ? negate : false;
 
@@ -475,6 +476,7 @@ define(["dojo/_base/declare",
        * @deprecated Since 1.0.44 - See [setupVisibilityConfigProcessing]{@link module:alfresco/core/CoreWidgetProcessing#setupVisibilityConfigProcessing} source code for current technique for evaluating visibility
        */
       visibilityRuleComparator: function alfresco_core_CoreWidgetProcessing__visibilityRuleComparator(targetValue, widget, useCurrentItem, currValue) {
+         /*jshint eqnull:true*/
          if (targetValue == null && currValue == null)
          {
             return true;
@@ -672,7 +674,7 @@ define(["dojo/_base/declare",
          // The use of indirection is done so modules will not rolled into a build (should we do one)
          var requires = [widget.name];
          require(requires, function(WidgetType) {
-            // jshint maxcomplexity:false
+            /* jshint maxcomplexity:false,maxstatements:false*/
             // Just to be sure, check that no widget doesn't already exist with that id and
             // if it does, generate a new one...
             if (typeof WidgetType === "function")

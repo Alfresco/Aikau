@@ -59,7 +59,8 @@ define(["alfresco/forms/controls/BaseFormControl",
       /**
        * @instance
        */
-      createFormControl: function alfresco_forms_controls_DropZoneControl__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_DropZoneControl__createFormControl(config, /*jshint unused:false*/ domNode) {
+         /*jshint eqnull:true*/
          // Set the value in the data model (this is so that it can be updated with dropped child references)
          // ...see DropZone.creator() function...
          this.alfSetData(config.id, (config.value != null) ? config.value : {});
@@ -81,6 +82,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @returns {string} The widgets defined in the preview pane
        */
       onUpdateValue: function alfresco_forms_controls_DropZoneControl__onUpdateValue() {
+         /*jshint eqnull:true*/
          this.alfLog("log", "Updating DropZoneControl value...");
          var value = {
             editorConfig: "",
@@ -130,7 +132,8 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @param {string} child The UUID of the child to retrieve the configuration for
        * @param {number} index The index of the child in the parent array
        */
-      processChildren: function alfresco_forms_controls_DropZoneControl__processChildren(childData, child, index) {
+      processChildren: function alfresco_forms_controls_DropZoneControl__processChildren(childData, child, /*jshint unused:false*/ index) {
+         /*jshint eqnull:true*/
          var childConfig = this.alfGetData(child);
          var subChildData = [];
          array.forEach(childConfig.children, lang.hitch(this, "processChildren", subChildData));

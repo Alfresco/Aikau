@@ -202,6 +202,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       renderData: function alfresco_lists_views_layout___MultiItemRendererMixin__renderData() {
+         /*jshint eqnull:true*/
          
          // Ensure that an array is created to hold the root widget subscriptions...
          if (!this.rootWidgetSubscriptions)
@@ -295,6 +296,7 @@ define(["dojo/_base/declare",
        * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
       allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets, processWidgetsId) {
+         /*jshint eqnull:true*/
          if (!processWidgetsId || processWidgetsId === "RENDER_APPENDIX_SENTINEL")
          {
             // Push the processed widgets for the last item into the array of rendered widgets...

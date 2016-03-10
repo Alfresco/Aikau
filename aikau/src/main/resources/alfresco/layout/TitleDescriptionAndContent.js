@@ -78,11 +78,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_layout_TitleDescriptionAndContent__postMixInProperties() {
-         if (this.title != "")
+         if (this.title !== "")
          {
             this.title = this.message(this.title);
          }
-         if (this.description != "")
+         if (this.description !== "")
          {
             this.description = this.message(this.description);
          }
@@ -94,6 +94,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_layout_TitleDescriptionAndContent__postCreate() {
+         /*jshint eqnull:true*/
          if (this.widgets != null)
          {
             this.processWidgets(this.widgets, this.contentNode);

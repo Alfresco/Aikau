@@ -245,10 +245,10 @@ define(["dojo/_base/declare",
          {
             // Find the the template...
             var loadedTemplate;
-            array.forEach(parameters.config.templates, function(template) {
-               if (template.name === parameters.object)
+            array.forEach(parameters.config.templates, function(nextTemplate) {
+               if (nextTemplate.name === parameters.object)
                {
-                  var parsedContent = JSON.parse(template.content);
+                  var parsedContent = JSON.parse(nextTemplate.content);
                   loadedTemplate = parsedContent.widgets[0];
                }
             });

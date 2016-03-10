@@ -212,11 +212,12 @@ define(["dojo/_base/declare",
                }, function(response) {
 
                   // Handle authentication failure (401) or Session timeout
+                  var callbackScope;
                   if (response.response && response.response.status === 401)
                   {
                      if (typeof config.authenticationFailureCallback === "function")
                      {
-                        var callbackScope = config.failureCallbackScope || config.callbackScope || _this;
+                        callbackScope = config.failureCallbackScope || config.callbackScope || _this;
                         config.authenticationFailureCallback.call(callbackScope, response, config);
                      }
                      else
@@ -261,7 +262,7 @@ define(["dojo/_base/declare",
                   }
                   if (typeof config.failureCallback === "function")
                   {
-                     var callbackScope = config.failureCallbackScope || config.callbackScope || _this;
+                     callbackScope = config.failureCallbackScope || config.callbackScope || _this;
                      config.failureCallback.call(callbackScope, response, config);
                   }
                   else
@@ -427,8 +428,8 @@ define(["dojo/_base/declare",
          // Build up the Accept-Language header value
          var languages = navigator.languages;
          if (languages) {
-            languages = array.map(languages, function(lang) {
-               return lang.toLowerCase();
+            languages = array.map(languages, function(nextLang) {
+               return nextLang.toLowerCase();
             }).join(", ");
          } else {
             languages = (navigator.language || navigator.userLanguage).toLowerCase();

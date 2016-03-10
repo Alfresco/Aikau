@@ -58,13 +58,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_documentlibrary_views_AlfSearchListView_NoSearchResultsTemplate__postCreate() {
+         /*jshint eqnull:true*/
          if (this.title != null)
          {
             this.titleNode.innerHTML = this.message(this.title);
          }
          if (this.suggestions != null)
          {
-            array.forEach(this.suggestions, function(suggestion, index) {
+            array.forEach(this.suggestions, function(suggestion) {
                domConstruct.create("li", {
                   innerHTML: this.message(suggestion),
                   className: "suggestion"

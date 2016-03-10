@@ -83,7 +83,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @returns {object} A new alfresco/forms/controls/MultipleEntryCreator
        */
-      createFormControl: function alfresco_forms_controls_MultipleEntryFormControl__createFormControl(config, domNode) {
+      createFormControl: function alfresco_forms_controls_MultipleEntryFormControl__createFormControl(config, /*jshint unused:false*/ domNode) {
          return this.createWidget({
             name: "alfresco/forms/controls/MultipleEntryCreator",
             config: config
@@ -114,7 +114,7 @@ define(["alfresco/forms/controls/BaseFormControl",
          // same scope so that they can modify their appearance/behaviour as necessary)...
          if (this.wrappedWidget)
          {
-            aspect.after(this.wrappedWidget, "validationRequired", function(deferred) {
+            aspect.after(this.wrappedWidget, "validationRequired", function(/*jshint unused:false*/ deferred) {
                _this.alfLog("log", "Wrapper 'validationRequired' function processed");
                _this.validate();
             });

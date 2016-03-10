@@ -79,6 +79,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_FileType__postMixInProperties() {
+         /*jshint eqnull:true*/
          // Mix the custom type mappings into the default type mappings
          var typeMappings = this.defaultTypeMappings;
          if (this.customTypeMappings != null)
@@ -109,6 +110,7 @@ define(["dojo/_base/declare",
        * @returns {string} The string representing the type.
        */
       getImageType: function alfresco_renderers_FileType__getImageType(typeMappings) {
+         /*jshint eqnull:true*/
          var type = "file";
          var itemType = lang.getObject("node.type", false, this.currentItem);
          if (itemType != null && typeMappings[itemType] != null)
@@ -125,10 +127,11 @@ define(["dojo/_base/declare",
        * @returns {string} The extension for the current item
        */
       getExtension: function alfresco_renderers_FileType__getExtensions() {
+         /*jshint eqnull:true*/
          var extn = "";
          if (this.currentItem != null &&
              this.currentItem.fileName != null &&
-             this.currentItem.fileName.lastIndexOf(".") != -1)
+             this.currentItem.fileName.lastIndexOf(".") !== -1)
          {
             extn = this.currentItem.fileName.substring(this.currentItem.fileName.lastIndexOf(".") + 1).toLowerCase();
          }
@@ -165,17 +168,17 @@ define(["dojo/_base/declare",
        */
       getImageSize: function alfresco_renderers_FileType__getImageSize() {
          var size = "48";
-         if (this.size == "large")
+         if (this.size === "large")
          {
             // Leave as default, no action required.
          }
-         else if (this.size == "medium")
+         else if (this.size === "medium")
          {
             size = "32";
          }
-         else if (this.size == "small")
+         else if (this.size === "small")
          {
-            size = "16"
+            size = "16";
          }
          return size;
       },

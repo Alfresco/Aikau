@@ -34,9 +34,8 @@ define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarItem",
         "alfresco/menus/_AlfDisplayFilterMixin",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
-        "dojo/_base/lang",
-        "dojo/_base/array"], 
-        function(declare, AlfMenuBarItem, _AlfDisplayFilterMixin, _AlfDocumentListTopicMixin, lang, array) {
+        "dojo/_base/lang"], 
+        function(declare, AlfMenuBarItem, _AlfDisplayFilterMixin, _AlfDocumentListTopicMixin, lang) {
    
    return declare([AlfMenuBarItem, _AlfDisplayFilterMixin, _AlfDocumentListTopicMixin], {
       
