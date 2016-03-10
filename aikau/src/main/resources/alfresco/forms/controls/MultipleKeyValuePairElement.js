@@ -23,7 +23,10 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/forms/controls/MultipleEntryElement"], 
+        "alfresco/forms/controls/MultipleEntryElement",
+
+        // Below classes needed for build purposes only
+        "alfresco/forms/controls/DojoValidationTextBox"], 
         function(declare, MultipleEntryElement) {
    
    return declare([MultipleEntryElement], {
