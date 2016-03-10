@@ -1,4 +1,5 @@
 /*globals Alfresco,Spinner*/
+/*jshint esnext:false,es3:false,esversion:6*/
 // TODO Strip these external dependencies
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.

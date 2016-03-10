@@ -1,3 +1,4 @@
+/*jshint esnext:false,es3:false,esversion:6*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
