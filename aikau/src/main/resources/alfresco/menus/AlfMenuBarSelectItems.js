@@ -39,6 +39,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/AlfMenuBarSelectItems.properties"}]
+       * @since 1.0.59
        */
       i18nRequirements: [{i18nFile: "./i18n/AlfMenuBarSelectItems.properties"}],
    
