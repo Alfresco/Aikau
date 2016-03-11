@@ -1,6 +1,14 @@
 model.jsonModel = {
    services: [
-      "alfresco/services/ErrorReporter"
+      {
+         name: "alfresco/services/LoggingService",
+         config: {
+            loggingPreferences: {
+               enabled: true,
+               all: true
+            }
+         }
+      }
    ],
    widgets: [
       {
@@ -283,10 +291,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
