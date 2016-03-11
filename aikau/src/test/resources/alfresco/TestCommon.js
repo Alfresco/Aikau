@@ -28,6 +28,7 @@ define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
         "intern/dojo/node!os",
         "intern/dojo/node!properties-reader",
+        "intern/dojo/node!process",
         "intern/dojo/lang",
         "intern",
         "config/Config",
@@ -35,8 +36,15 @@ define(["intern/dojo/node!fs",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/chai!assert",
         "intern/dojo/node!leadfoot/keys",
-        "lodash"], 
-        function(fs, http, os, propertiesReader, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
+        "lodash",
+        "safe-json-serialiser"], 
+        function(fs, http, os, propertiesReader, process, lang, intern, Config, Promise, pollUntil, assert, keys, _, safeJson) {
+
+   var logFilename = process.cwd() + "/test_reports/TestCommon.log";
+   function logToFile(message) {
+      var timestamp = "[" + (new Date()).toISOString() + "] ";
+      fs.appendFileSync(logFilename, timestamp + message + os.EOL, "utf8");
+   }
 
    return {
 
