@@ -28,6 +28,7 @@ define(["intern/dojo/node!fs",
         "intern/dojo/node!http",
         "intern/dojo/node!os",
         "intern/dojo/node!properties-reader",
+        "intern/dojo/node!process",
         "intern/dojo/lang",
         "intern",
         "config/Config",
@@ -35,8 +36,15 @@ define(["intern/dojo/node!fs",
         "intern/dojo/node!leadfoot/helpers/pollUntil",
         "intern/chai!assert",
         "intern/dojo/node!leadfoot/keys",
-        "lodash"], 
-        function(fs, http, os, propertiesReader, lang, intern, Config, Promise, pollUntil, assert, keys, _) {
+        "lodash",
+        "safe-json-serialiser"], 
+        function(fs, http, os, propertiesReader, process, lang, intern, Config, Promise, pollUntil, assert, keys, _, safeJson) {
+
+   var logFilename = process.cwd() + "/test_reports/TestCommon.log";
+   function logToFile(message) {
+      var timestamp = "[" + (new Date()).toISOString() + "] ";
+      fs.appendFileSync(logFilename, timestamp + message + os.EOL, "utf8");
+   }
 
    return {
 
@@ -225,12 +233,17 @@ define(["intern/dojo/node!fs",
             // Parse arguments
             var argsArray = Array.prototype.slice.call(arguments),
                description,
-               logFocusedElement;
+               logFocusedElement,
+               thisTestName;
             argsArray.forEach(function(arg) {
                if (typeof arg === "string") {
                   description = arg;
                } else if (typeof arg === "boolean") {
                   logFocusedElement = arg;
+               } else if (typeof arg === "object") {
+                  description = arg.desc || undefined;
+                  logFocusedElement = arg.logFocused || false;
+                  thisTestName = arg.testName || undefined;
                }
             });
 
@@ -243,7 +256,10 @@ define(["intern/dojo/node!fs",
                      .toLowerCase() : namePart.toUpperCase();
                })
                .join("_"),
-               screenshotName = safeBrowserName + "-" + testName + "-" + command.session.screenieIndex++ + ".png",
+               nonWordRegex = /[^a-z0-9]+/gi,
+               suiteName = testName.replace(nonWordRegex, "_") + "--", // Don't ask
+               thisTestName = (thisTestName && thisTestName.replace(nonWordRegex, "_") + "--") || "",
+               screenshotName = safeBrowserName + "--" + suiteName + thisTestName + command.session.screenieIndex++ + ".png",
                screenshotPath = "src/test/screenshots/" + screenshotName,
                infoId = "TestCommon__webpage-info",
                dfd = new Promise.Deferred();

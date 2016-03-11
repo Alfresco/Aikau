@@ -409,7 +409,7 @@ define([
             return input;
          }
          return input.split(" ").map(function(word) {
-            return word[0].toUpperCase() + word.substr(1).toLowerCase()
+            return word[0].toUpperCase() + word.substr(1).toLowerCase();
          }).join(" ");
       },
 
@@ -479,7 +479,7 @@ define([
        * @param {Object} testOrSuite The test or suite
        * @returns {Object} The environment names with two properties "full" and "short"
        */
-      getEnv: function(testOrSuite, shortened) {
+      getEnv: function(testOrSuite, /*jshint unused:false*/ shortened) {
          try {
             var env = (testOrSuite.remote && testOrSuite.remote.environmentType),
                shortName = "Unknown",
@@ -791,6 +791,7 @@ define([
        * @instance
        */
       outputFinalResults: function() {
+         /*jshint maxstatements:false*/
 
          // Function variables
          var loggedSectionTitle = false;
