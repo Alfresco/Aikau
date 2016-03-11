@@ -1,12 +1,24 @@
-.alf-checkable-menu-item {
-  height: 12px;
-  width: 12px;
+.@{alfresco} {
+
+   .dijitMenu {
+      .alfresco-menus-AlfCheckableMenuItem {
+         &__icon {
+            height: 16px;
+            width: 16px;
+         }
+
+         &--checked {
+            .alfresco-menus-AlfCheckableMenuItem {
+               &__icon{
+                  background-repeat: no-repeat;
+                  background-position: 4px 4px;
+                  background-image: url("./images/12x12-selected-icon.png");
+               }
+            }
+         }
+      }
+   }
 }
 
-.@{alfresco} .dijitMenu .alf-checkable-menu-item.alf-selected-icon {
-   background: url("./images/12x12-selected-icon.png");
-   background-repeat: no-repeat;
-   background-position: 4px 4px;
-   height: 16px;
-   width: 16px;
-}
+
+
