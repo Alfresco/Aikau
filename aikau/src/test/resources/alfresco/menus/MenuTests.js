@@ -51,8 +51,10 @@ define(["intern!object",
             popup: TestCommon.getTestSelector(menuBarPopupSelectors, "popup", ["DROP_DOWN_MENU_3"])
          },
          dropDown4: {
+            label: TestCommon.getTestSelector(menuBarPopupSelectors, "label", ["DROP_DOWN_MENU_4"]),
             menuItem: TestCommon.getTestSelector(menuBarPopupSelectors, "menu", ["DROP_DOWN_MENU_4"]),
-            popup: TestCommon.getTestSelector(menuBarPopupSelectors, "popup", ["DROP_DOWN_MENU_4"])
+            popup: TestCommon.getTestSelector(menuBarPopupSelectors, "popup", ["DROP_DOWN_MENU_4"]),
+            icon: TestCommon.getTestSelector(menuBarPopupSelectors, "icon", ["DROP_DOWN_MENU_4"])
          }
       },
       cascadingMenus: {
@@ -69,13 +71,16 @@ define(["intern!object",
          menuItem1: {
             label: TestCommon.getTestSelector(menuItemSelectors, "label", ["MENU_ITEM_1"])
          },
+         menuItem10: {
+            label: TestCommon.getTestSelector(menuItemSelectors, "label", ["MENU_ITEM_10"]),
+            icon: TestCommon.getTestSelector(menuItemSelectors, "icon", ["MENU_ITEM_10"])
+         },
          menuItem13: {
             label: TestCommon.getTestSelector(menuItemSelectors, "label", ["MENU_ITEM_13"])
          }
       }
    };
 
-   var alfPause = 250;
    registerSuite(function(){
       var browser;
 
@@ -425,8 +430,6 @@ define(["intern!object",
                .click()
             .end()
 
-            // TODO click menu item
-
             .getLastPublish("KEYBOARD_CLICK")
                .then(function(payload) {
                   assert.propertyVal(payload, "item", "MENU_ITEM_13");
@@ -439,6 +442,30 @@ define(["intern!object",
                .then(function(href) {
                   assert.equal(href, "/aikau/page/MENU_ITEM_7", "Share relative page URL incorrect");
                });
+         },
+
+         "Check popup menu image alt text": function() {
+            return browser.findByCssSelector(selectors.popupMenus.dropDown4.icon)
+               .getAttribute("alt")
+               .then(function(text) {
+                  assert(text, "dd4.label");
+               });
+         },
+
+         "Check menu item alt text": function() {
+            return browser.findByCssSelector(selectors.popupMenus.dropDown4.label)
+               .click()
+            .end()
+
+            .findDisplayedByCssSelector(selectors.popupMenus.dropDown4.popup)
+            .end()
+
+            .findByCssSelector(selectors.menuItems.menuItem10.icon)
+               .getAttribute("alt")
+               .then(function(text) {
+                  assert(text, "dd4.group1.mi2");
+               });
+
          },
 
          "Post Coverage Results": function() {

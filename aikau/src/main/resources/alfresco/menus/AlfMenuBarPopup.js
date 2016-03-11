@@ -109,6 +109,14 @@ define(["dojo/_base/declare",
          {
             this.title = this.message(this.title);
          }
+         if (!this.iconAltText && this.label)
+         {
+            this.iconAltText = this.label;
+         }
+         else
+         {
+            this.iconAltText = this.message(this.iconAltText);
+         }
          this.inherited(arguments);
       },
       
@@ -121,14 +129,15 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuBarPopup__postCreate() {
+         domClass.add(this.domNode, "alfresco-menus-AlfMenuBarPopup");
          if (this.iconClass && this.iconClass !== "dijitNoIcon")
          {
             this.iconNode = domConstruct.create("img", {
-               className: this.iconClass,
+               className: this.iconClass + " alfresco-menus-AlfMenuBarPopup__icon",
                src: (this.iconSrc ? this.iconSrc : require.toUrl("alfresco/menus/css/images/transparent-20.png")),
                title: this.message(this.iconAltText),
                alt: this.message(this.iconAltText),
-               tabIndex: 0
+               role: "presentation"
             }, this.focusNode, "first");
             if (this.label)
             {
