@@ -1,0 +1,145 @@
+.@{alfresco} .alfresco-menus-AlfMenuItemIconMixin {
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+
+   &.alf-edit-icon {
+      background: url("./images/Edit.png");
+   }
+
+   &.alf-cog-icon {
+      background: url("./images/Cog.png");
+   }
+
+   &.alf-leave-icon {
+      background: url("./images/Right_Arrow.png");
+   }
+
+   &.alf-profile-icon {
+      background: url("./images/Profile.png");
+   }
+
+   &.alf-password-icon {
+      background: url("./images/Password.png");
+   }
+
+   &.alf-help-icon {
+      background: url("./images/Help.png");
+   }
+
+   &.alf-logout-icon {
+      background: url("./images/Logout.png");
+   }
+
+   &.alf-simplelist-icon {
+      background: url("./images/simple-view-on-16.png");
+   }
+
+   &.alf-detailedlist-icon {
+      background: url("./images/detailed-view-on-16.png");
+   }
+
+   &.alf-gallery-icon {
+      background: url("./images/gallery-view-on-16.png");
+   }
+
+   &.alf-tableview-icon {
+      background: url("./images/table-view-on-16.png");
+   }
+
+   &.alf-filmstrip-icon {
+      background: url("./images/filmstrip-view-on-16.png");
+   }
+
+   &.alf-showfolders-icon {
+      background: url("./images/folders-show-16.png");
+   }
+
+   &.alf-showpath-icon {
+      background: url("./images/navbar-show-16.png");
+   }
+
+   &.alf-showsidebar-icon {
+      background: url("./images/ShowSidebar.png");
+   }
+
+   &.alf-textdoc-icon {
+      background: url("./images/TextDocument.png");
+   }
+
+   &.alf-htmldoc-icon {
+      background: url("./images/HtmlDocument.png");
+   }
+
+   &.alf-xmldoc-icon {
+      background: url("./images/XmlDocument.png");
+   }
+
+   &.alf-all-icon {
+      background: url("./images/AllSelected.png");
+   }
+
+   &.alf-some-icon {
+      background: url("./images/SomeSelected.png");
+   }
+
+   &.alf-none-icon {
+      background: url("./images/NoneSelected.png");
+   }
+
+   &.alf-delete-icon {
+      background: url("./images/delete-16.png");
+   }
+
+   &.alf-delete-20-icon {
+      background: url("./images/delete-20.png");
+   }
+
+   &.alf-fullscreen-icon {
+      background: url("./images/fullscreen-enter.png");
+   }
+
+   &.alf-enabled-on-icon {
+      background: url("./images/enabled-on-16.png");
+   }
+
+   &.alf-enabled-off-icon {
+      background: url("./images/enabled-off-16.png");
+   }
+
+   &.alf-configure-icon {
+      background: url("./images/Configure.png");
+   }
+
+   &.alf-user-icon {
+      background: url("./images/User.png");
+   }
+
+   &.alf-upload-icon {
+      background: url("./images/Upload.png");
+   }
+
+   &.alf-create-icon {
+      background: url("./images/Create.png");
+   }
+
+   &.alf-allselected-icon {
+      background: url("./images/AllSelected.png");
+   }
+
+   &.alf-someselected-icon {
+      background: url("./images/SomeSelected.png");
+   }
+
+   &.alf-noneselected-icon {
+      background: url("./images/NoneSelected.png");
+   }
+
+   &.alf-back-icon {
+      background: url("./images/back-arrow.png");
+   }
+
+   &.alf-forward-icon {
+      background: url("./images/forward-arrow-16.png");
+   }
+}

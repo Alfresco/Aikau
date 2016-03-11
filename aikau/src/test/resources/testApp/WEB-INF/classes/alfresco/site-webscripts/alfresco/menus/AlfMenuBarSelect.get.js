@@ -97,7 +97,7 @@ model.jsonModel = {
                               iconClass: "alf-htmldoc-icon",
                               publishTopic: "MENU_BAR_SELECT_WITH_ICONS",
                               publishPayload: {
-                                 iconClass: "alf-textdoc-icon"
+                                 iconClass: "alf-htmldoc-icon"
                               }
                            }
                         }
