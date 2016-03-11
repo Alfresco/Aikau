@@ -5,8 +5,7 @@ module.exports = function(grunt) {
       jshint: {
          options: {
             reporter: require("jshint-stylish"),
-            jshintrc: true,
-            force: true
+            jshintrc: true
          },
          all: [
             alfConfig.files.gruntFile,
