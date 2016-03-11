@@ -121,7 +121,11 @@ registerSuite(function(){
          .findByCssSelector("#MENU_BAR_SELECT_ITEMS>img.alf-someselected-icon")
             .then(null, function() {
                assert(false, "Expected CSS class not found on checkbox");
-            });
+            })
+            .getAttribute("alt")
+               .then(function(text) {
+                  assert.equal(text, "Some of the items are currently selected, click this icon to select all items");
+               });
       },
             
       "Click checkbox to go from some to all": function() {
@@ -189,7 +193,11 @@ registerSuite(function(){
          .findByCssSelector("#MENU_BAR_SELECT_ITEMS>img.alf-allselected-icon")
             .then(null, function() {
                assert(false, "Expected CSS class not found on checkbox");
-            });
+            })
+            .getAttribute("alt")
+               .then(function(text) {
+                  assert.equal(text, "All of the items are currently selected, click this icon remove all selections");
+               });
       },
 
       "Click 'Select None' menu item": function() {
@@ -212,7 +220,11 @@ registerSuite(function(){
          .findByCssSelector("#MENU_BAR_SELECT_ITEMS>img.alf-noneselected-icon")
             .then(null, function() {
                assert(false, "Expected CSS class not found on checkbox");
-            });
+            })
+            .getAttribute("alt")
+               .then(function(text) {
+                  assert.equal(text, "None of the items are currently selected, click this icon to select all of the items");
+               });
       },
 
       "Click checkbox to go from none to all": function() {
