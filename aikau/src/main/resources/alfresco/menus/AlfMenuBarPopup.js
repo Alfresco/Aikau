@@ -113,7 +113,7 @@ define(["dojo/_base/declare",
          {
             this.iconAltText = this.label;
          }
-         else
+         else if (this.iconAltText)
          {
             this.iconAltText = this.message(this.iconAltText);
          }

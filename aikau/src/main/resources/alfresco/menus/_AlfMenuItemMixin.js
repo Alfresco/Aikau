@@ -151,11 +151,11 @@ define(["dojo/_base/declare",
          {
             this.params.label = this.label = this.message(this.label);
          }
-         if (!this.title)
+         if (!this.title && this.label)
          {
             this.title = this.label;
          }
-         else
+         else if (this.title)
          {
             this.title = this.message(this.title);
          }
@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
          {
             this.iconAltText = this.label;
          }
-         else
+         else if (this.iconAltText)
          {
             this.iconAltText = this.message(this.iconAltText);
          }
