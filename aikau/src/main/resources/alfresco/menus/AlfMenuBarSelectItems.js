@@ -34,6 +34,15 @@ define(["dojo/_base/declare",
    return declare([AlfMenuBarSelect], {
       
       /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/AlfMenuBarSelectItems.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/AlfMenuBarSelectItems.properties"}],
+   
+      /**
        * Sets an initial iconClass. This ensures that the iconNode is created.
        * 
        * @instance
@@ -96,6 +105,7 @@ define(["dojo/_base/declare",
          this.inherited(arguments);
          if (this.iconNode)
          {
+            this.iconNode.setAttribute("alt", this.message("menubarselectitems.none.selected"));
             on(this.iconNode, "click", lang.hitch(this, this.handleIconClick));
          }
       },
@@ -216,6 +226,7 @@ define(["dojo/_base/declare",
             domClass.remove(this.iconNode, this._currentIconClass);
             this._currentIconClass = "alf-allselected-icon";
             domClass.add(this.iconNode, this._currentIconClass);
+            this.iconNode.setAttribute("alt", this.message("menubarselectitems.all.selected"));
          }
          this._itemsSelected = this._ALL;
       },
@@ -229,6 +240,7 @@ define(["dojo/_base/declare",
             domClass.remove(this.iconNode, this._currentIconClass);
             this._currentIconClass = "alf-someselected-icon";
             domClass.add(this.iconNode, this._currentIconClass);
+            this.iconNode.setAttribute("alt", this.message("menubarselectitems.some.selected"));
          }
          this._itemsSelected = this._SOME;
       },
@@ -242,6 +254,7 @@ define(["dojo/_base/declare",
             domClass.remove(this.iconNode, this._currentIconClass);
             this._currentIconClass = "alf-noneselected-icon";
             domClass.add(this.iconNode, this._currentIconClass);
+            this.iconNode.setAttribute("alt", this.message("menubarselectitems.none.selected"));
          }
          this._itemsSelected = this._NONE;
       }
