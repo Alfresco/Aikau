@@ -1067,6 +1067,33 @@ define([],function() {
       SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
 
       /**
+       * This topic is subscribed to by the [LightboxService]{@link module:alfresco/services/LightboxService}
+       * in order to handle requests to display lightboxes that show an image preview of a Node.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       */
+      
+      SHOW_LIGHTBOX: "ALF_DISPLAY_LIGHTBOX",
+
+      /**
+       * This topic is subscribed to by the [FilePreviewService]{@link module:alfresco/services/NodePreviewService}
+       * in order to handle requests to display previews of nodes.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       */
+      SHOW_NODE_PREVIEW: "ALF_SHOW_NODE_PREVIEW",
+
+      /**
        * This topic can be published to perform the actual creation of a site. Unlike 
        * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
        * details for the new site (as it performs the actual creation on the Alfresco Repository rather than

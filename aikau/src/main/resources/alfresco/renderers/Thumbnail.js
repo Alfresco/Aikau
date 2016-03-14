@@ -25,7 +25,9 @@
  * <p>As well as providing basic actions for navigating a Document Library (e.g. clicking a folder
  * requests to display the content of that folder and clicking on a document links to the details
  * page that renders the document) it is also possible to configure custom actions along with the
- * ability to request a preview of the node be displayed.</p>
+ * ability to request a preview of the node be displayed. <b>PLEASE NOTE:</b> If previews are to
+ * be shown then the [NodePreviewService]{@link module:alfresco/services/NodePreviewService} should
+ * be included on the page.</p>
  * <p>A thumbnail can also be configured to perform selection/de-selection action when clicked through
  * the configuration of the [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
  * and [onlySelectOnClick]{@link module:alfresco/renderers/Thumbnail#onlySelectOnClick} attributes.</p>

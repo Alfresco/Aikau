@@ -12,7 +12,8 @@ model.jsonModel = {
       "alfresco/services/DocumentService",
       "alfresco/services/DialogService",
       "alfresco/services/CrudService",
-      "alfresco/services/LightboxService"
+      "alfresco/services/LightboxService",
+      "alfresco/services/NodePreviewService"
    ],
    widgets:[
       {
