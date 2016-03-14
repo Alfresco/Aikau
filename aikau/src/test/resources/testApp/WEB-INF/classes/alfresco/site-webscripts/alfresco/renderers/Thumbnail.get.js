@@ -1,3 +1,7 @@
+/* global page */
+/* jshint sub:true */
+var usePreviewService = (page.url.args["usePreviewService"] === "true");
+
 model.jsonModel = {
    services: [
       {
@@ -12,9 +16,16 @@ model.jsonModel = {
       "alfresco/services/DocumentService",
       "alfresco/services/DialogService",
       "alfresco/services/CrudService",
-      "alfresco/services/LightboxService"
+      "alfresco/services/LightboxService",
+      "alfresco/services/NodePreviewService"
    ],
    widgets:[
+      {
+         name: "alfresco/html/Markdown",
+         config: {
+            markdown: "Use ?usePreviewService=true request parameter to use the NodePreviewService for previews"
+         }
+      },
       {
          id: "DOCLIB_RENDITIONS",
          name: "alfresco/layout/ClassicWindow",
@@ -189,7 +200,8 @@ model.jsonModel = {
                                                       name: "alfresco/renderers/Thumbnail",
                                                       config: {
                                                          assumeRendition: true,
-                                                         showDocumentPreview: true
+                                                         showDocumentPreview: true,
+                                                         usePreviewService: usePreviewService
                                                       }
                                                    }
                                                 ]
@@ -267,7 +279,8 @@ model.jsonModel = {
                         nodeRef: "workspace://SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28",
                         displayName: "Test PDF"
                      },
-                     showDocumentPreview: true
+                     showDocumentPreview: true,
+                     usePreviewService: usePreviewService
                   }
                }
             ]

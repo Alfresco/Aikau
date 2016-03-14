@@ -26,6 +26,15 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"], 
         function (registerSuite, assert, TestCommon, keys) {
 
+   var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
+   var selectors = {
+      dialogs: {
+         preview: {
+            visible: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["NODE_PREVIEW_SERVICE_DIALOG"])
+         }
+      },
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -80,12 +89,7 @@ define(["intern!object",
             return browser.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
                .click()
             .end()
-            .sleep(1000) // Give the lightbox a chance to populate
-            .findByCssSelector("#aikauLightbox")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "The lightbox preview was not displayed");
-               });
+            .findDisplayedById("aikauLightbox");
          },
 
          "Escape closes lightbox preview": function() {
@@ -105,6 +109,50 @@ define(["intern!object",
                .then(function(elements) {
                   assert.lengthOf(elements, 1, "PDFjs preview not displayed");
                });
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "Thumbnail Tests (Using NodePreviewService)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/Thumbnail?usePreviewService=true", "Thumbnail Tests (Using NodePreviewService)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Lightbox preview": function() {
+            return browser.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
+               .click()
+            .end()
+
+            .findDisplayedById("aikauLightbox")
+            .end()
+
+            .findDisplayedById("aikauCloseButton")
+               .click();
+         },
+
+         "PDFjs Preview": function() {
+            return browser.findByCssSelector("#HARDCODED .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
+               .click()
+            .end()
+
+            .findByCssSelector(selectors.dialogs.preview.visible)
+            .end()
+
+            .findDisplayedByCssSelector(".alfresco-preview-PdfJs");
          },
 
          "Post Coverage Results": function() {

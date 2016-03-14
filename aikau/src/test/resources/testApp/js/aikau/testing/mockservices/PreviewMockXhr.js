@@ -74,6 +74,38 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":2947517},
                                      audioNode]); 
+
+            // Raw data requests....
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":7962},
+                                     imageNode]);
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/a4fc4392-27f6-49fd-8b6e-20b953c59ff5\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":5520127},
+                                     videoNode]); 
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/8a93f2cc-5276-45b6-929a-f5112e7a645d\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":5520127},
+                                     videoH264Node]); 
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/b5973042-9f07-472f-980d-940eb117524b\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":5520127},
+                                     videoOggNode]); 
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/slingshot\/doclib2\/node\/workspace\/SpacesStore\/50e8fa78-86ee-4209-9de0-b5c996b7ee52\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":2947517},
+                                     audioNode]); 
          }
          catch(e)
          {

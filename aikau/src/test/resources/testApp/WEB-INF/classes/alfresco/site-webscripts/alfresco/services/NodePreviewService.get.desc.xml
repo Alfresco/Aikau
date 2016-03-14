@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>NodePreviewService</shortname>
+  <description>Displays buttons that can be used to drive the NodePreviewService</description>
+  <family>aikau-unit-tests</family>
+  <url>/NodePreviewService</url>
+</webscript>
