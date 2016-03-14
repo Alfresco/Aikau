@@ -12,10 +12,16 @@ model.jsonModel = {
       },
       "alfresco/services/DialogService",
       "alfresco/services/LightboxService",
-      "alfresco/services/NodePreviewService",
-      "alfresco/services/DocumentService"
+      "alfresco/services/DocumentService",
+      "alfresco/services/NotificationService"
    ],
    widgets: [
+      {
+         name: "alfresco/html/Markdown",
+         config: {
+            markdown: "Use ?altDisplay=true request parameters to use StickyPanel rather than Dialog"
+         }
+      },
       {
          id: "IMAGE_PREVIEW",
          name: "alfresco/buttons/AlfButton",
@@ -46,3 +52,42 @@ model.jsonModel = {
       }
    ]
 };
+
+/* global page */
+/* jshint sub:true */
+if (page.url.args["altDisplay"] === "true")
+{
+   model.jsonModel.services.push({
+      name: "alfresco/services/NodePreviewService",
+      config: {
+         useLightboxForImages: false,
+         publishTopic: "ALF_DISPLAY_STICKY_PANEL",
+         publishPayload: {
+            title: "{displayName}",
+            widgets: [
+               {
+                  name: "alfresco/documentlibrary/AlfDocument",
+                  config: {
+                     rawData: true,
+                     xhrRequired: true,
+                     nodeRef: "{node.nodeRef}",
+                     widgets: [
+                        {
+                           name: "alfresco/preview/AlfDocumentPreview",
+                           config: {
+                              heightMode: 400
+                           }
+                        }
+                     ]
+                  }
+               }
+            ],
+            width: 500
+         }
+      }
+   });
+}
+else
+{
+   model.jsonModel.services.push("alfresco/services/NodePreviewService");
+}

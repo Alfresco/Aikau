@@ -1076,8 +1076,9 @@ define([],function() {
        * @since 1.0.59
        *
        * @event
+       * @property {string} title The title for the lightbox
+       * @property {string} src The location of the image file to show in the lightbox
        */
-      
       SHOW_LIGHTBOX: "ALF_DISPLAY_LIGHTBOX",
 
       /**
@@ -1090,6 +1091,8 @@ define([],function() {
        * @since 1.0.59
        *
        * @event
+       * @property {object} [node] The Node to show the preview for
+       * @property {string} [nodeRef] The NodeRef of the Node to show the preview for
        */
       SHOW_NODE_PREVIEW: "ALF_SHOW_NODE_PREVIEW",
 
