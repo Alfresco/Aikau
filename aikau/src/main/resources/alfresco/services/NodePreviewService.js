@@ -18,6 +18,17 @@
  */
 
 /**
+ * This service can be included in pages to handle the displaying previews of Nodes. By default the
+ * [LightboxService]{@link module:alfresco/services/LightboxService} will be used to preview images
+ * and all other Nodes will be shown using the 
+ * [AlfDocumentPreview]{@link module:alfresco/preview/AlfDocumentPreview} via the
+ * [DialogService]{@link module:alfresco/services/DialogService}. It is possible to override the 
+ * services used through the configuration of this service to publish alternative 
+ * [payloads]{@link module:alfresco/preview/AlfDocumentPreview#publishPayload} on
+ * alternative [topics]{@link module:alfresco/preview/AlfDocumentPreview#publishTopic}. It is also 
+ * possible to pass additional configuration to the 
+ * [AlfDocumentPreview]{@link module:alfresco/preview/AlfDocumentPreview} widget.
+ * 
  * @module alfresco/services/NodePreviewService
  * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
@@ -294,7 +305,7 @@ define(["dojo/_base/declare",
                               config: {
                                  heightMode: "DIALOG",
                                  pluginConditionsOverrides: this.pluginConditionsOverrides,
-                                 proxy: this.proxy || "alfresco",
+                                 proxy: this.proxy,
                                  widgetsForPluginsOverrides: this.widgetsForPluginsOverrides
                               }
                            }

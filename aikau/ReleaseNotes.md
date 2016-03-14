@@ -1,7 +1,15 @@
 Aikau 1.0.58 Release Notes
 ===
 
-Current deprecations:
+New deprecations:
+---
+* alfresco/renderers/Thumbnail.js
+  * onNodePromiseResolved                                        (configure usePreviewService to be true)
+  * onLoadNode                                                   (configure usePreviewService to be true)
+  * onNodeLoaded                                                 (configure usePreviewService to be true)
+  * onShowPreview                                                (configure usePreviewService to be true)
+
+Previous deprecations:
 ---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
 * alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")

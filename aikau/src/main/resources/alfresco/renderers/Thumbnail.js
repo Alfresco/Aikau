@@ -109,6 +109,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
         "service/constants/Default",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/event",
         "dojo/dom-class",
@@ -119,7 +120,7 @@ define(["dojo/_base/declare",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                  _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, template, AlfCore, _ItemLinkMixin,
-                 AlfConstants, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
+                 AlfConstants, topics, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                    AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
@@ -448,6 +449,18 @@ define(["dojo/_base/declare",
        * @since 1.0.40
        */
       updateOnSelection: false,
+
+      /**
+       * It is recommended that [NodePreviewService]{@link module:alfresco/services/NodePreviewService} is used
+       * for displaying previews. For backwards compatibility reasons this is not the default configuration but
+       * it is expected to become the default in the next major release.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.59
+       */
+      usePreviewService: false,
 
       /**
        * Indicates how the thumbnail image should be aligned vertically, the options are "TOP",
@@ -887,12 +900,33 @@ define(["dojo/_base/declare",
                this.nodePromise = this.currentItem;
                var type = lang.getObject("node.type", false, this.currentItem),
                    mimetype = lang.getObject("node.mimetype", false, this.currentItem);
-               if (!type || !mimetype)
+               if (this.usePreviewService)
                {
-                  this.nodePromise = new Deferred();
-                  this.onLoadNode(nodeRef);
+                  if (mimetype)
+                  {
+                     // If we have a type and MIME type we can safely delegate to the NodePreviewService
+                     // without needing to load the full metadata (we want to avoid requesting the full
+                     // node metadata more than once)...
+                     this.alfServicePublish(topics.SHOW_NODE_PREVIEW, this.currentItem);
+                  }
+                  else
+                  {
+                     // ...if we don't have a MIME type we can still safely delegate, but we should just
+                     // pass the nodeRef and allow the NodePreviewService to get the full metadata
+                     this.alfServicePublish(topics.SHOW_NODE_PREVIEW, {
+                        nodeRef: nodeRef
+                     });
+                  }
                }
-               when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
+               else
+               {
+                  if (!type || !mimetype)
+                  {
+                     this.nodePromise = new Deferred();
+                     this.onLoadNode(nodeRef);
+                  }
+                  when(this.nodePromise, lang.hitch(this, this.onNodePromiseResolved, nodeRef));
+               }
             }
             else
             {
@@ -944,6 +978,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param  {string} nodeRef  The nodeRef of the node to preview
        * @param  {object} nodeData The resolved node data.
+       * @deprecated Since 1.0.59 - Use [usePreviewService]{@link module:alfresco/renderers/Thumbnail#usePreviewService} instead
        */
       onNodePromiseResolved: function alfresco_renderers_Thumbnail__onNodePromiseResolved(nodeRef, nodeData) {
          // First of all, update the currentItem with the full node data that has been resolved...
@@ -968,6 +1003,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {string} nodeRef The nodeRef to reqeuest the details for
+       * @deprecated Since 1.0.59 - Use [usePreviewService]{@link module:alfresco/renderers/Thumbnail#usePreviewService} instead
        */
       onLoadNode: function alfresco_renderers_Thumbnail__onLoadNode(nodeRef) {
          if (nodeRef)
@@ -994,6 +1030,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload 
+       * @deprecated Since 1.0.59 - Use [usePreviewService]{@link module:alfresco/renderers/Thumbnail#usePreviewService} instead
        */
       onNodeLoaded: function alfresco_renderers_Thumbnail__onNodeLoaded(payload) {
          this.alfUnsubscribe(payload.requestConfig.subscriptionHandle);
@@ -1017,6 +1054,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} nodeRef The nodeRef of the node to preview
        * @param {string} mimetype The mimetype of the node
+       * @deprecated Since 1.0.59 - Use [usePreviewService]{@link module:alfresco/renderers/Thumbnail#usePreviewService} instead
        */
       onShowPreview: function alfresco_renderers_Thumbnail__onShowPreview(nodeRef, mimetype) {
          // Since we're going to be publishing to services we need to publish globally...
