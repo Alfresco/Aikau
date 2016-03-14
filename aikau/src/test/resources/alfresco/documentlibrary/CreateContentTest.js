@@ -20,102 +20,73 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!expect",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Create Content Tests",
+      testPage: "/CreateContent",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/CreateContent", "Create Content Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Checking for create content item in create content menu": function () {
+      "Checking for create content item in create content menu": function() {
          // Check everything is initialised correctly...
-         return browser.findByCssSelector("#CREATE_CONTENT_MENU_text")
+         return this.remote.findByCssSelector("#CREATE_CONTENT_MENU_text")
             .click()
-         .end()
-         .findByCssSelector("#CREATE_XML_DOC_1")
+            .end()
+            .findByCssSelector("#CREATE_XML_DOC_1")
             .then(null, function() {
                assert(false, "Couldn't find content item in create content menu");
             });
       },
 
       "Checking create content item in create content menu is NOT disabled": function() {
-         return browser.findAllByCssSelector("#CREATE_XML_DOC_1.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_XML_DOC_1.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content item in create content menu was unexpectedly disabled");
             }, null);
       },
 
       "Checking for create content item in standard menu": function() {
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findByCssSelector("#CREATE_XML_DOC_2")
+            .end()
+            .findByCssSelector("#CREATE_XML_DOC_2")
             .then(null, function() {
                assert(false, "Couldn't find content item in standard popup menu");
             });
       },
 
       "Checking for create template cascade": function() {
-         return browser.findByCssSelector("#CREATE_TEMPLATES")
+         return this.remote.findByCssSelector("#CREATE_TEMPLATES")
             .then(null, function() {
                assert(false, "Couldn't find create templates cascade in standard popup menu");
             });
       },
 
       "Check for create content menu bar item": function() {
-         return browser.findByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM")
+         return this.remote.findByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM")
             .then(null, function() {
                assert(false, "Test #1e - Couldn't find content menu bar item");
             });
       },
 
       "Checking create content menu bar item is not disabled": function() {
-         return browser.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content menu bar item was unexpectedly disabled");
             }, null);
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Create Content (Denied Permission) Tests",
+      testPage: "/CreateContent",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/CreateContent", "Create Content (Denied Permission) Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Checking create content menu is now disabled": function () {
-         return browser.findByCssSelector("#DENY_CREATE_PERMISSION_label")
+      "Checking create content menu is now disabled": function() {
+         return this.remote.findByCssSelector("#DENY_CREATE_PERMISSION_label")
             .click()
-         .end()
+            .end()
 
          // Check the content menu is disabled...
          .findAllByCssSelector("#CREATE_CONTENT_MENU.dijitMenuItemDisabled")
@@ -126,24 +97,24 @@ registerSuite(function(){
 
       "Checking create content item in standard menu is now disabled": function() {
          // Check the create content menu item in the standard popup menu is disabled...
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
+            .end()
+            .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Content item in standard popup menu was not disabled");
             });
       },
 
       "Checking create template cascade is now disabled": function() {
-         return browser.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Create templates in standard popup menu was not disabled");
             });
       },
 
       "Checking menu bar item is now disabled": function() {
-         return browser.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Content menu bar item was not disabled");
             }, null);
@@ -151,15 +122,15 @@ registerSuite(function(){
 
       "Checking create content menu item in content menu has been re-enabled": function() {
          // Allow permissions...
-         return browser.findByCssSelector("#GRANT_CREATE_PERMISSION_label")
+         return this.remote.findByCssSelector("#GRANT_CREATE_PERMISSION_label")
             .click()
-         .end()
+            .end()
 
          // Check the content menu is re-enabled...
          .findByCssSelector("#CREATE_CONTENT_MENU_text")
             .click()
             .end()
-         .findAllByCssSelector("#CREATE_XML_DOC_1.dijitMenuItemDisabled")
+            .findAllByCssSelector("#CREATE_XML_DOC_1.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content item in create content menu was not re-enabled");
             }, null);
@@ -167,54 +138,38 @@ registerSuite(function(){
 
       "Checking create content item in standard popup is re-enabled": function() {
          // Check the create content menu item in the standard popup menu is disabled...
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
+            .end()
+            .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content item in standard popup menu was not re-enabled");
             });
       },
 
       "Check create template cascade has been re-enabled": function() {
-         return browser.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Create templates in standard popup menu was not re-enabled");
             });
       },
 
       "Checking that content menu bar item has been re-enabled": function() {
-         return browser.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content menu bar item was not re-enabled");
             }, null);
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Create Content (Change Path) Tests",
+      testPage: "/CreateContent",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/CreateContent", "Create Content (Change Path) Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check content menu has been disabled again": function () {
-         return browser.findByCssSelector("#SET_OTHER_FILTER_label")
+      "Check content menu has been disabled again": function() {
+         return this.remote.findByCssSelector("#SET_OTHER_FILTER_label")
             .click()
-         .end()
+            .end()
 
          // Check the content menu is disabled...
          .findAllByCssSelector("#CREATE_CONTENT_MENU.dijitMenuItemDisabled")
@@ -225,24 +180,24 @@ registerSuite(function(){
 
       "Check that content menu item in standard menu is disabled again": function() {
          // Check the create content menu item in the standard popup menu is disabled...
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
+            .end()
+            .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Content item in standard popup menu was not disabled");
             });
       },
 
       "Check that create template cascade has been disabled again": function() {
-         return browser.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Create templates in standard popup menu was not disabled");
             });
       },
 
       "Check that content menu bar item has been disabled again": function() {
-         return browser.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Content menu bar item was not disabled");
             }, null);
@@ -250,15 +205,15 @@ registerSuite(function(){
 
       "Check that create content menu has been re-enabled": function() {
          // Allow permissions...
-         return browser.findByCssSelector("#SET_PATH_label")
+         return this.remote.findByCssSelector("#SET_PATH_label")
             .click()
-         .end()
+            .end()
 
          // Check the content menu is re-enabled...
          .findByCssSelector("#CREATE_CONTENT_MENU_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_XML_DOC_1.dijitMenuItemDisabled")
+            .end()
+            .findAllByCssSelector("#CREATE_XML_DOC_1.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content item in create content menu was not re-enabled");
             }, null);
@@ -266,60 +221,44 @@ registerSuite(function(){
 
       "Check that create content menu item in standard menu has been re-enabled": function() {
          // Check the create content menu item in the standard popup menu is disabled...
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
+            .end()
+            .findAllByCssSelector("#CREATE_XML_DOC_2.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content item in standard popup menu was not re-enabled");
             });
       },
 
       "Check that create template cascade has been re-enabled": function() {
-         return browser.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_TEMPLATES.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Create templates in standard popup menu was not re-enabled");
             });
       },
 
       "Check that create content menu bar item has been re-enabled": function() {
-         return browser.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
+         return this.remote.findAllByCssSelector("#CREATE_CONTENT_MENUBAR_ITEM.dijitMenuItemDisabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Content menu bar item was not re-enabled");
             }, null);
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Create Templates Tests",
+      testPage: "/CreateContent",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/CreateContent", "Create Templates Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check create template node has rendered correctly": function () {
-         return browser.findByCssSelector("#POPUP_MENU_text")
+      "Check create template node has rendered correctly": function() {
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findByCssSelector("#CREATE_TEMPLATES_text")
+            .end()
+            .findByCssSelector("#CREATE_TEMPLATES_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
-         .end()
-         .findByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
+            .end()
+            .findAllByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
+            .end()
+            .findByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Node 1", "Node wasn't rendered correctly");
@@ -327,20 +266,20 @@ registerSuite(function(){
       },
 
       "Check that create template topic was published correctly": function() {
-         return browser.findByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
+         return this.remote.findByCssSelector("#CREATE_TEMPLATES_dropdown tbody tr:first-child td:nth-child(2)")
             .click()
-         .end()
-         .getLastPublish("ALF_CREATE_CONTENT")
+            .end()
+            .getLastPublish("ALF_CREATE_CONTENT")
             .then(function(payload) {
                assert.deepPropertyVal(payload, "action.params.sourceNodeRef", "workspace://SpacesStore/0e56c7a3-67d0-4a35-b2ce-4c2038897a66", "Create template topic not published correctly");
             });
       },
 
       "Check folder template creation label": function() {
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .click()
-         .end()
-         .findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
+            .end()
+            .findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Create content from folder template", "Menu item label was not correct");
@@ -348,59 +287,58 @@ registerSuite(function(){
       },
 
       "Check folder templates loaded": function() {
-         return browser.findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
+         return this.remote.findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_FOLDER_TEMPLATES_dropdown .alf-menu-group-items tr")
+            .end()
+            .findAllByCssSelector("#CREATE_FOLDER_TEMPLATES_dropdown .alf-menu-group-items tr")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Unexpected number of folder templates found");
             });
       },
 
       "Check folder override dialog is displayed when template selected": function() {
-         return browser.findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
+         return this.remote.findByCssSelector("#CREATE_FOLDER_TEMPLATES_text")
             .click()
-         .end()
-         .findAllByCssSelector("#CREATE_FOLDER_TEMPLATES_dropdown tr:first-child td:nth-child(2)")
+            .end()
+            .findAllByCssSelector("#CREATE_FOLDER_TEMPLATES_dropdown tr:first-child td:nth-child(2)")
             .click()
-         .end()
-         .findAllByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE")
+            .end()
+            .findAllByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Folder template overrides dialog was not displayed");
             });
       },
 
       "Override folder template settings": function() {
-         return browser.findByCssSelector("#FOLDER_TEMPLATE_NAME  .dijitInputContainer input")
+         return this.remote.findByCssSelector("#FOLDER_TEMPLATE_NAME  .dijitInputContainer input")
             .clearValue()
             .type("Name")
-         .end()
-         .findByCssSelector("#FOLDER_TEMPLATE_TITLE  .dijitInputContainer input")
+            .end()
+            .findByCssSelector("#FOLDER_TEMPLATE_TITLE  .dijitInputContainer input")
             .clearValue()
             .type("Title")
-         .end()
-         .findByCssSelector("#FOLDER_TEMPLATE_DESCRIPTION textarea")
+            .end()
+            .findByCssSelector("#FOLDER_TEMPLATE_DESCRIPTION textarea")
             .clearValue()
             .type("Description")
-         .end()
-         .findByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE .confirmationButton > span")
+            .end()
+            .findByCssSelector("#ALF_CREATE_FOLDER_TEMPLATE_NODE .confirmationButton > span")
             .click()
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden")
-         .end()
-         .getXhrEntries({url: "folder-templates", method: "POST", pos: "last"})
-            .then(function(xhr){
+            .end()
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden")
+            .end()
+            .getXhrEntries({
+               url: "folder-templates",
+               method: "POST",
+               pos: "last"
+            })
+            .then(function(xhr) {
                assert.propertyVal(xhr.request.body, "parentNodeRef", "some://dummy/node");
                assert.propertyVal(xhr.request.body, "sourceNodeRef", "workspace://SpacesStore/c90aa137-2c57-4a36-8681-b0b207cbee91");
                assert.propertyVal(xhr.request.body, "prop_cm_name", "Name");
                assert.propertyVal(xhr.request.body, "prop_cm_title", "Title");
                assert.propertyVal(xhr.request.body, "prop_cm_description", "Description");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

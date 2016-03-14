@@ -20,31 +20,20 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert", 
-        "require", 
-        "alfresco/TestCommon", 
-        "intern/dojo/node!leadfoot/helpers/pollUntil"], 
-        function(registerSuite, assert, require, TestCommon, pollUntil) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/helpers/pollUntil"],
+        function(module, defineSuite, assert, require, TestCommon, pollUntil) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "CodeMirror",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/CodeMirror", "CodeMirror")
-            .end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/CodeMirror",
 
       "Can enter content into control and publish it": function() {
-         return browser.findByCssSelector("#CODE_MIRROR_1 .CodeMirror")
+         return this.remote.findByCssSelector("#CODE_MIRROR_1 .CodeMirror")
             .click()
             .executeAsync(function(callback) {
                require(["dijit/registry"], function(registry) {
@@ -73,7 +62,7 @@ registerSuite(function(){
       },
 
       "Can still use control within dialog": function() {
-         return browser.findById("DIALOG_BUTTON")
+         return this.remote.findById("DIALOG_BUTTON")
             .click()
             .executeAsync(function(callback) {
                require(["dijit/registry"], function(registry) {
@@ -99,11 +88,6 @@ registerSuite(function(){
             }, function(err) {
                assert.fail(null, null, "Unable to enter content in Dialog and publish it: " + err);
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

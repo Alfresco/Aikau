@@ -20,38 +20,22 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "H264 Proxy Preview Tests",
+      testPage: "/VideoH264ProxyPreview",
 
-      return {
-         name: "H264 Proxy Preview Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/VideoH264ProxyPreview", "H264 Proxy Preview Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         // NOTE: The best way to check that the proxy was successfully loaded is that it can be played...
-         "Check that video is playing": function() {
-            return browser.findDisplayedByCssSelector("video")
-               .execute("return document.querySelector('video').paused")
-               .then(function(paused) {
-                  assert.isFalse(paused);
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      // NOTE: The best way to check that the proxy was successfully loaded is that it can be played...
+      "Check that video is playing": function() {
+         return this.remote.findDisplayedByCssSelector("video")
+            .execute("return document.querySelector('video').paused")
+            .then(function(paused) {
+               assert.isFalse(paused);
+            });
+      }
    });
 });

@@ -20,40 +20,30 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, expect, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "SearchResultPropertyLink Tests",
+      testPage: "/SearchResultPropertyLink",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchResultPropertyLink", "SearchResultPropertyLink Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Check that all 4 links have anchors": function () {
-         return browser.findAllByCssSelector("a.alfresco-navigation-_HtmlAnchorMixin")
+      "Check that all 4 links have anchors": function() {
+         return this.remote.findAllByCssSelector("a.alfresco-navigation-_HtmlAnchorMixin")
             .then(function(elements) {
                assert(elements.length === 4, "'path' not initialised correctly");
             });
       },
 
       "Check that navigation payload": function() {
-         return browser.pressKeys(keys.TAB)
-         .pressKeys(keys.RETURN)
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         return this.remote.pressKeys(keys.TAB)
+            .pressKeys(keys.RETURN)
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "type", "PAGE_RELATIVE", "Incorreect type");
                assert.propertyVal(payload, "target", "CURRENT", "Incorrect target");
@@ -62,75 +52,70 @@ registerSuite(function(){
       },
 
       "Check that url is correct for site folder": function() {
-         return browser.pressKeys(keys.TAB)
-         .pressKeys(keys.RETURN)
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         return this.remote.pressKeys(keys.TAB)
+            .pressKeys(keys.RETURN)
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "site/site1/documentlibrary?path=%2Ffolder1%2Ffolder2%2Ffolder3", "Site folder search result URL was incorrect");
             });
       },
 
       "Check that details url is correct for repo document": function() {
-         return browser.pressKeys(keys.TAB)
-         .pressKeys(keys.RETURN)
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         return this.remote.pressKeys(keys.TAB)
+            .pressKeys(keys.RETURN)
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Repository document search result URL was incorrect");
             });
       },
 
       "Check that path url is correct for repo document": function() {
-         return browser.pressKeys(keys.TAB)
-         .pressKeys(keys.RETURN)
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         return this.remote.pressKeys(keys.TAB)
+            .pressKeys(keys.RETURN)
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "repository?path=%2Ffolder2%2Ffolder3", "Repository folder search result URL was incorrect");
             });
       },
 
       "Check that details url is correct for site document": function() {
-         return browser.findByCssSelector("#SITE_DOC_LINK span.inner a")
+         return this.remote.findByCssSelector("#SITE_DOC_LINK span.inner a")
             .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "site/site1/document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Site document search result URL was incorrect");
             });
       },
 
       "Check that path url is correct for site folder": function() {
-         return browser.findByCssSelector("#SITE_FOLDER_LINK span.inner a")
+         return this.remote.findByCssSelector("#SITE_FOLDER_LINK span.inner a")
             .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "site/site1/documentlibrary?path=%2Ffolder1%2Ffolder2%2Ffolder3", "Site folder search result URL was incorrect");
             });
       },
 
       "Check that details url is correct for repo document (2)": function() {
-         return browser.findByCssSelector("#REPO_DOC_LINK span.inner a")
+         return this.remote.findByCssSelector("#REPO_DOC_LINK span.inner a")
             .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "document-details?nodeRef=workspace://SpacesStore/some-fake-uuid", "Repository document search result URL was incorrect");
             });
       },
 
       "Check that path url is correct for repo document (2)": function() {
-         return browser.findByCssSelector("#REPO_FOLDER_LINK span.inner a")
+         return this.remote.findByCssSelector("#REPO_FOLDER_LINK span.inner a")
             .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "repository?path=%2Ffolder2%2Ffolder3", "Repository folder search result URL was incorrect");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

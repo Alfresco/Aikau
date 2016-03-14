@@ -20,10 +20,11 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var baseFormControlSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/BaseFormControl");
    var tabSelectors = TestCommon.getTestSelectors("alfresco/layout/AlfTabContainer");
@@ -40,7 +41,7 @@ define(["intern!object",
          }
       },
       tabs: {
-         tab1: TestCommon.getTestSelector(tabSelectors, "identified.tab", ["TABS","DYNAMIC"])
+         tab1: TestCommon.getTestSelector(tabSelectors, "identified.tab", ["TABS", "DYNAMIC"])
       },
       checkBoxes: {
          initialVisibility: {
@@ -49,42 +50,26 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Asynchronous Form Control Loading Test",
+      testPage: "/AsyncFormControlLoading",
 
-      return {
-         name: "Asynchronous Form Control Loading Test",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AsyncFormControlLoading", "Asynchronous Form Control Loading Test").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check that controls all load": function() {
-            // Open the dialog...
-            return browser.findByCssSelector(selectors.buttons.create)
-               .click()
+      "Check that controls all load": function() {
+         // Open the dialog...
+         return this.remote.findByCssSelector(selectors.buttons.create)
+            .click()
             .end()
 
-            // ...wait for it to be displayed...
-            .findByCssSelector(selectors.dialogs.dialog1.visible)
+         // ...wait for it to be displayed...
+         .findByCssSelector(selectors.dialogs.dialog1.visible)
             .end()
 
-            // Select the "DYNAMIC" tab...
-            .findByCssSelector(selectors.tabs.tab1)
-               .click()
+         // Select the "DYNAMIC" tab...
+         .findByCssSelector(selectors.tabs.tab1)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.checkBoxes.initialVisibility.label);
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findDisplayedByCssSelector(selectors.checkBoxes.initialVisibility.label);
+      }
    });
 });

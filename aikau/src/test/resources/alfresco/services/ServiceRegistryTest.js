@@ -20,67 +20,52 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Service Registry Test",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/ServiceRegistry", "Service Registry Test")
-            .end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/ServiceRegistry",
 
       "Check for duplicate global scope subscriptions": function() {
-         return browser.findByCssSelector("body")
+         return this.remote.findByCssSelector("body")
             .getLogEntries({
                type: "SUBSCRIBE",
                topic: "ALF_NAVIGATE_TO_PAGE",
-               pos: "all"
-            }, true)
+               pos: "all",
+               isGlobal: true
+            })
             .then(function(subscriptions) {
                assert.lengthOf(subscriptions, 1, "Multiple global scope subscriptions");
             });
       },
 
       "Check for duplicate scope subscriptions (SCOPE1_)": function() {
-         return browser.findByCssSelector("body")
+         return this.remote.findByCssSelector("body")
             .getLogEntries({
                type: "SUBSCRIBE",
                topic: "SCOPE1_ALF_NAVIGATE_TO_PAGE",
-               pos: "all"
-            }, true)
+               pos: "all",
+               isGlobal: true
+            })
             .then(function(subscriptions) {
                assert.lengthOf(subscriptions, 1, "Multiple global scope subscriptions");
             });
       },
 
       "Check for duplicate scope subscriptions (SCOPE2_)": function() {
-         return browser.findByCssSelector("body")
+         return this.remote.findByCssSelector("body")
             .getLogEntries({
                type: "SUBSCRIBE",
                topic: "SCOPE1_ALF_NAVIGATE_TO_PAGE",
-               pos: "all"
-            }, true)
+               pos: "all",
+               isGlobal: true
+            })
             .then(function(subscriptions) {
                assert.lengthOf(subscriptions, 1, "Multiple global scope subscriptions");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

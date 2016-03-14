@@ -18,65 +18,48 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Menu Bar Orientation Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/MenuBarOrientation", "Menu Bar Orientation Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/MenuBarOrientation",
 
       "Check that menu 1 appears above the menu bar": function() {
          var menuTop;
-         return browser.findByCssSelector("#POPUP_MENU_text")
+         return this.remote.findByCssSelector("#POPUP_MENU_text")
             .getPosition()
             .then(function(pos) {
                menuTop = pos.y;
             })
             .click()
-         .end()
-         .findByCssSelector("#POPUP_MENU_dropdown")
+            .end()
+            .findByCssSelector("#POPUP_MENU_dropdown")
             .getPosition()
             .then(function(pos) {
-                  assert(pos.y < menuTop, "Popup was not displayed above the menu bar");
-               });
+               assert(pos.y < menuTop, "Popup was not displayed above the menu bar");
+            });
       },
 
-       "Check that menu 2 appears below the menu bar": function() {
+      "Check that menu 2 appears below the menu bar": function() {
          var menuTop;
-         return browser.findByCssSelector("#DROPDOWN_MENU_text")
+         return this.remote.findByCssSelector("#DROPDOWN_MENU_text")
             .getPosition()
             .then(function(pos) {
                menuTop = pos.y;
             })
             .click()
-         .end()
-         .findByCssSelector("#DROPDOWN_MENU_dropdown")
+            .end()
+            .findByCssSelector("#DROPDOWN_MENU_dropdown")
             .getPosition()
             .then(function(pos) {
-                  assert(pos.y > menuTop, "Popup was not displayed below the menu bar");
-               });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+               assert(pos.y > menuTop, "Popup was not displayed below the menu bar");
+            });
       }
-   };
    });
 });

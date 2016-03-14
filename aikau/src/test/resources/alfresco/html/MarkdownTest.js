@@ -20,65 +20,51 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Markdown Tests",
+      testPage: "/Markdown",
 
-      return {
-         name: "Markdown Tests",
+      "Check intial rendering": function() {
+         return this.remote.findDisplayedByCssSelector("#MARKDOWN h1");
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Markdown", "Markdown Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check intial rendering": function() {
-            return browser.findDisplayedByCssSelector("#MARKDOWN h1");
-         },
-
-         "Update rendering": function() {
-            return browser.findByCssSelector("#TEXTAREA textarea")
-               .clearValue()
-               .type("* bullet")
+      "Update rendering": function() {
+         return this.remote.findByCssSelector("#TEXTAREA textarea")
+            .clearValue()
+            .type("* bullet")
             .end()
 
-            .findByCssSelector("#FORM .confirmationButton > span")
-               .click()
+         .findByCssSelector("#FORM .confirmationButton > span")
+            .click()
             .end()
 
-            .findDisplayedByCssSelector("#MARKDOWN ul li");
-         },
+         .findDisplayedByCssSelector("#MARKDOWN ul li");
+      },
 
-         "Prevent XSS attack": function() {
-            // Use an XSS attack described here: https://github.com/showdownjs/showdown/wiki/Markdown's-XSS-Vulnerability-(and-how-to-mitigate-it)
-            return browser.findByCssSelector("#TEXTAREA textarea")
-               .clearValue()
-               .type("[some text](javascript:alert('xss'))")
+      "Prevent XSS attack": function() {
+         /*jshint scripturl:true*/
+
+         // Use an XSS attack described here: https://github.com/showdownjs/showdown/wiki/Markdown's-XSS-Vulnerability-(and-how-to-mitigate-it)
+         return this.remote.findByCssSelector("#TEXTAREA textarea")
+            .clearValue()
+            .type("[some text](javascript:alert('xss'))")
             .end()
 
-            .findByCssSelector("#FORM .confirmationButton > span")
-               .click()
+         .findByCssSelector("#FORM .confirmationButton > span")
+            .click()
             .end()
 
-            // A link should be generated... click it...
-            .findDisplayedByCssSelector("#MARKDOWN a")
-               .getAttribute("href")
-               .then(function(href) {
-                  assert.notEqual(href, "javascript:alert('xss')");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         // A link should be generated... click it...
+         .findDisplayedByCssSelector("#MARKDOWN a")
+            .getAttribute("href")
+            .then(function(href) {
+               assert.notEqual(href, "javascript:alert('xss')");
+            });
+      }
    });
 });

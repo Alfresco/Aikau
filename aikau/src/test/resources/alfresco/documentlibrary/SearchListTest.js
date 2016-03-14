@@ -20,34 +20,24 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
+        /*jshint maxlen:false*/
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "SearchList Tests",
+      testPage: "/SearchList",
 
-      return {
-         name: "SearchList Tests",
-         
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SearchList", "SearchList Tests").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
-         
-         "Test that initial search term is not set from hash": function () {
-            // Include a facet with no data...
-            return browser.findByCssSelector("#INCLUDE_FACET_0")
-               .click()
+      "Test that initial search term is not set from hash": function() {
+         // Include a facet with no data...
+         return this.remote.findByCssSelector("#INCLUDE_FACET_0")
+            .click()
             .end()
             // Include an initial facet (for code coverage)...
             .findByCssSelector("#INCLUDE_FACET_1")
-               .click()
+            .click()
             .end()
             // The initial AlfSearchList doesn't perform an initial search when "useHash" is set to true (which
             // for this test it is).
@@ -56,31 +46,31 @@ define(["intern!object",
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Search request made unexpectedly");
             });
-         },
+      },
 
-         "No data message is displayed": function() {
-            return browser.findByCssSelector(".alfresco-lists-AlfList .no-data")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "The no data message should not be hidden until a search request is made");
-               });
-         },
-         
-         "Test setting empty search term": function() {
-            // Click the button to set a search term (but don't actually provide one)
-            return browser.findByCssSelector("#SET_SEARCH_TERM_1")
-               .click()
+      "No data message is displayed": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-AlfList .no-data")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The no data message should not be hidden until a search request is made");
+            });
+      },
+
+      "Test setting empty search term": function() {
+         // Click the button to set a search term (but don't actually provide one)
+         return this.remote.findByCssSelector("#SET_SEARCH_TERM_1")
+            .click()
             .end()
             .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Search request made unexpectedly");
             });
-         },
-         
-         "Test updating hash sets search term": function() {
-            // Click the button to set the search term...
-            return browser.findByCssSelector("#SET_SEARCH_TERM_2")
-               .click()
+      },
+
+      "Test updating hash sets search term": function() {
+         // Click the button to set the search term...
+         return this.remote.findByCssSelector("#SET_SEARCH_TERM_2")
+            .click()
             .end()
             // Check that updating the hash results in a search request being made...
             .getLastPublish("ALF_SEARCH_REQUEST")
@@ -88,235 +78,235 @@ define(["intern!object",
                assert.propertyVal(payload, "term", "testTerm1", "Search term didn't request search");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from request");
             });
-         },
+      },
 
-         "No data message is hidden": function() {
-            return browser.findByCssSelector(".alfresco-lists-AlfList .no-data")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The no data message should have been hidden when loading data");
-               });
-         },
+      "No data message is hidden": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-AlfList .no-data")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The no data message should have been hidden when loading data");
+            });
+      },
 
-         "Test that setting different search term does not issues new search request when current request is ongoing": function() {
-            // Click the button to set a DIFFERENT search term (a new request SHOULD NOT be issued because a request is in progress)...
-            return browser.findByCssSelector("#SET_SEARCH_TERM_3")
-               .clearLog()
-               .click()
+      "Test that setting different search term does not issues new search request when current request is ongoing": function() {
+         // Click the button to set a DIFFERENT search term (a new request SHOULD NOT be issued because a request is in progress)...
+         return this.remote.findByCssSelector("#SET_SEARCH_TERM_3")
+            .clearLog()
+            .click()
             .end()
             .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Another search request made before previous response returned");
             });
-         },
+      },
 
-         "Test that the pending search is requested": function() {
-            // Send some response data, and then issue the search again, there should now be 3 search 
-            // requests and the last one should be for the last search term...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test that the pending search is requested": function() {
+         // Send some response data, and then issue the search again, there should now be 3 search
+         // requests and the last one should be for the last search term...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
-               assert.propertyVal(payload, "term","testTerm2", "Search term didn't request search");
+               assert.propertyVal(payload, "term", "testTerm2", "Search term didn't request search");
             });
-         },
+      },
 
-         "Test that setting identical search term DOES not re-issue search (to address eventual consistency)": function() {
-            // Click the button to set the SAME search term (a new request shouldn't be issued)...
-            // Return response from previous request...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test that setting identical search term DOES not re-issue search (to address eventual consistency)": function() {
+         // Click the button to set the SAME search term (a new request shouldn't be issued)...
+         // Return response from previous request...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
 
-            // Set identical search term...
-            .findByCssSelector("#SET_SEARCH_TERM_3")
-               .clearLog()
-               .click()
+         // Set identical search term...
+         .findByCssSelector("#SET_SEARCH_TERM_3")
+            .clearLog()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
-               assert.propertyVal(payload, "term","testTerm2", "Search term didn't request search");
+               assert.propertyVal(payload, "term", "testTerm2", "Search term didn't request search");
             });
-         },
+      },
 
-         "Test setting search with facet filters via hash": function() {
-            // Click the button to set a variety of data (including facet filters)....
-            // Set the same term again to check that the filters are removed...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test setting search with facet filters via hash": function() {
+         // Click the button to set a variety of data (including facet filters)....
+         // Set the same term again to check that the filters are removed...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet fields were not set appropriately from hash change");
             });
-         },
+      },
 
-         "Test new search term clears previous filters": function() {
-            // Ensure the next search term will be set by publishing some data (to prevent concurrent request blocking)...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test new search term clears previous filters": function() {
+         // Ensure the next search term will be set by publishing some data (to prevent concurrent request blocking)...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#SET_SEARCH_TERM_2")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
-               assert.propertyVal(payload, "term","testTerm1", "New search term not issued");
+               assert.propertyVal(payload, "term", "testTerm1", "New search term not issued");
                assert.propertyVal(payload, "filters", "", "Facet fields were not cleared");
             });
-         },
+      },
 
-         "Test setting null scope doesn't issue a search": function() {
-            // Test scope settings...
-            // Set empty scope...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test setting null scope doesn't issue a search": function() {
+         // Test scope settings...
+         // Set empty scope...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .clearLog()
             .findByCssSelector("#SET_SCOPE_0")
-               .click()
+            .click()
             .end()
             .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Setting a null scope issued a search request");
             });
-         },
+      },
 
-         "Test that setting the same scope doesn't issue new search": function() {
-            return browser.findByCssSelector("#SET_SCOPE_1")
-               .click()
+      "Test that setting the same scope doesn't issue new search": function() {
+         return this.remote.findByCssSelector("#SET_SCOPE_1")
+            .click()
             .end()
             .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Setting the same scope issued a search request");
             });
-         },
+      },
 
-         "Test that setting a new scope issues a new search": function() {
-            return browser.findByCssSelector("#SET_SCOPE_2")
-               .click()
+      "Test that setting a new scope issues a new search": function() {
+         return this.remote.findByCssSelector("#SET_SCOPE_2")
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "repo", false, "Setting a new scope didn't issue a search request (and repo wasn't set to false)");
                assert.propertyVal(payload, "site", "", "Site wasn't set to empty string for ALL_SITES scope");
             });
-         },
+      },
 
-         "Test that setting specific site scope issues a new search": function() {
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test that setting specific site scope issues a new search": function() {
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#SET_SCOPE_3")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "repo", false, "Repo wasn't set to false for site scope search");
                assert.propertyVal(payload, "site", "site1", "Site wasn't set requested site");
             });
-         },
+      },
 
-         "Test that setting repo scope issues a new search": function() {
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test that setting repo scope issues a new search": function() {
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#SET_SCOPE_1")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "repo", true, "Repo wasn't set to true for repo scope search");
                assert.propertyVal(payload, "site", "", "Site wasn't cleared for repo scope search");
             });
-         },
+      },
 
-         "Test setting multiple search attributes on hash (term)": function() {
-            // Check that updating the hash results in a search request being made...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test setting multiple search attributes on hash (term)": function() {
+         // Check that updating the hash results in a search request being made...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
-               assert.propertyVal(payload, "term","testTerm2", "Search term not set appropriately from hash change");
+               assert.propertyVal(payload, "term", "testTerm2", "Search term not set appropriately from hash change");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
                assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
                assert.propertyVal(payload, "sortAscending", "false", "Sort order not set appropriately from hash change");
                assert.propertyVal(payload, "sortField", "cm:title", "Sort property not set appropriately from hash change");
             });
-         },
+      },
 
-         "Test removing facet filter": function() {
-            // Click the button to remove filter2 from the filters list...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test removing facet filter": function() {
+         // Click the button to remove filter2 from the filters list...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#REMOVE_FACET_FILTER")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "filter1,filter3", "Facet filters not set appropriately from hash change");
             });
-         },
+      },
 
-         "Test setting bad facet filter doesn't issue search": function() {
-            // Test facet includes...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test setting bad facet filter doesn't issue search": function() {
+         // Test facet includes...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .clearLog()
             // Click the button to include an additional facet in search requests...
             .findByCssSelector("#INCLUDE_FACET_2")
-               .click()
+            .click()
             .end()
             .findByCssSelector("#APPLY_FACET_FILTER_0")
-               .click()
+            .click()
             .end()
             .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Bad facet filter triggered search");
             });
-         },
+      },
 
-         "Test applying new filter over pub/sub issues a search": function() {
-            // Click the button to add filter4 to the filters list...
-            return browser.findByCssSelector("#APPLY_FACET_FILTER")
-               .click()
+      "Test applying new filter over pub/sub issues a search": function() {
+         // Click the button to add filter4 to the filters list...
+         return this.remote.findByCssSelector("#APPLY_FACET_FILTER")
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "filter1,filter3,filter4", "Applying a filter didn't trigger a search");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
             });
-         },
+      },
 
-         "Test setting new search data on hash (term)": function() {
-            // Publish data to prevent block on concurrent requests...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test setting new search data on hash (term)": function() {
+         // Publish data to prevent block on concurrent requests...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA_2")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
-               assert.propertyVal(payload, "term","testTerm3", "Search term not set appropriately from hash change");
+               assert.propertyVal(payload, "term", "testTerm3", "Search term not set appropriately from hash change");
                assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
             });
-         },
+      },
 
-         "Test search result count publishes correctly": function() {
-            // Click the button to generate a fake search request response...
-            return browser.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
-               .click()
+      "Test search result count publishes correctly": function() {
+         // Click the button to generate a fake search request response...
+         return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
+            .click()
             .end()
             // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
             .getLastPublish("ALF_FACET_RESULTS_qname1")
@@ -330,54 +320,32 @@ define(["intern!object",
             })
             // Test that Number of search results is as expected.
             .findAllByCssSelector(".alfresco-search-AlfSearchResult")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
+            });
+      },
 
-         "Select an item": function() {
-            // Simulate the selection of an item to check that the itemPropertyKey matches
-            // nodeRef (AlfSearchList has an override of the default)...
-            return browser.findByCssSelector("#SELECT_A_RESULT")
-               .clearLog()
-               .click()
+      "Select an item": function() {
+         // Simulate the selection of an item to check that the itemPropertyKey matches
+         // nodeRef (AlfSearchList has an override of the default)...
+         return this.remote.findByCssSelector("#SELECT_A_RESULT")
+            .clearLog()
+            .click()
             .end()
 
-            .getLastPublish("ALF_SELECTED_FILES_CHANGED", "Item selection not detected");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("ALF_SELECTED_FILES_CHANGED", "Item selection not detected");
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "SearchList Tests (URL hashed filters)",
+      testPage: "/SearchList#searchTerm=png&scope=all_sites&sortField=cm%3Aname&sortAscending=true&facetFilters=%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcreator%7Cmjackson%2C%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcontent.mimetype%7Cimage%2Fpng",
 
-      return {
-         name: "SearchList Tests (URL hashed filters)",
-         
-         setup: function() {
-            browser = this.remote;
-            // jshint maxlen:false
-            return TestCommon.loadTestWebScript(this.remote, "/SearchList#searchTerm=png&scope=all_sites&sortField=cm%3Aname&sortAscending=true&facetFilters=%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcreator%7Cmjackson%2C%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcontent.mimetype%7Cimage%2Fpng", "SearchList Tests (URL hashed filters)").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check applied filter request": function() {
-            return browser.findByCssSelector("body").end().getLastPublish("ALF_SEARCH_REQUEST")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "filters", "{http://www.alfresco.org/model/content/1.0}creator|mjackson,{http://www.alfresco.org/model/content/1.0}content.mimetype|image/png", "Incorrect filters applied to search");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Check applied filter request": function() {
+         return this.remote.findByCssSelector("body").end().getLastPublish("ALF_SEARCH_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "filters", "{http://www.alfresco.org/model/content/1.0}creator|mjackson,{http://www.alfresco.org/model/content/1.0}content.mimetype|image/png", "Incorrect filters applied to search");
+            });
+      }
    });
 });

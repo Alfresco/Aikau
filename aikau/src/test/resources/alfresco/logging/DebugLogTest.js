@@ -20,42 +20,24 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
+   defineSuite(module, {
+      name: "DebugLog Tests",
+      testPage: "/DebugLog",
 
-   return {
-         name: "DebugLog Tests",
+      "Log displayed on button click": function() {
+         return this.remote.findById("SHOW_LOG_BUTTON")
+            .click()
+            .end()
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/DebugLog", "DebugLog Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Log displayed on button click": function() {
-            return browser.findById("SHOW_LOG_BUTTON")
-               .click()
-               .end()
-
-            .findAllByCssSelector(".alfresco_logging_DebugLog__log__entry[data-aikau-log-type=\"PUBLISH\"][data-aikau-log-topic=\"ALF_SHOW_PUBSUB_LOG\"]")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Did not show show pub-sub log in pub-sub log");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+         .findAllByCssSelector(".alfresco_logging_DebugLog__log__entry[data-aikau-log-type=\"PUBLISH\"][data-aikau-log-topic=\"ALF_SHOW_PUBSUB_LOG\"]")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Did not show show pub-sub log in pub-sub log");
+            });
+      }
    });
+});

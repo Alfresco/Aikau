@@ -17,6 +17,7 @@
     "grunt-shell-spawn": "0.3.10",
     "grunt-wait-server": "0.2.1",
     "intern": "3.0.6",
+    "istanbul": "0.4.2",
     "jsdoc": "3.4.0",
     "jshint-stylish": "2.1.0",
     "less": "2.6.1",

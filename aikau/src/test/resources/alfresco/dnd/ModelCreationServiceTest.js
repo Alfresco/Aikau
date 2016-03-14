@@ -20,41 +20,29 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
-
+   defineSuite(module, {
       name: "DND Model Creation Service Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/modelling-creation-service-testing", "DND Model Creation Service Tests")
-            .end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/modelling-creation-service-testing",
 
       "Drive the creation service": function() {
-         return browser.findByCssSelector("#DRIVE_THE_SERVICE_label")
+         return this.remote.findByCssSelector("#DRIVE_THE_SERVICE_label")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_DND_MODEL_LIBRARIES", "publish", "last"))
+            .end()
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_DND_MODEL_LIBRARIES", "publish", "last"))
             .then(null, function() {
                assert(false, "Library data not exported");
             });
       },
 
       "Find NLS properties": function() {
-         return browser.findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "nls"))
+         return this.remote.findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "nls"))
             .getVisibleText()
             .then(function(text) {
                assert(text.indexOf("test.prefix.widget.title=baa") !== -1, "Title not translated");
@@ -65,7 +53,7 @@ registerSuite(function(){
       },
 
       "Check for unnecessary NLS properties": function() {
-         return browser.findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "nls"))
+         return this.remote.findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "nls"))
             .getVisibleText()
             .then(function(text) {
                assert(text.indexOf("test.prefix.widget.noTranslation") === -1, "Unexpected NLS property found");
@@ -73,7 +61,7 @@ registerSuite(function(){
       },
 
       "Find functions": function() {
-         return browser.findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "js"))
+         return this.remote.findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "js"))
             .getVisibleText()
             .then(function(text) {
                assert(text.indexOf("function getTestModelConfig()") !== -1, "Could not find widgets config function");
@@ -81,11 +69,6 @@ registerSuite(function(){
                assert(text.indexOf("function getTestModelDisplay()") !== -1, "Could not find display widgets config function");
                assert(text.indexOf("function getDefaultTestModelModel()") !== -1, "Could model creation function");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

@@ -20,44 +20,27 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "NotificationUtils Mixin Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/NotificationUtils", "NotificationUtils Mixin Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/NotificationUtils",
 
       "Check that notification is displayed": function() {
-         return browser.findAllByCssSelector(".alfresco-notifications-AlfNotification__message")
+         return this.remote.findAllByCssSelector(".alfresco-notifications-AlfNotification__message")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Notification not displayed");
             });
       },
 
       "Check that prompt is displayed": function() {
-         return browser.findAllByCssSelector("#NOTIFICATION_PROMPT")
+         return this.remote.findAllByCssSelector("#NOTIFICATION_PROMPT")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Notification prompt was not displayed");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

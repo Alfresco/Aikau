@@ -19,33 +19,23 @@
 
 /**
  * This test interrogates the enable/disable and re-labelling features provided in the _AlfMenuItemMixin.
- * 
+ *
  * @author Richard Smith
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Disable MenuItem Tests",
+      testPage: "/DisableMenuItemTestPage",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DisableMenuItemTestPage", "Disable MenuItem Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Tests": function () {
+      "Tests": function() {
          var testname = "DisableMenuItemTests";
-         return browser.findById("MENU_BAR_ITEM_1")
+         return this.remote.findById("MENU_BAR_ITEM_1")
             .getAttribute("class")
             .then(
                function(currClasses) {
@@ -54,160 +44,155 @@ registerSuite(function(){
                })
             .end()
 
-            // Disable menu item
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Disable menu item
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_1")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            // Check menu item is now disabled
-            .findById("MENU_BAR_ITEM_1")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking menu item is disabled");
-                     expect(currClasses).to.contain("dijitMenuItemDisabled", "The menu item should be disabled");
-                  })
-               .end()
+         // Check menu item is now disabled
+         .findById("MENU_BAR_ITEM_1")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking menu item is disabled");
+                  expect(currClasses).to.contain("dijitMenuItemDisabled", "The menu item should be disabled");
+               })
+            .end()
 
-            // Enable menu item
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Enable menu item
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_2")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            // Check menu item is enabled
-            .findById("MENU_BAR_ITEM_1")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking menu item is enabled again");
-                     expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
-                  })
-               .end()
+         // Check menu item is enabled
+         .findById("MENU_BAR_ITEM_1")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking menu item is enabled again");
+                  expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
+               })
+            .end()
 
-            // Faulty payload 1
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Faulty payload 1
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_3")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            // Check menu item is enabled
-            .findById("MENU_BAR_ITEM_1")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking menu item is still enabled");
-                     expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
-                  })
-               .end()
+         // Check menu item is enabled
+         .findById("MENU_BAR_ITEM_1")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking menu item is still enabled");
+                  expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
+               })
+            .end()
 
-            // Faulty payload 2
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Faulty payload 2
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_4")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            // Check menu item is enabled
-            .findById("MENU_BAR_ITEM_1")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking menu item is still enabled");
-                     expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
-                  })
-               .end()
+         // Check menu item is enabled
+         .findById("MENU_BAR_ITEM_1")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking menu item is still enabled");
+                  expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
+               })
+            .end()
 
-            // Faulty payload 3
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Faulty payload 3
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_5")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            // Check menu item is enabled
-            .findById("MENU_BAR_ITEM_1")
-               .getAttribute("class")
-               .then(
-                  function(currClasses) {
-                     TestCommon.log(testname, "Checking menu item is still enabled");
-                     expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
-                  })
-               .end()
+         // Check menu item is enabled
+         .findById("MENU_BAR_ITEM_1")
+            .getAttribute("class")
+            .then(
+               function(currClasses) {
+                  TestCommon.log(testname, "Checking menu item is still enabled");
+                  expect(currClasses).to.not.contain("dijitMenuItemDisabled", "The menu item should not be disabled");
+               })
+            .end()
 
-            // Check menu item is label correctly
-            .findById("MENU_BAR_ITEM_1")
-               .getVisibleText()
-               .then(
-                  function(txt) {
-                     TestCommon.log(testname, "Checking menu item has expected label");
-                     expect(txt).to.equal("Menu Bar Item", "The menu item has the wrong label");
-                  })
-               .end()
+         // Check menu item is label correctly
+         .findById("MENU_BAR_ITEM_1")
+            .getVisibleText()
+            .then(
+               function(txt) {
+                  TestCommon.log(testname, "Checking menu item has expected label");
+                  expect(txt).to.equal("Menu Bar Item", "The menu item has the wrong label");
+               })
+            .end()
 
-            // Change label
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Change label
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_6")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            .findById("MENU_BAR_ITEM_1")
-               .getVisibleText()
-               .then(
-                  function(txt) {
-                     TestCommon.log(testname, "Checking menu item has new label");
-                     expect(txt).to.equal("Thingy", "The menu item has the wrong label");
-                  })
-               .end()
+         .findById("MENU_BAR_ITEM_1")
+            .getVisibleText()
+            .then(
+               function(txt) {
+                  TestCommon.log(testname, "Checking menu item has new label");
+                  expect(txt).to.equal("Thingy", "The menu item has the wrong label");
+               })
+            .end()
 
-            // Change label again
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Change label again
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_7")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            .findById("MENU_BAR_ITEM_1")
-               .getVisibleText()
-               .then(
-                  function(txt) {
-                     TestCommon.log(testname, "Checking menu item has another new label");
-                     expect(txt).to.equal("Wot-ya-ma-call-it", "The menu item has the wrong label");
-                  })
-               .end()
+         .findById("MENU_BAR_ITEM_1")
+            .getVisibleText()
+            .then(
+               function(txt) {
+                  TestCommon.log(testname, "Checking menu item has another new label");
+                  expect(txt).to.equal("Wot-ya-ma-call-it", "The menu item has the wrong label");
+               })
+            .end()
 
-            // Fault - no change
-            .findById("DROP_DOWN_MENU_1")
-               .click()
-               .end()
+         // Fault - no change
+         .findById("DROP_DOWN_MENU_1")
+            .click()
+            .end()
             .findById("MENU_ITEM_8")
-               .click()
-               .end()
+            .click()
+            .end()
 
-            .findById("MENU_BAR_ITEM_1")
-               .getVisibleText()
-               .then(
-                  function(txt) {
-                     TestCommon.log(testname, "Checking menu item has not changed label");
-                     expect(txt).to.equal("Wot-ya-ma-call-it", "The menu item has the wrong label");
-                  });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+         .findById("MENU_BAR_ITEM_1")
+            .getVisibleText()
+            .then(
+               function(txt) {
+                  TestCommon.log(testname, "Checking menu item has not changed label");
+                  expect(txt).to.equal("Wot-ya-ma-call-it", "The menu item has the wrong label");
+               });
       }
-   };
    });
 });

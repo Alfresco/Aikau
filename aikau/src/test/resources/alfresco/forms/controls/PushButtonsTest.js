@@ -20,121 +20,105 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, assert, TestCommon, keys) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-      registerSuite(function() {
-         var browser;
+   defineSuite(module, {
+      name: "PushButtons Tests",
+      testPage: "/PushButtons",
 
-         return {
-            name: "PushButtons Tests",
+      "Initial value is set correctly": function() {
+         return this.remote.findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/PushButtons", "PushButtons Control Tests");
-            },
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "canbuild", true);
+               assert.lengthOf(payload.properfootball, 2);
+               assert.deepPropertyVal(payload, "properfootball[0]", "rugby_football");
+               assert.deepPropertyVal(payload, "properfootball[1]", "union_football");
+               assert.propertyVal(payload, "bestlanguage", "javascript");
+            });
+      },
 
-            beforeEach: function() {
-               browser.end();
-            },
+      "Value can be updated by publish": function() {
+         return this.remote.findById("CANT_BUILD_VALUE")
+            .click()
+            .end()
 
-            "Initial value is set correctly": function() {
-               return browser.findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .findById("RUGBY_UNION_VALUE")
+            .click()
+            .end()
 
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "canbuild", true);
-                     assert.lengthOf(payload.properfootball, 2);
-                     assert.deepPropertyVal(payload, "properfootball[0]", "rugby_football");
-                     assert.deepPropertyVal(payload, "properfootball[1]", "union_football");
-                     assert.propertyVal(payload, "bestlanguage", "javascript");
-                  });
-            },
+         .findById("VB_VALUE")
+            .click()
+            .end()
 
-            "Value can be updated by publish": function() {
-               return browser.findById("CANT_BUILD_VALUE")
-                  .click()
-                  .end()
+         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-               .findById("RUGBY_UNION_VALUE")
-                  .click()
-                  .end()
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "canbuild", false);
+               assert.lengthOf(payload.properfootball, 1);
+               assert.deepPropertyVal(payload, "properfootball[0]", "rugby_union");
+               assert.propertyVal(payload, "bestlanguage", "vb");
+            });
+      },
 
-               .findById("VB_VALUE")
-                  .click()
-                  .end()
+      "Keyboard navigation and selection is supported on single-value controls": function() {
+         return this.remote.findById("VB_VALUE") // Focus on last button at top
+            .click()
+            .end()
 
-               .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .pressKeys(keys.TAB) // Tab to "canbuild" control
+            .pressKeys(keys.ARROW_LEFT)
+            .pressKeys(keys.SPACE)
+            .end()
 
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "canbuild", false);
-                     assert.lengthOf(payload.properfootball, 1);
-                     assert.deepPropertyVal(payload, "properfootball[0]", "rugby_union");
-                     assert.propertyVal(payload, "bestlanguage", "vb");
-                  });
-            },
+         .pressKeys(keys.TAB) // Tab to "properfootball" control, first value
+            .pressKeys(keys.SPACE)
+            .end()
 
-            "Keyboard navigation and selection is supported on single-value controls": function() {
-               return browser.findById("VB_VALUE") // Focus on last button at top
-                  .click()
-                  .end()
+         .pressKeys(keys.TAB) // Tab to "properfootball" control, second value
+            .pressKeys(keys.SPACE)
+            .end()
 
-               .pressKeys(keys.TAB) // Tab to "canbuild" control
-                  .pressKeys(keys.ARROW_LEFT)
-                  .pressKeys(keys.SPACE)
-                  .end()
+         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-               .pressKeys(keys.TAB) // Tab to "properfootball" control, first value
-                  .pressKeys(keys.SPACE)
-                  .end()
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "canbuild", true);
+               assert.lengthOf(payload.properfootball, 1);
+               assert.deepPropertyVal(payload, "properfootball[0]", "rugby_football");
+            });
+      },
 
-               .pressKeys(keys.TAB) // Tab to "properfootball" control, second value
-                  .pressKeys(keys.SPACE)
-                  .end()
+      "Can select push button with mouse": function() {
+         return this.remote.findByCssSelector("#BEST_LANGUAGE_CONTROL label:nth-of-type(2)")
+            .click()
+            .end()
 
-               .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "canbuild", true);
-                     assert.lengthOf(payload.properfootball, 1);
-                     assert.deepPropertyVal(payload, "properfootball[0]", "rugby_football");
-                  });
-            },
-
-            "Can select push button with mouse": function() {
-               return browser.findByCssSelector("#BEST_LANGUAGE_CONTROL label:nth-of-type(2)")
-                  .click()
-                  .end()
-
-               .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
-
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "bestlanguage", "javascript");
-                  });
-            },
-
-            "Post Coverage Results": function() {
-               TestCommon.alfPostCoverageResults(this, browser);
-            }
-         };
-      });
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "bestlanguage", "javascript");
+            });
+      }
    });
+});

@@ -20,10 +20,11 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var selectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/Select");
@@ -39,25 +40,25 @@ define(["intern!object",
             dropDown: TestCommon.getTestSelector(selectSelectors, "option.menu", ["SELECT_1"]),
             openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["SELECT_1"]),
             options: TestCommon.getTestSelector(selectSelectors, "options", ["SELECT_1"]),
-            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_1","3"])
+            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_1", "3"])
          },
          unscoped1: {
             dropDown: TestCommon.getTestSelector(selectSelectors, "option.menu", ["SELECT_3"]),
             openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["SELECT_3"]),
             options: TestCommon.getTestSelector(selectSelectors, "options", ["SELECT_3"]),
-            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_3","3"])
+            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_3", "3"])
          },
          scoped2: {
             dropDown: TestCommon.getTestSelector(selectSelectors, "option.menu", ["SELECT_2"]),
             openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["SELECT_2"]),
             options: TestCommon.getTestSelector(selectSelectors, "options", ["SELECT_2"]),
-            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_2","3"])
+            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_2", "3"])
          },
          unscoped2: {
             dropDown: TestCommon.getTestSelector(selectSelectors, "option.menu", ["SELECT_4"]),
             openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["SELECT_4"]),
             options: TestCommon.getTestSelector(selectSelectors, "options", ["SELECT_3"]),
-            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_4","3"])
+            option3: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SELECT_4", "3"])
          }
       },
       filteringSelects: {
@@ -66,14 +67,14 @@ define(["intern!object",
             filter: TestCommon.getTestSelector(fsSelectors, "filter.input", ["FILTERING_SELECT_1"]),
             openIcon: TestCommon.getTestSelector(fsSelectors, "open.menu.icon", ["FILTERING_SELECT_1"]),
             options: TestCommon.getTestSelector(fsSelectors, "options", ["FILTERING_SELECT_1"]),
-            option1: TestCommon.getTestSelector(fsSelectors, "nth.option.label", ["FILTERING_SELECT_1","1"])
+            option1: TestCommon.getTestSelector(fsSelectors, "nth.option.label", ["FILTERING_SELECT_1", "1"])
          },
          unscoped1: {
             dropDown: TestCommon.getTestSelector(fsSelectors, "option.menu", ["FILTERING_SELECT_2"]),
             filter: TestCommon.getTestSelector(fsSelectors, "filter.input", ["FILTERING_SELECT_2"]),
             openIcon: TestCommon.getTestSelector(fsSelectors, "open.menu.icon", ["FILTERING_SELECT_2"]),
             options: TestCommon.getTestSelector(fsSelectors, "options", ["FILTERING_SELECT_2"]),
-            option1: TestCommon.getTestSelector(fsSelectors, "nth.option.label", ["FILTERING_SELECT_2","1"])
+            option1: TestCommon.getTestSelector(fsSelectors, "nth.option.label", ["FILTERING_SELECT_2", "1"])
          }
       },
       multiSelects: {
@@ -104,246 +105,230 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Options Service Tests",
+      testPage: "/OptionsService",
 
-      return {
-         name: "Options Service Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/OptionsService", "Options Service Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Count options in scoped Select": function() {
-            return browser.findByCssSelector(selectors.selectControls.scoped1.openIcon)
-               .click()
+      "Count options in scoped Select": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.scoped1.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.selectControls.scoped1.dropDown)
+         .findDisplayedByCssSelector(selectors.selectControls.scoped1.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.selectControls.scoped1.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.selectControls.scoped1.options)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Third option label in scoped select is correct": function() {
-            return browser.findByCssSelector(selectors.selectControls.scoped1.option3)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "abeecher");
-               })
+      "Third option label in scoped select is correct": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.scoped1.option3)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "abeecher");
+            })
 
-               // Select 3rd option to close menu
-               .click(); 
-         },
+         // Select 3rd option to close menu
+         .click();
+      },
 
-         "Count options in unscoped Select": function() {
-            return browser.findByCssSelector(selectors.selectControls.unscoped1.openIcon)
-               .click()
+      "Count options in unscoped Select": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.unscoped1.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.selectControls.unscoped1.dropDown)
+         .findDisplayedByCssSelector(selectors.selectControls.unscoped1.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.selectControls.unscoped1.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.selectControls.unscoped1.options)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Third option label in unscoped select is correct": function() {
-            return browser.findByCssSelector(selectors.selectControls.unscoped1.option3)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "abeecher");
-               })
+      "Third option label in unscoped select is correct": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.unscoped1.option3)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "abeecher");
+            })
 
-               // Select 3rd option to close menu
-               .click(); 
-         },
+         // Select 3rd option to close menu
+         .click();
+      },
 
-         "Count options in scoped Select (UserService)": function() {
-            return browser.findByCssSelector(selectors.selectControls.scoped2.openIcon)
-               .click()
+      "Count options in scoped Select (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.scoped2.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.selectControls.scoped2.dropDown)
+         .findDisplayedByCssSelector(selectors.selectControls.scoped2.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.selectControls.scoped2.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.selectControls.scoped2.options)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Third option label in scoped select is correct (UserService)": function() {
-            return browser.findByCssSelector(selectors.selectControls.scoped2.option3)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Alice Beecher");
-               })
+      "Third option label in scoped select is correct (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.scoped2.option3)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Alice Beecher");
+            })
 
-               // Select 3rd option to close menu
-               .click(); 
-         },
+         // Select 3rd option to close menu
+         .click();
+      },
 
-         "Count options in unscoped Select (UserService)": function() {
-            return browser.findByCssSelector(selectors.selectControls.unscoped2.openIcon)
-               .click()
+      "Count options in unscoped Select (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.unscoped2.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.selectControls.unscoped2.dropDown)
+         .findDisplayedByCssSelector(selectors.selectControls.unscoped2.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.selectControls.unscoped2.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.selectControls.unscoped2.options)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Third option label in unscoped select is correct (UserService)": function() {
-            return browser.findByCssSelector(selectors.selectControls.unscoped2.option3)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Alice Beecher");
-               })
+      "Third option label in unscoped select is correct (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.selectControls.unscoped2.option3)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Alice Beecher");
+            })
 
-               // Select 3rd option to close menu
-               .click(); 
-         },
+         // Select 3rd option to close menu
+         .click();
+      },
 
-         "Count filter scoped options": function() {
-            return browser.findByCssSelector(selectors.filteringSelects.scoped1.openIcon)
-               .click()
+      "Count filter scoped options": function() {
+         return this.remote.findByCssSelector(selectors.filteringSelects.scoped1.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.filteringSelects.scoped1.dropDown)
+         .findDisplayedByCssSelector(selectors.filteringSelects.scoped1.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.selectControls.scoped1.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               })
+         .findAllByCssSelector(selectors.selectControls.scoped1.options)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            })
             .end();
-         },
+      },
 
-         "Count filter unscoped options": function() {
-            return browser.findByCssSelector(selectors.filteringSelects.unscoped1.openIcon)
-               .click()
+      "Count filter unscoped options": function() {
+         return this.remote.findByCssSelector(selectors.filteringSelects.unscoped1.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.filteringSelects.unscoped1.dropDown)
+         .findDisplayedByCssSelector(selectors.filteringSelects.unscoped1.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.selectControls.unscoped1.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               })
+         .findAllByCssSelector(selectors.selectControls.unscoped1.options)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            })
             .end();
-         },
+      },
 
-         "Count scoped MultiSelectInput options": function() {
-            return browser.findByCssSelector(selectors.multiSelects.scoped1.searchbox)
-               .click()
+      "Count scoped MultiSelectInput options": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.scoped1.searchbox)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.multiSelects.scoped1.loaded)
+         .findByCssSelector(selectors.multiSelects.scoped1.loaded)
             .end()
 
-            .findAllByCssSelector(selectors.multiSelects.scoped1.result)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.multiSelects.scoped1.result)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Check scoped MultiSelect second option label": function() {
-            return browser.findByCssSelector(selectors.multiSelects.scoped1.secondResult)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "mjackson");
-               })
-               .click();
-         },
+      "Check scoped MultiSelect second option label": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.scoped1.secondResult)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "mjackson");
+            })
+            .click();
+      },
 
-         "Count unscoped MultiSelectInput options": function() {
-            return browser.findByCssSelector(selectors.multiSelects.unscoped1.searchbox)
-               .click()
+      "Count unscoped MultiSelectInput options": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.unscoped1.searchbox)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.multiSelects.unscoped1.loaded)
+         .findByCssSelector(selectors.multiSelects.unscoped1.loaded)
             .end()
 
-            .findAllByCssSelector(selectors.multiSelects.unscoped1.result)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.multiSelects.unscoped1.result)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Check unscoped MultiSelect second option label": function() {
-            return browser.findByCssSelector(selectors.multiSelects.unscoped1.secondResult)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "mjackson");
-               })
-               .click();
-         },
+      "Check unscoped MultiSelect second option label": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.unscoped1.secondResult)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "mjackson");
+            })
+            .click();
+      },
 
-         "Count scoped MultiSelectInput options (UserService)": function() {
-            return browser.findByCssSelector(selectors.multiSelects.scoped2.searchbox)
-               .click()
+      "Count scoped MultiSelectInput options (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.scoped2.searchbox)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.multiSelects.scoped2.loaded)
+         .findByCssSelector(selectors.multiSelects.scoped2.loaded)
             .end()
 
-            .findAllByCssSelector(selectors.multiSelects.scoped2.result)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.multiSelects.scoped2.result)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Check scoped MultiSelect second option label (UserService)": function() {
-            return browser.findByCssSelector(selectors.multiSelects.scoped2.secondResult)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Mike Jackson");
-               })
-               .click();
-         },
+      "Check scoped MultiSelect second option label (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.scoped2.secondResult)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Mike Jackson");
+            })
+            .click();
+      },
 
-         "Count unscoped MultiSelectInput options (UserService)": function() {
-            return browser.findByCssSelector(selectors.multiSelects.unscoped2.searchbox)
-               .click()
+      "Count unscoped MultiSelectInput options (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.unscoped2.searchbox)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.multiSelects.unscoped2.loaded)
+         .findByCssSelector(selectors.multiSelects.unscoped2.loaded)
             .end()
 
-            .findAllByCssSelector(selectors.multiSelects.unscoped2.result)
-               .then(function(options) {
-                  assert.lengthOf(options, 6);
-               });
-         },
+         .findAllByCssSelector(selectors.multiSelects.unscoped2.result)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
+      },
 
-         "Check unscoped MultiSelect second option label (UserService)": function() {
-            return browser.findByCssSelector(selectors.multiSelects.unscoped2.secondResult)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Mike Jackson");
-               })
-               .click();
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Check unscoped MultiSelect second option label (UserService)": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.unscoped2.secondResult)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Mike Jackson");
+            })
+            .click();
+      }
    });
 });

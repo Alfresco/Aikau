@@ -21,6 +21,7 @@
  * This test is designed to simply pull in all the files to balance out the code coverage results.
  * 
  * @author Dave Draper
+ * @author Martin Doyle
  */
 define(["intern!object",
         "intern/chai!assert",
@@ -40,22 +41,14 @@ define(["intern!object",
          },
 
          "Balance": function() {
-            if (intern.args.doCoverage === true)
-            {
-               return TestCommon.loadTestWebScript(this.remote, "/RequireEverything", "Coverage Balancer")
-                  .end()
+            return TestCommon.loadTestWebScript(this.remote, "/RequireEverything", "Coverage Balancer")
+               .end()
 
-               .findByCssSelector("#LABEL")
-                  .getVisibleText()
-                  .then(function(text) {
-                     assert(text === "Coverage Balanced!", "Code Coverage Balancer Didn't Load - coverage results will be invalid");
-                  })
-                  .end();
-            }
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
+            .findById("LABEL")
+               .getVisibleText()
+               .then(function(visibleText) {
+                  assert.equal(visibleText, "Coverage Balanced!");
+               });
          }
       };
    });

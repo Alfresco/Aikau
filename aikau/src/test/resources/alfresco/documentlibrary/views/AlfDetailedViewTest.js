@@ -20,35 +20,25 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert", 
-        "alfresco/TestCommon"], 
-        function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
+        /*jshint maxlen:false*/
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AlfDetailedView",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfDetailedView", "AlfDetailedView").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AlfDetailedView",
 
       "Two items are listed": function() {
-         return browser.findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem")
+         return this.remote.findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem")
             .then(function(elements) {
                assert.lengthOf(elements, 4, "Incorrect number of items displayed");
             });
       },
 
       "Version does not appear on folders or working copies": function() {
-         return browser.findAllByCssSelector(".detail-item__version")
+         return this.remote.findAllByCssSelector(".detail-item__version")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Did not create one (and only one) version widget");
             })
@@ -61,7 +51,7 @@ registerSuite(function(){
       },
 
       "Version only appears on hover": function() {
-         return browser.findByCssSelector(".detail-item__version .value")
+         return this.remote.findByCssSelector(".detail-item__version .value")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "Version information visible without hovering");
@@ -91,14 +81,14 @@ registerSuite(function(){
       },
 
       "Title appears when specified": function() {
-         return browser.findAllByCssSelector(".detail-item__title")
+         return this.remote.findAllByCssSelector(".detail-item__title")
             .then(function(elements) {
                assert.lengthOf(elements, 4, "Incorrect number of title widgets created");
             });
       },
 
       "Description populated when specified": function() {
-         return browser.findAllByCssSelector(".detail-item__description .alfresco-renderers-Property:not(.faded)")
+         return this.remote.findAllByCssSelector(".detail-item__description .alfresco-renderers-Property:not(.faded)")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of description widgets populated");
             })
@@ -117,7 +107,7 @@ registerSuite(function(){
       },
 
       "Tags appear on all but working copy": function() {
-         return browser.findAllByCssSelector(".detail-item__tags")
+         return this.remote.findAllByCssSelector(".detail-item__tags")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Incorrect number of tag widgets created");
             })
@@ -130,7 +120,7 @@ registerSuite(function(){
       },
 
       "Category only appears when specified": function() {
-         return browser.findAllByCssSelector(".detail-item__category")
+         return this.remote.findAllByCssSelector(".detail-item__category")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Incorrect number of category widgets populated");
             })
@@ -143,7 +133,7 @@ registerSuite(function(){
       },
 
       "Working copy has appropriate indicator": function() {
-         return browser.findAllByCssSelector(".indicator[alt=editing]")
+         return this.remote.findAllByCssSelector(".indicator[alt=editing]")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Incorrect number of editing indicators created");
             })
@@ -156,7 +146,7 @@ registerSuite(function(){
       },
 
       "Working copy has appropriate banner": function() {
-         return browser.findAllByCssSelector(".detail-item__lockedBanner:not(.hidden)")
+         return this.remote.findAllByCssSelector(".detail-item__lockedBanner:not(.hidden)")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Incorrect number of locked banners created");
             })
@@ -169,7 +159,7 @@ registerSuite(function(){
       },
 
       "Items have size and folders do not": function() {
-         return browser.findAllByCssSelector(".detail-item__size")
+         return this.remote.findAllByCssSelector(".detail-item__size")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of size widgets created");
             })
@@ -182,7 +172,7 @@ registerSuite(function(){
       },
 
       "Clicking the comments link only opens the comments for that item": function() {
-         return browser.findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .comment-link")
+         return this.remote.findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .comment-link")
             .click()
             .end()
 
@@ -200,11 +190,6 @@ registerSuite(function(){
             .then(function(size) {
                assert.equal(size.height, 0, "Comments expanded for incorrect item");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

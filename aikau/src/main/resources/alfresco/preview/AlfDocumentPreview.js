@@ -658,23 +658,22 @@ define(["dojo/_base/declare",
        * @return {string} The "main" element holding the actual previewer.
        */
       getContentUrl: function alfresco_preview_AlfDocumentPreview__getContentUrl(download) {
-         var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + (this.proxy ? this.proxy + "/" : "");
+         var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + (this.proxy ? this.proxy + "/" : ""),
+            attach;
          switch (this.apiVersion)
          {
             case 0:
             {
                var nodeRefAsLink = this.nodeRef.replace(":/", ""),
                   noCache = "noCache=" + new Date().getTime();
-                  attach = download ? "a=true" : "a=false";
+               attach = download ? "a=true" : "a=false";
                return proxy + this.api + "/node/" + nodeRefAsLink + "/content/" + encodeURIComponent(this.name) + "?c=force&" + noCache + "&" + attach;
-               break;
             }
             case 1:
             {
-               var nodeRefAsId = this.nodeRef.replace(/.*:\/\/.*\//, ""),
-                  attach = download ? "attachment=true" : "attachment=false";
+               var nodeRefAsId = this.nodeRef.replace(/.*:\/\/.*\//, "");
+               attach = download ? "attachment=true" : "attachment=false";
                return proxy + "public/alfresco/versions/1/nodes/" + nodeRefAsId + "/content/" + encodeURIComponent(this.name) + "?" + attach;
-               break;
             }
             default:
                this.alfLog("error", "Unknown Rendition API version specified: " + this.apiVersion);
@@ -723,13 +722,11 @@ define(["dojo/_base/declare",
                var nodeRefAsLink = this.nodeRef.replace(":/", ""),
                   force = "c=force";
                return proxy + this.api + "/node/" + nodeRefAsLink + "/content/thumbnails/" + thumbnail + (fileSuffix ? "/suffix" + fileSuffix : "") + "?" + force + "&" + noCache;
-               break;
             }
             case 1:
             {
                var nodeRefAsId = this.nodeRef.replace(/.*:\/\/.*\//, "");
                return proxy + "public/alfresco/versions/1/nodes/" + nodeRefAsId + "/renditions/" + thumbnail + "/content?attachment=false" + "&" + noCache;
-               break;
             }
             default:
                this.alfLog("error", "Unknown Rendition API version specified: " + this.apiVersion);

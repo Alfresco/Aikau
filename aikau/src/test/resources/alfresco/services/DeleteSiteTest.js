@@ -20,45 +20,34 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Delete Site Tests",
+      testPage: "/DeleteSite",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DeleteSite", "Delete Site Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Delete with redirect": function () {
+      "Delete with redirect": function() {
          // Open the drop-down menu...
-         return browser.findById("MENUBAR_POPUP_text")
+         return this.remote.findById("MENUBAR_POPUP_text")
             .click()
-         .end()
+            .end()
 
          // Click the delete with redirect menu item...
          .findById("DELETE_WITH_REDIRECT_text")
             .click()
-         .end()
+            .end()
 
          // Wait for the confirmation dialog...
          .findByCssSelector("#ALF_SITE_SERVICE_DIALOG.dialogDisplayed")
-         .end()
+            .end()
 
          // Confirm deletion...
          .findById("ALF_SITE_SERVICE_DIALOG_CONFIRMATION_label")
             .click()
-         .end()
+            .end()
 
          // Check for redirect...
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
@@ -72,36 +61,31 @@ registerSuite(function(){
          .clearLog();
       },
 
-      "Delete with reload": function () {
+      "Delete with reload": function() {
          // Open the drop-down menu...
-         return browser.findById("MENUBAR_POPUP_text")
+         return this.remote.findById("MENUBAR_POPUP_text")
             .click()
-         .end()
+            .end()
 
          // Click the delete with reload menu item...
          .findById("DELETE_WITH_RELOAD_text")
             .click()
-         .end()
+            .end()
 
          // Wait for the confirmation dialog...
          .findByCssSelector("#ALF_SITE_SERVICE_DIALOG.dialogDisplayed")
-         .end()
+            .end()
 
          // Confirm deletion...
          .findById("ALF_SITE_SERVICE_DIALOG_CONFIRMATION_label")
             .click()
-         .end()
+            .end()
 
          // Check for redirect...
          .getLastPublish("ALF_DOCLIST_RELOAD_DATA", "No reload topic published")
 
          // Clear the logs for the next test
          .clearLog();
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

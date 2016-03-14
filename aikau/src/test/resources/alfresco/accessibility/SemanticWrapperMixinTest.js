@@ -20,62 +20,45 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "SemanticWrapperMixin Test",
+      testPage: "/SemanticWrapperMixin",
 
-      return {
-         name: "SemanticWrapperMixin Test",
+      "Test NO_WRAPPER is correct": function() {
+         return this.remote.findByCssSelector("#NO_WRAPPER > span.copyright > span.licenseHolder")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Licensed To: NO_WRAPPER licenseLabel", "The NO_WRAPPER dom must be incorrect");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SemanticWrapperMixin", "SemanticWrapperMixin Tests").end();
-         },
+      "Test GOOD_WRAPPER is correct": function() {
+         return this.remote.findByCssSelector("#GOOD_WRAPPER > footer > span.copyright > span.licenseHolder")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Licensed To: GOOD_WRAPPER licenseLabel", "The GOOD_WRAPPER dom must be incorrect");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Test BAD_WRAPPER is correct": function() {
+         return this.remote.findByCssSelector("#BAD_WRAPPER > span.copyright > span.licenseHolder")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Licensed To: BAD_WRAPPER licenseLabel", "The BAD_WRAPPER dom must be incorrect");
+            });
+      },
 
-
-         "Test NO_WRAPPER is correct": function () {
-            return browser.findByCssSelector("#NO_WRAPPER > span.copyright > span.licenseHolder")
-               .getVisibleText()
-               .then(function (text) {
-                  assert.equal(text, "Licensed To: NO_WRAPPER licenseLabel", "The NO_WRAPPER dom must be incorrect");
-               });
-         },
-
-         "Test GOOD_WRAPPER is correct": function() {
-            return browser.findByCssSelector("#GOOD_WRAPPER > footer > span.copyright > span.licenseHolder")
-               .getVisibleText()
-               .then(function (text) {
-                  assert.equal(text, "Licensed To: GOOD_WRAPPER licenseLabel", "The GOOD_WRAPPER dom must be incorrect");
-               });
-         },
-
-         "Test BAD_WRAPPER is correct": function() {
-            return browser.findByCssSelector("#BAD_WRAPPER > span.copyright > span.licenseHolder")
-               .getVisibleText()
-               .then(function (text) {
-                  assert.equal(text, "Licensed To: BAD_WRAPPER licenseLabel", "The BAD_WRAPPER dom must be incorrect");
-               });
-         },
-
-         "Test LEFT_AND_RIGHT_WRAPPER is correct": function() {
-            return browser.findByCssSelector("#LEFT_AND_RIGHT_WRAPPER > header > div > div.alfresco-layout-LeftAndRight__left")
-               .getVisibleText()
-               .then(function (text) {
-                  assert.equal(text, "This is a title with a semantic wrapper", "The LEFT_AND_RIGHT_WRAPPER dom must be incorrect");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Test LEFT_AND_RIGHT_WRAPPER is correct": function() {
+         return this.remote.findByCssSelector("#LEFT_AND_RIGHT_WRAPPER > header > div > div.alfresco-layout-LeftAndRight__left")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "This is a title with a semantic wrapper", "The LEFT_AND_RIGHT_WRAPPER dom must be incorrect");
+            });
+      }
    });
 });

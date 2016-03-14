@@ -20,30 +20,20 @@
 /**
  * @author Richard Smith
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "PdfJs missing PDF test",
+      testPage: "/PdfJsPreviewMissing",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/PdfJsPreviewMissing", "PdfJs missing PDF test").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Checking controls are hidden": function () {
-         return browser.sleep(500)
+      "Checking controls are hidden": function() {
+         return this.remote.sleep(500)
             .findByCssSelector(".previewer > .controls")
             .isDisplayed()
             .then(function(displayed) {
@@ -52,7 +42,7 @@ registerSuite(function(){
       },
 
       "Checking sidebar is hidden": function() {
-         return browser.findByCssSelector(".previewer > .sidebar")
+         return this.remote.findByCssSelector(".previewer > .sidebar")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Sidebar should be hidden");
@@ -60,7 +50,7 @@ registerSuite(function(){
       },
 
       "Checking viewer is hidden": function() {
-         return browser.findByCssSelector(".previewer > .viewer")
+         return this.remote.findByCssSelector(".previewer > .viewer")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Viewer should be hidden");
@@ -68,7 +58,7 @@ registerSuite(function(){
       },
 
       "Checking notification is shown": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(true, "Notification should be shown");
@@ -76,45 +66,29 @@ registerSuite(function(){
       },
 
       "Checking notification has text in it": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .getVisibleText()
             .then(function(text) {
                expect(text).to.have.length.above(0, "There should be a notification message");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "PdfJs faulty PDF test",
+      testPage: "/PdfJsPreviewFaulty",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/PdfJsPreviewFaulty", "PdfJs faulty PDF test").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Checking controls are hidden": function () {
-         return browser.sleep(500)
+      "Checking controls are hidden": function() {
+         return this.remote.sleep(500)
             .findByCssSelector(".previewer > .controls")
-               .isDisplayed()
-               .then(function(displayed) {
-                  expect(displayed).to.equal(false, "Controls should be hidden");
-               });
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Controls should be hidden");
+            });
       },
 
       "Checking sidebar is hidden": function() {
-         return browser.findByCssSelector(".previewer > .sidebar")
+         return this.remote.findByCssSelector(".previewer > .sidebar")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Sidebar should be hidden");
@@ -122,7 +96,7 @@ registerSuite(function(){
       },
 
       "Checking viewer is hidden": function() {
-         return browser.findByCssSelector(".previewer > .viewer")
+         return this.remote.findByCssSelector(".previewer > .viewer")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Viewer should be hidden");
@@ -130,7 +104,7 @@ registerSuite(function(){
       },
 
       "Checking notification is shown": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(true, "Notification should be shown");
@@ -138,46 +112,30 @@ registerSuite(function(){
       },
 
       "Checking notification has text in it": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .getVisibleText()
             .then(function(text) {
                expect(text).to.have.length.above(0, "There should be a notification message");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "PdfJs password protected PDF test",
+      testPage: "/PdfJsPreviewPassword",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/PdfJsPreviewPassword", "PdfJs password protected PDF test").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Checking controls are hidden": function () {
-         return browser.findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog
+      "Checking controls are hidden": function() {
+         return this.remote.findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog
             .end()
             .findByCssSelector(".previewer > .controls")
-               .isDisplayed()
-               .then(function(displayed) {
-                  expect(displayed).to.equal(false, "Controls should be hidden");
-               });
+            .isDisplayed()
+            .then(function(displayed) {
+               expect(displayed).to.equal(false, "Controls should be hidden");
+            });
       },
 
       "Checking sidebar is hidden": function() {
-         return browser.findByCssSelector(".previewer > .sidebar")
+         return this.remote.findByCssSelector(".previewer > .sidebar")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Sidebar should be hidden");
@@ -185,7 +143,7 @@ registerSuite(function(){
       },
 
       "Checking viewer is hidden": function() {
-         return browser.findByCssSelector(".previewer > .viewer")
+         return this.remote.findByCssSelector(".previewer > .viewer")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Viewer should be hidden");
@@ -193,7 +151,7 @@ registerSuite(function(){
       },
 
       "Checking notification is shown": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(true, "Notification should be shown");
@@ -201,40 +159,40 @@ registerSuite(function(){
       },
 
       "Checking notification has text in it": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .getVisibleText()
             .then(function(text) {
                expect(text).to.have.length.above(0, "There should be a notification message");
             });
       },
 
-      "Test PdfJs with a password protected PDF displays a password request": function () {
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
+      "Test PdfJs with a password protected PDF displays a password request": function() {
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(true, "Dialog should be displayed");
             });
       },
 
-      "Test PdfJs with a password protected PDF displays a new password challenge with a password error": function () {
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
+      "Test PdfJs with a password protected PDF displays a new password challenge with a password error": function() {
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .then(null, function() {
                assert(false, "No password field found");
             })
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .type("abc")
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog .footer > span:first-child > span")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for dialog to close
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog to open
-         .end()
+            .end()
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog to open
+            .end()
 
          .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "publish", "any"))
             .then(function(elements) {
@@ -242,25 +200,25 @@ registerSuite(function(){
             });
       },
 
-      "Test PdfJs with a password protected PDF displays a new password challenge with another password error": function () {
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
+      "Test PdfJs with a password protected PDF displays a new password challenge with another password error": function() {
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .then(null, function() {
                assert(false, "No password field found");
             })
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .type("def")
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog .footer > span:first-child > span")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for dialog to close
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog to open
-         .end()
+            .end()
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog to open
+            .end()
 
          .findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "publish", "any"))
             .then(function(elements) {
@@ -268,24 +226,24 @@ registerSuite(function(){
             });
       },
 
-      "Test PdfJs with a password protected PDF displays the PDF with a correct password": function () {
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
+      "Test PdfJs with a password protected PDF displays the PDF with a correct password": function() {
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .then(null, function() {
                assert(false, "No password field found");
             })
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog input[name='password']")
             .type("alfresco")
-         .end()
+            .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog .footer > span:first-child > span")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogHidden") // Wait for dialog to close
-         .end()
-         
+            .end()
+
          .findByCssSelector(".previewer > .controls")
             .isDisplayed()
             .then(function(displayed) {
@@ -294,7 +252,7 @@ registerSuite(function(){
       },
 
       "Checking sidebar is visible": function() {
-         return browser.findByCssSelector(".previewer > .sidebar")
+         return this.remote.findByCssSelector(".previewer > .sidebar")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(true, "Sidebar should be visible");
@@ -302,7 +260,7 @@ registerSuite(function(){
       },
 
       "Checking viewer is visible": function() {
-         return browser.findByCssSelector(".previewer > .viewer")
+         return this.remote.findByCssSelector(".previewer > .viewer")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(true, "Viewer should be visible");
@@ -310,16 +268,11 @@ registerSuite(function(){
       },
 
       "Checking notification is not shown": function() {
-         return browser.findByCssSelector(".notification")
+         return this.remote.findByCssSelector(".notification")
             .isDisplayed()
             .then(function(displayed) {
                expect(displayed).to.equal(false, "Notification should not be shown");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

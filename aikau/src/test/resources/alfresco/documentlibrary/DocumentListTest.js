@@ -20,52 +20,41 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "DocumentList Tests",
+      testPage: "/DocumentList",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DocumentList", "DocumentList").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Test initial data request": function () {
-         return browser.findByCssSelector("body").end()
+      "Test initial data request": function() {
+         return this.remote.findByCssSelector("body").end()
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST", "No load data request published")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "filter.path", "/", "Path wrong for intial load request");
-                  assert.propertyVal(payload, "type", "all", "Type wrong for intial load request");
-                  assert.propertyVal(payload, "site", "fake-site", "Site wrong for intial load request");
-                  assert.propertyVal(payload, "container", "documentlibrary", "Container wrong for intial load request");
-                  assert.propertyVal(payload, "sortAscending", false, "Sort direction wrong for intial load request");
-                  assert.propertyVal(payload, "sortField", "cm:title", "Sort field wrong for intial load request");
-                  assert.propertyVal(payload, "page", 1, "Page wrong for intial load request");
-                  assert.propertyVal(payload, "pageSize", 3, "Page size wrong for intial load request");
-               });
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "filter.path", "/", "Path wrong for intial load request");
+               assert.propertyVal(payload, "type", "all", "Type wrong for intial load request");
+               assert.propertyVal(payload, "site", "fake-site", "Site wrong for intial load request");
+               assert.propertyVal(payload, "container", "documentlibrary", "Container wrong for intial load request");
+               assert.propertyVal(payload, "sortAscending", false, "Sort direction wrong for intial load request");
+               assert.propertyVal(payload, "sortField", "cm:title", "Sort field wrong for intial load request");
+               assert.propertyVal(payload, "page", 1, "Page wrong for intial load request");
+               assert.propertyVal(payload, "pageSize", 3, "Page size wrong for intial load request");
+            });
       },
 
       "Test sort order toggles": function() {
-         return browser.findById("PUBLISH_DATA_label")
+         return this.remote.findById("PUBLISH_DATA_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-         .clearLog()
+            .clearLog()
 
          .findById("SORT_ASC_REQUEST_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -73,18 +62,18 @@ registerSuite(function(){
                assert.propertyVal(payload, "sortField", "cm:name", "Sort field not updated");
             });
       },
-      
+
       "Test sort field selection doesn't change sort order": function() {
-         return browser.findById("PUBLISH_DATA_label")
+         return this.remote.findById("PUBLISH_DATA_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-         .clearLog()
+            .clearLog()
 
          .findById("SORT_FIELD_SELECTION_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -94,104 +83,104 @@ registerSuite(function(){
                assert.propertyVal(payload, "sortAscending", true, "Sort direction not updated");
             });
       },
-      
+
       "Test sort order toggle (to descending)": function() {
-         return browser.findById("PUBLISH_DATA_label")
+         return this.remote.findById("PUBLISH_DATA_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-         .clearLog()
+            .clearLog()
 
          .findById("SORT_DESC_REQUEST_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "sortAscending", false, "Sort direction not updated");
 
                // Sort field should remain the same
-               assert.propertyVal(payload, "sortField", "cm:title", "Sort field not updated"); 
+               assert.propertyVal(payload, "sortField", "cm:title", "Sort field not updated");
             });
       },
-      
+
       "Test hide folder toggle": function() {
-         return browser.findById("PUBLISH_DATA_label")
+         return this.remote.findById("PUBLISH_DATA_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-         .clearLog()
+            .clearLog()
 
          .findByCssSelector("#HIDE_FOLDERS_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "type", "documents", "Type not updated");
             });
       },
-      
+
       "Test show folder toggle": function() {
-         return browser.findById("PUBLISH_DATA_label")
+         return this.remote.findById("PUBLISH_DATA_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-         .clearLog()
+            .clearLog()
 
          .findByCssSelector("#SHOW_FOLDERS_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "type", "all", "Type not updated");
             });
       },
-      
+
       "Test set page number": function() {
-         return browser.findById("PUBLISH_DATA_label")
+         return this.remote.findById("PUBLISH_DATA_label")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-         .clearLog()
+            .clearLog()
 
          .findByCssSelector("#SET_PAGE_label")
             .click()
-         .end()
-         
+            .end()
+
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "page", 2, "Page not updated");
             });
       },
-      
-      "Test data update renders current view": function() { 
-         return browser.findByCssSelector("#PUBLISH_DATA_label")
+
+      "Test data update renders current view": function() {
+         return this.remote.findByCssSelector("#PUBLISH_DATA_label")
             .click()
-         .end()
-        .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
+            .end()
+            .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "'VIEW1' was not displayed");
             });
       },
-      
+
       "Test update does not render hidden views": function() {
-         return browser.findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+         return this.remote.findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "'VIEW2' was displayed unexpectedly");
             });
       },
-      
+
       "Test changing view renders current data": function() {
-         return browser.findByCssSelector("#CHANGE_VIEW_label")
+         return this.remote.findByCssSelector("#CHANGE_VIEW_label")
             .click()
-         .end()
-         .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+            .end()
+            .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "'VIEW2' was not displayed");
             });
@@ -199,28 +188,23 @@ registerSuite(function(){
 
       "Check PublishingDropDownMenu options": function() {
          // See AKU-289
-         return browser.findAllByCssSelector(".alfresco-forms-controls-Select")
+         return this.remote.findAllByCssSelector(".alfresco-forms-controls-Select")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Couldn't find select controls in PublishingDropDownMenu widgets");
             })
-         .end()
+            .end()
 
          .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+            .end()
 
          .findDisplayedById("PDM_ITEM_0_SELECT_CONTROL")
             .click()
-         .end()
+            .end()
 
          .findAllByCssSelector(".dijitPopup tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "No options provided available");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

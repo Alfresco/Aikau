@@ -20,10 +20,11 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
    var selectors = {
@@ -34,63 +35,47 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "PublishPayloadMixinOnActions Tests",
+      testPage: "/PublishPayloadMixinOnActions",
 
-      return {
-         name: "PublishPayloadMixinOnActions Tests",
+      "There should be 3 action menus rendered": function() {
+         return this.remote.findAllByCssSelector(".alfresco-renderers-Actions")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "There should be 3 action menus rendered");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/PublishPayloadMixinOnActions", "PublishPayloadMixinOnActions Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-        "There should be 3 action menus rendered": function () {
-            return browser.findAllByCssSelector(".alfresco-renderers-Actions")
-               .then(function (elements) {
-                  assert.lengthOf(elements, 3, "There should be 3 action menus rendered");
-               });
-         },
-
-         "Click delete action": function() {
-            return browser.findByCssSelector(selectors.actions.first.label)
-               .click()
-            .end()
-            
-            .findDisplayedById("ACTIONS_ITEM_0_DELETE_text")
-               .click()
+      "Click delete action": function() {
+         return this.remote.findByCssSelector(selectors.actions.first.label)
+            .click()
             .end()
 
-            .getLastPublish("DELETE_ACTION_TOPIC")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "document.variable1", "red", "The action menu did not publish the payload with 'variable1' as 'red' after mouse clicks");
-                  assert.deepPropertyVal(payload, "document.variable2", "orange", "The action menu did not publish the payload with 'variable2' as 'orange' after mouse clicks");
-               });
-         },
-
-         "Click manage action": function() {
-            return browser.findByCssSelector(selectors.actions.first.label)
-               .click()
-            .end()
-            
-            .findDisplayedById("ACTIONS_ITEM_0_MANAGE_text")
-               .click()
+         .findDisplayedById("ACTIONS_ITEM_0_DELETE_text")
+            .click()
             .end()
 
-            .getLastPublish("MANAGE_ACTION_TOPIC")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "payloadVariable2", "red", "The action menu did not publish the payload with 'payloadVariable2' as 'red' after mouse clicks");
-                  assert.propertyVal(payload, "payloadVariable1", "orange", "The action menu did not publish the payload with 'payloadVariable1' as 'orange' after mouse clicks");
-               });
-         },
+         .getLastPublish("DELETE_ACTION_TOPIC")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "document.variable1", "red", "The action menu did not publish the payload with 'variable1' as 'red' after mouse clicks");
+               assert.deepPropertyVal(payload, "document.variable2", "orange", "The action menu did not publish the payload with 'variable2' as 'orange' after mouse clicks");
+            });
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Click manage action": function() {
+         return this.remote.findByCssSelector(selectors.actions.first.label)
+            .click()
+            .end()
+
+         .findDisplayedById("ACTIONS_ITEM_0_MANAGE_text")
+            .click()
+            .end()
+
+         .getLastPublish("MANAGE_ACTION_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "payloadVariable2", "red", "The action menu did not publish the payload with 'payloadVariable2' as 'red' after mouse clicks");
+               assert.propertyVal(payload, "payloadVariable1", "orange", "The action menu did not publish the payload with 'payloadVariable1' as 'orange' after mouse clicks");
+            });
+      }
    });
 });

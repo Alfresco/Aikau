@@ -18,92 +18,77 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Manage Aspects Action",
+      testPage: "/ManageAspectsAction",
 
-      return {
-         name: "Manage Aspects Action",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ManageAspectsAction", "Manage Aspects Action").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check that action appears for basic node": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action appears for basic node": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_0_MANAGE_ASPECTS")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Could not find manage aspects action for basic node");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find manage aspects action for basic node");
+            });
+      },
 
-         "Check that action does not appear for working copy node": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 1]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for working copy node": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 1]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_1_MANAGE_ASPECTS")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Manage aspects action should not have been displayed for working copy node");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Manage aspects action should not have been displayed for working copy node");
+            });
+      },
 
-         "Check that action does not appear for locked node": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 2]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for locked node": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 2]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_2_MANAGE_ASPECTS")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Manage aspects action should not have been displayed for locked node");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Manage aspects action should not have been displayed for locked node");
+            });
+      },
 
-         "Check that action does not appear for node without WRITE permission": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 3]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for node without WRITE permission": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 3]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_3_MANAGE_ASPECTS")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Manage aspects action should not have been displayed for node without user WRITE permission");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Manage aspects action should not have been displayed for node without user WRITE permission");
+            });
+      },
 
-         "Check that manage aspects dialog can be opened": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that manage aspects dialog can be opened": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findByCssSelector("#ACTIONS_ITEM_0_MANAGE_ASPECTS_text")
-               .click()
+            .click()
             .end()
             .setFindTimeout(10000)
             .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogDisplayed")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "The manage aspects dialog was not displayed");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "The manage aspects dialog was not displayed");
+            });
+      }
    });
 });

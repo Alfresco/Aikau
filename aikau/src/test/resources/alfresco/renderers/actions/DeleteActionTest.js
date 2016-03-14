@@ -18,168 +18,153 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Delete Action Test",
+      testPage: "/Delete",
 
-      return {
-         name: "Delete Action Test",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Delete", "Delete Action Test").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check that action appears for folder node": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action appears for folder node": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_0_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Could not find delete action for folder node");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find delete action for folder node");
+            });
+      },
 
-         "Check that action appears for document node": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 1]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action appears for document node": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 1]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_1_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Could not find delete action for document node");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find delete action for document node");
+            });
+      },
 
-         "Check that action appears for user owned working copy": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 2]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action appears for user owned working copy": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 2]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_2_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Could not find delete action for user owned working copy");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find delete action for user owned working copy");
+            });
+      },
 
-         "Check that action does not appear for working copy owned by another user": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 3]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for working copy owned by another user": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 3]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_3_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Delete action should not have been displayed for working copy owned by another user");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Delete action should not have been displayed for working copy owned by another user");
+            });
+      },
 
-         "Check that action appears for user owned locked node": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 4]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action appears for user owned locked node": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 4]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_4_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Could not find delete action for user locked node");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Could not find delete action for user locked node");
+            });
+      },
 
-         "Check that action does not appear for node locked by another user": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 5]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for node locked by another user": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 5]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_5_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Delete action should not have been displayed for node locked by another user");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Delete action should not have been displayed for node locked by another user");
+            });
+      },
 
-         "Check that action does not appear for node with node lock": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 6]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for node with node lock": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 6]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_6_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Delete action should not have been displayed for node locked with NODE_LOCK");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Delete action should not have been displayed for node locked with NODE_LOCK");
+            });
+      },
 
-         "Check that action does not appear for node without write permission": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 7]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Check that action does not appear for node without write permission": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 7]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_7_DELETE")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Delete action should not have been displayed for node without write permission");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Delete action should not have been displayed for node without write permission");
+            });
+      },
 
-         "Test legacy single item delete": function() {
-            return browser.findById("SINGLE_DELETE_VIA_ACTION_SERVICE_label")
-               .click()
+      "Test legacy single item delete": function() {
+         return this.remote.findById("SINGLE_DELETE_VIA_ACTION_SERVICE_label")
+            .click()
             .end()
             .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
             .end()
             .findById("ALF_DELETE_CONTENT_DIALOG_CONFIRMATION_label")
-               .click()
+            .click()
             .end()
             .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
             .end()
             .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete")
-               .then(function(xhr){
-                  assert.deepPropertyVal(xhr.request.body, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
-               });
-         },
+            .then(function(xhr) {
+               assert.deepPropertyVal(xhr.request.body, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
+            });
+      },
 
-         "Test legacy multiple item delete": function() {
-            return browser.findById("MULTIPLE_DELETE_VIA_ACTION_SERVICE_label")
-               .click()
+      "Test legacy multiple item delete": function() {
+         return this.remote.findById("MULTIPLE_DELETE_VIA_ACTION_SERVICE_label")
+            .click()
             .end()
             .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
             .end()
             .findById("ALF_DELETE_CONTENT_DIALOG_CONFIRMATION_label")
-               .click()
+            .click()
             .end()
             .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
             .end()
             .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/files?alf_method=delete")
-               .then(function(xhr){
-                  assert.deepPropertyVal(xhr.request.body, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
-                  assert.deepPropertyVal(xhr.request.body, "nodeRefs[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
-               });
-         },
+            .then(function(xhr) {
+               assert.deepPropertyVal(xhr.request.body, "nodeRefs[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
+               assert.deepPropertyVal(xhr.request.body, "nodeRefs[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
+            });
+      },
 
-         "Test actions renderer item delete": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
-            return browser.findByCssSelector(actionsSelector)
-               .click()
+      "Test actions renderer item delete": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .click()
             .end()
             .findByCssSelector("#ACTIONS_ITEM_0_DELETE_text")
-               .click()
+            .click()
             .end()
             .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
             .end();
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      }
    });
 });

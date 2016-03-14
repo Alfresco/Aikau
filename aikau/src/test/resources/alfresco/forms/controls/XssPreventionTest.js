@@ -18,86 +18,65 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Form Control XSS Prevention Test",
+      testPage: "/xss",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/xss", "Form Control XSS Prevention Test").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Test TextBox Value": function () {
-        return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedTextBoxValue");
+      "Test TextBox Value": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedTextBoxValue");
             assert(notHacked, "XSS attack in TextBox value succeeeded");
          });
       },
-      
-      "Test RadioButtons Option Label": function () {
-         return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedRBOptionLabel");
+
+      "Test RadioButtons Option Label": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedRBOptionLabel");
             assert(notHacked, "XSS attack in RadioButtons option label succeeeded");
          });
       },
 
-      "Test RadioButtons Option Value": function () {
-         return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedRBOptionValue");
+      "Test RadioButtons Option Value": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedRBOptionValue");
             assert(notHacked, "XSS attack in RadioButtons option value succeeeded");
          });
       },
 
-      "Test Select Option Label": function () {
-         return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedSelectOptionLabel");
+      "Test Select Option Label": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedSelectOptionLabel");
             assert(notHacked, "XSS attack in Select option label succeeeded");
          });
       },
 
-      "Test Select Option Value": function () {
-         return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedSelectOptionValue");
+      "Test Select Option Value": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedSelectOptionValue");
             assert(notHacked, "XSS attack in Select option value succeeeded");
          });
       },
 
-      "Test ComboBox Option Label": function () {
-         return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedSelectOptionLabel");
+      "Test ComboBox Option Label": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedSelectOptionLabel");
             assert(notHacked, "XSS attack in ComboBox option label succeeeded");
          });
       },
 
-      "Test ComboBox Option Value": function () {
-         return browser.then(function(){
-            var notHacked = browser.execute("!window.hackedComboBoxOptionValue");
+      "Test ComboBox Option Value": function() {
+         return this.remote.then(() => {
+            var notHacked = this.remote.execute("!window.hackedComboBoxOptionValue");
             assert(notHacked, "XSS attack in ComboBox option value succeeeded");
          });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

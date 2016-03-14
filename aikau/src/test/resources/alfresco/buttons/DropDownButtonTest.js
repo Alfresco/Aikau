@@ -21,77 +21,61 @@
  *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-      function (registerSuite, assert, TestCommon, keys) {
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Drop Down Button Tests",
+      testPage: "/DropDownButtons",
 
-      return {
-         name: "Drop Down Button Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/DropDownButtons", "Drop Down Button Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Open left drop-down": function() {
-            return browser.findById("DDB1_DROP_DOWN_BUTTON_label")
-               .click()
+      "Open left drop-down": function() {
+         return this.remote.findById("DDB1_DROP_DOWN_BUTTON_label")
+            .click()
             .end()
 
-            .findDisplayedById("DDB1_DROP_DOWN_DISPLAY")
+         .findDisplayedById("DDB1_DROP_DOWN_DISPLAY")
             .end()
 
-            .findDisplayedById("TB1")
+         .findDisplayedById("TB1")
             .end()
 
-            .findDisplayedById("TB1")
-            .end()
-         },
+         .findDisplayedById("TB1");
+      },
 
-         "Click button to close left drop-down": function() {
-            return browser.findDisplayedByCssSelector("#FORM .confirmationButton > span")
-               .click()
-            .end()
-
-            .getLastPublish("SAVE")
-
-            .findById("DDB1_DROP_DOWN_DISPLAY")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed);
-               });
-         },
-
-         "Tab to and open right, drop-down": function() {
-            return browser.findByCssSelector("body")
-               .tabToElement("#DDB2_DROP_DOWN_BUTTON")
-               .pressKeys(keys.ENTER)
+      "Click button to close left drop-down": function() {
+         return this.remote.findDisplayedByCssSelector("#FORM .confirmationButton > span")
+            .click()
             .end()
 
-            .findDisplayedById("DDB2_DROP_DOWN_DISPLAY")
-         },
+         .getLastPublish("SAVE")
 
-         "Press escape to close drop-down": function() {
-            return browser.pressKeys(keys.ESCAPE)
-               .findById("DDB2_DROP_DOWN_DISPLAY")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed);
-               });
-         },
+         .findById("DDB1_DROP_DOWN_DISPLAY")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Tab to and open right, drop-down": function() {
+         return this.remote.findByCssSelector("body")
+            .tabToElement("#DDB2_DROP_DOWN_BUTTON")
+            .pressKeys(keys.ENTER)
+            .end()
+
+         .findDisplayedById("DDB2_DROP_DOWN_DISPLAY");
+      },
+
+      "Press escape to close drop-down": function() {
+         return this.remote.pressKeys(keys.ESCAPE)
+            .findById("DDB2_DROP_DOWN_DISPLAY")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      }
    });
 });

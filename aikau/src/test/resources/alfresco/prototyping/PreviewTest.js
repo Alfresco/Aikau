@@ -20,49 +20,32 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite"],
+        function(module, defineSuite) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Model Preview Tests",
+      testPage: "/Preview",
 
-      return {
-         name: "Model Preview Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Preview", "Model Preview Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Initial preview is rendered": function() {
-            return browser.findByCssSelector("body")
+      "Initial preview is rendered": function() {
+         return this.remote.findByCssSelector("body")
             .end()
 
-            .getLastPublish("ALF_PREVIEW_MODEL_RENDERED")
+         .getLastPublish("ALF_PREVIEW_MODEL_RENDERED")
             .clearLog()
 
-            .findDisplayedById("LOGO");
-         },
+         .findDisplayedById("LOGO");
+      },
 
-         "Request stringified model preview": function() {
-            return browser.findById("UPDATE_PREVIEW_label")
-               .click()
+      "Request stringified model preview": function() {
+         return this.remote.findById("UPDATE_PREVIEW_label")
+            .click()
             .end()
 
-            .getLastPublish("ALF_PREVIEW_MODEL_RENDERED")
+         .getLastPublish("ALF_PREVIEW_MODEL_RENDERED")
 
-            .findDisplayedById("PREVIEW_BUTTON");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findDisplayedById("PREVIEW_BUTTON");
+      }
    });
 });

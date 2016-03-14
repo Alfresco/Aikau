@@ -19,15 +19,16 @@
 
 /**
  * This is a unit test for the BaseForm control
- * 
+ *
  * @author Richard Smith
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert", 
-        "intern/dojo/node!leadfoot/keys", 
-        "alfresco/TestCommon"], 
-        function(registerSuite, assert, keys, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "intern/dojo/node!leadfoot/keys",
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, keys, TestCommon) {
 
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
@@ -73,191 +74,175 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Base Form Control Tests",
+      testPage: "/BaseForm",
 
-      return {
-         name: "Base Form Control Tests",
+      "Checking the form field is initially empty": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.basic.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "Form field not initially empty");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/BaseForm", "Base Form Control Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Checking the form field is initially empty": function() {
-            return browser.findByCssSelector(selectors.textBoxes.basic.input)
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "", "Form field not initially empty");
-               });
-         },
-
-         "No payload does not update value": function() {
-            return browser.findByCssSelector(selectors.buttons.setValue1)
-               .click()
+      "No payload does not update value": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setValue1)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.textBoxes.basic.input)
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "", "No payload published but field value updated");
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.basic.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "No payload published but field value updated");
+            });
+      },
 
-         "Invalid field name does not update value": function() {
-            return browser.findByCssSelector(selectors.buttons.setValue2)
-               .click()
+      "Invalid field name does not update value": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setValue2)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.textBoxes.basic.input)
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "", "Invalid field name provided but value updated");
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.basic.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "", "Invalid field name provided but value updated");
+            });
+      },
 
-         "Setting string value updates field appropriately": function() {
-            return browser.findByCssSelector(selectors.buttons.setValue3)
-               .click()
+      "Setting string value updates field appropriately": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setValue3)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.textBoxes.basic.input)
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "this is the new value", "Field value not updated to published string value");
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.basic.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "this is the new value", "Field value not updated to published string value");
+            });
+      },
 
-         "Setting number value updates field appropriately": function() {
-            return browser.findByCssSelector(selectors.buttons.setValue4)
-               .click()
+      "Setting number value updates field appropriately": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setValue4)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.textBoxes.basic.input)
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "3.14159265", "Field value not updated to published numeric value");
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.basic.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "3.14159265", "Field value not updated to published numeric value");
+            });
+      },
 
-         "Setting boolean value updates field appropriately": function() {
-            return browser.findByCssSelector(selectors.buttons.setValue5)
-               .click()
+      "Setting boolean value updates field appropriately": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setValue5)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.textBoxes.basic.input)
-               .getProperty("value")
-               .then(function(value) {
-                  assert.equal(value, "true", "Field value not updated to published boolean value");
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.basic.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "true", "Field value not updated to published boolean value");
+            });
+      },
 
-         "Autosave on a form removes OK/Cancel buttons": function() {
-            return browser.findAllByCssSelector(selectors.forms.basic.confirmationButton+ ", " + selectors.forms.basic.cancelButton)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 2, "OK/Cancel buttons not found on basic form");
-               })
-               .end()
-
-            .findAllByCssSelector(selectors.forms.autoSave.confirmationButton+ ", " + selectors.forms.autoSave.cancelButton)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
-               });
-         },
-
-         "Updating autosave value publishes form": function() {
-            return browser.findByCssSelector(selectors.textBoxes.autoSave.input)
-               .clearValue()
-               .type("wibble")
-               .getLastPublish("AUTOSAVE_FORM_1")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "control", "wibble", "Did not autosave updated value");
-                  assert.propertyVal(payload, "alfValidForm", true, "Did not autosave validity property");
-               });
-         },
-
-         "Updating to invalid value does not autosave form": function() {
-            return browser.findByCssSelector(selectors.buttons.clearAutoSave)
-               .click()
-               .clearLog()
-               .getAllPublishes("AUTOSAVE_FORM_1")
-               .then(function(payloads) {
-                  assert.lengthOf(payloads, 0, "Published form when invalid");
-               });
-         },
-
-         "Autosave on invalid flag publishes invalid form": function() {
-            return browser.findByCssSelector(selectors.textBoxes.invalidAutoSave.input)
-               .clearLog()
-               .clearValue()
-               .pressKeys(keys.BACKSPACE) // Need to trigger an update!
-               .getLastPublish("AUTOSAVE_FORM_2")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "control", "", "Did not autosave updated, invalid value");
-                  assert.propertyVal(payload, "alfValidForm", false, "Did not autosave validity property");
-               });
-         },
-
-         "Autosaving with defined payload mixes payload into form values": function(){
-            return browser.findByCssSelector("body") // Need to get session to check for publish
-               .getLastPublish("AUTOSAVE_FORM_2")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "customProperty", "awooga", "Did not mix custom payload into form values");
-               });
-         },
-
-         "Ensure hidden button inputs have value": function() {
-            return browser.findByCssSelector(selectors.forms.basic.hiddenConfirmationButton)
-               .getAttribute("value")
-               .then(function(value) {
-                  assert.equal(value, "OK");
-               })
-               .end()
-
-            .findByCssSelector(selectors.forms.basic.hiddenCancelButton)
-               .getAttribute("value")
-               .then(function(value) {
-                  assert.equal(value, "CANCEL");
-               });
-         },
-
-         "Enter key can submit form": function() {
-            var firstPublish;
-
-            return browser.findByCssSelector(selectors.textBoxes.submitOnEnter.input)
-               .clearLog()
-               .type("wibble")
-               .pressKeys(keys.ENTER)
+      "Autosave on a form removes OK/Cancel buttons": function() {
+         return this.remote.findAllByCssSelector(selectors.forms.basic.confirmationButton + ", " + selectors.forms.basic.cancelButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "OK/Cancel buttons not found on basic form");
+            })
             .end()
 
-            .getLastPublish("FORM_PUBLISH")
-               .then(function(payload) {
-                  firstPublish = payload;
-               })
+         .findAllByCssSelector(selectors.forms.autoSave.confirmationButton + ", " + selectors.forms.autoSave.cancelButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "OK/Cancel buttons found on autosave form");
+            });
+      },
 
-            .findByCssSelector(selectors.forms.enterForm.confirmationButton)
-               .clearLog()
-               .click()
+      "Updating autosave value publishes form": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.autoSave.input)
+            .clearValue()
+            .type("wibble")
+            .getLastPublish("AUTOSAVE_FORM_1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "control", "wibble", "Did not autosave updated value");
+               assert.propertyVal(payload, "alfValidForm", true, "Did not autosave validity property");
+            });
+      },
+
+      "Updating to invalid value does not autosave form": function() {
+         return this.remote.findByCssSelector(selectors.buttons.clearAutoSave)
+            .click()
+            .clearLog()
+            .getAllPublishes("AUTOSAVE_FORM_1")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Published form when invalid");
+            });
+      },
+
+      "Autosave on invalid flag publishes invalid form": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.invalidAutoSave.input)
+            .clearLog()
+            .clearValue()
+            .pressKeys(keys.BACKSPACE) // Need to trigger an update!
+            .getLastPublish("AUTOSAVE_FORM_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "control", "", "Did not autosave updated, invalid value");
+               assert.propertyVal(payload, "alfValidForm", false, "Did not autosave validity property");
+            });
+      },
+
+      "Autosaving with defined payload mixes payload into form values": function() {
+         return this.remote.findByCssSelector("body") // Need to get session to check for publish
+            .getLastPublish("AUTOSAVE_FORM_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "customProperty", "awooga", "Did not mix custom payload into form values");
+            });
+      },
+
+      "Ensure hidden button inputs have value": function() {
+         return this.remote.findByCssSelector(selectors.forms.basic.hiddenConfirmationButton)
+            .getAttribute("value")
+            .then(function(value) {
+               assert.equal(value, "OK");
+            })
             .end()
 
-            .getLastPublish("FORM_PUBLISH")
-               .then(function(payload) {
-                  assert.deepEqual(payload, firstPublish, "ENTER publish did not match button-click publish");
-               });
-         },
+         .findByCssSelector(selectors.forms.basic.hiddenCancelButton)
+            .getAttribute("value")
+            .then(function(value) {
+               assert.equal(value, "CANCEL");
+            });
+      },
 
-         // See AKU-813
-         "Check renderFilter config can be used on form": function() {
-            return browser.findById("RENDER_FILTER_FORM");
-         },
+      "Enter key can submit form": function() {
+         var firstPublish;
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         return this.remote.findByCssSelector(selectors.textBoxes.submitOnEnter.input)
+            .clearLog()
+            .type("wibble")
+            .pressKeys(keys.ENTER)
+            .end()
+
+         .getLastPublish("FORM_PUBLISH")
+            .then(function(payload) {
+               firstPublish = payload;
+            })
+
+         .findByCssSelector(selectors.forms.enterForm.confirmationButton)
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("FORM_PUBLISH")
+            .then(function(payload) {
+               assert.deepEqual(payload, firstPublish, "ENTER publish did not match button-click publish");
+            });
+      },
+
+      // See AKU-813
+      "Check renderFilter config can be used on form": function() {
+         return this.remote.findById("RENDER_FILTER_FORM");
+      }
    });
 });

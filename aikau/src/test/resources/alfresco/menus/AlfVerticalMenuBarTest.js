@@ -19,35 +19,17 @@
 
 /**
  * This is the unit test for the alfresco/menus/AlfVerticalMenuBar widget.
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite"],
+        function(module, defineSuite) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AlfVerticalMenuBar Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfVerticalMenuBar", "AlfVerticalMenuBar Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AlfVerticalMenuBar",
 
       // TODO: This test has not yet been written because the vertical menu bar is still in beta and needs to be completed
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
    });
 });

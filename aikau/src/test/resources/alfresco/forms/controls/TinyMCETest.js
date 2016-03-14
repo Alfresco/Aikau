@@ -20,30 +20,17 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys",
-        "intern/dojo/node!leadfoot/helpers/pollUntil"],
-        function(registerSuite, assert, TestCommon, keys, pollUntil) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   var browser;
-
-   registerSuite({
+   defineSuite(module, {
       name: "TinyMCE",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/TinyMCE", "TinyMCE")
-            .end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/TinyMCE",
 
       "Can enter content into control and publish it": function() {
-         return browser.findByCssSelector(".alfresco-editors-TinyMCE iframe")
+         return this.remote.findByCssSelector(".alfresco-editors-TinyMCE iframe")
             .execute("tinymce.get(0).setContent('<p><strong>a</strong></p>');")
             .execute("tinymce.get(0).save();")
             .screenie()
@@ -52,7 +39,7 @@ define(["intern!object",
 
          .findByCssSelector(".confirmationButton .dijitButtonNode")
             .click()
-         .end()
+            .end()
 
          .getLastPublish("FORM_POST")
             .then(function(payload) {
@@ -62,19 +49,15 @@ define(["intern!object",
 
       // See AKU-711...
       "Focus is set in dialog form": function() {
-         return browser.findById("CREATE_FORM_DIALOG_label")
+         return this.remote.findById("CREATE_FORM_DIALOG_label")
             .click()
-         .end()
+            .end()
 
          // NOTE: It's not possible to type into the TinyMCE editor has it is rendered in an iframe
          //       and Selenium will not process the characters. Therefore we are relying on a topic
          //       published when the editor gets focused to determine that the focus function has
          //       at least been called.
          .getLastPublish("ALF_TINYMCE_EDITOR_FOCUSED", "Editor was not given focus");
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
    });
 });

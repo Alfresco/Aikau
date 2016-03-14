@@ -18,34 +18,24 @@
  */
 
 /**
- * 
+ *
  * @author Erik Winlöf
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert", 
-        "require", 
-        "alfresco/TestCommon", 
-        "intern/dojo/node!leadfoot/keys"], 
-        function(registerSuite, assert, require, TestCommon, keys) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "DateTextBox Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DateTextBox", "DateTextBox Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/DateTextBox",
 
       "Test initial valid values": function() {
-         return browser.findByCssSelector("#VALID_DATES_FORM .confirmationButton .dijitButtonNode")
+         return this.remote.findByCssSelector("#VALID_DATES_FORM .confirmationButton .dijitButtonNode")
             .click()
             .getLastPublish("VALID_DATES_FORM_SUBMIT")
             .then(function(payload) {
@@ -57,7 +47,7 @@ registerSuite(function(){
       },
 
       "Ensure placeHolder attribute is used": function() {
-         return browser.findByCssSelector("#DATE_WITH_PLACEHOLDER .dijitPlaceHolder")
+         return this.remote.findByCssSelector("#DATE_WITH_PLACEHOLDER .dijitPlaceHolder")
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "This is a placeholder");
@@ -65,40 +55,40 @@ registerSuite(function(){
       },
 
       "Test initial invalid values": function() {
-         return browser.findById("LETTERS_DATE_VALUE_CONTROL")
+         return this.remote.findById("LETTERS_DATE_VALUE_CONTROL")
             .getProperty("value")
-            .then(function(value){
+            .then(function(value) {
                assert.equal(value, "", "Initial value of letters should present empty date box");
             })
             .end()
-            
+
          .findById("EMPTY_DATE_VALUE_CONTROL")
             .getProperty("value")
-            .then(function(value){
+            .then(function(value) {
                assert.equal(value, "", "Initial value of empty should present empty date box");
             })
             .end()
 
          .findById("NULL_DATE_VALUE_CONTROL")
             .getProperty("value")
-            .then(function(value){
+            .then(function(value) {
                assert.equal(value, "", "Initial value of null should present empty date box");
             })
             .end()
 
          .findById("UNDEFINED_DATE_VALUE_CONTROL")
             .getProperty("value")
-            .then(function(value){
+            .then(function(value) {
                assert.equal(value, "", "Initial value of undefined should present empty date box");
             });
       },
 
       "Ensure invalid form is disabled": function() {
-         return browser.findByCssSelector("#INVALID_DATES_FORM .dijitButtonDisabled");
+         return this.remote.findByCssSelector("#INVALID_DATES_FORM .dijitButtonDisabled");
       },
-      
+
       "Changed date publishes correct value": function() {
-         return browser.findByCssSelector("#VALID_DATE_VALUE_2 .dijitArrowButton") // Click down arrow
+         return this.remote.findByCssSelector("#VALID_DATE_VALUE_2 .dijitArrowButton") // Click down arrow
             .clearLog()
             .click()
             .end()
@@ -117,7 +107,7 @@ registerSuite(function(){
       },
 
       "Entering invalid date produces correct error": function() {
-         return browser.findById("VALID_DATE_VALUE_1_CONTROL")
+         return this.remote.findById("VALID_DATE_VALUE_1_CONTROL")
             .clearValue()
             .type("foo")
             .end()
@@ -134,7 +124,7 @@ registerSuite(function(){
       },
 
       "Check that rule declaring textbox is not required initially": function() {
-         return browser.findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+         return this.remote.findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The requirement indicator should not have been initially displayed");
@@ -142,11 +132,11 @@ registerSuite(function(){
       },
 
       "Type a date to verify rules processing occurs on keyboard entry": function() {
-         return browser.findById("RULES_CHECKER_CONTROL")
+         return this.remote.findById("RULES_CHECKER_CONTROL")
             .click()
             .type("05/05/1946")
-         .end()
-         .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+            .end()
+            .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The requirement indicator should be displayed on date entry via keyboard");
@@ -154,21 +144,16 @@ registerSuite(function(){
       },
 
       "Clear the date to check that the textbox stops being required": function() {
-         return browser.findById("RULES_CHECKER_CONTROL")
+         return this.remote.findById("RULES_CHECKER_CONTROL")
             .clearValue() // Clear the value, makes it less to delete via backspace...
-            .type("1")    // ...add a single character to be deleted with backspace...
+            .type("1") // ...add a single character to be deleted with backspace...
             .pressKeys(keys.BACKSPACE) // ...and delete
-         .end()
-         .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+            .end()
+            .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The requirement indicator should be hidden when the date field is cleared");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });
