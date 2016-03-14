@@ -150,6 +150,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfCheckableMenuItem__postCreate() {
+         // jshint maxcomplexity:false
          domClass.add(this.domNode, "alfresco-menus-AlfCheckableMenuItem");
 
          // Set the correct role...
