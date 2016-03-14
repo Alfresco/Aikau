@@ -281,6 +281,7 @@ define(["dojo/_base/declare",
                contentWidth: (vs.w*0.7) + "px",
                contentHeight: (vs.h-250) + "px",
                handleOverflow: false,
+               dialogId: "NODE_PREVIEW_SERVICE_DIALOG",
                dialogTitle: previewData.title,
                additionalCssClasses: "no-padding",
                widgetsContent: [
