@@ -22,7 +22,8 @@
       font-family: @standard-button-font-family;
       font-size: @standard-button-font-size;
       font-weight: @standard-button-font-weight;
-      padding: 0;
+      padding: @standard-button-text-padding;
+      margin: @standard-button-text-margin;
    }
    .dijitReset.dijitInline.dijitButtonNode {
       background: none repeat scroll 0 0;
@@ -66,7 +67,8 @@
          font-family: @call-to-action-button-font-family;
          font-size: @call-to-action-button-font-size;
          font-weight: @call-to-action-button-font-weight;
-         padding: 0;
+         padding: @call-to-action-button-text-padding;
+         margin: @call-to-action-button-text-margin;
       }
       .dijitReset.dijitInline.dijitButtonNode {
          color: @call-to-action-button-font-color;
