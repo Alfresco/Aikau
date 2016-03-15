@@ -45,6 +45,22 @@ model.jsonModel = {
          }
       },
       {
+         id: "AUDIO_PREVIEW",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show Audio Preview",
+            publishTopic: "ALF_SHOW_NODE_PREVIEW",
+            publishPayload: {
+               nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52",
+               node: {
+                  mimetype: "audio/mpeg",
+                  nodeRef: "workspace://SpacesStore/50e8fa78-86ee-4209-9de0-b5c996b7ee52"
+               },
+               displayName: "Demo 3.mp3"
+            }
+         }
+      },
+      {
          name: "aikauTesting/mockservices/PreviewMockXhr"
       },
       {
