@@ -22,8 +22,9 @@
  */
 define(["intern!object",
         "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(registerSuite, assert, TestCommon, keys) {
 
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
@@ -31,7 +32,8 @@ define(["intern!object",
    var selectors = {
       buttons: {
          imagePreview: TestCommon.getTestSelector(buttonSelectors, "button.label", ["IMAGE_PREVIEW"]),
-         videoPreview: TestCommon.getTestSelector(buttonSelectors, "button.label", ["VIDEO_PREVIEW"])
+         videoPreview: TestCommon.getTestSelector(buttonSelectors, "button.label", ["VIDEO_PREVIEW"]),
+         audioPreview: TestCommon.getTestSelector(buttonSelectors, "button.label", ["AUDIO_PREVIEW"])
       },
       dialogs: {
          preview: {
@@ -85,7 +87,26 @@ define(["intern!object",
             .findByCssSelector(selectors.dialogs.preview.visible)
             .end()
 
-            .findByCssSelector("video");
+            .findByCssSelector("video")
+            .end()
+
+            .pressKeys(keys.ESCAPE)
+
+            .waitForDeletedByCssSelector(selectors.dialogs.preview.visible);
+         },
+
+         "Show audio preview": function() {
+            return browser.findByCssSelector(selectors.buttons.audioPreview)
+               .click()
+            .end()
+
+            .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
+            .getLastPublish("ALF_CREATE_DIALOG_REQUEST")
+
+            .findByCssSelector(selectors.dialogs.preview.visible)
+            .end()
+
+            .findByCssSelector("audio");
          },
 
          "Post Coverage Results": function() {

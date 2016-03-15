@@ -165,11 +165,17 @@ define(["dojo/_base/declare",
          var mimetype;
          if (node)
          {
-            mimetype = lang.getObject("node.mimetype", false, node);
+            mimetype = lang.getObject("mimetype", false, node);
          }
          if (nodeRef && mimetype)
          {
-            this.showPreview(nodeRef, mimetype);
+            var title = lang.getObject(this.imageTitleProperty, false, payload);
+            this.showPreview({
+               item: payload,
+               nodeRef: nodeRef, 
+               mimetype: mimetype,
+               title: title
+            });
          }
          else if (nodeRef)
          {
