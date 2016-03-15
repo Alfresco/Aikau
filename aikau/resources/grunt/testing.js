@@ -2,47 +2,6 @@ var notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
    os = require("os"),
    tcpPortUsed = require("tcp-port-used");
 
-// Calculate this machine's (i.e. the server's) best IP address
-// Preference is given to VM tunnel (which will work everywhere) and then an ethernet interface
-var networkInterfaces = os.networkInterfaces(),
-   interfaceNames = Object.keys(networkInterfaces),
-   vmInterface,
-   localInterface,
-   fallbackInterface;
-interfaceNames.forEach(function(interfaceName) {
-   var lowerName = interfaceName && interfaceName.toLowerCase();
-   networkInterfaces[interfaceName].forEach(function(interface) {
-      /*jshint noempty:false*/
-      if (interface.family === "IPv4" && !interface.internal) {
-         if (!lowerName) {
-            // Ignore unnamed interfaces (for the moment)
-         } else if (lowerName.indexOf("vbox") === 0) {
-            vmInterface = interface;
-            vmInterface.name = interfaceName;
-         } else if (lowerName.indexOf("virtual") === 0) {
-            vmInterface = interface;
-            vmInterface.name = interfaceName;
-         } else if (lowerName.indexOf("eth") === 0) {
-            localInterface = interface;
-            localInterface.name = interfaceName;
-         } else if (lowerName.indexOf("en") === 0) {
-            localInterface = interface;
-            localInterface.name = interfaceName;
-         } else {
-            fallbackInterface = interface;
-            fallbackInterface.name = interfaceName;
-         }
-      }
-   });
-});
-var interfaceToUse = vmInterface || localInterface || fallbackInterface,
-   serverIP = interfaceToUse.address,
-   interfaceName = interfaceToUse.name;
-console.log("");
-console.log("\x1b[4m" + "Retrieving IP address of server" + "\x1b[0m");
-console.log("Using network interface '" + interfaceName + "' with address of " + serverIP);
-console.log("");
-
 // Modify grunt
 module.exports = function(grunt) {
 
@@ -117,12 +76,64 @@ module.exports = function(grunt) {
       });
    });
 
+   // Calculate this machine's (i.e. the server's) best IP address
+   // Preference is given to VM tunnel (which will work everywhere) and then an ethernet interface
+   var interfaceToUse = (function() {
+
+      // Setup variables
+      var networkInterfaces = os.networkInterfaces(),
+         interfaceNames = Object.keys(networkInterfaces),
+         vmInterface,
+         localInterface,
+         fallbackInterface;
+
+      // Analyse all interfaces
+      interfaceNames.forEach(function(interfaceName) {
+         var lowerName = interfaceName && interfaceName.toLowerCase();
+         networkInterfaces[interfaceName].forEach(function(nextInterface) {
+            /*jshint noempty:false*/
+            if (nextInterface.family === "IPv4" && !nextInterface.internal) {
+               if (!lowerName) {
+                  // Ignore unnamed interfaces (for the moment)
+               } else if (lowerName.indexOf("vbox") === 0) {
+                  vmInterface = nextInterface;
+                  vmInterface.name = interfaceName;
+               } else if (lowerName.indexOf("virtual") === 0) {
+                  vmInterface = nextInterface;
+                  vmInterface.name = interfaceName;
+               } else if (lowerName.indexOf("eth") === 0) {
+                  localInterface = nextInterface;
+                  localInterface.name = interfaceName;
+               } else if (lowerName.indexOf("en") === 0) {
+                  localInterface = nextInterface;
+                  localInterface.name = interfaceName;
+               } else {
+                  fallbackInterface = nextInterface;
+                  fallbackInterface.name = interfaceName;
+               }
+            }
+         });
+      });
+
+      // Choose prioritised interface
+      var chosenInterface = vmInterface || localInterface || fallbackInterface;
+
+      // In debug mode, output the IP information
+      grunt.log.debug("");
+      grunt.log.debug("\x1b[4m" + "Retrieving IP address of server" + "\x1b[0m");
+      grunt.log.debug("Using network interface '" + chosenInterface.name + "' with address of " + chosenInterface.address);
+      grunt.log.debug("");
+
+      // Pass back the IP
+      return chosenInterface;
+   })();
+
    // Update the grunt config
    grunt.config.merge({
       intern: {
          options: {
             rowsCols: process.stdout.rows + "|" + process.stdout.columns, // Used by ConcurrentReporter
-            serverIP: serverIP // Used by all
+            serverIP: interfaceToUse.address // Used by all
          },
          bs: {
             options: {
