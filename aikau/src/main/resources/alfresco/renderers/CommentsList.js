@@ -36,8 +36,9 @@
 define(["dojo/_base/declare",
         "alfresco/core/ProcessWidgets",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang"], 
-        function(declare, ProcessWidgets, ObjectProcessingMixin, lang) {
+        function(declare, ProcessWidgets, ObjectProcessingMixin, topics, lang) {
 
    return declare([ProcessWidgets, ObjectProcessingMixin], {
 
@@ -145,14 +146,14 @@ define(["dojo/_base/declare",
                         checked: true,
                         onConfig: {
                            iconClass: "alf-sort-ascending-icon",
-                           publishTopic: "ALF_DOCLIST_SORT",
+                           publishTopic: topics.SORT_LIST,
                            publishPayload: {
                               direction: "ascending"
                            }
                         },
                         offConfig: {
                            iconClass: "alf-sort-descending-icon",
-                           publishTopic: "ALF_DOCLIST_SORT",
+                           publishTopic: topics.SORT_LIST,
                            publishPayload: {
                               direction: "descending"
                            }

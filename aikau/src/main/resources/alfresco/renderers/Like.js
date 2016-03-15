@@ -106,6 +106,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Like__postMixInProperties() {
+         /*jshint eqnull:true*/
          // Set up the toggle topics..
          // If no instantiation overrides have been provided then just default to the standard topics
          // provided by the "alfresco/services/_RatingsServiceTopicMixin" class...

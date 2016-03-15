@@ -38,6 +38,9 @@ define(["./config/Suites"],
             browserName: "internet explorer",
             version: "11",
             platform: "WINDOWS"
+         }, {
+            browserName: "safari",
+            platform: "MAC"
          }],
          xenvData = [{
             browserName: "chrome",

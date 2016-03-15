@@ -54,10 +54,8 @@ define(["alfresco/core/ProcessWidgets",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/dom-geometry",
-        "dojo/on",
-        "alfresco/core/ObjectTypeUtils"], 
-        function(ProcessWidgets, declare, template, lang, array, domConstruct, domStyle, domGeom, on, ObjectTypeUtils) {
+        "dojo/dom-geometry"], 
+        function(ProcessWidgets, declare, template, lang, array, domConstruct, domStyle, domGeom) {
    
    return declare([ProcessWidgets], {
       
@@ -108,7 +106,7 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        * @param {object} evt The resize event.
        */
-      onResize: function alfresco_layout_CenteredWidgets__onResize(evt) {
+      onResize: function alfresco_layout_CenteredWidgets__onResize(/*jshint unused:false*/ evt) {
          this.alfLog("log", "Resizing");
 
          // TODO: Implement to resize when the window changes...
@@ -126,7 +124,8 @@ define(["alfresco/core/ProcessWidgets",
        * @param {string} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
        * @returns {element} A new DOM node for the widget to be attached to
        */
-      createWidgetDomNode: function alfresco_layout_CenteredWidgets__createWidgetDomNode(widget, rootNode, rootClassName) {
+      createWidgetDomNode: function alfresco_layout_CenteredWidgets__createWidgetDomNode(widget, /*jshint unused:false*/ rootNode, /*jshint unused:false*/ rootClassName) {
+         /*jshint eqnull:true*/
 
          var marginLeft =  (this.widgetMarginLeft != null && !isNaN(this.widgetMarginLeft)) ? this.widgetMarginLeft: 0;
          var marginRight =  (this.widgetMarginRight != null && !isNaN(this.widgetMarginRight)) ? this.widgetMarginRight: 0;
@@ -135,8 +134,8 @@ define(["alfresco/core/ProcessWidgets",
          var style = {
             "marginLeft": marginLeft + "px",
             "marginRight": marginRight + "px"
-         }
-         if (widget.widthCalc != 0)
+         };
+         if (widget.widthCalc !== 0)
          {
             style.width = widget.widthCalc + "px";
          }
@@ -158,7 +157,7 @@ define(["alfresco/core/ProcessWidgets",
          // Calculate the total width and the max height of all the contained widgets
          var calcWidth = 0;
          var maxHeight = 0;
-         array.forEach(widgets, function(widget, i) {
+         array.forEach(widgets, function(widget) {
             calcWidth = calcWidth + this.overallWidth(widget.domNode);
             var thisHeight = this.overallHeight(widget.domNode);
             maxHeight = maxHeight > thisHeight?maxHeight:thisHeight;
@@ -171,17 +170,15 @@ define(["alfresco/core/ProcessWidgets",
 
          // Otherwise set the containerNode width
          }else{
-            var style = {
+            domStyle.set(this.containerNode, {
                "width": calcWidth + "px"
-            }
-            domStyle.set(this.containerNode, style);
+            });
          }
 
          // Set max height for the domNode
-         var style = {
+         domStyle.set(this.domNode, {
             "height": maxHeight + "px"
-         }
-         domStyle.set(this.domNode, style);
+         });
       },
 
       /**

@@ -1,3 +1,4 @@
+/*globals Alfresco*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -61,7 +62,7 @@ define(["dojo/_base/declare",
              return startDate;
          };
          var getEndDate = function() {
-            if (timePeriod == "CUSTOM") {
+            if (timePeriod === "CUSTOM") {
                return endDate;
             } else {
                return now;
@@ -233,30 +234,29 @@ define(["dojo/_base/declare",
                            name: "alfresco/charts/ccc/PieChart",
                            config: {
                               readers: [
-                                 { names: 'category', indexes: 0 },
-                                 { names: 'value', indexes: 2 }
+                                 { names: "category", indexes: 0 },
+                                 { names: "value", indexes: 2 }
                               ],
                               explodedSliceRadius: null,
                               selectable: false,
                               hoverable:  true,
                               extensionPoints: {
-                                 slice_innerRadiusEx: '55%',
-                                 slice_strokeStyle: 'white'
+                                 slice_innerRadiusEx: "55%",
+                                 slice_strokeStyle: "white"
                               },
                               clickTopic: "REPORT_ITEM_CLICKED",
                               tooltip: {
                                  format: function(scene){
-                                    var avatarUrl = Alfresco.constants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(scene.datum.atoms.category.value) + "/thumbnail/avatar32";
-                                    var tooltip = '';
-                                    tooltip += '<table><tr><td>';
-                                    tooltip += '<img class="avatar" src="' + avatarUrl + '" alt="avatar"><br>';
-                                    tooltip += '</td><td>';
-                                    tooltip += '<div style="text-align: left;">';
-                                    tooltip += '<strong>' + Alfresco.util.encodeHTML(scene.datum.atoms.category.value) + '</strong><br/>';
-                                    tooltip += I18nUtils.msg(i18nScope, "count", Alfresco.util.encodeHTML(scene.datum.atoms.value.value), Alfresco.util.encodeHTML(scene.vars.value.percent.label)) + '<br/>';
+                                    var tooltip = "";
+                                    tooltip += "<table><tr><td>";
+                                    tooltip += "<img class=\"avatar\" src=\"\" + avatarUrl + \"\" alt=\"avatar\"><br>";
+                                    tooltip += "</td><td>";
+                                    tooltip += "<div style=\"text-align: left;\">";
+                                    tooltip += "<strong>" + Alfresco.util.encodeHTML(scene.datum.atoms.category.value) + "</strong><br/>";
+                                    tooltip += I18nUtils.msg(i18nScope, "count", Alfresco.util.encodeHTML(scene.datum.atoms.value.value), Alfresco.util.encodeHTML(scene.vars.value.percent.label)) + "<br/>";
                                     tooltip += I18nUtils.msg(i18nScope, "sum", Alfresco.util.encodeHTML(Alfresco.util.formatFileSize(scene.datum.atoms.value2.value)));
-                                    tooltip += '</div>';
-                                    tooltip += '</td></tr></table>';
+                                    tooltip += "</div>";
+                                    tooltip += "</td></tr></table>";
                                     return tooltip;
                                  }
                               }

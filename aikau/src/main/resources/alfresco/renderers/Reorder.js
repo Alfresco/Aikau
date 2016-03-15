@@ -168,11 +168,12 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Reorder__postMixInProperties() {
-         if (this.upArrowImageSrc == null || this.upArrowImageSrc == "")
+         /*jshint eqnull:true*/
+         if (this.upArrowImageSrc == null || this.upArrowImageSrc === "")
          {
             this.upArrowImageSrc = require.toUrl("alfresco/renderers/css/images/" + this.upArrowImg);
          }
-         if (this.downArrowImageSrc == null || this.downArrowImageSrc == "")
+         if (this.downArrowImageSrc == null || this.downArrowImageSrc === "")
          {
             this.downArrowImageSrc = require.toUrl("alfresco/renderers/css/images/" + this.downArrowImg);
          }
@@ -212,7 +213,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event object
        */
-      onUpClick: function alfresco_renderers_Reorder__onUpClick(evt) {
+      onUpClick: function alfresco_renderers_Reorder__onUpClick(/*jshint unused:false*/ evt) {
          this.alfLog("log", "Moving item up", this);
          var payload = this.generatePayload(this.moveUpPublishPayload, 
                                             this.currentItem, 
@@ -236,7 +237,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event object
        */
-      onDownClick: function alfresco_renderers_Reorder__onDownClick(evt) {
+      onDownClick: function alfresco_renderers_Reorder__onDownClick(/*jshint unused:false*/ evt) {
          this.alfLog("log", "Moving item down", this);
          var payload = this.generatePayload(this.moveDownPublishPayload, 
                                             this.currentItem, 

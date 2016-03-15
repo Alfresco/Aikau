@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>SelectedListItems</shortname>
+  <description>Tests the SelectedListItems form control</description>
+  <family>aikau-unit-tests</family>
+  <url>/SelectedListItems</url>
+</webscript>

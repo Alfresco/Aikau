@@ -52,7 +52,7 @@ define(["dojo/_base/declare",
          var start = 0, end = 0, normalizedValue, range,
          textInputRange, len, endRange;
 
-         if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") 
+         if (typeof el.selectionStart === "number" && typeof el.selectionEnd === "number") 
          {
             start = el.selectionStart;
             end = el.selectionEnd;
@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
          {
             range = document.selection.createRange();
    
-            if (range && range.parentElement() == el) 
+            if (range && range.parentElement() === el) 
             {
                len = el.value.length;
                normalizedValue = el.value.replace(/\r\n/g, "\n");
@@ -123,7 +123,7 @@ define(["dojo/_base/declare",
          else if (el.createTextRange) 
          { 
              var range = el.createTextRange();
-             range.moveStart('character', position); 
+             range.moveStart("character", position); 
              range.select(); 
          }
       },
@@ -194,11 +194,11 @@ define(["dojo/_base/declare",
                }
 
                // Operator
-               if (this.domCalculationOperators[c["operator"]]) {
-                  result = this.domCalculationOperators[c["operator"]].call(this, result, tmp);
+               if (this.domCalculationOperators[c.operator]) {
+                  result = this.domCalculationOperators[c.operator].call(this, result, tmp);
                }
                else {
-                  throw new Error("Failed calculation due to missing operator " + c["operator"]);
+                  throw new Error("Failed calculation due to missing operator " + c.operator);
                }
             }
          }
@@ -259,7 +259,8 @@ define(["dojo/_base/declare",
        *    values to ignore).
        */
       resolveCssStyles: function(prefix, names, styleProperties, cache){
-         cache = typeof cache == "boolean" ? cache : true;
+         /*jshint maxcomplexity:false,maxstatements:false*/
+         cache = typeof cache === "boolean" ? cache : true;
 
          var result;
          if (cache) {
@@ -283,30 +284,32 @@ define(["dojo/_base/declare",
             computedStyle = domStyle.getComputedStyle(el);
             stylePropertiesPerName = {};
             for (var s in styleProperties) {
-               styleProperty = computedStyle[s];
+               if(styleProperties.hasOwnProperty(s)) {
+                  styleProperty = computedStyle[s];
 
-               // Make sure there is an array to store result in
-               if (!result[s]) {
-                  result[s] = [];
-               }
+                  // Make sure there is an array to store result in
+                  if (!result[s]) {
+                     result[s] = [];
+                  }
 
-               // Make sure we are not adding a valu that shall be ignored
-               if (lang.isArray(styleProperties[s])) {
-                  if (array.indexOf(styleProperties[s], styleProperty) == -1) {
+                  // Make sure we are not adding a valu that shall be ignored
+                  if (lang.isArray(styleProperties[s])) {
+                     if (array.indexOf(styleProperties[s], styleProperty) === -1) {
+                        result[s].push(styleProperty);
+                     }
+                  }
+                  else if (styleProperty !== styleProperties) {
                      result[s].push(styleProperty);
                   }
-               }
-               else if (styleProperty != styleProperties) {
-                  result[s].push(styleProperty);
-               }
 
-               // Store style property value on a per name basis as well
-               stylePropertiesPerName[s] = styleProperty;
+                  // Store style property value on a per name basis as well
+                  stylePropertiesPerName[s] = styleProperty;
+               }
             }
             result.byName.push({
                name: names[i],
                style: stylePropertiesPerName
-            })
+            });
          }
 
          if (cache) {

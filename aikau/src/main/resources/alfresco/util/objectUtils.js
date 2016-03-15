@@ -37,6 +37,7 @@ define([
 
          // See API below
          evaluateRules: function alfresco_util_objectUtils__evaluateRules(rules, successHandler, failureHandler) {
+            /*jshint devel:true*/
 
             // Setup variables
             var testValue = lang.getObject(rules.attribute, false, rules.testObject),

@@ -312,7 +312,7 @@ define(["alfresco/core/CoreXhr",
             destination: destination,
             siteId: targetData.siteId,
             containerId: targetData.containerId,
-            uploaddirectory: targetData.uploadDirectory,
+            uploaddirectory: targetData.uploadDirectory || file.relativePath,
             majorVersion: targetData.majorVersion ? targetData.majorVersion : "true",
             updateNodeRef: targetData.updateNodeRef,
             description: targetData.description,
@@ -608,7 +608,7 @@ define(["alfresco/core/CoreXhr",
        * @param {object} Contains info about the file and its request.
        */
       startFileUpload: function alfresco_services__BaseUploadService__startFileUpload(fileInfo) {
-         /*jshint maxstatements:false*/
+         /*jshint maxstatements:false,maxcomplexity:false*/
 
          // Ensure we only upload the maximum allowed at a time
          if (this._numUploadsInProgress === this.maxSimultaneousUploads) {
@@ -674,6 +674,9 @@ define(["alfresco/core/CoreXhr",
                formData.append("fileData", uploadData.filedata);
                formData.append("fileName", uploadData.filename);
                formData.append("autoRename", !uploadData.overwrite);
+               if (uploadData.uploaddirectory) {
+                  formData.append("relativePath", uploadData.uploaddirectory);
+               }
                
                break;
             }

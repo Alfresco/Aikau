@@ -1,3 +1,4 @@
+/*jshint esnext:false,es3:false,esversion:6*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -267,8 +268,8 @@ define(["dojo/_base/declare",
                   var textItems = textContent.items;
                   var str = "";
 
-                  for (var i = 0; i < textItems.length; i++) {
-                     str += textItems[i].str;
+                  for (var j = 0; j < textItems.length; j++) {
+                     str += textItems[j].str;
                   }
 
                   // Store the pageContent as a string.

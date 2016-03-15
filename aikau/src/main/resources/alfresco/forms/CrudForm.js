@@ -87,13 +87,13 @@ define(["dojo/_base/declare",
 
          if (this.showInfoTopics)
          {
-            array.forEach(this.showInfoTopics, function(topic, i) {
+            array.forEach(this.showInfoTopics, function(topic) {
                this.alfSubscribe(topic, lang.hitch(this, this.onShowInfo));
             }, this);
          }
          if (this.showFormTopics)
          {
-            array.forEach(this.showFormTopics, function(topic, i) {
+            array.forEach(this.showFormTopics, function(topic) {
                this.alfSubscribe(topic, lang.hitch(this, this.onShowForm));
             }, this);
          }
@@ -150,7 +150,8 @@ define(["dojo/_base/declare",
        * @instance
        * @param {array} widgets The created form controls
        */
-      allWidgetsProcessed: function alfresco_forms_CrudForm__allWidgetsProcessed(widgets) {
+      allWidgetsProcessed: function alfresco_forms_CrudForm__allWidgetsProcessed(/*jshint unused:false*/ widgets) {
+         /*jshint eqnull:true*/
          if (this.__creatingInfoWidgets === true)
          {
             this.__creatingInfoWidgets = false;
@@ -166,7 +167,7 @@ define(["dojo/_base/declare",
 
             // Collect the initial set of form data...
             var startingFormData = {};
-            array.forEach(this._form.getChildren(), function(entry, i) {
+            array.forEach(this._form.getChildren(), function(entry) {
                lang.setObject(entry.get("name"), entry.getValue(), startingFormData);
             });
 
@@ -189,6 +190,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       createButtons: function alfresco_forms_CrudForm__createButtons() {
+         /*jshint eqnull:true*/
          
          // Clear the default buttonsNode...
          domConstruct.empty(this.buttonsNode);
@@ -252,7 +254,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the create state
        */
-      onShowCreateState: function alfresco_forms_CrudForm__onShowCreateState(payload) {
+      onShowCreateState: function alfresco_forms_CrudForm__onShowCreateState(/*jshint unused:false*/ payload) {
          // Update the form to display the default data.
          this.setValue(this.defaultData);
 

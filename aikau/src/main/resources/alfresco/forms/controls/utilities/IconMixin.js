@@ -48,6 +48,7 @@ define(["dojo/_base/declare",
        * @param {object} control The form control to manipulate
        */
       addIcon: function alfresco_forms_controls_utilities_IconMixin__addIcon(control) {
+         /*jshint eqnull:true*/
          if (this.iconClass != null && lang.trim(this.iconClass) !== "")
          {
             domConstruct.create("span", {

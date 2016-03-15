@@ -121,6 +121,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_QuickShare__postMixInProperties() {
+         /*jshint eqnull:true*/
          // Set up the toggle topics..
          // If no instantiation overrides have been provided then just default to the standard topics
          // provided by the "alfresco/services/_RatingsServiceTopicMixin" class...
@@ -157,6 +158,7 @@ define(["dojo/_base/declare",
        * @returns {boolean} Indicating the initial state of the toggle.
        */
       getInitialState: function alfresco_renderers_QuickShare__getInitialState() {
+         /*jshint eqnull:true*/
          return (lang.getObject(this.propertyToRender, false, this.currentItem) != null);
       },
       
@@ -231,7 +233,8 @@ define(["dojo/_base/declare",
        * Called whenever the "toggleOffSuccessTopic" attribute is published on
        * @instance
        */
-      onToggleOffSuccess: function alfresco_renderers_QuickShare__onToggleOffSuccess(payload) {
+      onToggleOffSuccess: function alfresco_renderers_QuickShare__onToggleOffSuccess(/*jshint unused:false*/ payload) {
+         /*jshint eqnull:true*/
          this.inherited(arguments);
          if (this.onNode.children != null && this.onNode.children.length > 0)
          {
@@ -314,7 +317,7 @@ define(["dojo/_base/declare",
                   ]
                }
             }
-         ]
+         ];
          return widgets;
       }
    });

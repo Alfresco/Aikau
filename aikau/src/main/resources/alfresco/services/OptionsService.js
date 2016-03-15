@@ -60,6 +60,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onOptionsRequest: function alfresco_services_OptionsService__onOptionsRequest(payload) {
+         /*jshint eqnull:true*/
          if (payload.url != null &&
              payload.itemsAttribute != null &&
              payload.labelAttribute != null &&
@@ -123,7 +124,8 @@ define(["dojo/_base/declare",
        * @param {object} item The current item to process as an option
        * @param {number} index The index of the item in the items list
        */
-      processOptions: function alfresco_services_OptionsService__processOptions(options, config, item, index) {
+      processOptions: function alfresco_services_OptionsService__processOptions(options, config, item, /*jshint unused:false*/ index) {
+         /*jshint eqnull:true*/
          var label = lang.getObject(config.labelAttribute, false, item);
          var value = lang.getObject(config.valueAttribute, false, item);
          if (label == null && value == null)

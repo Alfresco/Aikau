@@ -71,12 +71,15 @@ define(["dojo/_base/declare",
          {
             for (var key in obj)
             {
+               if (obj.hasOwnProperty(key))
+               {
                   var procData = { id: uuid(), 
                                    label: key, 
                                    type: "path" };
                   var rawData = obj[key];
                   procData.children = this.getDataItems(rawData._alfValue);
                   items.push(procData);
+               }
             }
          }
          else
@@ -91,6 +94,7 @@ define(["dojo/_base/declare",
    
    var instance; 
    DataModel.getSingleton = function() {
+      /*jshint eqnull:true*/
       if (instance == null)
       {
          instance = new DataModel(); 

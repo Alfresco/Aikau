@@ -109,9 +109,40 @@ define(["dojo/_base/declare",
          {
             this.title = this.message(this.title);
          }
+         if (!this.iconAltText && this.label)
+         {
+            this.iconAltText = this.label;
+         }
+         else if (this.iconAltText)
+         {
+            this.iconAltText = this.message(this.iconAltText);
+         }
          this.inherited(arguments);
       },
       
+      /**
+       * Creates a DOM element to hold an icon for the menu.
+       * 
+       * @instance
+       * @since 1.0.59
+       */
+      createIconNode: function alfresco_menus_AlfMenuBarPopup__createIconNode() {
+         if (this.iconClass && this.iconClass !== "dijitNoIcon")
+         {
+            this.iconNode = domConstruct.create("img", {
+               className: this.iconClass + " alfresco-menus-AlfMenuBarPopup__icon alfresco-menus-AlfMenuItemIconMixin",
+               src: (this.iconSrc ? this.iconSrc : require.toUrl("alfresco/menus/css/images/transparent-20.png")),
+               title: this.message(this.iconAltText),
+               alt: this.message(this.iconAltText),
+               role: "presentation"
+            }, this.focusNode, "first");
+            if (this.label)
+            {
+               domClass.add(this.containerNode, this.labelWithIconClass);
+            }
+         }
+      },
+
       /**
        * Sets the label of the menu item that represents the popup and creates a new alfresco/menus/AlfMenuGroups
        * instance containing all of the widgets to be displayed in the popup. Ideally the array of widgets should
@@ -121,20 +152,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuBarPopup__postCreate() {
-         if (this.iconClass && this.iconClass !== "dijitNoIcon")
-         {
-            this.iconNode = domConstruct.create("img", {
-               className: this.iconClass,
-               src: (this.iconSrc ? this.iconSrc : require.toUrl("alfresco/menus/css/images/transparent-20.png")),
-               title: this.message(this.iconAltText),
-               alt: this.message(this.iconAltText),
-               tabIndex: 0
-            }, this.focusNode, "first");
-            if (this.label)
-            {
-               domClass.add(this.containerNode, this.labelWithIconClass);
-            }
-         }
+         domClass.add(this.domNode, "alfresco-menus-AlfMenuBarPopup");
+         this.createIconNode();
          if (this.showArrow)
          {
             // Add in the "arrow" image to indicate a drop-down menu. We do this with DOM manipulation

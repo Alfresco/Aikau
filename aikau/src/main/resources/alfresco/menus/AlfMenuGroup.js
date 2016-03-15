@@ -191,6 +191,7 @@ define(["dojo/_base/declare",
        * @return Either null if a menu bar cannot be found or a menu bar widget.
        */
       findMenuBarAncestor: function alfresco_menus_AlfMenuGroup__findMenuBarAncestor(currentMenu) {
+         /*jshint eqnull:true*/
          var reachedMenuTop = false;
          while (!reachedMenuTop && !currentMenu._isMenuBar)
          {

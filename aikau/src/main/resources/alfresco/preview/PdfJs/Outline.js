@@ -56,6 +56,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_preview_PdfJs_Outline__postCreate() {
+         /*jshint eqnull:true*/
          domClass.add(this.domNode, "alfresco-preview-PdfJs-Outline");
          if (this.pdfJsPlugin != null && this.pdfJsPlugin.pdfDocument != null)
          {
@@ -85,8 +86,8 @@ define(["dojo/_base/declare",
                for (i = 0; i < n; i++)
                {
                   var item = levelData.items[i];
-                  var div = document.createElement('div');
-                  div.className = 'outlineItem';
+                  var div = document.createElement("div");
+                  div.className = "outlineItem";
                   var a = domConstruct.create("a", {
                      href: "#",
                      innerHTML: item.title
@@ -95,8 +96,8 @@ define(["dojo/_base/declare",
                   div.appendChild(a);
 
                   if (item.items.length > 0) {
-                     var itemsDiv = document.createElement('div');
-                     itemsDiv.className = 'outlineItems';
+                     var itemsDiv = document.createElement("div");
+                     itemsDiv.className = "outlineItems";
                      div.appendChild(itemsDiv);
                      queue.push({parent: itemsDiv, items: item.items});
                   }
@@ -117,7 +118,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} dest The destination to navigate to within the PDF
        */
-      onOutlineClick: function alfresco_preview_PdfJs_Outline__onOutlineClick(dest, evt) {
+      onOutlineClick: function alfresco_preview_PdfJs_Outline__onOutlineClick(dest, /*jshint unused:false*/ evt) {
          this.pdfJsPlugin._navigateTo(dest);
       },
 

@@ -8,9 +8,9 @@ model.jsonModel = {
          config: {
             widgets: [
                {
+                  id: "CHECKABLE_MENU_ITEMS_DROPDOWN",
                   name: "alfresco/menus/AlfMenuBarPopup",
                   config: {
-                     id: "CHECKABLE_MENU_ITEMS_DROPDOWN",
                      label: "Checkable Menu Items",
                      widgets: [
                         {

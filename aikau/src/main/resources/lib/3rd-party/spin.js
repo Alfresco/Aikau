@@ -148,7 +148,7 @@
 
   /** The constructor */
   function Spinner(o) {
-    if (typeof this == 'undefined') return new Spinner(o)
+    if (typeof this === "undefined") return new Spinner(o)
     this.opts = merge(o || {}, Spinner.defaults, defaults)
   }
 

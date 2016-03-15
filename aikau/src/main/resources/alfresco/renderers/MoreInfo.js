@@ -132,6 +132,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_MoreInfo__postMixInProperties() {
+         /*jshint eqnull:true*/
          if (this.altText == null)
          {
             this.altText = "";
@@ -172,6 +173,7 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event.
        */
       onMoreInfo: function alfresco_renderers_MoreInfo__onMoreInfo(evt) {
+         /*jshint eqnull:true*/
          event.stop(evt);
          if (this.moreInfoDialog == null)
          {

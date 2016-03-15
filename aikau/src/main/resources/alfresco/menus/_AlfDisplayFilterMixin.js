@@ -53,6 +53,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfMenuItem__postCreate() {
+         /*jshint eqnull:true*/
          if (this.filterTopic != null)
          {
             this.alfSubscribe(this.filterTopic, lang.hitch(this, "filter"));
@@ -70,7 +71,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload published on the filter topic 
        */
-      filter: function alfresco_menus_AlfFilteringMenuItem__filter(payload) {
+      filter: function alfresco_menus_AlfFilteringMenuItem__filter(/*jshint unused:false*/ payload) {
          this.inherited(arguments);
       },
       

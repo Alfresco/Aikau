@@ -33,10 +33,11 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-class",
         "alfresco/layout/LeftAndRight",
+
+        // These items required for building only
         "alfresco/renderers/Selector",
-        "alfresco/renderers/MoreInfo",
-        "service/constants/Default"], 
-        function(declare, Thumbnail, template, lang, domStyle, domClass, LeftAndRight, Selector, MoreInfo, AlfConstants) {
+        "alfresco/renderers/MoreInfo"], 
+        function(declare, Thumbnail, template, lang, domStyle, domClass, LeftAndRight) {
 
    return declare([Thumbnail], {
       

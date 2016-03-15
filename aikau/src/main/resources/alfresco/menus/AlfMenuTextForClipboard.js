@@ -103,6 +103,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_menus_AlfMenuTextForClipboard__postMixInProperties() {
+         /*jshint eqnull:true*/
          if (this.label != null)
          {
             this.label = this.encodeHTML(this.message(this.label));

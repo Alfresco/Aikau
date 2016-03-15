@@ -30,8 +30,6 @@ define(["dojo/_base/declare",
    "alfresco/charts/ccc/Chart"],
       function(declare, AlfCore, I18nUtils, Chart) {
 
-         var i18nScope = "alfresco.reports.BarChart";
-
          return declare([Chart], {
 
             /**

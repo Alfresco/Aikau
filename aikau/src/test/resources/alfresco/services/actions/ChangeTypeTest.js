@@ -135,7 +135,7 @@ define(["intern!object",
 
             .getLastPublish("ALF_DISPLAY_PROMPT")
                .then(function(payload) {
-                  assert.propertyVal(payload, "message", "Unable to change type of document ''PDF.pdf''");
+                  assert.propertyVal(payload, "message", "We couldn't change the type of ''PDF.pdf''. Check with your Alfresco Administrator that the type matches the data model.");
                });
          },
 

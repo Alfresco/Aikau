@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
        */
       allWidgetsProcessed: function alfresco_menus_AlfMenuBar__allWidgetsProcessed(widgets) {
          var _this = this;
-         array.forEach(widgets, function(entry, i) {
+         array.forEach(widgets, function(entry) {
             _this._menuBar.addChild(entry);
          });
          this._menuBar.placeAt(this.containerNode);

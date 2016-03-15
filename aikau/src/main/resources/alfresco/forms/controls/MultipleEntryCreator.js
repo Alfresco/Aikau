@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
          // The supplied value should correspond to the JSON that we want to represent...
          // We need to construct the element configuration from this...
          
-         if (typeof this.value == "undefined" || this.value == null)
+         if (typeof this.value === "undefined" || this.value === null)
          {
             // If no value has been set then we can just make the value an empty array and
             // also make the elements attribute an empty array.
@@ -189,14 +189,14 @@ define(["dojo/_base/declare",
       getDNDAvatarWidget: function alfresco_forms_controls_MultipleEntryCreator__getDNDAvatarWidget(item) {
          var widget = null;
          var selectedNodes = this._dndSource.getSelectedNodes();
-         array.forEach(selectedNodes, function(node, index) {
+         array.forEach(selectedNodes, function(node) {
             var wrapper = registry.byNode(node);
             
             // This ultra-cautious - but to avoid potential errors we're going to check that
             // the data structure we expect is in place. We're looking to check that the item
             // is the represented by the current selected node.
             if (wrapper && wrapper.widget && wrapper.widget.value && 
-                item._alfMultipleElementId == wrapper.widget.value._alfMultipleElementId)
+                item._alfMultipleElementId === wrapper.widget.value._alfMultipleElementId)
             {
                widget = wrapper.widget;
             }
@@ -240,7 +240,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_forms_controls_MultipleEntryCreator__postMixInProperties() {
-         if (this.addEntryImageSrc == null || this.addEntryImageSrc == "")
+         /*jshint eqnull:true*/
+         if (this.addEntryImageSrc == null || this.addEntryImageSrc === "")
          {
             this.addEntryImageSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.addEntryImage);
          }
@@ -306,6 +307,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       createEntries: function alfresco_forms_controls_MultipleEntryCreator__createEntries(elements) {
+         /*jshint eqnull:true*/
          if (elements == null) 
          {
             elements = [];
@@ -318,7 +320,7 @@ define(["dojo/_base/declare",
          {
             // Iterate over the list of elements and create a wrapper containing each element...
             this.alfLog("log", "Creating entries for MultipleEntryCreator", elements);
-            array.forEach(elements, function(element, index) {
+            array.forEach(elements, function(element) {
                if (element != null)
                {
                   var wrapper = this.createElementWrapper(element, true);
@@ -358,7 +360,7 @@ define(["dojo/_base/declare",
          var wrapper = new MultipleEntryElementWrapper({creator: this,
                                                         previouslyExisted: previouslyExisted, 
                                                         widget: elementWidget});
-         aspect.after(wrapper, "blurWrapper", function(deferred) {
+         aspect.after(wrapper, "blurWrapper", function(/*jshint unused:false*/ deferred) {
             _this.alfLog("log", "Wrapper 'blurWrapper' function processed");
             _this.validationRequired();
          });
@@ -448,9 +450,9 @@ define(["dojo/_base/declare",
       getValue: function alfresco_forms_controls_MultipleEntryCreator__getValue() {
          var value = [];
          var wrappers = registry.findWidgets(this.currentEntries);
-         array.forEach(wrappers, function(wrapper, index) {
+         array.forEach(wrappers, function(wrapper) {
             var widget = wrapper.widget;
-            if (typeof widget.getValue == "function")
+            if (typeof widget.getValue === "function")
             {
                value.push(widget.getValue());
             }
@@ -470,10 +472,10 @@ define(["dojo/_base/declare",
          // Destroy all the wrapper widgets
          this.alfLog("log", "Setting value of MultipleEntryCreator", this, value);
          var wrappers = registry.findWidgets(this.currentEntries);
-         array.forEach(wrappers, function(wrapper, index) {
+         array.forEach(wrappers, function(wrapper) {
             wrapper.destroyRecursive();
          });
-         if (!value instanceof Array)
+         if (!(value instanceof Array))
          {
             this.alfLog("warn", "The value provided to the MultipleEntryCreator setValue was not an array:", value);
          }
@@ -491,8 +493,7 @@ define(["dojo/_base/declare",
       validate: function alfresco_forms_controls_MultipleEntryCreator__validate() {
          var valid = true;
          var wrappers = registry.findWidgets(this.currentEntries);
-         var _this = this;
-         array.forEach(wrappers, function(wrapper, index) {
+         array.forEach(wrappers, function(wrapper) {
             valid = valid && wrapper.widget.validate();
          });
          return valid;

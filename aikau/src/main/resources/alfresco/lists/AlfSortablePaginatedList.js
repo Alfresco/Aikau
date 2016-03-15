@@ -32,10 +32,11 @@
 define(["dojo/_base/declare",
         "alfresco/lists/AlfHashList",
         "alfresco/services/_PreferenceServiceTopicMixin",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "alfresco/util/hashUtils",
         "dojo/io-query"],
-        function(declare, AlfHashList, _PreferenceServiceTopicMixin, lang, hashUtils, ioQuery) {
+        function(declare, AlfHashList, _PreferenceServiceTopicMixin, topics, lang, hashUtils, ioQuery) {
 
    return declare([AlfHashList, _PreferenceServiceTopicMixin], {
 
@@ -104,6 +105,28 @@ define(["dojo/_base/declare",
        * @default
        */
       sortField: "cm:name",
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#showView} to set the sort data for
+       * any [HeaderCell]{@link module:alfresco/lists/views/layouts/HeaderCell} widgets that might be included in the
+       * view.
+       * 
+       * @instance
+       * @since 1.0.59
+       * @fires module:alfresco/core/topics#SORT_LIST
+       */
+      showView: function alfresco_lists_AlfSortablePaginatedList__showView() {
+         this.inherited(arguments);
+         if (!this.useHash)
+         {
+            this.alfLog("info", "Really should publish sort data");
+            this.alfPublish(topics.SORT_LIST, {
+               direction: (this.sortAscending) ? "ascending" : "descending",
+               value: this.sortField,
+               requester: this
+            });
+         }
+      },
 
       /**
        * Extends the [inherited function]{@link module:alfresco/lists/AlfList#postMixInProperties}
@@ -208,7 +231,7 @@ define(["dojo/_base/declare",
        */
       onSortRequest: function alfresco_lists_AlfSortablePaginatedList__onSortRequest(payload) {
          this.alfLog("log", "Sort requested: ", payload);
-         if (payload && payload.direction !== null || payload.value !== null)
+         if (payload && payload.requester !== this && (payload.direction !== null || payload.value !== null))
          {
             if (payload.direction)
             {

@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
             model: myModel,
             showRoot: false,
             getIconClass: function(item, opened) {
-               return (item.type == "value" ? "dijitLeaf" : (opened ? "dijitFolderOpened" : "dijitFolderClosed"));
+               return (item.type === "value" ? "dijitLeaf" : (opened ? "dijitFolderOpened" : "dijitFolderClosed"));
             }
          });
          tree.placeAt(this.treeNode);

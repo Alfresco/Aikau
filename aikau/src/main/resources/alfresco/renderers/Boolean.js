@@ -120,8 +120,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Boolean__postMixInProperties() {
+         /*jshint maxcomplexity:false*/
 
-         if(typeof this.displayTypeOptions.get(this.displayType) == "undefined")
+         if(typeof this.displayTypeOptions.get(this.displayType) === "undefined")
          {
             this.alfLog("log", "Unknown displayType '" + this.displayType + "'. Please select displayType from: " + this.displayTypeOptions.enums, this);
             this.renderedValue = "";

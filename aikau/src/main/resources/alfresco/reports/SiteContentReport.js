@@ -1,3 +1,4 @@
+/*globals Alfresco*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -65,23 +66,23 @@ define(["dojo/_base/declare",
                         site: Alfresco.constants.SITE // todo replace with $$SITE$$ once supported
                      },
                      readers: [
-                        { names: 'category', indexes: 0 },
-                        { names: 'value', indexes: 2 }
+                        { names: "category", indexes: 0 },
+                        { names: "value", indexes: 2 }
                      ],
                      explodedSliceRadius: null,
                      selectable: false,
                      hoverable:  true,
                      extensionPoints: {
-                        slice_innerRadiusEx: '55%',
-                        slice_strokeStyle: 'white'
+                        slice_innerRadiusEx: "55%",
+                        slice_strokeStyle: "white"
                      },
                      tooltip: {
                         format: function(scene){
-                           var tooltip = '<div style="text-align: left;">';
-                           tooltip += '<strong>' + Alfresco.util.encodeHTML(scene.datum.atoms.category.value) + '</strong><br/>';
-                           tooltip += I18nUtils.msg(i18nScope, "count", Alfresco.util.encodeHTML(scene.datum.atoms.value.value), Alfresco.util.encodeHTML(scene.vars.value.percent.label)) + '<br/>';
+                           var tooltip = "<div style=\"text-align: left;\">";
+                           tooltip += "<strong>" + Alfresco.util.encodeHTML(scene.datum.atoms.category.value) + "</strong><br/>";
+                           tooltip += I18nUtils.msg(i18nScope, "count", Alfresco.util.encodeHTML(scene.datum.atoms.value.value), Alfresco.util.encodeHTML(scene.vars.value.percent.label)) + "<br/>";
                            tooltip += I18nUtils.msg(i18nScope, "sum", Alfresco.util.encodeHTML(Alfresco.util.formatFileSize(scene.datum.atoms.value2.value)));
-                           tooltip += '</div>';
+                           tooltip += "</div>";
                            return tooltip;
                         }
                      }

@@ -192,6 +192,7 @@ define(["dojo/_base/declare",
              * @param dataDescriptor {object} Metadata describing data
              */
             onDataRequestTopic: function(data, dataDescriptor) {
+               /*jshint eqnull:true*/
                var chart = this._chartMap[this._currentlySelectedChart];
                if (chart != null) {
                   chart.showData(data, dataDescriptor);
@@ -246,7 +247,7 @@ define(["dojo/_base/declare",
                     return startDate;
                 };
                 var getEndDate = function(timePeriod) {
-                   if (timePeriod == "CUSTOM") {
+                   if (timePeriod === "CUSTOM") {
                       return endDate;
                    } else {
                       return now;
@@ -275,7 +276,7 @@ define(["dojo/_base/declare",
                   var chartName = name;
 
                   // Check if this is the initially requested chart...
-                  if (chartName == this._chart || (!this._currentlySelectedChart && !this._chart))
+                  if (chartName === this._chart || (!this._currentlySelectedChart && !this._chart))
                   {
                      this._currentlySelectedChart = chartName;
                   }

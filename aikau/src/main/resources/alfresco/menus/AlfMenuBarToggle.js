@@ -66,9 +66,8 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/dom-attr",
         "dojo/_base/lang",
-        "alfresco/util/hashUtils",
-        "dojo/io-query"], 
-        function(declare, AlfMenuBarItem, _AlfDocumentListTopicMixin, domConstruct, domClass, domAttr, lang, hashUtils, ioQuery) {
+        "alfresco/util/hashUtils"], 
+        function(declare, AlfMenuBarItem, _AlfDocumentListTopicMixin, domConstruct, domClass, domAttr, lang, hashUtils) {
    
    
    return declare([AlfMenuBarItem, _AlfDocumentListTopicMixin], {
@@ -127,6 +126,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       constructor: function alfresco_menus_AlfMenuBarToggle__constructor(args) {
+         /*jshint eqnull:true*/
          
          this.alfLog("log", "Create toggle", args);
          
@@ -255,7 +255,7 @@ define(["dojo/_base/declare",
          if (newConfig && newConfig.label)
          {
             this.label = newConfig.label;
-            this.set('label', this.message(newConfig.label));
+            this.set("label", this.message(newConfig.label));
             this.title = newConfig.title;
          }
 
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
          {
             this.title = newConfig.title;
             var title = this.message(newConfig.title);
-            this.set('title', title);
+            this.set("title", title);
             domAttr.set(this.iconNode, "title", title);
          }
 
@@ -328,10 +328,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       setState: function alfresco_menus_AlfMenuBarToggle__setState(payload) {
+         /*jshint eqnull:true*/
          if (payload && payload[this.subscriptionAttribute] != null)
          {
             this.alfLog("log", "Setting toggle state", payload, this);
-            this.checked = (this.checkedValue == payload[this.subscriptionAttribute]);
+            this.checked = (this.checkedValue === payload[this.subscriptionAttribute]);
             if (this.checked)
             {
                this.renderToggle(this.onConfig, this.offConfig);

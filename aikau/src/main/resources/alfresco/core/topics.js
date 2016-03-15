@@ -1067,6 +1067,36 @@ define([],function() {
       SET_THUMBNAIL_SIZE: "ALF_SET_THUMBNAIL_SIZE",
 
       /**
+       * This topic is subscribed to by the [LightboxService]{@link module:alfresco/services/LightboxService}
+       * in order to handle requests to display lightboxes that show an image preview of a Node.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       * @property {string} title The title for the lightbox
+       * @property {string} src The location of the image file to show in the lightbox
+       */
+      SHOW_LIGHTBOX: "ALF_DISPLAY_LIGHTBOX",
+
+      /**
+       * This topic is subscribed to by the [FilePreviewService]{@link module:alfresco/services/NodePreviewService}
+       * in order to handle requests to display previews of nodes.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       * @property {object} [node] The Node to show the preview for
+       * @property {string} [nodeRef] The NodeRef of the Node to show the preview for
+       */
+      SHOW_NODE_PREVIEW: "ALF_SHOW_NODE_PREVIEW",
+
+      /**
        * This topic can be published to perform the actual creation of a site. Unlike 
        * [CREATE_SITE]{@link module:alfresco/core/topics#CREATE_SITE} this requires a payload that includes the
        * details for the new site (as it performs the actual creation on the Alfresco Repository rather than
@@ -1146,6 +1176,22 @@ define([],function() {
        * @property {object[]} nodes The node or nodes to download.
        */
       SMART_DOWNLOAD: "ALF_SMART_DOWNLOAD",
+
+      /**
+       * This can be published to request that a [list]{@link module:alfresco/lists/AlfSortablePaginatedList}
+       * changes the way that its data is sorted.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       * @property {string} direction Either "ascending" or "descending"
+       * @property {string} value The field to sort on
+       * @property {object} [requester] The widget making the request (include to avoid cycling publications).
+       */
+      SORT_LIST: "ALF_DOCLIST_SORT",
 
       /**
        * This can be called to close the StickyPanel.
@@ -1283,6 +1329,22 @@ define([],function() {
        * @event
        */
       TINYMCE_EDITOR_FOCUSED: "ALF_TINYMCE_EDITOR_FOCUSED",
+
+      /**
+       * This can be published to change the current field being used to sort lists.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.59
+       *
+       * @event
+       * @property {string}  direction Either "ascending" or "descending"
+       * @property {string}  [label] A label that represents the field to be sorted on
+       * @property {boolean} [sortable] Whether or not this field can be have the sort direction changed on it
+       * @property {object}  [requester] The widget making the request (include to avoid cycling publications).
+       */
+      UPDATE_LIST_SORT_FIELD: "ALF_DOCLIST_SORT_FIELD_SELECTION",
 
       /**
        * This topic can be used to publish a request to change the title of a page. It is subscribed to by the

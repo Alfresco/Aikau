@@ -95,10 +95,18 @@ define(["dojo/_base/declare",
             }
             
             // Update the icon if there is an icon node, it's supported and there is a new iconClass...
-            if (this.iconNode && this.updateIconOnSelection && payload.iconClass)
+            if (this.updateIconOnSelection && payload.iconClass)
             {
+               if (!this.iconNode)
+               {
+                  this.iconClass = payload.iconClass;
+                  this._currentIconClass = this.iconClass;
+                  this.createIconNode();
+               }
+
                domClass.remove(this.iconNode, this._currentIconClass);
                domClass.add(this.iconNode, payload.iconClass);
+               this._currentIconClass = payload.iconClass;
             }
          }
          domClass.remove(this.domNode, "dijitMenuItemSelected"); // Ensure that the menu bar item isn't marked as selected

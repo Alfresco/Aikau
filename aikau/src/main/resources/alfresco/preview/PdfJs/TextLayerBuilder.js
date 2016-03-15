@@ -67,11 +67,11 @@ define(["dojo/_base/declare",
          this.isViewerInPresentationMode = false;
          // END ALFRESCO CHANGES
 
-         if (typeof this.pdfJsPlugin._findController === 'undefined') {
+         if (typeof this.pdfJsPlugin._findController === "undefined") {
            this.pdfJsPlugin._findController = null;
          } 
 
-         if (typeof this.lastScrollSource === 'undefined') {
+         if (typeof this.lastScrollSource === "undefined") {
            this.lastScrollSource = null;
          }
       },
@@ -83,8 +83,8 @@ define(["dojo/_base/declare",
        */
       renderLayer: function alfresco_preview_PdfJs_TextLayerBuilder__renderLayer() {
          var textDivs = this.textDivs;
-         var canvas = document.createElement('canvas');
-         var ctx = canvas.getContext('2d');
+         var canvas = document.createElement("canvas");
+         var ctx = canvas.getContext("2d");
 
          // No point in rendering so many divs as it'd make the browser unusable
          // even after the divs are rendered
@@ -95,30 +95,30 @@ define(["dojo/_base/declare",
 
          for (var i = 0, ii = textDivs.length; i < ii; i++) {
             var textDiv = textDivs[i];
-            if ('isWhitespace' in textDiv.dataset) {
+            if ("isWhitespace" in textDiv.dataset) {
                continue;
             }
 
-            ctx.font = textDiv.style.fontSize + ' ' + textDiv.style.fontFamily;
+            ctx.font = textDiv.style.fontSize + " " + textDiv.style.fontFamily;
             var width = ctx.measureText(textDiv.textContent).width;
 
             if (width > 0) {
                this.textLayerFrag.appendChild(textDiv);
                var textScale = textDiv.dataset.canvasWidth / width;
                var rotation = textDiv.dataset.angle;
-               var transform = 'scale(' + textScale + ', 1)';
-               transform = 'rotate(' + rotation + 'deg) ' + transform;
+               var transform = "scale(" + textScale + ", 1)";
+               transform = "rotate(" + rotation + "deg) " + transform;
 
                // ALFRESCO CHANGES
                // Share extras changed to use Yahoo dom.
                // TODO: Work out some more efficient way of determining
                // prefix as original method do, instead of setting all.
-               domStyle.set(textDiv, '-ms-transform', 'scale(' + textScale + ', 1)');
-               domStyle.set(textDiv, '-webkit-transform', 'scale(' + textScale + ', 1)');
-               domStyle.set(textDiv, '-moz-transform', 'scale(' + textScale + ', 1)');
-               domStyle.set(textDiv, '-ms-transformOrigin', '0% 0%');
-               domStyle.set(textDiv, '-webkit-transformOrigin', '0% 0%');
-               domStyle.set(textDiv, '-moz-transformOrigin', '0% 0%');
+               domStyle.set(textDiv, "-ms-transform", "scale(" + textScale + ", 1)");
+               domStyle.set(textDiv, "-webkit-transform", "scale(" + textScale + ", 1)");
+               domStyle.set(textDiv, "-moz-transform", "scale(" + textScale + ", 1)");
+               domStyle.set(textDiv, "-ms-transformOrigin", "0% 0%");
+               domStyle.set(textDiv, "-webkit-transformOrigin", "0% 0%");
+               domStyle.set(textDiv, "-moz-transformOrigin", "0% 0%");
                // END ALFRESCO CHANGES
             }
          }
@@ -166,7 +166,7 @@ define(["dojo/_base/declare",
        */
       appendText: function alfresco_preview_PdfJs_TextLayerBuilder__appendText(geom, styles) {
           var style = styles[geom.fontName];
-          var textDiv = document.createElement('div');
+          var textDiv = document.createElement("div");
           this.textDivs.push(textDiv);
           if (!/\S/.test(geom.str)) {
             textDiv.dataset.isWhitespace = true;
@@ -181,10 +181,10 @@ define(["dojo/_base/declare",
           var fontAscent = (style.ascent ? style.ascent * fontHeight :
             (style.descent ? (1 + style.descent) * fontHeight : fontHeight));
 
-          textDiv.style.position = 'absolute';
-          textDiv.style.left = (tx[4] + (fontAscent * Math.sin(angle))) + 'px';
-          textDiv.style.top = (tx[5] - (fontAscent * Math.cos(angle))) + 'px';
-          textDiv.style.fontSize = fontHeight + 'px';
+          textDiv.style.position = "absolute";
+          textDiv.style.left = (tx[4] + (fontAscent * Math.sin(angle))) + "px";
+          textDiv.style.top = (tx[5] - (fontAscent * Math.cos(angle))) + "px";
+          textDiv.style.fontSize = fontHeight + "px";
           textDiv.style.fontFamily = style.fontFamily;
 
           textDiv.textContent = geom.str;
@@ -220,6 +220,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       convertMatches: function alfresco_preview_PdfJs_TextLayerBuilder__convertMatches(matches) {
+         /*jshint devel:true*/
           var i = 0;
           var iIndex = 0;
           var bidiTexts = this.textContent.items;
@@ -241,8 +242,8 @@ define(["dojo/_base/declare",
             }
 
             // TODO: Do proper handling here if something goes wrong.
-            if (i == bidiTexts.length) {
-              console.error('Could not find matching mapping');
+            if (i === bidiTexts.length) {
+              console.error("Could not find matching mapping");
             }
 
             var match = {
@@ -278,6 +279,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       renderMatches: function alfresco_preview_PdfJs_TextLayerBuilder__renderMatches(matches) {
+         /*jshint maxcomplexity:false,maxstatements:false*/
           // Early exit if there is nothing to render.
           if (matches.length === 0) {
             return;
@@ -300,30 +302,30 @@ define(["dojo/_base/declare",
             offset: undefined
           };
 
-          function beginText(begin, className) {
-            var divIdx = begin.divIdx;
-            var div = textDivs[divIdx];
-            div.textContent = '';
-            appendTextToDiv(divIdx, 0, begin.offset, className);
-          }
-
-          function appendText(from, to, className) {
-            appendTextToDiv(from.divIdx, from.offset, to.offset, className);
-          }
-
           function appendTextToDiv(divIdx, fromOffset, toOffset, className) {
             var div = textDivs[divIdx];
 
             var content = bidiTexts[divIdx].str.substring(fromOffset, toOffset);
             var node = document.createTextNode(content);
             if (className) {
-              var span = document.createElement('span');
+              var span = document.createElement("span");
               span.className = className;
               span.appendChild(node);
               div.appendChild(span);
               return;
             }
             div.appendChild(node);
+          }
+
+          function beginText(begin, className) {
+            var divIdx = begin.divIdx;
+            var div = textDivs[divIdx];
+            div.textContent = "";
+            appendTextToDiv(divIdx, 0, begin.offset, className);
+          }
+
+          function appendText(from, to, className) {
+            appendTextToDiv(from.divIdx, from.offset, to.offset, className);
           }
 
           function highlightDiv(divIdx, className) {
@@ -346,7 +348,7 @@ define(["dojo/_base/declare",
             var end = match.end;
 
             var isSelected = isSelectedPage && i === selectedMatchIdx;
-            var highlightSuffix = (isSelected ? ' selected' : '');
+            var highlightSuffix = (isSelected ? " selected" : "");
             if (isSelected && !this.isViewerInPresentationMode) {
               // ALFRESCO - change reference to select correct pageIdx
               this.pdfJsPlugin.documentView.pages[this.pageIdx].scrollIntoView(textDivs[begin.divIdx],
@@ -367,13 +369,13 @@ define(["dojo/_base/declare",
             }
 
             if (begin.divIdx === end.divIdx) {
-              appendText(begin, end, 'highlight' + highlightSuffix);
+              appendText(begin, end, "highlight" + highlightSuffix);
             } else {
-              appendText(begin, infty, 'highlight begin' + highlightSuffix);
+              appendText(begin, infty, "highlight begin" + highlightSuffix);
               for (var n = begin.divIdx + 1; n < end.divIdx; n++) {
-                highlightDiv(n, 'highlight middle' + highlightSuffix);
+                highlightDiv(n, "highlight middle" + highlightSuffix);
               }
-              beginText(end, 'highlight end' + highlightSuffix);
+              beginText(end, "highlight end" + highlightSuffix);
             }
             prevEnd = end;
           }
@@ -407,7 +409,7 @@ define(["dojo/_base/declare",
             for (var n = begin; n <= match.end.divIdx; n++) {
                var div = textDivs[n];
                div.textContent = bidiTexts[n].str;
-               div.className = '';
+               div.className = "";
             }
             clearedUntilDivIdx = match.end.divIdx + 1;
          }

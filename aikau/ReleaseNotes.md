@@ -1,7 +1,15 @@
-Aikau 1.0.58 Release Notes
+Aikau 1.0.59 Release Notes
 ===
 
-Current deprecations:
+New deprecations:
+---
+* alfresco/renderers/Thumbnail.js
+  * onNodePromiseResolved                                        (configure usePreviewService to be true)
+  * onLoadNode                                                   (configure usePreviewService to be true)
+  * onNodeLoaded                                                 (configure usePreviewService to be true)
+  * onShowPreview                                                (configure usePreviewService to be true)
+
+Previous deprecations:
 ---
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
 * alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
@@ -42,6 +50,16 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.59:
+* [AKU-869](https://issues.alfresco.com/jira/browse/AKU-866)       - Added alfresco/services/NodePreviewService
+* [AKU-870](https://issues.alfresco.com/jira/browse/AKU-870)       - Ensure HeaderCell sorting works with AlfFilteredList
+* [AKU-871](https://issues.alfresco.com/jira/browse/AKU-871)       - Accessibility updates to AlfMenuBarSelectItems
+* [AKU-872](https://issues.alfresco.com/jira/browse/AKU-872)       - Accessibility updates to AlfCheckableMenuItem
+* [AKU-873](https://issues.alfresco.com/jira/browse/AKU-873)       - Accessibility updates to AlfMenuBarSelect
+* [AKU-874](https://issues.alfresco.com/jira/browse/AKU-874)       - Support alternate true/false values on Checkbox
+* [AKU-882](https://issues.alfresco.com/jira/browse/AKU-882)       - Added alfresco/forms/controls/SelectedListItems
+* [AKU-896](https://issues.alfresco.com/jira/browse/AKU-896)       - Update clickable button area
+
 1.0.58:
 * [AKU-207](https://issues.alfresco.com/jira/browse/AKU-207)       - Add support for change type action
 * [AKU-820](https://issues.alfresco.com/jira/browse/AKU-820)       - Added visual progress indicator to UploadMonitor

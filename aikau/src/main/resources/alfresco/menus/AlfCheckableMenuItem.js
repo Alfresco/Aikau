@@ -80,6 +80,7 @@ define(["dojo/_base/declare",
 
       /**
        * A reference to the cell that will be created by postCreate to handle toggling selection
+       * 
        * @instance
        * @type {object}
        * @default
@@ -88,6 +89,7 @@ define(["dojo/_base/declare",
 
       /**
        * Indicates whether or not the menu item is selected or not
+       * 
        * @instance
        * @type {boolean}
        * @default
@@ -96,11 +98,12 @@ define(["dojo/_base/declare",
 
       /**
        * The class to apply to render some checked indicator
+       * 
        * @instance
        * @type {string}
        * @default
        */
-      checkedIconClass: "alf-selected-icon",
+      checkedIconClass: "alfresco-menus-AlfCheckableMenuItem--checked",
 
       /**
        * If this is set then it indicates that this item is a member of a group. When in a group this cannot be unselected. Unselection
@@ -147,6 +150,23 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_menus_AlfCheckableMenuItem__postCreate() {
+         // jshint maxcomplexity:false
+         domClass.add(this.domNode, "alfresco-menus-AlfCheckableMenuItem");
+
+         // Set the correct role...
+         if (this.group)
+         {
+            // If a group has been assigned then only one menu item will be checkable at a time within the group
+            // so assign the role of "menuitemradio" (https://www.w3.org/TR/wai-aria/roles#menuitemradio)
+            this.domNode.setAttribute("role", "menuitemradio");
+         }
+         else
+         {
+            // If a group has NOT been assigned then this menu item can be toggled on and off independently so it
+            // should be given the role of "menuitemcheckbox" (https://www.w3.org/TR/wai-aria/roles#menuitemcheckbox)
+            this.domNode.setAttribute("role", "menuitemcheckbox");
+         }
+         
          if (!this.publishPayload)
          {
             this.publishPayload = {};
@@ -174,10 +194,11 @@ define(["dojo/_base/declare",
          }
 
          this.alfLog("log", "Create checkable cell");
-         this.checkCell = domConstruct.create("td", { className: "alf-checkable-menu-item", innerHTML: "&nbsp;"}, this.focusNode, "first");
+         this.checkCell = domConstruct.create("td", { className: "alfresco-menus-AlfCheckableMenuItem__icon", innerHTML: "&nbsp;"}, this.focusNode, "first");
+
          if (this.checked)
          {
-            domClass.add(this.checkCell, this.checkedIconClass);
+            domClass.add(this.domNode, this.checkedIconClass);
          }
 
          if (this.group)
@@ -199,6 +220,9 @@ define(["dojo/_base/declare",
          {
             this.subscriptionHandle = this.alfSubscribe(this.publishTopic, lang.hitch(this, this.onPublishTopicEvent));
          }
+
+         // Set the appropriate initial aria-state for the role type...
+         this.domNode.setAttribute(this.group ? "aria-selected": "aria-checked", this.checked);
       },
 
       /**
@@ -266,6 +290,7 @@ define(["dojo/_base/declare",
 
          if (this.group)
          {
+
             // If this is the member of a group we need to handle things a bit differently...
             if (!this.checked)
             {
@@ -276,6 +301,9 @@ define(["dojo/_base/declare",
                this.render();
                this.publishSelection();
             }
+
+            // Set the appropriate aria-state for the role type...
+            this.domNode.setAttribute("aria-selected", this.checked);
          }
          else
          {
@@ -283,6 +311,9 @@ define(["dojo/_base/declare",
             this.checked = !this.checked;
             this.render();
             this.publishSelection();
+
+            // Set the appropriate aria-state for the role type...
+            this.domNode.setAttribute(this.group ? "aria-selected": "aria-checked", this.checked);
          }
 
          // Clicking on the check cell will result in the menu item being marked as selected
@@ -303,11 +334,11 @@ define(["dojo/_base/declare",
       render: function alfresco_menus_AlfCheckableMenuItem__render() {
          if (this.checked)
          {
-            domClass.add(this.checkCell, this.checkedIconClass);
+            domClass.add(this.domNode, this.checkedIconClass);
          }
          else
          {
-            domClass.remove(this.checkCell, this.checkedIconClass);
+            domClass.remove(this.domNode, this.checkedIconClass);
          }
       },
 
@@ -338,6 +369,7 @@ define(["dojo/_base/declare",
       onGroupSelection: function alfresco_menus_AlfCheckableMenuItem__toggleSelection(payload) {
          if (payload.value !== this.value)
          {
+            this.domNode.setAttribute("aria-selected", false);
             this.checked = false;
             this.render();
          } 

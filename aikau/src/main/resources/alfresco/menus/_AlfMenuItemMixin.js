@@ -54,9 +54,10 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {object[]}
-       * @default [{cssFile:"./css/_AlfMenuItemMixin.css"}]
+       * @default [{cssFile:"./css/_AlfMenuItemMixin.css"},{cssFile: "./css/AlfMenuItemIconMixin.css"},{cssFile: "../core/css/Icons.css"}]
        */
       cssRequirements: [{cssFile: "./css/_AlfMenuItemMixin.css"},
+                        {cssFile: "./css/AlfMenuItemIconMixin.css"},
                         {cssFile: "../core/css/Icons.css"}],
 
       /**
@@ -148,13 +149,24 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_menus__AlfMenuItemMixin__postMixInProperties() {
          if (this.label)
          {
-            this.params.label = this.label = this.encodeHTML(this.message(this.label));
+            this.params.label = this.label = this.message(this.label);
          }
-         if (this.title)
+         if (!this.title && this.label)
+         {
+            this.title = this.label;
+         }
+         else if (this.title)
          {
             this.title = this.message(this.title);
          }
-
+         if (!this.iconAltText && this.title)
+         {
+            this.iconAltText = this.label;
+         }
+         else if (this.iconAltText)
+         {
+            this.iconAltText = this.message(this.iconAltText);
+         }
          this.inherited(arguments);
       },
 
@@ -215,10 +227,10 @@ define(["dojo/_base/declare",
             domConstruct.destroy(this.iconNode);
             this.iconNode = domConstruct.create("img", {
                role:"presentation",
-               className: "dijitInline dijitIcon dijitMenuItemIcon " + this.iconClass,
+               className: "dijitInline dijitIcon dijitMenuItemIcon alfresco-menus-_AlfMenuItemMixin__icon alfresco-menus-AlfMenuItemIconMixin " + this.iconClass,
                src: require.toUrl("alfresco/menus/css/images/transparent-20.png"),
-               title: this.message(this.iconAltText),
-               alt: this.message(this.iconAltText),
+               title: this.iconAltText,
+               alt: this.iconAltText,
                tabIndex: 0
             }, iconNodeParent, "first");
          }

@@ -73,7 +73,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .findAllByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown .alf-checkable-menu-item")
+            .findAllByCssSelector("#CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown .alfresco-menus-AlfCheckableMenuItem")
                .then(function(elements) {
                   assert.lengthOf(elements, 3, "The wrong number of custom page sizes was found");
                });
@@ -273,7 +273,7 @@ define(["intern!object",
                .click()
                .end()
 
-            .findAllByCssSelector("#MENU_BAR_POPUP_dropdown tr:nth-child(4) td.alf-selected-icon")
+            .findAllByCssSelector("#MENU_BAR_POPUP_dropdown .alfresco-menus-AlfCheckableMenuItem--checked")
                .then(function(elements) {
                   assert(elements.length === 1, "Results per page widget check box not highlighted correctly");
                });

@@ -38,10 +38,9 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/forms/controls/Select",
         "dojo/_base/lang",
-        "dojo/dom-class",
-        "dojo/on"],
+        "dojo/dom-class"],
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, 
-                 Select, lang, domClass, on) {
+                 Select, lang, domClass) {
 
    return declare([_WidgetBase, _OnDijitClickMixin, _TemplatedMixin, AlfCore, _PublishPayloadMixin], {
 

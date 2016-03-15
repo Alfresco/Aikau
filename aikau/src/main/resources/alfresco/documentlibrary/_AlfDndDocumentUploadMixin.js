@@ -159,6 +159,19 @@ define(["dojo/_base/declare",
        * @since 1.0.42
        */
       dndUploadHighlightTimeout: null,
+      
+      /**
+       * Maximum number of files to allow to be published from a single drag operation. As for some user-agents
+       * drag and drop of potentialy large nested folder structures may be supported - this limit will halt the
+       * publish of the file list if it is larger than the supplied value and throw an error. Specify zero to
+       * indicate no limit - which is the default setting to maintain backward compatibility.
+       * 
+       * @instance
+       * @type {integer}
+       * @default
+       * @since 1.0.59
+       */
+      dndMaxFileLimit: 0,
 
       /**
        * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities. 
@@ -625,26 +638,97 @@ define(["dojo/_base/declare",
                   username: null
                };
                var updatedConfig = lang.mixin(defaultConfig, config);
-
-               // Check to see whether or not the generated upload configuration indicates
-               // that an existing node will be created or not. If node is being updated then
-               // we need to generate an intermediary step to capture version and comments...
-               if (updatedConfig.overwrite === false)
+               
+               var walkFileSystem = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem(directory, callback, error) {
+                  
+                  callback.limit = this.dndMaxFileLimit;
+                  callback.pending = callback.pending || 0;
+                  callback.files = callback.files || [];
+                  
+                  callback.pending++;
+                  
+                  // get a dir reader and cleanup file path
+                  var reader = directory.createReader(),
+                      relativePath = directory.fullPath.replace(/^\//, "");
+                  reader.readEntries(function(entries) {
+                     callback.pending--;
+                     array.forEach(entries, function(entry) {
+                        if (entry.isFile)
+                        {
+                           callback.pending++;
+                           entry.file(function(File) {
+                              // add the relativePath property to each file - this can be used to rebuild the contents of
+                              // a nested tree folder structure if an appropriate API is available to do so
+                              File.relativePath = relativePath;
+                              callback.files.push(File);
+                              if (callback.limit && callback.files.length > callback.limit)
+                              {
+                                 throw new Error("Maximum dnd file limit reached: " + callback.limit);
+                              }
+                              if (--callback.pending === 0)
+                              {
+                                 callback(callback.files);
+                              }
+                           }, error);
+                        }
+                        else
+                        {
+                           walkFileSystem(entry, callback, error);
+                        }
+                     });
+                     
+                     if (callback.pending === 0)
+                     {
+                        callback(callback.files);
+                     }
+                  }, error);
+               });
+               
+               var addSelectedFiles = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__addSelectedFiles(files) {
+                  
+                  if (this.dndMaxFileLimit && files.length > this.dndMaxFileLimit)
+                  {
+                     throw new Error("Maximum dnd file limit reached: " + this.dndMaxFileLimit);
+                  }
+                  
+                  // Check to see whether or not the generated upload configuration indicates
+                  // that an existing node will be created or not. If node is being updated then
+                  // we need to generate an intermediary step to capture version and comments...
+                  if (updatedConfig.overwrite === false)
+                  {
+                     // Set up a response topic for receiving notifications that the upload has completed...
+                     var responseTopic = this.generateUuid();
+                     this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
+                     
+                     this.alfPublish(topics.UPLOAD_REQUEST, {
+                        alfResponseTopic: responseTopic,
+                        files: files,
+                        targetData: updatedConfig
+                     }, true);
+                  }
+                  else
+                  {
+                     // TODO: Check that only one file has been dropped and issue error...
+                     this.publishUpdateRequest(updatedConfig, files);
+                  }
+               });
+               
+               var items = evt.dataTransfer.items || [], firstEntry;
+               if (items[0] && items[0].webkitGetAsEntry && (firstEntry = items[0].webkitGetAsEntry()))
                {
-                  // Set up a response topic for receiving notifications that the upload has completed...
-                  var responseTopic = this.generateUuid();
-                  this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
-
-                  this.alfPublish(topics.UPLOAD_REQUEST, {
-                     alfResponseTopic: responseTopic,
-                     files: evt.dataTransfer.files,
-                     targetData: updatedConfig
-                  }, true);
+                  // way of uploading entire folders (only supported by Chrome >= 21)
+                  walkFileSystem(firstEntry.filesystem.root, function(files) {
+                        addSelectedFiles(files);
+                     }, function() {
+                        // fallback to standard way if error happens
+                        addSelectedFiles(evt.dataTransfer.files);
+                     }
+                  );
                }
                else
                {
-                  // TODO: Check that only one file has been dropped and issue error...
-                  this.publishUpdateRequest(updatedConfig, evt.dataTransfer.files);
+                  // fallback to standard way if no support for filesystem API
+                  addSelectedFiles(evt.dataTransfer.files);
                }
             }
             else

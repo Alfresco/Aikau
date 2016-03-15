@@ -24,14 +24,11 @@
  */
 define(["alfresco/forms/controls/MultipleEntryElement",
         "dojo/_base/declare",
-        "alfresco/forms/PublishForm",
-        "alfresco/core/ObjectTypeUtils",
-        "dojo/_base/lang",
-        "dojo/_base/array",
+
+        // Following required for build purposes only
         "alfresco/forms/controls/DojoValidationTextBox",
-        "alfresco/forms/controls/Select",
-        "alfresco/forms/controls/MultipleEntryFormControl"], 
-        function(MultipleEntryElement, declare, PublishForm, ObjectTypeUtils, lang, array, DojoValidationTextBox, DojoSelect, MultipleEntryFormControl) {
+        "alfresco/forms/controls/MultipleKeyValuePairFormControl"], 
+        function(MultipleEntryElement, declare) {
    
    return declare([MultipleEntryElement], {
       

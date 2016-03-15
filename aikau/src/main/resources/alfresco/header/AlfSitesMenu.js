@@ -554,7 +554,7 @@ define(["dojo/_base/declare",
          var item = this.createWidget({
             name: "alfresco/header/AlfMenuItem",
             config: widget.config
-         })
+         });
          group.addChild(item);
       },
       

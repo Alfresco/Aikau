@@ -146,12 +146,12 @@ define(["dojo/_base/lang",
                prefix = extns[extn];
             }
          }
-         else if (typeof type == "undefined")
+         else if (typeof type === "undefined")
          {
             if (fileParentType !== null)
             {
                type = this.fileIconTypes[fileParentType];
-               if (typeof type == "undefined")
+               if (typeof type === "undefined")
                {
                   type = "file";
                }
@@ -281,6 +281,7 @@ define(["dojo/_base/lang",
        * @return {string} File extension or null
        */
       getFileExtension: function alfresco_core_FileIconUtils(filePath) {
+         /*jshint eqnull:true*/
          if (filePath != null)
          {
             var match = filePath.match(/^.*\.([^\.]*)$/);

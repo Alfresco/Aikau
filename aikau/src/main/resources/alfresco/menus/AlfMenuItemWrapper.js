@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
        */
       onClick: function alfresco_menus_AlfMenuItemWrapper__onClick(evt){
          this.alfLog("log", "Item Wrapper onClick", evt);
-         if (this.item && typeof this.item.onClick == "function")
+         if (this.item && typeof this.item.onClick === "function")
          {
             this.item.onClick(evt);
          }
