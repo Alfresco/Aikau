@@ -17,6 +17,7 @@ module.exports = {
       reporter: "src/test/resources/reporters/AikauConcurrentReporter.js",
       test: "tests/alfresco/**",
       testApp: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**",
+      testPageDescriptors: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**/*.get.desc.xml",
       testFramework: "src/test/resources/testApp/js/aikau/testing/**",
       testModel: "src/test/resources/alfresco/**/*.json",
       testScreenshots: "src/test/screenshots/*.png",
