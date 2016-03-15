@@ -286,7 +286,7 @@ define(["dojo/_base/declare",
             // Use a custom payload for displaying the preview.
             publishPayload = lang.clone(this.publishPayload);
             this.currentItem = previewData.item;
-            this.processObject(["processCurrentItemTokens"], publishPayload);
+            this.processObject(["setCurrentItem","processCurrentItemTokens"], publishPayload);
             this.alfServicePublish(this.publishTopic, publishPayload);
          }
          else
