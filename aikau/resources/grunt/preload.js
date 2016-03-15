@@ -2,12 +2,11 @@ var fs = require("fs"),
    path = require("path"),
    http = require("http"),
    alfConfig = require("./_config");
-// safeJson = require("safe-json-serialiser");
 
 // Modify grunt
 module.exports = function(grunt) {
 
-   // Need strict more for block-level scoping
+   // Need strict mode for block-level scoping
    "use strict";
 
    grunt.registerMultiTask("preload", "Pre-load all of the available unit-test pages", function() {
@@ -68,7 +67,6 @@ module.exports = function(grunt) {
                grunt.log.writeln("...skipping file " + path.basename(filePath));
             }
             if (filesLoaded === numFiles) {
-               // testUrls.forEach(testUrl => grunt.log.writeln(testUrl));
                grunt.log.writeln("Retrieved " + testUrls.length + " URLs from " + filesLoaded + " files!");
                grunt.log.writeln("");
                grunt.log.writeln("Loading pages ...");
