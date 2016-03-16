@@ -119,7 +119,7 @@ define(["alfresco/enums/urlTypes",
          convertUrl: function alfresco_util_urlUtils__convertUrl(url, urlType) {
             var convertedUrl = url,
                falsyUrlTypeFallback = "FALSY_URL_TYPE_SUPPLIED";
-            if (url) {
+            if (url || urlType === urlTypes.HASH) {
                switch (urlType || falsyUrlTypeFallback) {
 
                   case urlTypes.SHARE_PAGE_RELATIVE:
@@ -157,7 +157,7 @@ define(["alfresco/enums/urlTypes",
                   case urlTypes.HASH:
                      // A hash path
                      // Ensure there is no leading hash
-                     convertedUrl = url.replace(/^#+/, "");
+                     convertedUrl = (url || "").replace(/^#+/, "");
                      break;
 
                   default:
