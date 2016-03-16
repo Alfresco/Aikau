@@ -1185,7 +1185,7 @@ define(["dojo/_base/declare",
                targetId: "TITLE",
                replacements: [
                   {
-                     regex: "[^a-z0-9\\-\\s]",
+                     regex: "[^a-z0-9-\\s]",
                      flags: "gi"
                   },
                   {
