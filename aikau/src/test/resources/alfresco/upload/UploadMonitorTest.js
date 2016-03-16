@@ -55,7 +55,7 @@ define(["intern!object",
 
                .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
                   .then(function(text) {
-                     assert.equal(text, "The file ''This file is empty.txt'' couldn't be be uploaded for the following reason. 0kb files can't be uploaded");
+                     assert.equal(text, "The file ''This file is empty.txt'' couldn't be uploaded for the following reason. 0kb files can't be uploaded");
                   })
                .end()
 
@@ -182,7 +182,7 @@ define(["intern!object",
 
             .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
                .then(function(text) {
-                  assert.equal(text, "The file ''Tiny dataset.csv'' couldn't be be uploaded for the following reason. The upload was cancelled");
+                  assert.equal(text, "The file ''Tiny dataset.csv'' couldn't be uploaded for the following reason. The upload was cancelled");
                })
             .end()
 
