@@ -87,7 +87,7 @@ define(["dojo/_base/declare",
        * 
        * @typedef {Replacement}
        * @property {string} regex A Regular Expression to match characters in the text that should be replaced
-       * @property {string} [flags="g"] Flags to apply to the Regular Expression (defaults to "g" for global replacement)
+       * @property {string} [flags=""] Flags to apply to the Regular Expression (defaults to "g" for global replacement)
        * @property {string} [replacement=""] The text to replace the matched characters with
        */
       
@@ -174,7 +174,7 @@ define(["dojo/_base/declare",
                {
                   try
                   {
-                     var re = new RegExp(replacement.regex, replacement.flags || "g");
+                     var re = new RegExp(replacement.regex, replacement.flags || "");
                      replacement._re = re;
                   }
                   catch(e)

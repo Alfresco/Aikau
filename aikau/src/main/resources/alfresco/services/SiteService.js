@@ -1190,7 +1190,8 @@ define(["dojo/_base/declare",
                   },
                   {
                      regex: "\\s+",
-                     replacement: "-"
+                     replacement: "-",
+                     flags: "g"
                   }
                ],
                label: "create-site.dialog.urlname.label",

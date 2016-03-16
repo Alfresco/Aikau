@@ -44,7 +44,8 @@ buildPageModel({
                               },
                               {
                                  regex: "\\s+",
-                                 replacement: "-"
+                                 replacement: "-",
+                                 "g"
                               }
                            ],
                            trim: true,
