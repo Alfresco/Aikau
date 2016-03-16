@@ -1,0 +1,6 @@
+<webscript>
+   <shortname>alfresco/forms/controls/MaskingTextBox</shortname>
+   <description>A specialized TextBox that can have its value automatically set and modified by changing another field.</description>
+   <family>ExamplePage</family>
+   <url>/MaskingTextBox</url>
+</webscript>

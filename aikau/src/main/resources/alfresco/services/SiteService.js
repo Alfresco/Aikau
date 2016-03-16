@@ -1179,9 +1179,21 @@ define(["dojo/_base/declare",
          },
          {
             id: "CREATE_SITE_FIELD_SHORTNAME",
-            name: "alfresco/forms/controls/TextBox",
+            name: "alfresco/forms/controls/MaskingTextBox",
             config: {
                fieldId: "SHORTNAME",
+               targetId: "TITLE",
+               replacements: [
+                  {
+                     regex: "[^a-z0-9-\\s]",
+                     flags: "gi"
+                  },
+                  {
+                     regex: "\\s+",
+                     replacement: "-",
+                     flags: "g"
+                  }
+               ],
                label: "create-site.dialog.urlname.label",
                description: "create-site.dialog.urlname.description",
                name: "shortName",
