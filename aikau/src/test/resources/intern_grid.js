@@ -70,6 +70,9 @@ define(["./config/Suites"],
             }, {
                name: "properties",
                location: "./node_modules/properties/lib"
+            }, {
+               name: "safe-json-serialiser",
+               location: "./node_modules/safe-json-serialiser"
             }]
          },
 
