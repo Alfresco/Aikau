@@ -89,9 +89,9 @@ define(["dojo/_base/declare",
 
       /**
        * This is the property of each item in the list that uniquely identifies that item. This
-       * should be configured correctly in order for items to be 
+       * should be configured correctly in order for items to be
        * [brought into view]{@link module alfresco/lists/views/ListRenderer#bringItemIntoView} as required.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
 
       /**
        * This can be set to be a custom message that is displayed when there are no items to
-       * be displayed in the current view. This will not be used if 
+       * be displayed in the current view. This will not be used if
        * [widgetsForNoDataDisplay]{@link module alfresco/lists/views/ListRenderer#widgetsForNoDataDisplay}
        * is configured.
        *
@@ -133,6 +133,19 @@ define(["dojo/_base/declare",
       renderFilterSelectorQuery: "tr",
 
       /**
+       * Configure whether {@link widgetsForAppendix}
+       * are shown when there are no items in the data. Appendix shown instead of calling {@link renderNoDataDisplay}
+       *
+       * Defaults to false for backwards compatibility.
+       *
+       * @instance
+       * @type Boolean
+       * @default
+       * @since 1.0.60
+       */
+      showAppendixWhenEmpty: false,
+
+      /**
        * Should the widget subscribe to events triggered by the documents request?
        * This should be set to true in the widget config for standalone/isolated usage.
        *
@@ -143,22 +156,22 @@ define(["dojo/_base/declare",
       subscribeToDocRequests: false,
 
       /**
-       * Overrides the 
+       * Overrides the
        * [inherited default configuration]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#suppressDndUploading}
        * to suppress the drag-and-drop upload highlighting.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
        * @since 1.0.39
        */
       suppressDndUploading: true,
-      
+
       /**
        * This will be automatically set when the view is used in an [AlfHashList]{@link module:alfresco/lists/AlfHashList}.
        * It indicates whether or not the list is being driven by data set on the browser URL hash and it can be useful
        * for views to have access to this information.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -175,7 +188,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       useInfiniteScroll: false,
-      
+
       /**
        * The configuration for view selection menu items. This needs to be either configured or defined in an
        * extending module. If this isn't specified then the view will not be selectable in the document list.
@@ -202,10 +215,10 @@ define(["dojo/_base/declare",
        * An optional widget model to be rendered as an appendix to the actual data. If this is
        * defined then it will never be possible for the
        * [widgetsForNoDataDisplay]{@link module:alfresco/lists/views/AlfListView#widgetsForNoDataDisplay}
-       * model to be rendered because it results in a special 
+       * model to be rendered because it results in a special
        * [marker]{@link module:alfresco/lists/views/RenderAppendixSentinel}
        * being added to the data set to be rendered.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default
@@ -274,14 +287,14 @@ define(["dojo/_base/declare",
        * @param {object} payload A payload containing a view value and a promise to resolve.
        */
       onViewNameRequest: function alfresco_lists_views_AlfListView__onViewNameRequest(payload) {
-         if (payload && 
-             payload.value === this.getViewName() && 
-             payload.promise && 
+         if (payload &&
+             payload.value === this.getViewName() &&
+             payload.promise &&
              typeof payload.promise.resolve === "function")
          {
             payload.promise.resolve({
                value: this.getViewName(),
-               label: this.viewSelectionConfig.label 
+               label: this.viewSelectionConfig.label
             });
          }
       },
@@ -393,16 +406,12 @@ define(["dojo/_base/declare",
        * most common example of this is when infinite scroll is being used.
        */
       renderView: function alfresco_lists_views_AlfListView__renderView(preserveCurrentData) {
+
+         // Add appendix widgets to currentData if set.
+         this.addWidgetsForAppendix();
+
          if (this.currentData && this.currentData.items)
          {
-            if (this.widgetsForAppendix)
-            {
-               var containsSentinel = array.some(this.currentData.items, function(item) {
-                  return item === RenderAppendixSentinel;
-               });
-               !containsSentinel && this.currentData.items.push(RenderAppendixSentinel);
-            }
-
             if (this.currentData.items.length > 0)
             {
                try
@@ -430,7 +439,7 @@ define(["dojo/_base/declare",
                   // Ensure that the renderer has has the same itemKey value as configured on the view. This is
                   // so that comparisons can be made for selection and items can be brought into view as necessary
                   this.docListRenderer.itemKey = this.itemKey;
-                  
+
                   // Finally, render the current data (when using infinite scroll the data should have been augmented)
                   this.docListRenderer.renderData();
 
@@ -495,8 +504,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This should be called when the renderers need to be removed. 
-       * 
+       * This should be called when the renderers need to be removed.
+       *
        * @instance
        * @extendable
        * @since 1.0.32
@@ -577,6 +586,30 @@ define(["dojo/_base/declare",
             className: "alfresco-lists-views-AlfListView__render-error",
             innerHTML: this.message("doclistview.rendering.error.message")
          }, this.domNode);
+      },
+
+      /**
+       *
+       * This method is called to add the widgets for the appendix
+       *
+       * @instance
+       * @since 1.0.60
+       */
+      addWidgetsForAppendix: function alfresco_lists_views_AlfListView__addWidgetsForAppendix() {
+         if (this.widgetsForAppendix)
+         {
+            // Check we either have items, or have been asked to show appendix anyway
+            if ((this.currentData && this.currentData.items) || this.showAppendixWhenEmpty)
+            {
+               this.currentData = this.currentData || {};
+               this.currentData.items = this.currentData.items || [];
+
+               var containsSentinel = array.some(this.currentData.items, function (item) {
+                  return item === RenderAppendixSentinel;
+               });
+               !containsSentinel && this.currentData.items.push(RenderAppendixSentinel);
+            }
+         }
       },
 
       /**
