@@ -740,7 +740,7 @@ define([],function() {
        * @default
        * @since 1.0.35
        *
-       * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
+       * @event
        * @property {string} url The URL to navigate to
        * @property {string} [type=PAGE_RELATIVE] The [type of navigation]{@link module:alfresco/enums/urlTypes}
        * @property {string} [target=CURRENT] Whether to use the "CURRENT" tab, open in a "NEW" tab, or use a "NAMED" tab
