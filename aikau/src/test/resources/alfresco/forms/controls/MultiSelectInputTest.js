@@ -52,10 +52,10 @@ define(["intern!object",
                delete: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice.delete", ["MULTISELECT_1", "3"])
             },
             result: TestCommon.getTestSelector(MultiSelectInputSelectors, "result", ["MULTISELECT_1"]),
+            loading: TestCommon.getTestSelector(MultiSelectInputSelectors, "results.loading.message", ["MULTISELECT_1"]),
+            firstResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "1"]),
             secondResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "2"]),
             fourthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "4"]),
-            fifthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "5"]),
-            seventhResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "7"]),
             searchbox: TestCommon.getTestSelector(MultiSelectInputSelectors, "searchbox", ["MULTISELECT_1"]),
          },
          control2: {
@@ -74,8 +74,8 @@ define(["intern!object",
             secondChoice: {
                element: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.choice", ["MULTISELECT_2", "2"]),
             },
-            fourthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_2", "4"]),
-            seventhResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_2", "7"])
+            firstResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_2", "1"]),
+            fourthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_2", "4"])
          },
          control3: {
             disabled: TestCommon.getTestSelector(MultiSelectInputSelectors, "disabled", ["MULTISELECT_3"])
@@ -95,7 +95,7 @@ define(["intern!object",
          },
          controlInDialog: {
             result: TestCommon.getTestSelector(MultiSelectInputSelectors, "result", ["MULTISELECT_IN_DIALOG_CONTROL_RESULTS"]),
-            fifthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_IN_DIALOG", "5"]),
+            secondResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_IN_DIALOG", "2"]),
          }
       };
 
@@ -280,7 +280,7 @@ define(["intern!object",
             //    focused element: Control 1
             //    
             "Selecting already-chosen item in dropdown does not choose item again": function() {
-               return browser.findByCssSelector(selectors.control1.fourthResult)
+               return browser.findByCssSelector(selectors.control1.firstResult)
                   .click()
                   .pressKeys(keys.ESCAPE)
                .end()
@@ -312,7 +312,7 @@ define(["intern!object",
                   .pressKeys(keys.TAB)
                .end()
 
-               .findByCssSelector(selectors.control1.fifthResult)
+               .findByCssSelector(selectors.control1.secondResult)
                   .click()
                .end()
 
@@ -347,7 +347,7 @@ define(["intern!object",
             "Typing into search box filters results": function() {
                return browser.findByCssSelector(selectors.control1.searchbox)
                   .type("tag2")
-                  .waitForDeletedByCssSelector(selectors.control1.fifthResult)
+                  .waitForDeletedByCssSelector(selectors.control1.secondResult)
                .end()
 
                .findAllByCssSelector(selectors.control1.result)
@@ -403,7 +403,7 @@ define(["intern!object",
                return browser.findByCssSelector(selectors.control1.searchbox)
                   .clearValue()
                   .type("(a")
-                  .waitForDeletedByCssSelector(selectors.control1.fifthResult)
+                  .waitForDeletedByCssSelector(selectors.control1.secondResult)
                .end()
 
                .findAllByCssSelector(selectors.control1.result)
@@ -490,7 +490,7 @@ define(["intern!object",
             "Keyboard can navigate and select items in dropdown": function() {
                return browser.findByCssSelector(selectors.control1.searchbox)
                   .type("new")
-                  .waitForDeletedByCssSelector(selectors.control1.seventhResult)
+                  .waitForDeletedByCssSelector(selectors.control1.fourthResult)
                   .pressKeys([keys.ARROW_DOWN, keys.ARROW_DOWN, keys.ARROW_UP, keys.ENTER])
                .end()
 
@@ -527,7 +527,7 @@ define(["intern!object",
                   .pressKeys(keys.ARROW_DOWN)
                .end()
                
-               .findAllByCssSelector(selectors.control1.seventhResult)
+               .findAllByCssSelector(selectors.control1.fourthResult)
                .end()
                
                .findAllByCssSelector(selectors.control1.result)
@@ -622,10 +622,10 @@ define(["intern!object",
             "Custom label format is used for results": function() {
                return browser.findByCssSelector(selectors.control2.searchbox)
                   .type("the")
-                  .waitForDeletedByCssSelector(selectors.control2.seventhResult)
+                  .waitForDeletedByCssSelector(selectors.control2.fourthResult)
                   .end()
 
-               .findByCssSelector(selectors.control2.fourthResult)
+               .findByCssSelector(selectors.control2.firstResult)
                   .getVisibleText()
                   .then(function(text) {
                      assert.equal(text, "CAT_01: Those that belong to the emperor", "Did not display custom label format (type=result) for result");
@@ -721,7 +721,7 @@ define(["intern!object",
                   .click()
                .end()
 
-               .findByCssSelector(selectors.controlInDialog.fifthResult)
+               .findByCssSelector(selectors.controlInDialog.secondResult)
                   .isDisplayed()
                   .then(function(isDisplayed) {
                      assert.isTrue(isDisplayed, "Unable to see result in dropdown");
@@ -745,7 +745,7 @@ define(["intern!object",
             //    *
             //    
             "Dialog MultiSelect submits correct data": function() {
-               return browser.findByCssSelector(selectors.controlInDialog.fifthResult)
+               return browser.findByCssSelector(selectors.controlInDialog.secondResult)
                   .click()
                .end()
 

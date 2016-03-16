@@ -285,6 +285,7 @@ define({
       "src/test/resources/alfresco/services/NavigationServiceTest",
       "src/test/resources/alfresco/services/NodePreviewServiceTest",
       "src/test/resources/alfresco/services/NotificationServiceTest",
+      "src/test/resources/alfresco/services/OptionsServiceTest",
       "src/test/resources/alfresco/services/SearchServiceTest",
       "src/test/resources/alfresco/services/ServiceFilteringTest",
       "src/test/resources/alfresco/services/ServiceRegistryTest",

@@ -539,6 +539,7 @@ define(["dojo/_base/declare",
        *          "global": true
        *       }
        *    ],
+       *    "itemsAttribute": "options",
        *    "publishTopic": "ALF_GET_FORM_CONTROL_OPTIONS",
        *    "publishPayload": {
        *       "url": AlfConstants.PROXY_URI + "api/groups",
@@ -685,6 +686,13 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "An option was provided with neither label nor value", option, this);
+         }
+
+         // See AKU-844 - also update the value attribute whilst we're here, not the correct location despite
+         // the function name !
+         if (option[valueAttribute])
+         {
+            option.value = option[valueAttribute];
          }
       },
 
@@ -847,9 +855,12 @@ define(["dojo/_base/declare",
        */
       onPubSubOptions: function alfresco_forms_controls_BaseFormControl__onPubSubOptions(payload) {
          this.alfUnsubscribeSaveHandles([this._pubSubOptionsHandle]);
-         if (payload.options)
+
+         var optionsAttribute = lang.getObject("itemsAttribute", false, this.optionsConfig) || "options";
+         var options = lang.getObject(optionsAttribute, false, payload);
+         if (options)
          {
-            this.setOptions(payload.options);
+            this.setOptions(options);
          }
          else
          {

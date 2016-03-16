@@ -60,12 +60,11 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onOptionsRequest: function alfresco_services_OptionsService__onOptionsRequest(payload) {
-         /*jshint eqnull:true*/
-         if (payload.url != null &&
-             payload.itemsAttribute != null &&
-             payload.labelAttribute != null &&
-             payload.valueAttribute != null &&
-             payload.responseTopic != null)
+         if (payload.url &&
+             payload.itemsAttribute &&
+             payload.labelAttribute &&
+             payload.valueAttribute &&
+             (payload.responseTopic || payload.alfResponseTopic))
          {
             this.serviceXhr({
                url : payload.url,
@@ -73,6 +72,7 @@ define(["dojo/_base/declare",
                method: "GET",
                successCallback: this.optionsSuccess,
                failureCallback: this.optionsFailure,
+               progressCallback: this.optionsProgress,
                callbackScope: this
             });
          }
@@ -80,6 +80,18 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A request was made to retrieve form control options, but required payload attributes are missing", payload, this);
          }
+      },
+
+      /**
+       * Handles progress updates by doing nothing. See AKU-884.
+       * 
+       * @instance
+       * @param {object} response
+       * @param {object} originalRequestConfig
+       * @since 1.0.60
+       */
+      optionsProgress: function alfresco_services_OptionsService__optionsProgress(/*jshint unused:false*/ response, originalRequestConfig) {
+         // No action intentionally
       },
 
       /**
@@ -109,7 +121,22 @@ define(["dojo/_base/declare",
          {
             array.forEach(items, lang.hitch(this, this.processOptions, options, originalRequestConfig.data));
          }
-         this.alfPublish(originalRequestConfig.data.responseTopic, {
+
+         // See AKU-884...
+         // The topic that the options are currently published on is tactically chosen to only use the
+         // alfResponseScope in tandem with the alfResponseTopic - but for the responseScope to be used by itself
+         // this is to retain backwards compatibility with form controls that do not use the ServiceStore (such
+         // as select) and those that do (such as FilteringSelect)...
+         var topic;
+         if (originalRequestConfig.data.alfResponseTopic)
+         {
+            topic = (originalRequestConfig.data.alfResponseScope || "") + originalRequestConfig.data.alfResponseTopic;
+         }
+         else
+         {
+            topic = originalRequestConfig.data.responseTopic;
+         }
+         this.alfPublish(topic, {
             options: options
          });
       },
