@@ -1,3 +1,4 @@
+/*jshint latedef:false,esversion:6*/
 var fs = require("fs"),
    path = require("path"),
    http = require("http"),
@@ -20,7 +21,6 @@ module.exports = function(grunt) {
          urlRegex = /<url>(.+)<\/url>/,
          testUrls = [],
          urlsLoaded = 0,
-         loadErrors = {},
          urlPrefix = "http://localhost:8089/aikau/page/tp/ws",
          pwd = process.cwd();
 
