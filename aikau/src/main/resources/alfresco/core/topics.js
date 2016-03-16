@@ -654,7 +654,8 @@ define([],function() {
       /**
        * This topic can be published to request a list of all available users in the Alfresco Repository.
        * This request is expected to be handled by the [UserService]{@link module:alfresco/services/UserService}.
-       * The results are published on 'alfResponseTopic' provided in the attribute "items".
+       * The results are published on 'alfResponseTopic' provided, and are defined as an array as attribute "items"
+       * in the published payload.
        * 
        * @instance
        * @type {string}

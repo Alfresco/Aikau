@@ -83,7 +83,7 @@ define(["dojo/_base/declare",
        * @param  {object} payload The payload for the request
        * @since 1.0.60
        */
-      onGetUsers: function alfresco_services_UserService__onGetUsers(/*jshint unused:false*/ payload) {
+      onGetUsers: function alfresco_services_UserService__onGetUsers(payload) {
          var topic;
          if (payload.alfResponseTopic)
          {
