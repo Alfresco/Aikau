@@ -1,4 +1,4 @@
-   /**
+/**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
@@ -20,10 +20,12 @@
 /**
  * This is a specialization of the [TextBox]{@link module:alfresco/forms/controls/TextBox}
  * that can be configured to automatically set its value to that of another form control
- * where the value is "masked" by a Regular Expression. This widget was written explicitly
- * to address a requirement in the [SiteService]{@link module:alfresco/services/SiteService}
- * where it was necessary for a "shortName" field to automatically be updated with the value
- * of the "title" field but with certain characters and white space removed.
+ * where the value is "masked" by a Regular Expressions defined in the 
+ * [replacements]{@link module:alfresco/forms/controls/MaskingTextBox#replacements} array. 
+ * This widget was written explicitly to address a requirement in the 
+ * [SiteService]{@link module:alfresco/services/SiteService} where it was necessary for a "shortName" 
+ * field to automatically be updated with the value of the "title" field but with certain characters 
+ * and white space removed.
  *
  * @example <caption>This example shows how the MaskingTextBox can be used with another TextBox</caption>
  * {
@@ -49,7 +51,16 @@
  *              label: "Resulting value",
  *              description: "This value will be automatically set from the value of the other TextBox",
  *              name: "maskedText",
- *              mask: "[^0-9a-zA-Z\-\s]",
+ *              replacements: [
+ *                 {
+ *                    regex: "[^a-z0-9\\-\\s]",
+ *                    flags: "gi"
+ *                 },
+ *                 {
+ *                    regex: "\\s+",
+ *                    replacement: "-"
+ *                 }
+ *              ],
  *              trim: true,
  *              toLowerCase: true
  *           }
@@ -65,19 +76,29 @@
  */
 define(["dojo/_base/declare",
         "alfresco/forms/controls/TextBox",
+        "dojo/_base/array",
         "dojo/_base/lang"], 
-        function(declare, TextBox, lang) {
+        function(declare, TextBox, array, lang) {
    
    return declare([TextBox], {
       
       /**
-       * A Regular Expression of the characters to remove from the target value.
+       * An object defining the how to target characters in the supplied value and how they should be replaced.
+       * 
+       * @typedef {Replacement}
+       * @property {string} regex A Regular Expression to match characters in the text that should be replaced
+       * @property {string} [flags="g"] Flags to apply to the Regular Expression (defaults to "g" for global replacement)
+       * @property {string} [replacement=""] The text to replace the matched characters with
+       */
+      
+      /**
+       * This should be configured to be an object array containing the 
        * 
        * @instance
-       * @type {string}
+       * @type {Replacement[]}
        * @default
        */
-      mask: null,
+      replacements: null,
 
       /**
        * Indicates whether or not the masked value should be converted to lower case.
@@ -109,15 +130,6 @@ define(["dojo/_base/declare",
       targetId: null,
 
       /**
-       * A Regular Expression compiled from [mask]{@link module:alfresco/forms/controls/MaskingTextBox#mask}}
-       * 
-       * @instance
-       * @type {RegExp}
-       * @default
-       */
-      _maskRe: null,
-
-      /**
        * This will be assigned a handle for the value change subscription created by
        * [postCreate]{@link module:alfresco/forms/controls/MaskingTextBox#postCreate}. The subscription 
        * will be removed as soon as the user has manually changed the value.
@@ -136,7 +148,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param  {object} evt The keyup event
        */
-      handleKeyUp: function alfresco_forms_controls_TextBox__handleKeyUp(/*jshint unused:false*/ evt) {
+      handleKeyUp: function alfresco_forms_controls_MaskingTextBox__handleKeyUp(/*jshint unused:false*/ evt) {
          this.inherited(arguments);
          if (this._maskUpdateSubscription)
          {
@@ -155,15 +167,31 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_forms_controls_MaskingTextBox__postCreate() {
          this.inherited(arguments);
-         if (this.mask)
+         if (this.replacements)
          {
-            this._maskRe = new RegExp(this.mask, "g");
+            array.forEach(this.replacements, function(replacement) {
+               if (replacement.regex)
+               {
+                  try
+                  {
+                     var re = new RegExp(replacement.regex, replacement.flags || "g");
+                     replacement._re = re;
+                  }
+                  catch(e)
+                  {
+                     this.alfLog("error", "The following error occurred generating a Regular Expression from: " + replacement.regex, this);
+                  }
+               }
+            });
          }
+
          this._maskUpdateSubscription = this.alfSubscribe("_valueChangeOf_" + this.targetId, lang.hitch(this, this.setMaskedValue));
       },
 
       /**
-       *
+       * This function sets the value of the form control by applying each valid entry 
+       * in the [replacements]{@link module:alfresco/forms/controls/MaskingTextBox#replacements} array.
+       * 
        * @instance
        * @param {object} payload The payload containing the details of the updated value
        */
@@ -173,10 +201,6 @@ define(["dojo/_base/declare",
              typeof payload.value.toString === "function")
          {
             var maskedValue = payload.value.toString();
-            if (this._maskRe)
-            {
-               maskedValue = maskedValue.replace(this._maskRe, "");
-            }
             if (this.toLowerCase)
             {
                maskedValue = maskedValue.toLowerCase();
@@ -185,6 +209,12 @@ define(["dojo/_base/declare",
             {
                maskedValue = lang.trim(maskedValue);
             }
+            array.forEach(this.replacements, function(replacement) {
+               if (replacement._re)
+               {
+                  maskedValue = maskedValue.replace(replacement._re, replacement.replacement || "");
+               }
+            });
             this.setValue(maskedValue);
          }
       }

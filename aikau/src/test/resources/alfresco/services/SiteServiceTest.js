@@ -82,7 +82,7 @@ define(["alfresco/TestCommon",
             .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
                .getProperty("value")
                .then(function(value) {
-                  assert.equal(value,"hasoddchars");
+                  assert.equal(value,"hasodd-chars");
                });
          },
 

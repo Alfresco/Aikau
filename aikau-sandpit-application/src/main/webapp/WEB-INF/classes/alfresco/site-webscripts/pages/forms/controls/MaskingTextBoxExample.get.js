@@ -37,7 +37,16 @@ buildPageModel({
                            label: "Resulting value",
                            description: "This value will be automatically set from the value of the other TextBox",
                            name: "maskedText",
-                           mask: "[^0-9a-zA-Z\-\s]",
+                           replacements: [
+                              {
+                                 regex: "[^a-z0-9\\-\\s]",
+                                 flags: "gi"
+                              },
+                              {
+                                 regex: "\\s+",
+                                 replacement: "-"
+                              }
+                           ],
                            trim: true,
                            toLowerCase: true
                         }

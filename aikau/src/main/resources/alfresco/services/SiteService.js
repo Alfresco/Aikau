@@ -1182,8 +1182,17 @@ define(["dojo/_base/declare",
             name: "alfresco/forms/controls/MaskingTextBox",
             config: {
                fieldId: "SHORTNAME",
-               mask: "[^0-9a-zA-Z\-\s]",
                targetId: "TITLE",
+               replacements: [
+                  {
+                     regex: "[^a-z0-9\\-\\s]",
+                     flags: "gi"
+                  },
+                  {
+                     regex: "\\s+",
+                     replacement: "-"
+                  }
+               ],
                label: "create-site.dialog.urlname.label",
                description: "create-site.dialog.urlname.description",
                name: "shortName",
