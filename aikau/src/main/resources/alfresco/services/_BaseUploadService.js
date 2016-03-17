@@ -349,10 +349,19 @@ define(["alfresco/core/CoreXhr",
       onUploadCancelRequest: function alfresco_services__BaseUploadService__onUploadCancelRequest(payload) {
          var fileId = payload && payload.fileId,
             fileInfo = this.fileStore[fileId];
-         try {
-            fileInfo.request.abort();
-         } catch (e) {
-            this.alfLog("info", "Unable to cancel upload: ", fileInfo, e);
+         if (fileInfo) {
+            try {
+               if (fileInfo.progress === 0) {
+                  fileInfo.request = { // Manually force status of 0 to notify of cancellation
+                     status: 0
+                  };
+                  this.failureListener(fileId); // Manually call the failure listener for this file
+               } else {
+                  fileInfo.request.abort();
+               }
+            } catch (e) {
+               this.alfLog("info", "Unable to cancel upload: ", fileInfo, e);
+            }
          }
       },
 
