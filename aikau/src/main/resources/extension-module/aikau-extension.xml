@@ -17,6 +17,7 @@
                      <base-url>/res/</base-url>
                      <default-less-configuration>/js/aikau/${project.version}/alfresco/css/less/defaults.less</default-less-configuration><messages-object>Alfresco</messages-object>
                      <packages>
+                        <package name="webscripts"    location="../service/${webscript.version}" />
                         <package name="service"       location="../service"/>
                         <package name="dojo"          location="js/lib/dojo-${dependency.dojo.version}/dojo"/>
                         <package name="dijit"         location="js/lib/dojo-${dependency.dojo.version}/dijit"/>

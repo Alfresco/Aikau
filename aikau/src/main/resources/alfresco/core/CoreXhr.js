@@ -27,6 +27,7 @@
  */
 define(["dojo/_base/declare",
         "service/constants/Default",
+        "webscripts/defaults",
         "dijit/registry",
         "dojo/topic",
         "dojo/_base/array",
@@ -37,7 +38,7 @@ define(["dojo/_base/declare",
         "dojo/json",
         "dojo/date/stamp",
         "dojo/cookie"],
-        function(declare, AlfConstants, registry, pubSub, array, lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
+        function(declare, AlfConstants, webScriptDefaults, registry, pubSub, array, lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
 
    return declare(null, {
 
@@ -427,12 +428,15 @@ define(["dojo/_base/declare",
 
          // Build up the Accept-Language header value
          var languages = navigator.languages;
-         if (languages) {
+         if (languages) 
+         {
             languages = array.map(languages, function(nextLang) {
                return nextLang.toLowerCase();
             }).join(", ");
-         } else {
-            languages = (navigator.language || navigator.userLanguage).toLowerCase();
+         } 
+         else 
+         {
+            languages = webScriptDefaults.ACCEPT_LANGUAGE;
          }
 
          // Construct and return the headers
