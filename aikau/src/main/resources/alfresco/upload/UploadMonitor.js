@@ -30,7 +30,10 @@
 define(["alfresco/core/FileSizeMixin",
         "alfresco/core/CoreWidgetProcessing", 
         "alfresco/core/topics",
-        "alfresco/upload/_UploadsDisplayMixin", 
+        "alfresco/core/Core",
+        "alfresco/upload/UploadsDisplayInterface",
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin", 
         "dojo/_base/array", 
         "dojo/_base/declare", 
         "dojo/_base/lang", 
@@ -39,9 +42,9 @@ define(["alfresco/core/FileSizeMixin",
         "dojo/dom-style",
         "dojo/when", 
         "dojo/text!./templates/UploadMonitor.html"], 
-        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, domStyle, when, template) {
+        function(FileSizeMixin, CoreWidgetProcessing, topics, AlfCore, UploadsDisplayInterface, _WidgetBase, _TemplatedMixin, array, declare, lang, domClass, domConstruct, domStyle, when, template) {
 
-   return declare([FileSizeMixin, CoreWidgetProcessing, _UploadsDisplayMixin], {
+   return declare([UploadsDisplayInterface, _WidgetBase, _TemplatedMixin, AlfCore, FileSizeMixin, CoreWidgetProcessing], {
 
       /**
        * An array of the i18n files to use with this widget.

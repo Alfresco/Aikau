@@ -28,15 +28,18 @@
  */
 define(["dojo/_base/declare",
         "dojo/text!./templates/AlfUploadDisplay.html",
-        "alfresco/upload/_UploadsDisplayMixin",
+        "alfresco/core/Core",
+        "alfresco/upload/UploadsDisplayInterface",
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin", 
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/on",
         "dojo/dom-construct",
         "dojo/json"], 
-        function(declare, template, _UploadsDisplayMixin, lang, array, on, domConstruct, dojoJson) {
+        function(declare, template, AlfCore, UploadsDisplayInterface, _WidgetBase, _TemplatedMixin, lang, array, on, domConstruct, dojoJson) {
    
-   return declare([_UploadsDisplayMixin], {
+   return declare([UploadsDisplayInterface, _WidgetBase, _TemplatedMixin, AlfCore], {
 
       /**
        * An array of the i18n files to use with this widget.
