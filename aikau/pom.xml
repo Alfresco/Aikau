@@ -178,7 +178,7 @@
          <resource>
             <!-- WebScripts go into their own package -->
             <targetPath>./alfresco/site-webscripts/org/alfresco/aikau</targetPath>
-            <filtering>false</filtering>
+            <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/webscripts</directory>
          </resource>
 
@@ -216,6 +216,32 @@
       </testResources>
 
       <plugins>
+
+         <!-- See AKU-845 - This plugin has been brought in to create a property that is the project
+              version with all "." characters replaced with "-" characters. The reason that this is 
+              required is that we want to defined version specific WebScript URLs, but for some reason
+              (most likely in Surf) the RequestDispatcher fails to map URLs containing more than
+              one "." character - this means that the Aikau version cannot be used without modification -->
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.10</version>
+            <executions>
+               <execution>
+                  <id>regex-property</id>
+                  <goals>
+                     <goal>regex-property</goal>
+                  </goals>
+                  <configuration>
+                     <name>webscript.version</name>
+                     <value>${project.version}</value>
+                     <regex>\.</regex>
+                     <replacement>-</replacement>
+                     <failIfNoMatch>false</failIfNoMatch>
+                  </configuration>
+             </execution>
+           </executions>
+         </plugin>
 
          <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
