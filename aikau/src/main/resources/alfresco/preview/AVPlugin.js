@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
    return declare([AlfDocumentPreviewPlugin], {
 
       /**
-       * Indicates whether or not the the AV previewer should automatically play when it is displayed.
+       * Indicates whether or not the AV previewer should automatically play when it is displayed.
        * 
        * @instance
        * @type {boolean}

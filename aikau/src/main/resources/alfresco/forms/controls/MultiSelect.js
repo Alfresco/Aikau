@@ -414,7 +414,7 @@ define([
 
          /**
           * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getStoreItem}
-          * to return the the mapped item from the [store]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_storeItems}.
+          * to return the mapped item from the [store]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_storeItems}.
           *
           * @instance
           * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.

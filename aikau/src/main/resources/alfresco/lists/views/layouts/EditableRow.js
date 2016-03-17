@@ -132,7 +132,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Used to indicate whether or not the the [widgetsForEditMode]{@link module:alfresco/lists/views/layouts/EditableRow#widgetsForEditMode}
+       * Used to indicate whether or not the [widgetsForEditMode]{@link module:alfresco/lists/views/layouts/EditableRow#widgetsForEditMode}
        * should be processed.
        *
        * @instance

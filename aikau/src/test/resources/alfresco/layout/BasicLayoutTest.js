@@ -164,7 +164,7 @@ define(["intern!object",
                .getComputedStyle("width")
                .then(function(width) {
                   // Calculate what the width should be...
-                  // 75% of the the width of the REMAINDER of the horizontal widget parent minus all the margins and the pixel width widget
+                  // 75% of the width of the REMAINDER of the horizontal widget parent minus all the margins and the pixel width widget
                   var x = width.substring(0, width.lastIndexOf("px"));
                   var shouldBe = (testableDimensions.horiz2 - 90 - 300 - 3 - 30) * 0.75;
                   assert.equal(shouldBe, x, "The width was not set correctly by remaining percentage: " + x + " (should be: " + shouldBe + ")");

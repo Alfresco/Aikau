@@ -499,7 +499,7 @@ define(["dojo/_base/declare",
       
       /**
        * This handles publications on the [filterSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#filterSelectionTopic} topic
-       * to show when a filter is selected. The the rendered path is replaced with the details of the filter.
+       * to show when a filter is selected. The rendered path is replaced with the details of the filter.
        * 
        * @instance
        */
