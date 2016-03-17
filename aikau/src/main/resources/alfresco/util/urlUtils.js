@@ -117,6 +117,7 @@ define(["alfresco/enums/urlTypes",
          //       PAGE_RELATIVE and specified, invalid values do not modify the URL but
          //       do log an error.
          convertUrl: function alfresco_util_urlUtils__convertUrl(url, urlType) {
+            /*jshint maxcomplexity:false*/
             var convertedUrl = url,
                falsyUrlTypeFallback = "FALSY_URL_TYPE_SUPPLIED";
             if (url || urlType === urlTypes.HASH) {

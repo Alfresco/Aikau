@@ -358,7 +358,7 @@ define(["dojo/_base/declare",
             if(this.useHash === true) {
                hashUtils.updateHash({
                   description: null
-               }, true)
+               }, true);
             }
 
          }
