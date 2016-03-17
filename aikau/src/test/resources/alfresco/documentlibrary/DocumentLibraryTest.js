@@ -53,7 +53,8 @@ define(["intern!object",
          .findAllByCssSelector(".alfresco-documentlibrary-AlfBreadcrumb")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The breadcrumb trail was not updated");
-            });
+            })
+            .end();
          };
 
    var checkAddedBreadcrumbText = function(browser) {
@@ -93,7 +94,19 @@ define(["intern!object",
          .getVisibleText()
          .then(function(text) {
             assert.equal(text, "My Favorite Files and Folders", "The filter description was not retained");
-         });
+         })
+      .end()
+      .getLastPublish(pubSubScope + "ALF_DOCLIST_REQUEST_FINISHED");
+   };
+
+   var hashObjFromUrl = function(url) {
+      var hashString = url.substr(url.lastIndexOf("#") + 1),
+         hashParams = hashString.split("&");
+      return hashParams.reduce(function(hashObj, nextParam) {
+         var keyVal = nextParam.split("=");
+         hashObj[keyVal[0]] = keyVal[1];
+         return hashObj;
+      }, {});
    };
 
    // NOTE: For some as yet undetermined reason the first time we attempt to load the Document Library test page 
@@ -143,6 +156,11 @@ define(["intern!object",
          "Click on a folder link and check for updated breadcrumb": function() {
             return browser.then(function() {
                return clickOnFolderLink(browser);
+            })
+            .getCurrentUrl()
+            .then(function(currentUrl) {
+               var currHash = hashObjFromUrl(currentUrl);
+               assert.propertyVal(currHash, "path", "%2FDetailedView", "Hash does not have correct path parameter");
             });
          },
 
@@ -161,11 +179,17 @@ define(["intern!object",
          "Switch to favourites filter": function() {
             return browser.then(function() {
                return switchToFilter(browser, "SCOPED_");
+            })
+            .getCurrentUrl()
+            .then(function(currentUrl) {
+               var currHash = hashObjFromUrl(currentUrl);
+               assert.propertyVal(currHash, "filter", "favourites", "Hash does not have correct filter parameter");
+               assert.propertyVal(currHash, "description", "My%20Favorite%20Files%20and%20Folders", "Hash does not have correct description parameter");
             });
          },
 
-         // NOTE: The following tests don't need to be duplicated across both hashing and non-hashing
-         //       Document Libraries
+         // NOTE: The following tests don't need to be duplicated across both hashing and non-hashing Document Libraries
+         
          "Delete item in scoped document library": function() {
             return browser.findById("DETAILED_VIEW_ACTIONS_ITEM_0_MENU_text")
                .clearLog()
@@ -182,6 +206,16 @@ define(["intern!object",
 
             .getLastPublish("SCOPED_ALF_DOCLIST_RELOAD_DATA", "Scoped reload request not published");
          },
+
+         "Changing hash to path loads path": function() {
+            return browser.get(TestCommon.testWebScriptURL("/DocLib#currentPage=1&path=%2FDetailedView%2F"))
+               .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+               .getCurrentUrl()
+               .then(function(currentUrl) {
+                  var currHash = hashObjFromUrl(currentUrl);
+                  assert.propertyVal(currHash, "path", "%2FDetailedView%2F", "Hash does not have correct path parameter");
+               });
+         },         
 
          "Post Coverage Results": function() {
             TestCommon.alfPostCoverageResults(this, browser);
@@ -310,6 +344,7 @@ define(["intern!object",
 
          "Delete item in scoped document library": function() {
             return browser.findDisplayedById("DETAILED_VIEW_ACTIONS_ITEM_0_MENU_text")
+               .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
                .clearLog()
                .click()
             .end()
