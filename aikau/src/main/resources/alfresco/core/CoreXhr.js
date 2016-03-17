@@ -431,12 +431,18 @@ define(["dojo/_base/declare",
          if (languages) 
          {
             languages = array.map(languages, function(nextLang) {
-               return nextLang.toLowerCase();
+               return nextLang;
             }).join(", ");
          } 
          else 
          {
             languages = webScriptDefaults.ACCEPT_LANGUAGE;
+         }
+
+         // Last resort... if for any reason the webscriptDefaults hasn't worked.
+         if (!languages)
+         {
+            languages = (navigator.language || navigator.userLanguage);
          }
 
          // Construct and return the headers
