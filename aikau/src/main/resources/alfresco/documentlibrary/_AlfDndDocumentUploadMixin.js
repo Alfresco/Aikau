@@ -617,7 +617,7 @@ define(["dojo/_base/declare",
                   }
                   else
                   {
-                     height = clientHeight - top;
+                     height = clientHeight;
                   }
                }
             }
@@ -634,11 +634,18 @@ define(["dojo/_base/declare",
                // Work out the height based on the available space...
                if (heightOfDndNode - top > clientHeight)
                {
-                  height = clientHeight;
+                  if (howFarScrolled === 0)
+                  {
+                     height = clientHeight - whereDoesDndNodeStart;
+                  }
+                  else
+                  {
+                     height = clientHeight;
+                  }
                }
                else
                {
-                  height = heightOfDndNode - howFarScrolled;
+                  height = clientHeight - howFarScrolled;
                }
             }
          }
