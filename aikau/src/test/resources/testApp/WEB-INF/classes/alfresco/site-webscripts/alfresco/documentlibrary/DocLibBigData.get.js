@@ -1,6 +1,14 @@
 <import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/service-filtering.lib.js">
 <import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/doclib/doclib.lib.js">
 
+/* global page */
+/* jshint sub:true */
+var full = true;
+if (page.url.args["full"])
+{
+   full = page.url.args["full"] === "true";
+}
+
 var pageServices = [
    {
       name: "alfresco/services/LoggingService",
@@ -26,32 +34,36 @@ var docLib = getDocLib({
 });
 docLib.config.pubSubScope = "SCOPED_";
 
+if (!full)
+{
+   docLib = {
+      name: "alfresco/layout/FixedHeaderFooter",
+      config: {
+         widgetsForHeader: [
+            {
+               name: "alfresco/html/Spacer",
+               config: {
+                  height: "50px"
+               }
+            }
+         ],
+         widgets: [docLib],
+         widgetsForFooter: [
+            {
+               name: "alfresco/html/Spacer",
+               config: {
+                  height: "50px"
+               }
+            }
+         ]
+      }
+   };
+}
+
 model.jsonModel = {
    services: services,
    widgets: [
-      // docLib,
-      {
-         name: "alfresco/layout/FixedHeaderFooter",
-         config: {
-            widgetsForHeader: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: "Bob"
-                  }
-               }
-            ],
-            widgets: [docLib],
-            widgetsForFooter: [
-               {
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: "Bob"
-                  }
-               }
-            ]
-         }
-      },
+      docLib,
       {
          name: "alfresco/testing/NodesMockXhr",
          config: {

@@ -581,6 +581,7 @@ define(["dojo/_base/declare",
        * @since 1.0.42
        */
       setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
+         // jshint maxstatements:false
          var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
          var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
          var dndNodePosition = domGeom.position(this.dragAndDropNode);
@@ -632,24 +633,39 @@ define(["dojo/_base/declare",
             {
                // Top of drop target is below the top of scroll area
                top = dndNodeBoundingRect.top;
+
+               if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
+               {
+                  // ...the bottom of the drop target is BELOW that of the scroll area... this means
+                  // that we just need to place the overlay over the ENTIRE scroll area...
+                  height = scrollAreaBoundingRect.bottom - dndNodeBoundingRect.top;
+               }
+               else
+               {
+                  // ...the bottom of the drop target is ABOVE that of the scroll area, this means
+                  // that we shouldn't overlay all the way to the bottom of the scroll area...
+                  height = dndNodeBoundingRect.bottom - dndNodeBoundingRect.top;
+               }
             }
             else
             {
                // Top of drop target is above the top of the scroll area (this implies that it has been scrolled)...
                top = scrollAreaBoundingRect.top;
+
+               if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
+               {
+                  // ...the bottom of the drop target is BELOW that of the scroll area... this means
+                  // that we just need to place the overlay over the ENTIRE scroll area...
+                  height = scrollAreaBoundingRect.bottom - scrollAreaBoundingRect.top;
+               }
+               else
+               {
+                  // ...the bottom of the drop target is ABOVE that of the scroll area, this means
+                  // that we shouldn't overlay all the way to the bottom of the scroll area...
+                  height = dndNodeBoundingRect.bottom - scrollAreaBoundingRect.top;
+               }
             }
-            if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
-            {
-               // ...the bottom of the drop target is BELOW that of the scroll area... this means
-               // that we just need to place the overlay over the ENTIRE scroll area...
-               height = scrollAreaBoundingRect.bottom - scrollAreaBoundingRect.top;
-            }
-            else
-            {
-               // ...the bottom of the drop target is ABOVE that of the scroll area, this means
-               // that we shouldn't overlay all the way to the bottom of the scroll area...
-               height = dndNodeBoundingRect.bottom - scrollAreaBoundingRect.top;
-            }
+            
          }
 
          domStyle.set(this.dragAndDropOverlayNode, {
@@ -666,7 +682,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @returns {element} The DOM element that is the scroll parent with scroll bars displayed
-       * @since 1.0.53
+       * @since 1.0.60
        */
       findScrollParent: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__findScrollParent(domNode) {
          var scrollParent = $(domNode).scrollParent();
