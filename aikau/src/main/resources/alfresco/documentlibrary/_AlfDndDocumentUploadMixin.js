@@ -45,9 +45,11 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/dom",
-        "dojo/_base/window"], 
+        "dojo/_base/window",
+        "jquery",
+        "jqueryui"], 
         function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, topics, lang, array, mouse, on, registry, domClass, 
-                 domConstruct, domGeom, domStyle, dom, win) {
+                 domConstruct, domGeom, domStyle, dom, win, $) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
 
@@ -582,12 +584,98 @@ define(["dojo/_base/declare",
          var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
          var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
          var dndNodePosition = domGeom.position(this.dragAndDropNode);
+
+         var top, height;
+         var scrollParent = this.findScrollParent(this.dragAndDropNode);
+         if (scrollParent.is("html"))
+         {
+            var clientHeight = $(window).height();
+            var howFarScrolled = $(window).scrollTop();
+            var heightOfDndNode = dndNodeDimensions.h;
+            var whereDoesDndNodeStart = $(this.dragAndDropNode).offset().top;
+            if (howFarScrolled > whereDoesDndNodeStart)
+            {
+               // We've scrolled beyond the start of the node. Therefore we need to start below the of the node
+               if (howFarScrolled > whereDoesDndNodeStart + heightOfDndNode)
+               {
+                  // but we've scrolled past the end of the node so there will be nothing to display
+                  top = 0;
+                  height = 0;
+               }
+               else
+               {
+                  // Set the top as the location scrolled to...
+                  top = howFarScrolled;
+
+                  // Now work out the height...
+                  var overlayOffset = howFarScrolled - whereDoesDndNodeStart;
+                  if (overlayOffset + clientHeight > heightOfDndNode)
+                  {
+                     // Using full client height would go beyond the height 
+                     height = heightOfDndNode - overlayOffset;
+                  }
+                  else
+                  {
+                     height = clientHeight;
+                  }
+               }
+            }
+         }
+         else
+         {
+            // Get the positions of the scrollable node and the drag-and-drop node within the view port...
+            var dndNodeBoundingRect = this.dragAndDropNode.getBoundingClientRect();
+            var scrollAreaBoundingRect = $(scrollParent)[0].getBoundingClientRect();
+
+            // Now work out the appropriate position of the overlay...
+            if (dndNodeBoundingRect.top > scrollAreaBoundingRect.top)
+            {
+               // Top of drop target is below the top of scroll area
+               top = dndNodeBoundingRect.top;
+            }
+            else
+            {
+               // Top of drop target is above the top of the scroll area (this implies that it has been scrolled)...
+               top = scrollAreaBoundingRect.top;
+            }
+            if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
+            {
+               // ...the bottom of the drop target is BELOW that of the scroll area... this means
+               // that we just need to place the overlay over the ENTIRE scroll area...
+               height = scrollAreaBoundingRect.bottom - scrollAreaBoundingRect.top;
+            }
+            else
+            {
+               // ...the bottom of the drop target is ABOVE that of the scroll area, this means
+               // that we shouldn't overlay all the way to the bottom of the scroll area...
+               height = dndNodeBoundingRect.bottom - scrollAreaBoundingRect.top;
+            }
+         }
+
          domStyle.set(this.dragAndDropOverlayNode, {
-            height: dndNodeDimensions.h + "px",
+            height: height + "px",
             width: dndNodeDimensions.w + "px",
-            top: dndNodePosition.y + "px",
+            top: top + "px",
             left: dndNodePosition.x + "px"
          });
+      },
+
+      /**
+       * This function recursively searches out through the DOM to find the first parent of the supplied element that
+       * is capable of scrolling vertically and has scrollbars displayed.
+       * 
+       * @instance
+       * @returns {element} The DOM element that is the scroll parent with scroll bars displayed
+       * @since 1.0.53
+       */
+      findScrollParent: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__findScrollParent(domNode) {
+         var scrollParent = $(domNode).scrollParent();
+         if (!scrollParent.is("html") &&
+             scrollParent[0].clientHeight === scrollParent[0].scrollHeight)
+         {
+            scrollParent = this.findScrollParent(scrollParent[0]);
+         }
+         return scrollParent;
       },
       
       /**
