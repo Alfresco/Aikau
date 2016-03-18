@@ -650,38 +650,50 @@ define(["dojo/_base/declare",
                   // get a dir reader and cleanup file path
                   var reader = directory.createReader(),
                       relativePath = directory.fullPath.replace(/^\//, "");
-                  reader.readEntries(function(entries) {
-                     callback.pending--;
-                     array.forEach(entries, function(entry) {
-                        if (entry.isFile)
+                 
+                  var fnReader = function() {
+                     reader.readEntries(function(entries) {
+                        callback.pending--;
+                        array.forEach(entries, function(entry) {
+                           if (entry.isFile)
+                           {
+                              callback.pending++;
+                              entry.file(function(File) {
+                                 // add the relativePath property to each file - this can be used to rebuild the contents of
+                                 // a nested tree folder structure if an appropriate API is available to do so
+                                 File.relativePath = relativePath;
+                                 callback.files.push(File);
+                                 if (callback.limit && callback.files.length > callback.limit)
+                                 {
+                                    throw new Error("Maximum dnd file limit reached: " + callback.limit);
+                                 }
+                                 if (--callback.pending === 0)
+                                 {
+                                    callback(callback.files);
+                                 }
+                              }, error);
+                           }
+                           else
+                           {
+                              walkFileSystem(entry, callback, error);
+                           }
+                        });
+                        
+                        // the reader API is a little esoteric,from the MDN docs:
+                        // "Continue calling readEntries() until an empty array is returned.
+                        //  You have to do this because the API might not return all entries in a single call."
+                        if (entries.length !== 0)
                         {
-                           callback.pending++;
-                           entry.file(function(File) {
-                              // add the relativePath property to each file - this can be used to rebuild the contents of
-                              // a nested tree folder structure if an appropriate API is available to do so
-                              File.relativePath = relativePath;
-                              callback.files.push(File);
-                              if (callback.limit && callback.files.length > callback.limit)
-                              {
-                                 throw new Error("Maximum dnd file limit reached: " + callback.limit);
-                              }
-                              if (--callback.pending === 0)
-                              {
-                                 callback(callback.files);
-                              }
-                           }, error);
+                           fnReader();
                         }
-                        else
+                        
+                        if (callback.pending === 0)
                         {
-                           walkFileSystem(entry, callback, error);
+                           callback(callback.files);
                         }
-                     });
-                     
-                     if (callback.pending === 0)
-                     {
-                        callback(callback.files);
-                     }
-                  }, error);
+                     }, error);
+                  };
+                  fnReader();
                });
                
                var addSelectedFiles = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__addSelectedFiles(files) {
