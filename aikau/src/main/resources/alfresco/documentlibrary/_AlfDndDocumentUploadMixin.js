@@ -594,10 +594,10 @@ define(["dojo/_base/declare",
             var howFarScrolled = $(window).scrollTop();
             var heightOfDndNode = dndNodeDimensions.h;
             var whereDoesDndNodeStart = $(this.dragAndDropNode).offset().top;
-            if (howFarScrolled > whereDoesDndNodeStart)
+            if (howFarScrolled >= whereDoesDndNodeStart)
             {
                // We've scrolled beyond the start of the node. Therefore we need to start below the of the node
-               if (howFarScrolled > whereDoesDndNodeStart + heightOfDndNode)
+               if (howFarScrolled >= whereDoesDndNodeStart + heightOfDndNode)
                {
                   // but we've scrolled past the end of the node so there will be nothing to display
                   top = 0;
@@ -617,8 +617,28 @@ define(["dojo/_base/declare",
                   }
                   else
                   {
-                     height = clientHeight;
+                     height = clientHeight - top;
                   }
+               }
+            }
+            else
+            {
+               // We haven't scrolled beyond the start of the node (in fact we might not have scrolled at all)...
+               // Initially set the top to be how far we've scrolled, but correct if it is before the start of the node
+               top = howFarScrolled;
+               if (top < whereDoesDndNodeStart)
+               {
+                  top = whereDoesDndNodeStart;
+               }
+
+               // Work out the height based on the available space...
+               if (heightOfDndNode - top > clientHeight)
+               {
+                  height = clientHeight;
+               }
+               else
+               {
+                  height = heightOfDndNode - howFarScrolled;
                }
             }
          }
@@ -633,7 +653,6 @@ define(["dojo/_base/declare",
             {
                // Top of drop target is below the top of scroll area
                top = dndNodeBoundingRect.top;
-
                if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
                {
                   // ...the bottom of the drop target is BELOW that of the scroll area... this means
