@@ -258,7 +258,7 @@ define(["dojo/_base/declare",
 
          this.showRoot = this.showRoot !== null ? this.showRoot : true;
 
-         // Create a new tree store using the the siteId as part of the URL
+         // Create a new tree store using the siteId as part of the URL
          this.treeStore = this.createWidget({
             name: "alfresco/navigation/TreeStore",
             config: {
@@ -300,7 +300,7 @@ define(["dojo/_base/declare",
       
       /**
        * This is the topic that is published when a node on the tree is clicked. The data applied
-       * to the filter is the the value of the node clicked. By default it is expected that the
+       * to the filter is the value of the node clicked. By default it is expected that the
        * tree represents a path so is set to the [path changed topic]{@link module:alfresco/core/topics#PATH_CHANGED}.
        * 
        * @instance
@@ -310,7 +310,7 @@ define(["dojo/_base/declare",
       publishTopic: topics.PATH_CHANGED,
 
       /**
-       * By default the payload type will the the current item. This will automatically be set
+       * By default the payload type will the current item. This will automatically be set
        * to be the tree node clicked.
        *
        * @instance

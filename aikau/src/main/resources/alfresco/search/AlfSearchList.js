@@ -675,7 +675,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} response The response object
-       * @param {object} originalRequestConfig The configuration that was passed to the the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
+       * @param {object} originalRequestConfig The configuration that was passed to the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
       onDataLoadSuccess: function alfresco_search_AlfSearchList__onDataLoadSuccess(payload) {
          /* jshint maxcomplexity:false */

@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
       /**
        * <p>This function attempts to set an appropriate height for the previewer. There are 3 different modes
        * of controlling the height:
-       * <ul><li>"AUTO" will attempt to ensure that the the previewer takes up the complete vertical space in the 
+       * <ul><li>"AUTO" will attempt to ensure that the previewer takes up the complete vertical space in the 
        * client from where it starts. This makes sense to use if you have a single previewer on a page.</li>
        * <li>Any positive number (note: not as a string) will set an explicit height that won't change as the 
        * browser resizes</li>

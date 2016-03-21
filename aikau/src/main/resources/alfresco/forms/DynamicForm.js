@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
        * is published on. 
        * 
        * @instance
-       * @param {object} payload A payload containing a 'value' attribute with the the JSON model to render
+       * @param {object} payload A payload containing a 'value' attribute with the JSON model to render
        */
       onDynamicFormUpdate: function alfresco_forms_DynamicForm__onDynamicFormUpdate(payload) {
          // jshint maxcomplexity:false

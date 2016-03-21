@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Document Library Example (lots of data)</shortname>
+  <description>This provides an example of building the standard Document Library using the doclib.lib.js library file.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DocLibBigData</url>
+</webscript>

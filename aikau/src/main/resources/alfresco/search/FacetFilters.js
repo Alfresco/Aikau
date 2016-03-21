@@ -193,7 +193,7 @@ define(["dojo/_base/declare",
             }
          }
 
-         // Create a new array and populate with the the facet filters...
+         // Create a new array and populate with the facet filters...
          var filters = [];
          for (var key in payload.facetResults)
          {

@@ -18414,7 +18414,7 @@ var Font = (function FontClosure() {
 
         // The spec seems to imply that if the font is symbolic the encoding
         // should be ignored, this doesn't appear to work for 'preistabelle.pdf'
-        // where the the font is symbolic and it has an encoding.
+        // where the font is symbolic and it has an encoding.
         if (hasEncoding &&
             (cmapPlatformId === 3 && cmapEncodingId === 1 ||
              cmapPlatformId === 1 && cmapEncodingId === 0) ||
@@ -19087,7 +19087,7 @@ function type1FontGlyphMapping(properties, builtInEncoding, glyphNames) {
 }
 
 /*
- * CharStrings are encoded following the the CharString Encoding sequence
+ * CharStrings are encoded following the CharString Encoding sequence
  * describe in Chapter 6 of the "Adobe Type1 Font Format" specification.
  * The value in a byte indicates a command, a number, or subsequent bytes
  * that are to be interpreted in a special way.

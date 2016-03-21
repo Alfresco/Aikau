@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
-       * The widgets processed by AlfDocument should all be be designed to work with a "currentItem" attribute.
+       * The widgets processed by AlfDocument should all be designed to work with a "currentItem" attribute.
        *
        * @instance
        * @type {object[]}
