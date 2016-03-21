@@ -558,7 +558,7 @@ define(["dojo/_base/declare",
                }, pNode);
             }
             
-            this.setDndHighlightDimensions();
+            this.setDndHighlightDimensions(this.dragAndDropNode);
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
 
@@ -577,23 +577,33 @@ define(["dojo/_base/declare",
        * [dragAndDropOverlayNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropOverlayNode}
        * 
        * @instance
+       * @param {object} [targetNode] An optional node to use instead of the 
+       * [dragAndDropNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropNode}
        * @overridable
        * @since 1.0.42
        */
-      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
+      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions(targetNode) {
          // jshint maxstatements:false, maxcomplexity:false
-         var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
-         var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
-         var dndNodePosition = domGeom.position(this.dragAndDropNode);
+         
+         // Backwards compatibility setup, as of 1.0.60, an argument wasn't passed and this.dragAndDropNode was always used,
+         // this ensures that this behaviour is retained...
+         if (!targetNode)
+         {
+            targetNode = this.dragAndDropNode;
+         }
+
+         var computedStyle = domStyle.getComputedStyle(targetNode);
+         var dndNodeDimensions = domGeom.getMarginBox(targetNode, computedStyle);
+         var dndNodePosition = domGeom.position(targetNode);
 
          var top, height;
-         var scrollParent = this.findScrollParent(this.dragAndDropNode);
+         var scrollParent = this.findScrollParent(targetNode);
          if (scrollParent.is("html"))
          {
             var clientHeight = $(window).height();
             var howFarScrolled = $(window).scrollTop();
             var heightOfDndNode = dndNodeDimensions.h;
-            var whereDoesDndNodeStart = $(this.dragAndDropNode).offset().top;
+            var whereDoesDndNodeStart = $(targetNode).offset().top;
             if (howFarScrolled >= whereDoesDndNodeStart)
             {
                // We've scrolled beyond the start of the node. Therefore we need to start below the of the node
@@ -645,14 +655,14 @@ define(["dojo/_base/declare",
                }
                else
                {
-                  height = clientHeight - howFarScrolled;
+                  height = heightOfDndNode;
                }
             }
          }
          else
          {
             // Get the positions of the scrollable node and the drag-and-drop node within the view port...
-            var dndNodeBoundingRect = this.dragAndDropNode.getBoundingClientRect();
+            var dndNodeBoundingRect = targetNode.getBoundingClientRect();
             var scrollAreaBoundingRect = $(scrollParent)[0].getBoundingClientRect();
 
             // Now work out the appropriate position of the overlay...
@@ -711,11 +721,24 @@ define(["dojo/_base/declare",
        * @since 1.0.60
        */
       findScrollParent: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__findScrollParent(domNode) {
-         var scrollParent = $(domNode).scrollParent();
-         if (!scrollParent.is("html") &&
-             scrollParent[0].clientHeight === scrollParent[0].scrollHeight)
+         var scrollParent;
+         if (domNode === document)
          {
-            scrollParent = this.findScrollParent(scrollParent[0]);
+            // We've managed to get all the way to document, return html instead.
+            scrollParent = $("html");
+         }
+         else
+         {
+            scrollParent = $(domNode).scrollParent();
+            if (scrollParent.is("html"))
+            {
+               // No action required - just return "html" as the scroll parent
+            }
+            else if (scrollParent[0].clientHeight === scrollParent[0].scrollHeight)
+            {
+               // Find the next parent because, the current scroll parent is NOT making use of the scroll bar
+               scrollParent = this.findScrollParent(scrollParent[0]);
+            }
          }
          return scrollParent;
       },
