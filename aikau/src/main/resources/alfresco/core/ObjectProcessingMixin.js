@@ -18,7 +18,7 @@
  */
 
 /**
- * This mixin module is primarily provided for allowing publication payloads to be be processed
+ * This mixin module is primarily provided for allowing publication payloads to be processed
  * using a set of utility functions. It was written to be used by the
  * [_PublishPayloadMixin]{@link module:alfresco/renderers/_PublishPayloadMixin} but can be mixed into
  * any module that needs to take advantage of the object processing capabilities that it provides.

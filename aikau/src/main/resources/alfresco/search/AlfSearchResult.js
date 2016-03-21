@@ -318,7 +318,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [Property widget]{@link module:alfresco/renderers/Property}
-       * to render the the description of the result. It can be overridden to replace the default widget 
+       * to render the description of the result. It can be overridden to replace the default widget 
        * with a reconfigured version. 
        * 
        * @instance
@@ -344,7 +344,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [DateLink widget]{@link module:alfresco/renderers/DateLink}
-       * to render the the date that the result was created or last modified. It can be overridden to 
+       * to render the date that the result was created or last modified. It can be overridden to 
        * replace the default widget with a reconfigured version. 
        * 
        * @instance
@@ -377,7 +377,7 @@ define(["dojo/_base/declare",
       /**
        * This function is called to create a 
        * [SearchResultPropertyLink]{@link module:alfresco/renderers/SearchResultPropertyLink} widget
-       * to render the the displayName of the result. It can be overridden to replace the default widget 
+       * to render the displayName of the result. It can be overridden to replace the default widget 
        * with a reconfigured version. 
        * 
        * @instance
@@ -436,7 +436,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [PropertyLink widget]{@link module:alfresco/renderers/PropertyLink}
-       * to render the the path to the result. It can be overridden to replace the default widget with a reconfigured 
+       * to render the path to the result. It can be overridden to replace the default widget with a reconfigured 
        * version. 
        * 
        * @instance

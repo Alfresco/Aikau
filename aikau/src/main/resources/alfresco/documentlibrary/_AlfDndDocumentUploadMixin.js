@@ -243,7 +243,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Handles changes to the the current node that is represented by the widget that mixes in this module. For example
+       * Handles changes to the current node that is represented by the widget that mixes in this module. For example
        * when the path that a view is displaying changes.
        * 
        * @instance
