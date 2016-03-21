@@ -23,8 +23,9 @@
 define(["intern!object",
         "intern/chai!assert",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/helpers/pollUntil"],
-        function(registerSuite, assert, TestCommon, pollUntil) {
+        "intern/dojo/node!leadfoot/helpers/pollUntil",
+        "intern/dojo/node!leadfoot/keys"],
+        function(registerSuite, assert, TestCommon, pollUntil, keys) {
 
    var DialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
    var dialogSelectors = {
@@ -622,6 +623,73 @@ define(["intern!object",
                .end()
 
             .findByCssSelector("#RESIZING_DIALOG.dialogHidden");
+         },
+
+         "Post Coverage Results": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "More Dialog Service Tests",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/DialogService", "More Dialog Service Tests").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Test a suitably configured form dialog submits with the enter key": function() {
+            
+            // Open a simple form dialog and make sure it doesn't submit with the enter key. The open the submit-on-enter 
+            // form dialog and make sure it does submit with the enter key.
+
+            return browser
+
+            .findById("CREATE_FORM_DIALOG_CUSTOM_SCOPE")
+               .click()
+            .end()
+
+            .pressKeys(keys.ENTER)
+
+            .findDisplayedById("SCOPED_FORM")
+               .then(
+                  function(elem) {},
+                  function(err) {
+                     assert.fail("SCOPED_FORM dialog should not have disappeared with an enter key press.");
+                  }
+               )
+            .end()
+
+            .pressKeys(keys.ESCAPE)
+
+            .findById("CREATE_FORM_DIALOG_SUBMIT_ON_ENTER")
+               .click()
+            .end()
+
+            .pressKeys(keys.ENTER)
+
+            .findDisplayedById("SUBMIT_ON_ENTER_FORM")
+               .then(
+                  function(elem) {
+                     assert.fail("SUBMIT_ON_ENTER_FORM dialog should have disappeared with an enter key press.");
+                  },
+                  function(err) {}
+               )
+            .end()
+
+            .getLastPublish("CREATE_FORM_DIALOG_SUBMIT_ON_ENTER_TOPIC")
+               .then(function(payload){
+                  assert.propertyVal(payload, "text", "This is some sample text", "Did not publish correct form value on enter key");
+                  assert.propertyVal(payload, "text2", "This is some more sample text", "Did not publish correct form value on enter key");
+               })
          },
 
          "Post Coverage Results": function() {

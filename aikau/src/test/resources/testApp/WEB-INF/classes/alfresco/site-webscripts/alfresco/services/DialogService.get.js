@@ -727,6 +727,40 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "CREATE_FORM_DIALOG_SUBMIT_ON_ENTER",
+         config: {
+            label: "Create Form Dialog (submit on enter)",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "SUBMIT_ON_ENTER_FORM",
+               dialogTitle: "Submit on Enter Form Dialog",
+               formSubmissionTopic: "CREATE_FORM_DIALOG_SUBMIT_ON_ENTER_TOPIC",
+               publishValueSubscriptions: ["ALF_ENTER_KEY_PRESSED"],
+               widgets: [
+                  {
+                     id: "FORM_TEXTBOX",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text",
+                        label: "Enter some text",
+                        value: "This is some sample text"
+                     }
+                  },
+                  {
+                     id: "FORM_TEXTBOX_2",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        name: "text2",
+                        label: "Enter some more text",
+                        value: "This is some more sample text"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

@@ -131,6 +131,7 @@
  * @property {string} dialogTitle - The text to set in the dialog title bar
  * @property {number} [duration=0] - The duration of the fade effect when showing or hiding the dialog
  * @property {string} formSubmissionTopic - The topic to publish when the confirmation button is used (the published payload will be the form value)
+ * @property {array} publishValueSubscriptions - Topics to subscribe to that can affect a value publish
  * @property {Object} formSubmissionPayloadMixin - An additional object to "mixin" to the form value before it is published
  * @property {Object} [formValue={}] - The initial value to apply to the form when created. This should be an object with attributes mapping to the "name" attribute of each form control.
  * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
@@ -544,8 +545,8 @@ define(["dojo/_base/declare",
             {
                // Create a new pubSubScope just for this request (to allow multiple dialogs to behave independently)...
                var pubSubScope = this.generateUuid();
-               var subcriptionTopic =  pubSubScope + this._formConfirmationTopic;
-               var confirmationHandle = this.alfSubscribe(subcriptionTopic, lang.hitch(this, this.onFormDialogConfirmation));
+               var subscriptionTopic =  pubSubScope + this._formConfirmationTopic;
+               var confirmationHandle = this.alfSubscribe(subscriptionTopic, lang.hitch(this, this.onFormDialogConfirmation));
                this.mapRequestedIdToHandle(payload, "dialog.confirmation", confirmationHandle);
 
                if (payload.dialogRepeats)
@@ -564,7 +565,7 @@ define(["dojo/_base/declare",
                lang.mixin(config, clonedPayload);
                config.pubSubScope = pubSubScope;
                config.parentPubSubScope = this.parentPubSubScope;
-               config.subcriptionTopic = subcriptionTopic; // Include the subscriptionTopic in the configuration the subscription can be cleaned up
+               config.subscriptionTopic = subscriptionTopic; // Include the subscriptionTopic in the configuration the subscription can be cleaned up
 
                // Construct the form widgets and then construct the dialog using that configuration...
                var formValue = config.formValue ? config.formValue: {};
@@ -588,6 +589,9 @@ define(["dojo/_base/declare",
                   var enableHandle = this.alfSubscribe(config.dialogEnableTopic, lang.hitch(this, this.onFailedSubmission, dialog));
                   this.mapRequestedIdToHandle(payload, "dialog.enable", enableHandle);
                }
+
+               // Add in publishValueSubscriptions (see AKU-894)
+               this._addPublishValueSubscriptions(config, dialog);
 
                if (payload.dialogRepeats)
                {
@@ -957,6 +961,35 @@ define(["dojo/_base/declare",
          if (this._activeDialogs.length) {
             var lastOpenedDialog = this._activeDialogs[this._activeDialogs.length - 1];
             lastOpenedDialog.onCancel();
+         }
+      },
+
+      /**
+       * Add publishValueSubscriptions if some are provided.
+       *
+       * @instance
+       * @param {object} config
+       * @param {object} dialog
+       * @since 1.0.60
+       */
+      _addPublishValueSubscriptions: function alfresco_services_DialogService___addPublishValueSubscriptions(config, dialog) {
+         // When any of these topics are published, submit the form
+         if (config.publishValueSubscriptions && config.publishValueSubscriptions.length) {
+            array.forEach(config.publishValueSubscriptions, function(subTopic) {
+               this.alfSubscribe(config.pubSubScope + subTopic, lang.hitch(this, function() {
+                  
+                  if (dialog._buttons && dialog._buttons.length)
+                  {
+                     var topicPayload = lang.getObject("publishPayload", false, dialog._buttons[0]);
+                     if (topicPayload && topicPayload.dialogContent)
+                     {
+                        this.onFormDialogConfirmation(topicPayload);
+                        this.onCloseDialog(dialog);
+                     }
+                  }
+
+               }));
+            }, this);
          }
       }
    });
