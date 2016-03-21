@@ -35,7 +35,7 @@ The WebScriptor descriptor file should be found at `<PROJECT>/src/main/webapp/WE
 </webscript>
 ```
 
-The only truly important line in this file (in the context of Aikau) is the <url> element. When you load your new page you will need to use the address: [http://localhost:8090/aikau-sample/page/ap/ws/users-and-groups](http://localhost:8090/aikau-sample/page/ap/ws/users-and-groups)
+The only truly important line in this file (in the context of Aikau) is the `<url>` element. When you load your new page you will need to use the address: [http://localhost:8090/aikau-sample/page/ap/ws/users-and-groups](http://localhost:8090/aikau-sample/page/ap/ws/users-and-groups)
 
 Note that the value of the `<url>` element is the last part of the URL - how the page URLs are mapped to WebScripts will be explained in a later tutorial.
 
