@@ -581,7 +581,7 @@ define(["dojo/_base/declare",
        * @since 1.0.42
        */
       setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
-         // jshint maxstatements:false
+         // jshint maxstatements:false, maxcomplexity:false
          var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
          var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
          var dndNodePosition = domGeom.position(this.dragAndDropNode);
