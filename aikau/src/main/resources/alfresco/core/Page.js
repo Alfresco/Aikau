@@ -45,7 +45,7 @@ define(["alfresco/core/ProcessWidgets",
         "jqueryui", // NOTE: Need to include JQuery UI at root page to prevent XHR require request for first module that uses it
         "alfresco/core/shims"],
         function(ProcessWidgets, ResizeMixin, topics, urlTypes, urlUtils, AlfConstants, string, declare, domConstruct, array,
-                 lang, domClass, win, PubQueue, jquery, jqueryui, shims) {
+                 lang, domClass, win, PubQueue, $, jqueryui, shims) {
 
    return declare([ProcessWidgets, ResizeMixin], {
 
@@ -103,6 +103,16 @@ define(["alfresco/core/ProcessWidgets",
                var pageInfoDom = domConstruct.toDom(pageInfo);
                domConstruct.place(pageInfoDom, this.domNode, "first");
             }
+
+            // See AKU-891 - Prevent all standard drag and drop events from working if they bubble as
+            // far as the html element. This decision has been taken to prevent users from inadvertently
+            // dropping files onto areas of any page that can't handle them (and subsequently having those
+            // files rendered by the browser). JQuery used here as Dojo approach proved problematic and we
+            // have JQuery loaded anyway. All drag events need to be subscribed to to prevent the drop
+            // being fired, see: http://stackoverflow.com/questions/14674349/why-preventdefault-does-not-work
+            $("html").on("dragenter dragstart dragend dragleave dragover drag drop", function (e) {
+               e.preventDefault();
+            });
 
             if (this.services && this.services.length)
             {
