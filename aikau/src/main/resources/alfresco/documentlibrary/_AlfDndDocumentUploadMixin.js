@@ -798,19 +798,26 @@ define(["dojo/_base/declare",
                   callback.pending = callback.pending || 0;
                   callback.files = callback.files || [];
                   
-                  callback.pending++;
-                  
                   // get a dir reader and cleanup file path
                   var reader = directory.createReader(),
                       relativePath = directory.fullPath.replace(/^\//, "");
                  
-                  var fnReader = function() {
-                     reader.readEntries(function(entries) {
+                  var repeatReader = function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem__repeatReader() {
+                     
+                     // about to start an async callback function
+                     callback.pending++;
+                     
+                     reader.readEntries(function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem__repeatReader__readEntries(entries) {
+                        
+                        // processing an async callback function
                         callback.pending--;
+                        
                         array.forEach(entries, function(entry) {
                            if (entry.isFile)
                            {
+                              // about to start an async callback function
                               callback.pending++;
+                              
                               entry.file(function(File) {
                                  // add the relativePath property to each file - this can be used to rebuild the contents of
                                  // a nested tree folder structure if an appropriate API is available to do so
@@ -820,8 +827,11 @@ define(["dojo/_base/declare",
                                  {
                                     throw new Error("Maximum dnd file limit reached: " + callback.limit);
                                  }
+                                 
+                                 // processing an async callback function
                                  if (--callback.pending === 0)
                                  {
+                                    // fall out here if last item processed is a file entry
                                     callback(callback.files);
                                  }
                               }, error);
@@ -837,16 +847,17 @@ define(["dojo/_base/declare",
                         //  You have to do this because the API might not return all entries in a single call."
                         if (entries.length !== 0)
                         {
-                           fnReader();
+                           repeatReader();
                         }
                         
+                        // fall out here if last item processed is a dir entry e.g. empty dir
                         if (callback.pending === 0)
                         {
                            callback(callback.files);
                         }
                      }, error);
                   };
-                  fnReader();
+                  repeatReader();
                });
                
                var addSelectedFiles = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__addSelectedFiles(files) {
