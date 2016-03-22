@@ -107,9 +107,8 @@ define(["dojo/_base/declare"], function(declare) {
        * @instance
        * @param {string} fileId The unique id of the file
        * @param {number} percentageComplete The current upload progress as a percentage
-       * @param {object} progressEvt The progress event
        */
-      updateUploadProgress: function alfresco_upload__UploadsDisplayMixin__updateUploadProgress(fileId, percentageComplete, progressEvt) {
+      updateUploadProgress: function alfresco_upload__UploadsDisplayMixin__updateUploadProgress(fileId, percentageComplete) {
          this.alfLog("error", "Method not overridden in implementing class");
       }
    });
