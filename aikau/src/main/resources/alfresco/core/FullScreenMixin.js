@@ -274,7 +274,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called when a key is pressed in full screen or full window mode. If the 
-       * key that has been pressed happens to be the the ESCAPE key then the current mode is exited.
+       * key that has been pressed happens to be the ESCAPE key then the current mode is exited.
        *
        * @instance
        * @param {object} evt The key up event

@@ -45,9 +45,11 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/dom-style",
         "dojo/dom",
-        "dojo/_base/window"], 
+        "dojo/_base/window",
+        "jquery",
+        "jqueryui"], 
         function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, topics, lang, array, mouse, on, registry, domClass, 
-                 domConstruct, domGeom, domStyle, dom, win) {
+                 domConstruct, domGeom, domStyle, dom, win, $) {
    
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
 
@@ -241,7 +243,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Handles changes to the the current node that is represented by the widget that mixes in this module. For example
+       * Handles changes to the current node that is represented by the widget that mixes in this module. For example
        * when the path that a view is displaying changes.
        * 
        * @instance
@@ -556,7 +558,7 @@ define(["dojo/_base/declare",
                }, pNode);
             }
             
-            this.setDndHighlightDimensions();
+            this.setDndHighlightDimensions(this.dragAndDropNode);
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
 
@@ -575,19 +577,170 @@ define(["dojo/_base/declare",
        * [dragAndDropOverlayNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropOverlayNode}
        * 
        * @instance
+       * @param {object} [targetNode] An optional node to use instead of the 
+       * [dragAndDropNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropNode}
        * @overridable
        * @since 1.0.42
        */
-      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
-         var computedStyle = domStyle.getComputedStyle(this.dragAndDropNode);
-         var dndNodeDimensions = domGeom.getMarginBox(this.dragAndDropNode, computedStyle);
-         var dndNodePosition = domGeom.position(this.dragAndDropNode);
+      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions(targetNode) {
+         // jshint maxstatements:false, maxcomplexity:false
+         
+         // Backwards compatibility setup, as of 1.0.60, an argument wasn't passed and this.dragAndDropNode was always used,
+         // this ensures that this behaviour is retained...
+         if (!targetNode)
+         {
+            targetNode = this.dragAndDropNode;
+         }
+
+         var computedStyle = domStyle.getComputedStyle(targetNode);
+         var dndNodeDimensions = domGeom.getMarginBox(targetNode, computedStyle);
+         var dndNodePosition = domGeom.position(targetNode);
+
+         var top, height;
+         var scrollParent = this.findScrollParent(targetNode);
+         if (scrollParent.is("html"))
+         {
+            var clientHeight = $(window).height();
+            var howFarScrolled = $(window).scrollTop();
+            var heightOfDndNode = dndNodeDimensions.h;
+            var whereDoesDndNodeStart = $(targetNode).offset().top;
+            if (howFarScrolled >= whereDoesDndNodeStart)
+            {
+               // We've scrolled beyond the start of the node. Therefore we need to start below the of the node
+               if (howFarScrolled >= whereDoesDndNodeStart + heightOfDndNode)
+               {
+                  // but we've scrolled past the end of the node so there will be nothing to display
+                  top = 0;
+                  height = 0;
+               }
+               else
+               {
+                  // Set the top as the location scrolled to...
+                  top = howFarScrolled;
+
+                  // Now work out the height...
+                  var overlayOffset = howFarScrolled - whereDoesDndNodeStart;
+                  if (overlayOffset + clientHeight > heightOfDndNode)
+                  {
+                     // Using full client height would go beyond the height 
+                     height = heightOfDndNode - overlayOffset;
+                  }
+                  else
+                  {
+                     height = clientHeight;
+                  }
+               }
+            }
+            else
+            {
+               // We haven't scrolled beyond the start of the node (in fact we might not have scrolled at all)...
+               // Initially set the top to be how far we've scrolled, but correct if it is before the start of the node
+               top = howFarScrolled;
+               if (top < whereDoesDndNodeStart)
+               {
+                  top = whereDoesDndNodeStart;
+               }
+
+               // Work out the height based on the available space...
+               if (heightOfDndNode - top > clientHeight)
+               {
+                  if (howFarScrolled === 0)
+                  {
+                     height = clientHeight - whereDoesDndNodeStart;
+                  }
+                  else
+                  {
+                     height = clientHeight;
+                  }
+               }
+               else
+               {
+                  height = heightOfDndNode;
+               }
+            }
+         }
+         else
+         {
+            // Get the positions of the scrollable node and the drag-and-drop node within the view port...
+            var dndNodeBoundingRect = targetNode.getBoundingClientRect();
+            var scrollAreaBoundingRect = $(scrollParent)[0].getBoundingClientRect();
+
+            // Now work out the appropriate position of the overlay...
+            if (dndNodeBoundingRect.top > scrollAreaBoundingRect.top)
+            {
+               // Top of drop target is below the top of scroll area
+               top = dndNodeBoundingRect.top;
+               if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
+               {
+                  // ...the bottom of the drop target is BELOW that of the scroll area... this means
+                  // that we just need to place the overlay over the ENTIRE scroll area...
+                  height = scrollAreaBoundingRect.bottom - dndNodeBoundingRect.top;
+               }
+               else
+               {
+                  // ...the bottom of the drop target is ABOVE that of the scroll area, this means
+                  // that we shouldn't overlay all the way to the bottom of the scroll area...
+                  height = dndNodeBoundingRect.bottom - dndNodeBoundingRect.top;
+               }
+            }
+            else
+            {
+               // Top of drop target is above the top of the scroll area (this implies that it has been scrolled)...
+               top = scrollAreaBoundingRect.top;
+
+               if (dndNodeBoundingRect.bottom >= scrollAreaBoundingRect.bottom)
+               {
+                  // ...the bottom of the drop target is BELOW that of the scroll area... this means
+                  // that we just need to place the overlay over the ENTIRE scroll area...
+                  height = scrollAreaBoundingRect.bottom - scrollAreaBoundingRect.top;
+               }
+               else
+               {
+                  // ...the bottom of the drop target is ABOVE that of the scroll area, this means
+                  // that we shouldn't overlay all the way to the bottom of the scroll area...
+                  height = dndNodeBoundingRect.bottom - scrollAreaBoundingRect.top;
+               }
+            }
+            
+         }
+
          domStyle.set(this.dragAndDropOverlayNode, {
-            height: dndNodeDimensions.h + "px",
+            height: height + "px",
             width: dndNodeDimensions.w + "px",
-            top: dndNodePosition.y + "px",
+            top: top + "px",
             left: dndNodePosition.x + "px"
          });
+      },
+
+      /**
+       * This function recursively searches out through the DOM to find the first parent of the supplied element that
+       * is capable of scrolling vertically and has scrollbars displayed.
+       * 
+       * @instance
+       * @returns {element} The DOM element that is the scroll parent with scroll bars displayed
+       * @since 1.0.60
+       */
+      findScrollParent: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__findScrollParent(domNode) {
+         var scrollParent;
+         if (domNode === document)
+         {
+            // We've managed to get all the way to document, return html instead.
+            scrollParent = $("html");
+         }
+         else
+         {
+            scrollParent = $(domNode).scrollParent();
+            if (scrollParent.is("html"))
+            {
+               // No action required - just return "html" as the scroll parent
+            }
+            else if (scrollParent[0].clientHeight === scrollParent[0].scrollHeight)
+            {
+               // Find the next parent because, the current scroll parent is NOT making use of the scroll bar
+               scrollParent = this.findScrollParent(scrollParent[0]);
+            }
+         }
+         return scrollParent;
       },
       
       /**
@@ -645,43 +798,66 @@ define(["dojo/_base/declare",
                   callback.pending = callback.pending || 0;
                   callback.files = callback.files || [];
                   
-                  callback.pending++;
-                  
                   // get a dir reader and cleanup file path
                   var reader = directory.createReader(),
                       relativePath = directory.fullPath.replace(/^\//, "");
-                  reader.readEntries(function(entries) {
-                     callback.pending--;
-                     array.forEach(entries, function(entry) {
-                        if (entry.isFile)
-                        {
-                           callback.pending++;
-                           entry.file(function(File) {
-                              // add the relativePath property to each file - this can be used to rebuild the contents of
-                              // a nested tree folder structure if an appropriate API is available to do so
-                              File.relativePath = relativePath;
-                              callback.files.push(File);
-                              if (callback.limit && callback.files.length > callback.limit)
-                              {
-                                 throw new Error("Maximum dnd file limit reached: " + callback.limit);
-                              }
-                              if (--callback.pending === 0)
-                              {
-                                 callback(callback.files);
-                              }
-                           }, error);
-                        }
-                        else
-                        {
-                           walkFileSystem(entry, callback, error);
-                        }
-                     });
+                 
+                  var repeatReader = function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem__repeatReader() {
                      
-                     if (callback.pending === 0)
-                     {
-                        callback(callback.files);
-                     }
-                  }, error);
+                     // about to start an async callback function
+                     callback.pending++;
+                     
+                     reader.readEntries(function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem__repeatReader__readEntries(entries) {
+                        
+                        // processing an async callback function
+                        callback.pending--;
+                        
+                        array.forEach(entries, function(entry) {
+                           if (entry.isFile)
+                           {
+                              // about to start an async callback function
+                              callback.pending++;
+                              
+                              entry.file(function(File) {
+                                 // add the relativePath property to each file - this can be used to rebuild the contents of
+                                 // a nested tree folder structure if an appropriate API is available to do so
+                                 File.relativePath = relativePath;
+                                 callback.files.push(File);
+                                 if (callback.limit && callback.files.length > callback.limit)
+                                 {
+                                    throw new Error("Maximum dnd file limit reached: " + callback.limit);
+                                 }
+                                 
+                                 // processing an async callback function
+                                 if (--callback.pending === 0)
+                                 {
+                                    // fall out here if last item processed is a file entry
+                                    callback(callback.files);
+                                 }
+                              }, error);
+                           }
+                           else
+                           {
+                              walkFileSystem(entry, callback, error);
+                           }
+                        });
+                        
+                        // the reader API is a little esoteric,from the MDN docs:
+                        // "Continue calling readEntries() until an empty array is returned.
+                        //  You have to do this because the API might not return all entries in a single call."
+                        if (entries.length !== 0)
+                        {
+                           repeatReader();
+                        }
+                        
+                        // fall out here if last item processed is a dir entry e.g. empty dir
+                        if (callback.pending === 0)
+                        {
+                           callback(callback.files);
+                        }
+                     }, error);
+                  };
+                  repeatReader();
                });
                
                var addSelectedFiles = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__addSelectedFiles(files) {

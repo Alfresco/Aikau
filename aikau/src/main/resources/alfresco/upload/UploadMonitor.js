@@ -30,7 +30,10 @@
 define(["alfresco/core/FileSizeMixin",
         "alfresco/core/CoreWidgetProcessing", 
         "alfresco/core/topics",
-        "alfresco/upload/_UploadsDisplayMixin", 
+        "alfresco/core/Core",
+        "alfresco/upload/UploadsDisplayInterface",
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin", 
         "dojo/_base/array", 
         "dojo/_base/declare", 
         "dojo/_base/lang", 
@@ -39,9 +42,9 @@ define(["alfresco/core/FileSizeMixin",
         "dojo/dom-style",
         "dojo/when", 
         "dojo/text!./templates/UploadMonitor.html"], 
-        function(FileSizeMixin, CoreWidgetProcessing, topics, _UploadsDisplayMixin, array, declare, lang, domClass, domConstruct, domStyle, when, template) {
+        function(FileSizeMixin, CoreWidgetProcessing, topics, AlfCore, UploadsDisplayInterface, _WidgetBase, _TemplatedMixin, array, declare, lang, domClass, domConstruct, domStyle, when, template) {
 
-   return declare([FileSizeMixin, CoreWidgetProcessing, _UploadsDisplayMixin], {
+   return declare([UploadsDisplayInterface, _WidgetBase, _TemplatedMixin, AlfCore, FileSizeMixin, CoreWidgetProcessing], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -290,6 +293,10 @@ define(["alfresco/core/FileSizeMixin",
             textContent: this.message("upload.status.inprogress")
          }, itemStatus);
          domConstruct.create("span", {
+            className: this.baseClass + "__item__status__finishing",
+            textContent: this.message("upload.status.finishing")
+         }, itemStatus);
+         domConstruct.create("span", {
             className: this.baseClass + "__item__status__successful",
             textContent: this.message("upload.status.successful")
          }, itemStatus);
@@ -509,17 +516,19 @@ define(["alfresco/core/FileSizeMixin",
        * @override
        * @param {string} fileId The unique id of the file
        * @param {number} percentageComplete The current upload progress as a percentage
-       * @param {object} progressEvt The progress event
        */
-      updateUploadProgress: function alfesco_upload_UploadMonitor__updateUploadProgress(fileId, percentageComplete, /*jshint unused:false*/ progressEvt) {
+      updateUploadProgress: function alfesco_upload_UploadMonitor__updateUploadProgress(fileId, percentageComplete) {
          if (!this.displayUploadPercentage) {
             return;
          }
          var upload = this._uploads[fileId];
          if (upload) {
             if (!upload.completed) {
-               upload.nodes.progress.textContent = percentageComplete + "%";
                domStyle.set(upload.nodes.progressBar, "width", percentageComplete + "%");
+               upload.nodes.progress.textContent = percentageComplete + "%";
+               if (percentageComplete === 100) {
+                  domClass.add(upload.nodes.row, this.baseClass + "__item--finishing");
+               }
             }
          } else {
             this.alfLog("warn", "Attempt to update upload that is not being tracked (id=" + fileId + ")");

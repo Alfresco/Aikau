@@ -261,12 +261,19 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#CREATE_DIALOG
        */
       showPreview: function alfresco_services_NodePreviewService__showPreview(previewData) {
+         // Ensure the current item is set from latest data before processing and publishing
+         this.currentItem = previewData.item;
+         
          // Since we're going to be publishing to services we need to publish globally...
          var publishPayload;
          if (this.useLightboxForImages && previewData.mimetype && previewData.mimetype.indexOf("image/") === 0)
          {
             // get last modified for image preview if present in the metadata
-            var lastModified = lang.getObject(this.lastThumbnailModificationProperty, false, this.currentItem) || 1;
+            var lastModified = 1;
+            if (this.currentItem && this.lastThumbnailModificationProperty)
+            {
+               lastModified = lang.getObject(this.lastThumbnailModificationProperty, false, this.currentItem) || 1;
+            }
             if (previewData.nodeRef)
             {
                publishPayload = {
@@ -285,8 +292,7 @@ define(["dojo/_base/declare",
          {
             // Use a custom payload for displaying the preview.
             publishPayload = lang.clone(this.publishPayload);
-            this.currentItem = previewData.item;
-            this.processObject(["setCurrentItem","processCurrentItemTokens"], publishPayload);
+            this.processObject(["processCurrentItemTokens","setCurrentItem"], publishPayload);
             this.alfServicePublish(this.publishTopic, publishPayload);
          }
          else

@@ -414,7 +414,7 @@ define([
 
          /**
           * Overrides the [inherited function]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#getStoreItem}
-          * to return the the mapped item from the [store]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_storeItems}.
+          * to return the mapped item from the [store]{@link module:alfresco/forms/controls/utilities/ChoiceMixin#_storeItems}.
           *
           * @instance
           * @return {object} The [search box]{@link module:alfresco/forms/controls/MultiSelect#searchBox} element.
@@ -714,7 +714,7 @@ define([
                resultListener.remove();
             }
             while (this._nodes.resultsDropdown.childNodes.length > 3) {
-               this._nodes.resultsDropdown.removeChild(this._nodes.resultsDropdown.lastChild);
+               this._nodes.resultsDropdown.removeChild(this._nodes.resultsDropdown.firstChild);
             }
             this._focusedResult = null;
          },
@@ -1371,8 +1371,8 @@ define([
             this._focusedResult = null;
 
             // If we have too many current results displaying, remove the excess nodes
-            while (this._nodes.resultsDropdown.childNodes.length > this._results.length + 3) {
-               this._nodes.resultsDropdown.removeChild(this._nodes.resultsDropdown.lastChild);
+            while (this._nodes.resultsDropdown.childNodes.length > 3) {
+               this._nodes.resultsDropdown.removeChild(this._nodes.resultsDropdown.firstChild);
             }
 
             // Update or add as necessary
@@ -1381,17 +1381,24 @@ define([
                // Setup variables
                var resultIsChosen = array.some(this._choices, function(nextChoice) {
                      return nextChoice.value === nextResult.value;
-                  }),
-                  itemNode = this._nodes.resultsDropdown.childNodes[index + 3],
-                  labelObj = this._getLabel(nextResult.item),
+                  });
+               var labelObj = this._getLabel(nextResult.item),
                   clickListener,
                   mouseoverListener;
 
+               // The last 3 elements in the resultsDropDown are for indicating "state" so
+               // we want to avoid re-using any of those special nodes as a result...
+               var itemNode;
+               if (index < this._nodes.resultsDropdown.childNodes - 3)
+               {
+                  itemNode = this._nodes.resultsDropdown.childNodes[index];
+               }
+               
                // Construct the item if not already present
                if (!itemNode) {
                   itemNode = domConstruct.create("li", {
                      "className": this.rootClass + "__results__result"
-                  }, this._nodes.resultsDropdown);
+                  }, this._nodes.loadingMessage, "before");
                }
 
                // Update the title

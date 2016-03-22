@@ -765,7 +765,7 @@ define(["dojo/_base/declare",
 
       /**
        * This will be used to keep track of all services that are created so that they can be destroyed
-       * when the the current instance is destroyed.
+       * when the current instance is destroyed.
        *
        * @instance
        * @type {object[]}
@@ -775,7 +775,7 @@ define(["dojo/_base/declare",
 
       /**
        * This will be used to keep track of all widgets that are created so that they can be destroyed
-       * when the the current instance is destroyed.
+       * when the current instance is destroyed.
        *
        * @instance
        * @type {object[]}

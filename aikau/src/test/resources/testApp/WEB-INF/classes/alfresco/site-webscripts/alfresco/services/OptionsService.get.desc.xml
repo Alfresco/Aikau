@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Options Service</shortname>
+  <description>Examples of using the OptionsService</description>
+  <family>aikau-unit-tests</family>
+  <url>/OptionsService</url>
+</webscript>

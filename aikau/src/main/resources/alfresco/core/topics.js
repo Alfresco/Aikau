@@ -652,6 +652,22 @@ define([],function() {
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
 
       /**
+       * This topic can be published to request a list of all available users in the Alfresco Repository.
+       * This request is expected to be handled by the [UserService]{@link module:alfresco/services/UserService}.
+       * The results are published on 'alfResponseTopic' provided, and are defined as an array as attribute "items"
+       * in the published payload.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.60
+       *
+       * @event
+       * @property {string} alfResponseTopic The topic on which to publish the users data
+       */
+      GET_USERS: "ALF_GET_USERS",
+
+      /**
        * Can be published to initialise the creation of a synchronization between an on-premise node and
        * a location on the Alfresco Cloud.
        * 
@@ -740,7 +756,7 @@ define([],function() {
        * @default
        * @since 1.0.35
        *
-       * @event module:alfresco/core/topics~NAVIGATE_TO_PAGE
+       * @event
        * @property {string} url The URL to navigate to
        * @property {string} [type=PAGE_RELATIVE] The [type of navigation]{@link module:alfresco/enums/urlTypes}
        * @property {string} [target=CURRENT] Whether to use the "CURRENT" tab, open in a "NEW" tab, or use a "NAMED" tab

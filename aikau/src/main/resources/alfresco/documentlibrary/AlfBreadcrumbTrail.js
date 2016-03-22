@@ -21,7 +21,7 @@
  * <p>This widget can be used to render breadcrumb trails. It can be used either to render a fixed set of breadcrumbs (e.g.
  * where you might want to render some information about a fixed location of a page) or it can be used to render path
  * based data. When rendering path based data it is possible to get the path from the
- * [browser URL hash]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#useHash} of from explicitly configured
+ * [browser URL hash]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#useHash} or from explicitly configured
  * [path publishing topics]{@link module:alfresco/documentlibrary/AlfBreadcrumbTrail#pathChangeTopic}. When rendering
  * a path based breadcrumb trail it is expected that the last item in the trail  represents the
  * current location and clicking it can either navigate the user to another page (in which case you should set the
@@ -52,12 +52,13 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/documentlibrary/AlfBreadcrumb",
+        "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class"], 
         function(declare, _WidgetBase, _TemplatedMixin, template,  AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, 
-                 _PublishPayloadMixin, AlfBreadcrumb, lang, array, domConstruct, domClass) {
+                 _PublishPayloadMixin, AlfBreadcrumb, hashUtils, lang, array, domConstruct, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin, _AlfDocumentListTopicMixin], {
       
@@ -268,20 +269,21 @@ define(["dojo/_base/declare",
                this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.onCurrentNodeChange));
             }
 
+            if (this.currentPath)
+            {
+               this.renderPathBreadcrumbTrail();
+            }
             if (this.useHash === true)
             {
                // Subscribe using the widgets own scope (don't assume global) because the topic published
                // will in practice be published at a share scope (i.e. when used in the context of a 
                // scoped Document Library the hash change publication will be scoped, not global)...
-               this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onPathChanged));
+               this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.onHashChanged));
+               this.onHashChanged(hashUtils.getHash());
             }
             else if (this.pathChangeTopic)
             {
                this.alfSubscribe(this.pathChangeTopic, lang.hitch(this, this.onPathChanged));
-            }
-            if (this.currentPath)
-            {
-               this.renderPathBreadcrumbTrail();
             }
          }
       },
@@ -321,6 +323,21 @@ define(["dojo/_base/declare",
             this.alfLog("error", "A request was made to update the current NodeRef, but no 'node' property was provided in the payload: ", payload);
          }
       },
+
+      /**
+       * Handle hash-change events
+       *
+       * @instance
+       * @param {object} newHash The new hash value
+       * @since 1.0.60
+       */
+      onHashChanged: function alfresco_documentlibrary_AlfBreadcrumbTrail__onHashChanged(newHash) {
+         if (newHash.path) {
+            this.onPathChanged(newHash);
+         } else if (newHash.filter && newHash.description) {
+            this.onFilterSelection(newHash);
+         }
+      },
       
       /**
        * This handles publications on the [hashChangeTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#hashChangeTopic}
@@ -338,6 +355,12 @@ define(["dojo/_base/declare",
             this._filterDisplayed = false;
             this.currentPath = payload.path;
             this.renderPathBreadcrumbTrail();
+            if(this.useHash === true) {
+               hashUtils.updateHash({
+                  description: null
+               }, true);
+            }
+
          }
       },
      
@@ -476,7 +499,7 @@ define(["dojo/_base/declare",
       
       /**
        * This handles publications on the [filterSelectionTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#filterSelectionTopic} topic
-       * to show when a filter is selected. The the rendered path is replaced with the details of the filter.
+       * to show when a filter is selected. The rendered path is replaced with the details of the filter.
        * 
        * @instance
        */
@@ -489,6 +512,13 @@ define(["dojo/_base/declare",
             this.renderBreadcrumb({
                label: payload.description
             });
+            if(this.useHash === true) {
+               if(!hashUtils.getHash().description) {
+                  hashUtils.updateHash({
+                     description: payload.description
+                  }, true);
+               }
+            }
          }
          else
          {

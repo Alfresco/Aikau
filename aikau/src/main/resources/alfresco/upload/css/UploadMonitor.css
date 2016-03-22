@@ -33,11 +33,14 @@
       }
       &__status {
          width: @upload-monitor-status-column-width;
-         &__inprogress, &__successful, &__unsuccessful, &__unsuccessful_icon {
+         &__inprogress, &__finishing, &__successful, &__unsuccessful, &__unsuccessful_icon {
             display: none;
          }
          &__inprogress {
             color: @upload-monitor-status-color-inprogress;
+         }
+         &__finishing {
+            color: @upload-monitor-status-color-finishing;
          }
          &__successful {
             color: @upload-monitor-status-color-successful;
@@ -63,8 +66,8 @@
          background: @upload-monitor-progress-bar-background;
          box-shadow: @upload-monitor-progress-bar-box-shadow;
          height: @upload-monitor-progress-bar-height;
-         width: 0;
          transition: width .3s ease;
+         width: 0;
       }
    }
    &__inprogress-items {
@@ -75,6 +78,25 @@
             }
             &__action__inprogress {
                display: inline-block;
+            }
+            &--finishing {
+               .alfresco-upload-UploadMonitor {
+                  &__item__status {
+                     &__inprogress {
+                        display: none;
+                     }
+                     &__finishing {
+                        display: inline-block;
+                     }
+                  }
+               }
+               + tr {
+                  .alfresco-upload-UploadMonitor {
+                     &__item__progress-bar {
+                        background: @upload-monitor-progress-bar-finishing-background;
+                     }
+                  }
+               }
             }
          }
       }

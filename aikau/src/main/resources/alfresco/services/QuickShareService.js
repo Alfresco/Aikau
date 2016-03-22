@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Returns a URL for removing the the quick share of a node.
+       * Returns a URL for removing the quick share of a node.
        * 
        * @instance
        * @param {string} shareId The id to of the share to remove

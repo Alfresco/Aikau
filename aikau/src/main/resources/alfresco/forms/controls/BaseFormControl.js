@@ -539,6 +539,7 @@ define(["dojo/_base/declare",
        *          "global": true
        *       }
        *    ],
+       *    "itemsAttribute": "options",
        *    "publishTopic": "ALF_GET_FORM_CONTROL_OPTIONS",
        *    "publishPayload": {
        *       "url": AlfConstants.PROXY_URI + "api/groups",
@@ -670,7 +671,7 @@ define(["dojo/_base/declare",
        */
       processOptionLabel: function alfresco_forms_controls_BaseFormControl__processOptionLabel(option, /*jshint unused:false*/ index) {
          // Get the option label and value attributes...
-         // These are the values to look up in each item of the the options data array...
+         // These are the values to look up in each item of the options data array...
          // They default to "label" and "value" if not specified
          var labelAttribute = this.optionsConfig.labelAttribute ? this.optionsConfig.labelAttribute : "label";
          var valueAttribute = this.optionsConfig.valueAttribute ? this.optionsConfig.valueAttribute : "value";
@@ -685,6 +686,13 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "An option was provided with neither label nor value", option, this);
+         }
+
+         // See AKU-844 - also update the value attribute whilst we're here, not the correct location despite
+         // the function name !
+         if (option[valueAttribute])
+         {
+            option.value = option[valueAttribute];
          }
       },
 
@@ -791,7 +799,7 @@ define(["dojo/_base/declare",
 
       /**
        * This gets set to the temporary subscription handle that is created whenever options are dynamically requested
-       * by publishing on a configured topic. This information needs to be be maintained as a widget instance variable
+       * by publishing on a configured topic. This information needs to be maintained as a widget instance variable
        * in order for the temporary subscription to be removed and prevent potential memory leaks.
        *
        * @instance
@@ -847,9 +855,12 @@ define(["dojo/_base/declare",
        */
       onPubSubOptions: function alfresco_forms_controls_BaseFormControl__onPubSubOptions(payload) {
          this.alfUnsubscribeSaveHandles([this._pubSubOptionsHandle]);
-         if (payload.options)
+
+         var optionsAttribute = lang.getObject("itemsAttribute", false, this.optionsConfig) || "options";
+         var options = lang.getObject(optionsAttribute, false, payload);
+         if (options)
          {
-            this.setOptions(payload.options);
+            this.setOptions(options);
          }
          else
          {

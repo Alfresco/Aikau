@@ -32,12 +32,14 @@ define(["dojo/_base/declare",
         "alfresco/core/NotificationUtils",
         "alfresco/services/_UserServiceTopicMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
+        "alfresco/core/topics",
         "dojo/request/xhr",
         "dojo/json",
         "dojo/_base/lang",
+        "dojo/_base/array",
         "service/constants/Default"],
         function(declare, BaseService, AlfXhr, NotificationUtils, 
-              _UserServiceTopicMixin, _PreferenceServiceTopicMixin, xhr, JSON, lang, AlfConstants) {
+              _UserServiceTopicMixin, _PreferenceServiceTopicMixin, topics, xhr, JSON, lang, array, AlfConstants) {
    
    return declare([BaseService, AlfXhr, NotificationUtils, _UserServiceTopicMixin, _PreferenceServiceTopicMixin], {
       
@@ -64,12 +66,91 @@ define(["dojo/_base/declare",
        * 
        * @instance 
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#GET_USERS
        */
       registerSubscriptions: function alfresco_services_UserService__registerSubscriptions() {
          this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, this.updateUserStatus));
          this.alfSubscribe(this.setUserHomePageTopic, lang.hitch(this, this.onSetUserHomePage));
          this.alfSubscribe(this.setUserHomePageSuccessTopic, lang.hitch(this, this.onSetUserHomePageSuccess));
          this.alfSubscribe(this.setUserHomePageFailureTopic, lang.hitch(this, this.onSetUserHomePageFailure));
+         this.alfSubscribe(topics.GET_USERS, lang.hitch(this, this.onGetUsers));
+      },
+
+      /**
+       * Handles requests to retrieve all users from the Alfresco Repository.
+       * 
+       * @instance
+       * @param  {object} payload The payload for the request
+       * @since 1.0.60
+       */
+      onGetUsers: function alfresco_services_UserService__onGetUsers(payload) {
+         var topic;
+         if (payload.alfResponseTopic)
+         {
+            topic = (payload.alfResponseScope || "") + payload.alfResponseTopic;
+         }
+         else
+         {
+            topic = payload.responseTopic;
+         }
+         
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "api/people",
+            method: "GET",
+            alfResponseTopic: topic,
+            successCallback: this.onUsersSuccess,
+            failureCallback: this.onUsersFailure,
+            callbackScope: this
+         });
+      },
+
+      /**
+       * This is the success callback for the [onGetUsers]{@link module:alfresco/services/UserService#onGetUsers} function.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.60
+       */
+      onUsersSuccess: function alfresco_services_UserService__onUsersSuccess(response, originalRequestConfig) {
+         var items = lang.getObject("people", false, response);
+         if (items)
+         {
+            array.forEach(items, function(item) {
+               if (item.firstName && item.lastName)
+               {
+                  item.displayName = item.firstName + " " + item.lastName;
+               }
+               else if (item.firstName)
+               {
+                  item.displayName = item.firstName;
+               }
+               else if (item.lastName)
+               {
+                  item.displayName = item.lastName;
+               }
+               else
+               {
+                  item.displayName = "";
+               }
+            });
+
+            this.alfPublish(originalRequestConfig.alfResponseTopic, {
+               items: items
+            });
+         }
+      },
+
+      /**
+       * This is the failure callback for the [onGetUsers]{@link module:alfresco/services/UserService#onGetUsers} function.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.60
+       */
+      onUsersFailure: function alfresco_services_UserService__onUsersFailure(response, originalRequestConfig) {
+         this.alfLog("error", "It was not possible to retrieve the list of users", response, originalRequestConfig, this);
       },
       
       /**

@@ -1,0 +1,8 @@
+<webscript>
+  <shortname>Defaults</shortname>
+  <description>This WebScript is used to represent an AMD module that provides server-side constants</description>
+  <url>/${webscript.version}/defaults</url>
+  <family>WebScript-Generated-AMD-Modules</family>
+  <format default="js">extension</format>
+  <authentication>none</authentication>
+</webscript>

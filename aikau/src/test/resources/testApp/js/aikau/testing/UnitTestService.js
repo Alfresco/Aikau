@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
 
       /**
        * When a unit test model has been successfully posted it will be saved in the HTTP Session and
-       * the browser can be re-directed to the the unit test rendering page.
+       * the browser can be re-directed to the unit test rendering page.
        *
        * @instance
        * @param {object} response The response from the POST request

@@ -349,10 +349,19 @@ define(["alfresco/core/CoreXhr",
       onUploadCancelRequest: function alfresco_services__BaseUploadService__onUploadCancelRequest(payload) {
          var fileId = payload && payload.fileId,
             fileInfo = this.fileStore[fileId];
-         try {
-            fileInfo.request.abort();
-         } catch (e) {
-            this.alfLog("info", "Unable to cancel upload: ", fileInfo, e);
+         if (fileInfo) {
+            try {
+               if (fileInfo.progress === 0) {
+                  fileInfo.request = { // Manually force status of 0 to notify of cancellation
+                     status: 0
+                  };
+                  this.failureListener(fileId); // Manually call the failure listener for this file
+               } else {
+                  fileInfo.request.abort();
+               }
+            } catch (e) {
+               this.alfLog("info", "Unable to cancel upload: ", fileInfo, e);
+            }
          }
       },
 
@@ -761,6 +770,7 @@ define(["alfresco/core/CoreXhr",
             // successfully, if this occurs then we'll attach a function to the onreadystatechange extension
             // point and things to catch up before we check everything was ok.
             if (fileInfo.request.readyState !== 4) {
+               this.uploadDisplayWidget.updateUploadProgress(fileId, 100);
                fileInfo.request.onreadystatechange = lang.hitch(this, function() {
                   if (fileInfo.request.readyState === 4) {
                      this.processUploadCompletion(fileId, evt);
@@ -832,8 +842,8 @@ define(["alfresco/core/CoreXhr",
       uploadProgressListener: function alfresco_services__BaseUploadService__uploadProgressListener(fileId, evt) {
          var fileInfo = this.fileStore[fileId];
          if (fileInfo && evt.lengthComputable) {
-            var progress = Math.round(evt.loaded / evt.total * 100);
-            this.uploadDisplayWidget.updateUploadProgress(fileId, progress, evt);
+            var progress = Math.min(Math.round(evt.loaded / evt.total * 100), 100);
+            this.uploadDisplayWidget.updateUploadProgress(fileId, progress);
             fileInfo.progress = progress;
             this.updateAggregateProgress();
          } else {
