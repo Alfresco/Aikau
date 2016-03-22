@@ -1,16 +1,13 @@
-Aikau 1.0.59 Release Notes
+Aikau 1.0.60 Release Notes
 ===
 
-New deprecations:
+Previous deprecations:
 ---
 * alfresco/renderers/Thumbnail.js
   * onNodePromiseResolved                                        (configure usePreviewService to be true)
   * onLoadNode                                                   (configure usePreviewService to be true)
   * onNodeLoaded                                                 (configure usePreviewService to be true)
   * onShowPreview                                                (configure usePreviewService to be true)
-
-Previous deprecations:
----
 * alfresco/buttons/AlfFormDialogButton.js                        (use alfresco/services/DialogService)
 * alfresco/core/Core "alfDeleteFrameworkAttributes"              (use alfresco/core/Core "alfCleanFrameworkAttributes")
 * alfresco/core/NotificationUtils.js                             (use alfresco/services/NotificationService)
@@ -50,6 +47,17 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.60:
+* [AKU-879](https://issues.alfresco.com/jira/browse/AKU-879)       - Ensure drag and drop overlay fits to visible area
+* [AKU-884](https://issues.alfresco.com/jira/browse/AKU-884)       - OptionsService improvements
+* [AKU-885](https://issues.alfresco.com/jira/browse/AKU-885)       - Ensure correct Accept-Language header in IE
+* [AKU-887](https://issues.alfresco.com/jira/browse/AKU-887)       - Ensure upload works on Safari
+* [AKU-888](https://issues.alfresco.com/jira/browse/AKU-888)       - Improvements to create site dialog
+* [AKU-889](https://issues.alfresco.com/jira/browse/AKU-889)       - Upload display customization improvements
+* [AKU-891](https://issues.alfresco.com/jira/browse/AKU-891)       - Prevent browser rendering dropped files
+* [AKU-895](https://issues.alfresco.com/jira/browse/AKU-895)       - Ensure AlfBreadcrumbTrail reflects initial path
+* [AKU-897](https://issues.alfresco.com/jira/browse/AKU-897)       - Ensure it is possible to cancel unstarted upload
+
 1.0.59:
 * [AKU-869](https://issues.alfresco.com/jira/browse/AKU-866)       - Added alfresco/services/NodePreviewService
 * [AKU-870](https://issues.alfresco.com/jira/browse/AKU-870)       - Ensure HeaderCell sorting works with AlfFilteredList
