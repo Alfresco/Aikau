@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
    return declare([MultipleEntryElement], {
       
       /**
-       * This is the default function for determining the unique key to identify the the element amongst its
+       * This is the default function for determining the unique key to identify the element amongst its
        * peers. This function will most likely need to be overridden by extending classes that handle more
        * complex data types. 
        * 

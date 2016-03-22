@@ -6,6 +6,7 @@
 }
 
 .alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay {
+   box-sizing: border-box;
    display: none;
    opacity: @upload-highlight-overlay-opacity;
    position: absolute;

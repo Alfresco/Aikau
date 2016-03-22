@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
       debounceTime: 50,
 
       /**
-       * Indicates whether or not the the [disable]{@link module:alfresco/lists/SelectedItemStateMixin#disable}
+       * Indicates whether or not the [disable]{@link module:alfresco/lists/SelectedItemStateMixin#disable}
        * function should be called when no items are selected.
        *
        * @instance

@@ -458,7 +458,7 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * This is the the sort function used for ordering favourite site menu items.
+       * This is the sort function used for ordering favourite site menu items.
        * 
        * @instance
        * @param {object} item1 The first menu item to compare

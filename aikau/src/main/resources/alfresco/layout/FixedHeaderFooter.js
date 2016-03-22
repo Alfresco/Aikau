@@ -159,7 +159,7 @@ define(["alfresco/core/ProcessWidgets",
       height: "AUTO",
 
       /**
-       * If this is configured to be true the the height of the widget will be reset as the browser window is resized.
+       * If this is configured to be true the height of the widget will be reset as the browser window is resized.
        * This will only occur  when [height]{@link module:alfresco/layout/FixedHeaderFooter#height} is set to "auto" 
        * (which is also the default).
        *

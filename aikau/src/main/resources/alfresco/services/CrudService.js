@@ -368,7 +368,7 @@ define(["dojo/_base/declare",
        * This function is called when the user confirms that they wish to peform the delete action.
        *
        * @instance
-       * @param {object} payload An object containing the the deletion details.
+       * @param {object} payload An object containing the deletion details.
        */
       onDeleteConfirmation: function alfresco_services_CrudService__onDeleteConfirmation(payload) {
          this.alfUnsubscribeSaveHandles([this._deleteHandle]);

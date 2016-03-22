@@ -50,8 +50,11 @@ define(["intern!object",
                .end()
 
             .findByCssSelector(".dijitMenuItem[aria-label^=\"Recent Sites\"]")
+               .clearLog()
                .click()
                .end()
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
             .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
                .click()
@@ -86,8 +89,11 @@ define(["intern!object",
                .end()
 
             .findByCssSelector(".dijitMenuItem[aria-label^=\"Favorite Sites\"]")
+               .clearLog()
                .click()
                .end()
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
             .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
                .click()

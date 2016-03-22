@@ -36,7 +36,7 @@
  * be provided either as a string or as an array of strings and the first visible element found 
  * will be used.</p>
  * 
- * @module alfresco/layout/VerticalWidgets
+ * @module alfresco/layout/UploadContainer
  * @extends module:alfresco/layout/VerticalWidgets
  * @mixes module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin
  * @author Dave Draper
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      postCreate: function alfresco_core_ProcessWidgets__postCreate() {
+      postCreate: function alfresco_layout_UploadContainer__postCreate() {
          this.inherited(arguments);
          this.subscribeToCurrentNodeChanges(this.domNode);
          this.addUploadDragAndDrop(this.domNode);
@@ -102,8 +102,11 @@ define(["dojo/_base/declare",
        * overlay dimensions will be .</p>
        * 
        * @instance
+       * @param {object} [targetNode] An optional node to use instead of the 
+       * [dragAndDropNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropNode}
+       * @since 1.0.56
        */
-      setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions() {
+      setDndHighlightDimensions: function alfresco_layout_UploadContainer__setDndHighlightDimensions(/*jshint unused:false*/ targetNode) {
 
          // proxyDragAndDropNode can be an array of strings or a comma-separated list
          if (this.proxyDragAndDropNode && !Array.isArray(this.proxyDragAndDropNode))
@@ -114,30 +117,21 @@ define(["dojo/_base/declare",
          // if the proxyDragAndDropNode is an array with items
          if (Array.isArray(this.proxyDragAndDropNode) && this.proxyDragAndDropNode.length > 0)
          {
+            var targetProxyNode;
             array.some(this.proxyDragAndDropNode, function(proxyNodeId) {
-
                // A node id could, disappointingly, match several items
                var foundProxyNodes = query(proxyNodeId);
                return array.some(foundProxyNodes, function(proxyNode) {
-
                   // If the offsetHeight of the node is not 0, it is visible and therefore it becomes the target
                   if (proxyNode.offsetHeight !== 0)
                   {
-                     var computedStyle = domStyle.getComputedStyle(proxyNode);
-                     var dndNodeDimensions = domGeom.getMarginBox(proxyNode, computedStyle);
-                     var dndNodePosition = domGeom.position(proxyNode);
-                     domStyle.set(this.dragAndDropOverlayNode, {
-                        height: dndNodeDimensions.h + "px",
-                        width: dndNodeDimensions.w + "px",
-                        top: dndNodePosition.y + "px",
-                        left: dndNodePosition.x + "px"
-                     });
-
-                     // Stop at first item found from the list
+                     targetProxyNode = proxyNode;
                      return true;
                   }
                }, this);
             }, this);
+
+            this.inherited(arguments, [targetProxyNode]);
          }
          else if (this.fullScreenDndHighlight)
          {

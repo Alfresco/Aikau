@@ -402,7 +402,7 @@ define(["dojo/_base/declare",
       /**
        * Indicates whether or not a preview of the node represented by the thumbnail should be
        * displayed when it is clicked. If this is set to true and there is not enough information
-       * to determine whether or not the the node can be previewed then a request will be published
+       * to determine whether or not the node can be previewed then a request will be published
        * to retrieve that information.
        *
        * @instance

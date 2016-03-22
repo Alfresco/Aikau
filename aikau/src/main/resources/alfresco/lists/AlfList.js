@@ -1174,7 +1174,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} response The response object
-       * @param {object} originalRequestConfig The configuration that was passed to the the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
+       * @param {object} originalRequestConfig The configuration that was passed to the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
       onDataLoadSuccess: function alfresco_lists_AlfList__onDataLoadSuccess(payload) {
          // There is a pending load request, this will typically be the case when a new filter has been
@@ -1315,7 +1315,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} response The response object
-       * @param {object} originalRequestConfig The configuration that was passed to the the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
+       * @param {object} originalRequestConfig The configuration that was passed to the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
       onDataLoadFailure: function alfresco_lists_AlfList__onDataLoadSuccess(response, originalRequestConfig) {
          this.alfLog("error", "Data Load Failed", response, originalRequestConfig);

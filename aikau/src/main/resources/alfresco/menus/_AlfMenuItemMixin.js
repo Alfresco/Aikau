@@ -258,7 +258,7 @@ define(["dojo/_base/declare",
          }
          else if (this.iconNode)
          {
-            // If there is no iconClass or iconImage then we need to explicitly set the the
+            // If there is no iconClass or iconImage then we need to explicitly set the
             // parent element of the icon node to have an inherited width. This is because there
             // is a CSS selector that fixes the width of menu items with icons to ensure that
             // they are all aligned. This means that there would be a space for an icon even if

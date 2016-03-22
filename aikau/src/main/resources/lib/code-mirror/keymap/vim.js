@@ -2358,7 +2358,7 @@
             cm.replaceRange(text, selectionStart, selectionEnd);
             curPosFinal = cm.posFromIndex(cm.indexFromPos(selectionStart) + text.length - 1);
           }
-          // restore the the curEnd marker
+          // restore the curEnd marker
           if(lastSelectionCurEnd) {
             vim.lastSelection.curEndMark = cm.setBookmark(lastSelectionCurEnd);
           }
