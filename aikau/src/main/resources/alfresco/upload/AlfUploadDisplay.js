@@ -233,9 +233,8 @@ define(["dojo/_base/declare",
        * @override
        * @param {string} fileId The unique id of the file
        * @param {number} percentageComplete The current upload progress as a percentage
-       * @param {object} progressEvt The progress event
        */
-      updateUploadProgress: function alfresco_upload_AlfUploadDisplay__updateUploadProgress(fileId, percentageComplete, /*jshint unused:false*/ progressEvt) {
+      updateUploadProgress: function alfresco_upload_AlfUploadDisplay__updateUploadProgress(fileId, percentageComplete) {
          // Set progress position
          // var left = (-400 + ((percentage/100) * 400));
          var inProgressFile = this.inProgressFiles[fileId];
