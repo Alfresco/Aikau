@@ -276,6 +276,16 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This top-level click handler is to prevent click events on the log bubbling back up to the document.
+       *
+       * @instance
+       * @param {Event} evt Dojo-normalised event object
+       */
+      _onWidgetClick: function alfresco_logging_DebugLog___onWidgetClick(evt) {
+         evt.stopPropagation();
+      },
+
+      /**
        * Toggle the body visibility for the log
        *
        * @instance
