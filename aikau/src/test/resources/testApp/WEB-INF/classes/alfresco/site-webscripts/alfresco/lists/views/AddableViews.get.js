@@ -158,7 +158,7 @@ model.jsonModel = {
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "name"
-                                       
+
                                     }
                                  }
                               ]
@@ -178,6 +178,79 @@ model.jsonModel = {
                                        label: "Add Item",
                                        publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
                                        publishPayload: addItemPayload
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
+         id: "EMPTY_LIST",
+         name: "alfresco/lists/AlfList",
+         config: {
+            currentData: null,
+            pubSubScope: "EMPTY_SCOPE",
+            viewSelectionConfig: {
+               label: "Empty View",
+               value: "EMPTYVIEW"
+            },
+            widgets: [
+               {
+                  id: "EMPTY_VIEW",
+                  name: "alfresco/lists/views/AlfListView",
+                  config: {
+                     showAppendixWhenEmpty: true,
+                     widgets: [
+                        {
+                           id: "EMPTY_ROW",
+                           name: "alfresco/lists/views/layouts/Row",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "EMPTY_CELL",
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             id: "EMPTY_LIST_PROPERTY",
+                                             name: "alfresco/renderers/Property",
+                                             config: {
+                                                propertyToRender: "name"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ],
+                     widgetsForAppendix: [
+                        {
+                           id: "EMPTY_ROW",
+                           name: "alfresco/lists/views/layouts/Row",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "EMPTY_CELL",
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       widgets: [
+                                          {
+                                             id: "EMPTY_CREATE_BUTTON_2",
+                                             name: "alfresco/buttons/AlfButton",
+                                             config: {
+                                                label: "Add Item",
+                                                publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+                                                publishPayload: addItemPayload
+                                             }
+                                          }
+                                       ]
                                     }
                                  }
                               ]
