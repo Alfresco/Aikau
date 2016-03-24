@@ -177,7 +177,7 @@
 
          <resource>
             <!-- WebScripts go into their own package -->
-            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau</targetPath>
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/${project.version}/webscripts</targetPath>
             <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/webscripts</directory>
          </resource>
