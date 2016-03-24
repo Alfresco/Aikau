@@ -250,6 +250,7 @@ define({
       "src/test/resources/alfresco/renderers/ProgressTest",
       "src/test/resources/alfresco/renderers/PropertyLinkTest",
       "src/test/resources/alfresco/renderers/PropertyTest",
+      "src/test/resources/alfresco/renderers/PublishActionTest",
       "src/test/resources/alfresco/renderers/PublishingDropDownMenuTest",
       "src/test/resources/alfresco/renderers/PublishPayloadMixinOnActionsTest",
       "src/test/resources/alfresco/renderers/ReorderTest",

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>PublishAction Test</shortname>
+  <description>This page exercises the PublishAction renderer</description>
+  <family>aikau-unit-tests</family>
+  <url>/PublishAction</url>
+</webscript>
