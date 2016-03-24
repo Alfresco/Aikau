@@ -463,7 +463,9 @@ define(["alfresco/core/FileSizeMixin",
 
             // Move the item to the unsuccessful items section and update the properties accordingly
             upload.completed = true;
-            upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
+            if (upload.nodes.progressBar.parentNode) {
+               upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
+            }
             domConstruct.place(upload.nodes.row, this.unsuccessfulItemsNode, "first");
             upload.nodes.progress.textContent = "";
             
