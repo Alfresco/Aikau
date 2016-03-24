@@ -204,6 +204,7 @@
             <filtering>true</filtering>
             <includes>
                <include>testApp/WEB-INF/surf.xml</include>
+               <include>testApp/WEB-INF/config/web-application-config.xml</include>
             </includes>
          </testResource>
          <testResource>
@@ -211,6 +212,7 @@
             <filtering>false</filtering>
             <excludes>
                <exclude>testApp/WEB-INF/surf.xml</exclude>
+               <exclude>testApp/WEB-INF/config/web-application-config.xml</exclude>
             </excludes>
          </testResource>
       </testResources>
