@@ -525,6 +525,7 @@ define(["alfresco/core/ObjectTypeUtils",
           *
           * @instance
           * @param {Event} evt Dojo-normalised event object
+          * @since 1.0.61
           */
          _onWidgetClick: function alfresco_logging_DebugLog___onWidgetClick(evt) {
             evt.stopPropagation();
