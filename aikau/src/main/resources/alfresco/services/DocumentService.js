@@ -89,6 +89,18 @@ define(["dojo/_base/declare",
       downloadAPI: AlfConstants.PROXY_URI + "api/internal/downloads",
 
       /**
+       * This is a reference to an IFrame that gets created to handle download requests. An IFrame is required because
+       * it is possible that the full metadata for the node to download may need to be requested over an XHR request
+       * and the use of an IFrame prevents browser popup blocking occuring in this scenario. See AKU-757.
+       * 
+       * @instance
+       * @type {element}
+       * @default
+       * @since 1.0.61
+       */
+      downloadIFrame: null,
+
+      /**
        * Overrides the default setting for encoding URIs
        *
        * @instance
@@ -347,13 +359,18 @@ define(["dojo/_base/declare",
                contentURL = contentURL.substring(1);
             }
 
-            // NOTE: The key request parameter of "a=true" is important to ensure that a download rather than
-            //       a navigation occurs...
-            this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
-               url: AlfConstants.PROXY_URI + contentURL + "?a=true",
-               type: urlTypes.FULL_PATH,
-               target: "NEW"
-            });
+            if (this.downloadIFrame)
+            {
+               this.downloadIFrame.src = AlfConstants.PROXY_URI + contentURL + "?a=true";
+            }
+            else
+            {
+               this.downloadIFrame = domConstruct.create("iframe", {
+                  id: "ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME",
+                  src: AlfConstants.PROXY_URI + contentURL + "?a=true",
+                  style: "display:none"
+               }, document.body);
+            }
          }
          else
          {
