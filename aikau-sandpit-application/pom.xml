@@ -5,7 +5,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.60-SNAPSHOT</version>
+      <version>1.0.61-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
    
@@ -20,12 +20,12 @@
          <version>${project.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf</artifactId>
          <version>${dependency.surf.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
          <version>${dependency.surf.version}</version>
       </dependency>

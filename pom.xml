@@ -4,7 +4,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.60-SNAPSHOT</version>
+   <version>1.0.61-SNAPSHOT</version>
    
    <name>Aikau Project Aggregator</name>
 
@@ -14,7 +14,7 @@
 
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <dependency.surf.version>5.0.d</dependency.surf.version>
+      <dependency.surf.version>6.3</dependency.surf.version>
       <dependency.dojo.version>1.10.4</dependency.dojo.version>
       <dependency.jquery.version>1.11.1</dependency.jquery.version>
       <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>      
@@ -60,7 +60,7 @@
 
       <!-- Surf is required for unit testing application -->
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
          <version>${dependency.surf.version}</version>
          <scope>runtime</scope>
@@ -73,23 +73,7 @@
          <version>4.0.4</version>
          <scope>runtime</scope>
       </dependency>
-
-      <!-- This is used for the LESS CSS processing. It allows us to include LESS code in both
-          the Theme XML files and in widget CSS files. We deliberately exclude it's preferred
-          Rhino version so as to avoid conflicts with our own dependencies. -->
-      <dependency>
-         <groupId>com.asual.lesscss</groupId>
-         <artifactId>lesscss-engine</artifactId>
-         <version>1.5.1</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.mozilla</groupId>
-               <artifactId>rhino</artifactId>
-            </exclusion>
-         </exclusions>
-         <scope>runtime</scope>
-      </dependency>
-
+      
    </dependencies>
 
    <build>

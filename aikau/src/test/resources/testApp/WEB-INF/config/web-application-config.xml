@@ -104,14 +104,12 @@
 
    <bean id="webscript.alfresco.UnitTestList.get" class="org.alfresco.aikau.UnitTestList" parent="webscript" scope="prototype" />
    
-   <!-- Override DependencyAggregator to set compression exclusions -->
-   <bean id="dependency.aggregator" parent="dependency.aggregator.abstract" class="org.springframework.extensions.surf.DependencyAggregator">
-      <property name="compressionExclusions">
-         <list>
-            <!-- required for Aikau 1.0.36 to avoid LESS errors util Surf dependencies can be updated -->
-            <value>*.css</value>
-         </list>
-      </property>
+   <!-- Use an external Node driven LESS CSS theme handler -->
+   <bean id="css.theme.handler" parent="css.theme.handler.abstract" class="org.springframework.extensions.surf.ExternalLessCssThemeHandler">
+      <!-- Node LESS compiler command - the hyphen "-" in the cmd value means 'read from stdin'
+           This default works well on Linux/Mac with NPM installed. On Windows, a full path will probably be required, for example:
+           "C:\Users\rsmith2\AppData\Roaming\npm\lessc.cmd -" -->
+      <property name="cmd"><value>${basedir}/node_modules/less/bin/lessc -</value></property>
    </bean>
    
 </beans>

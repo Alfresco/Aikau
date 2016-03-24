@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.60-SNAPSHOT</version>
+   <version>1.0.61-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -177,7 +177,7 @@
 
          <resource>
             <!-- WebScripts go into their own package -->
-            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau</targetPath>
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/${project.version}/webscripts</targetPath>
             <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/webscripts</directory>
          </resource>
@@ -204,6 +204,7 @@
             <filtering>true</filtering>
             <includes>
                <include>testApp/WEB-INF/surf.xml</include>
+               <include>testApp/WEB-INF/config/web-application-config.xml</include>
             </includes>
          </testResource>
          <testResource>
@@ -211,6 +212,7 @@
             <filtering>false</filtering>
             <excludes>
                <exclude>testApp/WEB-INF/surf.xml</exclude>
+               <exclude>testApp/WEB-INF/config/web-application-config.xml</exclude>
             </excludes>
          </testResource>
       </testResources>

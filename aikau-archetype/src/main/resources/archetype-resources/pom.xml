@@ -28,14 +28,14 @@
          <version>${project.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf</artifactId>
-         <version>5.0.d</version>
+         <version>${dependency.surf.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
-         <version>5.0.d</version>
+         <version>${dependency.surf.version}</version>
       </dependency>
       <dependency>
          <groupId>org.tuckey</groupId>
