@@ -1139,7 +1139,7 @@ define(["dojo/_base/declare",
                payload = {};
             }
 
-            payload.alfResponseTopic = this.pubSubScope + this.loadDataPublishTopic;
+            payload.alfResponseTopic = this.loadDataPublishTopic;
 
             if (this.dataFilters)
             {
