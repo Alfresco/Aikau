@@ -1216,6 +1216,11 @@ define(["dojo/_base/declare",
 
                   // We lose metaData unless we store that as well.
                   var metadata = lang.getObject(this.metadataProperty, false, payload.response);
+                  if (!metadata)
+                  {
+                      // same fallback as with items
+                      metadata = lang.getObject(this.metadataProperty, false, payload);
+                  }
                   if (metadata)
                   {
                      this.currentData.metadata = metadata;
