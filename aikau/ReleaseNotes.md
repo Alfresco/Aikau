@@ -1,4 +1,4 @@
-Aikau 1.0.60 Release Notes
+Aikau 1.0.61 Release Notes
 ===
 
 Previous deprecations:
@@ -47,6 +47,11 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.61:
+* [AKU-757](https://issues.alfresco.com/jira/browse/AKU-757)       - Prevent browser popup blocker on download requests
+* [AKU-903](https://issues.alfresco.com/jira/browse/AKU-903)       - Prevent click bubbling on PublishAction
+* [AKU-910](https://issues.alfresco.com/jira/browse/AKU-910)       - Success actions on UploadMonitor
+
 1.0.60:
 * [AKU-879](https://issues.alfresco.com/jira/browse/AKU-879)       - Ensure drag and drop overlay fits to visible area
 * [AKU-884](https://issues.alfresco.com/jira/browse/AKU-884)       - OptionsService improvements
