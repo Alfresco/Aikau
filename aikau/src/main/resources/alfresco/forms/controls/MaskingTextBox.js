@@ -162,8 +162,6 @@ define(["dojo/_base/declare",
        * to create a subscription for the changing value of the form control with the 
        * [fieldId]{@link module:alfresco/forms/controls/BaseFormControl#fieldId} of the configured
        * [targetId]{@link module:alfresco/forms/controls/MaskingTextBox#targetId}.
-       * 
-       * @return {[type]} [description]
        */
       postCreate: function alfresco_forms_controls_MaskingTextBox__postCreate() {
          this.inherited(arguments);

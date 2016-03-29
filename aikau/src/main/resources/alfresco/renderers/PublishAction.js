@@ -123,9 +123,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} evt The click event object
        */
-      onClick: function alfresco_renderers_PublishAction__onClick(/*jshint unused:false*/ evt) {
+      onClick: function alfresco_renderers_PublishAction__onClick(evt) {
          this.publishPayload = this.getGeneratedPayload();
          this.alfPublish(this.publishTopic, this.publishPayload, !!this.publishGlobal, !!this.publishToParent);
+         evt.stopPropagation();
       }
    });
 });

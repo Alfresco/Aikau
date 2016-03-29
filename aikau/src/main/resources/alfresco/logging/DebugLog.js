@@ -521,6 +521,17 @@ define(["alfresco/core/ObjectTypeUtils",
          },
 
          /**
+          * This top-level click handler is to prevent click events on the log bubbling back up to the document.
+          *
+          * @instance
+          * @param {Event} evt Dojo-normalised event object
+          * @since 1.0.61
+          */
+         _onWidgetClick: function alfresco_logging_DebugLog___onWidgetClick(evt) {
+            evt.stopPropagation();
+         },
+
+         /**
           * Split the terms in a filter string to create an array of filter values. Terms are
           * comma-separated. To include a comma in a search term, double it up (use ,,) and
           * it will be converted into a single comma after the terms have been split.

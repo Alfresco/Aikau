@@ -207,7 +207,6 @@ define(["alfresco/core/FileSizeMixin",
 
          // Loop through the potential states of an upload
          var propTypes = ["InProgress", "Successful", "Unsuccessful"],
-            processId = Date.now() + "_actionWidgets",
             actionClass = this.baseClass + "__item__action";
          array.forEach(propTypes, function(propType) {
 
@@ -225,21 +224,15 @@ define(["alfresco/core/FileSizeMixin",
                      publishPayloadType: "CURRENT_ITEM",
                      publishGlobal: true,
                      additionalCssClasses: actionClass + " " + actionStateClass
-                  }, action.config || {});
+                  }, action.config || {}, {
+                     currentItem: actionPayload
+                  });
                }, this);
 
                // Create the widgets under the appropriate node
-               this.processWidgets(widgets, actionsNode, processId);
+               this.processWidgets(widgets, actionsNode);
             }
          }, this);
-
-         // Get the processed widgets and assign the current item to each one
-         var processedWidgets = this.getProcessedWidgets(processId);
-         when(processedWidgets, function(widgets) {
-            array.forEach(widgets, function(widget) {
-               widget.currentItem = actionPayload;
-            });
-         });
       },
 
       /**
@@ -463,7 +456,9 @@ define(["alfresco/core/FileSizeMixin",
 
             // Move the item to the unsuccessful items section and update the properties accordingly
             upload.completed = true;
-            upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
+            if (upload.nodes.progressBar.parentNode) {
+               upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
+            }
             domConstruct.place(upload.nodes.row, this.unsuccessfulItemsNode, "first");
             upload.nodes.progress.textContent = "";
             
