@@ -124,7 +124,7 @@ registerSuite(function(){
             })
             .getAttribute("alt")
                .then(function(text) {
-                  assert.equal(text, "Some of the items are currently selected, click this icon to select all items");
+                  assert.equal(text, "You have some items selected. Click this icon to select all.");
                });
       },
             
@@ -196,7 +196,7 @@ registerSuite(function(){
             })
             .getAttribute("alt")
                .then(function(text) {
-                  assert.equal(text, "All of the items are currently selected, click this icon remove all selections");
+                  assert.equal(text, "You have all items selected. Click this icon to deselect all.");
                });
       },
 
@@ -223,7 +223,7 @@ registerSuite(function(){
             })
             .getAttribute("alt")
                .then(function(text) {
-                  assert.equal(text, "None of the items are currently selected, click this icon to select all of the items");
+                  assert.equal(text, "You have no items selected. Click this icon to select all.");
                });
       },
 
