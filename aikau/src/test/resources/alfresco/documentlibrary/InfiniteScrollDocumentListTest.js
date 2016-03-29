@@ -27,6 +27,9 @@ define(["intern!object",
 
    var rowSelectors = TestCommon.getTestSelectors("alfresco/lists/views/layouts/Row");
    var headerCellSelectors = TestCommon.getTestSelectors("alfresco/lists/views/layouts/HeaderCell");
+   var menuBarSelectSelectors = TestCommon.getTestSelectors("alfresco/menus/AlfMenuBarSelect");
+   var checkableMenuItemSelectors = TestCommon.getTestSelectors("alfresco/menus/AlfCheckableMenuItem");
+   
 
    var selectors = {
       rows: {
@@ -42,6 +45,13 @@ define(["intern!object",
             descending: TestCommon.getTestSelector(headerCellSelectors, "descending.indicator", ["TABLE_VIEW_NAME_HEADING"]),
             label: TestCommon.getTestSelector(headerCellSelectors, "label", ["TABLE_VIEW_NAME_HEADING"])
          }
+      },
+      sortMenu: {
+         label: TestCommon.getTestSelector(menuBarSelectSelectors, "label", ["DOCLIB_SORT_FIELD_SELECT"]),
+         popup: TestCommon.getTestSelector(menuBarSelectSelectors, "popup", ["DOCLIB_SORT_FIELD_SELECT"])
+      },
+      sortItems: {
+         fourth: TestCommon.getTestSelector(checkableMenuItemSelectors, "nth.item.label", ["DOCLIB_SORT_FIELD_SELECT_GROUP","4"])
       }
    };
 
@@ -105,6 +115,52 @@ define(["intern!object",
             .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
             .findDisplayedByCssSelector(selectors.headerCells.all.indicators);
+         },
+
+         "Post Coverage Results (1)": function() {
+            TestCommon.alfPostCoverageResults(this, browser);
+         }
+      };
+   });
+
+   registerSuite(function(){
+      var browser;
+
+      return {
+         name: "AlfDocumentList Sorting Tests (sort via menu)",
+
+         setup: function() {
+            browser = this.remote;
+            return TestCommon.loadTestWebScript(this.remote, "/InfiniteScrollDocumentList?includeSortMenu=true", "AlfDocumentList Sorting Tests (sort via menu)").end();
+         },
+
+         beforeEach: function() {
+            browser.end();
+         },
+
+         "Sort via menu": function() {
+            // Open the sort menu...
+            return browser.findByCssSelector(selectors.sortMenu.label)
+               .click()
+            .end()
+
+            .clearLog()
+
+            // Wait for it to open...
+            .findDisplayedByCssSelector(selectors.sortMenu.popup)
+            .end()
+
+            // Click the fourth sort item...
+            .findDisplayedByCssSelector(selectors.sortItems.fourth)
+               .click()
+            .end()
+
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+            .findAllByCssSelector(selectors.rows.all)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 4);
+               });
          },
 
          "Post Coverage Results (1)": function() {
