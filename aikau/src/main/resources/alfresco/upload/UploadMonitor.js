@@ -223,9 +223,10 @@ define(["alfresco/core/FileSizeMixin",
                   action.config = lang.mixin({
                      publishPayloadType: "CURRENT_ITEM",
                      publishGlobal: true,
-                     additionalCssClasses: actionClass + " " + actionStateClass,
+                     additionalCssClasses: actionClass + " " + actionStateClass
+                  }, action.config || {}, {
                      currentItem: actionPayload
-                  }, action.config || {});
+                  });
                }, this);
 
                // Create the widgets under the appropriate node

@@ -52,14 +52,12 @@ define(["intern!object",
                .end()
 
             .findByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-upload-UploadMonitor__unsuccessful-items .alfresco-upload-UploadMonitor__item")
+            .end()
 
-               .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
-                  .then(function(text) {
-                     assert.equal(text, "The file ''This file is empty.txt'' couldn't be uploaded for the following reason. 0kb files can't be uploaded");
-                  })
-               .end()
-
-            .end() // Escape previous extra nesting
+            .execute(getTextContent, [".alfresco-upload-UploadMonitor__item__status__unsuccessful_icon svg title"])
+               .then(function(text) {
+                  assert.equal(text, "The file ''This file is empty.txt'' couldn't be uploaded for the following reason. 0kb files can't be uploaded");
+               })
 
             .findByCssSelector(".alfresco-layout-StickyPanel__title-bar__close")
                .click();
