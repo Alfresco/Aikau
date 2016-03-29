@@ -106,7 +106,7 @@ define(["alfresco/core/FileSizeMixin",
       maxUploadNameLength: 50,
 
       /**
-       * This collection of [PublishAction]{@link module:alfresco/renderers/PublishAction} widgets
+       * <p>This collection of [PublishAction]{@link module:alfresco/renderers/PublishAction} widgets
        * will be displayed against each inprogress item in the upload monitor. The upload item
        * (containing relevant information) will be added as the current item, and the
        * [publishPayloadType]{@link module:alfresco/renderers/_PublishPayloadMixin#publishPayloadType}
@@ -114,7 +114,12 @@ define(["alfresco/core/FileSizeMixin",
        * if not specified. In effect, this means that you should normally only need to specify the
        * [publishTopic]{@link module:alfresco/renderers/PublishAction#publishTopic} and
        * [iconClass]{@link module:alfresco/renderers/PublishAction#iconClass} in the PublishAction
-       * config.
+       * config.</p>
+       *
+       * <p>The currentItem that's provided to the supplied action is an object with five properties.
+       * Specifically, three simple properties of fileId, fileSize (bytes) and fileName and two additional
+       * complex properties of fileObj (which is all the details of the upload object) and response
+       * (which is the server response - valid for finished uploads only).</p>
        *
        * @instance
        * @type {object[]}
@@ -308,7 +313,8 @@ define(["alfresco/core/FileSizeMixin",
             actionPayload: {
                fileId: fileId,
                fileSize: file.size,
-               fileName : file.name
+               fileName : file.name,
+               fileObj: file
             },
             nodes: {
                row: itemRow,
@@ -412,11 +418,13 @@ define(["alfresco/core/FileSizeMixin",
             // This information could be used to allow actions or links to be generated for the uploaded content
             // before the display is closed...
             if (request && request.responseText) {
-               var jsonResponse = JSON.parse(request.responseText);
-               lang.mixin(upload.actionPayload, {
-                  nodeRef: jsonResponse.nodeRef,
-                  fileName: jsonResponse.fileName
-               });
+               var response = request.responseText;
+               try {
+                  response = JSON.parse(response);
+               } catch (e) {
+                  this.alfLog("debug", "Unable to parse upload response as JSON", response);
+               }
+               upload.actionPayload.response = response;
             }
          } else {
             this.alfLog("warn", "Attempt to mark as complete an upload that is not being tracked (id=" + fileId + ")");
