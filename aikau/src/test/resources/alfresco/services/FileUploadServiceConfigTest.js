@@ -71,7 +71,7 @@ define(["intern!object",
                .click()
             .end()
 
-            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED")
+            .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
 
             .findByCssSelector(".alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item__actions .alfresco-html-SVGImage")
                .click()
