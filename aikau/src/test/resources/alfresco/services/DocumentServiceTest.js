@@ -45,11 +45,10 @@ define(["intern!object",
                .click()
             .end()
 
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-               .then(function(payload) {
-                  assert.include(payload.url, 
-                                 "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true",
-                                 "Individual download request not detected");
+            .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
+               .getAttribute("src")
+               .then(function(src) {
+                  assert.include(src, "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true");
                })
                .clearLog();
          },
@@ -68,11 +67,13 @@ define(["intern!object",
                .click()
             .end()
 
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-               .then(function(payload) {
-                  assert.include(payload.url, 
-                                 "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28/PDF.pdf?a=true",
-                                 "Individual download request not detected");
+            .getLastPublish("ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS")
+            .clearLog()
+
+            .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
+               .getAttribute("src")
+               .then(function(src) {
+                  assert.include(src, "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28/PDF.pdf?a=true");
                })
                .clearLog();
          },
