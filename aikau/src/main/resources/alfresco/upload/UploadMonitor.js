@@ -106,7 +106,7 @@ define(["alfresco/core/FileSizeMixin",
       maxUploadNameLength: 50,
 
       /**
-       * This collection of [PublishAction]{@link module:alfresco/renderers/PublishAction} widgets
+       * <p>This collection of [PublishAction]{@link module:alfresco/renderers/PublishAction} widgets
        * will be displayed against each inprogress item in the upload monitor. The upload item
        * (containing relevant information) will be added as the current item, and the
        * [publishPayloadType]{@link module:alfresco/renderers/_PublishPayloadMixin#publishPayloadType}
@@ -114,7 +114,12 @@ define(["alfresco/core/FileSizeMixin",
        * if not specified. In effect, this means that you should normally only need to specify the
        * [publishTopic]{@link module:alfresco/renderers/PublishAction#publishTopic} and
        * [iconClass]{@link module:alfresco/renderers/PublishAction#iconClass} in the PublishAction
-       * config.
+       * config.</p>
+       *
+       * <p>The currentItem that's provided to the supplied action is an object with five properties.
+       * Specifically, three simple properties of fileId, fileSize (bytes) and fileName and two additional
+       * complex properties of fileObj (which is all the details of the upload object) and response
+       * (which is the server response - valid for finished uploads only).</p>
        *
        * @instance
        * @type {object[]}
