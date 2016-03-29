@@ -50,10 +50,10 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         id: "CONFIGURED_UPLOAD",
+         id: "DO_UPLOAD",
          name: "alfresco/buttons/AlfButton",
          config: {
-            label: "Configured upload",
+            label: "Do upload",
             publishTopic: "ALF_UPLOAD_REQUEST",
             publishPayload: {
                alfResponseTopic: "UPLOAD_COMPLETE_OR_CANCELLED",
