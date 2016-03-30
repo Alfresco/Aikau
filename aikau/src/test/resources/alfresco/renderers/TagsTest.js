@@ -114,9 +114,8 @@ define(["intern!object",
             .end()
 
             // Click the cancel button
-            .findByCssSelector("#TAGS_4 span.action:nth-of-type(2)")
-               .click()
-            .end();
+            .findByCssSelector("#TAGS_4 .editor .alfresco-forms-Form .cancelButton .dijitButtonText")
+               .click();
          },
 
          "Post Coverage Results": function() {
@@ -229,18 +228,17 @@ define(["intern!object",
          },
 
          "Check that actions are not displayed": function() {
-            return browser.findByCssSelector("#TAGS_2 .action.save")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Save action should not be shown");
+            return browser.findAllByCssSelector("#TAGS_2 .editor .alfresco-forms-Form .confirmationButton .dijitButtonText")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
                })
             .end()
 
-            .findByCssSelector("#TAGS_2 .action.cancel")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Save action should not be shown");
-               });
+            .findAllByCssSelector("#TAGS_2  .editor .alfresco-forms-Form .cancelButton .dijitButtonText")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 0);
+               })
+               .end();
          },
 
          "Post Coverage Results": function() {
