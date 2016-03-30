@@ -852,12 +852,12 @@ define(["dojo/_base/declare",
          if (this.searchResultsPage)
          {
             // Generate custom search page link...
-            url = this.searchResultsPage + "#searchTerm=" + this.generateSearchTerm(terms) + "&scope=" + scope + "&sortField=Relevance";
+            url = this.searchResultsPage + "#searchTerm=" + this.generateSearchTerm(terms) + "&scope=" + scope;
          }
          else if (this.linkToFacetedSearch === true)
          {
             // Generate faceted search page link...
-            url = "dp/ws/faceted-search#searchTerm=" + this.generateSearchTerm(terms) + "&scope=" + scope + "&sortField=Relevance";
+            url = "dp/ws/faceted-search#searchTerm=" + this.generateSearchTerm(terms) + "&scope=" + scope;
          }
          else
          {
