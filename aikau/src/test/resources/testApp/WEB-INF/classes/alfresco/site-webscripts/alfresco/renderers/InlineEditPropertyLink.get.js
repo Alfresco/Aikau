@@ -1,4 +1,5 @@
-var propertyLinkWidgets = [
+function getPropertyLinkWidgets(id) {
+   return [
       {
          name: "alfresco/lists/views/layouts/Row",
          config: {
@@ -8,7 +9,7 @@ var propertyLinkWidgets = [
                   config: {
                      widgets: [
                         {
-                           id: "INLINE_EDIT",
+                           id: id,
                            name: "alfresco/renderers/InlineEditPropertyLink",
                            config: {
                               permissionProperty: null,
@@ -38,8 +39,11 @@ var propertyLinkWidgets = [
             ]
          }
       }
-   ],
-   propertyLinkWidgetsNoTopic = [
+   ];
+}
+
+function getPropertyLinkWidgetsNoTopic(id) {
+   return [
       {
          name: "alfresco/lists/views/layouts/Row",
          config: {
@@ -49,7 +53,7 @@ var propertyLinkWidgets = [
                   config: {
                      widgets: [
                         {
-                           id: "INLINE_EDIT",
+                           id: id,
                            name: "alfresco/renderers/InlineEditPropertyLink",
                            config: {
                               permissionProperty: null,
@@ -78,6 +82,7 @@ var propertyLinkWidgets = [
          }
       }
    ];
+}
 
 model.jsonModel = {
    services: [
@@ -105,7 +110,7 @@ model.jsonModel = {
                   }
                ]
             },
-            widgets: propertyLinkWidgets
+            widgets: getPropertyLinkWidgets("INLINE_EDIT_1")
          }
       },
       {
@@ -120,7 +125,7 @@ model.jsonModel = {
                   }
                ]
             },
-            widgets: propertyLinkWidgets
+            widgets: getPropertyLinkWidgets("INLINE_EDIT_2")
          }
       },
       {
@@ -135,7 +140,7 @@ model.jsonModel = {
                   }
                ]
             },
-            widgets: propertyLinkWidgetsNoTopic
+            widgets: getPropertyLinkWidgetsNoTopic("INLINE_EDIT_3")
          }
       },
       {
@@ -149,7 +154,7 @@ model.jsonModel = {
                   }
                ]
             },
-            widgets: propertyLinkWidgets
+            widgets: getPropertyLinkWidgets("INLINE_EDIT_4")
          }
       },
       {
@@ -163,7 +168,7 @@ model.jsonModel = {
                   }
                ]
             },
-            widgets: propertyLinkWidgets
+            widgets: getPropertyLinkWidgets("INLINE_EDIT_5")
          }
       },
       {
