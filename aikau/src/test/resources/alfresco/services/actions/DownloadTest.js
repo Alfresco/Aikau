@@ -67,10 +67,10 @@ define(["intern!object",
                .click()
             .end()
 
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-               .then(function(payload) {
-                  assert.property(payload, "url", "No 'url' attribute");
-                  assert.include(payload.url, "/proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true", "Incorrect URL");
+            .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
+               .getAttribute("src")
+               .then(function(src) {
+                  assert.include(src, "/proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true");
                });
          },
 

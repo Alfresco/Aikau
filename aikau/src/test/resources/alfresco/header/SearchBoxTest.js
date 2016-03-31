@@ -164,7 +164,7 @@ define(["intern!object",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
-                  assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=pdf&scope=repo&sortField=Relevance", "Did not find expected navigation publication request (check the search scope!)");
+                  assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=pdf&scope=repo", "Did not find expected navigation publication request (check the search scope!)");
                });
          },
 
@@ -231,7 +231,7 @@ define(["intern!object",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                .then(function(payload) {
-                  assert.propertyVal(payload, "url", "site/site1/dp/ws/faceted-search#searchTerm=site&scope=site1&sortField=Relevance");
+                  assert.propertyVal(payload, "url", "site/site1/dp/ws/faceted-search#searchTerm=site&scope=site1");
                });
          },
 
@@ -370,7 +370,7 @@ define(["intern!object",
                .end()
                .getLastPublish("ALF_NAVIGATE_TO_PAGE")
                   .then(function(payload) {
-                     assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=(data%25test)%20secret%20squirrels&scope=repo&sortField=Relevance");
+                     assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=(data%25test)%20secret%20squirrels&scope=repo");
                   });
          },
 

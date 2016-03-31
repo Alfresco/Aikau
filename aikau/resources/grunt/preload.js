@@ -20,31 +20,33 @@ module.exports = function(grunt) {
          unitTestString = "<family>aikau-unit-tests</family>",
          urlRegex = /<url>(.+)<\/url>/,
          testUrls = [],
+         totalTestUrls = 0,
          urlsLoaded = 0,
          urlPrefix = "http://localhost:8089/aikau/page/tp/ws",
          pwd = process.cwd();
 
       // Define function to load each URL
       var onUrlLoaded = function() {
-            if (++urlsLoaded === testUrls.length) {
+            urlsLoaded++;
+            if (testUrls.length) {
+               loadNextUrl();
+            } else {
                grunt.log.writeln("");
                grunt.log.writeln("Complete!");
                done();
-            } else {
-               loadNextUrl();
             }
          },
          loadNextUrl = function() {
             var nextUrl = testUrls.shift(),
                fullUrl = urlPrefix + nextUrl,
-               percentOnLoaded = Math.ceil((urlsLoaded + 1) / testUrls.length * 100);
+               percentOnLoaded = Math.ceil((urlsLoaded + 1) / totalTestUrls * 100);
             grunt.log.write(fullUrl + "...");
             http.get(fullUrl, res => {
                res.resume();
-               grunt.log.writeln(`done (${percentOnLoaded}%)`);
+               grunt.log.writeln(`done (${percentOnLoaded}% - ${urlsLoaded + 1}/${totalTestUrls})`);
                onUrlLoaded();
             }).on("error", e => {
-               grunt.log.writeln(`error (${percentOnLoaded}%)`);
+               grunt.log.writeln(`error (${percentOnLoaded}% - ${urlsLoaded + 1}/${totalTestUrls})`);
                grunt.log.error(e.message);
                onUrlLoaded();
             });
@@ -70,6 +72,7 @@ module.exports = function(grunt) {
                grunt.log.writeln("Retrieved " + testUrls.length + " URLs from " + filesLoaded + " files!");
                grunt.log.writeln("");
                grunt.log.writeln("Loading pages ...");
+               totalTestUrls = testUrls.length;
                loadNextUrl();
             }
          });

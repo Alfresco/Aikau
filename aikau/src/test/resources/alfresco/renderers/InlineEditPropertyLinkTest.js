@@ -29,6 +29,53 @@ define(["intern!object",
 
    /* global window */
 
+   var inlineEditSelectors = TestCommon.getTestSelectors("alfresco/renderers/InlineEditProperty");
+
+   var selectors = {
+      inlineEditProperties: {
+         first: {
+            readValue: TestCommon.getTestSelector(inlineEditSelectors, "readonly.value", ["INLINE_EDIT_1_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectors, "edit.form", ["INLINE_EDIT_1_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectors, "edit.icon", ["INLINE_EDIT_1_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectors, "edit.save", ["INLINE_EDIT_1_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectors, "edit.cancel", ["INLINE_EDIT_1_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_1_ITEM_0"])
+         },
+         second: {
+            readValue: TestCommon.getTestSelector(inlineEditSelectors, "readonly.value", ["INLINE_EDIT_2_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectors, "edit.form", ["INLINE_EDIT_2_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectors, "edit.icon", ["INLINE_EDIT_2_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectors, "edit.save", ["INLINE_EDIT_2_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectors, "edit.cancel", ["INLINE_EDIT_2_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_2_ITEM_0"])
+         },
+         third: {
+            readValue: TestCommon.getTestSelector(inlineEditSelectors, "readonly.value", ["INLINE_EDIT_3_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectors, "edit.form", ["INLINE_EDIT_3_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectors, "edit.icon", ["INLINE_EDIT_3_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectors, "edit.save", ["INLINE_EDIT_3_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectors, "edit.cancel", ["INLINE_EDIT_3_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_3_ITEM_0"])
+         },
+         fourth: {
+            readValue: TestCommon.getTestSelector(inlineEditSelectors, "readonly.value", ["INLINE_EDIT_4_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectors, "edit.form", ["INLINE_EDIT_4_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectors, "edit.icon", ["INLINE_EDIT_4_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectors, "edit.save", ["INLINE_EDIT_4_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectors, "edit.cancel", ["INLINE_EDIT_4_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_4_ITEM_0"])
+         },
+         fifth: {
+            readValue: TestCommon.getTestSelector(inlineEditSelectors, "readonly.value", ["INLINE_EDIT_5_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectors, "edit.form", ["INLINE_EDIT_5_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectors, "edit.icon", ["INLINE_EDIT_5_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectors, "edit.save", ["INLINE_EDIT_5_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectors, "edit.cancel", ["INLINE_EDIT_5_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_5_ITEM_0"])
+         }
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -45,7 +92,7 @@ define(["intern!object",
          },
 
          "Property is rendered correctly": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "Test item (topic, no scope)", "Value not rendered correctly");
@@ -53,60 +100,57 @@ define(["intern!object",
          },
 
          "Edit widget not initially created": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 [data-dojo-attach-point=\"formWidgetNode\"]") // Make sure placeholder is present
-               .end()
-
-            .findAllByCssSelector("#INLINE_EDIT_ITEM_0 .alfresco-forms-Form")
+            return browser.findAllByCssSelector(selectors.inlineEditProperties.first.editForm)
                .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Edit widget node should be empty until needed");
+                  assert.lengthOf(elements, 0);
                });
          },
 
          "Edit icon initially invisible": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                .isDisplayed()
                .then(function(result) {
-                  assert.isFalse(result, "Icon should not be displayed");
+                  assert.isFalse(result);
                });
          },
 
          "Icon appears on focus": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .then(function(element) {
                   element.type(""); // Focus on element
 
                   browser.end()
-                     .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+                     .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                      .isDisplayed()
                      .then(function(result) {
-                        assert.isTrue(result, "Edit icon was not revealed on focus");
+                        assert.isTrue(result);
                      });
                });
          },
 
          "Icon disappears on blur": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .then(function(element) {
                   element.type([keys.SHIFT, keys.TAB]); // Focus away from element
 
                   browser.end()
-                     .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+                     .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                      .isDisplayed()
                      .then(function(result) {
-                        assert.isFalse(result, "Edit icon was not hidden on blur");
+                        assert.isFalse(result);
                      });
                });
          },
 
          "Icon appears on mouseover": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .moveMouseTo()
             .end()
 
-            .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+            .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                .isDisplayed()
                .then(function(result) {
-                  assert.isTrue(result, "Edit icon was not revealed on mouse over");
+                  assert.isTrue(result);
                });
          },
 
@@ -115,24 +159,24 @@ define(["intern!object",
                .moveMouseTo(0, 0)
                .then(function() {
                   browser.end()
-                     .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+                     .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                      .isDisplayed()
                      .then(function(result) {
-                        assert.isFalse(result, "Edit icon was not hidden on mouse out");
+                        assert.isFalse(result);
                      });
                });
          },
 
          "Edit widgets are created on edit": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                .click()
             .end()
 
-            .findByCssSelector("#INLINE_EDIT_ITEM_0 .alfresco-forms-Form");
+            .findByCssSelector(selectors.inlineEditProperties.first.editForm);
          },
 
          "Read property is hidden when editing": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .isDisplayed()
                .then(function(result) {
                   assert.isFalse(result, "Read-only span was not hidden");
@@ -140,34 +184,22 @@ define(["intern!object",
          },
 
          "Save and cancel buttons are displayed when editing": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Save button not visible when editing");
-               })
+            return browser.findDisplayedByCssSelector(selectors.inlineEditProperties.first.editSave)
             .end()
 
-            .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Cancel button not visible when editing");
-               });
+            .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editCancel);
          },
 
          "Escape key cancels editing": function() {
-            return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.editInput)
                .pressKeys([keys.ESCAPE])
             .end()
 
-            .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Read-only value not revealed on cancelling edit");
-               });
+            .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
          },
 
          "Clicking on property fires topic": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .click()
             .end()
 
@@ -175,7 +207,7 @@ define(["intern!object",
          },
 
          "Clicking on property does not start editing": function() {
-            return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.editInput)
                .isDisplayed()
                .then(function(result) {
                   assert.isFalse(result, "Edit box revealed when clicking on property value");
@@ -183,40 +215,36 @@ define(["intern!object",
          },
 
          "Clicking on cancel button stops editing": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .moveMouseTo()
                .then(function() {
                   return browser.end()
-                     .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+                     .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                      .click()
                   .end()
 
-                  .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+                  .findByCssSelector(selectors.inlineEditProperties.first.readValue)
                      .isDisplayed()
                      .then(function(result) {
                         assert.isFalse(result, "Edit mode not entered when clicking on icon");
                      })
                   .end()
 
-                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
+                  .findByCssSelector(selectors.inlineEditProperties.first.editCancel)
                      .click()
                   .end()
 
-                  .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-                     .isDisplayed()
-                     .then(function(result) {
-                        assert.isTrue(result, "Read-only value not revealed on cancelling edit");
-                     });
+                  .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
                });
          },
 
          "CTRL-E starts editing": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .pressKeys([keys.CONTROL, "e"])
                .pressKeys(keys.NULL)
             .end()
 
-            .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+            .findByCssSelector(selectors.inlineEditProperties.first.editInput)
                .isDisplayed()
                .then(function(result) {
                   assert.isTrue(result, "Edit box not revealed on CTRL-E");
@@ -224,19 +252,12 @@ define(["intern!object",
          },
 
          "Changes published on save": function() {
-            return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Edit box not visible");
-               })
-            .end()
-
-            .findByCssSelector("#INLINE_EDIT_ITEM_0 .dijitInputContainer input")
+            return browser.findDisplayedByCssSelector(selectors.inlineEditProperties.first.editInput)
                .clearValue()
                .type("New")
             .end()
 
-            .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
+            .findByCssSelector(selectors.inlineEditProperties.first.editSave)
                .click()
             .end()
 
@@ -249,28 +270,23 @@ define(["intern!object",
          },
 
          "Readonly view displayed when finished editing": function() {
-            return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Read-only span not revealed on save");
-               })
-
-            .getVisibleText()
+            return browser.findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue)
+               .getVisibleText()
                .then(function(text) {
                   assert.equal(text, "New", "Read-only value not updated correctly");
                });
          },
 
          "Scoped property link update has response scoped": function() {
-            return browser.findByCssSelector("#LIST_TOPIC_SCOPED .editIcon")
+            return browser.findByCssSelector(selectors.inlineEditProperties.second.editIcon)
                .click()
             .end()
 
-            .findByCssSelector("#LIST_TOPIC_SCOPED .alfresco-forms-controls-TextBox:first-child .dijitInputContainer input")
+            .findByCssSelector(selectors.inlineEditProperties.second.editInput)
                .type("New2")
             .end()
 
-            .findByCssSelector("#LIST_TOPIC_SCOPED .save")
+            .findByCssSelector(selectors.inlineEditProperties.second.editSave)
                .clearLog()
                .click()
             .end()
@@ -282,7 +298,7 @@ define(["intern!object",
          },
 
          "Property links publish correct payloads": function() {
-            return browser.findByCssSelector("#LIST_TOPIC_NOSCOPE .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
+            return browser.findByCssSelector(selectors.inlineEditProperties.first.readValue)
                .clearLog()
                .click()
             .end()
@@ -293,7 +309,7 @@ define(["intern!object",
                })
             .end()
 
-            .findByCssSelector("#LIST_TOPIC_SCOPED .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
+            .findByCssSelector(selectors.inlineEditProperties.second.readValue)
                .clearLog()
                .click()
             .end()
@@ -304,7 +320,7 @@ define(["intern!object",
                })
             .end()
 
-            .findByCssSelector("#LIST_NOTOPIC_SCOPED .alfresco-renderers-InlineEditProperty .alfresco-renderers-Property")
+            .findByCssSelector(selectors.inlineEditProperties.third.readValue)
                .clearLog()
                .click()
             .end()
@@ -334,17 +350,17 @@ define(["intern!object",
 
          "Edit encoded value": function() {
             // Move the mouse over the hidden edit icon...
-            return browser.findByCssSelector("#LIST_XSS_ITEMS .editIcon")
+            return browser.findByCssSelector(selectors.inlineEditProperties.fifth.editIcon)
                .moveMouseTo()
             .end()
 
             // Wait for it to appear and clikc it...
-            .findDisplayedByCssSelector("#LIST_XSS_ITEMS .editIcon")
+            .findDisplayedByCssSelector(selectors.inlineEditProperties.fifth.editIcon)
                .click()
             .end()
 
             // Check that the edit value isn't encoded...
-            .findDisplayedByCssSelector("#LIST_XSS_ITEMS .alfresco-forms-controls-TextBox .dijitInputContainer input")
+            .findDisplayedByCssSelector(selectors.inlineEditProperties.fifth.editInput)
                .getProperty("value")
                .then(function(value) {
                   assert.equal(value, "<img src=\"1\" onerror=\"window.hackedProperty=true\">", "Incorrect edit field value");
@@ -352,11 +368,11 @@ define(["intern!object",
          },
 
          "Save value and check XSS is not injected": function() {
-            return browser.findByCssSelector("#LIST_XSS_ITEMS .action.save")
+            return browser.findByCssSelector(selectors.inlineEditProperties.fifth.editSave)
                .click()
             .end()
 
-            .findDisplayedByCssSelector("#LIST_XSS_ITEMS #INLINE_EDIT_ITEM_0 .inlineEditValue")
+            .findDisplayedByCssSelector(selectors.inlineEditProperties.fifth.readValue)
                .getVisibleText()
                .then(function(visibleText) {
                   assert.equal(visibleText, "<img src=\"1\" onerror=\"window.hackedProperty=true\">");

@@ -43,6 +43,7 @@ define(["dojo/_base/declare",
        */
       getPrimaryFormWidget: function alfresco_renderers_InlineEditSelect__getPrimaryFormWidget() {
          return {
+            id: this.id + "_SELECT",
             name: "alfresco/forms/controls/Select",
             config: {
                name: this.postParam,
