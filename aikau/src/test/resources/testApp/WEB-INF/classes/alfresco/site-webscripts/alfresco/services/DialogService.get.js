@@ -83,6 +83,10 @@ model.jsonModel = {
                formSubmissionPayloadMixin: {
                   bonusData: "test"
                },
+               customFormConfig: {
+                  setValueTopic: "CHECK_FOR_MY_SUBSCRIBED_TOPIC",
+                  setValueTopicGlobalScope: true
+               },
                contentWidth: "700px",
                contentHeight: "300px",
                widgets: [
