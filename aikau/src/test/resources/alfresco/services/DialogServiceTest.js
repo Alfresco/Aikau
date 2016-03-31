@@ -117,12 +117,25 @@ define(["intern!object",
                });
          },
 
+         // See AKU-904 (the basic form dialog now includes custom form config for a setValueTopic - this should
+         // result in a subscription being created)...
+         "Custom form config was processed": function() {
+            return browser.findByCssSelector("body").getLogEntries({
+               type: "SUBSCRIBE",
+               topic: "CHECK_FOR_MY_SUBSCRIBED_TOPIC",
+               pos: "all"
+            }, true)
+            .then(function(subscriptions) {
+               assert.lengthOf(subscriptions, 1, "Subscription not created");
+            });
+         },
+
          "Test creating dialog with an ID": function() {
             return closeAllDialogs(browser)
                .then(function() {
                   return browser.findById("CREATE_FORM_DIALOG")
                      .click()
-                     .end()
+                  .end()
 
                   .findAllByCssSelector(".alfresco-dialog-AlfDialog")
                      .then(function(elements) {
@@ -569,11 +582,16 @@ define(["intern!object",
                getWindowHeight = function() {
                   return window.innerHeight;
                },
-               getCorrectTop = function() {
-                  return (windowHeight - dialogHeight) / 2;
-               },
                windowHeight,
                dialogHeight;
+
+            var relevantVerticalCentres = function() {
+               var dialogBoundingRect = document.getElementById("RESIZING_DIALOG").getBoundingClientRect();
+               return {
+                  dialogCentre: dialogBoundingRect.top + (dialogBoundingRect.height / 2),
+                  windowCentre: window.innerHeight / 2
+               };
+            };
 
             return browser.findById("RESIZING_DIALOG_BUTTON_label")
                .click()
@@ -589,9 +607,9 @@ define(["intern!object",
                .then(function(height) {
                   dialogHeight = height;
                })
-               .getPosition()
-               .then(function(position) {
-                  assert.closeTo(getCorrectTop(), position.y, 20, "Dialog is not initially centred");
+               .execute(relevantVerticalCentres)
+               .then(function(verticalCentres) {
+                  assert.closeTo(verticalCentres.dialogCentre, verticalCentres.windowCentre, 20, "Dialog is not initially centred");
                })
                .end()
 
@@ -611,9 +629,9 @@ define(["intern!object",
                })
 
             .findByCssSelector("#RESIZING_DIALOG")
-               .getPosition()
-               .then(function(position) {
-                  assert.closeTo(getCorrectTop(), position.y, 20, "Dialog is not centred after size changes");
+               .execute(relevantVerticalCentres)
+               .then(function(verticalCentres) {
+                  assert.closeTo(verticalCentres.dialogCentre, verticalCentres.windowCentre, 20, "Dialog is not initially centred");
                })
                .end()
 
