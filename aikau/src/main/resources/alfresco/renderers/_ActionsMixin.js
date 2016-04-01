@@ -316,6 +316,64 @@ define(["dojo/_base/declare",
          {
             this.alfLog("log", "Skipping action as it's missing from whitelist: " + action);
          }
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.62
+       */
+      createEmptyMenu: function alfresco_renderers__ActionsMixin__createEmptyMenu() {
+         this.dropDown = this.createWidget({
+            id: this.id + "_DROPDOWN",
+            name: "alfresco/menus/AlfMenuGroups",
+            config: {
+               widgets: [
+                  {
+                     name: "alfresco/menus/AlfMenuGroup",
+                     assignToScope: this,
+                     assignTo: "_menu"
+                  }
+               ]
+            }
+         });
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {Function} callback The function to call to display the drop-down
+       * @since 1.0.62
+       */
+      createDropDownMenu: function alfresco_renderers__ActionsMixin__createDropDownMenu(callback) {
+         this.createEmptyMenu();
+         this.addActions();
+         callback();
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.62
+       */
+      isLoaded: function alfresco_renderers__ActionsMixin__isLoaded() {
+         return (!!this.dropDown && this.dropDown.isLoaded);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {Function} callback The function to call to display the drop-down
+       * @since 1.0.62
+       */
+      loadDropDown: function alfresco_renderers__ActionsMixin__loadDropDown(callback) {
+         var dropDown = this.dropDown;
+         if(!dropDown) { 
+            this.createDropDownMenu(callback);
+         }
+         else {
+            callback();
+         }
       }
    });
 });
