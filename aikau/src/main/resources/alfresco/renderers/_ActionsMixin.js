@@ -35,6 +35,7 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/menus/_AlfPopupCloseMixin",
         "alfresco/menus/AlfMenuItem",
         "dojo/_base/array",
         "dojo/_base/lang",
@@ -42,9 +43,9 @@ define(["dojo/_base/declare",
         "alfresco/core/ArrayUtils",
         "alfresco/core/JsNode"],
         function(declare, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, 
-                 AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode) {
+                 _AlfPopupCloseMixin, AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode) {
 
-   return declare([AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin], {
+   return declare([AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, _AlfPopupCloseMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -337,6 +338,11 @@ define(["dojo/_base/declare",
                ]
             }
          });
+
+         // NOTE: Need to assign this.dropDown to this.popup in order for _AlfPopupCloseMixin capabilities
+         //       to work correctly...
+         this.popup = this.dropDown;
+         this.registerPopupCloseEvent();
       },
 
       /**
