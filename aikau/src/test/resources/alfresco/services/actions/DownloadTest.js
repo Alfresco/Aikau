@@ -26,6 +26,19 @@ define(["intern!object",
         "alfresco/TestCommon"],
         function(registerSuite, assert, TestCommon) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+   var selectors = {
+      downloadDocument: {
+         label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", "0"]),
+         dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", "0"]),
+         action1: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.nth.action.label", ["ACTIONS", "0", "1"])
+      },
+      downloadFolder: {
+         label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", "1"]),
+         dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", "1"])
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -42,14 +55,15 @@ define(["intern!object",
          },
 
          "Test that action does appear for document": function() {
-            return browser.findById("ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.downloadDocument.label)
                .click()
             .end()
-            .findById("ACTIONS_ITEM_0_DOWNLOAD");
+
+            .findDisplayedById("ACTIONS_ITEM_0_DOWNLOAD");
          },
 
          "Test that action does NOT appear for folder": function() {
-            return browser.findById("ACTIONS_ITEM_1_MENU_text")
+            return browser.findByCssSelector(selectors.downloadFolder.label)
                .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_1_DOWNLOAD")
@@ -59,11 +73,11 @@ define(["intern!object",
          },
 
          "Test download action": function() {
-            return browser.findById("ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.downloadDocument.label)
                .click()
             .end()
             
-            .findById("ACTIONS_ITEM_0_DOWNLOAD_text")
+            .findDisplayedByCssSelector(selectors.downloadDocument.action1)
                .click()
             .end()
 

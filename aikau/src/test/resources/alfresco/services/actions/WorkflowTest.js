@@ -27,6 +27,15 @@ define(["intern!object",
         "alfresco/TestCommon"],
            function(registerSuite, assert, require, TestCommon) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+   var selectors = {
+      startWorkflow: {
+         label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", "0"]),
+         dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", "0"]),
+         action1: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.nth.action.label", ["ACTIONS", "0", "1"])
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -191,12 +200,14 @@ define(["intern!object",
          },
 
          "Test non-legacy action version": function() {
-            return browser.findByCssSelector("#ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.startWorkflow.label)
                .click()
             .end()
-            .findAllByCssSelector("#ACTIONS_ITEM_0_START-WORKFLOW_text")
+
+            .findDisplayedByCssSelector(selectors.startWorkflow.action1)
                .click()
             .end()
+            
             .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation post not found")
                .then(function(payload) {
                   assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node4", "Incorrect nodeRef");

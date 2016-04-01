@@ -25,6 +25,24 @@ define(["intern!object",
         "alfresco/TestCommon"],
        function (registerSuite, assert, TestCommon) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+   var selectors = {
+      restActions: {
+         first: {
+            label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["XHR_ACTIONS", "0"]),
+            dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["XHR_ACTIONS", "0"]),
+            action: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.actions", ["XHR_ACTIONS", "0"])
+         }
+      },
+      mergedActions: {
+         first: {
+            label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["MERGED_XHR_ACTIONS", "0"]),
+            dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["MERGED_XHR_ACTIONS", "0"]),
+            action: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.actions", ["MERGED_XHR_ACTIONS", "0"])
+         }
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -43,50 +61,39 @@ define(["intern!object",
         "Check Actions menu was rendered": function () {
             // Test spec:
             // 1: Check dropdown element exists
-            return browser.findById("XHR_ACTIONS_ITEM_0_MENU_text");
+            return browser.findByCssSelector(selectors.restActions.first.label);
          },
 
          "Check that document request event was triggered": function() {
             // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
-            return browser.findById("XHR_ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.restActions.first.label)
                .click()
             .end()
             .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", "Retrieve single doc request not triggered");
          },
 
          "Check default behaviour to render 'legacy' document actions": function() {
-            return browser.findById("XHR_ACTIONS_ITEM_0_document-download")
+            return browser.findDisplayedByCssSelector(selectors.restActions.first.dropDown)
                .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-view-content")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-edit-properties")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-upload-new-version")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-edit-offline")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-copy-to")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-move-to")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-delete")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-assign-workflow")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-assign-workflow")
-               .end()
-               .findById("XHR_ACTIONS_ITEM_0_document-manage-granular-permissions");
+
+               .findAllByCssSelector(selectors.restActions.first.action)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 11);
+               });
          },
 
          "Check merged and filtered actions": function() {
-            return browser.findById("MERGED_XHR_ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.mergedActions.first.label)
                .click()
             .end()
-            .findById("MERGED_XHR_ACTIONS_ITEM_0_document-delete")
+
+            .findDisplayedByCssSelector(selectors.mergedActions.first.dropDown)
             .end()
-            .findById("MERGED_XHR_ACTIONS_ITEM_0_CUSTOM3")
-            .end()
-            .findById("MERGED_XHR_ACTIONS_ITEM_0_MANAGE_ASPECTS");
+
+            .findAllByCssSelector(selectors.mergedActions.first.action)
+               .then(function(elements) {
+                  assert.lengthOf(elements, 3);
+               });
          },
 
          "Post Coverage Results": function() {

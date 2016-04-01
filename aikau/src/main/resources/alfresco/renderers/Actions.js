@@ -94,15 +94,21 @@
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
+        "dijit/_HasDropDown",
         "dojo/text!./templates/Actions.html",
         "alfresco/renderers/_ActionsMixin",
+        "alfresco/buttons/AlfButton",
+        "alfresco/menus/AlfMenuGroups",
+        "alfresco/menus/AlfMenuGroup",
         "dijit/Menu",
         "dojo/dom-class",
         "dojo/_base/event",
+        "dojo/_base/lang",
         "dojo/keys"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, _ActionsMixin, Menu, domClass, Event, keys) {
+        function(declare, _WidgetBase, _TemplatedMixin, _HasDropDown, template, _ActionsMixin, AlfButton, 
+                 AlfMenuGroups, AlfMenuGroup, Menu, domClass, Event, lang, keys) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _ActionsMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _HasDropDown, _ActionsMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -152,18 +158,17 @@ define(["dojo/_base/declare",
       label: "alf.renderers.Actions.menuLabel",
 
       /**
-       * This will hold a reference to a diijt/Menu widget that is created to hold the menu. This
-       * should not be referenced by extending widgets as it may not always be available depending 
-       * upon how implementation of the menu changes as required. For example, this widget previously
-       * used an [AlfMenuBar]{@link module:alfresco/menus/AlfMenuBar} but it was necessary to change
-       * the implementation to resolve menu pop-up location issues (see AKU-706).
+       * This will hold a reference to the [button]{@link module:alfresco/buttons/AlfButton} that when
+       * clicked will display a drop-down menu containing the available actions. This should not be 
+       * referenced by extending widgets as it may not always be available depending upon how implementation 
+       * of widget changes.
        * 
        * @instance
        * @type {object}
        * @default
-       * @since 1.0.46
+       * @since 1.0.62
        */
-      _menu: null,
+      _button: null,
 
       /**
        * Ensures that the [menu]{@link module:alfresco/renderers/Actions#_menu} is destroyed.
@@ -225,14 +230,17 @@ define(["dojo/_base/declare",
             // No action
          }
 
-         this._menu = new Menu({
-            id: this.id + "_GROUP", // Used "_GROUP" as a suffix for backwards compatibility with tests
-            leftClickToOpen: true,
-            targetNodeIds: [this.labelNode]
+         this._button = this.createWidget({
+            name: "alfresco/buttons/AlfButton",
+            config: {
+               additionalCssClasses: "call-to-action",
+               label: this.message("alf.renderers.Actions.menuLabel"),
+               publishTopic: "NO_OP"
+            }
          });
-         
-         // Add all the actions...
-         this.addActions();
+         this._button.placeAt(this.domNode);
+         this._buttonNode = this._button.domNode;
+         this._aroundNode = this._button.domNode;
       }
    });
 });

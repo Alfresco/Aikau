@@ -1,10 +1,26 @@
-.alfresco-lists-views-layout-_MultiItemRendererMixin__item:hover .alfresco-renderers-Actions.hover-only > div,
-.alfresco-lists-views-layout-_MultiItemRendererMixin__item .alfresco-renderers-Actions.hover-only > div.dijitSelected {
-   visibility: visible;
-}
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item {
+   &:hover {
+      .alfresco-renderers-Actions {
+         &.hover-only {
+            >.alfresco-buttons-AlfButton {
+               visibility: visible;
+            }
+         }
+      }
+   }
+   .alfresco-renderers-Actions {
+      &.hover-only {
+         &.dijitHasDropDownOpen {
+            >.alfresco-buttons-AlfButton {
+               visibility: visible;
+            }
+         }
 
-.alfresco-lists-views-layout-_MultiItemRendererMixin__item .alfresco-renderers-Actions.hover-only > div {
-   visibility: hidden;
+         > .alfresco-buttons-AlfButton {
+            visibility: hidden;
+         }
+      }
+   }
 }
 
 .alfresco-renderers-Actions {
