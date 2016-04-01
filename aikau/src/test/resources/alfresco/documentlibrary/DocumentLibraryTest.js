@@ -25,6 +25,17 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, TestCommon) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+   var selectors = {
+      actions: {
+         first: {
+            label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["DETAILED_VIEW_ACTIONS", "0"]),
+            dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["DETAILED_VIEW_ACTIONS", "0"]),
+            action: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.actions", ["DETAILED_VIEW_ACTIONS", "0"])
+         }
+      }
+   };
+
    // PLEASE NOTE:
    // We're going to run the same tests on the Document Library with URL hashing enabled and then disabled
    // so the tests are abstracted to their own individual functions for re-use (this is slightly different
@@ -191,7 +202,7 @@ define(["intern!object",
          // NOTE: The following tests don't need to be duplicated across both hashing and non-hashing Document Libraries
          
          "Delete item in scoped document library": function() {
-            return browser.findById("DETAILED_VIEW_ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.actions.first.label)
                .clearLog()
                .click()
             .end()
@@ -343,7 +354,7 @@ define(["intern!object",
          },
 
          "Delete item in scoped document library": function() {
-            return browser.findDisplayedById("DETAILED_VIEW_ACTIONS_ITEM_0_MENU_text")
+            return browser.findDisplayedByCssSelector(selectors.actions.first.label)
                .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
                .clearLog()
                .click()

@@ -28,6 +28,7 @@ define(["intern!object",
         "intern/dojo/node!leadfoot/keys"],
    function(registerSuite, assert, TestCommon, keys) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
    registerSuite(function(){
       var browser;
 
@@ -115,7 +116,8 @@ define(["intern!object",
          },
 
          "Check merged actions": function() {
-            return browser.findById("SR_ACTIONS_MENU_text")
+            var actionSelector = TestCommon.getTestSelector(actionsSelectors, "label", ["SR_ACTIONS"]);
+            return browser.findByCssSelector(actionSelector)
                .moveMouseTo(1, 1)
                .click()
                .end()

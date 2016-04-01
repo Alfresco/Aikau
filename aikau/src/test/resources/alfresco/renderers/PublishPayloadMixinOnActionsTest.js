@@ -25,6 +25,15 @@ define(["intern!object",
         "alfresco/TestCommon"], 
         function (registerSuite, assert, TestCommon) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+   var selectors = {
+      actions: {
+         first: {
+            label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", "0"])
+         }
+      }
+   };
+
    registerSuite(function(){
       var browser;
 
@@ -48,7 +57,7 @@ define(["intern!object",
          },
 
          "Click delete action": function() {
-            return browser.findById("ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.actions.first.label)
                .click()
             .end()
             
@@ -64,7 +73,7 @@ define(["intern!object",
          },
 
          "Click manage action": function() {
-            return browser.findById("ACTIONS_ITEM_0_MENU_text")
+            return browser.findByCssSelector(selectors.actions.first.label)
                .click()
             .end()
             

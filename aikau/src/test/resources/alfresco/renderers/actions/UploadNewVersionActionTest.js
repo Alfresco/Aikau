@@ -25,23 +25,29 @@ define(["intern!object",
         "alfresco/TestCommon"],
        function (registerSuite, assert, TestCommon) {
 
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+
    var shouldBeRendered = function(browser, index) {
-      return browser.findById("ACTIONS_ITEM_" + index + "_MENU_text")
+      var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", index]);
+      var dropDownSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", index]);
+      return browser.findByCssSelector(actionSelector)
          .click()
       .end()
 
-      .findDisplayedById("ACTIONS_ITEM_" + index + "_GROUP")
+      .findDisplayedByCssSelector(dropDownSelector)
       .end()
 
-      .findById("ACTIONS_ITEM_" + index + "_UPLOAD_NEW_VERSION");
+      .findDisplayedById("ACTIONS_ITEM_" + index + "_UPLOAD_NEW_VERSION");
    };
 
    var shouldNotBeRendered = function(browser, index) {
-      return browser.findById("ACTIONS_ITEM_" + index + "_MENU_text")
+      var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", index]);
+      var dropDownSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", index]);
+      return browser.findByCssSelector(actionSelector)
          .click()
       .end()
 
-      .findDisplayedById("ACTIONS_ITEM_" + index + "_GROUP")
+      .findDisplayedByCssSelector(dropDownSelector)
       .end()
 
       .findAllByCssSelector("#ACTIONS_ITEM_" + index + "_UPLOAD_NEW_VERSION")
@@ -98,11 +104,14 @@ define(["intern!object",
          },
 
          "Upload a new verion": function() {
-            return browser.findById("ACTIONS_ITEM_1_MENU_text")
+            var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 1]);
+            var dropDownSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", 1]);
+      
+            return browser.findByCssSelector(actionSelector)
                .click()
             .end()
 
-            .findDisplayedById("ACTIONS_ITEM_1_GROUP")
+            .findDisplayedByCssSelector(dropDownSelector)
             .end()
 
             .findById("ACTIONS_ITEM_1_UPLOAD_NEW_VERSION")
