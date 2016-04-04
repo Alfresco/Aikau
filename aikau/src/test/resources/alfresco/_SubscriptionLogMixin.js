@@ -22,6 +22,7 @@
  *
  * @author Dave Draper
  * @author Martin Doyle
+ * @since 1.0.62
  */
 define({
 

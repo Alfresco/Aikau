@@ -24,7 +24,7 @@
  * documentation at https://theintern.github.io/leadfoot/module-leadfoot_Command.html
  *
  * @author Martin Doyle
- * @since 1.0.59
+ * @since 1.0.62
  */
 define(["intern/dojo/node!fs",
       "intern/dojo/node!os",
