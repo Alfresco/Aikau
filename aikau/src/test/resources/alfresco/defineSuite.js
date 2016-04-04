@@ -18,7 +18,10 @@
  */
 
 /**
+ * This is a custom wrapper for the "intern!object" registerSuite function.
+ * 
  * @author Martin Doyle
+ * @since 1.0.62
  */
 define(["intern/dojo/node!fs", 
         "intern/dojo/node!os", 
