@@ -41,8 +41,4 @@
          </plugin>
       </plugins>
    </build>
-
-  <scm>
-    <tag>release-1.0.39.6-SNAPSHOT</tag>
-  </scm>
 </project>
