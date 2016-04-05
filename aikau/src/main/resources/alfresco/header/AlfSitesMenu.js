@@ -551,10 +551,11 @@ define(["dojo/_base/declare",
        */
       _addMenuItem: function alfresco_header_AlfSitesMenu___addMenuItem(group, widget, index) {
          this.alfLog("log", "Adding menu item", widget, index, group);
+
          var item = this.createWidget({
             name: "alfresco/header/AlfMenuItem",
             config: widget.config
-         })
+         });
          group.addChild(item);
       },
       
