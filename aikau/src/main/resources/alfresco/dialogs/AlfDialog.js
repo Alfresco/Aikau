@@ -207,6 +207,10 @@ define(["dojo/_base/declare",
             args.content = args.textContent;
             delete args.textContent;
          }
+         if (args.content)
+         {
+            args.content = this.encodeHTML(args.content);
+         }
          declare.safeMixin(args);
       },
 
@@ -367,7 +371,7 @@ define(["dojo/_base/declare",
          {
             // Add basic text content into the container node. An example of this would be for
             // setting basic text content in an confirmation dialog...
-            html.set(this.bodyNode, this.encodeHTML(this.content));
+            html.set(this.bodyNode, this.content);
          }
 
          this.alfSetupResizeSubscriptions(this.onWindowResize, this);

@@ -465,7 +465,7 @@ define(["dojo/_base/declare",
          // TODO: Update this and other function with scroll setting...
          var dialogConfig = {
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
-            title: this.message(payload.dialogTitle || ""),
+            title: this.encodeHTML(this.message(payload.dialogTitle || "")),
             content: payload.textContent,
             duration: payload.duration || 0,
             fullScreenMode: payload.fullScreenMode || false,
