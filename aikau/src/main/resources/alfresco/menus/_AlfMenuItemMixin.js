@@ -150,11 +150,11 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_menus__AlfMenuItemMixin__postMixInProperties() {
          if (this.label)
          {
-            this.params.label = this.label = this.encodeHTML(this.message(this.label));
+            this.params.label = this.label = this.message(this.label);
          }
          if (this.title)
          {
-            this.title = this.encodeHTML(this.message(this.title));
+            this.title = this.message(this.title);
          }
 
          this.inherited(arguments);

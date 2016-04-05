@@ -65,18 +65,50 @@ registerSuite(function(){
       "Test that dialog with no ID can be created": function() {
          return browser.findByCssSelector("#CREATE_FORM_DIALOG_NO_ID")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
-            .then(null, function() {
-               assert(false, "The Dialog did not appear");
-            });
+         .findDisplayedByCssSelector(".alfresco-dialog-AlfDialog");
       },
 
       "Test publication on dialog show": function() {
          return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
          .end()
          .getLastPublish("DISPLAYED_FD1", "Could not find topic published when displayed dialog");
+      },
+
+      "Title not double encoded": function() {
+         return this.remote.findByCssSelector("#FD1 .dijitDialogTitle")
+            .getVisibleText()
+            .then(function(text) {
+               // NOTE: Only include is used because text is truncated via ellipsis
+               assert.include(text, "<img ='><svg onload=\"window");
+            });
+      },
+
+      "Text content not double encoded": function() {
+         return this.remote.findByCssSelector("#FD1 .dialog-body")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "<img ='><svg onload=\"window.bodyHacked=true\"'>");
+            });
+      },
+
+      "Title XSS attack failed": function() {
+         return this.remote.execute(function() {
+               return window.titleHacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
+            });
+      },
+
+      "Body XSS attack failed": function() {
+         return this.remote.execute(function() {
+               return window.bodyHacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
+            });
       },
 
       "Test recreating dialog with no ID": function() {
