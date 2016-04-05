@@ -79,8 +79,11 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("log", "Loading actions");
-            this._button.set("label", this.message("loading.label"));
-            this._button.set("disabled", true);
+            if (this._button)
+            {
+               this._button.set("label", this.message("loading.label"));
+               this._button.set("disabled", true);
+            }
             this.getXhrData(callback);
          }
       },
@@ -125,7 +128,10 @@ define(["dojo/_base/declare",
          {
             this.currentItem = payload.response.item;
             this.addXhrItems();
-            callback();
+            if (typeof callback === "function")
+            {
+               callback();
+            }
          }
          else
          {
@@ -140,8 +146,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       addXhrItems: function alfresco_renderers__XhrActionsMixin__addXhrItems() {
-         this._button.set("label", this.message("alf.renderers.Actions.menuLabel"));
-         this._button.set("disabled", false);
+         if (this._button)
+         {
+            this._button.set("label", this.message("alf.renderers.Actions.menuLabel"));
+            this._button.set("disabled", false);
+         }
          this.addActions();
       }
    });
