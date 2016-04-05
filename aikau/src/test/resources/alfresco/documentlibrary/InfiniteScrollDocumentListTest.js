@@ -96,7 +96,10 @@ define(["module",
       },
 
       "Reload the page and check initial sorting displayed": function() {
-         return this.remote.get(TestCommon.generateWebscriptUrl("/InfiniteScrollDocumentList"))
+         return this.remote.getCurrentUrl()
+            .then(currentUrl => {
+               return this.remote.get(currentUrl);
+            })
             .findByCssSelector("body")
             .end()
 

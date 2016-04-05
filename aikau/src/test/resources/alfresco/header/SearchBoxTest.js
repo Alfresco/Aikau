@@ -204,14 +204,14 @@ define(["module",
       },
 
       "Submit the search request": function() {
-         return this.remote.findAllByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
+         return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
             .click()
             .pressKeys(keys.RETURN)
          .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.propertyVal(payload, "url", "site/site1/dp/ws/faceted-search#searchTerm=site&scope=site1");
+               assert.propertyVal(payload, "url", "site/site1/dp/ws/faceted-search#searchTerm=site&scope=repo");
             });
       },
 
