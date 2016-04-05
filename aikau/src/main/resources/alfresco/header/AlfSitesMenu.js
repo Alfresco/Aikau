@@ -551,6 +551,8 @@ define(["dojo/_base/declare",
        */
       _addMenuItem: function alfresco_header_AlfSitesMenu___addMenuItem(group, widget, index) {
          this.alfLog("log", "Adding menu item", widget, index, group);
+
+         widget.config.label = this.encodeHTML(widget.config.label);
          var item = this.createWidget({
             name: "alfresco/header/AlfMenuItem",
             config: widget.config
@@ -779,7 +781,7 @@ define(["dojo/_base/declare",
          var newFavourite = this.createWidget({
             name: "alfresco/header/AlfMenuItem",
             config: {
-               label: siteTitle,
+               label: this.encodeHTML(siteTitle),
                iconClass: this.favouriteGroupIconClass,
                targetUrl: "site/" + siteShortName + this.siteLandingPage.replace(/^\/*/, "/"),
                siteShortName: siteShortName
