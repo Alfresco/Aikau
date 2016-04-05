@@ -21,16 +21,17 @@
  *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon"],
-        function (registerSuite, assert, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
 
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
    var formControlSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/BaseFormControl");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
-   
+
    var selectors = {
       form: {
          confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["TEST_FORM"]),
@@ -65,265 +66,249 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Advanced Form Validation Tests",
+      testPage: "/Validation",
 
-      return {
-         name: "Advanced Form Validation Tests",
+      "Check that the form is initially invalid": function() {
+         return this.remote.findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Validation", "Advanced Form Validation Tests").end();
-         },
+      "Check the initial error messages (1)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Too short, Letters only");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check the initial error messages (2)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.invert.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Too short");
+            });
+      },
 
-         "Check that the form is initially invalid": function () {
-            return browser.findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+      "Check the in-progress indicator isn't shown": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validating)
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         "Check the initial error messages (1)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Too short, Letters only");
-               });
-         },
-
-         "Check the initial error messages (2)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.invert.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Too short");
-               });
-         },
-
-         "Check the in-progress indicator isn't shown": function() {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validating)
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
-
-         // Add 3 letters to both controls (make sure errors are cleared and form can be posted)...
-         "Check form confirmation button is enabled": function () {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .type("abc")
+      // Add 3 letters to both controls (make sure errors are cleared and form can be posted)...
+      "Check form confirmation button is enabled": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .type("abc")
             .end()
 
-            .findByCssSelector(selectors.textBoxes.invert.input)
-               .type("abc")
+         .findByCssSelector(selectors.textBoxes.invert.input)
+            .type("abc")
             .end()
 
-            .findAllByCssSelector(selectors.form.disabledConfirmationButton)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
-               });
-         },
+         .findAllByCssSelector(selectors.form.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
+            });
+      },
 
-         "Check that error message has been removed (1)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
+      "Check that error message has been removed (1)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         "Check that error message has been removed (2)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.invert.validationMessage)
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
+      "Check that error message has been removed (2)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.invert.validationMessage)
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         // Add 6 letters to control 1 (make sure field is invalid and message is correct)...
-         "Test confirmation button disabled (too many chars)": function () {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .clearValue()
-               .type("abcdef")
+      // Add 6 letters to control 1 (make sure field is invalid and message is correct)...
+      "Test confirmation button disabled (too many chars)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .clearValue()
+            .type("abcdef")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test error message (too many chars)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Too long");
-               });
-         },
+      "Test error message (too many chars)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Too long");
+            });
+      },
 
-         // Add numbers to control 1 (make sure field is invalid and message is correct)...
-         "Test confirmation button disabled (invalid chars)": function () {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .clearValue()
-               .type("123")
+      // Add numbers to control 1 (make sure field is invalid and message is correct)...
+      "Test confirmation button disabled (invalid chars)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .clearValue()
+            .type("123")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test error message (invalid chars)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Letters only");
-               });
-         },
+      "Test error message (invalid chars)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Letters only");
+            });
+      },
 
-         // Add a value to control 1 that is used (make sure field is invalid and message is correct)...
-         "Test confirmation button disabled (duplicate value)": function () {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .clearValue()
-               .type("One")
+      // Add a value to control 1 that is used (make sure field is invalid and message is correct)...
+      "Test confirmation button disabled (duplicate value)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .clearValue()
+            .type("One")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test error message (duplicate value)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Already used");
-               });
-         },
+      "Test error message (duplicate value)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Already used");
+            });
+      },
 
-         // Add a value to control 2 that contains illegal characters (make sure field is invalid and message is correct)...
-         "Test confirmation button is disabled (more illegal chars)": function () {
-            return browser.findByCssSelector(selectors.textBoxes.invert.input)
-               .clearValue()
-               .type("abc>def/")
+      // Add a value to control 2 that contains illegal characters (make sure field is invalid and message is correct)...
+      "Test confirmation button is disabled (more illegal chars)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.invert.input)
+            .clearValue()
+            .type("abc>def/")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test error message (more illegal chars)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.invert.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "No illegal characters");
-               });
-         },
+      "Test error message (more illegal chars)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.invert.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "No illegal characters");
+            });
+      },
 
-         // Check asynchoronous behaviour...
-         "Test asynchoronous validation indicator gets displayed": function () {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .clearValue()
+      // Check asynchoronous behaviour...
+      "Test asynchoronous validation indicator gets displayed": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .clearValue()
             .end()
 
-            .findByCssSelector(selectors.buttons.blockResponse)
-               .click()
+         .findByCssSelector(selectors.buttons.blockResponse)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .type("O")
+         .findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .type("O")
             .end()
 
-            .findDisplayedByCssSelector(selectors.textBoxes.threeLettersOrMore.validating);
-         },
+         .findDisplayedByCssSelector(selectors.textBoxes.threeLettersOrMore.validating);
+      },
 
-         "Test progress indicator is removed": function() {
-            return browser.findByCssSelector(selectors.buttons.unblockResponse)
-               .click()
-               .click() // Needs the 2nd click!
+      "Test progress indicator is removed": function() {
+         return this.remote.findByCssSelector(selectors.buttons.unblockResponse)
+            .click()
+            .click() // Needs the 2nd click!
             .end()
 
-            .findByCssSelector(selectors.textBoxes.threeLettersOrMore.validating)
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.threeLettersOrMore.validating)
+            .isDisplayed()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         // Need to make the form valid before the next test!
-         "Test confirmation button gets enabled": function () {
-            return browser.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
-               .clearValue()
-               .type("abc")
+      // Need to make the form valid before the next test!
+      "Test confirmation button gets enabled": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.threeLettersOrMore.input)
+            .clearValue()
+            .type("abc")
             .end()
             .findByCssSelector(selectors.textBoxes.invert.input)
-               .clearValue()
-               .type("abc")
+            .clearValue()
+            .type("abc")
             .end()
             .findAllByCssSelector(selectors.form.disabledConfirmationButton)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
+            });
+      },
 
-         "Test validationTopic returns a failure": function() {
-            return browser.findByCssSelector(selectors.textBoxes.topicValidation.input)
-               .clearValue()
-               .type("#fail")
+      "Test validationTopic returns a failure": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.topicValidation.input)
+            .clearValue()
+            .type("#fail")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test validationTopic returns success": function () {
-            return browser.findByCssSelector(selectors.textBoxes.topicValidation.input)
-               .clearValue()
-               .type("success")
+      "Test validationTopic returns success": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.topicValidation.input)
+            .clearValue()
+            .type("success")
             .end()
 
-            .findAllByCssSelector(selectors.form.disabledConfirmationButton)
-               .then(function (elements) {
-                  assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
-               });
-         },
+         .findAllByCssSelector(selectors.form.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
+            });
+      },
 
-         "Test Match Validation - Source Change": function () {
-            return browser.findByCssSelector(selectors.textBoxes.matchTarget.input)
-               .clearValue()
-               .type("ABC")
+      "Test Match Validation - Source Change": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.matchTarget.input)
+            .clearValue()
+            .type("ABC")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test Match Validation - Target Match": function () {
-            return browser.findByCssSelector(selectors.textBoxes.matchSource.input)
-               .clearValue()
-               .type("ABC")
+      "Test Match Validation - Target Match": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.matchSource.input)
+            .clearValue()
+            .type("ABC")
             .end()
 
-            .findAllByCssSelector(selectors.form.disabledConfirmationButton)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
-               });
-         },
+         .findAllByCssSelector(selectors.form.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
+            });
+      },
 
-         "Test Match Validation - Target Mismatch": function () {
-            return browser.findByCssSelector(selectors.textBoxes.matchTarget.input)
-               .clearValue()
-               .type("AB")
+      "Test Match Validation - Target Mismatch": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.matchTarget.input)
+            .clearValue()
+            .type("AB")
             .end()
 
-            .findByCssSelector(selectors.form.disabledConfirmationButton);
-         },
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
 
-         "Test Match Validation - Source Match Again": function () {
-            return browser.findByCssSelector(selectors.textBoxes.matchSource.input)
-               .clearValue()
-               .type("AB")
+      "Test Match Validation - Source Match Again": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.matchSource.input)
+            .clearValue()
+            .type("AB")
             .end()
 
-            .findAllByCssSelector(selectors.form.disabledConfirmationButton)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "The forms confirmation button should be disabled");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findAllByCssSelector(selectors.form.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be disabled");
+            });
+      }
    });
 });

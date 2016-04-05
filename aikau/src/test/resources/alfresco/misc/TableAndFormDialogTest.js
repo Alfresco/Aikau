@@ -20,126 +20,110 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Table And Form Dialog Tests",
+      testPage: "/TableAndFormDialog",
 
-      return {
-         name: "Table And Form Dialog Tests",
+      // To get an entry in the table to click: "#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner"
+      // To get the value of an entry in the table to click: "#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner span.value"
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/TableAndFormDialog", "Table And Form Dialog Tests").end();
-         },
+      "Test that no dialogs exist when page first loads": function() {
+         return this.remote.findAllByCssSelector(".alfresco-dialog-AlfDialog")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Check there are no dialogs at page load");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Test that the first row in the initial table is correct": function() {
+         // Check the initial values...
+         return this.remote.findByCssSelector("#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner span.value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "ID1", "First row of data has wrong id");
+            });
+      },
 
-         // To get an entry in the table to click: "#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner"
-         // To get the value of an entry in the table to click: "#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner span.value"
+      "Test that second row in the initial table is correct": function() {
+         return this.remote.findByCssSelector("#TABLE_VIEW_ITEMS tr:nth-child(2) td:nth-child(2) span.inner span.value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "ID2", "Second row of data has wrong id");
+            });
+      },
 
-         "Test that no dialogs exist when page first loads": function () {
-            return browser.findAllByCssSelector(".alfresco-dialog-AlfDialog")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Check there are no dialogs at page load");
-               });
-         },
-
-         "Test that the first row in the initial table is correct": function() {
-            // Check the initial values...
-            return browser.findByCssSelector("#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner span.value")
-               .getVisibleText()
-               .then(function(resultText) {
-                     assert.equal(resultText, "ID1", "First row of data has wrong id");
-                  });
-         },
-
-         "Test that second row in the initial table is correct": function() {
-            return browser.findByCssSelector("#TABLE_VIEW_ITEMS tr:nth-child(2) td:nth-child(2) span.inner span.value")
-               .getVisibleText()
-               .then(function(resultText) {
-                     assert.equal(resultText, "ID2", "Second row of data has wrong id");
-                  });
-         },
-
-         "Test that clicking item opens dialog": function() {
-            // Click on the ID in the first row to open the dialog...
-            return browser.findByCssSelector("#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner")
-               .click()
+      "Test that clicking item opens dialog": function() {
+         // Click on the ID in the first row to open the dialog...
+         return this.remote.findByCssSelector("#TABLE_VIEW_ITEMS tr:nth-child(1) td:nth-child(2) span.inner")
+            .click()
             .end()
 
-            // Check that only 1 dialog exists (e.g. that any previous dialogs have been destroyed)...
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "More than one dialog was found");
-               });
-         },
+         // Check that only 1 dialog exists (e.g. that any previous dialogs have been destroyed)...
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "More than one dialog was found");
+            });
+      },
 
-         "Test that dialog title is set from clicked item": function() {
-            return browser.findByCssSelector(".alfresco-dialog-AlfDialog .dijitDialogTitleBar .dijitDialogTitle")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert.equal(resultText, "ID1", "The dialog did not have the expected title");
-               });
-         },
+      "Test that dialog title is set from clicked item": function() {
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog .dijitDialogTitleBar .dijitDialogTitle")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "ID1", "The dialog did not have the expected title");
+            });
+      },
 
-         "Test form control count": function() {
-            return browser.findAllByCssSelector(".dialog-body form div.alfresco-forms-controls-BaseFormControl")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 3, "Unexpected number of form controls in the dialog");
-               });
-         },
+      "Test form control count": function() {
+         return this.remote.findAllByCssSelector(".dialog-body form div.alfresco-forms-controls-BaseFormControl")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Unexpected number of form controls in the dialog");
+            });
+      },
 
-         "Test the value of the ID form field": function() {
-            return browser.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(1) .horizontal-widget:nth-child(1) div.alfresco-forms-controls-BaseFormControl .dijitInputContainer input")
-               .getProperty("value")
-               .then(function(resultText) {
-                  assert.equal(resultText, "ID1", "The ID form field was not set correctly");
-               });
-         },
+      "Test the value of the ID form field": function() {
+         return this.remote.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(1) .horizontal-widget:nth-child(1) div.alfresco-forms-controls-BaseFormControl .dijitInputContainer input")
+            .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "ID1", "The ID form field was not set correctly");
+            });
+      },
 
-         "Test the value of the name form field": function() {
-            return browser.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(1) .horizontal-widget:nth-child(2) div.alfresco-forms-controls-BaseFormControl .dijitInputContainer input")
-               .getProperty("value")
-               .then(function(resultText) {
-                  assert.equal(resultText, "Test1", "The name form field was not set correctly");
-               });
-         },
+      "Test the value of the name form field": function() {
+         return this.remote.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(1) .horizontal-widget:nth-child(2) div.alfresco-forms-controls-BaseFormControl .dijitInputContainer input")
+            .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "Test1", "The name form field was not set correctly");
+            });
+      },
 
-         "Test that option form field was set correctly": function() {
-            return browser.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(2) .horizontal-widget:nth-child(1) div.alfresco-forms-controls-BaseFormControl span[role=option]")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert.equal(resultText, "One", "The option form field was not set correctly");
-               });
-         },
+      "Test that option form field was set correctly": function() {
+         return this.remote.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(2) .horizontal-widget:nth-child(1) div.alfresco-forms-controls-BaseFormControl span[role=option]")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "One", "The option form field was not set correctly");
+            });
+      },
 
-         "Test posting a changed value": function() {
-            // Update the first text field...
-            return browser.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(1) .horizontal-widget:nth-child(1) div.alfresco-forms-controls-BaseFormControl .dijitInputContainer input")
-               .clearValue()
-               .type("Updated_ID1")
+      "Test posting a changed value": function() {
+         // Update the first text field...
+         return this.remote.findByCssSelector(".dialog-body form > .alfresco-layout-HorizontalWidgets:nth-child(1) .horizontal-widget:nth-child(1) div.alfresco-forms-controls-BaseFormControl .dijitInputContainer input")
+            .clearValue()
+            .type("Updated_ID1")
             .end()
 
-            // Post the form...
-            .findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
-               .click()
+         // Post the form...
+         .findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+            .click()
             .end()
 
-            .getLastPublish("ALF_CRUD_UPDATE")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "id", "Updated_ID1", "ID was not updated");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("ALF_CRUD_UPDATE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "id", "Updated_ID1", "ID was not updated");
+            });
+      }
    });
 });

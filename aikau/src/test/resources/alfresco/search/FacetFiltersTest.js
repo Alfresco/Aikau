@@ -18,531 +18,452 @@
  */
 
 /**
- * The purpose of this test is to ensure that keyboard accessibility is possible between the header and the 
+ * The purpose of this test is to ensure that keyboard accessibility is possible between the header and the
  * main table. It should be possible to use the tab/shift-tab keys to navigate along the headers (and the enter/space key
  * to make requests for sorting) and then the cursor keys to navigate around the table itself.
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "FacetFilters Tests (Filter blocking)",
+      testPage: "/FacetFilters",
 
-      return {
-         name: "FacetFilters Tests (Filter blocking)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (Filter blocking)").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Simulate search request": function() {
-            return browser.findById("DO_FACET_BUTTON_1_label")
-               .click()
+      "Simulate search request": function() {
+         return this.remote.findById("DO_FACET_BUTTON_1_label")
+            .click()
             .end()
 
-            .findById("SIM_SEARCH_REQUEST_label")
-               .clearLog()
-               .click()
+         .findById("SIM_SEARCH_REQUEST_label")
+            .clearLog()
+            .click()
             .end()
 
-            .findByCssSelector("#FACET1 .alfresco-search-FacetFilter:first-child .details .filterLabel")
-               .click()
+         .findByCssSelector("#FACET1 .alfresco-search-FacetFilter:first-child .details .filterLabel")
+            .click()
             .end()
 
-            .getAllPublishes("ALF_APPLY_FACET_FILTER")
+         .getAllPublishes("ALF_APPLY_FACET_FILTER")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Filter click should not be applied");
             });
-         },
+      },
 
-         "Simulate search results": function() {
-            return browser.findById("SIM_SEARCH_RESULTS_label")
-               .clearLog()
-               .click()
+      "Simulate search results": function() {
+         return this.remote.findById("SIM_SEARCH_RESULTS_label")
+            .clearLog()
+            .click()
             .end()
 
-            .findByCssSelector("#FACET1 .alfresco-search-FacetFilter:first-child .details .filterLabel")
-               .click()
+         .findByCssSelector("#FACET1 .alfresco-search-FacetFilter:first-child .details .filterLabel")
+            .click()
             .end()
 
-            .getLastPublish("ALF_APPLY_FACET_FILTER", "Filter click not applied");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("ALF_APPLY_FACET_FILTER", "Filter click not applied");
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "FacetFilters Tests (Mouse)",
+      testPage: "/FacetFilters",
 
-      return {
-         name: "FacetFilters Tests (Mouse)",
+      "Check no facets are shown to begin with": function() {
+         // Check no facets are shown to begin with
+         return this.remote.findById("FACET1")
+            .getVisibleText()
+            .then(function(initialValue) {
+               assert.equal(initialValue, "Facet 1", "The only text shown should be 'Facet 1'");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (Mouse)").end();
-         },
+      "Check no facet rows are shown to begin with": function() {
+         return this.remote.findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
+            .then(function(rows) {
+               assert.lengthOf(rows, 0, "There should be no visible rows in the facet display");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-        "Check no facets are shown to begin with": function () {
-            // Check no facets are shown to begin with
-            return browser.findById("FACET1")
-               .getVisibleText()
-               .then(function (initialValue) {
-                  assert.equal(initialValue, "Facet 1", "The only text shown should be 'Facet 1'");
-               });
-         },
-
-         "Check no facet rows are shown to begin with": function() {
-            return browser.findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 0, "There should be no visible rows in the facet display");
-               });
-            },
-
-         "Check facets are shown after clicking button 1": function() {
-            // Click button 1 - 4 rows of facet data should appear
-            return browser.findById("DO_FACET_BUTTON_1")
-               .click()
+      "Check facets are shown after clicking button 1": function() {
+         // Click button 1 - 4 rows of facet data should appear
+         return this.remote.findById("DO_FACET_BUTTON_1")
+            .click()
             .end()
 
-            .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 4, "There should be 4 rows in the facet display");
-               });
-         },
+         .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
+            .then(function(rows) {
+               assert.lengthOf(rows, 4, "There should be 4 rows in the facet display");
+            });
+      },
 
-         "Check the first set of facets have appeared": function() {
-            // Check the facet values
-            return browser.findById("FACET1")
-               .getVisibleText()
-               .then(function (facets) {
-                  assert.include(facets, "result 1", "Facets should contain 'result 1'");
-                  assert.include(facets, "result 2", "Facets should contain 'result 2'");
-                  assert.include(facets, "result 3", "Facets should contain 'result 3'");
-                  assert.include(facets, "result 4", "Facets should contain 'result 4'");
-               });
-         },
+      "Check the first set of facets have appeared": function() {
+         // Check the facet values
+         return this.remote.findById("FACET1")
+            .getVisibleText()
+            .then(function(facets) {
+               assert.include(facets, "result 1", "Facets should contain 'result 1'");
+               assert.include(facets, "result 2", "Facets should contain 'result 2'");
+               assert.include(facets, "result 3", "Facets should contain 'result 3'");
+               assert.include(facets, "result 4", "Facets should contain 'result 4'");
+            });
+      },
 
-         "Check facets are shown after clicking button 2": function() {
-            // Click button 2 - 2 rows of facet data should appear
-            return browser.findById("DO_FACET_BUTTON_2")
-               .click()
+      "Check facets are shown after clicking button 2": function() {
+         // Click button 2 - 2 rows of facet data should appear
+         return this.remote.findById("DO_FACET_BUTTON_2")
+            .click()
             .end()
             .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 2, "There should be 2 rows in the facet display");
-               });
-         },
+            .then(function(rows) {
+               assert.lengthOf(rows, 2, "There should be 2 rows in the facet display");
+            });
+      },
 
-         "Check the second set of facets have appeared": function() {
-            // Check the facet values
-            return browser.findById("FACET1")
-               .getVisibleText()
-               .then(function (facets) {
-                  assert.include(facets, "result 5", "Facets should contain 'result 5'");
-                  assert.include(facets, "result 6", "Facets should contain 'result 6'");
-               });
-         },
+      "Check the second set of facets have appeared": function() {
+         // Check the facet values
+         return this.remote.findById("FACET1")
+            .getVisibleText()
+            .then(function(facets) {
+               assert.include(facets, "result 5", "Facets should contain 'result 5'");
+               assert.include(facets, "result 6", "Facets should contain 'result 6'");
+            });
+      },
 
-         "Check facets are shown after clicking button 3": function() {
-            return browser// Click button 3 - 4 rows of facet data should appear
+      "Check facets are shown after clicking button 3": function() {
+         return this.remote // Click button 3 - 4 rows of facet data should appear
             .findById("DO_FACET_BUTTON_3")
-               .click()
+            .click()
             .end()
             .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 6, "There should be 6 rows in the facet display");
-               });
-         },
+            .then(function(rows) {
+               assert.lengthOf(rows, 6, "There should be 6 rows in the facet display");
+            });
+      },
 
-         "Check the third set of facets have appeared": function() {
-            // Check the facet values
-            return browser.findById("FACET1")
-               .getVisibleText()
-               .then(function (facets) {
-                  assert.include(facets, "result 7", "Facets should contain 'result 7'");
-                  assert.include(facets, "result 8", "Facets should contain 'result 8'");
-                  assert.include(facets, "result 9", "Facets should contain 'result 9'");
-                  assert.include(facets, "result 10", "Facets should contain 'result 10'");
-                  assert.include(facets, "result 11", "Facets should contain 'result 11'");
-                  assert.include(facets, "Show More", "Facets should contain 'More choices'");
-                  assert.notInclude(facets, "result 12", "Facets should not contain 'result 12'");
-               });
-         },
+      "Check the third set of facets have appeared": function() {
+         // Check the facet values
+         return this.remote.findById("FACET1")
+            .getVisibleText()
+            .then(function(facets) {
+               assert.include(facets, "result 7", "Facets should contain 'result 7'");
+               assert.include(facets, "result 8", "Facets should contain 'result 8'");
+               assert.include(facets, "result 9", "Facets should contain 'result 9'");
+               assert.include(facets, "result 10", "Facets should contain 'result 10'");
+               assert.include(facets, "result 11", "Facets should contain 'result 11'");
+               assert.include(facets, "Show More", "Facets should contain 'More choices'");
+               assert.notInclude(facets, "result 12", "Facets should not contain 'result 12'");
+            });
+      },
 
-         "Check the four set of facets are shown": function() {
-            // Click the more choices button
-            return browser.findByCssSelector("li.showMore")
-               .click()
+      "Check the four set of facets are shown": function() {
+         // Click the more choices button
+         return this.remote.findByCssSelector("li.showMore")
+            .click()
             .end()
 
-            // Check the facet values
-            .findById("FACET1")
-               .getVisibleText()
-               .then(function (facets) {
-                  assert.include(facets, "result 7", "Facets should contain 'result 7'");
-                  assert.include(facets, "result 8", "Facets should contain 'result 8'");
-                  assert.include(facets, "result 9", "Facets should contain 'result 9'");
-                  assert.include(facets, "result 10", "Facets should contain 'result 10'");
-                  assert.include(facets, "result 11", "Facets should contain 'result 11'");
-                  assert.include(facets, "Show Fewer", "Facets should contain 'Less choices'");
-                  assert.include(facets, "result 12", "Facets should contain 'result 12'");
-               });
-         },
+         // Check the facet values
+         .findById("FACET1")
+            .getVisibleText()
+            .then(function(facets) {
+               assert.include(facets, "result 7", "Facets should contain 'result 7'");
+               assert.include(facets, "result 8", "Facets should contain 'result 8'");
+               assert.include(facets, "result 9", "Facets should contain 'result 9'");
+               assert.include(facets, "result 10", "Facets should contain 'result 10'");
+               assert.include(facets, "result 11", "Facets should contain 'result 11'");
+               assert.include(facets, "Show Fewer", "Facets should contain 'Less choices'");
+               assert.include(facets, "result 12", "Facets should contain 'result 12'");
+            });
+      },
 
-         "Check the fifth set of facets are shown": function() {
-            // Click the less choices button
-            return browser.findByCssSelector("li.showLess")
-               .click()
+      "Check the fifth set of facets are shown": function() {
+         // Click the less choices button
+         return this.remote.findByCssSelector("li.showLess")
+            .click()
             .end()
 
-            // Check the facet values
-            .findById("FACET1")
-               .getVisibleText()
-               .then(function (facets) {
-                  assert.include(facets, "result 7", "Facets should contain 'result 7'");
-                  assert.include(facets, "result 8", "Facets should contain 'result 8'");
-                  assert.include(facets, "result 9", "Facets should contain 'result 9'");
-                  assert.include(facets, "result 10", "Facets should contain 'result 10'");
-                  assert.include(facets, "result 11", "Facets should contain 'result 11'");
-                  assert.include(facets, "Show More", "Facets should contain 'More choices'");
-                  assert.notInclude(facets, "result 12", "Facets should not contain 'result 12'");
-               });
-         },
+         // Check the facet values
+         .findById("FACET1")
+            .getVisibleText()
+            .then(function(facets) {
+               assert.include(facets, "result 7", "Facets should contain 'result 7'");
+               assert.include(facets, "result 8", "Facets should contain 'result 8'");
+               assert.include(facets, "result 9", "Facets should contain 'result 9'");
+               assert.include(facets, "result 10", "Facets should contain 'result 10'");
+               assert.include(facets, "result 11", "Facets should contain 'result 11'");
+               assert.include(facets, "Show More", "Facets should contain 'More choices'");
+               assert.notInclude(facets, "result 12", "Facets should not contain 'result 12'");
+            });
+      },
 
-         "Check facet menu is hidden when the title is clicked": function() {
-            return browser// Click the title - the facet menu should disappear
+      "Check facet menu is hidden when the title is clicked": function() {
+         return this.remote // Click the title - the facet menu should disappear
             .findByCssSelector("#FACET1 > div.label")
-               .click()
+            .click()
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isFalse(displayed, "Facet menu should be hidden when the title is clicked");
-               });
-         },
+         .findByCssSelector("#FACET1 > ul.filters")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Facet menu should be hidden when the title is clicked");
+            });
+      },
 
-         "Check facet menu is shown when the title is clicked again": function() {
-            // Click the title again - the facet menu should reappear
-            return browser.findByCssSelector("#FACET1 > div.label")
-               .click()
+      "Check facet menu is shown when the title is clicked again": function() {
+         // Click the title again - the facet menu should reappear
+         return this.remote.findByCssSelector("#FACET1 > div.label")
+            .click()
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isTrue(displayed, "Facet menu should be shown when the title is clicked again");
-               });
-         },
+         .findByCssSelector("#FACET1 > ul.filters")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Facet menu should be shown when the title is clicked again");
+            });
+      },
 
-         "Facet menu item should select when clicked": function() {
-            // Click the first facet menu item - it should select
-            return browser.findByCssSelector("#FACET1 > ul.filters > li:first-of-type span.filterLabel")
-               .click()
+      "Facet menu item should select when clicked": function() {
+         // Click the first facet menu item - it should select
+         return this.remote.findByCssSelector("#FACET1 > ul.filters > li:first-of-type span.filterLabel")
+            .click()
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isTrue(displayed, "Facet menu item should select when clicked");
-               })
+         .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Facet menu item should select when clicked");
+            })
             .end()
 
-            .getLastPublish("ALF_APPLY_FACET_FILTER");
-         },
+         .getLastPublish("ALF_APPLY_FACET_FILTER");
+      },
 
-         "Facet menu item should de-select when clicked again": function() {
-            return browser// Click the first facet menu item again - it should de-select
+      "Facet menu item should de-select when clicked again": function() {
+         return this.remote // Click the first facet menu item again - it should de-select
             .findByCssSelector("#FACET1 > ul.filters > li:first-of-type span.filterLabel")
-               .click()
+            .click()
             .end()
             .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isFalse(displayed, "Facet menu item should de-select when clicked again");
-               })
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Facet menu item should de-select when clicked again");
+            })
             .end()
 
-            .getLastPublish("ALF_REMOVE_FACET_FILTER");
-         },
-        
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("ALF_REMOVE_FACET_FILTER");
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "FacetFilters Tests (Keyboard)",
+      testPage: "/FacetFilters",
 
-      return {
-         name: "FacetFilters Tests (Keyboard)",
+      "Check no facets are shown to begin with": function() {
+         // Check no facets are shown to begin with
+         return this.remote.findById("FACET1")
+            .getVisibleText()
+            .then(function(initialValue) {
+               assert.equal(initialValue, "Facet 1", "The only text shown should be 'Facet 1'");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (Keyboard)").end();
-         },
+      "Check no facet rows are shown to begin with": function() {
+         return this.remote.findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
+            .then(function(rows) {
+               assert.lengthOf(rows, 0, "There should be no visible rows in the facet display");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check no facets are shown to begin with": function () {
-            // Check no facets are shown to begin with
-            return browser.findById("FACET1")
-               .getVisibleText()
-               .then(function (initialValue) {
-                  assert.equal(initialValue, "Facet 1", "The only text shown should be 'Facet 1'");
-               });
-         },
-         
-         "Check no facet rows are shown to begin with": function() {
-            return browser.findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 0, "There should be no visible rows in the facet display");
-               });
-         },
-         
-         "Check facets are shown after selecting button 1 with the keyboard": function() {
-            // 'click' the first button
-            return browser.pressKeys(keys.TAB)
+      "Check facets are shown after selecting button 1 with the keyboard": function() {
+         // 'click' the first button
+         return this.remote.pressKeys(keys.TAB)
             .pressKeys(keys.RETURN)
             .end()
 
-            .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 4, "There should be 4 rows in the facet display");
-               });
-         },
-         
-         "Check facet menu is hidden when the title is clicked with the keyboard": function() {
-            // Move to the facet menu label and 'click' it
-            return browser.pressKeys(keys.TAB)
+         .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
+            .then(function(rows) {
+               assert.lengthOf(rows, 4, "There should be 4 rows in the facet display");
+            });
+      },
+
+      "Check facet menu is hidden when the title is clicked with the keyboard": function() {
+         // Move to the facet menu label and 'click' it
+         return this.remote.pressKeys(keys.TAB)
             .pressKeys(keys.TAB)
             .pressKeys(keys.TAB)
             .pressKeys(keys.RETURN)
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isFalse(displayed, "Facet menu should be hidden when the title is clicked using the keyboard");
-               });
-         },
-         
-         "Check facet menu is displayed when the title is re-clicked with the keyboard": function() {
-            // 'Click' the menu label again to re-show the menu
-            return browser.pressKeys(keys.RETURN)
+         .findByCssSelector("#FACET1 > ul.filters")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Facet menu should be hidden when the title is clicked using the keyboard");
+            });
+      },
+
+      "Check facet menu is displayed when the title is re-clicked with the keyboard": function() {
+         // 'Click' the menu label again to re-show the menu
+         return this.remote.pressKeys(keys.RETURN)
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isTrue(displayed, "Facet menu should be displayed when the title is re-clicked using the keyboard");
-               });
-         },
-         
-         "Facet menu item should select when clicked with the keyboard": function() {
-            // Tab onto the first facet in the menu and 'click' it - it should select
-            return browser.pressKeys(keys.TAB)
+         .findByCssSelector("#FACET1 > ul.filters")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Facet menu should be displayed when the title is re-clicked using the keyboard");
+            });
+      },
+
+      "Facet menu item should select when clicked with the keyboard": function() {
+         // Tab onto the first facet in the menu and 'click' it - it should select
+         return this.remote.pressKeys(keys.TAB)
             .pressKeys(keys.RETURN)
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isTrue(displayed, "Facet menu item should select when clicked using the keyboard");
-               })
+         .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Facet menu item should select when clicked using the keyboard");
+            })
             .end()
 
-            .getLastPublish("ALF_APPLY_FACET_FILTER");
-         },
-         
-         "Facet menu item should de-select when clicked again using the keyboard": function() {
-            // 'Click' the first facet menu item again - it should de-select
-            return browser.pressKeys(keys.RETURN)
+         .getLastPublish("ALF_APPLY_FACET_FILTER");
+      },
+
+      "Facet menu item should de-select when clicked again using the keyboard": function() {
+         // 'Click' the first facet menu item again - it should de-select
+         return this.remote.pressKeys(keys.RETURN)
             .end()
 
-            .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
-               .isDisplayed()
-               .then(function (displayed) {
-                  assert.isFalse(displayed, "Facet menu item should de-select when clicked again using the keyboard");
-               })
+         .findByCssSelector("#FACET1 > ul.filters > li:first-of-type > span.status > span")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Facet menu item should de-select when clicked again using the keyboard");
+            })
             .end()
 
-            .getLastPublish("ALF_REMOVE_FACET_FILTER");
-         },
+         .getLastPublish("ALF_REMOVE_FACET_FILTER");
+      },
 
-         "Hits don't toggle on facet 1": function() {
-            return browser.findByCssSelector("#FACET1 .hits")
-               .clearLog()
-               .click()
+      "Hits don't toggle on facet 1": function() {
+         return this.remote.findByCssSelector("#FACET1 .hits")
+            .clearLog()
+            .click()
             .end()
 
-            .getAllPublishes("ALF_APPLY_FACET_FILTER")
-               .then(function(payloads) {
-                  assert.lengthOf(payloads, 0, "Filter should not be toggled clicking on hits");
-               });
-         },
+         .getAllPublishes("ALF_APPLY_FACET_FILTER")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Filter should not be toggled clicking on hits");
+            });
+      },
 
-         "Hits do toggle on facet 2": function() {
-            return browser.findById("DO_FACET_BUTTON_4_label")
-               .click()
+      "Hits do toggle on facet 2": function() {
+         return this.remote.findById("DO_FACET_BUTTON_4_label")
+            .click()
             .end()
 
-            .findDisplayedByCssSelector("#FACET2 .hits")
-               .click()
+         .findDisplayedByCssSelector("#FACET2 .hits")
+            .click()
             .end()
 
-            // NOTE: #FACET2 has a different topic on click from #FACET1
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Filter was not toggled clicking on hits");
-         },
-         
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         // NOTE: #FACET2 has a different topic on click from #FACET1
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE", "Filter was not toggled clicking on hits");
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "FacetFilters Tests (URL Hash Tests)",
+      testPage: "/FacetFilters",
 
-      return {
-         name: "FacetFilters Tests (URL Hash Tests)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (URL Hash Tests)").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check facets are shown after clicking button 4": function () {
-            // Click button 4 - 3 rows of facet data should appear
-            return browser.findById("DO_FACET_BUTTON_4")
-               .click()
+      "Check facets are shown after clicking button 4": function() {
+         // Click button 4 - 3 rows of facet data should appear
+         return this.remote.findById("DO_FACET_BUTTON_4")
+            .click()
             .end()
 
-            .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
-               .then(function (rows) {
-                  assert.lengthOf(rows, 3, "There should be 3 rows in the facet display");
-               });
-         },
+         .findAllByCssSelector(".alfresco-search-FacetFilter:not(.hidden)")
+            .then(function(rows) {
+               assert.lengthOf(rows, 3, "There should be 3 rows in the facet display");
+            });
+      },
 
-         "Click the first item in the facet menu": function() {
-            return browser// Click facet1 - check the url hash appears as expected
+      "Click the first item in the facet menu": function() {
+         return this.remote // Click facet1 - check the url hash appears as expected
             .findByCssSelector("#FACET2 > ul.filters > li:first-of-type span.filterLabel")
-               .click()
+            .click()
             .end()
 
-            .getCurrentUrl()
-               .then(function (url) {
-                  assert.include(url, "FACET2QNAME", "The url hash should contain 'FACET2QNAME'");
-                  assert.include(url, "facFil1", "The facet click did not write the value 'facFil1' to the url hash as expected");
-               });
-         },
+         .getCurrentUrl()
+            .then(function(url) {
+               assert.include(url, "FACET2QNAME", "The url hash should contain 'FACET2QNAME'");
+               assert.include(url, "facFil1", "The facet click did not write the value 'facFil1' to the url hash as expected");
+            });
+      },
 
-         "Click the second item in the facet menu": function() {
-            return browser// Click facet2 - check the url hash appears as expected
+      "Click the second item in the facet menu": function() {
+         return this.remote // Click facet2 - check the url hash appears as expected
             .findByCssSelector("#FACET2 > ul.filters > li:nth-of-type(2) span.filterLabel")
-               .click()
+            .click()
             .end()
 
-            .getCurrentUrl()
-               .then(function (url) {
-                  assert.include(url, "FACET2QNAME", "The url hash should contain 'FACET2QNAME'");
-                  assert.include(url, "facFil1", "The url hash should contain 'facFil2'");
-                  assert.include(url, "facFil2", "The facet click did not add the value 'facFil2' to the url hash as expected");
-               });
-         },
+         .getCurrentUrl()
+            .then(function(url) {
+               assert.include(url, "FACET2QNAME", "The url hash should contain 'FACET2QNAME'");
+               assert.include(url, "facFil1", "The url hash should contain 'facFil2'");
+               assert.include(url, "facFil2", "The facet click did not add the value 'facFil2' to the url hash as expected");
+            });
+      },
 
-         "Click the first item in the facet menu again": function() {
-            return browser// Click facet1 - check the url hash appears as expected
+      "Click the first item in the facet menu again": function() {
+         return this.remote // Click facet1 - check the url hash appears as expected
             .findByCssSelector("#FACET2 > ul.filters > li:first-of-type span.filterLabel")
-               .click()
+            .click()
             .end()
 
-            .getCurrentUrl()
-               .then(function (url) {
-                  assert.include(url, "FACET2QNAME", "The url hash should contain 'FACET2QNAME'");
-                  assert.notInclude(url, "facFil1", "The facet click did not remove the value 'facFil1' from the url hash as expected");
-               });
-         },
+         .getCurrentUrl()
+            .then(function(url) {
+               assert.include(url, "FACET2QNAME", "The url hash should contain 'FACET2QNAME'");
+               assert.notInclude(url, "facFil1", "The facet click did not remove the value 'facFil1' from the url hash as expected");
+            });
+      },
 
-         "Click the second item in the facet menu again": function() {
-            return browser// Click facet2 - check the url hash appears as expected
+      "Click the second item in the facet menu again": function() {
+         return this.remote // Click facet2 - check the url hash appears as expected
             .findByCssSelector("#FACET2 > ul.filters > li:nth-of-type(2) span.filterLabel")
-               .click()
+            .click()
             .end()
 
-            .getCurrentUrl()
-               .then(function (url) {
-                  assert.notInclude(url, "FACET2QNAME", "The url hash should not now contain 'FACET2QNAME'");
-                  assert.notInclude(url, "facFil2", "The facet click did not remove the value 'facFil2' from the url hash as expected");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getCurrentUrl()
+            .then(function(url) {
+               assert.notInclude(url, "FACET2QNAME", "The url hash should not now contain 'FACET2QNAME'");
+               assert.notInclude(url, "facFil2", "The facet click did not remove the value 'facFil2' from the url hash as expected");
+            });
+      }
    });
 
    // See AKU-477...
-   // FacetFilters publish information about themselves when they are created, but they wait for 
+   // FacetFilters publish information about themselves when they are created, but they wait for
    // page loading to complete so that all widgets have been created before publishing occurs.
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "FacetFilters Tests (delayed creation)",
+      testPage: "/FacetFilters",
 
-      return {
-         name: "FacetFilters Tests (delayed creation)",
+      "Facet filters should not exist in tab container on page load": function() {
+         return this.remote.findAllByCssSelector("#TAB_CONTAINER .alfresco-search-FacetFilter")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Facet filters unexpectedly existed in tab container");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FacetFilters", "FacetFilters Tests (delayed creation)").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Facet filters should not exist in tab container on page load": function() {
-            return browser.findAllByCssSelector("#TAB_CONTAINER .alfresco-search-FacetFilter")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Facet filters unexpectedly existed in tab container");
-               });
-         },
-
-         "Check publications on delayed creation": function() {
-            return browser.findByCssSelector(".dijitTabInner:nth-child(2)")
-               .clearLog()
-               .click()
+      "Check publications on delayed creation": function() {
+         return this.remote.findByCssSelector(".dijitTabInner:nth-child(2)")
+            .clearLog()
+            .click()
             .end()
             .getLastPublish("ALF_INCLUDE_FACET");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      }
    });
 });

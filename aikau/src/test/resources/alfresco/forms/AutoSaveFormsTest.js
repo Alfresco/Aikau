@@ -20,74 +20,57 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AutoSave Forms Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AutoSaveForm", "AutoSave Forms Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AutoSaveForm",
 
       "Check autosave doesn't occur on page load": function() {
-         return browser.findByCssSelector("#AUTOSAVE_FORM")
-         .end()
-         .getAllPublishes("AUTOSAVE_FORM")
-         .then(function(payloads) {
-            assert.lengthOf(payloads, 0, "There should be no auto save when the page loads");
-         });
+         return this.remote.findByCssSelector("#AUTOSAVE_FORM")
+            .end()
+            .getAllPublishes("AUTOSAVE_FORM")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "There should be no auto save when the page loads");
+            });
       },
 
       "Check that autosave works on control update": function() {
-         return browser.findByCssSelector("#FIELD1 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#FIELD1 .dijitInputContainer input")
             .clearValue()
             .type("updated")
-         .end()
-         .getLastPublish("AUTOSAVE_FORM")
+            .end()
+            .getLastPublish("AUTOSAVE_FORM")
             .then(function(payload) {
                assert.propertyVal(payload, "field1", "updated", "Form was not auto-saved on field update");
             });
       },
 
       "Launch autosave form in dialog": function() {
-         return browser.findByCssSelector("#LAUNCH_FORM_DIALOG_label")
+         return this.remote.findByCssSelector("#LAUNCH_FORM_DIALOG_label")
             .click()
-         .end()
-         // Wait for dialog to open...
-         .findAllByCssSelector("#DIALOG1.dialogDisplayed")
-         .end()
-         .getAllPublishes("AUTOSAVE_FORM2")
+            .end()
+            // Wait for dialog to open...
+            .findAllByCssSelector("#DIALOG1.dialogDisplayed")
+            .end()
+            .getAllPublishes("AUTOSAVE_FORM2")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "There should be no auto save when the page loads");
             });
       },
 
       "Check that form in dialog auto saves on field edit": function() {
-         return browser.findByCssSelector("#FIELD2 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#FIELD2 .dijitInputContainer input")
             .clearValue()
             .type("updated")
-         .end()
-         .getLastPublish("AUTOSAVE_FORM2")
+            .end()
+            .getLastPublish("AUTOSAVE_FORM2")
             .then(function(payload) {
                assert.propertyVal(payload, "field2", "updated", "Dialog form was not auto-saved on field update");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

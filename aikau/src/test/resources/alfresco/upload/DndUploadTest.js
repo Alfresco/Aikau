@@ -20,71 +20,55 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Drag-and-drop file upload tests",
+      testPage: "/dnd-upload",
 
-      return {
-         name: "Drag-and-drop file upload tests",
+      "Simulate file drop": function() {
+         return this.remote.findByCssSelector("body")
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/dnd-upload", "Drag-and-drop file upload tests").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
-         
-         "Simulate file drop": function() {
-            return browser.findByCssSelector("body")
-
-            // Wait for the document library to finish loading...
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+         // Wait for the document library to finish loading...
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
             .clearLog()
 
-            // Simulate dropping a node...
-            .findById("SIM_DROP_label")
-               .click()
+         // Simulate dropping a node...
+         .findById("SIM_DROP_label")
+            .click()
             .end()
 
-            // Check that an upload request is published and includes the metadata...
-            .getLastPublish("ALF_UPLOAD_REQUEST")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "targetData.destination", "parent://node/ref", "Target data not included in upload request");
-               });
-         },
+         // Check that an upload request is published and includes the metadata...
+         .getLastPublish("ALF_UPLOAD_REQUEST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "targetData.destination", "parent://node/ref", "Target data not included in upload request");
+            });
+      },
 
-         // See AKU-784 - We need to ensure that when new list data is loaded (such that a new view instance is created
-         // to replace the current view instance) that target metadata is retained...
-         "Update view and drop": function() {
-            return browser.findByCssSelector("#SIMPLE_VIEW_NAME_ITEM_0 .alfresco-renderers-Property")
-               .click()
+      // See AKU-784 - We need to ensure that when new list data is loaded (such that a new view instance is created
+      // to replace the current view instance) that target metadata is retained...
+      "Update view and drop": function() {
+         return this.remote.findByCssSelector("#SIMPLE_VIEW_NAME_ITEM_0 .alfresco-renderers-Property")
+            .click()
             .end()
 
-            // Wait for the document library to finish loading...
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+         // Wait for the document library to finish loading...
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
             .clearLog()
 
-            // Simulate dropping a node...
-            .findById("SIM_DROP_label")
-               .click()
+         // Simulate dropping a node...
+         .findById("SIM_DROP_label")
+            .click()
             .end()
 
-            // Check that an upload request is published and includes the metadata...
-            .getLastPublish("ALF_UPLOAD_REQUEST")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "targetData.destination", "parent://node/ref", "Target data not included in upload request");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         // Check that an upload request is published and includes the metadata...
+         .getLastPublish("ALF_UPLOAD_REQUEST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "targetData.destination", "parent://node/ref", "Target data not included in upload request");
+            });
+      }
    });
 });

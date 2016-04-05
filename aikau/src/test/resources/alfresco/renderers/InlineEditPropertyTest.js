@@ -21,34 +21,68 @@
  * @author Dave Draper
  * @author Martin Doyle
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-   function(registerSuite, assert, TestCommon, keys) {
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
+   var inlineEditPropertySelectors = TestCommon.getTestSelectors("alfresco/renderers/InlineEditProperty");
+   var inlineEditSelectSelectors = TestCommon.getTestSelectors("alfresco/renderers/InlineEditSelect");
 
-   return {
+   var selectors = {
+      inlineEditProperties: {
+         first: {
+            label: TestCommon.getTestSelector(inlineEditPropertySelectors, "label", ["INLINE_EDIT_ITEM_0"]),
+            readValue: TestCommon.getTestSelector(inlineEditPropertySelectors, "readonly.value", ["INLINE_EDIT_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.form", ["INLINE_EDIT_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.icon", ["INLINE_EDIT_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.save", ["INLINE_EDIT_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.cancel", ["INLINE_EDIT_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.input", ["INLINE_EDIT_ITEM_0"])
+         },
+         second: {
+            editIcon: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.icon", ["INLINE_EDIT_NO_VALUE_ITEM_0"])
+         },
+         third: {
+            editIcon: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.icon", ["INLINE_EDIT_ITEM_1"]),
+            readValue: TestCommon.getTestSelector(inlineEditPropertySelectors, "readonly.value", ["INLINE_EDIT_ITEM_1"])
+         },
+         fourth: {
+            editIcon: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.icon", ["INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0"]),
+            readValue: TestCommon.getTestSelector(inlineEditPropertySelectors, "readonly.value", ["INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.save", ["INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.input", ["INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0"])
+         }
+      },
+      inlineEditSelects: {
+         first: {
+            label: TestCommon.getTestSelector(inlineEditSelectSelectors, "label", ["INLINE_SELECT_ITEM_0"]),
+            readValue: TestCommon.getTestSelector(inlineEditSelectSelectors, "readonly.value", ["INLINE_SELECT_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.form", ["INLINE_SELECT_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.icon", ["INLINE_SELECT_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.save", ["INLINE_SELECT_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.cancel", ["INLINE_SELECT_ITEM_0"]),
+            editOpenMenuIcon: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.open.menu.icon", ["INLINE_SELECT_ITEM_0"]),
+            editOptions: {
+               second: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.nth.option.label", ["INLINE_SELECT_ITEM_0", "2"])
+            }
+         }
+      },
+
+   };
+
+   defineSuite(module, {
       name: "InlineEditProperty",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/InlineEditProperty", "InlineEditProperty")
-            .end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/InlineEditProperty",
 
       "Label is displayed": function() {
-         return browser.findDisplayedByCssSelector("#INLINE_EDIT_ITEM_0 .label");
+         return this.remote.findDisplayedByCssSelector(selectors.inlineEditProperties.first.label);
       },
 
       "Property is rendered correctly": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Test", "Value not rendered correctly");
@@ -56,18 +90,19 @@ registerSuite(function(){
       },
 
       "Edit widget not initially created": function() {
-         return browser.findAllByCssSelector("#INLINE_EDIT_ITEM_0 > .editWidgetNode > *")
+         return this.remote.findAllByCssSelector("#INLINE_EDIT_ITEM_0 > .editWidgetNode > *")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Edit widget node should be empty until needed");
             });
       },
 
       "Edit icon initially invisible": function() {
-         return browser.findByCssSelector(".alfresco_logging_DebugLog__header")
+         return this.remote.findByCssSelector(".alfresco_logging_DebugLog__header")
             .moveMouseTo()
-         .end()
-         .sleep(250) // Make sure the mouse isn't over the row!
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+            .click() // Make sure the mouse isn't over the row!
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Icon should not be displayed");
@@ -76,41 +111,37 @@ registerSuite(function(){
 
       "Render on new line configuration doesn't effect icon": function() {
          var valueX;
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .inlineEditValue")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .getPosition()
             .then(function(p) {
                valueX = p.x;
             })
-         .end()
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+            .end()
+            .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .getPosition()
             .then(function(p) {
                assert.notEqual(valueX, p.x, "The value and icon should NOT be starting at the same X co-ordinate");
             })
-         .end();
+            .end();
       },
 
       "Icon appears on focus": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-            .then(function(element) {
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
+            .then(element => {
                element.type(""); // Focus on element
 
-               browser.end()
-                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
-                  .isDisplayed()
-                  .then(function(result) {
-                     assert.isTrue(result, "Edit icon was not revealed on focus");
-                  });
+               this.remote.end()
+                  .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editIcon);
             });
       },
 
       "Icon disappears on blur": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-            .then(function(element) {
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
+            .then(element => {
                element.type([keys.SHIFT, keys.TAB]); // Focus away from element
 
-               browser.end()
-                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+               this.remote.end()
+                  .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                   .isDisplayed()
                   .then(function(result) {
                      assert.isFalse(result, "Edit icon was not hidden on blur");
@@ -119,23 +150,19 @@ registerSuite(function(){
       },
 
       "Icon appears on mouseover": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .moveMouseTo()
             .end()
 
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Edit icon was not revealed on mouse over");
-            });
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editIcon);
       },
 
       "Icon hides on mouseout": function() {
-         return browser.findByCssSelector("body")
+         return this.remote.findByCssSelector("body")
             .moveMouseTo(0, 0)
-            .then(function() {
-               browser.end()
-                  .findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+            .then(() => {
+               this.remote.end()
+                  .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                   .isDisplayed()
                   .then(function(result) {
                      assert.isFalse(result, "Edit icon was not hidden on mouse out");
@@ -144,18 +171,18 @@ registerSuite(function(){
       },
 
       "Edit widgets are created on edit": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .editIcon")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .click()
             .end()
 
-         .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+         .findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .then(null, function() {
                assert(false, "Clicking edit icon did not create the validation text box");
             });
       },
 
       "Read property is hidden when editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Read-only span was not hidden");
@@ -163,78 +190,54 @@ registerSuite(function(){
       },
 
       "Save and cancel buttons are displayed when editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Save button not visible when editing");
-            })
+         return this.remote.findDisplayedByCssSelector(selectors.inlineEditProperties.first.editSave)
             .end()
 
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Cancel button not visible when editing");
-            });
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editCancel);
       },
 
       "Escape key cancels editing": function() {
-         return browser.findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .pressKeys([keys.ESCAPE])
             .end()
 
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Read-only value not revealed on cancelling edit");
-            });
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
       },
 
       "Clicking on read-only value starts editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .click()
             .end()
 
-         .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Edit box not revealed when clicking on read-only value");
-            });
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editInput);
       },
 
       "Clicking on cancel button stops editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .action.cancel")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editCancel)
             .click()
             .end()
 
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Read-only value not revealed on cancelling edit");
-            });
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
       },
 
       "CTRL-E starts editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
             .end()
 
-         .findByCssSelector(".alfresco-forms-controls-TextBox:first-child")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Edit box not revealed on CTRL-E");
-            });
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editInput);
       },
 
       "Changes published on save": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .clearValue()
             .type("New")
-         .end()
+            .end()
 
-         .findByCssSelector("#INLINE_EDIT_ITEM_0 .action.save")
+         .findByCssSelector(selectors.inlineEditProperties.first.editSave)
             .click()
-         .end()
+            .end()
 
          .getLastPublish("ALF_CRUD_UPDATE")
             .then(function(payload) {
@@ -244,47 +247,37 @@ registerSuite(function(){
       },
 
       "Readonly view displayed when finished editing": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_0 > .alfresco-renderers-Property")
-            .isDisplayed()
-            .then(function(result) {
-               assert.isTrue(result, "Read-only span not revealed on save");
-            })
-
-         .getVisibleText()
+         return this.remote.findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue)
+            .getVisibleText()
             .then(function(text) {
                assert.equal(text, "New", "Read-only value not updated correctly");
             });
       },
 
       "Inline-edit select restores values on failed save": function() {
-         return browser.findByCssSelector("#INLINE_SELECT_ITEM_0 > .alfresco-renderers-Property")
-            .then(function(element) {
-               return browser.moveMouseTo(element)
-                  .then(function() {
-                     return browser.end()
-                        .findByCssSelector("#INLINE_SELECT_ITEM_0 .editIcon")
+         return this.remote.findByCssSelector(selectors.inlineEditSelects.first.readValue)
+            .then(element => {
+               return this.remote.moveMouseTo(element)
+                  .then(() => {
+                     return this.remote.end()
+                        .findByCssSelector(selectors.inlineEditSelects.first.editIcon)
                         .click()
                         .end()
 
-                     .findByCssSelector("#INLINE_SELECT_ITEM_0 .alfresco-forms-controls-BaseFormControl .dijitArrowButtonInner")
+                     .findByCssSelector(selectors.inlineEditSelects.first.editOpenMenuIcon)
                         .click()
                         .end()
 
-                     .findByCssSelector(".dijitPopup table tr:nth-child(2) td.dijitMenuItemLabel")
+                     .findDisplayedByCssSelector(selectors.inlineEditSelects.first.editOptions.second)
                         .click()
                         .end()
 
-                     .findByCssSelector("#INLINE_SELECT_ITEM_0 .action.save")
+                     .findByCssSelector(selectors.inlineEditSelects.first.editSave)
                         .click()
                         .end()
 
-                     .findByCssSelector("#INLINE_SELECT_ITEM_0 > .alfresco-renderers-Property")
-                        .isDisplayed()
-                        .then(function(result) {
-                           assert.isTrue(result, "Read-only span not revealed on failed save");
-                        })
-
-                     .getVisibleText()
+                     .findDisplayedByCssSelector(selectors.inlineEditSelects.first.readValue)
+                        .getVisibleText()
                         .then(function(text) {
                            assert.equal(text, "1", "Read-only value not restored correctly after failed save");
                         });
@@ -293,7 +286,7 @@ registerSuite(function(){
       },
 
       "Check rendered alt text when no value available": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_ITEM_0 .editIcon")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.second.editIcon)
             .getAttribute("alt")
             .then(function(alt) {
                assert.equal(alt, "Click to edit", "Alt text for missing value incorrect");
@@ -301,10 +294,10 @@ registerSuite(function(){
       },
 
       "Check edit disabled when user has no write permissions": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_1 .inlineEditValue")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.third.readValue)
             .moveMouseTo()
-         .end()
-         .findByCssSelector("#INLINE_EDIT_ITEM_1 .editIcon")
+            .end()
+            .findByCssSelector(selectors.inlineEditProperties.third.editIcon)
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The edit icon should not be displayed for items without write permission");
@@ -312,7 +305,7 @@ registerSuite(function(){
       },
 
       "Check keyboard shortcut edit disabled when user has no write permissions": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_ITEM_1 .inlineEditValue")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.third.readValue)
             .click()
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
@@ -323,7 +316,7 @@ registerSuite(function(){
       },
 
       "Check warning message on item with no value": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.fourth.readValue)
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "(No property set)", "Value not rendered correctly");
@@ -331,21 +324,24 @@ registerSuite(function(){
       },
 
       "Check fade class applied to warning value": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
+         return this.remote.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
       },
 
       "Edit and save item check rendered value has prefix/suffix": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .editIcon")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.fourth.editIcon)
             .click()
-         .end()
-         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .alfresco-forms-controls-TextBox .dijitInputContainer input")
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.fourth.editInput)
             .clearValue()
             .type("Updated")
-         .end()
-         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .action.save")
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.fourth.editSave)
             .click()
-         .end()
-         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property")
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.fourth.readValue)
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "(Updated)", "Value not rendered correctly");
@@ -353,23 +349,26 @@ registerSuite(function(){
       },
 
       "Check that faded style has been removed": function() {
-         return browser.findAllByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded")
+         return this.remote.findAllByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Faded style was not removed when a value was provided");
             });
       },
 
       "Edit and save item to remove value to check warning returns": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .editIcon")
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.fourth.editIcon)
             .click()
-         .end()
-         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .alfresco-forms-controls-TextBox .dijitInputContainer input")
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.fourth.editInput)
             .clearValue()
-         .end()
-         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 .action.save")
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.fourth.editSave)
             .click()
-         .end()
-         .findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property")
+            .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.fourth.readValue)
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "(No property set)", "Value not rendered correctly");
@@ -377,12 +376,7 @@ registerSuite(function(){
       },
 
       "Check that faded style has been reapplied": function() {
-         return browser.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+         return this.remote.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
       }
-   };
    });
 });

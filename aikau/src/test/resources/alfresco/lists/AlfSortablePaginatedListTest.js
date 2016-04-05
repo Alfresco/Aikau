@@ -20,332 +20,289 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
    /* global document */
 
    var testClearingDocumentList = function(browser, buttonId, errorMsg) {
       return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
          .click()
          .end()
+
       .execute(function() {
-         document.querySelector("#INFINITE_SCROLL_AREA_WITH_DOCLIST .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
-      })
-      .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL", "Document list scroll event not registered")
-      .end()
+            document.querySelector("#INFINITE_SCROLL_AREA_WITH_DOCLIST .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
+         })
+         .getLastPublish("DOCUMENT_LIST_ALF_EVENTS_SCROLL", "Document list scroll event not registered")
+         .end()
+
       .findAllByCssSelector("#DOCUMENT_LIST tr")
          .then(function(elements) {
             assert.lengthOf(elements, 20, "Additional rows were not loaded when the bottom of the list was reached");
          })
-      .end()
+         .end()
+
       .findByCssSelector(".alfresco_logging_DebugLog__clear-button")
          .click()
-      .end()
+         .end()
+
       .findByCssSelector(buttonId)
          .click()
-      .end()
+         .end()
+
       .getLastPublish("DOCUMENT_LIST_ALF_DOCLIST_REQUEST_FINISHED", "More results not loaded")
-      .end()
+         .end()
+
       .findAllByCssSelector("#DOCUMENT_LIST tr")
          .then(function(elements) {
             assert.lengthOf(elements, 10, errorMsg);
          });
    };
 
+   defineSuite(module, {
+      name: "AlfSortablePaginatedList Tests",
+      testPage: "/AlfSortablePaginatedList#currentPage=2&currentPageSize=20",
 
-   registerSuite(function(){
-      var browser;
-
-      return {
-         name: "AlfSortablePaginatedList Tests",
-         
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfSortablePaginatedList#currentPage=2&currentPageSize=20", "AlfSortablePaginatedList Tests").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Preference names are honoured when retrieving pageSize": function() {
-            return browser.findByCssSelector("body") // Need to create the session
-               .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "ALF_PREFERENCE_GET",
-                  object: "HASH_LIST",
-                  pos: "last"
-               })
-               .then(function(payload) {
-                  assert.propertyVal(payload, "preference", "org.alfresco.share.documentList.documentsPerPage", "Incorrect preference used for HASH_LIST list");
-               })
-
+      "Preference names are honoured when retrieving pageSize": function() {
+         return this.remote.findByCssSelector("body") // Need to create the session
             .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "ALF_PREFERENCE_GET",
-                  object: "DOCUMENT_LIST",
-                  pos: "last"
-               })
-               .then(function(payload) {
-                  assert.propertyVal(payload, "preference", "org.alfresco.share.documentList.documentsPerPage", "Incorrect preference used for DOCUMENT_LIST list");
-               })
+               type: "PUBLISH",
+               topic: "ALF_PREFERENCE_GET",
+               object: "HASH_LIST",
+               pos: "last"
+            })
+            .then(function(payload) {
+               assert.propertyVal(payload, "preference", "org.alfresco.share.documentList.documentsPerPage", "Incorrect preference used for HASH_LIST list");
+            })
 
-            .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "ALF_PREFERENCE_GET",
-                  object: "INFINITE_SCROLL_LIST",
-                  pos: "last"
-               })
-               .then(function(payload) {
-                  assert.propertyVal(payload, "preference", "custom.pageSize.preference", "Incorrect preference used for INFINITE_SCROLL_LIST list");
-               });
-         },
+         .getLogEntries({
+               type: "PUBLISH",
+               topic: "ALF_PREFERENCE_GET",
+               object: "DOCUMENT_LIST",
+               pos: "last"
+            })
+            .then(function(payload) {
+               assert.propertyVal(payload, "preference", "org.alfresco.share.documentList.documentsPerPage", "Incorrect preference used for DOCUMENT_LIST list");
+            })
 
-         "Check URL hash controls displayed page": function() {
-            // See AKU-293
-            return browser.findByCssSelector("#HASH_LIST tr:nth-child(1) .alfresco-renderers-Property .value")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "21", "The currentPage URL hash parameter was ignored on load");
-               });
-         },
+         .getLogEntries({
+               type: "PUBLISH",
+               topic: "ALF_PREFERENCE_GET",
+               object: "INFINITE_SCROLL_LIST",
+               pos: "last"
+            })
+            .then(function(payload) {
+               assert.propertyVal(payload, "preference", "custom.pageSize.preference", "Incorrect preference used for INFINITE_SCROLL_LIST list");
+            });
+      },
 
-         "Check paginator has updated the page size": function() {
-            // See AKU-302
-            return browser.findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "20 per page", "Page size menu ignored URL hash parameter");
-               });
-         },
+      "Check URL hash controls displayed page": function() {
+         // See AKU-293
+         return this.remote.findByCssSelector("#HASH_LIST tr:nth-child(1) .alfresco-renderers-Property .value")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "21", "The currentPage URL hash parameter was ignored on load");
+            });
+      },
 
-         "Count the rows": function() {
-            return browser.findAllByCssSelector("#HASH_LIST .alfresco-lists-views-layouts-Row")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 20, "There should only be twenty rows");
-               });
-         },
+      "Check paginator has updated the page size": function() {
+         // See AKU-302
+         return this.remote.findByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "20 per page", "Page size menu ignored URL hash parameter");
+            });
+      },
 
-         "Scroll to bottom of basic infinite scroll area": function() {
-            // Click on the first row to give it focus...
-            return browser.execute(function() {
-                  document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
-               })
+      "Count the rows": function() {
+         return this.remote.findAllByCssSelector("#HASH_LIST .alfresco-lists-views-layouts-Row")
+            .then(function(elements) {
+               assert.lengthOf(elements, 20, "There should only be twenty rows");
+            });
+      },
+
+      "Scroll to bottom of basic infinite scroll area": function() {
+         // Click on the first row to give it focus...
+         return this.remote.execute(function() {
+               document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop += 50;
+            })
             .getLastPublish("INFINITE_SCROLL_AREA_ALF_EVENTS_SCROLL", "List scroll event not registered")
             .end()
             .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 20, "Additional rows were not loaded when the bottom of the list was reached");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 20, "Additional rows were not loaded when the bottom of the list was reached");
+            });
+      },
 
-         "Simulate a filter data request": function() {
-            // Clear previous pub/sub log (so that we can detect the next load)...
-            return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
-               .click()
+      "Simulate a filter data request": function() {
+         // Clear previous pub/sub log (so that we can detect the next load)...
+         return this.remote.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+            .click()
             .end()
 
-            // Scroll back up the page to prevent Chrome loading the next page of data because its so damn fast!
-            .execute(function() {
-               document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop -= 50;
-            })
+         // Scroll back up the page to prevent Chrome loading the next page of data because its so damn fast!
+         .execute(function() {
+            document.querySelector("#INFINITE_SCROLL_AREA .alfresco-layout-FixedHeaderFooter__content").scrollTop -= 50;
+         })
 
-            .findByCssSelector("#SIMULATE_FILTER_label")
-               .click()
+         .findByCssSelector("#SIMULATE_FILTER_label")
+            .click()
             .end()
 
-            .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", 1500, "More results not loaded")
+         .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", 1500, "More results not loaded")
             .end()
 
-            .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
-               });
-         },
+         .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
+            });
+      },
 
-         "Simulate a reload request": function() {
-            return browser.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
-               .click()
+      "Simulate a reload request": function() {
+         return this.remote.findByCssSelector(".alfresco_logging_DebugLog__clear-button")
+            .click()
             .end()
             .findByCssSelector("#SIMULATE_RELOAD_label")
-               .click()
+            .click()
             .end()
             .getLastPublish("INFINITE_SCROLL_AREA_ALF_DOCLIST_REQUEST_FINISHED", "More results not loaded")
             .end()
             .findAllByCssSelector("#INFINITE_SCROLL_LIST tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
-               });
-         },
-
-         "Simulate a path change": function() {
-            return browser.then(function() {
-               return testClearingDocumentList(browser, "#SIMULATE_PATH_CHANGE_label", "Old data not cleared when path change request applied");
+            .then(function(elements) {
+               assert.lengthOf(elements, 10, "Old data not cleared when data filter request applied");
             });
-         },
+      },
 
-         "Simulate a category change": function() {
-            return browser.then(function() {
-               return testClearingDocumentList(browser, "#SIMULATE_CATEGORY_CHANGE_label", "Old data not cleared when category change request applied");
-            });
-         },
+      "Simulate a path change": function() {
+         return this.remote.then(() => {
+            return testClearingDocumentList(this.remote, "#SIMULATE_PATH_CHANGE_label", "Old data not cleared when path change request applied");
+         });
+      },
 
-         "Simulate a tag change": function() {
-            return browser.then(function() {
-               return testClearingDocumentList(browser, "#SIMULATE_TAG_CHANGE_label", "Old data not cleared when tag change request applied");
-            });
-         },
+      "Simulate a category change": function() {
+         return this.remote.then(() => {
+            return testClearingDocumentList(this.remote, "#SIMULATE_CATEGORY_CHANGE_label", "Old data not cleared when category change request applied");
+         });
+      },
 
-         "Simulate a filter change": function() {
-            return browser.then(function() {
-               return testClearingDocumentList(browser, "#SIMULATE_FILTER_CHANGE_label", "Old data not cleared when filter change request applied");
-            });
-         },
+      "Simulate a tag change": function() {
+         return this.remote.then(() => {
+            return testClearingDocumentList(this.remote, "#SIMULATE_TAG_CHANGE_label", "Old data not cleared when tag change request applied");
+         });
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Simulate a filter change": function() {
+         return this.remote.then(() => {
+            return testClearingDocumentList(this.remote, "#SIMULATE_FILTER_CHANGE_label", "Old data not cleared when filter change request applied");
+         });
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "AlfSortablePaginatedList Tests (item selection retention)",
+      testPage: "/AlfSortablePaginatedList",
 
-      return {
-         name: "AlfSortablePaginatedList Tests (item selection retention)",
-         
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfSortablePaginatedList", "AlfSortablePaginatedList Tests (item selection retention)").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Select items": function() {
-            return browser.findDisplayedById("SELECTOR_ITEM_2")
-               .click()
+      "Select items": function() {
+         return this.remote.findDisplayedById("SELECTOR_ITEM_2")
+            .click()
             .end()
 
-            .getLastPublish("HASH_CUSTOM_ALF_DOCLIST_FILE_SELECTION", "Selection data not published (1)")
+         .getLastPublish("HASH_CUSTOM_ALF_DOCLIST_FILE_SELECTION", "Selection data not published (1)")
             .clearLog()
 
-            .findDisplayedById("SELECTOR_ITEM_4")
-               .click()
+         .findDisplayedById("SELECTOR_ITEM_4")
+            .click()
             .end()
 
-            .getLastPublish("HASH_CUSTOM_ALF_DOCLIST_FILE_SELECTION", "Selection data not published (2)")
+         .getLastPublish("HASH_CUSTOM_ALF_DOCLIST_FILE_SELECTION", "Selection data not published (2)")
             .clearLog();
-         },
+      },
 
-         "Switch order and check items are still selected": function() {
-            return browser.findById("DESCENDING_text")
-               .click()
+      "Switch order and check items are still selected": function() {
+         return this.remote.findById("DESCENDING_text")
+            .click()
             .end()
 
-            .getLastPublish("HASH_CUSTOM_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Data not reloaded")
+         .getLastPublish("HASH_CUSTOM_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Data not reloaded")
             .clearLog()
 
-            .findByCssSelector("#SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
+         .findByCssSelector("#SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
             .end()
 
-            .findByCssSelector("#SELECTOR_ITEM_4.alfresco-lists-ItemSelectionMixin--selected");
-         },
+         .findByCssSelector("#SELECTOR_ITEM_4.alfresco-lists-ItemSelectionMixin--selected");
+      },
 
-         "Change the page size and check items are still selected": function() {
-            return browser.findById("HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
-               .click()
+      "Change the page size and check items are still selected": function() {
+         return this.remote.findById("HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_text")
+            .click()
             .end()
 
-            .findDisplayedByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:first-child .dijitMenuItemLabel")
-               .click()
+         .findDisplayedByCssSelector("#HASH_CUSTOM_PAGE_SIZE_PAGINATOR_RESULTS_PER_PAGE_SELECTOR_dropdown tr:first-child .dijitMenuItemLabel")
+            .click()
             .end()
 
-            .getLastPublish("HASH_CUSTOM_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Data not reloaded")
+         .getLastPublish("HASH_CUSTOM_ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "Data not reloaded")
             .clearLog()
 
-            .findByCssSelector("#SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
+         .findByCssSelector("#SELECTOR_ITEM_2.alfresco-lists-ItemSelectionMixin--selected")
             .end()
 
-            .findByCssSelector("#SELECTOR_ITEM_4.alfresco-lists-ItemSelectionMixin--selected");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("#SELECTOR_ITEM_4.alfresco-lists-ItemSelectionMixin--selected");
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "AlfSortablePaginatedList Tests (data load failure)",
+      testPage: "/AlfSortablePaginatedListDataFail",
 
-      return {
-         name: "AlfSortablePaginatedList Tests (data load failure)",
-         
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfSortablePaginatedListDataFail", "AlfSortablePaginatedList Tests (data load failure)").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check data failure message": function() {
+         return this.remote.findByCssSelector("#LIST .data-failure")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Loading message not displayed");
+            });
+      },
 
-         "Check data failure message": function() {
-            return browser.findByCssSelector("#LIST .data-failure")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Loading message not displayed");
-               });
-         },
-
-         "Check that the pagination controls are all hidden": function() {
-            return browser.findByCssSelector("#PAGINATOR_PAGE_SELECTOR")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The page selector was NOT hidden");
-               })
+      "Check that the pagination controls are all hidden": function() {
+         return this.remote.findByCssSelector("#PAGINATOR_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page selector was NOT hidden");
+            })
             .end()
             .findByCssSelector("#PAGINATOR_PAGE_BACK")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The page back button was NOT hidden");
-               })
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page back button was NOT hidden");
+            })
             .end()
             .findByCssSelector("#PAGINATOR_PAGE_MARKER")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The page indicator was NOT hidden");
-               })
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page indicator was NOT hidden");
+            })
             .end()
             .findByCssSelector("#PAGINATOR_PAGE_FORWARD")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The page forward button was NOT hidden");
-               })
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The page forward button was NOT hidden");
+            })
             .end()
             .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The items per page selector was NOT hidden");
-               });
-         },
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The items per page selector was NOT hidden");
+            });
+      },
 
-         "Resize and check that controls are all still hidden": function() {
-            return browser.setWindowSize(null, 1024, 300)
-               .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "The items per page selector was revealed on resize");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Resize and check that controls are all still hidden": function() {
+         return this.remote.setWindowSize(null, 1024, 300)
+            .findByCssSelector("#PAGINATOR_RESULTS_PER_PAGE_SELECTOR")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "The items per page selector was revealed on resize");
+            });
+      }
    });
 });

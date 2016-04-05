@@ -21,40 +21,34 @@
  * @author Dave Draper
  * @since 1.0.33
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
-   registerSuite(function(){
-      var browser;
-      var scrollbarWidth;             // We'll calculate this by deducting the body width from the window width
-      var windowSize = 1050;          // The size we'll set the window
+   defineSuite(module, function() {
+      var scrollbarWidth; // We'll calculate this by deducting the body width from the window width
+      var windowSize = 1050; // The size we'll set the window
       var pagePaddingAllocation = 20; // The page has 20px of padding
-      var widgetPadding = 20;         // Each ClassicWindow widget has 20px of padding
-      var scrollbarAllocation = 30;   // 30px is reserved for scrollbar allocation (to prevent accidental overflow)
-      var fixedWidthWidget = 200;     // The fixed width of WIDGET_1
-      var availableWidth;             // We'll calculate this in the setup
+      var widgetPadding = 20; // Each ClassicWindow widget has 20px of padding
+      var scrollbarAllocation = 30; // 30px is reserved for scrollbar allocation (to prevent accidental overflow)
+      var fixedWidthWidget = 200; // The fixed width of WIDGET_1
+      var availableWidth; // We'll calculate this in the setup
 
       return {
          name: "Dynamic Horizontal Layout Tests",
 
          setup: function() {
-            browser = this.remote;
             return TestCommon.loadTestWebScript(this.remote, "/DynamicHorizontalLayout", "Dynamic Horizontal Layout Tests").end()
                // Set a window size and calculate the scrollbar width to assist width calculations...
                .setWindowSize(null, windowSize, 400)
                .findByCssSelector("body")
-                  .getSize()
-                  .then(function(size) {
-                     scrollbarWidth = windowSize - size.width;
-                     availableWidth = size.width - pagePaddingAllocation - scrollbarAllocation;
-                  });
-         },
-
-         beforeEach: function() {
-            browser.end();
+               .getSize()
+               .then(function(size) {
+                  scrollbarWidth = windowSize - size.width;
+                  availableWidth = size.width - pagePaddingAllocation - scrollbarAllocation;
+               });
          },
 
          // Width calculations...
@@ -67,7 +61,7 @@ define(["intern!object",
          // IMPORTANT: All widgets should have 20px deducted for their margins
 
          "Widget 1 should be 200px on load": function() {
-            return browser.findById("WIDGET_1")
+            return this.remote.findById("WIDGET_1")
                .getSize()
                .then(function(size) {
                   assert.equal(size.width, 180, "Widget 1 was not the correct size");
@@ -78,7 +72,7 @@ define(["intern!object",
             // Widgets 3 and 4 should be hidden so the width of widget 2 should be 50% of the available space
             // (minus the fixed widget width)...
             var expectedWidth = ((availableWidth - fixedWidthWidget) / 2) - widgetPadding;
-            return browser.findById("WIDGET_2")
+            return this.remote.findById("WIDGET_2")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 2 was not the correct size");
@@ -86,7 +80,7 @@ define(["intern!object",
          },
 
          "Widget 3 is hidden on load": function() {
-            return browser.findById("WIDGET_3")
+            return this.remote.findById("WIDGET_3")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isFalse(displayed, "Widget 3 should not have been displayed when the page was loaded");
@@ -94,7 +88,7 @@ define(["intern!object",
          },
 
          "Widget 4 is hidden on load": function() {
-            return browser.findById("WIDGET_4")
+            return this.remote.findById("WIDGET_4")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isFalse(displayed, "Widget 4 should not have been displayed when the page was loaded");
@@ -103,10 +97,10 @@ define(["intern!object",
 
          "Widget 5 should get half the remaining space": function() {
             // Widget 5 should get an even share of the remaining space after fixed and percentage width widgets
-            // have had their widths deducted from the available space. Because Widgets 3 and 4 are initially 
+            // have had their widths deducted from the available space. Because Widgets 3 and 4 are initially
             // hidden, this means that widget 5 should get 50% of the available space (after Widget 1 is deducted)
             var expectedWidth = ((availableWidth - fixedWidthWidget) / 2) - widgetPadding;
-            return browser.findById("WIDGET_5")
+            return this.remote.findById("WIDGET_5")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 5 was not the correct size");
@@ -117,10 +111,10 @@ define(["intern!object",
             // Revealing Widget 3 should cause the widgets to recalculate their sizes, Widgets 1 and 2 should
             // stay the same size, but Widget 3 should consume half of the space that Widget 5 previously had
             var expectedWidth = ((availableWidth - fixedWidthWidget) / 4) - widgetPadding;
-            return browser.findById("SHOW_WIDGET_3_BUTTON_label")
+            return this.remote.findById("SHOW_WIDGET_3_BUTTON_label")
                .click()
-            .end()
-            .findById("WIDGET_3")
+               .end()
+               .findById("WIDGET_3")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isTrue(displayed, "Widget 3 should have been revealed");
@@ -129,8 +123,8 @@ define(["intern!object",
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 3 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_5")
+               .end()
+               .findById("WIDGET_5")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 5 was not the correct size");
@@ -143,10 +137,10 @@ define(["intern!object",
             // shared
             var remainingSpace = (availableWidth - ((availableWidth - fixedWidthWidget) / 2)) - fixedWidthWidget;
             var expectedWidth = (remainingSpace / 3) - widgetPadding;
-            return browser.findById("SHOW_WIDGET_4_BUTTON_label")
+            return this.remote.findById("SHOW_WIDGET_4_BUTTON_label")
                .click()
-            .end()
-            .findById("WIDGET_4")
+               .end()
+               .findById("WIDGET_4")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isTrue(displayed, "Widget 4 should have been revealed");
@@ -155,14 +149,14 @@ define(["intern!object",
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 4 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_3")
+               .end()
+               .findById("WIDGET_3")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 3 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_5")
+               .end()
+               .findById("WIDGET_5")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 5 was not the correct size");
@@ -172,38 +166,38 @@ define(["intern!object",
          "Hide Widget 1": function() {
             // Hiding Widget 1 should cause all the remaining widgets to recalculate their sizes
             // such that Widget 2 has half the available space and Widgets 3,4 and 5 share the remaining space
-            
+
             var widget2ExpectedWidth = (availableWidth / 2) - widgetPadding;
             var otherWidgetsExpectedWidth = ((availableWidth - widget2ExpectedWidth) / 3) - widgetPadding;
-            
-            return browser.findById("HIDE_WIDGET_1_BUTTON_label")
+
+            return this.remote.findById("HIDE_WIDGET_1_BUTTON_label")
                .click()
-            .end()
-            .findById("WIDGET_1")
+               .end()
+               .findById("WIDGET_1")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isFalse(displayed, "Widget 1 should have been hidden");
                })
-            .end()
-            .findById("WIDGET_2")
+               .end()
+               .findById("WIDGET_2")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, widget2ExpectedWidth, 10, "Widget 2 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_3")
+               .end()
+               .findById("WIDGET_3")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 3 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_4")
+               .end()
+               .findById("WIDGET_4")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 4 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_5")
+               .end()
+               .findById("WIDGET_5")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 5 was not the correct size");
@@ -216,68 +210,68 @@ define(["intern!object",
             var widget2ExpectedWidth;
             var otherWidgetsExpectedWidth;
             windowSize = 850;
-            return browser.setWindowSize(null, windowSize, 400)
+            return this.remote.setWindowSize(null, windowSize, 400)
                .findByCssSelector("body")
-                  .getSize()
-                  .then(function(size) {
-                     scrollbarWidth = windowSize - size.width;
-                     availableWidth = size.width - pagePaddingAllocation - scrollbarAllocation;
-                     widget2ExpectedWidth = (availableWidth / 2) - widgetPadding;
-                     otherWidgetsExpectedWidth = ((availableWidth - widget2ExpectedWidth) / 3) - widgetPadding;
-                  })
+               .getSize()
+               .then(function(size) {
+                  scrollbarWidth = windowSize - size.width;
+                  availableWidth = size.width - pagePaddingAllocation - scrollbarAllocation;
+                  widget2ExpectedWidth = (availableWidth / 2) - widgetPadding;
+                  otherWidgetsExpectedWidth = ((availableWidth - widget2ExpectedWidth) / 3) - widgetPadding;
+               })
                .end()
                .findById("WIDGET_2")
-                  .getSize()
-                  .then(function(size) {
-                     assert.closeTo(size.width, widget2ExpectedWidth, 10, "Widget 2 was not the correct size");
-                  })
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.width, widget2ExpectedWidth, 10, "Widget 2 was not the correct size");
+               })
                .end()
                .findById("WIDGET_3")
-                  .getSize()
-                  .then(function(size) {
-                     assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 3 was not the correct size");
-                  })
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 3 was not the correct size");
+               })
                .end()
                .findById("WIDGET_4")
-                  .getSize()
-                  .then(function(size) {
-                     assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 4 was not the correct size");
-                  })
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 4 was not the correct size");
+               })
                .end()
                .findById("WIDGET_5")
-                  .getSize()
-                  .then(function(size) {
-                     assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 5 was not the correct size");
-                  });
+               .getSize()
+               .then(function(size) {
+                  assert.closeTo(size.width, otherWidgetsExpectedWidth, 10, "Widget 5 was not the correct size");
+               });
          },
 
          "Hide Widget 2": function() {
             // Hiding Widget 1 should cause all the remaining widgets to recalculate their sizes
             // such that Widget 2 has half the available space and Widgets 3,4 and 5 share the remaining space
             var expectedWidth = (availableWidth / 3) - widgetPadding;
-            
-            return browser.findById("HIDE_WIDGET_2_BUTTON_label")
+
+            return this.remote.findById("HIDE_WIDGET_2_BUTTON_label")
                .click()
-            .end()
-            .findById("WIDGET_2")
+               .end()
+               .findById("WIDGET_2")
                .isDisplayed()
                .then(function(displayed) {
                   assert.isFalse(displayed, "Widget 1 should have been hidden");
                })
-            .end()
-            .findById("WIDGET_3")
+               .end()
+               .findById("WIDGET_3")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 3 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_4")
+               .end()
+               .findById("WIDGET_4")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 4 was not the correct size");
                })
-            .end()
-            .findById("WIDGET_5")
+               .end()
+               .findById("WIDGET_5")
                .getSize()
                .then(function(size) {
                   assert.closeTo(size.width, expectedWidth, 10, "Widget 5 was not the correct size");
@@ -285,16 +279,12 @@ define(["intern!object",
          },
 
          "Check that when a widget is revealed that a resize event is published": function() {
-            return browser.findById("HIDE_WIDGET_2_BUTTON_label")
+            return this.remote.findById("HIDE_WIDGET_2_BUTTON_label")
                .clearLog()
                .click()
-            .end()
-            .getLastPublish("ALF_NODE_RESIZED", "A resize publication should have been made");
-         },
-         
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
+               .end()
+               .getLastPublish("ALF_NODE_RESIZED", "A resize publication should have been made");
          }
       };
-      });
    });
+});

@@ -20,51 +20,36 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var tabContainerSelectors = TestCommon.getTestSelectors("alfresco/layout/AlfTabContainer");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var selectors = {
       tc1: {
-         logo1Tab: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC","Logo1"])
+         logo1Tab: TestCommon.getTestSelector(tabContainerSelectors, "identified.tab", ["TC", "Logo1"])
       },
       buttons: {
          showIFrame: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SHOW_IFRAME"])
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "IFramed Tab Container Tests",
+      testPage: "/IFramedTabContainer",
 
-      return {
-         name: "IFramed Tab Container Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/IFramedTabContainer", "IFramed Tab Container Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         // See AKU-692...
-         "Reveal the iframe and check for tab container": function () {
-            return browser.findByCssSelector(selectors.buttons.showIFrame)
-               .click()
+      // See AKU-692...
+      "Reveal the iframe and check for tab container": function() {
+         return this.remote.findByCssSelector(selectors.buttons.showIFrame)
+            .click()
             .end()
 
-            .switchToFrame("IFRAME_IFRAME")
+         .switchToFrame("IFRAME_IFRAME")
 
-            .findByCssSelector(selectors.tc1.logo1Tab);
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector(selectors.tc1.logo1Tab);
+      }
    });
 });

@@ -20,55 +20,40 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Gallery View (focus) Tests",
+      testPage: "/GalleryViewFocus",
 
-      return {
-         name: "Gallery View (focus) Tests",
-         
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/GalleryViewFocus", "Gallery View (focus) Tests").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
-
-         // See AKU-690...
-         "Keyboard focus works": function() {
-            return browser.findDisplayedByCssSelector("#VERTICAL_ITEM_0 .alfresco-renderers-Property")
-               .click()
+      // See AKU-690...
+      "Keyboard focus works": function() {
+         return this.remote.findDisplayedByCssSelector("#VERTICAL_ITEM_0 .alfresco-renderers-Property")
+            .click()
             .end()
 
-            .pressKeys(keys.ARROW_RIGHT)
+         .pressKeys(keys.ARROW_RIGHT)
 
-            .getActiveElement()
-               .getVisibleText()
-                  .then(function(text) {
-                     assert.equal(text, "Telford and Wrekin Council", "Focus not moved");
-                  });
-         },
+         .getActiveElement()
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Telford and Wrekin Council", "Focus not moved");
+            });
+      },
 
-         // See AKU-689...
-         // We need to ensure that horizontal widget resize events are correctly handled as the grid cells resize...
-         "Test initial sizing": function() {
-            return browser.findDisplayedByCssSelector("#VERTICAL_ITEM_5 .alfresco-layout-HorizontalWidgets")
-               .getSize()
-                  .then(function(size) {
-                     assert.equal(size.width, 200, "Width not set correctly");
-                  });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      // See AKU-689...
+      // We need to ensure that horizontal widget resize events are correctly handled as the grid cells resize...
+      "Test initial sizing": function() {
+         return this.remote.findDisplayedByCssSelector("#VERTICAL_ITEM_5 .alfresco-layout-HorizontalWidgets")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.width, 200, "Width not set correctly");
+            });
+      }
    });
 });

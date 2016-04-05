@@ -20,70 +20,53 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Node Location Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/NodeLocation", "Node Location Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/NodeLocation",
 
       "Locate (in Share) site node": function() {
-         return browser.findByCssSelector("#SITE_NODE_DEFAULT_label")
+         return this.remote.findByCssSelector("#SITE_NODE_DEFAULT_label")
             .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-         .then(function(payload) {
-            assert.equal(payload.url, "/aikau/page/site/site1/documentlibrary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
-         });
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.equal(payload.url, "/aikau/page/site/site1/documentlibrary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
+            });
       },
 
       "Locate (in Share) repo node": function() {
-         return browser.findByCssSelector("#NODE_DEFAULT_label")
+         return this.remote.findByCssSelector("#NODE_DEFAULT_label")
             .click()
-         .end()
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-         .then(function(payload) {
-            assert.equal(payload.url, "/aikau/page/repository#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
-         });
+            .end()
+            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.equal(payload.url, "/aikau/page/repository#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
+            });
       },
 
       "Locate (in Aikau) site node": function() {
-         return browser.findByCssSelector("#SITE_NODE_CUSTOM_label")
+         return this.remote.findByCssSelector("#SITE_NODE_CUSTOM_label")
             .click()
-         .end()
-         .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
-         .then(function(payload) {
-            assert.equal(payload.url, "/aikau/page/site/site1/dp/ws/document-libarary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
-         });
+            .end()
+            .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.equal(payload.url, "/aikau/page/site/site1/dp/ws/document-libarary#path=%2Fsome%2Frandom%2Fpath", "Unexpected location");
+            });
       },
 
       "Locate (in Aikau) repo node": function() {
-         return browser.findByCssSelector("#NODE_CUSTOM_label")
+         return this.remote.findByCssSelector("#NODE_CUSTOM_label")
             .click()
-         .end()
-         .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
-         .then(function(payload) {
-            assert.equal(payload.url, "/aikau/page/dp/ws/repo#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
-         });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+            .end()
+            .getLastPublish("CUSTOM_ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.equal(payload.url, "/aikau/page/dp/ws/repo#path=%2Fanother%2Frandom%2Fpath", "Unexpected location");
+            });
       }
-   };
    });
 });

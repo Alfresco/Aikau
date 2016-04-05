@@ -1,3 +1,4 @@
+/*jshint browser:true*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -20,41 +21,29 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-       function(registerSuite, assert, TestCommon) {
-
-registerSuite(function(){
-   var browser;
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    function getWindowSize() {
       return {
          width: window.innerWidth,
          height: window.innerHeight
-      }
-   };
+      };
+   }
 
-   return {
-
+   defineSuite(module, {
       name: "Full Screen Dialog Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/FullScreenDialogs", "Full Screen Dialog Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/FullScreenDialogs",
 
       "Create full screen dialog": function() {
          var windowSize;
-         return browser.setWindowSize(null, 1024, 400)
-         .findById("FULL_SCREEN_DIALOG_label")
+         return this.remote.setWindowSize(null, 1024, 400)
+            .findById("FULL_SCREEN_DIALOG_label")
             .click()
-         .end()
-         .findByCssSelector("#FSD1.dialogDisplayed")
+            .end()
+            .findByCssSelector("#FSD1.dialogDisplayed")
             .execute(getWindowSize)
             .then(function(size) {
                windowSize = size;
@@ -68,8 +57,8 @@ registerSuite(function(){
 
       "Resize window (1)": function() {
          var windowSize;
-         return browser.setWindowSize(null, 1024, 600)
-         .findByCssSelector("#FSD1.dialogDisplayed")
+         return this.remote.setWindowSize(null, 1024, 600)
+            .findByCssSelector("#FSD1.dialogDisplayed")
             .execute(getWindowSize)
             .then(function(size) {
                windowSize = size;
@@ -79,19 +68,19 @@ registerSuite(function(){
                assert.equal(windowSize.height - 40, size.height, "Height wrong");
                assert.equal(windowSize.width - 40, size.width, "Width wrong");
             })
-         .end()
-         .findById("FULL_SCREEN_DIALOG_CLOSE_label")
+            .end()
+            .findById("FULL_SCREEN_DIALOG_CLOSE_label")
             .click()
-         .end()
-         .findByCssSelector("#FSD1.dialogHidden");
+            .end()
+            .findByCssSelector("#FSD1.dialogHidden");
       },
 
       "Create full screen form dialog": function() {
          var windowSize;
-         return browser.findById("FULL_SCREEN_FORM_DIALOG_label")
+         return this.remote.findById("FULL_SCREEN_FORM_DIALOG_label")
             .click()
-         .end()
-         .findByCssSelector("#FSD2.dialogDisplayed")
+            .end()
+            .findByCssSelector("#FSD2.dialogDisplayed")
             .execute(getWindowSize)
             .then(function(size) {
                windowSize = size;
@@ -105,8 +94,8 @@ registerSuite(function(){
 
       "Resize window (2)": function() {
          var windowSize;
-         return browser.setWindowSize(null, 1024, 700)
-         .findByCssSelector("#FSD2.dialogDisplayed")
+         return this.remote.setWindowSize(null, 1024, 700)
+            .findByCssSelector("#FSD2.dialogDisplayed")
             .execute(getWindowSize)
             .then(function(size) {
                windowSize = size;
@@ -116,16 +105,11 @@ registerSuite(function(){
                assert.equal(windowSize.height - 80, size.height, "Height wrong");
                assert.equal(windowSize.width - 80, size.width, "Width wrong");
             })
-         .end()
-         .findById("FSD2_OK_label")
+            .end()
+            .findById("FSD2_OK_label")
             .click()
-         .end()
-         .findByCssSelector("#FSD2.dialogHidden");
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+            .end()
+            .findByCssSelector("#FSD2.dialogHidden");
       }
-   };
    });
 });

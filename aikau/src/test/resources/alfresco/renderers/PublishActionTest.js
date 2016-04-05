@@ -1,3 +1,4 @@
+/*jshint browser:true*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -20,58 +21,42 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon"], 
-      function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "PublishAction Tests",
+      testPage: "/PublishAction",
 
-      return {
-         name: "PublishAction Tests",
+      "Validate initial page state": function() {
+         return this.remote.execute(function() {
+            return window.bodyClicked;
+         }).then(function(bodyClicked) {
+            assert.isFalse(bodyClicked);
+         });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/PublishAction", "PublishAction Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Validate initial page state": function() {
-            return browser.execute(function() {
-               return window.bodyClicked;
-            }).then(function(bodyClicked) {
-               assert.isFalse(bodyClicked);
-            });
-         },
-
-         "Clicking on action publishes correctly": function() {
-            return browser.findById("EDIT_ME")
-               .clearLog()
-               .click()
+      "Clicking on action publishes correctly": function() {
+         return this.remote.findById("EDIT_ME")
+            .clearLog()
+            .click()
             .end()
 
-            .getLastPublish("EDIT_ME")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "editMode", true);
-               });
-         },
+         .getLastPublish("EDIT_ME")
+            .then(function(payload) {
+               assert.propertyVal(payload, "editMode", true);
+            });
+      },
 
-         "Action clicks do not bubble upwards": function() {
-            return browser.execute(function() {
-                  return window.bodyClicked;
-               })
-               .then(function(bodyClicked) {
-                  assert.isFalse(bodyClicked);
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Action clicks do not bubble upwards": function() {
+         return this.remote.execute(function() {
+               return window.bodyClicked;
+            })
+            .then(function(bodyClicked) {
+               assert.isFalse(bodyClicked);
+            });
+      }
    });
 });

@@ -21,110 +21,91 @@
  * @author Dave Draper
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
+   defineSuite(module, {
+      name: "Site Picker Tests",
+      testPage: "/SitePicker",
 
-      registerSuite(function(){
-      var browser;
+      "Can choose single site": function() {
+         return this.remote.findByCssSelector("#SITE_PICKER .alfresco-forms-controls-Picker__add-button .dijitButtonNode")
+            .click()
+            .end()
 
-   return {
-         name: "Site Picker Tests",
+         .findByCssSelector(".dijitMenuItem[aria-label^=\"Recent Sites\"]")
+            .clearLog()
+            .click()
+            .end()
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SitePicker", "Site Picker Tests").end();
-         },
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-         beforeEach: function() {
-            browser.end();
-         },
+         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
+            .click()
+            .end()
 
-         "Can choose single site": function() {
-            return browser.findByCssSelector("#SITE_PICKER .alfresco-forms-controls-Picker__add-button .dijitButtonNode")
-               .click()
-               .end()
+         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
+            .click()
+            .end()
 
-            .findByCssSelector(".dijitMenuItem[aria-label^=\"Recent Sites\"]")
-               .clearLog()
-               .click()
-               .end()
+         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
+            .click()
+            .end()
 
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+         .getLastPublish("ALF_ITEMS_SELECTED") // Helps ensure dialog has closed
+            .end()
 
-            .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
-               .click()
-               .end()
+         .findByCssSelector("#SITE_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
 
-            .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
-               .click()
-               .end()
+         .getLastPublish("SITE_PICKED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "site[0]", "site1", "Did not pick and publish correct site");
+               assert.notDeepProperty(payload, "site[1]", "Second site exists when it should not");
+            })
+            .clearLog();
+      },
 
-            .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
-               .click()
-               .end()
+      "Can choose multiple sites": function() {
+         return this.remote.findByCssSelector("#SITES_PICKER .alfresco-forms-controls-Picker__add-button .dijitButtonNode")
+            .click()
+            .end()
 
-            .getLastPublish("ALF_ITEMS_SELECTED") // Helps ensure dialog has closed
-               .end()
+         .findByCssSelector(".dijitMenuItem[aria-label^=\"Favorite Sites\"]")
+            .clearLog()
+            .click()
+            .end()
 
-            .findByCssSelector("#SITE_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
-               .click()
-               .end()
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-            .getLastPublish("SITE_PICKED")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "site[0]", "site1", "Did not pick and publish correct site");
-                  assert.notDeepProperty(payload, "site[1]", "Second site exists when it should not");
-               })
-               .clearLog();
-         },
+         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
+            .click()
+            .end()
 
-         "Can choose multiple sites": function() {
-            return browser.findByCssSelector("#SITES_PICKER .alfresco-forms-controls-Picker__add-button .dijitButtonNode")
-               .click()
-               .end()
+         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
+            .click()
+            .end()
 
-            .findByCssSelector(".dijitMenuItem[aria-label^=\"Favorite Sites\"]")
-               .clearLog()
-               .click()
-               .end()
+         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
+            .click()
+            .end()
 
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+         .getLastPublish("ALF_ITEMS_SELECTED") // Helps ensure dialog has closed
+            .end()
 
-            .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
-               .click()
-               .end()
+         .findByCssSelector("#SITES_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
 
-            .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
-               .click()
-               .end()
-
-            .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
-               .click()
-               .end()
-
-            .getLastPublish("ALF_ITEMS_SELECTED") // Helps ensure dialog has closed
-               .end()
-
-            .findByCssSelector("#SITES_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
-               .click()
-               .end()
-
-            .getLastPublish("SITES_PICKED")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "sites[0]", "site1", "Did not pick and publish correct sites");
-                  assert.deepPropertyVal(payload, "sites[1]", "site-2", "Did not pick and publish correct sites");
-               })
-               .clearLog();
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+         .getLastPublish("SITES_PICKED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "sites[0]", "site1", "Did not pick and publish correct sites");
+               assert.deepPropertyVal(payload, "sites[1]", "site-2", "Did not pick and publish correct sites");
+            })
+            .clearLog();
+      }
    });
+});

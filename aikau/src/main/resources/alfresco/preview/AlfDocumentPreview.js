@@ -159,13 +159,27 @@ define(["dojo/_base/declare",
       thumbnails: null,
 
       /**
-       * The base to the rest api call for the node's content or thumbnails
+       * The base to the rest api call for the node's content or thumbnails, used when using an
+       * [apiVersion]{@link module:alfresco/preview/AlfDocumentPreview#apiVersion} of 0.
        *
        * @isntance
        * @type {string}
        * @default
        */
       api: "api",
+
+      /**
+       * The Alfresco repository features multiple rendition REST APIs. Up to and including version 5.1 of Alfresco
+       * supports the "version zero" REST API (also known as Share Services API) for Renditions. In addition post 5.1
+       * there is a "version one" Public Rendition API also. Set this value to 1 to use the new version one API, else
+       * the classic v0 API will be used and Share Services AMP must be applied to the repository.
+       *
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.60
+       */
+      apiVersion: 0,
 
       /**
        * The proxy to use for the rest api call for the node's content or thumbnails.
@@ -645,10 +659,25 @@ define(["dojo/_base/declare",
        */
       getContentUrl: function alfresco_preview_AlfDocumentPreview__getContentUrl(download) {
          var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + (this.proxy ? this.proxy + "/" : ""),
-            nodeRefAsLink = this.nodeRef.replace(":/", ""),
-            noCache = "noCache=" + new Date().getTime();
-         download = download ? "a=true" : "a=false";
-         return proxy + this.api + "/node/" + nodeRefAsLink + "/content/" + encodeURIComponent(this.name) + "?c=force&" + noCache + "&" + download;
+            attach;
+         switch (this.apiVersion)
+         {
+            case 0:
+            {
+               var nodeRefAsLink = this.nodeRef.replace(":/", ""),
+                  noCache = "noCache=" + new Date().getTime();
+               attach = download ? "a=true" : "a=false";
+               return proxy + this.api + "/node/" + nodeRefAsLink + "/content/" + encodeURIComponent(this.name) + "?c=force&" + noCache + "&" + attach;
+            }
+            case 1:
+            {
+               var nodeRefAsId = this.nodeRef.replace(/.*:\/\/.*\//, "");
+               attach = download ? "attachment=true" : "attachment=false";
+               return proxy + "public/alfresco/versions/1/nodes/" + nodeRefAsId + "/content/" + encodeURIComponent(this.name) + "?" + attach;
+            }
+            default:
+               this.alfLog("error", "Unknown Rendition API version specified: " + this.apiVersion);
+         }
       },
 
       /**
@@ -662,9 +691,7 @@ define(["dojo/_base/declare",
        */
       getThumbnailUrl: function alfresco_preview_AlfDocumentPreview__getThumbnailUrl(thumbnail, fileSuffix) {
          var proxy = window.location.protocol + "//" + window.location.host + AlfConstants.URL_CONTEXT + "proxy/" + (this.proxy ? this.proxy + "/" : ""),
-            nodeRefAsLink = this.nodeRef.replace(":/", ""),
-            noCache = "noCache=" + new Date().getTime(),
-            force = "c=force";
+            noCache = "noCache=" + new Date().getTime();
          
          // Check to see if last modification data is available for the thumbnail...
          for (var i = 0; i < this.thumbnailModification.length; i++)
@@ -684,11 +711,26 @@ define(["dojo/_base/declare",
                   // Resetting to 'false' since thumbnail will be eventually updated...
                   this.avoidCachedThumbnail = false;
                }
-
                break;
             }
          }
-         return proxy + this.api + "/node/" + nodeRefAsLink + "/content/thumbnails/" + thumbnail + (fileSuffix ? "/suffix" + fileSuffix : "") + "?" + force + "&" + noCache;
+         
+         switch (this.apiVersion)
+         {
+            case 0:
+            {
+               var nodeRefAsLink = this.nodeRef.replace(":/", ""),
+                  force = "c=force";
+               return proxy + this.api + "/node/" + nodeRefAsLink + "/content/thumbnails/" + thumbnail + (fileSuffix ? "/suffix" + fileSuffix : "") + "?" + force + "&" + noCache;
+            }
+            case 1:
+            {
+               var nodeRefAsId = this.nodeRef.replace(/.*:\/\/.*\//, "");
+               return proxy + "public/alfresco/versions/1/nodes/" + nodeRefAsId + "/renditions/" + thumbnail + "/content?attachment=false" + "&" + noCache;
+            }
+            default:
+               this.alfLog("error", "Unknown Rendition API version specified: " + this.apiVersion);
+         }
       },
 
       /**

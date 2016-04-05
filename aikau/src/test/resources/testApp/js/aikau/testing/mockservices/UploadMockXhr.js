@@ -62,11 +62,23 @@ define(["dojo/_base/declare",
                var headers = {
                      "Content-Type": "application/json;charset=UTF-8"
                   },
-                  body = "{\"nodeRef\":\"bob\",\"fileName\":\"moomin\"}";
+                  successBody = JSON.stringify({
+                     "nodeRef": "workspace://SpacesStore/c2128109-6b01-450f-9a8c-ec2dc4934553",
+                     "fileName": "IMG_8897.jpg",
+                     "status": {
+                        "code": 200,
+                        "name": "OK",
+                        "description": "File uploaded successfully"
+                     }
+                  });
 
                // If response code isn't 200, respond immediately
                if (this.responseCode !== 200) {
-                  request.respond(this.responseCode, headers, body);
+                  request.respond(this.responseCode, headers, JSON.stringify({
+                     status: {
+                        code: this.responseCode
+                     }
+                  }));
                   return;
                }
 
@@ -80,7 +92,7 @@ define(["dojo/_base/declare",
                // After progress has finished, send the final response
                setTimeout(function() {
                   request.readyState = 1; // Sinon won't send response unless it thinks the response is clean and only just opened
-                  request.respond(request.aborted ? 0 : this.responseCode, headers, body);
+                  request.respond(request.aborted ? 0 : this.responseCode, headers, successBody);
                }, i * delay);
 
             }));

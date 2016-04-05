@@ -35,6 +35,7 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/menus/_AlfPopupCloseMixin",
         "alfresco/menus/AlfMenuItem",
         "dojo/_base/array",
         "dojo/_base/lang",
@@ -42,9 +43,9 @@ define(["dojo/_base/declare",
         "alfresco/core/ArrayUtils",
         "alfresco/core/JsNode"],
         function(declare, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, 
-                 AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode) {
+                 _AlfPopupCloseMixin, AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode) {
 
-   return declare([AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin], {
+   return declare([AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, _AlfPopupCloseMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -315,6 +316,69 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("log", "Skipping action as it's missing from whitelist: " + action);
+         }
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.62
+       */
+      createEmptyMenu: function alfresco_renderers__ActionsMixin__createEmptyMenu() {
+         this.dropDown = this.createWidget({
+            id: this.id + "_DROPDOWN",
+            name: "alfresco/menus/AlfMenuGroups",
+            config: {
+               widgets: [
+                  {
+                     name: "alfresco/menus/AlfMenuGroup",
+                     assignToScope: this,
+                     assignTo: "_menu"
+                  }
+               ]
+            }
+         });
+
+         // NOTE: Need to assign this.dropDown to this.popup in order for _AlfPopupCloseMixin capabilities
+         //       to work correctly...
+         this.popup = this.dropDown;
+         this.registerPopupCloseEvent();
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {Function} callback The function to call to display the drop-down
+       * @since 1.0.62
+       */
+      createDropDownMenu: function alfresco_renderers__ActionsMixin__createDropDownMenu(callback) {
+         this.createEmptyMenu();
+         this.addActions();
+         callback();
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.62
+       */
+      isLoaded: function alfresco_renderers__ActionsMixin__isLoaded() {
+         return (!!this.dropDown && this.dropDown.isLoaded);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {Function} callback The function to call to display the drop-down
+       * @since 1.0.62
+       */
+      loadDropDown: function alfresco_renderers__ActionsMixin__loadDropDown(callback) {
+         var dropDown = this.dropDown;
+         if(!dropDown) { 
+            this.createDropDownMenu(callback);
+         }
+         else {
+            callback();
          }
       }
    });

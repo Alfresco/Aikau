@@ -20,55 +20,58 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
-      var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
 
-      var selectors = {
-         buttons: {
-            doUpload: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DO_UPLOAD"])
-         }
-      };
+   var selectors = {
+      buttons: {
+         doUpload: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DO_UPLOAD"])
+      }
+   };
 
-      registerSuite(function() {
-         var browser;
+   defineSuite(module, {
+      name: "FileUploadService Config Tests",
+      testPage: "/FileUploadServiceConfig",
 
-         return {
-            name: "FileUploadService Config Tests",
+      "Configured success action does not prevent inprogress action payload from publishing": function() {
+         return this.remote.findByCssSelector(selectors.buttons.doUpload)
+            .clearLog()
+            .click()
+            .end()
 
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/FileUploadServiceConfig", "FileUploadService Config Tests").end();
-            },
+         .findByCssSelector(".alfresco-upload-UploadMonitor__inprogress-items .alfresco-renderers-PublishAction")
+            .click()
+            .end()
 
-            beforeEach: function() {
-               browser.end();
-            },
+         .getLastPublish("CANCEL_INPROGRESS_UPLOAD")
+            .then(function(payload) {
+               assert.propertyVal(payload, "fileSize", 1337, "fileSize property not found in payload");
+               assert.propertyVal(payload, "fileName", "File for v1 API.docx", "fileName property not found in payload");
+            });
+      },
 
-            "Configured success action does not prevent inprogress action payload from publishing": function() {
-               return browser.findByCssSelector(selectors.buttons.doUpload)
-                  .clearLog()
-                  .click()
-                  .end()
+      "Full upload and response info available in action payload": function() {
+         return this.remote.findByCssSelector(selectors.buttons.doUpload)
+            .clearLog()
+            .click()
+            .end()
 
-               .findByCssSelector(".alfresco-upload-UploadMonitor__inprogress-items .alfresco-renderers-PublishAction")
-                  .click()
-                  .end()
+         .getLastPublish("UPLOAD_COMPLETE_OR_CANCELLED", 5000)
 
-               .getLastPublish("CANCEL_INPROGRESS_UPLOAD")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "fileSize", 1337, "fileSize property not found in payload");
-                     assert.propertyVal(payload, "fileName", "File for v1 API.docx", "fileName property not found in payload");
-                  });
-            },
+         .findByCssSelector(".alfresco-upload-UploadMonitor__successful-items .alfresco-upload-UploadMonitor__item__actions .alfresco-html-SVGImage")
+            .click()
+            .end()
 
-            "Post Coverage Results": function() {
-               TestCommon.alfPostCoverageResults(this, browser);
-            }
-         };
-      });
+         .getLastPublish("UNDO_UPLOAD")
+            .then(function(payload) {
+               assert.propertyVal(payload, "fileName", "File for v1 API.docx");
+               assert.propertyVal(payload, "nodeRef", "workspace://SpacesStore/c2128109-6b01-450f-9a8c-ec2dc4934553");
+            });
+      }
    });
+});

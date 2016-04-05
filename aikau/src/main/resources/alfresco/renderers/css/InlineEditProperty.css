@@ -34,19 +34,6 @@
          display: none;
       }
    }
-   .action {
-      color: @general-font-color;
-      cursor: pointer;
-      display: inline-block;
-      font-family: @standard-font;
-      font-size: @normal-font-size;
-      height: 85%;
-      vertical-align: middle;
-      &.disabled {
-         color: @de-emphasized-font-color;
-         cursor: default;
-      }
-   }
    > .editor {
       display: inline-block;
       height: 40px;

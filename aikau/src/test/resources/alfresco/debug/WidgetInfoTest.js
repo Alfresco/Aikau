@@ -20,40 +20,24 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Widget Info Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/WidgetInfo", "Widget Info Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end();
-      // },
+      testPage: "/WidgetInfo",
 
       "Test that developer mode isn't initally enabled": function() {
-         return browser.findAllByCssSelector(".alfresco-developer-mode-Enabled")
+         return this.remote.findAllByCssSelector(".alfresco-developer-mode-Enabled")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Developer mode should not have been initially enabled");
             });
       },
 
       "Test that WidgetInfo widgets aren't displayed": function() {
-         return browser.findByCssSelector(".alfresco-debug-WidgetInfo")
+         return this.remote.findByCssSelector(".alfresco-debug-WidgetInfo")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The WidgetInfo widgets should not be displayed when developer mode is off");
@@ -61,17 +45,17 @@ registerSuite(function(){
       },
 
       "Test toggling developer mode on": function() {
-         return browser.findByCssSelector("#TOGGLE_DEVELOPER_MODE_label")
+         return this.remote.findByCssSelector("#TOGGLE_DEVELOPER_MODE_label")
             .click()
-         .end()
-         .findAllByCssSelector(".alfresco-developer-mode-Enabled")
+            .end()
+            .findAllByCssSelector(".alfresco-developer-mode-Enabled")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Developer mode was not enabled");
             });
       },
 
       "Test that WidgetInfo widgets are now displayed": function() {
-         return browser.findByCssSelector(".alfresco-debug-WidgetInfo")
+         return this.remote.findByCssSelector(".alfresco-debug-WidgetInfo")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The WidgetInfo widgets were not displayed after enabling developer mode");
@@ -79,14 +63,14 @@ registerSuite(function(){
       },
 
       "Test that all widgets have info provided": function() {
-         return browser.findAllByCssSelector(".alfresco-debug-WidgetInfo")
+         return this.remote.findAllByCssSelector(".alfresco-debug-WidgetInfo")
             .then(function(elements) {
                assert.lengthOf(elements, 5, "Unexpected number of WidgetInfo widgets found");
             });
       },
 
       "Test that alt text is generated": function() {
-         return browser.findByCssSelector(".alfresco-buttons-AlfButton .alfresco-debug-WidgetInfo img")
+         return this.remote.findByCssSelector(".alfresco-buttons-AlfButton .alfresco-debug-WidgetInfo img")
             .getAttribute("alt")
             .then(function(alt) {
                assert.equal(alt, "Information about widget TOGGLE_DEVELOPER_MODE", "Alt text was not generated for image");
@@ -94,17 +78,17 @@ registerSuite(function(){
       },
 
       "Test that info tooltip can be displayed": function() {
-         return browser.findByCssSelector(".alfresco-buttons-AlfButton .alfresco-debug-WidgetInfo img")
+         return this.remote.findByCssSelector(".alfresco-buttons-AlfButton .alfresco-debug-WidgetInfo img")
             .click()
-         .end()
-         .findAllByCssSelector(".alfresco-debug-WidgetInfoDialogPopup")
+            .end()
+            .findAllByCssSelector(".alfresco-debug-WidgetInfoDialogPopup")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Info tooltip was not generated");
             });
       },
 
       "Clicking info button does not activate click event on widget": function() {
-         return browser.findByCssSelector("#LINK .alfresco-debug-WidgetInfo img")
+         return this.remote.findByCssSelector("#LINK .alfresco-debug-WidgetInfo img")
             .click()
             .end()
 
@@ -112,11 +96,6 @@ registerSuite(function(){
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Payload published incorrectly when clicking info link");
             });
-      },
-      
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

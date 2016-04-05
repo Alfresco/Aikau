@@ -20,48 +20,31 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "FilteredList Tests (Use Case 1)",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/FilteredListUseCase1", "FilteredList Tests (Use Case 1").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/FilteredListUseCase1",
 
       // See AKU-508 for the context, but we want to make sure that opening a dialog will not trigger the filtered list
       // to request data...
       "Check displaying dialog does not reload list": function() {
-         return browser.findByCssSelector("#PDM_ITEM_1_SELECT_CONTROL span")
+         return this.remote.findByCssSelector("#PDM_ITEM_1_SELECT_CONTROL span")
             .clearLog()
             .click()
-         .end()
-         .findByCssSelector("#PDM_ITEM_1_SELECT_CONTROL_menu tr[data-value='MODERATED']")
+            .end()
+            .findByCssSelector("#PDM_ITEM_1_SELECT_CONTROL_menu tr[data-value='MODERATED']")
             .click()
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
-         .end()
-         .getAllPublishes("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
-         .then(function(payloads) {
-            assert.lengthOf(payloads, 0, "A request to load data should not have been made when the dialog opens");
-         });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+            .end()
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
+            .end()
+            .getAllPublishes("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "A request to load data should not have been made when the dialog opens");
+            });
       }
-   };
    });
 });

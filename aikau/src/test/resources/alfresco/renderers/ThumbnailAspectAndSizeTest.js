@@ -20,136 +20,120 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Thumbnail Tests (aspect ratio, cropping and size) ",
+      testPage: "/ThumbnailAspectAndSize",
 
-      return {
-         name: "Thumbnail Tests (aspect ratio, cropping and size) ",
+      "Thumbnail can be sized": function() {
+         return this.remote.findByCssSelector("#THUMB2_ITEM_0 .alfresco-renderers-Thumbnail__frame")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 150, "Incorrect height");
+               assert.equal(size.width, 150, "Incorrect width");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ThumbnailAspectAndSize", "Thumbnail Tests (aspect ratio, cropping and size) ").end();
-         },
+      "Landscape thumbnail can be cropped": function() {
+         return this.remote.findByCssSelector("#THUMB2_ITEM_0 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.isAbove(size.width, 150, "Landscape not cropped");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Portrait thumbnail can be cropped": function() {
+         return this.remote.findByCssSelector("#THUMB2_ITEM_1 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.isAbove(size.height, 150, "Portrait not cropped");
+            });
+      },
 
-         "Thumbnail can be sized": function() {
-            return browser.findByCssSelector("#THUMB2_ITEM_0 .alfresco-renderers-Thumbnail__frame")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.height, 150, "Incorrect height");
-                  assert.equal(size.width, 150, "Incorrect width");
-               });
-         },
-         
-         "Landscape thumbnail can be cropped": function() {
-            return browser.findByCssSelector("#THUMB2_ITEM_0 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.isAbove(size.width, 150, "Landscape not cropped");
-               });
-         },
+      "Gallery thumbnail can be sized": function() {
+         return this.remote.findById("THUMB3_ITEM_0")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 200, "Incorrect height");
+               assert.equal(size.width, 200, "Incorrect width");
+            });
+      },
 
-         "Portrait thumbnail can be cropped": function() {
-            return browser.findByCssSelector("#THUMB2_ITEM_1 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.isAbove(size.height, 150, "Portrait not cropped");
-               });
-         },
+      "Gallery thumbnail can lose aspect ratio": function() {
+         return this.remote.findByCssSelector("#THUMB3_ITEM_0 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 200, "Incorrect height");
+               assert.equal(size.width, 200, "Incorrect width");
+            });
+      },
 
-         "Gallery thumbnail can be sized": function() {
-            return browser.findById("THUMB3_ITEM_0")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.height, 200, "Incorrect height");
-                  assert.equal(size.width, 200, "Incorrect width");
-               });
-         },
+      "Landscape gallery thumbnail can maintain aspect ratio": function() {
+         return this.remote.findByCssSelector("#THUMB4_ITEM_0 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.closeTo(size.height, 169, 2, "Incorrect height");
+               assert.equal(size.width, 300, "Incorrect width");
+            });
+      },
 
-         "Gallery thumbnail can lose aspect ratio": function() {
-            return browser.findByCssSelector("#THUMB3_ITEM_0 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.height, 200, "Incorrect height");
-                  assert.equal(size.width, 200, "Incorrect width");
-               });
-         },
+      "Portrait gallery thumbnail can maintain aspect ratio": function() {
+         return this.remote.findByCssSelector("#THUMB4_ITEM_1 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 300, "Incorrect height");
+               assert.closeTo(size.width, 225, 2, "Incorrect width");
+            });
+      },
 
-         "Landscape gallery thumbnail can maintain aspect ratio": function() {
-            return browser.findByCssSelector("#THUMB4_ITEM_0 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.closeTo(size.height, 169, 2, "Incorrect height");
-                  assert.equal(size.width, 300, "Incorrect width");
-               });
-         },
+      "Small thumbnail is correct size": function() {
+         return this.remote.findByCssSelector("#THUMB7_ITEM_0 .alfresco-renderers-Thumbnail__frame")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 40, "Incorrect height");
+               assert.equal(size.width, 40, "Incorrect width");
+            });
+      },
 
-         "Portrait gallery thumbnail can maintain aspect ratio": function() {
-            return browser.findByCssSelector("#THUMB4_ITEM_1 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.height, 300, "Incorrect height");
-                  assert.closeTo(size.width, 225, 2, "Incorrect width");
-               });
-         },
+      "Landscape gallery thumbnail can be cropped": function() {
+         return this.remote.findByCssSelector("#THUMB8_ITEM_0 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.isAbove(size.width, 249, "Landscape not cropped");
+            });
+      },
 
-         "Small thumbnail is correct size": function() {
-            return browser.findByCssSelector("#THUMB7_ITEM_0 .alfresco-renderers-Thumbnail__frame")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.height, 40, "Incorrect height");
-                  assert.equal(size.width, 40, "Incorrect width");
-               });
-         },
+      "Landscape gallery  thumbnail can be cropped": function() {
+         return this.remote.findByCssSelector("#THUMB8_ITEM_0 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.isAbove(size.height, 249, "Portrait not cropped");
+            });
+      },
 
-         "Landscape gallery thumbnail can be cropped": function() {
-            return browser.findByCssSelector("#THUMB8_ITEM_0 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.isAbove(size.width, 249, "Landscape not cropped");
-               });
-         },
+      // NOTE: The following two tests address both AKU-713 and AKU-714...
+      //       The height and width of the landscape and portrait take into account the
+      //       5px margin - e.g. the *thumbnail* width and height should be 300px and 200px
+      "Non-square thumbnail landscape renders correctly": function() {
+         return this.remote.findByCssSelector("#THUMB9_ITEM_0 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.closeTo(size.width, 290, 1, "Non-square landscape width is wrong");
+               assert.closeTo(size.height, 163, 1, "Non-square landscape height is wrong");
+            });
+      },
 
-         "Landscape gallery  thumbnail can be cropped": function() {
-            return browser.findByCssSelector("#THUMB8_ITEM_0 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.isAbove(size.height, 249, "Portrait not cropped");
-               });
-         },
-
-         // NOTE: The following two tests address both AKU-713 and AKU-714...
-         //       The height and width of the landscape and portrait take into account the 
-         //       5px margin - e.g. the *thumbnail* width and height should be 300px and 200px
-         "Non-square thumbnail landscape renders correctly": function() {
-            return browser.findByCssSelector("#THUMB9_ITEM_0 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.closeTo(size.width, 290, 1, "Non-square landscape width is wrong");
-                  assert.closeTo(size.height, 163, 1, "Non-square landscape height is wrong");
-               });
-         },
-
-         "Non-square thumbnail portrait renders correctly": function() {
-            return browser.findByCssSelector("#THUMB9_ITEM_1 .alfresco-renderers-Thumbnail__image")
-               .getSize()
-               .then(function(size) {
-                  assert.closeTo(size.height, 190, 1, "Non-square portrait height is wrong");
-                  assert.closeTo(size.width, 143, 1, "Non-square portrait width is wrong");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Non-square thumbnail portrait renders correctly": function() {
+         return this.remote.findByCssSelector("#THUMB9_ITEM_1 .alfresco-renderers-Thumbnail__image")
+            .getSize()
+            .then(function(size) {
+               assert.closeTo(size.height, 190, 1, "Non-square portrait height is wrong");
+               assert.closeTo(size.width, 143, 1, "Non-square portrait width is wrong");
+            });
+      }
    });
 });

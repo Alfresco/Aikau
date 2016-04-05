@@ -12,9 +12,6 @@ model.jsonModel = {
          config: {
             label: "Coverage Balanced!"
          }
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };

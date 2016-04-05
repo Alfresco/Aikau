@@ -22,17 +22,16 @@ model.jsonModel = {
                         {
                            name: "alfresco/html/SVGImage",
                            config: {
-                              source: "sfs/html/svg/undo.svg",
+                              source: "alfresco/html/svg/undo.svg",
                               symbolId: "undo",
-                              height: 11,
-                              width: 11,
-                              title: "This is a title",
+                              height: 16,
+                              width: 16,
+                              title: "Undo upload",
                               publishTopic: "UNDO_UPLOAD",
-                              publishGlobal: true,
                               publishPayloadType: "PROCESS",
                               publishPayload: {
-                                 nodeId: "{fileId}",
-                                 fileName: "{fileName}"
+                                 nodeRef: "{response.nodeRef}",
+                                 fileName: "{fileObj.name}"
                               },
                               useCurrentItemAsPayload: false,
                               publishPayloadModifiers: [

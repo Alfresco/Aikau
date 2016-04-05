@@ -10,7 +10,8 @@ module.exports = function(grunt) {
          all: [
             alfConfig.files.gruntFile,
             alfConfig.files.gruntTasks,
-            alfConfig.files.js
+            alfConfig.files.js,
+            alfConfig.files.testScripts
          ]
       }
    });

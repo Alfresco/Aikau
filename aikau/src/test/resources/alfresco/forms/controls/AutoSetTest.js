@@ -18,13 +18,14 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var selectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/Select");
@@ -35,121 +36,105 @@ define(["intern!object",
          confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["FORM"])
       },
       select: {
-         firstOption: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SOURCE","1"]),
+         firstOption: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SOURCE", "1"]),
          openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["SOURCE"]),
-         secondOption: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SOURCE","2"]),
-         thirdOption: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SOURCE","3"])
+         secondOption: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SOURCE", "2"]),
+         thirdOption: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["SOURCE", "3"])
       },
       button: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE"])
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Auto Set Form Rules Tests",
+      testPage: "/AutoSet",
 
-      return {
-         name: "Auto Set Form Rules Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AutoSet", "Auto Set Form Rules Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check the initial post (source field)": function () {
-            return browser.findByCssSelector(selectors.form.confirmationButton)
-               .click()
+      "Check the initial post (source field)": function() {
+         return this.remote.findByCssSelector(selectors.form.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("POST_FORM")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "source", "1", "Source field not posted correctly");
-                  assert.propertyVal(payload, "target", "", "Target field not posted correctly");
-                  assert.propertyVal(payload, "hidden", "", "Hidden field not posted correctly");
-                  assert.propertyVal(payload, "hidden2", "initial value", "Second hidden field not posted correctly");
-               });
-         },
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "source", "1", "Source field not posted correctly");
+               assert.propertyVal(payload, "target", "", "Target field not posted correctly");
+               assert.propertyVal(payload, "hidden", "", "Hidden field not posted correctly");
+               assert.propertyVal(payload, "hidden2", "initial value", "Second hidden field not posted correctly");
+            });
+      },
 
-         "Check the updated post (source field)": function () {
-            return browser.findByCssSelector(selectors.select.openIcon)
-               .click()
+      "Check the updated post (source field)": function() {
+         return this.remote.findByCssSelector(selectors.select.openIcon)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.select.secondOption)
-               .click()
+         .findByCssSelector(selectors.select.secondOption)
+            .click()
             .end()
 
-            .clearLog()
+         .clearLog()
 
-            // Post the form, check the hidden field is set and the visible field isn't
-            .findByCssSelector(selectors.form.confirmationButton)
-               .click()
+         // Post the form, check the hidden field is set and the visible field isn't
+         .findByCssSelector(selectors.form.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("POST_FORM")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "source", "2", "Source field not posted correctly");
-                  assert.propertyVal(payload, "target", "", "Target field not posted correctly");
-                  assert.deepPropertyVal(payload, "hidden.something.quite", "complex", "Couldn't find complex data in initial form value publication");
-               });
-         },
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "source", "2", "Source field not posted correctly");
+               assert.propertyVal(payload, "target", "", "Target field not posted correctly");
+               assert.deepPropertyVal(payload, "hidden.something.quite", "complex", "Couldn't find complex data in initial form value publication");
+            });
+      },
 
-         "Check the hidden field is not set and the visible field is": function() {
-            // Set the drop-down to 2...
-            return browser.findByCssSelector(selectors.select.openIcon)
-               .click()
+      "Check the hidden field is not set and the visible field is": function() {
+         // Set the drop-down to 2...
+         return this.remote.findByCssSelector(selectors.select.openIcon)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.select.secondOption)
-               .click()
+         .findByCssSelector(selectors.select.secondOption)
+            .click()
             .end()
 
-            // Set the drop-down to 3...
-            .findByCssSelector(selectors.select.openIcon)
-               .click()
+         // Set the drop-down to 3...
+         .findByCssSelector(selectors.select.openIcon)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.select.thirdOption)
-               .click()
+         .findByCssSelector(selectors.select.thirdOption)
+            .click()
             .end()
 
-            .clearLog()
+         .clearLog()
 
-            // Post the form, check the hidden field is not set and the visible field is...
-            .findByCssSelector(selectors.form.confirmationButton)
-               .click()
+         // Post the form, check the hidden field is not set and the visible field is...
+         .findByCssSelector(selectors.form.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("POST_FORM")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "source", "3", "Source field not posted correctly");
-                  assert.propertyVal(payload, "target", "Updated", "Target field not posted correctly");
-                  assert.propertyVal(payload, "hidden", "", "Hidden field not posted correctly");
-               });
-         },
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "source", "3", "Source field not posted correctly");
+               assert.propertyVal(payload, "target", "Updated", "Target field not posted correctly");
+               assert.propertyVal(payload, "hidden", "", "Hidden field not posted correctly");
+            });
+      },
 
-         "Check that hidden field value can be set by form value update": function() {
-            return browser.findByCssSelector(selectors.button)
-               .click()
+      "Check that hidden field value can be set by form value update": function() {
+         return this.remote.findByCssSelector(selectors.button)
+            .click()
             .end()
 
-            .clearLog()
+         .clearLog()
 
-            .findByCssSelector(selectors.form.confirmationButton)
-               .click()
+         .findByCssSelector(selectors.form.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("POST_FORM")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "hidden2", "Value Set", "Second hidden field not posted correctly");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "hidden2", "Value Set", "Second hidden field not posted correctly");
+            });
+      }
    });
 });

@@ -21,11 +21,12 @@
  *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-   function(registerSuite, assert, TestCommon, keys) {
+        function(module, defineSuite, assert, TestCommon, keys) {
 
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var formControlSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/BaseFormControl");
@@ -55,111 +56,95 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "CheckBox Tests",
+      testPage: "/CheckBox",
 
-      return {
-         name: "CheckBox Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/CheckBox", "CheckBox Control Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Initial values are set correctly": function() {
-            return browser.findByCssSelector(selectors.checkBoxes.default.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isTrue(isSelected, "Default checkbox not selected at startup");
-               })
+      "Initial values are set correctly": function() {
+         return this.remote.findByCssSelector(selectors.checkBoxes.default.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isTrue(isSelected, "Default checkbox not selected at startup");
+            })
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.o1.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isFalse(isSelected, "0/1 checkbox selected at startup");
-               })
+         .findByCssSelector(selectors.checkBoxes.o1.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isFalse(isSelected, "0/1 checkbox selected at startup");
+            })
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.offon.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isTrue(isSelected, "on/off checkbox not selected at startup");
-               });
-         },
+         .findByCssSelector(selectors.checkBoxes.offon.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isTrue(isSelected, "on/off checkbox not selected at startup");
+            });
+      },
 
-         "Values are correctly updated by publish": function() {
-            return browser.findByCssSelector(selectors.buttons.updateCheckboxes)
-               .click()
+      "Values are correctly updated by publish": function() {
+         return this.remote.findByCssSelector(selectors.buttons.updateCheckboxes)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.default.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isFalse(isSelected, "Default checkbox not deselected by publish");
-               })
+         .findByCssSelector(selectors.checkBoxes.default.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isFalse(isSelected, "Default checkbox not deselected by publish");
+            })
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.o1.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isTrue(isSelected, "0/1 checkbox not selected by publish");
-               })
+         .findByCssSelector(selectors.checkBoxes.o1.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isTrue(isSelected, "0/1 checkbox not selected by publish");
+            })
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.offon.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isTrue(isSelected, "on/off checkbox incorrectly modified by publish");
-               });
-         },
+         .findByCssSelector(selectors.checkBoxes.offon.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isTrue(isSelected, "on/off checkbox incorrectly modified by publish");
+            });
+      },
 
-         "Keyboard navigation and selection is supported": function() {
-            return browser.findByCssSelector(selectors.buttons.updateCheckboxes)
-               .click()
-               .tabToElement(selectors.checkBoxes.default.checkBox)
-               .pressKeys(keys.SPACE)
+      "Keyboard navigation and selection is supported": function() {
+         return this.remote.findByCssSelector(selectors.buttons.updateCheckboxes)
+            .click()
+            .tabToElement(selectors.checkBoxes.default.checkBox)
+            .pressKeys(keys.SPACE)
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.default.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isTrue(isSelected, "Checkbox value not changed by keyboard");
-               });
-         },
+         .findByCssSelector(selectors.checkBoxes.default.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isTrue(isSelected, "Checkbox value not changed by keyboard");
+            });
+      },
 
-         "Can modify checkbox value with mouse": function() {
-            return browser.findByCssSelector(selectors.checkBoxes.default.label)
-               .click()
+      "Can modify checkbox value with mouse": function() {
+         return this.remote.findByCssSelector(selectors.checkBoxes.default.label)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.checkBoxes.default.checkBox)
-               .isSelected()
-               .then(function(isSelected) {
-                  assert.isFalse(isSelected, "Checkbox value not changed by mouse");
-               });
-         },
+         .findByCssSelector(selectors.checkBoxes.default.checkBox)
+            .isSelected()
+            .then(function(isSelected) {
+               assert.isFalse(isSelected, "Checkbox value not changed by mouse");
+            });
+      },
 
-         "Form correctly posts value": function() {
-            return browser.findByCssSelector(selectors.form.confirmationButton)
-               .click()
+      "Form correctly posts value": function() {
+         return this.remote.findByCssSelector(selectors.form.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("POST_FORM")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "defaultCheckbox", false);
-                  assert.propertyVal(payload, "o1", 1);
-                  assert.propertyVal(payload, "offon", "on");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "defaultCheckbox", false);
+               assert.propertyVal(payload, "o1", 1);
+               assert.propertyVal(payload, "offon", "on");
+            });
+      }
    });
 });

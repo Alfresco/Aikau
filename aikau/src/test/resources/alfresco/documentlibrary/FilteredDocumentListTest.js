@@ -20,55 +20,39 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "AlfDocumentList Tests (filters)",
+      testPage: "/FilteredDocumentList",
 
-      return {
-         name: "AlfDocumentList Tests (filters)",
+      "Document request includes initial filter": function() {
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FilteredDocumentList", "AlfDocumentList Tests (filters)").end();
-         },
+         return this.remote.findByCssSelector("body").end().getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "dataType", "PERSONAL", "Initial filter not included in request");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Document request includes initial filter": function() {
-
-            return browser.findByCssSelector("body").end().getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "dataType", "PERSONAL", "Initial filter not included in request");
-               });
-         },
-
-         "Change filter": function() {
-            return browser.findById("PUBLISH_DATA_label")
-               .click()
+      "Change filter": function() {
+         return this.remote.findById("PUBLISH_DATA_label")
+            .click()
             .end()
 
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
             .clearLog()
 
-            .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL input[value=\"DOCLIBS\"]")
-               .click()
+         .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL input[value=\"DOCLIBS\"]")
+            .click()
             .end()
 
-            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST", "Filter did not trigger reload")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "dataType", "DOCLIBS", "Updated filter not included in request");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST", "Filter did not trigger reload")
+            .then(function(payload) {
+               assert.propertyVal(payload, "dataType", "DOCLIBS", "Updated filter not included in request");
+            });
+      }
    });
 });

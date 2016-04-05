@@ -20,29 +20,36 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon"],
-       function (registerSuite, assert, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
+
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
 
    var shouldBeRendered = function(browser, index) {
-      return browser.findById("ACTIONS_ITEM_" + index + "_MENU_text")
+      var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", index]);
+      var dropDownSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", index]);
+      return browser.findByCssSelector(actionSelector)
          .click()
-      .end()
+         .end()
 
-      .findDisplayedById("ACTIONS_ITEM_" + index + "_GROUP")
-      .end()
+      .findDisplayedByCssSelector(dropDownSelector)
+         .end()
 
-      .findById("ACTIONS_ITEM_" + index + "_UPLOAD_NEW_VERSION");
+      .findDisplayedById("ACTIONS_ITEM_" + index + "_UPLOAD_NEW_VERSION");
    };
 
    var shouldNotBeRendered = function(browser, index) {
-      return browser.findById("ACTIONS_ITEM_" + index + "_MENU_text")
+      var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", index]);
+      var dropDownSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", index]);
+      return browser.findByCssSelector(actionSelector)
          .click()
-      .end()
+         .end()
 
-      .findDisplayedById("ACTIONS_ITEM_" + index + "_GROUP")
-      .end()
+      .findDisplayedByCssSelector(dropDownSelector)
+         .end()
 
       .findAllByCssSelector("#ACTIONS_ITEM_" + index + "_UPLOAD_NEW_VERSION")
          .then(function(elements) {
@@ -50,79 +57,66 @@ define(["intern!object",
          });
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Upload New Version Action Test",
+      testPage: "/UploadNewVersionAction",
 
-      return {
-         name: "Upload New Version Action Test",
+      "Check folder": function() {
+         return shouldNotBeRendered(this.remote, 0);
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/UploadNewVersionAction", "Upload New Version Action Test").end();
-         },
+      "Check basic node": function() {
+         return shouldBeRendered(this.remote, 1);
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check working copy owner by user": function() {
+         return shouldBeRendered(this.remote, 2);
+      },
 
-         "Check folder": function() {
-            return shouldNotBeRendered(browser, 0);
-         },
+      "Check working copy owner by another user": function() {
+         return shouldNotBeRendered(this.remote, 3);
+      },
 
-         "Check basic node": function() {
-            return shouldBeRendered(browser, 1);
-         },
+      "Check node locked by user": function() {
+         return shouldBeRendered(this.remote, 4);
+      },
 
-         "Check working copy owner by user": function() {
-            return shouldBeRendered(browser, 2);
-         },
+      "Check node locked by another user": function() {
+         return shouldNotBeRendered(this.remote, 5);
+      },
 
-         "Check working copy owner by another user": function() {
-            return shouldNotBeRendered(browser, 3);
-         },
+      "Check node with node lock": function() {
+         return shouldNotBeRendered(this.remote, 6);
+      },
 
-         "Check node locked by user": function() {
-            return shouldBeRendered(browser, 4);
-         },
+      "Check node without Write permission": function() {
+         return shouldNotBeRendered(this.remote, 7);
+      },
 
-         "Check node locked by another user": function() {
-            return shouldNotBeRendered(browser, 5);
-         },
+      "Upload a new verion": function() {
+         var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 1]);
+         var dropDownSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", 1]);
 
-         "Check node with node lock": function() {
-            return shouldNotBeRendered(browser, 6);
-         },
-
-         "Check node without Write permission": function() {
-            return shouldNotBeRendered(browser, 7);
-         },
-
-         "Upload a new verion": function() {
-            return browser.findById("ACTIONS_ITEM_1_MENU_text")
-               .click()
+         return this.remote.findByCssSelector(actionSelector)
+            .click()
             .end()
 
-            .findDisplayedById("ACTIONS_ITEM_1_GROUP")
+         .findDisplayedByCssSelector(dropDownSelector)
             .end()
 
-            .findById("ACTIONS_ITEM_1_UPLOAD_NEW_VERSION")
-               .click()
+         .findById("ACTIONS_ITEM_1_UPLOAD_NEW_VERSION")
+            .click()
             .end()
 
-            // Give the dialog a chance to appear...
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
+         // Give the dialog a chance to appear...
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
             .end()
 
-            // Check this is an update (rather than just upload) dialog...
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-forms-controls-RadioButtons")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Version increment options should be displayed");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         // Check this is an update (rather than just upload) dialog...
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-forms-controls-RadioButtons")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Version increment options should be displayed");
+            });
+      }
    });
 });

@@ -1,3 +1,4 @@
+/*jshint browser:true*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -20,189 +21,170 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-      "intern/chai!expect",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, expect, assert, require, TestCommon, keys) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!expect",
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, expect, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
+   defineSuite(module, {
+      name: "Property Tests",
+      testPage: "/Property",
 
-   return {
-         name: "Property Tests",
+      "Check standard property is rendered correctly": function() {
+         return this.remote
+            .findByCssSelector("#BASIC_ITEM_0 .value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert(resultText === "Test", "Standard property not rendered correctly: " + resultText);
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Property", "Property Tests").end();
-         },
+      "Check prefixed/suffixed property is rendered correctly": function() {
+         return this.remote.findByCssSelector("#PREFIX_SUFFIX_ITEM_0 .value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert(resultText === "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check new line property is rendered correctly": function() {
+         return this.remote.findByCssSelector("#NEW_LINE_ITEM_0")
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert(result === "block", "New line not applied");
+            });
+      },
 
-         "Check standard property is rendered correctly": function() {
-            return browser
-               // .moveMouseTo(null, 0, 0)
-               //    .end()
+      "Check standard warning is rendered correctly": function() {
+         return this.remote.findByCssSelector("#WARN1_ITEM_0 .value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "No property for: \"missing\"", "Standard warning not rendered correctly");
+            });
+      },
 
-               .findByCssSelector("#BASIC_ITEM_0 .value")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert(resultText === "Test", "Standard property not rendered correctly: " + resultText);
-               });
-         },
+      "Check explicit warning is rendered correctly": function() {
+         return this.remote.findByCssSelector("#WARN2_ITEM_0 .value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert(resultText === "No description", "Explicit warning not rendered correctly: " + resultText);
+            });
+      },
 
-         "Check prefixed/suffixed property is rendered correctly": function() {
-            return browser.findByCssSelector("#PREFIX_SUFFIX_ITEM_0 .value")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert(resultText === "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
-               });
-         },
+      "Check hover property is hidden": function() {
+         return this.remote.findByCssSelector(".alfresco-testing-SubscriptionLog")
+            .then(element => {
+               this.remote.moveMouseTo(element);
+            })
+            .end()
 
-         "Check new line property is rendered correctly": function() {
-            return browser.findByCssSelector("#NEW_LINE_ITEM_0")
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert(result === "block", "New line not applied");
-               });
-         },
+         .findByCssSelector("#HOVER_ITEM_0 .inner")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === false, "Hover displayed unexpectedly");
+            });
+      },
 
-         "Check standard warning is rendered correctly": function() {
-            return browser.findByCssSelector("#WARN1_ITEM_0 .value")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert.equal(resultText, "No property for: \"missing\"", "Standard warning not rendered correctly");
-               });
-         },
+      "Check hover property is displayed": function() {
+         return this.remote.findByCssSelector("#LIST table tbody tr td")
+            .then(element => {
+               this.remote.moveMouseTo(element);
+            })
+            .end()
 
-         "Check explicit warning is rendered correctly": function() {
-            return browser.findByCssSelector("#WARN2_ITEM_0 .value")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert(resultText === "No description", "Explicit warning not rendered correctly: " + resultText);
-               });
-         },
+         .findByCssSelector("#HOVER_ITEM_0 .value")
+            .isDisplayed()
+            .then(function(result) {
+               assert(result === true, "Hover displayed unexpectedly");
+            });
+      },
 
-         "Check hover property is hidden": function() {
-            return browser.findByCssSelector(".alfresco-testing-SubscriptionLog")
-               .then(function(element) {
-                  browser.moveMouseTo(element);
-               })
-               .end()
+      "Check label is rendered correctly": function() {
+         return this.remote.findByCssSelector("#LABEL_ITEM_0 .label")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert(resultText === "Label:", "Label not rendered correctly: " + resultText);
+            });
+      },
 
-            .findByCssSelector("#HOVER_ITEM_0 .inner")
-               .isDisplayed()
-               .then(function(result) {
-                  assert(result === false, "Hover displayed unexpectedly");
-               });
-         },
+      "Property is truncated when too long for max-width": function() {
+         return this.remote.execute(function() {
+               var property = document.getElementById("MAX_LENGTH_ITEM_0"),
+                  truncated = property.clientWidth < property.scrollWidth;
+               return truncated;
+            })
+            .then(function(truncated) {
+               assert.isTrue(truncated, "Long property not truncated properly");
+            })
+            .end()
 
-         "Check hover property is displayed": function() {
-            return browser.findByCssSelector("#LIST table tbody tr td")
-               .then(function(element) {
-                  browser.moveMouseTo(element);
-               })
-               .end()
+         .findById("MAX_LENGTH_ITEM_0")
+            .then(function(elem) {
+               return elem.getSize();
+            })
+            .then(function(size) {
+               assert.equal(size.width, 300, "Long property width incorrect");
+            })
+            .end()
 
-            .findByCssSelector("#HOVER_ITEM_0 .value")
-               .isDisplayed()
-               .then(function(result) {
-                  assert(result === true, "Hover displayed unexpectedly");
-               });
-         },
+         .screenie(); // For visual verification of ellipsis if required
+      },
 
-         "Check label is rendered correctly": function() {
-            return browser.findByCssSelector("#LABEL_ITEM_0 .label")
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert(resultText === "Label:", "Label not rendered correctly: " + resultText);
-               });
-         },
+      "Truncated property displays full text on focus": function() {
+         return this.remote.findById("MAX_LENGTH_ITEM_0")
+            .then(element => {
+               element.type(""); // Focus on element
 
-         "Property is truncated when too long for max-width": function() {
-            return browser.execute(function() {
-                  var property = document.getElementById("MAX_LENGTH_ITEM_0"),
-                     truncated = property.clientWidth < property.scrollWidth;
-                  return truncated;
-               })
-               .then(function(truncated) {
-                  assert.isTrue(truncated, "Long property not truncated properly");
-               })
-               .end()
+               this.remote.end()
+                  .findByCssSelector(".dijitTooltip")
+                  .isDisplayed()
+                  .then(function(result) {
+                     assert.isTrue(result, "Full-text hover was not revealed on focus");
+                  });
+            });
+      },
 
-            .findById("MAX_LENGTH_ITEM_0")
-               .then(function(elem) {
-                  return elem.getSize();
-               })
-               .then(function(size) {
-                  assert.equal(size.width, 300, "Long property width incorrect");
-               })
-               .end()
+      "Truncated property hides full text on blur": function() {
+         return this.remote.findById("MAX_LENGTH_ITEM_0")
+            .then(element => {
+               element.type([keys.SHIFT, keys.TAB]); // Focus away from element
 
-            .screenie(); // For visual verification of ellipsis if required
-         },
+               this.remote.end()
+                  .findByCssSelector(".dijitTooltip")
+                  .isDisplayed()
+                  .then(function(result) {
+                     assert.isFalse(result, "Full-text hover was not hidden on blur");
+                  });
+            });
+      },
 
-         "Truncated property displays full text on focus": function() {
-            return browser.findById("MAX_LENGTH_ITEM_0")
-               .then(function(element) {
-                  element.type(""); // Focus on element
+      "Truncated property displays full text on mouseover": function() {
+         return this.remote.findById("MAX_LENGTH_ITEM_0")
+            .moveMouseTo()
+            .end()
 
-                  browser.end()
-                     .findByCssSelector(".dijitTooltip")
-                     .isDisplayed()
-                     .then(function(result) {
-                        assert.isTrue(result, "Full-text hover was not revealed on focus");
-                     });
-               });
-         },
+         .findByCssSelector(".dijitTooltip")
+            .isDisplayed()
+            .then(function(result) {
+               assert.isTrue(result, "Full-text hover was not revealed on mouse over");
+            });
+      },
 
-         "Truncated property hides full text on blur": function() {
-            return browser.findById("MAX_LENGTH_ITEM_0")
-               .then(function(element) {
-                  element.type([keys.SHIFT, keys.TAB]); // Focus away from element
-
-                  browser.end()
-                     .findByCssSelector(".dijitTooltip")
-                     .isDisplayed()
-                     .then(function(result) {
-                        assert.isFalse(result, "Full-text hover was not hidden on blur");
-                     });
-               });
-         },
-
-         "Truncated property displays full text on mouseover": function() {
-            return browser.findById("MAX_LENGTH_ITEM_0")
-               .moveMouseTo()
-               .end()
-
-            .findByCssSelector(".dijitTooltip")
-               .isDisplayed()
-               .then(function(result) {
-                  assert.isTrue(result, "Full-text hover was not revealed on mouse over");
-               });
-         },
-
-         "Truncated property hides full text on mouseout": function() {
-            return browser.findByCssSelector("body")
-               .moveMouseTo(0, 0)
-               .then(function() {
-                  browser.end()
-                     .findByCssSelector(".dijitTooltip")
-                     .isDisplayed()
-                     .then(function(result) {
-                        assert.isFalse(result, "Full-text hover was not hidden on mouse out");
-                     });
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+      "Truncated property hides full text on mouseout": function() {
+         return this.remote.findByCssSelector("body")
+            .moveMouseTo(0, 0)
+            .then(() => {
+               this.remote.end()
+                  .findByCssSelector(".dijitTooltip")
+                  .isDisplayed()
+                  .then(function(result) {
+                     assert.isFalse(result, "Full-text hover was not hidden on mouse out");
+                  });
+            });
+      }
    });
+});

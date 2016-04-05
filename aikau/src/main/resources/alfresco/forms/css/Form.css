@@ -6,4 +6,13 @@
    .alfresco-forms-Form__warnings--hidden {
       display: none;
    }
+
+   &--single-line {
+      >div {
+         display: inline-block;
+      }
+      >form {
+         display: inline-block;
+      }
+   }
 }

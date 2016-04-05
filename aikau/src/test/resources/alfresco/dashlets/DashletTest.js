@@ -19,109 +19,93 @@
 
 /**
  * Test class for the Dashlet widget.
- * 
+ *
  * @author Martin Doyle
  */
-define(["alfresco/TestCommon",
-      "intern/chai!assert",
-      "intern!object"
-   ],
-   function(TestCommon, assert, registerSuite) {
+define(["module",
+        "alfresco/TestCommon",
+        "intern/chai!assert",
+        "alfresco/defineSuite"],
+        function(module, TestCommon, assert, defineSuite) {
 
-registerSuite(function(){
-   var browser;
+   defineSuite(module, {
+      name: "Dashlet Tests",
+      testPage: "/Dashlet",
 
-   return {
-         name: "Dashlet Tests",
+      "Toolbars and body display when widgets provided": function() {
+         return this.remote.findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed, "Toolbar not visible when widgets provided");
+            })
+            .end()
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Dashlet", "Dashlet Tests").end();
-         },
+         .findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar2")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed, "Toolbar2 not visible when widgets provided");
+            })
+            .end()
 
-         beforeEach: function() {
-            browser.end();
-         },
+         .findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__body")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed, "Body not visible when widgets provided");
+            })
+            .end()
 
-         "Toolbars and body display when widgets provided": function() {
-            return browser.findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Toolbar not visible when widgets provided");
-               })
-               .end()
+         .findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isFalse(isDisplayed, "Toolbar visible when widgets not provided");
+            })
+            .end()
 
-            .findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar2")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Toolbar2 not visible when widgets provided");
-               })
-               .end()
+         .findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar2")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isFalse(isDisplayed, "Toolbar2 visible when widgets not provided");
+            });
+      },
 
-            .findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__body")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Body not visible when widgets provided");
-               })
-               .end()
+      "Dashlet only resizable with ID": function() {
+         return this.remote.findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isFalse(isDisplayed, "Resize bar visible when ID not provided");
+            })
+            .end()
 
-            .findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Toolbar visible when widgets not provided");
-               })
-               .end()
+         .findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed, "Resize bar not visible when ID provided");
+            });
+      },
 
-            .findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar2")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Toolbar2 visible when widgets not provided");
-               });
-         },
+      "Dashlet with pre-configured height is set appropriately": function() {
+         return this.remote.findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__body__widgets")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 300, "Body not equal to set height");
+            });
+      },
 
-         "Dashlet only resizable with ID": function() {
-            return browser.findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isFalse(isDisplayed, "Resize bar visible when ID not provided");
-               })
-               .end()
+      // This does not work in Chrome currently, however we expect the FF test to pass, so this provides some level of regression testability
+      "Resizing dashlet stores height": function() {
+         TestCommon.skipIf(this, "environment", "chrome");
 
-            .findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert.isTrue(isDisplayed, "Resize bar not visible when ID provided");
-               });
-         },
+         return this.remote.findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar__icon")
+            .moveMouseTo(0, 0)
+            .pressMouseButton()
+            .moveMouseTo(0, -50)
+            .releaseMouseButton()
+            .end()
 
-         "Dashlet with pre-configured height is set appropriately": function() {
-            return browser.findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__body__widgets")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.height, 300, "Body not equal to set height");
-               });
-         },
-
-         // This does not work in Chrome currently, however we expect the FF test to pass, so this provides some level of regression testability
-         "Resizing dashlet stores height": function() {
-            TestCommon.skipIf(this, "environment", "chrome");
-
-            return browser.findByCssSelector("#VALID_ID_DASHLET .alfresco-dashlets-Dashlet__resize-bar__icon")
-               .moveMouseTo(0, 0)
-               .pressMouseButton()
-               .moveMouseTo(0, -50)
-               .releaseMouseButton()
-               .end()
-
-            .getLastPublish("VALID_ID_ALF_STORE_DASHLET_HEIGHT_SUCCESS")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "requestConfig.data.height", 270, "Did not publish new height");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+         .getLastPublish("VALID_ID_ALF_STORE_DASHLET_HEIGHT_SUCCESS")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "requestConfig.data.height", 270, "Did not publish new height");
+            });
+      }
    });
+});

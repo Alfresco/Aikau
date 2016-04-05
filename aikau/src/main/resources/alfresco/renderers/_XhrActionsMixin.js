@@ -48,69 +48,43 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/_XhrActionsMixin.properties"}],
 
       /**
-       * A boolean flag indicating whether or not the actions have been loaded yet.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      _actionsLoaded: false,
-
-      /**
-       * The JSON model for controlling the widgets that are displayed whilst waiting for the
-       * XHR request to complete.
-       *
-       * @instance
-       * @type {array}
-       */
-      widgetsForLoading: [
-         {
-            name: "alfresco/header/AlfMenuItem",
-            config: {
-               iconClass: "alf-loading-icon",
-               label: "loading.label"
-            }
-         }
-      ],
-
-      /**
-       * Extends the [inherited function]{@link module:alfresco/renderers/_ActionsMixin#addActions} to create place
-       * holding [widgets]{@link module:alfresco/renderers/_XhrActionsMixin#widgetsForLoading} to display until the
-       * XHR request to retrieve the full Node details returns. This function is subsequently called when the user
-       * opens the pop-up menu to render all the actions.
+       * Overrides the [inherited function]{@link module:alfresco/renderers/_ActionsMixin#createDropDownMenu}
+       * to call [loadActions]{@link module:alfresco/renderers/_XhrActionsMixin#loadActions} to ensure that
+       * the actions are loaded before the drop-down menu is displayed.
        * 
        * @instance
+       * @param  {function} callback The function to call to display the drop-down
+       * @since 1.0.62
        */
-      addActions: function alfresco_renderers__XhrActionsMixin__postCreate() {
-         if (this._actionsLoaded)
-         {
-            this.inherited(arguments);
-         }
-         else
-         {
-            this.processWidgets(this.widgetsForLoading);
-
-            // Pass the loading JSON model to the actions menu group to be displayed...
-            aspect.after(this._menu, "_scheduleOpen", lang.hitch(this, this.loadActions));
-         }
+      createDropDownMenu: function alfresco_renderers__XhrActionsMixin__createDropDownMenu(callback) {
+         this.createEmptyMenu();
+         this.loadActions(callback);
       },
 
       /**
        * Called whenever the user opens up the actions pop-up menu. If an XHR request has not yet been made to 
-       * retrieve the full Node data for the current item then the [getXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#getXhrData}
-       * function will be called, otherwise the previously rendered actions will be shown.
+       * retrieve the full Node data for the current item then the 
+       * [getXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#getXhrData} function will be called, otherwise 
+       * the previously rendered actions will be shown.
        * 
        * @instance
+       * @param  {function} callback The function to call to display the drop-down
        */
-      loadActions: function alfresco_renderers__XhrActionsMixin__loadActions() {
+      loadActions: function alfresco_renderers__XhrActionsMixin__loadActions(callback) {
          if (this._actionsLoaded)
          {
             this.alfLog("log", "Actions already loaded");
+            callback();
          }
          else
          {
             this.alfLog("log", "Loading actions");
-            this.getXhrData();
+            if (this._button)
+            {
+               this._button.set("label", this.message("loading.label"));
+               this._button.set("disabled", true);
+            }
+            this.getXhrData(callback);
          }
       },
 
@@ -118,16 +92,17 @@ define(["dojo/_base/declare",
        * Publishes a request to retrieve the full Node data for the current item.
        * 
        * @instance
+       * @param  {function} callback The function to call to display the drop-down
        * @fires module:alfresco/core/topics#GET_DOCUMENT
        */
-      getXhrData: function alfresco_renderers__XhrActionsMixin__getXhrData() {
+      getXhrData: function alfresco_renderers__XhrActionsMixin__getXhrData(callback) {
          var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
          if (nodeRef)
          {
             // Generate a UUID for the response to the publication to ensure that only this widget
             // handles to the XHR data...
             var responseTopic = this.generateUuid();
-            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onXhrData), true);
+            this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onXhrData, callback), true);
             this.alfPublish(topics.GET_DOCUMENT, {
                alfResponseTopic: responseTopic,
                nodeRef: nodeRef
@@ -144,16 +119,19 @@ define(["dojo/_base/declare",
        * [addXhrItems]{@link module:alfresco/renderers/_XhrActionsMixin#addXhrItems} to render the actions.
        * 
        * @instance
+       * @param  {function} callback The function to call to display the drop-down
        * @param {object} payload 
        */
-      onXhrData: function alfresco_renderers__XhrActionsMixin__onXhrData(payload) {
+      onXhrData: function alfresco_renderers__XhrActionsMixin__onXhrData(callback, payload) {
          this.alfUnsubscribeSaveHandles([this._xhrDataRequestHandle]);
          if (lang.exists("response.item", payload)) 
          {
-            this._actionsLoaded = true;
             this.currentItem = payload.response.item;
-            this.clearLoadingItem();
             this.addXhrItems();
+            if (typeof callback === "function")
+            {
+               callback();
+            }
          }
          else
          {
@@ -162,22 +140,17 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Removes the "Loading..." place holder menu item. Called from [onXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#onXhrData}
-       * 
-       * @instance
-       */
-      clearLoadingItem: function alfresco_renderers__XhrActionsMixin__clearLoadingItem() {
-         array.forEach(this._menu.getChildren(), function(widget) {
-            this._menu.removeChild(widget);
-         }, this);
-      },
-
-      /**
-       * Adds the menu items for the asynchronously retrieved data. Called from [onXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#onXhrData}
+       * Adds the menu items for the asynchronously retrieved data. Called from 
+       * [onXhrData]{@link module:alfresco/renderers/_XhrActionsMixin#onXhrData}.
        *
        * @instance
        */
       addXhrItems: function alfresco_renderers__XhrActionsMixin__addXhrItems() {
+         if (this._button)
+         {
+            this._button.set("label", this.message("alf.renderers.Actions.menuLabel"));
+            this._button.set("disabled", false);
+         }
          this.addActions();
       }
    });

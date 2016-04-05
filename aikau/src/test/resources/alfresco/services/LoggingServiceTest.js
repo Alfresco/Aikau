@@ -20,53 +20,39 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Logging Service Tests",
+      testPage: "/LoggingService",
 
-      return {
-         name: "Logging Service Tests",
+      "There should be no preference request for SCOPE1_": function() {
+         return this.remote.findByCssSelector("body").end()
+            .getLogEntries({
+               type: "PUBLISH",
+               topic: "SCOPE1_ALF_PREFERENCE_GET",
+               pos: "all",
+               isGlobal: true
+            })
+            .then(function(subscriptions) {
+               assert.lengthOf(subscriptions, 0, "User preference request should have been suppressed");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/LoggingService", "Logging Service Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "There should be no preference request for SCOPE1_": function() {
-            return browser.findByCssSelector("body").end()
-               .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "SCOPE1_ALF_PREFERENCE_GET",
-                  pos: "all"
-               }, true)
-               .then(function(subscriptions) {
-                  assert.lengthOf(subscriptions, 0, "User preference request should have been suppressed");
-               });
-         },
-
-         "There should be a preference request for SCOPE2_": function() {
-            return browser.findByCssSelector("body").end()
-               .getLogEntries({
-                  type: "PUBLISH",
-                  topic: "SCOPE2_ALF_PREFERENCE_GET",
-                  pos: "all"
-               }, true)
-               .then(function(subscriptions) {
-                  assert.lengthOf(subscriptions, 1, "User preference request not published");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "There should be a preference request for SCOPE2_": function() {
+         return this.remote.findByCssSelector("body").end()
+            .getLogEntries({
+               type: "PUBLISH",
+               topic: "SCOPE2_ALF_PREFERENCE_GET",
+               pos: "all",
+               isGlobal: true
+            })
+            .then(function(subscriptions) {
+               assert.lengthOf(subscriptions, 1, "User preference request not published");
+            });
+      }
    });
 });

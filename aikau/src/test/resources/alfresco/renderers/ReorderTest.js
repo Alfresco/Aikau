@@ -20,42 +20,32 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Reorder Renderer Tests",
+      testPage: "/Reorder",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Reorder", "Reorder Renderer Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Basic Tests": function () {
+      "Basic Tests": function() {
          // Although there are 3 items, only 2 up arrows and 2 down arrows should be displayed (first
          // can't be moved up, last can't be moved down)...
-         return browser.findAllByCssSelector(".alfresco-renderers-Reorder .up")
+         return this.remote.findAllByCssSelector(".alfresco-renderers-Reorder .up")
             .then(function(elements) {
                assert(elements.length === 3, "Test #1a - Unexpected number of up arrows: " + elements.length);
             })
             .end()
-         .findAllByCssSelector(".alfresco-renderers-Reorder .up.invisible")
+            .findAllByCssSelector(".alfresco-renderers-Reorder .up.invisible")
             .then(function(elements) {
                assert(elements.length === 1, "Test #1b - Unexpected number of INVISIBLE up arrows: " + elements.length);
             })
             .end()
-         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .up")
+            .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .up")
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "Test #1c - The first up arrow was displayed incorrectly");
@@ -67,7 +57,7 @@ registerSuite(function(){
                assert(elements.length === 3, "Test #1d - Unexpected number of down arrows: " + elements.length);
             })
             .end()
-         .findAllByCssSelector(".alfresco-renderers-Reorder .down.invisible")
+            .findAllByCssSelector(".alfresco-renderers-Reorder .down.invisible")
             .then(function(elements) {
                assert(elements.length === 1, "Test #1e - Unexpected number of INVISIBLE down arrows: " + elements.length);
             })
@@ -87,7 +77,7 @@ registerSuite(function(){
                assert(result === "Click to move \"First\" down a place", "Test #2a - Alt text not set correctly on down arrow: " + result);
             })
             .end()
-         .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
+            .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
             .getAttribute("alt")
             .then(function(result) {
                assert(result === "Click to move \"Middle\" up a place", "Test #2a - Alt text not set correctly on down arrow: " + result);
@@ -98,12 +88,12 @@ registerSuite(function(){
          .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(1) .alfresco-renderers-Reorder .down > img")
             .click()
             .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_MOVE_DOWN", "publish", "last"))
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_MOVE_DOWN", "publish", "last"))
             .then(function(elements) {
                assert(elements.length === 1, "Test #3a - Move down topic not published");
             })
             .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "name", "First"))
+            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "name", "First"))
             .then(function(elements) {
                assert(elements.length === 1, "Test #3b - Move down payload not published correctly");
             })
@@ -112,20 +102,15 @@ registerSuite(function(){
          .findByCssSelector(".alfresco-lists-views-layouts-Row:nth-child(2) .alfresco-renderers-Reorder .up > img")
             .click()
             .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_MOVE_UP", "publish", "last"))
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_MOVE_UP", "publish", "last"))
             .then(function(elements) {
                assert(elements.length === 1, "Test #3c - Move up topic not published");
             })
             .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "name", "Middle"))
+            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "name", "Middle"))
             .then(function(elements) {
                assert(elements.length === 1, "Test #3d - Move up payload not published correctly");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

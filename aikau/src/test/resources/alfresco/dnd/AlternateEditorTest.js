@@ -20,31 +20,17 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
-
+   defineSuite(module, {
       name: "DND Alternative Editing Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/alternative-editor-dnd", "DND Alternative Editing Tests")
-            .end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/alternative-editor-dnd",
 
       "Check that dynamic form buttons aren't displayed initially": function() {
-         return browser.findByCssSelector(".alfresco-forms-DynamicForm .buttons")
+         return this.remote.findByCssSelector(".alfresco-forms-DynamicForm .buttons")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The form buttons should not have been displayed initially because no form controls are configured");
@@ -52,24 +38,24 @@ registerSuite(function(){
       },
 
       "Check that no text boxes are displayed initially": function() {
-         return browser.findAllByCssSelector(".alfresco-forms-controls-TextBox")
+         return this.remote.findAllByCssSelector(".alfresco-forms-controls-TextBox")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "No TextBox widgets should exist before edit");
             });
       },
 
       "Check edit doesn't open a dialog": function() {
-         return browser.findByCssSelector(".action.edit > img")
+         return this.remote.findByCssSelector(".action.edit > img")
             .click()
-         .end()
-         .findAllByCssSelector(".alfresco-dialogs-AlfDialog")
+            .end()
+            .findAllByCssSelector(".alfresco-dialogs-AlfDialog")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Dialog unexpectedly created");
             });
       },
 
       "Check that dynamic form buttons are displayed after edit": function() {
-         return browser.findByCssSelector(".alfresco-forms-DynamicForm .buttons")
+         return this.remote.findByCssSelector(".alfresco-forms-DynamicForm .buttons")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The form buttons should have been displayed after edit operation");
@@ -77,30 +63,25 @@ registerSuite(function(){
       },
 
       "Check that 3 text boxes are displayed after editing": function() {
-         return browser.findAllByCssSelector(".alfresco-forms-controls-TextBox")
+         return this.remote.findAllByCssSelector(".alfresco-forms-controls-TextBox")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "TextBox widgets should have been created");
             });
       },
 
       "Edit description": function() {
-         return browser.findByCssSelector(".alfresco-forms-DynamicForm .alfresco-forms-controls-TextArea textarea")
+         return this.remote.findByCssSelector(".alfresco-forms-DynamicForm .alfresco-forms-controls-TextArea textarea")
             .clearValue()
             .type("Updated description")
-         .end()
-         .findByCssSelector(".alfresco-forms-DynamicForm .confirmationButton > span")
+            .end()
+            .findByCssSelector(".alfresco-forms-DynamicForm .confirmationButton > span")
             .click()
-         .end()
-         .findByCssSelector(".alfresco-dnd-DroppedItemWidgets .alfresco-forms-controls-TextArea .description")
+            .end()
+            .findByCssSelector(".alfresco-dnd-DroppedItemWidgets .alfresco-forms-controls-TextArea .description")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Updated description", "The description was not updated");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

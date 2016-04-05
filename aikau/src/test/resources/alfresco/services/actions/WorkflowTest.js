@@ -18,195 +18,143 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon"],
-           function(registerSuite, assert, require, TestCommon) {
+        function(module, defineSuite, assert, require, TestCommon) {
 
-   registerSuite(function(){
-      var browser;
+   var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
+   var selectors = {
+      startWorkflow: {
+         label: TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", "0"]),
+         dropDown: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown", ["ACTIONS", "0"]),
+         action1: TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.nth.action.label", ["ACTIONS", "0", "1"])
+      }
+   };
 
-      return {
-         name: "Assign Workflow Test",
+   defineSuite(module, {
+      name: "Assign Workflow Test",
+      testPage: "/WorkflowActions",
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions", "Assign Workflow Test").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Assign a workflow": function() {
-            return browser.findByCssSelector("#ASSIGN_label")
-               .click()
+      "Assign a workflow": function() {
+         return this.remote.findByCssSelector("#ASSIGN_label")
+            .click()
             .end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "url", "/aikau/page/dp/ws/start-workflow"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Workflow not assigned");
-               })
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Workflow not assigned");
+            })
             .end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_POST_TO_PAGE", "type", "FULL_PATH"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Workflow URL type incorrect");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Workflow URL type incorrect");
+            });
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Simple Workflow Actions Tests (Successes)",
+      testPage: "/WorkflowActions?responseCode=200",
 
-      return {
-         name: "Simple Workflow Actions Tests (Successes)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=200", "Simple Workflow Actions Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Approve a workflow": function() {
-            return browser.findByCssSelector("#APPROVE_SUCCESS_label")
-               .click()
+      "Approve a workflow": function() {
+         return this.remote.findByCssSelector("#APPROVE_SUCCESS_label")
+            .click()
             .end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as approved"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Simple approval success notification not found");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Simple approval success notification not found");
+            });
+      },
 
-         "Reject a workflow": function() {
-            return browser.findByCssSelector("#REJECT_SUCCESS_label")
-               .click()
+      "Reject a workflow": function() {
+         return this.remote.findByCssSelector("#REJECT_SUCCESS_label")
+            .click()
             .end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "File marked as rejected"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Simple rejection success notification not found");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Simple rejection success notification not found");
+            });
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Simple Workflow Actions Tests (Failures)",
+      testPage: "/WorkflowActions?responseCode=500",
 
-      return {
-         name: "Simple Workflow Actions Tests (Failures)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/WorkflowActions?responseCode=500", "Simple Workflow Actions Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Approve a workflow": function() {
-            return browser.findByCssSelector("#APPROVE_FAILURE_label")
-               .click()
+      "Approve a workflow": function() {
+         return this.remote.findByCssSelector("#APPROVE_FAILURE_label")
+            .click()
             .end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Simple approval failure notification not found");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Simple approval failure notification not found");
+            });
+      },
 
-         "Reject a workflow": function() {
-            return browser.findByCssSelector("#REJECT_FAILURE_label")
-               .click()
+      "Reject a workflow": function() {
+         return this.remote.findByCssSelector("#REJECT_FAILURE_label")
+            .click()
             .end()
             .findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_RELOAD_DATA", "publish", "last"))
             .end()
             .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Workflow action couldn't be completed."))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 2, "Simple rejection failure notification not found");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Simple rejection failure notification not found");
+            });
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Start Workflow Action Tests",
+      testPage: "/StartWorkflow",
 
-      return {
-         name: "Start Workflow Action Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/StartWorkflow", "Start Workflow Action Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Test single item download": function() {
-            // This test simulates the payload that would be generated from legacy document library action 
-            // configuration to check that the appropriate publications occur...
-            return browser.findById("SINGLE_VIA_ACTION_SERVICE_label")
-                  .click()
-               .end()
-               .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation not found")
-                  .then(function(payload) {
-                     assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node1", "Incorrect nodeRef");
-                     assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
-                  })
-                  .clearLog();
-         },
-
-         "Test multiple item download": function() {
-            // This test simulates the payload that would be generated from a multiple item selection action 
-            // based on the legacy Share document library action configuration...
-            return browser.findById("MULTIPLE_VIA_ACTION_SERVICE_label")
-                  .click()
-               .end()
-               .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation not found")
-                  .then(function(payload) {
-                     assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node2,workspace://SpacesStore/node3", "Incorrect nodeRef");
-                     assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
-                  })
-                  .clearLog();
-         },
-
-         "Test non-legacy action version": function() {
-            return browser.findByCssSelector("#ACTIONS_ITEM_0_MENU_text")
-               .click()
+      "Test single item download": function() {
+         // This test simulates the payload that would be generated from legacy document library action
+         // configuration to check that the appropriate publications occur...
+         return this.remote.findById("SINGLE_VIA_ACTION_SERVICE_label")
+            .click()
             .end()
-            .findAllByCssSelector("#ACTIONS_ITEM_0_START-WORKFLOW_text")
-               .click()
-            .end()
-            .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation post not found")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node4", "Incorrect nodeRef");
-                  assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
-               });
-         },
+            .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation not found")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node1", "Incorrect nodeRef");
+               assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
+            })
+            .clearLog();
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Test multiple item download": function() {
+         // This test simulates the payload that would be generated from a multiple item selection action
+         // based on the legacy Share document library action configuration...
+         return this.remote.findById("MULTIPLE_VIA_ACTION_SERVICE_label")
+            .click()
+            .end()
+            .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation not found")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node2,workspace://SpacesStore/node3", "Incorrect nodeRef");
+               assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
+            })
+            .clearLog();
+      },
+
+      "Test non-legacy action version": function() {
+         return this.remote.findByCssSelector(selectors.startWorkflow.label)
+            .click()
+            .end()
+
+         .findDisplayedByCssSelector(selectors.startWorkflow.action1)
+            .click()
+            .end()
+
+         .getLastPublish("ALF_POST_TO_PAGE", "Start workflow navigation post not found")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "parameters.selectedItems", "workspace://SpacesStore/node4", "Incorrect nodeRef");
+               assert.propertyVal(payload, "target", "CURRENT", "Incorrect navigation target");
+            });
+      }
    });
 });

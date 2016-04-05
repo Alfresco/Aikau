@@ -251,10 +251,6 @@ define(["dojo/_base/declare",
             this.editIconImageSrc = require.toUrl("alfresco/renderers/css/images/edit-16.png");
          }
 
-         // Localize the labels and alt-text...
-         this.saveLabel = this.message(this.saveLabel);
-         this.cancelLabel = this.message(this.cancelLabel);
-
          if (this.renderedValue)
          {
             this.editAltText = this.message(this.editAltText, {
@@ -296,14 +292,14 @@ define(["dojo/_base/declare",
 
       /**
        * Gets the form widget that will be rendered as the edit field. By default this will 
-       * return a [validation textbox]{@link module:alfresco/forms/controls/DojoValidationTextBox}
+       * return a [textbox]{@link module:alfresco/forms/controls/TextBox}
        * but can be overridden to return alternative form controls.
        * 
        * @instance
        */
       getPrimaryFormWidget: function alfresco_renderers_InlineEditProperty__getPrimaryFormWidget() {
          return {
-            name: "alfresco/forms/controls/DojoValidationTextBox",
+            name: "alfresco/forms/controls/TextBox",
             config: {
                name: this.postParam,
                validationConfig: this.validationConfig,
@@ -369,19 +365,27 @@ define(["dojo/_base/declare",
        * @returns {object} The widget for editing.
        */
       getFormWidget: function alfresco_renderers_InlineEditProperty__getFormWidget() {
-         if (this.formWidget === null)
+         if (!this.formWidget)
          {
             var uuid = this.generateUuid();
-            this.alfSubscribe(uuid + "ALF_FORM_VALIDITY", lang.hitch(this, this.onFormValidityChange), true);
+            var saveTopic = "_SAVE";
+            var cancelTopic = "_CANCEL";
+            this.alfSubscribe(uuid + saveTopic, lang.hitch(this, this.onSave), true);
+            this.alfSubscribe(uuid + cancelTopic, lang.hitch(this, this.onCancel), true);
             var primaryFormWidget = this.getPrimaryFormWidget();
             var autoSetFields = this.processHiddenDataRules();
             lang.setObject("config.fieldId", "PRIMARY_FIELD", primaryFormWidget);
             this.formWidget = this.createWidget({
                name: "alfresco/forms/Form",
                config: {
+                  additionalCssClasses: "alfresco-forms-Form--single-line",
                   pubSubScope: uuid,
-                  showOkButton: false,
-                  showCancelButton: false,
+                  okButtonLabel: this.message(this.saveLabel),
+                  cancelButtonLabel: this.message(this.cancelLabel),
+                  cancelButtonPublishTopic: cancelTopic,
+                  okButtonPublishTopic: saveTopic,
+                  showOkButton: this.showOkCancelActions,
+                  showCancelButton: this.showOkCancelActions,
                   widgets: [primaryFormWidget].concat(autoSetFields)
                }
             }, this.formWidgetNode);
@@ -394,25 +398,16 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This handles publications from the form used by this widget to determine whether
-       * or the edit field is invalid or not. If the form is in an invalid state then the
-       * "Save" link will be disabled.
+       * Since 1.0.62 this function is never called and performs no action. The action labels were removed
+       * and the buttons from the [Form]{@link module:alfresco/forms/Form} are now displayed instead and 
+       * the [Form]{@link module:alfresco/forms/Form} automatically takes care of button enablement.
        *
        * @instance
        * @param {object} payload The details of the updated form validity
+       * @deprecated Since 1.0.62 - This function no longer performs any action.
        */
-      onFormValidityChange: function alfresco_renderers_InlineEditProperty__onFormValidityChange(payload) {
-         this.alfLog("log", "Form validity changed", payload);
-         if (payload.valid === true)
-         {
-            this.isSaveAllowed = true;
-            domClass.remove(this.saveLinkNode, "disabled");
-         }
-         else
-         {
-            this.isSaveAllowed = false;
-            domClass.add(this.saveLinkNode, "disabled");
-         }
+      onFormValidityChange: function alfresco_renderers_InlineEditProperty__onFormValidityChange() {
+         // No action.
       },
 
       /**
@@ -450,19 +445,15 @@ define(["dojo/_base/declare",
       /**
        * @instance
        */
-      onSave: function alfresco_renderers_InlineEditProperty__onSave(evt) {
+      onSave: function alfresco_renderers_InlineEditProperty__onSave(formPayload) {
          /*jshint unused:false*/
-         if (this.isSaveAllowed === true)
-         {
-            var responseTopic = this.generateUuid();
-            var payload = lang.clone(this.getGeneratedPayload(false, null));
-            payload.alfResponseTopic = responseTopic;
-            this._saveSuccessHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onSaveSuccess), true);
-            this._saveFailureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onSaveFailure), true);
-            this.updateSaveData(payload);
-            this.alfPublish(this.publishTopic, payload, true);
-            // TODO: Set some sort of indicator to show that a save operation is in flight?
-         }
+         var responseTopic = this.generateUuid();
+         var payload = lang.clone(this.getGeneratedPayload(false, null));
+         payload.alfResponseTopic = responseTopic;
+         this._saveSuccessHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onSaveSuccess), true);
+         this._saveFailureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onSaveFailure), true);
+         this.updateSaveData(payload);
+         this.alfPublish(this.publishTopic, payload, true);
       },
 
       /**

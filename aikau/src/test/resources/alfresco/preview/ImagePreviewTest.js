@@ -20,77 +20,45 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Image Preview Tests",
+      testPage: "/ImagePreview",
 
-      return {
-         name: "Image Preview Tests",
+      "Find image preview node": function() {
+         return this.remote.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer");
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ImagePreview", "Image Preview Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Find image preview node": function () {
-            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview > div.previewer");
-         },
-
-         "Find image source request": function() {
-            return browser.findAllByCssSelector(".alfresco-testing-MockXhr table tbody tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements,1, "Expected just one XHR request");
-               })
+      "Find image source request": function() {
+         return this.remote.findAllByCssSelector(".alfresco-testing-MockXhr table tbody tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Expected just one XHR request");
+            })
             .end()
 
-            .findByCssSelector(".alfresco-testing-MockXhr table tbody tr:first-child td.mx-url")
-               .getVisibleText()
-                  .then(function(text) {
-                     var result = text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1;
-                     assert(result, "Test #2b - AlfDocument didn't request node details: " + text);
-                  });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector(".alfresco-testing-MockXhr table tbody tr:first-child td.mx-url")
+            .getVisibleText()
+            .then(function(text) {
+               var result = text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1;
+               assert(result, "Test #2b - AlfDocument didn't request node details: " + text);
+            });
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Image Preview Tests (plugin removal)",
+      testPage: "/ImagePreview?removeCondition=true",
 
-      return {
-         name: "Image Preview Tests (plugin removal)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ImagePreview?removeCondition=true", "Image Preview Tests (plugin removal)").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Image cannot be previewed": function () {
-            return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview .previewer .message")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.include(text, "This document can't be previewed.");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Image cannot be previewed": function() {
+         return this.remote.findByCssSelector(".alfresco-preview-AlfDocumentPreview .previewer .message")
+            .getVisibleText()
+            .then(function(text) {
+               assert.include(text, "This document can't be previewed.");
+            });
+      }
    });
 });

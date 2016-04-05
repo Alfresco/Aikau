@@ -21,60 +21,44 @@
  *
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-       function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Dynamic Widgets Tests",
+      testPage: "/DynamicWidgets",
 
-      return {
-         name: "Dynamic Widgets Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/DynamicWidgets", "Dynamic Widgets Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Ensure logo and label not rendered on load": function() {
-            return browser.findAllByCssSelector(".alfresco-logo-Logo")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Logo should not have been rendered on load");
-               })
+      "Ensure logo and label not rendered on load": function() {
+         return this.remote.findAllByCssSelector(".alfresco-logo-Logo")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Logo should not have been rendered on load");
+            })
             .end()
             .findAllByCssSelector(".alfresco-html-Label")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Label should not have been rendered on load");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Label should not have been rendered on load");
+            });
+      },
 
-         "Render the logo": function() {
-            return browser.findById("BUTTON1_label")
-               .click()
+      "Render the logo": function() {
+         return this.remote.findById("BUTTON1_label")
+            .click()
             .end()
             .findByCssSelector(".alfresco-layout-ClassicWindow .alfresco-logo-Logo");
-         },
+      },
 
-         "Render the label": function() {
-            return browser.findById("BUTTON2_label")
-               .click()
+      "Render the label": function() {
+         return this.remote.findById("BUTTON2_label")
+            .click()
             .end()
             .findByCssSelector(".alfresco-layout-ClassicWindow .alfresco-html-Label")
             .end()
             .findAllByCssSelector(".alfresco-logo-Logo")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Logo should not have been rendered on load");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Logo should not have been rendered on load");
+            });
+      }
    });
 });

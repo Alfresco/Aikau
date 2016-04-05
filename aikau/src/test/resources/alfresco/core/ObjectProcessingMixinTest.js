@@ -20,28 +20,17 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "ObjectProcessingMixin Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/ObjectProcessingMixin", "ObjectProcessingMixin Tests");
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/ObjectProcessingMixin",
 
       "Trying to process a recursive object succeeds and can be used as payload": function() {
-         return browser.findById("PROCESS_RECURSIVE")
+         return this.remote.findById("PROCESS_RECURSIVE")
             .click()
             .end()
 
@@ -49,11 +38,6 @@ registerSuite(function(){
             .then(function(payload) {
                assert.deepPropertyVal(payload, "obj1.obj2", "[recursive object]");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

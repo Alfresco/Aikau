@@ -151,6 +151,8 @@
  * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
  * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
  * @property {boolean} [showValidationErrorsImmediately=true] Indicates whether or not to display form errors immediately
+ * @property {object} [customFormConfig=null] Any additional configuration that can be applied to a [Form]{@link module:alfresco/forms/Form} (please note that the following form configuration
+ * attributes will always be overridden by specific form dialog configuration: "additionalCssClasses", "displayButtons", "widgets", "value", "warnings" and "warningsPosition")
  */
 
 /**
@@ -785,7 +787,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Creates and returns the [form]{@link module:alfresco/forms/Form} configuration to be added to the [dialog]{@link module:alfresco/dialog/AlfDialog}
+       * Creates and returns the [form]{@link module:alfresco/forms/Form} configuration to be added to the 
+       * [dialog]{@link module:alfresco/dialog/AlfDialog}
        *
        * @instance
        * @param {object} widgets This is the configuration of the fields to be included in the form.
@@ -793,18 +796,26 @@ define(["dojo/_base/declare",
        * @returns {object} The configuration for the form to add to the dialog
        */
       createFormConfig: function alfresco_services_DialogService__createFormConfig(config, formValue) {
-         var formConfig = {
+         // See AKU-904...
+         // The "customFormConfig" attribute is a catch-all for supporting any additional options that may
+         // be added to a form without requiring the same attributes to be added to this service. We
+         // use the custom config as the initial base and then mixin in the defaults as we want the 
+         // specific properties to "win"...
+         var formConfig = config.customFormConfig || {};
+         lang.mixin(formConfig, {
+            additionalCssClasses: "root-dialog-form",
+            displayButtons: false,
+            widgets: config.widgets,
+            value: formValue,
+            warnings: config.warnings,
+            warningsPosition: config.warningsPosition
+         });
+
+         var form = {
             name: "alfresco/forms/Form",
-            config: {
-               additionalCssClasses: "root-dialog-form",
-               displayButtons: false,
-               widgets: config.widgets,
-               value: formValue,
-               warnings: config.warnings,
-               warningsPosition: config.warningsPosition
-            }
+            config: formConfig
          };
-         return formConfig;
+         return form;
       },
 
       /**

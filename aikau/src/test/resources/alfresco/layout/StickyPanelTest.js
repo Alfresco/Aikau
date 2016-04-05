@@ -1,4 +1,3 @@
-
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -21,132 +20,115 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "StickyPanel Tests",
+      testPage: "/StickyPanel",
 
-      return {
-         name: "StickyPanel Tests",
+      "Panel opens when requested": function() {
+         return this.remote.findByCssSelector("[widgetid=\"OPEN_STICKY_PANEL\"] .dijitButtonNode")
+            .click()
+            .end()
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/StickyPanel", "StickyPanel Tests").end();
-         },
+         .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
 
-         beforeEach: function() {
-            browser.end();
-         },
+         .findDisplayedByCssSelector(".alfresco-layout-StickyPanel__panel");
+      },
 
-         "Panel opens when requested": function() {
-            return browser.findByCssSelector("[widgetid=\"OPEN_STICKY_PANEL\"] .dijitButtonNode")
-               .click()
-               .end()
+      "Panel scrolls when content too great for window size": function() {
+         return this.remote.findByCssSelector("body")
+            .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
+            .then(function(hasScrollbars) {
+               assert.isFalse(hasScrollbars.vertical, "Scrollbar should not initially be present");
+            })
 
-            .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
+         .setWindowSize(null, 1024, 300)
+            .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
+            .then(function(hasScrollbars) {
+               assert.isTrue(hasScrollbars.vertical, "Should have scrollbar after resize");
+            })
 
-            .findDisplayedByCssSelector(".alfresco-layout-StickyPanel__panel");
-         },
+         .setWindowSize(null, 1024, 768)
+            .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
+            .then(function(hasScrollbars) {
+               assert.isFalse(hasScrollbars.vertical, "Scrollbar should disappear after resize to original size");
+            });
+      },
 
-         "Panel scrolls when content too great for window size": function() {
-            return browser.findByCssSelector("body")
-               .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
-               .then(function(hasScrollbars) {
-                  assert.isFalse(hasScrollbars.vertical, "Scrollbar should not initially be present");
-               })
+      "Panel has no title attribute": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-StickyPanel")
+            .getAttribute("title")
+            .then(function(title) {
+               assert.equal(title, null);
+            });
+      },
 
-               .setWindowSize(null, 1024, 300)
-               .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
-               .then(function(hasScrollbars) {
-                  assert.isTrue(hasScrollbars.vertical, "Should have scrollbar after resize");
-               })
+      "Panel can be minimised": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
+            .click()
+            .end()
 
-               .setWindowSize(null, 1024, 768)
-               .hasScrollbars(".alfresco-layout-StickyPanel__widgets")
-               .then(function(hasScrollbars) {
-                  assert.isFalse(hasScrollbars.vertical, "Scrollbar should disappear after resize to original size");
-               });
-         },
+         .findByCssSelector(".alfresco-layout-StickyPanel--minimised")
+            .end()
 
-         "Panel has no title attribute": function() {
-            return browser.findByCssSelector(".alfresco-layout-StickyPanel")
-               .getAttribute("title")
-               .then(function(title) {
-                  assert.equal(title, null);
-               });
-         },
+         .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isFalse(isDisplayed);
+            });
+      },
 
-         "Panel can be minimised": function() {
-            return browser.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
-               .click()
-               .end()
+      "Panel can be restored": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__restore")
+            .click()
+            .end()
 
-            .findByCssSelector(".alfresco-layout-StickyPanel--minimised")
-               .end()
+         .waitForDeletedByCssSelector(".alfresco-layout-StickyPanel--minimised")
 
-            .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
-               .isDisplayed()
-               .then(function(isDisplayed){
-                  assert.isFalse(isDisplayed);
-               });
-         },
+         .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed);
+            });
+      },
 
-         "Panel can be restored": function() {
-            return browser.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__restore")
-               .click()
-               .end()
+      "If StickyPanel requested when minimised, it will restore automatically": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
+            .click()
+            .end()
 
-            .waitForDeletedByCssSelector(".alfresco-layout-StickyPanel--minimised")
+         .findByCssSelector(".alfresco-layout-StickyPanel--minimised")
+            .end()
 
-            .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
-               .isDisplayed()
-               .then(function(isDisplayed){
-                  assert.isTrue(isDisplayed);
-               });
-         },
+         .findByCssSelector("[widgetid=\"OPEN_STICKY_PANEL\"] .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-         "If StickyPanel requested when minimised, it will restore automatically": function(){
-            return browser.findByCssSelector(".alfresco-layout-StickyPanel__title-bar__minimise")
-               .click()
-               .end()
+         .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
 
-            .findByCssSelector(".alfresco-layout-StickyPanel--minimised")
-               .end()
+         .waitForDeletedByCssSelector(".alfresco-layout-StickyPanel--minimised")
 
-            .findByCssSelector("[widgetid=\"OPEN_STICKY_PANEL\"] .dijitButtonNode")
-               .clearLog()
-               .click()
-               .end()
+         .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert.isTrue(isDisplayed);
+            });
+      },
 
-            .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
+      "Panel allows clicks either side of it": function() {
+         return this.remote.findByCssSelector("[widgetid=\"LEFT_BUTTON\"] .dijitButtonNode")
+            .click()
+            .getLastPublish("LEFT_BUTTON_PUSHED")
+            .end()
 
-            .waitForDeletedByCssSelector(".alfresco-layout-StickyPanel--minimised")
-
-            .findByCssSelector(".alfresco-layout-StickyPanel__widgets")
-               .isDisplayed()
-               .then(function(isDisplayed){
-                  assert.isTrue(isDisplayed);
-               });
-         },
-
-         "Panel allows clicks either side of it": function(){
-            return browser.findByCssSelector("[widgetid=\"LEFT_BUTTON\"] .dijitButtonNode")
-               .click()
-               .getLastPublish("LEFT_BUTTON_PUSHED")
-            .end()  
-
-            .findByCssSelector("[widgetid=\"RIGHT_BUTTON\"] .dijitButtonNode")
-               .click()
-               .getLastPublish("RIGHT_BUTTON_PUSHED");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("[widgetid=\"RIGHT_BUTTON\"] .dijitButtonNode")
+            .click()
+            .getLastPublish("RIGHT_BUTTON_PUSHED");
+      }
    });
 });

@@ -20,70 +20,53 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
-
+   defineSuite(module, {
       name: "AlfGalleryViewSlider Preferences Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfGalleryViewSlider", "AlfGalleryViewSlider Preferences Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AlfGalleryViewSlider",
 
       "Default config uses preference": function() {
-         return browser.findByCssSelector("body").end()
+         return this.remote.findByCssSelector("body").end()
             .getLastPublish("GS1_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", 3, "Incorrect column value set");
-               });
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", 3, "Incorrect column value set");
+            });
       },
 
       "Preference overrides config": function() {
-         return browser.findByCssSelector("body").end()
+         return this.remote.findByCssSelector("body").end()
             .getLastPublish("GS2_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", 7, "Incorrect column value set");
-               });
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", 7, "Incorrect column value set");
+            });
       },
 
       "Config overrides default (when no preferences available)": function() {
-         return browser.findByCssSelector("body").end()
+         return this.remote.findByCssSelector("body").end()
             .getLastPublish("GS3_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", 10, "Incorrect column value set");
-               });
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", 10, "Incorrect column value set");
+            });
       },
 
       "Default used with invalid config (string) when no preferences available": function() {
-         return browser.findByCssSelector("body").end()
+         return this.remote.findByCssSelector("body").end()
             .getLastPublish("GS4_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", 4, "Incorrect column value set");
-               });
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", 4, "Incorrect column value set");
+            });
       },
 
       "Default used with invalid config (null) when no preferences available": function() {
-         return browser.findByCssSelector("body").end()
+         return this.remote.findByCssSelector("body").end()
             .getLastPublish("GS5_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", 4, "Incorrect column value set");
-               });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", 4, "Incorrect column value set");
+            });
       }
-   };
    });
 });

@@ -22,76 +22,59 @@
  *
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
+   defineSuite(module, {
+      name: "StripedContent tests",
+      testPage: "/StripedContent",
 
-   return {
-         name: "StripedContent tests",
+      "Content is rendered on load": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-StripedContent")
+            .getVisibleText()
+            .then(function(text) {
+               assert.include(text, "This is the sub-header", "Sub-header content not rendered on page-load");
+               assert.include(text, "This is the menu row", "Menu row content not rendered on page-load");
+               assert.include(text, "Content goes here...", "Main content row not rendered on page-load");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/StripedContent", "StripedContent Tests").end();
-         },
+      "Logo is rendered on load": function() {
+         return this.remote.findByCssSelector(".alfresco-logo-Logo")
+            .isDisplayed()
+            .then(function(isDisplayed) {
+               assert(isDisplayed, "Logo was not visible");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Elements all rendered in correct order": function() {
+         var lastTop = 0;
+         return this.remote.findByCssSelector(".alfresco-logo-Logo")
+            .getPosition()
+            .then(function(pos) {
+               assert(lastTop < (lastTop = pos.y), "Logo was not below top of page");
+            })
+            .end()
 
-         "Content is rendered on load": function() {
-            return browser.findByCssSelector(".alfresco-layout-StripedContent")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.include(text, "This is the sub-header", "Sub-header content not rendered on page-load");
-                  assert.include(text, "This is the menu row", "Menu row content not rendered on page-load");
-                  assert.include(text, "Content goes here...", "Main content row not rendered on page-load");
-               });
-         },
+         .findAllByCssSelector(".alfresco-html-Label")
+            .then(function(elements) {
+               elements[0].getPosition()
+                  .then(function(pos) {
+                     assert(lastTop < (lastTop = pos.y), "Sub-header was not below logo");
+                  });
 
-         "Logo is rendered on load": function() {
-            return browser.findByCssSelector(".alfresco-logo-Logo")
-               .isDisplayed()
-               .then(function(isDisplayed) {
-                  assert(isDisplayed, "Logo was not visible");
-               });
-         },
+               elements[1].getPosition()
+                  .then(function(pos) {
+                     assert(lastTop < (lastTop = pos.y), "Menu row was not below sub-header");
+                  });
 
-         "Elements all rendered in correct order": function() {
-            var lastTop = 0;
-            return browser.findByCssSelector(".alfresco-logo-Logo")
-               .getPosition()
-               .then(function(pos) {
-                  assert(lastTop < (lastTop = pos.y), "Logo was not below top of page");
-               })
-               .end()
-
-            .findAllByCssSelector(".alfresco-html-Label")
-               .then(function(elements) {
-                  elements[0].getPosition()
-                     .then(function(pos) {
-                        assert(lastTop < (lastTop = pos.y), "Sub-header was not below logo");
-                     });
-
-                  elements[1].getPosition()
-                     .then(function(pos) {
-                        assert(lastTop < (lastTop = pos.y), "Menu row was not below sub-header");
-                     });
-
-                  return elements[2].getPosition()
-                     .then(function(pos) {
-                        assert(lastTop < (lastTop = pos.y), "Main content was not below menu row");
-                     });
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+               return elements[2].getPosition()
+                  .then(function(pos) {
+                     assert(lastTop < (lastTop = pos.y), "Main content was not below menu row");
+                  });
+            });
+      }
    });
+});

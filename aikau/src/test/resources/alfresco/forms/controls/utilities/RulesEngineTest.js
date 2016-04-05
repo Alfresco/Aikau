@@ -18,37 +18,27 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, require, TestCommon, keys) {
 
    // PLEASE NOTE: There is additional testing for the original rules engine code (that was originally
    //              part of BaseFormControl) in the TextBoxTest. This test covers updates specific to
    //              ANY/ALL configuration (See AKU-451)...
-   
-registerSuite(function(){
-   var browser;
 
-   return {
+   defineSuite(module, {
       name: "Rules Engine Test",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/RulesEngine", "Rules Engine Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/RulesEngine",
 
       "ANY rules widget should NOT be visible on page load": function() {
-         return browser.findById("RULES1")
+         return this.remote.findById("RULES1")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The ANY rules widget should not have been displayed");
@@ -56,7 +46,7 @@ registerSuite(function(){
       },
 
       "ALL rules widget should NOT be visible on page load": function() {
-         return browser.findById("RULES2")
+         return this.remote.findById("RULES2")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The ALL rules widget should not have been displayed");
@@ -64,17 +54,17 @@ registerSuite(function(){
       },
 
       "Entering text into first text box should reveal ANY rules widget": function() {
-         return browser.findByCssSelector("#SOURCE1 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#SOURCE1 .dijitInputContainer input")
             .clearValue()
             .type("hello")
-         .end()
-         .findById("RULES1")
+            .end()
+            .findById("RULES1")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The ANY rules widget should be displayed when one of the source fields has data");
             })
-         .end()
-         .findById("RULES2")
+            .end()
+            .findById("RULES2")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The ALL rules widget should remain hidden when one of the source fields has data");
@@ -82,17 +72,17 @@ registerSuite(function(){
       },
 
       "Entering text into second text box should reveal ALL rules widget": function() {
-         return browser.findByCssSelector("#SOURCE2 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#SOURCE2 .dijitInputContainer input")
             .clearValue()
             .type("hello")
-         .end()
-         .findById("RULES1")
+            .end()
+            .findById("RULES1")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The ANY rules widget should remain displayed when both of the source fields have data");
             })
-         .end()
-         .findById("RULES2")
+            .end()
+            .findById("RULES2")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The ALL rules widget should be displayed when both of the source fields have data");
@@ -100,17 +90,17 @@ registerSuite(function(){
       },
 
       "Removing text from first text box should hide ALL rules widget": function() {
-         return browser.findByCssSelector("#SOURCE2 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#SOURCE2 .dijitInputContainer input")
             .clearValue()
             .type(keys.BACKSPACE)
-         .end()
-         .findById("RULES1")
+            .end()
+            .findById("RULES1")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The ANY rules widget should remain displayed when the first source field is cleared");
             })
-         .end()
-         .findById("RULES2")
+            .end()
+            .findById("RULES2")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The ALL rules widget should be hidden when the first source field is cleared");
@@ -118,26 +108,21 @@ registerSuite(function(){
       },
 
       "Removing text from second text box should hide ANY rules widget": function() {
-         return browser.findByCssSelector("#SOURCE1 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#SOURCE1 .dijitInputContainer input")
             .clearValue()
             .type(keys.BACKSPACE)
-         .end()
-         .findById("RULES1")
+            .end()
+            .findById("RULES1")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The ANY rules widget should be hidden when the first source field is cleared");
             })
-         .end()
-         .findById("RULES2")
+            .end()
+            .findById("RULES2")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The ALL rules widget should remain hidden when the first source field is cleared");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

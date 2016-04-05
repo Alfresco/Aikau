@@ -20,38 +20,23 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite"],
+        function(module, defineSuite) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Form Field Focus Order Tests",
+      testPage: "/FormFieldFocusOrder",
 
-      return {
-         name: "Form Field Focus Order Tests",
+      "Check first form field is focused": function() {
+         return this.remote.findById("CREATE_DIALOG_FORM_label")
+            .click()
+         .end()
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/FormFieldFocusOrder", "Form Field Focus Order Test").end();
-         },
+         .findByCssSelector("#FD1.dialogDisplayed")
+         .end()
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check first form field is focused": function() {
-            return browser.findById("CREATE_DIALOG_FORM_label")
-               .click()
-            .end()
-            .findByCssSelector("#FD1.dialogDisplayed")
-            .end()
-            .findByCssSelector("#SELECT_CONTROL.dijitSelectFocused");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("#SELECT_CONTROL.dijitSelectFocused");
+      }
    });
 });

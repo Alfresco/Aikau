@@ -20,11 +20,12 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-        function(registerSuite, assert, TestCommon, keys) {
+        function(module, defineSuite, assert, TestCommon, keys) {
 
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
@@ -42,109 +43,75 @@ define(["intern!object",
       },
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "NodePreviewService Tests",
+      testPage: "/NodePreviewService",
 
-      return {
-
-         name: "NodePreviewService Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/NodePreviewService", "NodePreviewService Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Show image preview": function() {
-            return browser.findByCssSelector(selectors.buttons.imagePreview)
-               .click()
+      "Show image preview": function() {
+         return this.remote.findByCssSelector(selectors.buttons.imagePreview)
+            .click()
             .end()
 
-            .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
+         .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
             .getLastPublish("ALF_DISPLAY_LIGHTBOX")
 
-            .findDisplayedById("aikauLightbox")
+         .findDisplayedById("aikauLightbox")
             .end()
 
-            .findDisplayedById("aikauCloseButton")
-               .click()
+         .findDisplayedById("aikauCloseButton")
+            .click()
             .end()
 
-            .clearLog();
-         },
+         .clearLog();
+      },
 
-         "Show video preview": function() {
-            return browser.findByCssSelector(selectors.buttons.videoPreview)
-               .click()
+      "Show video preview": function() {
+         return this.remote.findByCssSelector(selectors.buttons.videoPreview)
+            .click()
             .end()
 
-            .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
+         .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
             .getLastPublish("ALF_CREATE_DIALOG_REQUEST")
 
-            .findByCssSelector(selectors.dialogs.preview.visible)
+         .findByCssSelector(selectors.dialogs.preview.visible)
             .end()
 
-            .findByCssSelector("video")
+         .findByCssSelector("video")
             .end()
 
-            .pressKeys(keys.ESCAPE)
+         .pressKeys(keys.ESCAPE)
 
-            .waitForDeletedByCssSelector(selectors.dialogs.preview.visible);
-         },
+         .waitForDeletedByCssSelector(selectors.dialogs.preview.visible);
+      },
 
-         "Show audio preview": function() {
-            return browser.findByCssSelector(selectors.buttons.audioPreview)
-               .click()
+      "Show audio preview": function() {
+         return this.remote.findByCssSelector(selectors.buttons.audioPreview)
+            .click()
             .end()
 
-            .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
+         .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
             .getLastPublish("ALF_CREATE_DIALOG_REQUEST")
 
-            .findByCssSelector(selectors.dialogs.preview.visible)
+         .findByCssSelector(selectors.dialogs.preview.visible)
             .end()
 
-            .findByCssSelector("audio");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("audio");
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "NodePreviewService Tests (alternate display)",
+      testPage: "/NodePreviewService?altDisplay=true",
 
-      return {
-
-         name: "NodePreviewService Tests (alternate display)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/NodePreviewService?altDisplay=true", "NodePreviewService Tests (alternate display)").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Show image preview": function() {
-            return browser.findByCssSelector(selectors.buttons.imagePreview)
-               .click()
+      "Show image preview": function() {
+         return this.remote.findByCssSelector(selectors.buttons.imagePreview)
+            .click()
             .end()
 
-            .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
+         .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST")
             .getLastPublish("ALF_DISPLAY_STICKY_PANEL")
 
-            .findDisplayedByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-preview-AlfDocumentPreview");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findDisplayedByCssSelector(".alfresco-layout-StickyPanel__panel .alfresco-preview-AlfDocumentPreview");
+      }
    });
 });

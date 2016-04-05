@@ -20,100 +20,68 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-   function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "SearchFilmStripView Tests",
+      testPage: "/SearchFilmStripView",
 
-      return {
-         name: "SearchFilmStripView Tests",
+      // See AKU-697...
+      "Previews are same height": function() {
+         var firstPreviewHeight;
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SearchFilmStripView", "SearchFilmStripView Tests").end();
-         },
+         return this.remote.findByCssSelector("body")
 
-         beforeEach: function() {
-            browser.end();
-         },
+         // Last publish on page render completion...
+         .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
 
-         // See AKU-697...
-         "Previews are same height": function() {
-            var firstPreviewHeight;
+         // Get the height of the first preview...
+         .findByCssSelector("#SEARCH_RESULTS_PREVIEWS .items li:nth-child(1) .alfresco-preview-PdfJs")
+            .getSize()
+            .then(function(size) {
+               firstPreviewHeight = size.height;
+            })
+            .end()
 
-            return browser.findByCssSelector("body")
+         // Show the next preview...
+         .clearLog()
 
-               // Last publish on page render completion...
-               .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
-               
-               // Get the height of the first preview...
-               .findByCssSelector("#SEARCH_RESULTS_PREVIEWS .items li:nth-child(1) .alfresco-preview-PdfJs")
-                  .getSize()
-                  .then(function(size) {
-                     firstPreviewHeight = size.height;
-                  })
-               .end()
+         .findByCssSelector("#SEARCH_RESULTS_PREVIEWS .controls .next .alfresco-html-Image")
+            .click()
+            .end()
 
-               // Show the next preview...
-               .clearLog()
+         // Last publish after second preview render...
+         .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
 
-               .findByCssSelector("#SEARCH_RESULTS_PREVIEWS .controls .next .alfresco-html-Image")
-                  .click()
-               .end()
-
-               // Last publish after second preview render...
-               .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
-
-               // Check the heights are equal...
-               .findByCssSelector("#SEARCH_RESULTS_PREVIEWS .items li:nth-child(2) .alfresco-preview-PdfJs")
-                  .getSize()
-                  .then(function(size) {
-                     assert.equal(firstPreviewHeight, size.height, "The preview heights were not equal");
-                  });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         // Check the heights are equal...
+         .findByCssSelector("#SEARCH_RESULTS_PREVIEWS .items li:nth-child(2) .alfresco-preview-PdfJs")
+            .getSize()
+            .then(function(size) {
+               assert.equal(firstPreviewHeight, size.height, "The preview heights were not equal");
+            });
+      }
    });
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "SearchFilmStripView Tests (height config)",
+      testPage: "/SearchFilmStripView?heightMode=400",
 
-      return {
-         name: "SearchFilmStripView Tests (height config)",
+      // See AKU-744...
+      "Height configuration is applied": function() {
+         return this.remote.findByCssSelector("body")
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SearchFilmStripView?heightMode=400", "SearchFilmStripView Tests  (height config)").end();
-         },
+         // Last publish on page render completion...
+         .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-         // See AKU-744...
-         "Height configuration is applied": function() {
-            return browser.findByCssSelector("body")
-
-               // Last publish on page render completion...
-               .getLastPublish("ALF_PDFJS_ZOOM_SELECTION")
-               
-               .findDisplayedById("SEARCH_RESULTS_PREVIEWS")
-                  .getSize()
-                  .then(function(size) {
-                     // The height should be the requested height, minus the item carousel...
-                     assert.equal(size.height, 288, "Height configuration not used");
-                  });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findDisplayedById("SEARCH_RESULTS_PREVIEWS")
+            .getSize()
+            .then(function(size) {
+               // The height should be the requested height, minus the item carousel...
+               assert.equal(size.height, 288, "Height configuration not used");
+            });
+      }
    });
 });

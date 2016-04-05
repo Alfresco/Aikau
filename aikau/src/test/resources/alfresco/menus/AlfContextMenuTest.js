@@ -19,29 +19,17 @@
 
 /**
  * This is the unit test for the alfresco/menus/AlfMenuItemWrapper widget.
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AlfContextMenu Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfContextMenu", "AlfContextMenu Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AlfContextMenu",
 
       // TESTS COMMENTED OUT PENDING ANSWER POSTED HERE: https://github.com/theintern/intern/issues/191
       // .findByCssSelector("#LOGO")
@@ -69,10 +57,5 @@ registerSuite(function(){
       //       assert(elements.length == 1, "Test #2 - Inherited node context menu failure");
       //    })
       //    .end()
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
-      }
-   };
    });
 });

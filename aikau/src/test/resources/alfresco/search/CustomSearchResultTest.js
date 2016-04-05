@@ -20,76 +20,60 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Custom Search Result Tests",
+      testPage: "/CustomSearchResult",
 
-      return {
-         name: "Custom Search Result Tests",
+      "Check that MoreInfo widget is not displayed": function() {
+         // The test page configures the "showMoreInfo" to be false so the MoreInfo renderer should
+         // not be displayed...
+         return this.remote.findAllByCssSelector(".alfresco-renderers-MoreInfo")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The MoreInfo widget should not have been rendered");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/CustomSearchResult", "Custom Search Result Tests").end();
-         },
+      "Check that widgets are rendered above": function() {
+         return this.remote.findAllByCssSelector(".alfresco-search-AlfSearchResult .aboveCell .alfresco-renderers-Banner")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Additional widget was NOT rendered above the main result properties");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check that widgets are rendered below": function() {
+         return this.remote.findAllByCssSelector(".alfresco-search-AlfSearchResult .belowCell .alfresco-renderers-Banner")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Additional widget was NOT rendered below the main result properties");
+            });
+      },
 
-         "Check that MoreInfo widget is not displayed": function() {
-            // The test page configures the "showMoreInfo" to be false so the MoreInfo renderer should
-            // not be displayed...
-            return browser.findAllByCssSelector(".alfresco-renderers-MoreInfo")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "The MoreInfo widget should not have been rendered");
-               });
-         },
-
-         "Check that widgets are rendered above": function() {
-            return browser.findAllByCssSelector(".alfresco-search-AlfSearchResult .aboveCell .alfresco-renderers-Banner")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Additional widget was NOT rendered above the main result properties");
-               });
-         },
-
-         "Check that widgets are rendered below": function() {
-            return browser.findAllByCssSelector(".alfresco-search-AlfSearchResult .belowCell .alfresco-renderers-Banner")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Additional widget was NOT rendered below the main result properties");
-               });
-         },
-
-         "Check that right-click actions are enabled": function() {
-            return browser.findByCssSelector(".alfresco-search-AlfSearchResult .aboveCell .alfresco-renderers-Banner")
-               .moveMouseTo()
-               .clickMouseButton(2)
+      "Check that right-click actions are enabled": function() {
+         return this.remote.findByCssSelector(".alfresco-search-AlfSearchResult .aboveCell .alfresco-renderers-Banner")
+            .moveMouseTo()
+            .clickMouseButton(2)
             .end()
             .findAllByCssSelector(".alfresco-menus-AlfContextMenu")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Right-click context actions menu not displayed");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Right-click context actions menu not displayed");
+            });
+      },
 
-         "Check that the additional action filter is applied": function() {
-            return browser.findAllByCssSelector(".alfresco-menus-AlfContextMenu .alfresco-menus-AlfMenuItem")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 9, "Not enough actions were displayed");
-               })
+      "Check that the additional action filter is applied": function() {
+         return this.remote.findAllByCssSelector(".alfresco-menus-AlfContextMenu .alfresco-menus-AlfMenuItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 9, "Not enough actions were displayed");
+            })
             .end()
             .findByCssSelector(".alfresco-menus-AlfContextMenu .alfresco-menus-AlfMenuItem:last-child .dijitMenuItemLabel")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Test Action");
-               });
-         },
-         
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Test Action");
+            });
+      }
    });
 });

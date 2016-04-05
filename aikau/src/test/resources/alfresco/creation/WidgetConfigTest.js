@@ -20,46 +20,33 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite"], 
+        function(module, defineSuite) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
-
+   defineSuite(module, {
       name: "Page Creation Widgets Tests",
+      testPage: "/WidgetConfig",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/WidgetConfig", "Page Creation Widgets Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Test Drag From Palette To Drop Zone": function () {
-         return browser.findByCssSelector("#dojoUnique1 > .title")
+      "Test Drag From Palette To Drop Zone": function() {
+         return this.remote.findByCssSelector("#dojoUnique1 > .title")
             .moveMouseTo()
             .click()
             .pressMouseButton()
             .moveMouseTo(1, 1)
-         .end()
+            .end()
+
          .findByCssSelector(".alfresco-creation-DropZone > div")
-            .then(function(element) {
-               return browser.moveMouseTo(element)
+            .then(element => {
+               return this.remote.moveMouseTo(element)
                   .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
                   .releaseMouseButton();
             })
-            
-         .end()
+            .end()
+
          .findByCssSelector(".dojoDndHandle")
-            .click()
-         .end();
+            .click();
+
          // TODO: This assertion is failing because the input widget isn't getting it's value, set...
          //       We'll live with this for now because it's not required for production.
          // .findByCssSelector(".alfresco-forms-controls-TextBox .dijitInputContainer input")
@@ -67,7 +54,7 @@ registerSuite(function(){
          //    .then(function(resultText) {
          //       assert(resultText === "Value1", "The initial value was not set correctly: " + resultText);
          //    })
-         // .end().alfPostCoverageResults(browser);
+         // .end();
 
          // // 5. Save the config...
          // .findByCssSelector(".alfresco-creation-WidgetConfig .confirmationButton > span")
@@ -77,14 +64,7 @@ registerSuite(function(){
          // // 6. Save the form...
          // .findByCssSelector("#FORM .confirmationButton > span")
          //    .click()
-         //    .end()
-
-         // .alfPostCoverageResults(browser);
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+         //    .end();
       }
-   };
    });
 });

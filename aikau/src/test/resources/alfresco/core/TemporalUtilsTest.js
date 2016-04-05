@@ -22,17 +22,15 @@
  * @author Dave Draper
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert", 
-        "require", 
-        "alfresco/TestCommon"], 
-        function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function() {
+   defineSuite(module, function() {
 
       // Setup the variables
-      var browser,
-         results = [
+      var results = [
             "over 20 years ago",
             "over 10 years ago",
             "12 months ago",
@@ -59,16 +57,8 @@ define(["intern!object",
          ],
          suite = {
             name: "TemporalUtils Tests",
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/TemporalUtils", "TemporalUtils Tests").end();
-            },
-            beforeEach: function() {
-               browser.end();
-            },
-            "Post Coverage Results": function() {
-               TestCommon.alfPostCoverageResults(this, browser);
-            },
+            testPage: "/TemporalUtils",
+
             "TEMPORALUTILS_TEST24": function() {
 
                // Setup variables
@@ -78,7 +68,7 @@ define(["intern!object",
                   result;
 
                // Run the test
-               return browser.execute(getOffsetHours)
+               return this.remote.execute(getOffsetHours)
                   .then(function(offset) {
 
                      // Construct date-time part of ISO timestamp
@@ -110,7 +100,7 @@ define(["intern!object",
       results.forEach(function(result, index) {
          var topic = "TEMPORALUTILS_TEST" + (index + 1);
          suite["Check publish of " + topic] = function() {
-            return browser.findByCssSelector("body")
+            return this.remote.findByCssSelector("body")
                .getLastPublish(topic)
                .then(function(payload) {
                   assert.include(payload.result, result);

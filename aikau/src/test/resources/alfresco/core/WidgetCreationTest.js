@@ -20,90 +20,74 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Widget Creation Tests",
+      testPage: "/WidgetCreation",
 
-      return {
-         name: "Widget Creation Tests",
+      "Count the number of Logo widgets": function() {
+         // This isn't the optimal way of testing this - ideally we want to get each widget and then
+         // check the IDs - however, it's not easily understood how to do this with mulitple selection and
+         // chaining of promises - this test should be sufficient but it would be nice to update at some
+         // point in the future!
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/WidgetCreation", "Widget Creation Tests").end();
-         },
+         return this.remote.findAllByCssSelector(".alfresco-logo-Logo")
+            .then(function(els) {
+               assert.lengthOf(els, 3, "An unexpected number of logo widgets found");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check for the Logo with the specific ID": function() {
+         return this.remote.findAllByCssSelector("#SPECIFIC_DOM_ID")
+            .then(function(els) {
+               assert.lengthOf(els, 1, "Couldn't find Logo with specific DOM id");
+            });
+      },
 
-         "Count the number of Logo widgets": function () {
-            // This isn't the optimal way of testing this - ideally we want to get each widget and then
-            // check the IDs - however, it's not easily understood how to do this with mulitple selection and 
-            // chaining of promises - this test should be sufficient but it would be nice to update at some
-            // point in the future!
+      "Check for the Logo with the overridden ID": function() {
+         return this.remote.findAllByCssSelector("#SPECIFIC_DOM_ID")
+            .then(function(els) {
+               assert.lengthOf(els, 1, "Couldn't find Logo with overridden DOM id");
+            });
+      },
 
-            return browser.findAllByCssSelector(".alfresco-logo-Logo")
-               .then(function (els) {
-                  assert.lengthOf(els, 3, "An unexpected number of logo widgets found");
-               });
-         },
-
-         "Check for the Logo with the specific ID": function() {
-            return browser.findAllByCssSelector("#SPECIFIC_DOM_ID")
-               .then(function (els) {
-                  assert.lengthOf(els, 1, "Couldn't find Logo with specific DOM id");
-               });
-         },
-
-         "Check for the Logo with the overridden ID": function() {
-            return browser.findAllByCssSelector("#SPECIFIC_DOM_ID")
-               .then(function (els) {
-                  assert.lengthOf(els, 1, "Couldn't find Logo with overridden DOM id");
-               });
-         },
-
-         "Open dialog for first item": function() {
-            // Open the dialog for the first item in the list...
-            return browser.findByCssSelector("#PROPERTY_LINK_ITEM_0 .value")
-               .click()
+      "Open dialog for first item": function() {
+         // Open the dialog for the first item in the list...
+         return this.remote.findByCssSelector("#PROPERTY_LINK_ITEM_0 .value")
+            .click()
             .end()
 
-            // Wait for the dialog to open...
-            .findByCssSelector("#one_DIALOG.dialogDisplayed")
+         // Wait for the dialog to open...
+         .findByCssSelector("#one_DIALOG.dialogDisplayed")
             .end()
 
-            // Close it...
-            .findById("one_DIALOG_OK_label")
-               .click()
+         // Close it...
+         .findById("one_DIALOG_OK_label")
+            .click()
             .end()
 
-            // Wait for it to close...
-            .findByCssSelector("#one_DIALOG.dialogHidden")
+         // Wait for it to close...
+         .findByCssSelector("#one_DIALOG.dialogHidden")
             .end()
 
-            // Open the dialog for the second item in the list...
-            .findByCssSelector("#PROPERTY_LINK_ITEM_1 .value")
-               .click()
+         // Open the dialog for the second item in the list...
+         .findByCssSelector("#PROPERTY_LINK_ITEM_1 .value")
+            .click()
             .end()
 
-            // Wait for the dialog to open...
-            .findByCssSelector("#two_DIALOG.dialogDisplayed")
+         // Wait for the dialog to open...
+         .findByCssSelector("#two_DIALOG.dialogDisplayed")
             .end()
 
-            .findByCssSelector("#two_DIALOG .alfresco-forms-controls-BaseFormControl")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "The text box in the second dialog should have been displayed");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("#two_DIALOG .alfresco-forms-controls-BaseFormControl")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "The text box in the second dialog should have been displayed");
+            });
+      }
    });
 });

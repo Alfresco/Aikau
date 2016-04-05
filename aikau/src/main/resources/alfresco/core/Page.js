@@ -67,6 +67,7 @@ define(["alfresco/core/ProcessWidgets",
       onError: function alfresco_core_Page__onError(error) {
          /* global console */
          console.error("The following AMD module loading error occurred", error);
+         this._showPage();
       },
 
       /**
@@ -128,6 +129,7 @@ define(["alfresco/core/ProcessWidgets",
          catch (e)
          {
             this.alfLog("error", "The following error occurred building the page", e);
+            this._showPage();
             PubQueue.getSingleton().release();
          }
       },
@@ -233,6 +235,7 @@ define(["alfresco/core/ProcessWidgets",
                catch (e) 
                {
                   _this.alfLog("error", "The following error occurred creating a service", e);
+                  this._showPage();
                   if (callback)
                   {
                      callback.call((callbackScope || _this), service, index);
@@ -241,6 +244,7 @@ define(["alfresco/core/ProcessWidgets",
             }
             else
             {
+               this._showPage();
                _this.alfLog("error", "The following service could not be found, so is not included on the page '" +  dep + "'. Please correct the use of this service in your page definition");
             }
             if (callback)
@@ -354,7 +358,17 @@ define(["alfresco/core/ProcessWidgets",
 
          // Add a class to indicate that the page is ready. This is primarily for testing purposes.
          domClass.add(this.domNode, "allWidgetsProcessed");
-         domClass.add(win.body(), "aikau-reveal");
+         this._showPage();
+      },
+
+      /**
+       * Un-hide the body of the page
+       *
+       * @instance
+       * @since 1.0.59
+       */
+      _showPage: function alfresco_core_Page___showPage() {
+         domClass.add(document.body, "aikau-reveal");
       }
    });
 });

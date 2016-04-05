@@ -20,29 +20,17 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Avatar Thumbnail Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AvatarThumbnail", "Avatar Thumbnail Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AvatarThumbnail",
 
       "Image src is correct": function() {
-         return browser.findByCssSelector("#ADMIN_THUMBNAIL .alfresco-renderers-Thumbnail__image")
+         return this.remote.findByCssSelector("#ADMIN_THUMBNAIL .alfresco-renderers-Thumbnail__image")
             .getAttribute("src")
             .then(function(src) {
                assert.match(src, /\/aikau\/proxy\/alfresco\/slingshot\/profile\/avatar\/silly%25userid\/thumbnail\/avatar/, "Avatar thumbnail src incorrect");
@@ -50,17 +38,12 @@ registerSuite(function(){
       },
 
       "Publishes topic when clicked": function() {
-         return browser.findByCssSelector("#GUEST_THUMBNAIL .alfresco-renderers-Thumbnail__frame")
+         return this.remote.findByCssSelector("#GUEST_THUMBNAIL .alfresco-renderers-Thumbnail__frame")
             .click()
             .getLastPublish("ALF_DISPLAY_NOTIFICATION", true, "Did not publish correct topic when clicked")
             .then(function(payload) {
                assert.propertyVal(payload, "message", "You clicked on the guest thumbnail", "Did not publish correct payload");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

@@ -20,86 +20,71 @@
 /**
  * @author Martin Doyle
  */
-define(["alfresco/TestCommon",
-      "intern!object",
-      "intern/chai!assert"],
-      function(TestCommon, registerSuite, assert) {
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, TestCommon, defineSuite, assert) {
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "TagFilters Tests",
+      testPage: "/TagFilters",
 
-      return {
-         name: "TagFilters Tests",
+      // See AKU-640 - this test needs to be first before we start manipulating the filters...
+      "Check root node tag publication": function() {
+         return this.remote.findByCssSelector("body").end()
+            .getLastPublish("ALF_TAG_QUERY")
+            .then(function(payload) {
+               assert.propertyVal(payload, "siteId", null, "Unexpected siteId");
+               assert.propertyVal(payload, "containerId", null, "Unexpected containerId");
+               assert.propertyVal(payload, "rootNode", "some://fake/node", "Unexpected containerId");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/TagFilters", "TagFilters Tests");
-         },
+      "Check root node XHR request": function() {
+         // We know that a rootNode query uses "tagQuery" as opposed to "tags" as used for siteId/containerId
+         // It's important to make sure that a rootNode request is made because then we know that no
+         // spurious siteId/containerId attributes have been provided...
+         return this.remote.findByCssSelector("body").end()
+            .getLastXhr("/tagQuery", "No root node XHR request");
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Can retrieve tags in unscoped context": function() {
+         return this.remote.findAllByCssSelector("#TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter")
+            .then(function(elements) {
+               assert.lengthOf(elements, 9);
+            });
+      },
 
-         // See AKU-640 - this test needs to be first before we start manipulating the filters...
-         "Check root node tag publication": function() {
-            return browser.findByCssSelector("body").end()
-               .getLastPublish("ALF_TAG_QUERY")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "siteId", null, "Unexpected siteId");
-                     assert.propertyVal(payload, "containerId", null, "Unexpected containerId");
-                     assert.propertyVal(payload, "rootNode", "some://fake/node", "Unexpected containerId");
-                  });
-         },
+      "Can retrieve tags in scoped context": function() {
+         return this.remote.findAllByCssSelector("#SCOPED_TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter")
+            .then(function(elements) {
+               assert.lengthOf(elements, 9);
+            });
+      },
 
-         "Check root node XHR request": function() {
-            // We know that a rootNode query uses "tagQuery" as opposed to "tags" as used for siteId/containerId
-            // It's important to make sure that a rootNode request is made because then we know that no
-            // spurious siteId/containerId attributes have been provided...
-            return browser.findByCssSelector("body").end()
-               .getLastXhr("/tagQuery", "No root node XHR request");
-         },
+      "Clicked tags publish change notification (unscoped)": function() {
+         return this.remote.findByCssSelector("#TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
+            .clearLog()
+            .click()
+            .getLastPublish("ALF_DOCUMENTLIST_TAG_CHANGED", true);
+      },
 
-         "Can retrieve tags in unscoped context": function() {
-            return browser.findAllByCssSelector("#TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 9);
-               });
-         },
+      "Clicked tags publish change notification (scoped)": function() {
+         return this.remote.findByCssSelector("#SCOPED_TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
+            .clearLog()
+            .click()
+            .getLastPublish("SCOPED_ALF_DOCUMENTLIST_TAG_CHANGED", true);
+      },
 
-         "Can retrieve tags in scoped context": function() {
-            return browser.findAllByCssSelector("#SCOPED_TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 9);
-               });
-         },
-
-         "Clicked tags publish change notification (unscoped)": function() {
-            return browser.findByCssSelector("#TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
-               .clearLog()
-               .click()
-               .getLastPublish("ALF_DOCUMENTLIST_TAG_CHANGED", true);
-         },
-
-         "Clicked tags publish change notification (scoped)": function() {
-            return browser.findByCssSelector("#SCOPED_TAG_FILTERS .alfresco-documentlibrary-AlfDocumentFilter:last-child")
-               .clearLog()
-               .click()
-               .getLastPublish("SCOPED_ALF_DOCUMENTLIST_TAG_CHANGED", true);
-         },
-
-         "Document tagged event forces reload of scoped list": function() {
-            return browser.findById("PUBLISH_TAGGED_BUTTON_label")
-               .click()
-               .getLastPublish("SCOPED_ALF_DOCUMENT_TAGGED", true)
-               .getLastPublish("ALF_TAG_QUERY", true)
-               .then(function(payload) {
-                  assert.propertyVal(payload, "alfResponseScope", "SCOPED_");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Document tagged event forces reload of scoped list": function() {
+         return this.remote.findById("PUBLISH_TAGGED_BUTTON_label")
+            .click()
+            .getLastPublish("SCOPED_ALF_DOCUMENT_TAGGED", true)
+            .getLastPublish("ALF_TAG_QUERY", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "alfResponseScope", "SCOPED_");
+            });
+      }
    });
 });
