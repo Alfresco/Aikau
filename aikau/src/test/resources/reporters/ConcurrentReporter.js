@@ -468,10 +468,14 @@ define(["intern/dojo/node!fs",
           * @instance
           */
          createCoverageReport: function() {
-            var reporter = istanbul.Report.create("html", {
-               dir: this.config.coverageDir
-            });
-            reporter.writeReport(this.coverageCollector, true);
+            try {
+               var reporter = istanbul.Report.create("html", {
+                  dir: this.config.coverageDir
+               });
+               reporter.writeReport(this.coverageCollector, true);
+            } catch (e) {
+               this.exitWithError(e, "Error creating coverage report");
+            }
          },
 
          /**

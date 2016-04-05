@@ -26,6 +26,7 @@ module.exports = {
 
    // Directories
    dir: {
+      appTarget: "target/classes/META-INF/js/aikau",
       code: "./",
       coverage: "code-coverage-reports",
       docs: "docs",

@@ -8,8 +8,8 @@ module.exports = function(grunt) {
 
    // Generate a task for copying the uninstrumented code back...
    grunt.registerTask("copyOriginalCode", "Copy Uninstrumented Code", function() {
-      var srcPath = "src/main/resources/alfresco";
-      var targetRoot = "target/classes/META-INF/js/aikau/";
+      var srcPath = alfConfig.dir.main;
+      var targetRoot = alfConfig.dir.appTarget;
 
       // Return unique array of all file paths which match globbing pattern
       var options1 = {
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
             grunt.file.expand(options1, globPattern1)
                .forEach(function(fileMatches) {
                   var src = path.join(srcPath, fileMatches);
-                  var target = path.join(targetRoot + targetVersion + "/alfresco", fileMatches);
+                  var target = path.join(targetRoot, targetVersion, "/alfresco", fileMatches);
                   grunt.file.copy(src, target);
                });
          });
@@ -39,8 +39,8 @@ module.exports = function(grunt) {
 
    // Generate a task for copying the instrumented code...
    grunt.registerTask("copyInstrumentedCode", "Copy Instrumented Code", function() {
-      var srcPath = "src/main/resources/alfrescoInst";
-      var targetRoot = "target/classes/META-INF/js/aikau/";
+      var srcPath = alfConfig.dir.mainInstrumented;
+      var targetRoot = alfConfig.dir.appTarget;
 
       // Return unique array of all file paths which match globbing pattern
       var options1 = {
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
             grunt.file.expand(options1, globPattern1)
                .forEach(function(fileMatches) {
                   var src = path.join(srcPath, fileMatches);
-                  var target = path.join(targetRoot + targetVersion + "/alfresco", fileMatches);
+                  var target = path.join(targetRoot, targetVersion, "/alfresco", fileMatches);
                   console.log("Copying '" + src + "' to '" + target + "'");
                   grunt.file.copy(src, target);
                });
