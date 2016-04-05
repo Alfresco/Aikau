@@ -20,99 +20,83 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "alfresco/TestCommon",
-      "intern/dojo/node!leadfoot/keys"
-   ],
-   function(registerSuite, assert, TestCommon, keys) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "alfresco/TestCommon",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-      registerSuite(function() {
-         var browser;
+   defineSuite(module, {
+      name: "RadioButtons Tests",
+      testPage: "/RadioButtons",
 
-         return {
-            name: "RadioButtons Tests",
+      "Initial value is set correctly": function() {
+         return this.remote.findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/RadioButtons", "RadioButtons Control Tests");
-            },
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "canbuild", true);
+               assert.propertyVal(payload, "properfootball", "rugby_football");
+            });
+      },
 
-            beforeEach: function() {
-               browser.end();
-            },
+      "Value can be updated by publish": function() {
+         return this.remote.findById("CANT_BUILD_VALUE")
+            .click()
+            .end()
 
-            "Initial value is set correctly": function() {
-               return browser.findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .findById("RUGBY_UNION_VALUE")
+            .click()
+            .end()
 
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "canbuild", true);
-                     assert.propertyVal(payload, "properfootball", "rugby_football");
-                  });
-            },
+         .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-            "Value can be updated by publish": function() {
-               return browser.findById("CANT_BUILD_VALUE")
-                  .click()
-                  .end()
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "canbuild", false);
+               assert.propertyVal(payload, "properfootball", "rugby_union");
+            });
+      },
 
-               .findById("RUGBY_UNION_VALUE")
-                  .click()
-                  .end()
+      "Keyboard navigation and selection is supported": function() {
+         return this.remote.pressKeys([keys.SHIFT, keys.TAB])
+            .pressKeys(keys.ARROW_UP)
+            .pressKeys(keys.SPACE)
+            .pressKeys(keys.NULL) // Cancel modifiers
+            .end()
 
-               .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "canbuild", false);
-                     assert.propertyVal(payload, "properfootball", "rugby_union");
-                  });
-            },
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "properfootball", "rugby_football");
+            });
+      },
 
-            "Keyboard navigation and selection is supported": function() {
-               return browser.pressKeys([keys.SHIFT, keys.TAB])
-                  .pressKeys(keys.ARROW_UP)
-                  .pressKeys(keys.SPACE)
-                  .pressKeys(keys.NULL) // Cancel modifiers
-                  .end()
+      "Can select radio button with mouse": function() {
+         return this.remote.findByCssSelector("input[value=\"union_football\"]")
+            .click()
+            .end()
 
-               .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "properfootball", "rugby_football");
-                  });
-            },
-
-            "Can select radio button with mouse": function() {
-               return browser.findByCssSelector("input[value=\"union_football\"]")
-                  .click()
-                  .end()
-
-               .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
-
-               .getLastPublish("SCOPED_POST_FORM", true)
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "properfootball", "union_football");
-                  });
-            },
-
-            "Post Coverage Results": function() {
-               TestCommon.alfPostCoverageResults(this, browser);
-            }
-         };
-      });
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "properfootball", "union_football");
+            });
+      }
    });
+});

@@ -19,180 +19,163 @@
 
 /**
  * This is a unit test for the disabling-submit functionality of the alfresco/forms/Form control
- * 
+ *
  * @author Martin Doyle
  */
-define([
-      "alfresco/TestCommon",
-      "intern!object",
-      "intern/chai!assert"
-   ],
-   function(TestCommon, registerSuite, assert) {
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, TestCommon, defineSuite, assert) {
 
-      registerSuite(function() {
-         var browser;
+   defineSuite(module, {
+      name: "Disabling-submit Form control Tests",
+      testPage: "/DisablingSubmitForm",
 
-         return {
-            name: "Disabling-submit Form control Tests",
+      "OK button disables and label changes, and both are re-enabled by publication": function() {
+         return this.remote.findByCssSelector("#NAME_TEXTBOX .dijitInputField input")
+            .type("Fred")
+            .end()
 
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/DisablingSubmitForm", "Disabling-submit Form control Tests");
-            },
+         .findByCssSelector("#FORM_WITH_REENABLE_TOPICS .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
 
-            beforeEach: function() {
-               browser.end();
-            },
+         .getLastPublish("MY_NAME_IS", true)
 
-            "OK button disables and label changes, and both are re-enabled by publication": function() {
-               return browser.findByCssSelector("#NAME_TEXTBOX .dijitInputField input")
-                  .type("Fred")
-                  .end()
+         .findByCssSelector("#FORM_WITH_REENABLE_TOPICS .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "true", "OK button not disabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Submitted", "OK button label not changed");
+            })
+            .end()
 
-               .findByCssSelector("#FORM_WITH_REENABLE_TOPICS .confirmationButton .dijitButtonNode")
-                  .click()
-                  .end()
+         .getLastPublish("ENABLE_OK_BUTTON", 5000)
 
-               .getLastPublish("MY_NAME_IS", true)
+         .findByCssSelector("#FORM_WITH_REENABLE_TOPICS .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "false", "OK button not re-enabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "OK", "OK button label not reset");
+            });
+      },
 
-               .findByCssSelector("#FORM_WITH_REENABLE_TOPICS .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "true", "OK button not disabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted", "OK button label not changed");
-                  })
-                  .end()
+      "Forcing a publication which fails a conditional check will NOT re-enable the OK button": function() {
+         return this.remote.findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
 
-               .getLastPublish("ENABLE_OK_BUTTON", 5000)
+         .getLastPublish("ODD_OR_EVEN", true)
 
-               .findByCssSelector("#FORM_WITH_REENABLE_TOPICS .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "false", "OK button not re-enabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "OK", "OK button label not reset");
-                  });
-            },
+         .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "true", "OK button not disabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Submitted", "OK button label not changed");
+            })
+            .end()
 
-            "Forcing a publication which fails a conditional check will NOT re-enable the OK button": function() {
-               return browser.findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonNode")
-                  .clearLog()
-                  .click()
-                  .end()
+         .getLastPublish("ENABLE_OK_BUTTON_IF", 5000)
 
-               .getLastPublish("ODD_OR_EVEN", true)
+         .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "true", "OK button incorrectly re-enabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Submitted", "OK button label incorrectly reset");
+            })
+            .end()
 
-               .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "true", "OK button not disabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted", "OK button label not changed");
-                  })
-                  .end()
+         .findById("REENABLE_OK_BUTTON_BUTTON")
+            .click();
+      },
 
-               .getLastPublish("ENABLE_OK_BUTTON_IF", 5000)
+      "Forcing a publication which passes a conditional check WILL re-enable the OK button": function() {
+         // Function from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+         // Returns a random integer between min (included) and max (excluded)
+         // Using Math.round() will give you a non-uniform distribution!
+         function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+         }
 
-               .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "true", "OK button incorrectly re-enabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted", "OK button label incorrectly reset");
-                  })
-                  .end()
+         return this.remote.findByCssSelector("#CONDITIONAL_REENABLE_INPUT .dijitInputField input")
+            .clearLog()
+            .type("" + (getRandomInt(0, 100) * 2))
+            .end()
 
-               .findById("REENABLE_OK_BUTTON_BUTTON")
-                  .click();
-            },
+         .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
 
-            "Forcing a publication which passes a conditional check WILL re-enable the OK button": function() {
-               // Function from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-               // Returns a random integer between min (included) and max (excluded)
-               // Using Math.round() will give you a non-uniform distribution!
-               function getRandomInt(min, max) {
-                  return Math.floor(Math.random() * (max - min)) + min;
-               }
+         .getLastPublish("ODD_OR_EVEN", true)
 
-               return browser.findByCssSelector("#CONDITIONAL_REENABLE_INPUT .dijitInputField input")
-                  .clearLog()
-                  .type("" + (getRandomInt(0, 100) * 2))
-                  .end()
+         .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "true", "OK button not disabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Submitted", "OK button label not changed");
+            })
+            .end()
 
-               .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonNode")
-                  .click()
-                  .end()
+         .getLastPublish("ENABLE_OK_BUTTON_IF", 5000)
 
-               .getLastPublish("ODD_OR_EVEN", true)
+         .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "false", "OK button not re-enabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "OK", "OK button label not reset");
+            })
+            .end();
+      },
 
-               .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "true", "OK button not disabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted", "OK button label not changed");
-                  })
-                  .end()
+      "OK button can just change label on submit and reverts automatically": function() {
+         return this.remote.findByCssSelector("#DEFAULT_FORM .confirmationButton .dijitButtonNode")
+            .click()
+            .end()
 
-               .getLastPublish("ENABLE_OK_BUTTON_IF", 5000)
+         .getLastPublish("HERES_A_SECRET")
 
-               .findByCssSelector("#FORM_WITH_CONDITIONAL_REENABLEMENT .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "false", "OK button not re-enabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "OK", "OK button label not reset");
-                  })
-                  .end();
-            },
+         .findByCssSelector("#DEFAULT_FORM .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "false", "OK button incorrectly disabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Submitted", "OK button label not changed");
+            })
+            .end()
 
-            "OK button can just change label on submit and reverts automatically": function() {
-               return browser.findByCssSelector("#DEFAULT_FORM .confirmationButton .dijitButtonNode")
-                  .click()
-                  .end()
+         .sleep(3000)
 
-               .getLastPublish("HERES_A_SECRET")
-
-               .findByCssSelector("#DEFAULT_FORM .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "false", "OK button incorrectly disabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "Submitted", "OK button label not changed");
-                  })
-                  .end()
-
-               .sleep(3000)
-
-               .findByCssSelector("#DEFAULT_FORM .confirmationButton .dijitButtonContents")
-                  .getAttribute("aria-disabled")
-                  .then(function(isDisabled) {
-                     assert.equal(isDisabled, "false", "OK button incorrectly disabled");
-                  })
-                  .getVisibleText()
-                  .then(function(visibleText) {
-                     assert.equal(visibleText, "OK", "OK button label not reset");
-                  });
-            },
-
-            "Post Coverage Results": function() {
-               TestCommon.alfPostCoverageResults(this, browser);
-            }
-         };
-      });
+         .findByCssSelector("#DEFAULT_FORM .confirmationButton .dijitButtonContents")
+            .getAttribute("aria-disabled")
+            .then(function(isDisabled) {
+               assert.equal(isDisabled, "false", "OK button incorrectly disabled");
+            })
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "OK", "OK button label not reset");
+            });
+      }
    });
+});

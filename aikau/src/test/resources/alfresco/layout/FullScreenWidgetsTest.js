@@ -20,37 +20,27 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, expect, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, expect, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Full Screen Widgets Tests",
+      testPage: "/FullScreenWidgets",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/FullScreenWidgets", "Full Screen Widgets Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Tests": function () {
+      "Tests": function() {
          var testname = "Full Screen Widgets Test";
-         return browser.findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+         return this.remote.findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
                function() {
                   assert(false, "Test #1a - Full window class found unexpectedly");
                },
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class not present as expected");
                }
             )
@@ -60,12 +50,12 @@ registerSuite(function(){
          .findByCssSelector("#POPUP_MENU")
             .click()
             .end()
-         .findByCssSelector("#FULL_WINDOW")
+            .findByCssSelector("#FULL_WINDOW")
             .click()
             .end()
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+            .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class as expected");
                },
                function() {
@@ -78,15 +68,15 @@ registerSuite(function(){
          .findByCssSelector("#POPUP_MENU")
             .click()
             .end()
-         .findByCssSelector("#FULL_WINDOW")
+            .findByCssSelector("#FULL_WINDOW")
             .click()
             .end()
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+            .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
                function() {
                   assert(false, "Test #2a - Full window class should have been removed");
                },
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class removed correctly (on full screen)");
                }
             )
@@ -96,12 +86,12 @@ registerSuite(function(){
          .findByCssSelector("#POPUP_MENU")
             .click()
             .end()
-         .findByCssSelector("#FULL_WINDOW")
+            .findByCssSelector("#FULL_WINDOW")
             .click()
             .end()
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+            .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class as expected");
                },
                function() {
@@ -114,15 +104,15 @@ registerSuite(function(){
          .findByCssSelector("#POPUP_MENU")
             .click()
             .end()
-         .findByCssSelector("#FULL_WINDOW")
+            .findByCssSelector("#FULL_WINDOW")
             .click()
             .end()
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+            .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
                function() {
                   assert(false, "Test #3b - Full window class should have been removed");
                },
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class removed correctly");
                }
             )
@@ -132,12 +122,12 @@ registerSuite(function(){
          .findByCssSelector("#POPUP_MENU")
             .click()
             .end()
-         .findByCssSelector("#FULL_WINDOW")
+            .findByCssSelector("#FULL_WINDOW")
             .click()
             .end()
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+            .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class as expected");
                },
                function() {
@@ -145,22 +135,17 @@ registerSuite(function(){
                }
             )
             .end()
-            
+
          .pressKeys(keys.ESCAPE)
-         .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
+            .findByCssSelector(".alfresco-core-FullScreenMixin-fullWindow")
             .then(
                function() {
                   assert(false, "Test #4b - Full window class should have been removed after pressing escape key");
                },
-               function() { 
+               function() {
                   TestCommon.log(testname, "Found full window class removed correctly following escape key press");
                }
             );
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

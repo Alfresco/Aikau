@@ -23,35 +23,23 @@
  * @author David Webster
  * @todo Check that second selection overwrites first selection
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Document Picker Single Item Test",
+      testPage: "/DocumentPickerSingleItem",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DocumentPickerSingleItem", "DocumentPickerSingleItem").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Initial set-value is correctly submitted": function(){
-         return browser.findByCssSelector("#FORM .confirmationButton .dijitButtonNode")
+      "Initial set-value is correctly submitted": function() {
+         return this.remote.findByCssSelector("#FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()
 
          .getLastPublish("PUBLISH_FORM")
-            .then(function(payload){
+            .then(function(payload) {
                assert.deepPropertyVal(payload, "document[0]", "workspace://SpacesStore/8285e568-3782-4839-9f53-bf0b6aaacb3c", "Did not publish preset value");
             })
             .end()
@@ -60,13 +48,13 @@ registerSuite(function(){
             .click();
       },
 
-      "Test picker dialog can be displayed": function () {
-         return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
+      "Test picker dialog can be displayed": function() {
+         return this.remote.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()
-         .end()
-         .findByCssSelector(".alfresco-pickers-Picker")
+            .end()
+            .findByCssSelector(".alfresco-pickers-Picker")
             .then(
-               function(){},
+               function() {},
                function() {
                   assert(false, "The dialog has NOT opened with the picker");
                }
@@ -75,12 +63,12 @@ registerSuite(function(){
 
       "Test Shared Files sub-picker is shown": function() {
          // Select "Shared Files" (the results for this are mocked)
-         return browser.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
+         return this.remote.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
             .click()
-         .end()
-         .findByCssSelector(".alfresco-lists-views-AlfListView")
+            .end()
+            .findByCssSelector(".alfresco-lists-views-AlfListView")
             .then(
-               function(){},
+               function() {},
                function() {
                   assert(false, "The Shared Files click did not yield any results");
                }
@@ -89,7 +77,7 @@ registerSuite(function(){
 
       "Test Shared files result count": function() {
          // Count the mocked results...
-         return browser.findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
+         return this.remote.findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 4, "4 results expected for Shared Files, found: " + elements.length);
             });
@@ -97,9 +85,9 @@ registerSuite(function(){
 
       "Test first item in picker can be added": function() {
          // Check the first item has an ADD publish action image...
-         return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
             .then(
-               function(){},
+               function() {},
                function() {
                   assert(false, "The first shared files item did not have an ADD publish action image");
                }
@@ -108,12 +96,12 @@ registerSuite(function(){
 
       "Test item gets picked": function() {
          // Click the ADD publish action image to add the item to the picked items...
-         return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
             .click()
-         .end()
-         // Count the number of picked items (there should now be 1)...
-         // TODO: Could probably check that there were none picked when the dialog was first opened...
-         .findAllByCssSelector(".picked-items tr")
+            .end()
+            // Count the number of picked items (there should now be 1)...
+            // TODO: Could probably check that there were none picked when the dialog was first opened...
+            .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "Only one result was expected for picked items");
             });
@@ -121,26 +109,26 @@ registerSuite(function(){
 
       "Test picked items are reflected when closing dialog": function() {
          // Close the dialog...
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
             .click()
             .sleep(500)
-         .end()
-         // Count the selected items...
-         .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
+            .end()
+            // Count the selected items...
+            .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 1, "Only 1 results was expected for picked items after dialog close, found: " + elements.length);
             });
       },
 
       "Test picked items are retained": function() {
-         return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span.alfresco-buttons-AlfButton.confirmationButton > span > span")
-            .then(function(){}, function() {})
-         .end()
-         // Open the dialog again and check the picked items remain...
-         .findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
+         return this.remote.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span.alfresco-buttons-AlfButton.confirmationButton > span > span")
+            .then(function() {}, function() {})
+            .end()
+            // Open the dialog again and check the picked items remain...
+            .findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()
-         .end()
-         .findAllByCssSelector(".picked-items tr")
+            .end()
+            .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "The previously selected item was not preserved");
             });
@@ -148,9 +136,9 @@ registerSuite(function(){
 
       "Test previously picked item can be removed": function() {
          // Check the remove item image exists...
-         return browser.findByCssSelector(".picked-items tr .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector(".picked-items tr .alfresco-renderers-PublishAction > img")
             .then(
-               function(){},
+               function() {},
                function() {
                   assert(false, "The remove item image could not be found");
                }
@@ -159,15 +147,15 @@ registerSuite(function(){
 
       "Test previously picked item gets removed": function() {
          // Remove the previously selected item...
-         return browser.findByCssSelector(".picked-items tr .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector(".picked-items tr .alfresco-renderers-PublishAction > img")
             .click()
-         .end()
-         // Close the dialog...
-         .findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
+            .end()
+            // Close the dialog...
+            .findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
             .click()
-         .end()
-         // Check the item was removed...
-         .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
+            .end()
+            // Check the item was removed...
+            .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 0, "The previously selected item should have been removed");
             });
@@ -175,20 +163,20 @@ registerSuite(function(){
 
       "Test an item can be only picked once": function() {
          // Open the dialog again and add some more...
-         return browser.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
+         return this.remote.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()
-         .end()
-         // Select "Shared Files" option again...
-         .findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
+            .end()
+            // Select "Shared Files" option again...
+            .findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
             .click()
-         .end()
-         // Click the ADD publish action image TWICE, check that it was only added once...
-         .findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(2) .alfresco-renderers-PublishAction > img")
+            .end()
+            // Click the ADD publish action image TWICE, check that it was only added once...
+            .findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(2) .alfresco-renderers-PublishAction > img")
             .click()
             .click()
-         .end()
-         // Count the number of picked items (there should now be 1 DESPITE clicking twice)...
-         .findAllByCssSelector(".picked-items tr")
+            .end()
+            // Count the number of picked items (there should now be 1 DESPITE clicking twice)...
+            .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "Only one result was expected for picked items, found: " + elements.length);
             });
@@ -196,10 +184,10 @@ registerSuite(function(){
 
       "Test picking another item": function() {
          // Add another item...
-         return browser.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector(".alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
             .click()
-         .end()
-         .findAllByCssSelector(".picked-items tr")
+            .end()
+            .findAllByCssSelector(".picked-items tr")
             .then(function(elements) {
                assert(elements.length === 1, "One result was expected for picked items, found: " + elements.length);
             });
@@ -207,19 +195,14 @@ registerSuite(function(){
 
       "Test one item is shown when dialog closed": function() {
          // Close the dialog...
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog .footer .alfresco-buttons-AlfButton:first-child > span")
             .click()
-         .end()
-         // Check there are now 2 items...
-         .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
+            .end()
+            // Check there are now 2 items...
+            .findAllByCssSelector("#DOCUMENT_PICKER .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert(elements.length === 1, "One item should have been picked, found: " + elements.length);
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

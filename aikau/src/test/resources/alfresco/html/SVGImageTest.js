@@ -20,59 +20,44 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "SVGImage Tests",
+      testPage: "/SVGImage",
 
-      return {
-         name: "SVGImage Tests",
+      "SVG is rendered": function() {
+         return this.remote.findByCssSelector("#IMAGE1 svg");
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/SVGImage", "SVGImage Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "SVG is rendered": function() {
-            return browser.findByCssSelector("#IMAGE1 svg");
-         },
-
-         "Image with actions publish on click": function() {
-            return browser.findById("IMAGE1")
-               .click()
+      "Image with actions publish on click": function() {
+         return this.remote.findById("IMAGE1")
+            .click()
             .end()
 
-            .getLastPublish("IMAGE1_TOPIC");
-         },
+         .getLastPublish("IMAGE1_TOPIC");
+      },
 
-         "Image with actions can be tabbed to and actioned": function() {
-            return browser.findByCssSelector("body").end().tabToElement("#IMAGE1")
-               .clearLog()
-               .pressKeys(keys.ENTER)
+      "Image with actions can be tabbed to and actioned": function() {
+         return this.remote.findByCssSelector("body").end().tabToElement("#IMAGE1")
+            .clearLog()
+            .pressKeys(keys.ENTER)
             .end()
 
-            .getLastPublish("IMAGE1_TOPIC");
-         },
+         .getLastPublish("IMAGE1_TOPIC");
+      },
 
-         "Dimensions can be set": function() {
-            return browser.findByCssSelector("#IMAGE1 .alfresco-html-SVGImage__svg")
-               .getSize()
-               .then(function(size){
-                  assert.equal(size.height, 600);
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Dimensions can be set": function() {
+         return this.remote.findByCssSelector("#IMAGE1 .alfresco-html-SVGImage__svg")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.height, 600);
+            });
+      }
    });
 });

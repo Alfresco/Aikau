@@ -20,34 +20,24 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
    var toggleSelector = function(id, status) {
       return "#" + id + "_ITEM_0 ." + status;
    };
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Social Renderers Test (Likes)",
+      testPage: "/SocialRenderers",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", "Social Renderers Test (Likes)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Check like PROCESSING image": function () {
-         return browser.findByCssSelector(toggleSelector("LIKES", "processing"))
+      "Check like PROCESSING image": function() {
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "processing"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Like PROCESSING image should not be displayed initially");
@@ -55,7 +45,7 @@ registerSuite(function(){
       },
 
       "Check like ON image": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "on"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "on"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Like ON image should not be displayed initially");
@@ -63,7 +53,7 @@ registerSuite(function(){
       },
 
       "Check like OFF image": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "off"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "off"))
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Like OFF image was not displayed");
@@ -71,7 +61,7 @@ registerSuite(function(){
       },
 
       "Check like WARNING image": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "warning"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "warning"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Like WARNING image should not be displayed initially");
@@ -79,7 +69,7 @@ registerSuite(function(){
       },
 
       "Check like count": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "count"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "4", "Like COUNT is incorrect");
@@ -87,17 +77,17 @@ registerSuite(function(){
       },
 
       "Like the document": function() {
-         return browser.findByCssSelector("#LIKES_ITEM_0")
+         return this.remote.findByCssSelector("#LIKES_ITEM_0")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_ADD", "publish", "any"))
+            .end()
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_ADD", "publish", "any"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Add rating request not published");
             });
       },
 
       "Check ON image is toggled": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "on"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "on"))
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Like ON image not displayed following like");
@@ -105,7 +95,7 @@ registerSuite(function(){
       },
 
       "Check OFF image is toggled": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "off"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "off"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Like OFF image displayed despite liking");
@@ -113,7 +103,7 @@ registerSuite(function(){
       },
 
       "Check the like count is incremented": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "count"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "5", "Like COUNT is incorrect following liking");
@@ -121,17 +111,17 @@ registerSuite(function(){
       },
 
       "Unlike the document": function() {
-         return browser.findByCssSelector("#LIKES_ITEM_0")
+         return this.remote.findByCssSelector("#LIKES_ITEM_0")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_REMOVE", "publish", "any"))
+            .end()
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_REMOVE", "publish", "any"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Remove rating request not published");
             });
       },
 
       "Check ON image is toggled (on unlike)": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "on"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "on"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Like ON image displayed despite removing like");
@@ -139,7 +129,7 @@ registerSuite(function(){
       },
 
       "Check OFF image is toggled (on unlike)": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "off"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "off"))
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Like OFF image not displayed despite removing like");
@@ -147,36 +137,20 @@ registerSuite(function(){
       },
 
       "Check count is decremented (on unlike)": function() {
-         return browser.findByCssSelector(toggleSelector("LIKES", "count"))
+         return this.remote.findByCssSelector(toggleSelector("LIKES", "count"))
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "4", "Like COUNT is incorrect after unliking");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Social Renderers Test (Favourites)",
+      testPage: "/SocialRenderers",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", "Social Renderers Test (Favourites)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Check initial PROCESSING image": function () {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "processing"))
+      "Check initial PROCESSING image": function() {
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "processing"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Favourite PROCESSING image should not be displayed initially");
@@ -184,7 +158,7 @@ registerSuite(function(){
       },
 
       "Check initial ON image": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "on"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "on"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Favourite ON image should not be displayed initially");
@@ -192,7 +166,7 @@ registerSuite(function(){
       },
 
       "Check initial OFF image": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "off"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "off"))
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Favourite OFF image was not displayed");
@@ -200,7 +174,7 @@ registerSuite(function(){
       },
 
       "Check initial WARNING image": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "warning"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "warning"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Favourite WARNING image should not be displayed initially");
@@ -208,17 +182,17 @@ registerSuite(function(){
       },
 
       "Favourite a document": function() {
-         return browser.findByCssSelector("#FAVOURITES_ITEM_0")
+         return this.remote.findByCssSelector("#FAVOURITES_ITEM_0")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE", "publish", "any"))
+            .end()
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE", "publish", "any"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Add favourite request not published");
             });
       },
 
       "Check ON image toggled (add favourite)": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "on"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "on"))
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Favourite ON image not displayed following favourite");
@@ -226,7 +200,7 @@ registerSuite(function(){
       },
 
       "Check OFF image toggled (add favourite)": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "off"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "off"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "Favourite OFF image displayed despite favourite");
@@ -234,17 +208,17 @@ registerSuite(function(){
       },
 
       "Remove favourite": function() {
-         return browser.findByCssSelector("#FAVOURITES_ITEM_0")
+         return this.remote.findByCssSelector("#FAVOURITES_ITEM_0")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE", "publish", "any"))
+            .end()
+            .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE", "publish", "any"))
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Remove favourite request not published");
             });
       },
 
       "Check ON image toggled (remove favourite)": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "on"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "on"))
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, false, "Favourite ON image displayed despite removing favourite");
@@ -252,46 +226,24 @@ registerSuite(function(){
       },
 
       "Check OFF image toggled (remove favourite)": function() {
-         return browser.findByCssSelector(toggleSelector("FAVOURITES", "off"))
+         return this.remote.findByCssSelector(toggleSelector("FAVOURITES", "off"))
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "Favourite OFF image not displayed despite removing favourite");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Social Renderers Test (Comments)",
+      testPage: "/SocialRenderers",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SocialRenderers", "Social Renderers Test (Comments)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Comments Test": function () {
-        return browser.findByCssSelector(toggleSelector("COMMENTS", "count"))
+      "Comments Test": function() {
+         return this.remote.findByCssSelector(toggleSelector("COMMENTS", "count"))
             .getVisibleText()
             .then(function(resultText) {
                assert(resultText === "6", "Test #1a - comments COUNT is incorrect: " + resultText);
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

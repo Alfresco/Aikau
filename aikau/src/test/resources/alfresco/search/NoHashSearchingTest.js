@@ -19,120 +19,104 @@
 
 /**
  * This test generates some variations on AlfSearchResult to test the various if statements in the rendering widgets involved
- * 
+ *
  * @author Richard Smith
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "No URL Hashing Search Tests",
+      testPage: "/NoHashSearching",
 
-      return {
-         name: "No URL Hashing Search Tests",
+      "Check that a scope is selected": function() {
+         // See AKU-475 - because no hashName attribute is set on the AlfCheckableMenuItems the configured checked
+         // status should result in a scope being set
+         return this.remote.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Repository", "An initial scope was not set");
+            })
+            .clearLog();
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/NoHashSearching", "No URL Hashing Search Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check that a scope is selected": function() {
-            // See AKU-475 - because no hashName attribute is set on the AlfCheckableMenuItems the configured checked 
-            // status should result in a scope being set
-            return browser.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Repository", "An initial scope was not set");
-               })
-               .clearLog();
-         },
-
-         "Perform a search without setting a hash": function() {
-            // See AKU-472 - with both the SingleComboBoxForm and AlfSearchList configured with useHash to be false
-            // then setting a search term should just perform a search without updating the URL hash
-            return browser.findByCssSelector(".dijitInputInner")
-               .type("hame")
+      "Perform a search without setting a hash": function() {
+         // See AKU-472 - with both the SingleComboBoxForm and AlfSearchList configured with useHash to be false
+         // then setting a search term should just perform a search without updating the URL hash
+         return this.remote.findByCssSelector(".dijitInputInner")
+            .type("hame")
             .end()
             .findByCssSelector(".confirmationButton > span")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "response.totalRecords", 10, "Response not published");
-               })
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "response.totalRecords", 10, "Response not published");
+            })
             .getCurrentUrl()
-               .then(function(url) {
-                  assert.notInclude(url, "#", "A hash should not have been set");
-               })
+            .then(function(url) {
+               assert.notInclude(url, "#", "A hash should not have been set");
+            })
             .clearLog();
-         },
+      },
 
-         "Check search results for alternative search": function() {
-            // Searching for "hame" will actually generate an alternative search for "home"
-            return browser.findByCssSelector(".searched-for-term .search-term-link")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "home", "Did not perform the alternative search");
-               });
-         },
+      "Check search results for alternative search": function() {
+         // Searching for "hame" will actually generate an alternative search for "home"
+         return this.remote.findByCssSelector(".searched-for-term .search-term-link")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "home", "Did not perform the alternative search");
+            });
+      },
 
-         "Change the scope without setting a hash": function() {
-            // Switching from Repository to All Sites scope should initiate a new search search without setting the hash
-            return browser.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
-               .click()
+      "Change the scope without setting a hash": function() {
+         // Switching from Repository to All Sites scope should initiate a new search search without setting the hash
+         return this.remote.findById("FCTSRCH_SCOPE_SELECTION_MENU_text")
+            .click()
             .end()
             .findById("FCTSRCH_SET_ALL_SITES_SCOPE_text")
-               .click()
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "repo", false, "The search scope was not updated");
-               })
-               .clearLog();
-         },
-
-         "Use original search term without setting hash": function() {
-            // The AlternativeSearchLabel should present the original search term of "hame" - clicking on this
-            // should perform that search and the hash should remain unchanged
-            return browser.findByCssSelector(".searched-for-term .search-term-link")
-               .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "term", "home", "The search request was not updated");
-               })
-            .getCurrentUrl()
-               .then(function(url) {
-                  assert.notInclude(url, "#", "A hash should not have been set");
-               })
+            .then(function(payload) {
+               assert.propertyVal(payload, "repo", false, "The search scope was not updated");
+            })
             .clearLog();
-         },
-         
-         "Apply a facet filter without setting hash": function() {
-            // Applying a facet filter should trigger another search without the AlfSearchList updating the URL hash
-            return browser.findByCssSelector(".filters li:first-child .filterLabel")
-               .click()
+      },
+
+      "Use original search term without setting hash": function() {
+         // The AlternativeSearchLabel should present the original search term of "hame" - clicking on this
+         // should perform that search and the hash should remain unchanged
+         return this.remote.findByCssSelector(".searched-for-term .search-term-link")
+            .click()
             .end()
             .getLastPublish("ALF_SEARCH_REQUEST")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "filters", encodeURIComponent("{http://www.alfresco.org/model/content/1.0}created|NOW/DAY-7DAYS\"..\"NOW/DAY+1DAY"), "The search request was not updated");
-               })
+            .then(function(payload) {
+               assert.propertyVal(payload, "term", "home", "The search request was not updated");
+            })
             .getCurrentUrl()
-               .then(function(url) {
-                  assert.notInclude(url, "#", "A hash should not have been set");
-               });
-         },
+            .then(function(url) {
+               assert.notInclude(url, "#", "A hash should not have been set");
+            })
+            .clearLog();
+      },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Apply a facet filter without setting hash": function() {
+         // Applying a facet filter should trigger another search without the AlfSearchList updating the URL hash
+         return this.remote.findByCssSelector(".filters li:first-child .filterLabel")
+            .click()
+            .end()
+            .getLastPublish("ALF_SEARCH_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "filters", encodeURIComponent("{http://www.alfresco.org/model/content/1.0}created|NOW/DAY-7DAYS\"..\"NOW/DAY+1DAY"), "The search request was not updated");
+            })
+            .getCurrentUrl()
+            .then(function(url) {
+               assert.notInclude(url, "#", "A hash should not have been set");
+            });
+      }
    });
 });

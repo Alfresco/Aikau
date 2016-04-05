@@ -18,13 +18,14 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon"],
-        function(registerSuite, assert, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
    var selectors = {
@@ -39,58 +40,42 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Download Action Tests",
+      testPage: "/Download",
 
-      return {
-         name: "Download Action Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Download", "Download Action Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Test that action does appear for document": function() {
-            return browser.findByCssSelector(selectors.downloadDocument.label)
-               .click()
+      "Test that action does appear for document": function() {
+         return this.remote.findByCssSelector(selectors.downloadDocument.label)
+            .click()
             .end()
 
-            .findDisplayedById("ACTIONS_ITEM_0_DOWNLOAD");
-         },
+         .findDisplayedById("ACTIONS_ITEM_0_DOWNLOAD");
+      },
 
-         "Test that action does NOT appear for folder": function() {
-            return browser.findByCssSelector(selectors.downloadFolder.label)
-               .click()
+      "Test that action does NOT appear for folder": function() {
+         return this.remote.findByCssSelector(selectors.downloadFolder.label)
+            .click()
             .end()
             .findAllByCssSelector("#ACTIONS_ITEM_1_DOWNLOAD")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0, "Download action should not be present for folder");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Download action should not be present for folder");
+            });
+      },
 
-         "Test download action": function() {
-            return browser.findByCssSelector(selectors.downloadDocument.label)
-               .click()
-            .end()
-            
-            .findDisplayedByCssSelector(selectors.downloadDocument.action1)
-               .click()
+      "Test download action": function() {
+         return this.remote.findByCssSelector(selectors.downloadDocument.label)
+            .click()
             .end()
 
-            .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
-               .getAttribute("src")
-               .then(function(src) {
-                  assert.include(src, "/proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true");
-               });
-         },
+         .findDisplayedByCssSelector(selectors.downloadDocument.action1)
+            .click()
+            .end()
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "/proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true");
+            });
+      }
    });
 });

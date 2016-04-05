@@ -20,115 +20,84 @@
 /**
  * @author Martin Doyle
  */
-define(["alfresco/TestCommon", 
-        "intern!object", 
-        "intern/chai!assert", 
-        "intern/dojo/node!leadfoot/keys"], 
-        function(TestCommon, registerSuite, assert, keys) {
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, TestCommon, defineSuite, assert, keys) {
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "Image Tests",
+      testPage: "/Image",
 
-      return {
-         name: "Image Tests",
+      "Image displayed with correct, custom dimensions": function() {
+         return this.remote.findById("IMAGE_WITH_DIMENSIONS")
+            .getSize()
+            .then(function(size) {
+               assert.propertyVal(size, "width", 150);
+               assert.propertyVal(size, "height", 75);
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Image", "Image Tests");
-         },
+      "Missing dimension extrapolated from aspect ratio": function() {
+         return this.remote.findById("IMAGE_CLASS_AND_DIMENSIONS")
+            .getSize()
+            .then(function(size) {
+               assert.propertyVal(size, "width", 100);
+               assert.propertyVal(size, "height", 100);
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Custom style applied": function() {
+         return this.remote.findByCssSelector("#IMAGE_CLASS_STYLE_TOPIC .alfresco-html-Image__img")
+            .getComputedStyle("boxShadow")
+            .then(function(boxShadow) {
+               assert.include(boxShadow, "3px 3px 10px");
+            });
+      },
 
-         "Image displayed with correct, custom dimensions": function() {
-            return browser.findById("IMAGE_WITH_DIMENSIONS")
-               .getSize()
-               .then(function(size) {
-                  assert.propertyVal(size, "width", 150);
-                  assert.propertyVal(size, "height", 75);
-               });
-         },
+      "Image with topic publishes on click": function() {
+         return this.remote.findById("IMAGE_CLASS_STYLE_TOPIC")
+            .click()
+            .getLastPublish("LOGO_TOPIC_PUBLISHED");
+      },
 
-         "Missing dimension extrapolated from aspect ratio": function() {
-            return browser.findById("IMAGE_CLASS_AND_DIMENSIONS")
-               .getSize()
-               .then(function(size) {
-                  assert.propertyVal(size, "width", 100);
-                  assert.propertyVal(size, "height", 100);
-               });
-         },
+      "Image with url navigates when clicked": function() {
+         return this.remote.findByCssSelector("#IMAGE_CLASS_LINK .alfresco-html-Image__img")
+            .click()
+            .end()
 
-         "Custom style applied": function() {
-            return browser.findByCssSelector("#IMAGE_CLASS_STYLE_TOPIC .alfresco-html-Image__img")
-               .getComputedStyle("boxShadow")
-               .then(function(boxShadow) {
-                  assert.include(boxShadow, "3px 3px 10px");
-               });
-         },
-
-         "Image with topic publishes on click": function() {
-            return browser.findById("IMAGE_CLASS_STYLE_TOPIC")
-               .click()
-               .getLastPublish("LOGO_TOPIC_PUBLISHED");
-         },
-
-         "Image with url navigates when clicked": function() {
-            return browser.findByCssSelector("#IMAGE_CLASS_LINK .alfresco-html-Image__img")
-               .click()
-               .end()
-
-            .findByCssSelector("#TDAC .title")
-               .getVisibleText()
-               .then(function(visibleText) {
-                  assert.equal(visibleText, "Aikau Unit Tests");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("#TDAC .title")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Aikau Unit Tests");
+            });
+      }
    });
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "Image Keyboard Tests",
+      testPage: "/Image",
 
-      return {
-         name: "Image Keyboard Tests",
+      "Image will publish topic when ENTER pressed": function() {
+         return this.remote.findByCssSelector("body")
+            .tabToElement("#IMAGE_CLASS_STYLE_TOPIC")
+            .pressKeys(keys.ENTER)
+            .getLastPublish("LOGO_TOPIC_PUBLISHED");
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Image", "Image Keyboard Tests");
-         },
+      "Image will act as link when ENTER pressed": function() {
+         return this.remote.findByCssSelector("body")
+            .tabToElement("#IMAGE_CLASS_LINK a")
+            .pressKeys(keys.ENTER)
+            .end()
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Image will publish topic when ENTER pressed": function() {
-            return browser.findByCssSelector("body")
-               .tabToElement("#IMAGE_CLASS_STYLE_TOPIC")
-               .pressKeys(keys.ENTER)
-               .getLastPublish("LOGO_TOPIC_PUBLISHED");
-         },
-
-         "Image will act as link when ENTER pressed": function() {
-            return browser.findByCssSelector("body")
-               .tabToElement("#IMAGE_CLASS_LINK a")
-               .pressKeys(keys.ENTER)
-               .end()
-
-            .findByCssSelector("#TDAC .title")
-               .getVisibleText()
-               .then(function(visibleText) {
-                  assert.equal(visibleText, "Aikau Unit Tests");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findByCssSelector("#TDAC .title")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "Aikau Unit Tests");
+            });
+      }
    });
 });

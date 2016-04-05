@@ -20,34 +20,18 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, expect, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Advanced VisibilityConfig Tests",
+      testPage: "/AdvancedVisibilityConfig",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AdvancedVisibilityConfig", "Advanced VisibilityConfig Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-      "Check LOGO1 is initially displayed": function () {
-         return browser.findByCssSelector("#LOGO1")
+      "Check LOGO1 is initially displayed": function() {
+         return this.remote.findByCssSelector("#LOGO1")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO1 was not initially displayed");
@@ -55,7 +39,7 @@ registerSuite(function(){
       },
 
       "Check LOGO2 is initially displayed": function() {
-         return browser.findByCssSelector("#LOGO2")
+         return this.remote.findByCssSelector("#LOGO2")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO2 was not initially displayed");
@@ -63,40 +47,40 @@ registerSuite(function(){
       },
 
       "Check LOGO3 is initially displayed": function() {
-         return browser.findByCssSelector("#LOGO3")
+         return this.remote.findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO3 was not initially displayed");
             });
       },
 
-      "Check LOGO1 is still displayed (non-strict)": function () {
-         return browser.findByCssSelector("#TEST_NON_STRICT_1")
+      "Check LOGO1 is still displayed (non-strict)": function() {
+         return this.remote.findByCssSelector("#TEST_NON_STRICT_1")
             .click()
-         .end()
-         .findByCssSelector("#LOGO1")
+            .end()
+            .findByCssSelector("#LOGO1")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO1 was hidden");
             });
       },
 
-      "Check LOGO2 is still displayed (Current Item Rule)": function () {
-         return browser.findByCssSelector("#HIDE_LOGO_2")
+      "Check LOGO2 is still displayed (Current Item Rule)": function() {
+         return this.remote.findByCssSelector("#HIDE_LOGO_2")
             .click()
-         .end()
-         .findByCssSelector("#LOGO2")
+            .end()
+            .findByCssSelector("#LOGO2")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO2 was hidden");
             });
       },
 
-      "Check LOGO3 is now hidden (Invisibility Rule)": function () {
-         return browser.findByCssSelector("#HIDE_LOGO_3")
+      "Check LOGO3 is now hidden (Invisibility Rule)": function() {
+         return this.remote.findByCssSelector("#HIDE_LOGO_3")
             .click()
-         .end()
-         .findByCssSelector("#LOGO3")
+            .end()
+            .findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "LOGO3 was still displayed");
@@ -104,19 +88,14 @@ registerSuite(function(){
       },
 
       "Check LOGO3 is now displayed (Invisibility Rule)": function() {
-         return browser.findByCssSelector("#SHOW_LOGO_3")
+         return this.remote.findByCssSelector("#SHOW_LOGO_3")
             .click()
-         .end()
-         .findByCssSelector("#LOGO3")
+            .end()
+            .findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO3 was not displayed");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

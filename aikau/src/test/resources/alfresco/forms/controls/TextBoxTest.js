@@ -18,14 +18,15 @@
  */
 
 /**
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
    var baseFormControlSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/BaseFormControl");
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
@@ -70,300 +71,284 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Text Box Tests",
+      testPage: "/TextBox",
 
-      return {
-         name: "Text Box Tests",
+      "Check that label is rendered correctly": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.basic.label)
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "Basic");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/TextBox", "Text Box Tests").end();
-         },
+      "Check that units are rendered correctly": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.unitsAndDescription.units)
+            .getVisibleText()
+            .then(function(resultText) {
+               assert.equal(resultText, "Some unit");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check that initial value is set correctly": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue1.input)
+            .getProperty("value")
+            .then(function(resultText) {
+               assert.equal(resultText, "Val1");
+            });
+      },
 
-        "Check that label is rendered correctly": function () {
-            return browser.findByCssSelector(selectors.textBoxes.basic.label)
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert.equal(resultText, "Basic");
-               });
-         },
+      "Check that SINGLE_POSITIVE_RULES widget is displayed": function() {
+         return this.remote.findDisplayedByCssSelector("#SINGLE_POSITIVE_RULES");
+      },
 
-         "Check that units are rendered correctly": function() {
-            return browser.findByCssSelector(selectors.textBoxes.unitsAndDescription.units)
-               .getVisibleText()
-               .then(function(resultText) {
-                  assert.equal(resultText, "Some unit");
-               });
-         },
+      "Check that SINGLE_NEGATIVE_RULES widget is hidden": function() {
+         return this.remote.findByCssSelector("#SINGLE_NEGATIVE_RULES")
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check that initial value is set correctly": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue1.input)
-               .getProperty("value")
-               .then(function(resultText) {
-                  assert.equal(resultText,"Val1");
-               });
-         },
+      "Check that SINGLE_POSITIVE_RULES widget requirement indicator is shown": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.textBoxes.singlePostitiveRules.requirementIndicator);
+      },
 
-         "Check that SINGLE_POSITIVE_RULES widget is displayed": function() {
-            return browser.findDisplayedByCssSelector("#SINGLE_POSITIVE_RULES");
-         },
+      "Check requirement indicator": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singleNegativeRules.requirementIndicator)
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check that SINGLE_NEGATIVE_RULES widget is hidden": function() {
-            return browser.findByCssSelector("#SINGLE_NEGATIVE_RULES")
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none");
-               });
-         },
+      "Check field is disabled": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singlePostitiveRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         "Check that SINGLE_POSITIVE_RULES widget requirement indicator is shown": function() {
-            return browser.findDisplayedByCssSelector(selectors.textBoxes.singlePostitiveRules.requirementIndicator);
-         },
+      "Check field is enabled": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singleNegativeRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isTrue(result);
+            });
+      },
 
-         "Check requirement indicator": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singleNegativeRules.requirementIndicator)
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result,"none");
-               });
-         },
-
-         "Check field is disabled": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singlePostitiveRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
-
-         "Check field is enabled": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singleNegativeRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isTrue(result);
-               });
-         },
-
-         "Check widget is dynamically hidden": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue1.input)
-               .type(keys.BACKSPACE)
+      "Check widget is dynamically hidden": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue1.input)
+            .type(keys.BACKSPACE)
             .end()
 
-            .findByCssSelector("#SINGLE_POSITIVE_RULES")
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none", "Widget displayed unexpectedly after processing positive rules");
-               });
-         },
+         .findByCssSelector("#SINGLE_POSITIVE_RULES")
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none", "Widget displayed unexpectedly after processing positive rules");
+            });
+      },
 
-         "Check widget is displayed": function() {
-            return browser.findDisplayedByCssSelector("#SINGLE_NEGATIVE_RULES");
-         },
+      "Check widget is displayed": function() {
+         return this.remote.findDisplayedByCssSelector("#SINGLE_NEGATIVE_RULES");
+      },
 
-         "Check requirement indicator is displayed": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue2.input)
-               .type(keys.BACKSPACE)
+      "Check requirement indicator is displayed": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue2.input)
+            .type(keys.BACKSPACE)
             .end()
 
-            .findDisplayedByCssSelector(selectors.textBoxes.singleNegativeRules.requirementIndicator);
-         },
+         .findDisplayedByCssSelector(selectors.textBoxes.singleNegativeRules.requirementIndicator);
+      },
 
-         "Check requirement indicator is hidden": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singlePostitiveRules.requirementIndicator)
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none", "Requirement indicator displayed unexpectedly");
-               });
-         },
+      "Check requirement indicator is hidden": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singlePostitiveRules.requirementIndicator)
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none", "Requirement indicator displayed unexpectedly");
+            });
+      },
 
-         "Check field is disabled on backspace": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue3.input)
-               .type(keys.BACKSPACE)
+      "Check field is disabled on backspace": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue3.input)
+            .type(keys.BACKSPACE)
             .end()
 
-            .findByCssSelector(selectors.textBoxes.singleNegativeRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.singleNegativeRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         "Check field is enabled on backspace": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singlePostitiveRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isTrue(result);
-               });
-         },
+      "Check field is enabled on backspace": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singlePostitiveRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isTrue(result);
+            });
+      },
 
-         "Check widget displayed": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue1.input)
-               .type("1")
+      "Check widget displayed": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue1.input)
+            .type("1")
             .end()
 
-            .findByCssSelector(selectors.textBoxes.initialValue2.input)
-               .type("2")
+         .findByCssSelector(selectors.textBoxes.initialValue2.input)
+            .type("2")
             .end()
 
-            .findByCssSelector(selectors.textBoxes.initialValue3.input)
-               .type("3")
+         .findByCssSelector(selectors.textBoxes.initialValue3.input)
+            .type("3")
             .end()
 
-            .findDisplayedByCssSelector("#SINGLE_POSITIVE_RULES");
-         },
+         .findDisplayedByCssSelector("#SINGLE_POSITIVE_RULES");
+      },
 
-         "Check widget hidden": function() {
-            return browser.findByCssSelector("#SINGLE_NEGATIVE_RULES")
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none");
-               });
-         },
+      "Check widget hidden": function() {
+         return this.remote.findByCssSelector("#SINGLE_NEGATIVE_RULES")
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check requirement indicator displayed": function() {
-            return browser.findDisplayedByCssSelector(selectors.textBoxes.singlePostitiveRules.requirementIndicator);
-         },
+      "Check requirement indicator displayed": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.textBoxes.singlePostitiveRules.requirementIndicator);
+      },
 
-         "Check requirement indicate hidden": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singleNegativeRules.requirementIndicator)
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none");
-               });
-         },
+      "Check requirement indicate hidden": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singleNegativeRules.requirementIndicator)
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check field is disabled (SINGLE_POSITIVE_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singlePostitiveRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isFalse(result);
-               });
-         },
+      "Check field is disabled (SINGLE_POSITIVE_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singlePostitiveRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isFalse(result);
+            });
+      },
 
-         "Check field is enabled (SINGLE_NEGATIVE_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.singleNegativeRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isTrue(result);
-               });
-         },
+      "Check field is enabled (SINGLE_NEGATIVE_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.singleNegativeRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isTrue(result);
+            });
+      },
 
-         "Check widget is hidden (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector("#MULTIPLE_MIXED_RULES")
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none");
-               });
-         },
+      "Check widget is hidden (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector("#MULTIPLE_MIXED_RULES")
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check widget is displayed (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue2.input)
-               .type("x")
+      "Check widget is displayed (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue2.input)
+            .type("x")
             .end()
 
-            .findDisplayedByCssSelector("#MULTIPLE_MIXED_RULES");
-         },
+         .findDisplayedByCssSelector("#MULTIPLE_MIXED_RULES");
+      },
 
-         "Check widget is hidden again (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue1.input)
-               .type("x")
+      "Check widget is hidden again (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue1.input)
+            .type("x")
             .end()
 
-            .findByCssSelector("#MULTIPLE_MIXED_RULES")
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none");
-               });
-         },
+         .findByCssSelector("#MULTIPLE_MIXED_RULES")
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check requirement indicator was displayed (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue1.input)
-               .type(keys.BACKSPACE)
+      "Check requirement indicator was displayed (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue1.input)
+            .type(keys.BACKSPACE)
             .end()
 
-            // Requirement should be ON
-            .findDisplayedByCssSelector(selectors.textBoxes.multipleMixedRules.requirementIndicator);
-         },
+         // Requirement should be ON
+         .findDisplayedByCssSelector(selectors.textBoxes.multipleMixedRules.requirementIndicator);
+      },
 
-         "Check widget is disabled (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.multipleMixedRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isFalse(result, "Multiple mixed should have been disabled");
-               });
-         },
+      "Check widget is disabled (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.multipleMixedRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isFalse(result, "Multiple mixed should have been disabled");
+            });
+      },
 
-         "Check requirement indicator is hidden (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.initialValue3.input)
-               .type("x")
+      "Check requirement indicator is hidden (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.initialValue3.input)
+            .type("x")
             .end()
 
-            .findByCssSelector(selectors.textBoxes.multipleMixedRules.requirementIndicator)
-               .getComputedStyle("display")
-               .then(function(result) {
-                  assert.equal(result, "none");
-               });
-         },
+         .findByCssSelector(selectors.textBoxes.multipleMixedRules.requirementIndicator)
+            .getComputedStyle("display")
+            .then(function(result) {
+               assert.equal(result, "none");
+            });
+      },
 
-         "Check widget is enabled (MULTIPLE_MIXED_RULES)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.multipleMixedRules.input)
-               .isEnabled()
-               .then(function(result) {
-                  assert.isTrue(result);
-               });
-         },
+      "Check widget is enabled (MULTIPLE_MIXED_RULES)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.multipleMixedRules.input)
+            .isEnabled()
+            .then(function(result) {
+               assert.isTrue(result);
+            });
+      },
 
-         "Check validation error indicator": function() {
-            return browser.findByCssSelector(selectors.textBoxes.hasValidationConfig.invalid);
-         },
+      "Check validation error indicator": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.hasValidationConfig.invalid);
+      },
 
-         "Check validation error message": function() {
-            return browser.findDisplayedByCssSelector(selectors.textBoxes.hasValidationConfig.validationMessage)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Value must be a number");
-               });
-         },
+      "Check validation error message": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.textBoxes.hasValidationConfig.validationMessage)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Value must be a number");
+            });
+      },
 
-         "Check validation error indicator is displayed (non-numeric)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.hasValidationConfig.input)
-               .type("x")
+      "Check validation error indicator is displayed (non-numeric)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.hasValidationConfig.input)
+            .type("x")
             .end()
 
-            .findByCssSelector(selectors.textBoxes.hasValidationConfig.invalid);
-         },
+         .findByCssSelector(selectors.textBoxes.hasValidationConfig.invalid);
+      },
 
-         "Check validation indicator is hidden (non-numeric)": function() {
-            return browser.findByCssSelector(selectors.textBoxes.hasValidationConfig.input)
-               .type(keys.BACKSPACE)
-               .type("1234")
+      "Check validation indicator is hidden (non-numeric)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.hasValidationConfig.input)
+            .type(keys.BACKSPACE)
+            .type("1234")
             .end()
 
-            .findAllByCssSelector(selectors.textBoxes.hasValidationConfig.invalid)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 0);
-               });
-         },
+         .findAllByCssSelector(selectors.textBoxes.hasValidationConfig.invalid)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
+      },
 
-         "Check invalid configuration": function() {
-            return browser.findDisplayedByCssSelector("#INVALID_VALIDATION_CONFIG_1")
+      "Check invalid configuration": function() {
+         return this.remote.findDisplayedByCssSelector("#INVALID_VALIDATION_CONFIG_1")
             .end()
 
-            .findDisplayedByCssSelector("#INVALID_VALIDATION_CONFIG_2");
-         },
+         .findDisplayedByCssSelector("#INVALID_VALIDATION_CONFIG_2");
+      },
 
-         "Check textbox with help is displayed": function() {
-            return browser.findDisplayedByCssSelector(selectors.textBoxes.withHelp.helpIndicator);
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Check textbox with help is displayed": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.textBoxes.withHelp.helpIndicator);
+      }
    });
 });

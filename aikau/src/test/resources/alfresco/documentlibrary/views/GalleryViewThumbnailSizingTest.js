@@ -20,100 +20,88 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Gallery View Tests (Thumbnail Resizing)",
 
-      return {
-         name: "Gallery View Tests (Thumbnail Resizing)",
+      setup: function() {
+         return TestCommon.loadTestWebScript(this.remote, "/GalleryViewThumbnailSizing", "Gallery View Tests (Thumbnail Resizing)")
+            .setWindowSize(null, 900, 768) // Set a window height to ensure 2 columns
+            .end();
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/GalleryViewThumbnailSizing", "Gallery View Tests (Thumbnail Resizing)")
-               .setWindowSize(null, 900, 768) // Set a window height to ensure 2 columns
-               .end();
-         },
+      "There are initially 6 rows": function() {
+         // The default thumbnail width is 400px and with a 900px view width we'd expect
+         // two columns... 11 items in 2 columns produces 6 rows...
+         return this.remote.findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 6, "Unexpected number of rows");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      // See AKU-743 - The thumbnail is wrapped in a tooltip and we need to ensure that the tooltip
+      //               delegates resize calls onto its child widgets...
+      "Check the thumbnail size": function() {
+         return this.remote.findByCssSelector("#TOOLIP_ITEM_0 .alfresco-renderers-Thumbnail")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.width, 400, "Thumbnail was not sized by outer tooltip widget");
+            });
+      },
 
-         "There are initially 6 rows": function() {
-            // The default thumbnail width is 400px and with a 900px view width we'd expect
-            // two columns... 11 items in 2 columns produces 6 rows...
-            return browser.findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 6, "Unexpected number of rows");
-               });
-         },
-
-         // See AKU-743 - The thumbnail is wrapped in a tooltip and we need to ensure that the tooltip
-         //               delegates resize calls onto its child widgets...
-         "Check the thumbnail size": function() {
-            return browser.findByCssSelector("#TOOLIP_ITEM_0 .alfresco-renderers-Thumbnail")
-               .getSize()
-               .then(function(size) {
-                  assert.equal(size.width, 400, "Thumbnail was not sized by outer tooltip widget");
-               });
-         },
-
-         "Increase thumbnail size to decrease columns": function() {
-            // Increasing the thumbnail size (using the slider) should re-render the grid
-            // so that there is only a single column of thumbnails
-            return browser.findByCssSelector(".dijitSliderIncrementIconH")
-               .clearLog()
-               .click()
+      "Increase thumbnail size to decrease columns": function() {
+         // Increasing the thumbnail size (using the slider) should re-render the grid
+         // so that there is only a single column of thumbnails
+         return this.remote.findByCssSelector(".dijitSliderIncrementIconH")
+            .clearLog()
+            .click()
             .end()
 
-            // Wait for preference to be set...
-            .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
+         // Wait for preference to be set...
+         .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
 
+         .findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 11, "Unexpected number of rows");
+            });
+      },
+
+      "Increase the browser window to increase columns": function() {
+         // Increasing the window size should add more columns...
+         return this.remote.setWindowSize(null, 1500, 768)
             .findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 11, "Unexpected number of rows");
-               });
-         },
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "Unexpected number of rows");
+            });
+      },
 
-         "Increase the browser window to increase columns": function() {
-            // Increasing the window size should add more columns...
-            return browser.setWindowSize(null, 1500, 768)
-               .findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 4, "Unexpected number of rows");
-               });
-         },
-
-         "Decrease the thumbnail size to increase the colums": function() {
-            // It is necessary to go down 2 steps to get to 4 columns...
-            return browser.findByCssSelector(".dijitSliderDecrementIconH")
-               .clearLog()
-               .click()
+      "Decrease the thumbnail size to increase the colums": function() {
+         // It is necessary to go down 2 steps to get to 4 columns...
+         return this.remote.findByCssSelector(".dijitSliderDecrementIconH")
+            .clearLog()
+            .click()
             .end()
 
-            // Wait for preference to be set (first size reduction)...
-            .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
+         // Wait for preference to be set (first size reduction)...
+         .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
 
-            .findByCssSelector(".dijitSliderDecrementIconH")
-               .clearLog()
-               .click()
+         .findByCssSelector(".dijitSliderDecrementIconH")
+            .clearLog()
+            .click()
             .end()
 
-            // Wait for preference to be set (second size reduction)...
-            .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
+         // Wait for preference to be set (second size reduction)...
+         .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
 
-            .findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 3, "Unexpected number of rows");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findAllByCssSelector(".alfresco-lists-views-layouts-Grid tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3, "Unexpected number of rows");
+            });
+      }
    });
 });

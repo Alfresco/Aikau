@@ -20,48 +20,38 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
    var countResults = function(browser, expected) {
       browser.findAllByCssSelector(".alfresco-search-AlfSearchResult")
          .then(function(elements) {
             assert(elements.length === expected, "Counting Result, expected: " + expected + ", found: " + elements.length);
          })
-      .end();
+         .end();
    };
    var scrollToBottom = function(browser) {
       browser.execute("return window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight))")
          .sleep(2000)
-      .end();
+         .end();
    };
    var scrollToTop = function(browser) {
       browser.execute("return window.scrollTo(0,0)")
          .sleep(2000)
-      .end();
+         .end();
    };
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "SearchList Scroll Tests",
+      testPage: "/SearchListScroll#searchTerm=test",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchListScroll#searchTerm=test", "SearchList Scroll Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check for the search request being made": function () {
-         return browser.findByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
+      "Check for the search request being made": function() {
+         return this.remote.findByCssSelector(TestCommon.topicSelector("ALF_SEARCH_REQUEST", "publish", "any"))
             .then(null, function() {
                assert(false, "Search request not made");
             });
@@ -69,45 +59,40 @@ registerSuite(function(){
 
       "Looking for first search response": function() {
          // Check for the search results being returned...
-         return browser.findByCssSelector(TestCommon.topicSelector("ALF_SEARCH_RESULTS_COUNT", "publish", "any"))
+         return this.remote.findByCssSelector(TestCommon.topicSelector("ALF_SEARCH_RESULTS_COUNT", "publish", "any"))
             .then(null, function() {
                assert(false, "Test #1b - Search results not returned");
             })
-            .then(function(){
-               countResults(browser, 25);
+            .then(() => {
+               countResults(this.remote, 25);
             });
       },
 
       "Trigger Infinite Scroll": function() {
-         return browser.sleep(1000)
+         return this.remote.sleep(1000)
             // Trigger Infinite Scroll.
-            .then(function(){
-               scrollToBottom(browser);
-               scrollToTop(browser);
-               scrollToBottom(browser);
+            .then(() => {
+               scrollToBottom(this.remote);
+               scrollToTop(this.remote);
+               scrollToBottom(this.remote);
             })
 
-            // Count Results. there should be 50. (Request 2)
-            .then(function(){
-               countResults(browser, 50);
-            });
+         // Count Results. there should be 50. (Request 2)
+         .then(() => {
+            countResults(this.remote, 50);
+         });
       },
 
       "Scroll Again": function() {
          // Scroll Again.
-         return browser.then(function(){
-            scrollToBottom(browser);
+         return this.remote.then(() => {
+            scrollToBottom(this.remote);
          })
 
          // Count Results there should be 75 (Request 3)
-         .then(function(){
-            countResults(browser, 75);
+         .then(() => {
+            countResults(this.remote, 75);
          });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

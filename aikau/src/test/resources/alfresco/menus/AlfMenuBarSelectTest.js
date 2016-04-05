@@ -19,19 +19,19 @@
 
 /**
  * This is the unit test for the alfresco/menus/AlfMenuBarSelect widget.
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, TestCommon, keys) {
 
    var menuBarSelectSelectors = TestCommon.getTestSelectors("alfresco/menus/AlfMenuBarSelect");
    var menuItemSelectors = TestCommon.getTestSelectors("alfresco/menus/AlfMenuItem");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
-   
 
    var selectors = {
       menuBarSelects: {
@@ -76,229 +76,213 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "AlfMenuBarSelect Tests",
+      testPage: "/AlfMenuBarSelect",
 
-      return {
-         name: "AlfMenuBarSelect Tests",
+      "Check initial label (1)": function() {
+         return this.remote.findByCssSelector(selectors.menuBarSelects.mbs1.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Select (label)...");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfMenuBarSelect", "AlfMenuBarSelect Tests").end();
-         },
+      "Check initial label (2)": function() {
+         return this.remote.findByCssSelector(selectors.menuBarSelects.mbs2.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Select (value)...");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Check initial label (3)": function() {
+         return this.remote.findByCssSelector(selectors.menuBarSelects.mbs3.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Select (show icon)...");
+            });
+      },
 
-         "Check initial label (1)": function() {
-            return browser.findByCssSelector(selectors.menuBarSelects.mbs1.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Select (label)...");
-               });
-         },
+      "Use the keyboard to test label set (using label)": function() {
+         return this.remote.findByCssSelector("body")
+            .tabToElement(selectors.menuBarSelects.mbs1.menuItem)
 
-         "Check initial label (2)": function() {
-            return browser.findByCssSelector(selectors.menuBarSelects.mbs2.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Select (value)...");
-               });
-         },
+         .pressKeys(keys.ARROW_DOWN)
 
-         "Check initial label (3)": function() {
-            return browser.findByCssSelector(selectors.menuBarSelects.mbs3.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Select (show icon)...");
-               });
-         },
-
-         "Use the keyboard to test label set (using label)": function() {
-            return browser.findByCssSelector("body")
-               .tabToElement(selectors.menuBarSelects.mbs1.menuItem)
-
-               .pressKeys(keys.ARROW_DOWN)
-
-               .findDisplayedByCssSelector(selectors.menuBarSelects.mbs1.popup)
-               .end()
-
-               .clearLog()
-               .pressKeys(keys.SPACE)
-
-               .getLastPublish("MENU_BAR_SELECT")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "label", "Option 1 Selected");
-                  })
-
-               .findByCssSelector(selectors.menuBarSelects.mbs1.label)
-                  .getVisibleText()
-                  .then(function(text) {
-                     assert.equal(text, "Option 1 Selected");
-                  });
-         },
-
-         "Use the keyboard to test label set (using value)": function() {
-            return browser.pressKeys(keys.ARROW_RIGHT)
-
-               .findDisplayedByCssSelector(selectors.menuBarSelects.mbs2.popup)
-               .end()
-
-               .clearLog()
-               .pressKeys(keys.RETURN)
-
-               .getLastPublish("MENU_BAR_SELECT_VALUE")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "value", "Alpha");
-                  })
-
-               .findByCssSelector(selectors.menuBarSelects.mbs2.label)
-                  .getVisibleText()
-                  .then(function(text) {
-                     assert.equal(text, "Alpha");
-                  });
-         },
-
-         "Use the keyboard to test label set (using icons)": function() {
-            return browser.pressKeys(keys.ARROW_RIGHT)
-
-               .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.popup)
-               .end()
-
-               .clearLog()
-               .pressKeys(keys.RETURN)
-
-               .getLastPublish("MENU_BAR_SELECT_WITH_ICONS")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "iconClass", "alf-textdoc-icon");
-                  })
-
-               .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.icon)
-                  .getAttribute("class")
-                  .then(function(classes) {
-                     assert.include(classes, "alfresco-menus-AlfMenuItemIconMixin");
-                     assert.include(classes, "alf-textdoc-icon");
-                  });
-         },
-
-         "Use the mouse to test label set (using label)": function() {
-            return browser.findByCssSelector(selectors.menuBarSelects.mbs1.label)
-               .click()
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs1.popup)
             .end()
 
-            .findDisplayedByCssSelector(selectors.menuBarSelects.mbs1.popup)
+         .clearLog()
+            .pressKeys(keys.SPACE)
+
+         .getLastPublish("MENU_BAR_SELECT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "label", "Option 1 Selected");
+            })
+
+         .findByCssSelector(selectors.menuBarSelects.mbs1.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Option 1 Selected");
+            });
+      },
+
+      "Use the keyboard to test label set (using value)": function() {
+         return this.remote.pressKeys(keys.ARROW_RIGHT)
+
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs2.popup)
             .end()
 
-            .clearLog()
+         .clearLog()
+            .pressKeys(keys.RETURN)
 
-            .findByCssSelector(selectors.menuItems.menuItem2.label)
-               .click()
-            .end()
-               
-            .getLastPublish("MENU_BAR_SELECT")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "label", "Option 2 Selected");
-               })
+         .getLastPublish("MENU_BAR_SELECT_VALUE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Alpha");
+            })
 
-            .findByCssSelector(selectors.menuBarSelects.mbs1.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Option 2 Selected");
-               });
-         },
+         .findByCssSelector(selectors.menuBarSelects.mbs2.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Alpha");
+            });
+      },
 
-         "Use the mouse to test label set (using value)": function() {
-            return browser.findByCssSelector(selectors.menuBarSelects.mbs2.label)
-               .click()
+      "Use the keyboard to test label set (using icons)": function() {
+         return this.remote.pressKeys(keys.ARROW_RIGHT)
+
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.popup)
             .end()
 
-            .findDisplayedByCssSelector(selectors.menuBarSelects.mbs2.popup)
+         .clearLog()
+            .pressKeys(keys.RETURN)
+
+         .getLastPublish("MENU_BAR_SELECT_WITH_ICONS")
+            .then(function(payload) {
+               assert.propertyVal(payload, "iconClass", "alf-textdoc-icon");
+            })
+
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.icon)
+            .getAttribute("class")
+            .then(function(classes) {
+               assert.include(classes, "alfresco-menus-AlfMenuItemIconMixin");
+               assert.include(classes, "alf-textdoc-icon");
+            });
+      },
+
+      "Use the mouse to test label set (using label)": function() {
+         return this.remote.findByCssSelector(selectors.menuBarSelects.mbs1.label)
+            .click()
             .end()
 
-            .clearLog()
-
-            .findByCssSelector(selectors.menuItems.menuItem4.label)
-               .click()
-            .end()
-               
-            .getLastPublish("MENU_BAR_SELECT_VALUE")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", "Beta");
-               })
-
-            .findByCssSelector(selectors.menuBarSelects.mbs2.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Beta");
-               });
-         },
-
-         "Use the mouse to test label set (using icon)": function() {
-            return browser.findByCssSelector(selectors.menuBarSelects.mbs3.label)
-               .click()
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs1.popup)
             .end()
 
-            .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.popup)
+         .clearLog()
+
+         .findByCssSelector(selectors.menuItems.menuItem2.label)
+            .click()
             .end()
 
-            .clearLog()
+         .getLastPublish("MENU_BAR_SELECT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "label", "Option 2 Selected");
+            })
 
-            .findByCssSelector(selectors.menuItems.menuItem6.label)
-               .click()
-            .end()
-               
-            .getLastPublish("MENU_BAR_SELECT_WITH_ICONS")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "iconClass", "alf-htmldoc-icon");
-                  })
+         .findByCssSelector(selectors.menuBarSelects.mbs1.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Option 2 Selected");
+            });
+      },
 
-               .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.icon)
-                  .getAttribute("class")
-                  .then(function(classes) {
-                     assert.include(classes, "alfresco-menus-AlfMenuItemIconMixin");
-                     assert.include(classes, "alf-htmldoc-icon");
-                     assert.notInclude(classes, "alf-textdoc-icon");
-                  });
-         },
-
-         "Set the label using an external publication": function() {
-            return browser.findByCssSelector(selectors.buttons.setWithLabel)
-               .click()
+      "Use the mouse to test label set (using value)": function() {
+         return this.remote.findByCssSelector(selectors.menuBarSelects.mbs2.label)
+            .click()
             .end()
 
-            .getLastPublish("MENU_BAR_SELECT")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "label", "Alternative Label");
-               })
-
-            .findByCssSelector(selectors.menuBarSelects.mbs1.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Alternative Label");
-               });
-         },
-
-         "Set the label using an external publication (2)": function() {
-            return browser.findByCssSelector(selectors.buttons.setWithValue)
-               .click()
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs2.popup)
             .end()
 
-            .getLastPublish("MENU_BAR_SELECT_VALUE")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "label", "Alternative Value");
-               })
+         .clearLog()
 
-            .findByCssSelector(selectors.menuBarSelects.mbs2.label)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Alternative Value");
-               });
-         },
+         .findByCssSelector(selectors.menuItems.menuItem4.label)
+            .click()
+            .end()
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("MENU_BAR_SELECT_VALUE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Beta");
+            })
+
+         .findByCssSelector(selectors.menuBarSelects.mbs2.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Beta");
+            });
+      },
+
+      "Use the mouse to test label set (using icon)": function() {
+         return this.remote.findByCssSelector(selectors.menuBarSelects.mbs3.label)
+            .click()
+            .end()
+
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.popup)
+            .end()
+
+         .clearLog()
+
+         .findByCssSelector(selectors.menuItems.menuItem6.label)
+            .click()
+            .end()
+
+         .getLastPublish("MENU_BAR_SELECT_WITH_ICONS")
+            .then(function(payload) {
+               assert.propertyVal(payload, "iconClass", "alf-htmldoc-icon");
+            })
+
+         .findDisplayedByCssSelector(selectors.menuBarSelects.mbs3.icon)
+            .getAttribute("class")
+            .then(function(classes) {
+               assert.include(classes, "alfresco-menus-AlfMenuItemIconMixin");
+               assert.include(classes, "alf-htmldoc-icon");
+               assert.notInclude(classes, "alf-textdoc-icon");
+            });
+      },
+
+      "Set the label using an external publication": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setWithLabel)
+            .click()
+            .end()
+
+         .getLastPublish("MENU_BAR_SELECT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "label", "Alternative Label");
+            })
+
+         .findByCssSelector(selectors.menuBarSelects.mbs1.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Alternative Label");
+            });
+      },
+
+      "Set the label using an external publication (2)": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setWithValue)
+            .click()
+            .end()
+
+         .getLastPublish("MENU_BAR_SELECT_VALUE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "label", "Alternative Value");
+            })
+
+         .findByCssSelector(selectors.menuBarSelects.mbs2.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Alternative Value");
+            });
+      }
    });
 });

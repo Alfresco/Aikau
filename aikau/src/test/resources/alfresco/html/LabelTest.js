@@ -18,86 +18,73 @@
  */
 
 /**
- * The purpose of this test is to ensure that keyboard accessibility is possible between the header and the 
+ * The purpose of this test is to ensure that keyboard accessibility is possible between the header and the
  * main table. It should be possible to use the tab/shift-tab keys to navigate along the headers (and the enter/space key
  * to make requests for sorting) and then the cursor keys to navigate around the table itself.
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "intern/chai!expect",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, expect, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, expect, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Label Tests",
+      testPage: "/Label",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Label", "Label Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Check the label is shown with the correct text to begin with": function () {
-         return browser.findById("TEST_LABEL")
+      "Check the label is shown with the correct text to begin with": function() {
+         return this.remote.findById("TEST_LABEL")
             .getVisibleText()
-            .then(function (label) {
+            .then(function(label) {
                expect(label).to.equal("This is a test label", "The label should contain 'This is a test label'");
             });
       },
 
       "Check the label has the class 'bold' when rendered": function() {
-         return browser.findByCssSelector("#TEST_LABEL.bold")
+         return this.remote.findByCssSelector("#TEST_LABEL.bold")
             .then(
-               function(){},
-               function(){assert(false, "The label should have css class 'bold'");}
+               function() {},
+               function() {
+                  assert(false, "The label should have css class 'bold'");
+               }
             );
       },
 
       "Check the label has subscribed to topic 'NOT_A_REAL_TOPIC'": function() {
-         return browser.findByCssSelector(TestCommon.topicSelector("NOT_A_REAL_TOPIC", "subscribe", "any"))
+         return this.remote.findByCssSelector(TestCommon.topicSelector("NOT_A_REAL_TOPIC", "subscribe", "any"))
             .then(
-               function(){},
-               function(){assert(false, "The label should have subscribed to topic 'NOT_A_REAL_TOPIC'");}
+               function() {},
+               function() {
+                  assert(false, "The label should have subscribed to topic 'NOT_A_REAL_TOPIC'");
+               }
             );
       },
 
       "Check the button has published to topic 'NOT_A_REAL_TOPIC'": function() {
-         return browser.findById("TEST_BUTTON")
+         return this.remote.findById("TEST_BUTTON")
             .click()
-         .end()
+            .end()
 
          // Has published to appropriate topic
          .findByCssSelector(TestCommon.topicSelector("NOT_A_REAL_TOPIC", "publish", "any"))
             .then(
-               function(){},
-               function(){assert(false, "The button should have published to topic 'NOT_A_REAL_TOPIC'");}
+               function() {},
+               function() {
+                  assert(false, "The button should have published to topic 'NOT_A_REAL_TOPIC'");
+               }
             );
       },
 
       "Check the label is now shown with the text from the topic publish payload": function() {
-         return browser.findById("TEST_LABEL")
+         return this.remote.findById("TEST_LABEL")
             .getVisibleText()
-            .then(function (label) {
+            .then(function(label) {
                expect(label).to.equal("Label is updated", "The label should contain 'Label is updated'");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

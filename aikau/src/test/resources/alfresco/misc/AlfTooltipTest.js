@@ -20,39 +20,27 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AlfTooltip Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfTooltip", "AlfTooltip Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AlfTooltip",
 
       "Check tooltip is created": function() {
-         return browser.findByCssSelector("#LOGO1")
+         return this.remote.findByCssSelector("#LOGO1")
             .moveMouseTo()
-         .end()
-         .findAllByCssSelector("#SINGLE_ITEM_TOOLTIP")
+            .end()
+            .findAllByCssSelector("#SINGLE_ITEM_TOOLTIP")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Could not find tooltip");
             });
       },
 
       "Check tooltip is displayed": function() {
-         return browser.findByCssSelector("#SINGLE_ITEM_TOOLTIP")
+         return this.remote.findByCssSelector("#SINGLE_ITEM_TOOLTIP")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The tooltip was not displayed");
@@ -60,16 +48,16 @@ registerSuite(function(){
       },
 
       "Check width of tooltip is correct": function() {
-         return browser.findByCssSelector("#SINGLE_ITEM_TOOLTIP")
+         return this.remote.findByCssSelector("#SINGLE_ITEM_TOOLTIP")
             .getSize()
             .then(function(size) {
                // width set is 300, 306 accounts for styling
-               assert.equal(size.width, 306, "The tooltip width was incorrect"); 
+               assert.equal(size.width, 306, "The tooltip width was incorrect");
             });
       },
 
       "Check tooltip content": function() {
-         return browser.findByCssSelector("#LABEL1")
+         return this.remote.findByCssSelector("#LABEL1")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "This is the tooltip content", "The tooltip content was not created");
@@ -77,11 +65,11 @@ registerSuite(function(){
       },
 
       "Check tooltip is hidden": function() {
-         return browser.findByCssSelector("#LIST2 tr:first-child .alfresco-renderers-Property .value")
+         return this.remote.findByCssSelector("#LIST2 tr:first-child .alfresco-renderers-Property .value")
             .moveMouseTo()
             .sleep(500)
-         .end()
-         .findByCssSelector("#SINGLE_ITEM_TOOLTIP")
+            .end()
+            .findByCssSelector("#SINGLE_ITEM_TOOLTIP")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The tooltip was not hidden");
@@ -89,25 +77,20 @@ registerSuite(function(){
       },
 
       "Check click tooltip is not displayed": function() {
-         return browser.findByCssSelector("#LOGO1_REQUIRES_CLICK")
+         return this.remote.findByCssSelector("#LOGO1_REQUIRES_CLICK")
             .moveMouseTo()
-         .end()
-         .findAllByCssSelector("#LABEL1_REQUIRES_CLICK")
+            .end()
+            .findAllByCssSelector("#LABEL1_REQUIRES_CLICK")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "The tooltip was displayed but should require click");
             });
       },
 
       "Check XHR generated data": function() {
-         return browser.findAllByCssSelector(".alfresco-renderers-Thumbnail")
+         return this.remote.findAllByCssSelector(".alfresco-renderers-Thumbnail")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Could not find XHR generated content");
             });
-      },
-      
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

@@ -21,63 +21,50 @@
  * @author Dave Draper
  * @author Martin Doyle
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon"],
-        function(registerSuite, assert, require, TestCommon) {
-registerSuite(function(){
-   var browser;
+        function(module, defineSuite, assert, require, TestCommon) {
 
-   return {
+   defineSuite(module, {
       name: "Simple Picker Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SimplePicker", "Simple Picker Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
+      testPage: "/SimplePicker",
 
       "Test that PICKER1 has no items selected on load": function() {
-         return browser.findAllByCssSelector("#PICKER1 .picked-items table > *")
+         return this.remote.findAllByCssSelector("#PICKER1 .picked-items table > *")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Items were unexpectedly pre-selected in PICKER1");
             });
       },
 
       "Test that PICKER2 has one item selected on load": function() {
-         return browser.findAllByCssSelector("#PICKER2 .picked-items table > *")
+         return this.remote.findAllByCssSelector("#PICKER2 .picked-items table > *")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Items were unexpectedly pre-selected in PICKER2");
             });
       },
 
       "Test that PICKER1 has 3 options available for selection on load": function() {
-         return browser.findAllByCssSelector("#PICKER1 .sub-pickers .alfresco-lists-views-AlfListView tr")
+         return this.remote.findAllByCssSelector("#PICKER1 .sub-pickers .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Not the correct number of available items for selection in PICKER1");
             });
       },
 
       "Test that PICKER2 has 2 options available for selection on load": function() {
-         return browser.findAllByCssSelector("#PICKER2 .sub-pickers .alfresco-lists-views-AlfListView tr")
+         return this.remote.findAllByCssSelector("#PICKER2 .sub-pickers .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Not the correct number of available items for selection in PICKER2");
             });
       },
 
       "Test that PICKER2 posted value contains pre-selected item": function() {
-         return browser.findByCssSelector("#FORM .confirmationButton > span")
+         return this.remote.findByCssSelector("#FORM .confirmationButton > span")
             .click()
-         .end()
-         .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST","picker2","name","One"))
+            .end()
+            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST", "picker2", "name", "One"))
             .then(null, function() {
                assert(false, "Pre-selected item was not reflected in initial form value post");
             });
@@ -85,27 +72,27 @@ registerSuite(function(){
 
       "Test that an item can be selected": function() {
          // Pick the 3rd item ("Three") in the first picker...
-         return browser.findByCssSelector("#PICKER1 .alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector("#PICKER1 .alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
             .click()
-         .end()
-         .findAllByCssSelector("#PICKER1 .picked-items table > *")
+            .end()
+            .findAllByCssSelector("#PICKER1 .picked-items table > *")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "An item was not picked");
             });
       },
 
       "Test that the picked item is reflected in the posted form value": function() {
-         return browser.findByCssSelector("#FORM .confirmationButton > span")
+         return this.remote.findByCssSelector("#FORM .confirmationButton > span")
             .click()
-         .end()
-         .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST","picker1","name","Three"))
+            .end()
+            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST", "picker1", "name", "Three"))
             .then(null, function() {
                assert(false, "Picked item from PICKER1 is not reflected in form value post");
             });
       },
 
       "Test that the picked item is not available to be picked again": function() {
-         return browser.findByCssSelector("#PICKER1 .alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector("#PICKER1 .alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
             .isDisplayed()
             .then(function(visible) {
                assert.isFalse(visible, "The picked item in PICKER1 is still visible to be picked again");
@@ -113,37 +100,32 @@ registerSuite(function(){
       },
 
       "Test that removing a previously picked item removes it from the picked list": function() {
-         return browser.findByCssSelector("#PICKER1 .picked-items tr .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector("#PICKER1 .picked-items tr .alfresco-renderers-PublishAction > img")
             .click()
-         .end()
-         .findAllByCssSelector("#PICKER1 .picked-items table > *")
+            .end()
+            .findAllByCssSelector("#PICKER1 .picked-items table > *")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Previously picked item was not removed");
             });
       },
 
       "Test that removed item is available for re-selection": function() {
-         return browser.findByCssSelector("#PICKER1 .alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
+         return this.remote.findByCssSelector("#PICKER1 .alfresco-lists-views-AlfListView tr:nth-child(3) .alfresco-renderers-PublishAction > img")
             .isDisplayed()
             .then(function(visible) {
                assert.isTrue(visible, "The removed item from PICKER1 is not available for selection");
             });
       },
-      
+
       "Test form value post after removing previously picked item": function() {
-         return browser.findByCssSelector("#FORM .confirmationButton > span")
+         return this.remote.findByCssSelector("#FORM .confirmationButton > span")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST","picker1","name","Three"))
+            .end()
+            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST", "picker1", "name", "Three"))
             .then(function(elements) {
                // NOTE: We should still find the previous post in the SubscriptionLog which is why we're checking for one...
                assert.lengthOf(elements, 1, "Removed item from PICKER1 is not reflected in form value post");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

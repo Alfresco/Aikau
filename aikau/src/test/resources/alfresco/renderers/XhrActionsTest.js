@@ -20,10 +20,11 @@
 /**
  * @author David Webster
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon"],
-       function (registerSuite, assert, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
    var selectors = {
@@ -43,62 +44,46 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "XHR Actions Renderer Tests",
+      testPage: "/XhrActions",
 
-      return {
-         name: "XHR Actions Renderer Tests",
+      "Check Actions menu was rendered": function() {
+         // Test spec:
+         // 1: Check dropdown element exists
+         return this.remote.findByCssSelector(selectors.restActions.first.label);
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/XhrActions", "XHR Actions Renderer Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-        "Check Actions menu was rendered": function () {
-            // Test spec:
-            // 1: Check dropdown element exists
-            return browser.findByCssSelector(selectors.restActions.first.label);
-         },
-
-         "Check that document request event was triggered": function() {
-            // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
-            return browser.findByCssSelector(selectors.restActions.first.label)
-               .click()
+      "Check that document request event was triggered": function() {
+         // 2: Click on it. Check event triggered: ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST
+         return this.remote.findByCssSelector(selectors.restActions.first.label)
+            .click()
             .end()
             .getLastPublish("ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST", "Retrieve single doc request not triggered");
-         },
+      },
 
-         "Check default behaviour to render 'legacy' document actions": function() {
-            return browser.findDisplayedByCssSelector(selectors.restActions.first.dropDown)
-               .end()
-
-               .findAllByCssSelector(selectors.restActions.first.action)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 11);
-               });
-         },
-
-         "Check merged and filtered actions": function() {
-            return browser.findByCssSelector(selectors.mergedActions.first.label)
-               .click()
+      "Check default behaviour to render 'legacy' document actions": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.restActions.first.dropDown)
             .end()
 
-            .findDisplayedByCssSelector(selectors.mergedActions.first.dropDown)
+         .findAllByCssSelector(selectors.restActions.first.action)
+            .then(function(elements) {
+               assert.lengthOf(elements, 11);
+            });
+      },
+
+      "Check merged and filtered actions": function() {
+         return this.remote.findByCssSelector(selectors.mergedActions.first.label)
+            .click()
             .end()
 
-            .findAllByCssSelector(selectors.mergedActions.first.action)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 3);
-               });
-         },
+         .findDisplayedByCssSelector(selectors.mergedActions.first.dropDown)
+            .end()
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findAllByCssSelector(selectors.mergedActions.first.action)
+            .then(function(elements) {
+               assert.lengthOf(elements, 3);
+            });
+      }
    });
 });

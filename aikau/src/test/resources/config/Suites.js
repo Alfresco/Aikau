@@ -21,17 +21,17 @@
  * This provides the configuration for test suites.
  *
  * @author Richard Smith
+ * @author Martin Doyle
  */
-define({
+define(function() {
 
-   /**
-    * This is the base array of functional test suites
-    *
-    * @instance
-    * @type {string[]}
-    */
-   // Uncomment and add specific tests as necessary during development!
-   xbaseFunctionalSuites: [
+   // Whether to run all tests or just a few
+   var runAllTests = true;
+   runAllTests = false; // Comment/uncomment this line to toggle
+
+   // This is the collection to change when only some tests are required
+   var someTests = [
+      "src/test/resources/alfresco/CodeCoverageBalancer",
       "src/test/resources/alfresco/upload/UploadMonitorTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
@@ -42,15 +42,12 @@ define({
       // "src/test/resources/alfresco/forms/controls/SitePickerTest",
       // "src/test/resources/alfresco/renderers/CommentsListTest",
       // "src/test/resources/alfresco/services/DialogServiceTest"
-   ],
+   ];
 
-   /**
-    * This is the base array of functional test suites
-    *
-    * @instance
-    * @type {string[]}
-    */
-   baseFunctionalSuites: [
+   // This is the superset collection of all tests
+   var allTests = [
+      "src/test/resources/alfresco/CodeCoverageBalancer",
+
       "src/test/resources/alfresco/accessibility/AccessibilityMenuTest",
       "src/test/resources/alfresco/accessibility/SemanticWrapperMixinTest",
 
@@ -311,77 +308,8 @@ define({
       "src/test/resources/alfresco/util/functionUtilsTest",
       "src/test/resources/alfresco/util/hashUtilsTest",
       "src/test/resources/alfresco/util/urlUtilsTest"
-   ],
+   ];
 
-   /**
-    * This is the array of functional test suites that should only be applied to local tests
-    *
-    * @instance
-    * @type {string[]}
-    */
-   localOnlyFunctionalSuites: [],
-
-   /**
-    * This is the full array of functional test suites for local tests
-    *
-    * @instance
-    * @type {Function}
-    */
-   localFunctionalSuites: function localFunctionalSuites() {
-      return this.baseFunctionalSuites.concat(this.localOnlyFunctionalSuites);
-   },
-
-   /**
-    * This is the array of functional test suites that should only be applied to virtual machine tests
-    *
-    * @instance
-    * @type {string[]}
-    */
-   vmOnlyFunctionalSuites: ["src/test/resources/alfresco/CodeCoverageBalancer"],
-
-   /**
-    * This is the full array of functional test suites for virtual machine tests
-    *
-    * @instance
-    * @type {Function}
-    */
-   vmFunctionalSuites: function vmFunctionalSuites() {
-      return this.baseFunctionalSuites.concat(this.vmOnlyFunctionalSuites);
-   },
-
-   /**
-    * This is the array of functional test suites that should only be applied to sauce labs tests
-    *
-    * @instance
-    * @type {string[]}
-    */
-   slOnlyFunctionalSuites: [],
-
-   /**
-    * This is the full array of functional test suites for sauce labs tests
-    *
-    * @instance
-    * @type {Function}
-    */
-   slFunctionalSuites: function slFunctionalSuites() {
-      return this.baseFunctionalSuites.concat(this.slOnlyFunctionalSuites);
-   },
-
-   /**
-    * This is the array of functional test suites that should only be applied to selenium grid tests
-    *
-    * @instance
-    * @type {string[]}
-    */
-   gridOnlyFunctionalSuites: [],
-
-   /**
-    * This is the full array of functional test suites for selenium grid tests
-    *
-    * @instance
-    * @type {Function}
-    */
-   gridFunctionalSuites: function gridFunctionalSuites() {
-      return this.baseFunctionalSuites.concat(this.gridOnlyFunctionalSuites);
-   }
+   // Pass back the tests
+   return runAllTests ? allTests : someTests;
 });

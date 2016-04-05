@@ -20,31 +20,19 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Form Validation Display Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/FormValidation", "Form Validation Display Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/FormValidation",
 
       "Check that first field of second form is focused initially": function() {
          var focusedId;
 
-         return browser.getActiveElement()
+         return this.remote.getActiveElement()
             .getAttribute("id")
             .then(function(id) {
                focusedId = id;
@@ -59,39 +47,39 @@ registerSuite(function(){
       },
 
       "Check that first form is NOT displayed as invalid on load": function() {
-         return browser.findAllByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid")
+         return this.remote.findAllByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "The form control should not be marked as invalid (TB1)");
             })
          .end()
+         
          .findAllByCssSelector("#TB2.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "The form control should not be marked as invalid (TB2)");
-            })
-         .end()
+            });
       },
 
       "Check that first form confirmation button is disabled": function() {
-         return browser.findAllByCssSelector("#NO_INITIAL_VALIDATION .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
+         return this.remote.findAllByCssSelector("#NO_INITIAL_VALIDATION .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
             .then(function(elements) {
                assert(elements.length === 1, "Confirmation button was not initially disabled");
             });
       },
 
       "Check that second form IS displayed as invalid on load": function() {
-         return browser.findByCssSelector("#TB3.alfresco-forms-controls-BaseFormControl--invalid")
-         .end()
-         .findByCssSelector("#TB4.alfresco-forms-controls-BaseFormControl--invalid");
+         return this.remote.findByCssSelector("#TB3.alfresco-forms-controls-BaseFormControl--invalid")
+            .end()
+            .findByCssSelector("#TB4.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
       "Error indicators are only shown when form is invalid": function() {
-         return browser.findByCssSelector("#TB1 .alfresco-forms-controls-BaseFormControl__validation-error")
+         return this.remote.findByCssSelector("#TB1 .alfresco-forms-controls-BaseFormControl__validation-error")
             .isDisplayed()
             .then(function(isDisplayed) {
                assert.isFalse(isDisplayed, "Error image was shown on valid form control");
             })
             .end()
-            
+
          .findByCssSelector("#TB1 .validation-message")
             .isDisplayed()
             .then(function(isDisplayed) {
@@ -105,7 +93,7 @@ registerSuite(function(){
                assert.isTrue(isDisplayed, "Error image was not shown on invalid form control");
             })
             .end()
-            
+
          .findByCssSelector("#TB3 .validation-message")
             .isDisplayed()
             .then(function(isDisplayed) {
@@ -114,39 +102,34 @@ registerSuite(function(){
       },
 
       "Give and remove focus to first text field and verify control is marked as invalid": function() {
-         return browser.findByCssSelector("#TB1 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#TB1 .dijitInputContainer input")
             .click()
-         .end()
-         .findByCssSelector("#TB2 .dijitInputContainer input")
+            .end()
+            .findByCssSelector("#TB2 .dijitInputContainer input")
             .click()
-         .end()
-         .findByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid");
+            .end()
+            .findByCssSelector("#TB1.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
       "Remove focus from second text field and verify control is marked as invalid": function() {
-         return browser.findByCssSelector("#TB3 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#TB3 .dijitInputContainer input")
             .click()
-         .end()
-         .findByCssSelector("#TB2.alfresco-forms-controls-BaseFormControl--invalid");
+            .end()
+            .findByCssSelector("#TB2.alfresco-forms-controls-BaseFormControl--invalid");
       },
 
       "Make third text field valid and then remove focus and verify that control is not marked as invalid": function() {
-         return browser.findByCssSelector("#TB5 .dijitInputContainer input")
+         return this.remote.findByCssSelector("#TB5 .dijitInputContainer input")
             .clearValue()
             .type("abcde")
-         .end()
-         .findByCssSelector("#TB3 .dijitInputContainer input")
+            .end()
+            .findByCssSelector("#TB3 .dijitInputContainer input")
             .click()
-         .end()
-         .findAllByCssSelector("#TB5.alfresco-forms-controls-BaseFormControl--invalid")
+            .end()
+            .findAllByCssSelector("#TB5.alfresco-forms-controls-BaseFormControl--invalid")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "The control should not be marked as invalid (TB5)");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

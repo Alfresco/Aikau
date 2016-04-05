@@ -19,33 +19,21 @@
 
 /**
  * This test generates some variations on AlfSearchResult to test the various if statements in the rendering widgets involved
- * 
+ *
  * @author Richard Smith
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Search Suggestions Tests (Alternative Searches)",
+      testPage: "/SearchSuggestions#searchTerm=test",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchSuggestions#searchTerm=test", "Search Suggestions Tests (Alternative Searches)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check alternative search label": function () {
-         return browser.findByCssSelector(".alfresco-search-AlternativeSearchLabel")
+      "Check alternative search label": function() {
+         return this.remote.findByCssSelector(".alfresco-search-AlternativeSearchLabel")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The AlternativeSearchLabel was not initially hidden");
@@ -53,18 +41,18 @@ registerSuite(function(){
       },
 
       "Check search suggestions aren't initially displayed": function() {
-         return browser.findByCssSelector("#SEARCHED_ON")
+         return this.remote.findByCssSelector("#SEARCHED_ON")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The search suggestions list was not initially hidden");
             });
       },
 
-      "Check that the alternative search label is revealed": function () {
+      "Check that the alternative search label is revealed": function() {
          // Click the button to simulate a search result that used an alternative search term
-         return browser.findByCssSelector("#SIM_ALT_SEARCH_label")
+         return this.remote.findByCssSelector("#SIM_ALT_SEARCH_label")
             .click()
-         .end()
+            .end()
 
          // Check that the alternative suggestion widget is displayed
          .findByCssSelector(".alfresco-search-AlternativeSearchLabel")
@@ -75,7 +63,7 @@ registerSuite(function(){
       },
 
       "Check the alternative search term rendering": function() {
-         return browser.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .searched-for-term > .search-term-link")
+         return this.remote.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .searched-for-term > .search-term-link")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "test", "The alternative search term was not rendered correctly");
@@ -83,7 +71,7 @@ registerSuite(function(){
       },
 
       "Check the original search term rendering": function() {
-         return browser.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .original-term > .search-term-link")
+         return this.remote.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .original-term > .search-term-link")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "tast", "The original search term was not rendered correctly");
@@ -91,9 +79,9 @@ registerSuite(function(){
       },
 
       "Check the URL has been updated correctly when clicking on the alternative search term": function() {
-         return browser.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .searched-for-term > .search-term-link")
+         return this.remote.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .searched-for-term > .search-term-link")
             .click()
-         .end()
+            .end()
 
          // Check the URL is updated correctly
          .getCurrentUrl()
@@ -103,43 +91,27 @@ registerSuite(function(){
       },
 
       "Check the URL has been updated correctly when clicking on the original search term": function() {
-         return browser.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .original-term > .search-term-link")
+         return this.remote.findByCssSelector(".alfresco-search-AlternativeSearchLabel > .original-term > .search-term-link")
             .click()
-         .end()
+            .end()
 
          // Check the URL is updated correctly
          .getCurrentUrl()
             .then(function(url) {
                assert.include(url, "#searchTerm=tast", "Clicking on the original search term did not update the URL correctly: " + url);
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Search Suggestions Tests (Suggestions)",
+      testPage: "/SearchSuggestions",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchSuggestions", "Search Suggestions Tests (Suggestions)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check that the search suggestions is revealed": function () {
+      "Check that the search suggestions is revealed": function() {
          // Click the button to simulate a search result containing suggested search terms
-         return browser.findByCssSelector("#SIM_SEARCH_SUGGESTIONS_label")
+         return this.remote.findByCssSelector("#SIM_SEARCH_SUGGESTIONS_label")
             .click()
-         .end()
+            .end()
 
          // Check that search suggestions are displayed
          .findByCssSelector("#SEARCHED_ON")
@@ -150,14 +122,14 @@ registerSuite(function(){
       },
 
       "Check that there are 3 suggestions": function() {
-         return browser.findAllByCssSelector("#SEARCHED_ON tr")
+         return this.remote.findAllByCssSelector("#SEARCHED_ON tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "The wrong number of search suggestions were shown");
             });
       },
 
       "Check that the suggestion is rendered correctly": function() {
-         return browser.findByCssSelector("#SEARCHED_ON tr:first-child span.value")
+         return this.remote.findByCssSelector("#SEARCHED_ON tr:first-child span.value")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "test", "The search suggestion was rendered incorrectly");
@@ -166,38 +138,22 @@ registerSuite(function(){
       },
 
       "Check the URL has been updated correctly when clicking on the search suggestion": function() {
-         return browser.getCurrentUrl()
+         return this.remote.getCurrentUrl()
             .then(function(url) {
                assert.include(url, "#searchTerm=test", "Clicking on the search suggestion did not update the URL correctly: " + url);
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Search Suggestions Tests (Standard Search)",
+      testPage: "/SearchSuggestions",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchSuggestions", "Search Suggestions Tests (Standard Search)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check that the alternative search label is still hidden": function () {
+      "Check that the alternative search label is still hidden": function() {
          // Click the button to simulate a search result containing suggested search terms
-         return browser.findByCssSelector("#SIM_NORMAL_SEARCH_label")
+         return this.remote.findByCssSelector("#SIM_NORMAL_SEARCH_label")
             .click()
-         .end()
+            .end()
 
          // Check that neither the alternative search nor the search suggestions are displayed...
          .findByCssSelector(".alfresco-search-AlternativeSearchLabel")
@@ -208,47 +164,31 @@ registerSuite(function(){
       },
 
       "Check that the search suggestions list is still hidden": function() {
-         return browser.findByCssSelector("#SEARCHED_ON")
+         return this.remote.findByCssSelector("#SEARCHED_ON")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The search suggestions list did not remain hidden");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Search Suggestions Tests (Visibility Config)",
+      testPage: "/SearchSuggestions",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/SearchSuggestions", "Search Suggestions Tests (Visibility Config)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check that the AlternativeSearchLabel is hidden": function () {
+      "Check that the AlternativeSearchLabel is hidden": function() {
          // Show both alt search and suggestions...
-         return browser.findByCssSelector("#SIM_ALT_SEARCH_label")
+         return this.remote.findByCssSelector("#SIM_ALT_SEARCH_label")
             .click()
-         .end()
-         .findByCssSelector("#SIM_SEARCH_SUGGESTIONS_label")
+            .end()
+            .findByCssSelector("#SIM_SEARCH_SUGGESTIONS_label")
             .click()
-         .end()
+            .end()
 
          // Simulate another search request (this should hide them both)...
          .findByCssSelector("#SIM_SEARCH_REQUEST_label")
             .click()
-         .end()
+            .end()
 
          // Check that neither the alternative search nor the search suggestions are displayed...
          .findByCssSelector(".alfresco-search-AlternativeSearchLabel")
@@ -259,16 +199,11 @@ registerSuite(function(){
       },
 
       "Check that the search suggestions list is hidden": function() {
-         return browser.findByCssSelector("#SEARCHED_ON")
+         return this.remote.findByCssSelector("#SEARCHED_ON")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The search suggestions list was not hidden");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

@@ -1,3 +1,4 @@
+/*jshint browser:true*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -21,55 +22,38 @@
  * @author Dave Draper
  * @author Martin Doyle
  */
-define([
-      "alfresco/TestCommon",
-      "intern!object",
-      "intern/chai!assert"
-   ],
-   function(TestCommon, registerSuite, assert) {
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, TestCommon, defineSuite, assert) {
 
-      registerSuite(function() {
-         var browser;
+   defineSuite(module, {
+      name: "Login Form Tests",
+      testPage: "/Login",
 
-         return {
-            name: "Login Form Tests",
+      "Placeholder attribute passed through if supported": function() {
+         var placeholderSupported = false;
 
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/Login", "Login Form Tests");
-            },
+         return this.remote.execute(function() {
+               return document.createElement("input").placeholder === "";
+            })
+            .then(function(supported) {
+               placeholderSupported = supported;
+            })
+            .findByCssSelector("#LOGIN_USERNAME .dijitInputField input")
+            .getAttribute("placeholder")
+            .then(function(attrValue) {
+               assert[placeholderSupported ? "equal" : "notEqual"](attrValue, "Username");
+            });
+      },
 
-            beforeEach: function() {
-               browser.end();
-            },
-
-            "Placeholder attribute passed through if supported": function() {
-               var placeholderSupported = false;
-
-               return browser.execute(function() {
-                     return document.createElement('input').placeholder === "";
-                  })
-                  .then(function(supported) {
-                     placeholderSupported = supported;
-                  })
-                  .findByCssSelector("#LOGIN_USERNAME .dijitInputField input")
-                  .getAttribute("placeholder")
-                  .then(function(attrValue) {
-                     assert[placeholderSupported ? "equal" : "notEqual"](attrValue, "Username");
-                  });
-            },
-
-            "Autocomplete attribute passed through": function() {
-               return browser.findByCssSelector("#LOGIN_USERNAME .dijitInputField input")
-                  .getAttribute("autocomplete")
-                  .then(function(attrValue) {
-                     assert.equal(attrValue, "username");
-                  });
-            },
-
-            "Post Coverage Results": function() {
-               TestCommon.alfPostCoverageResults(this, browser);
-            }
-         };
-      });
+      "Autocomplete attribute passed through": function() {
+         return this.remote.findByCssSelector("#LOGIN_USERNAME .dijitInputField input")
+            .getAttribute("autocomplete")
+            .then(function(attrValue) {
+               assert.equal(attrValue, "username");
+            });
+      }
    });
+});

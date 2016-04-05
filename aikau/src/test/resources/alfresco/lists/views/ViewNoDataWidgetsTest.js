@@ -20,37 +20,20 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite"],
+        function(module, defineSuite) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "View With No Data Widgets Tests",
+      testPage: "/ViewNoDataWidgets",
 
-      return {
-         name: "View With No Data Widgets Tests",
-         
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ViewNoDataWidgets", "View With No Data Widgets Tests").end();
-         },
-         
-         beforeEach: function() {
-            browser.end();
-         },
+      "No data widgets displayed": function() {
+         return this.remote.findDisplayedById("NO_DATA_WARNING");
+      },
 
-         "No data widgets displayed": function() {
-            return browser.findDisplayedById("NO_DATA_WARNING");
-         },
-
-         "Data failure widgets displayed": function() {
-            return browser.findDisplayedById("DATA_FAIL_WARNING");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Data failure widgets displayed": function() {
+         return this.remote.findDisplayedById("DATA_FAIL_WARNING");
+      }
    });
 });

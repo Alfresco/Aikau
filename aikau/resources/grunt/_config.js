@@ -14,7 +14,7 @@ module.exports = {
       js: "src/main/resources/alfresco/**/*.js",
       jsdocConfig: "conf.json",
       jsdocReadme: "resources/jsdoc/templates/alfresco/README.md",
-      reporter: "src/test/resources/reporters/AikauConcurrentReporter.js",
+      reporter: "src/test/resources/reporters/ConcurrentReporter.js",
       test: "tests/alfresco/**",
       testApp: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**",
       testPageDescriptors: "src/test/resources/testApp/WEB-INF/classes/alfresco/site-webscripts/**/*.get.desc.xml",
@@ -28,14 +28,15 @@ module.exports = {
    dir: {
       code: "./",
       coverage: "code-coverage-reports",
-      coverageTemp: "code-coverage-reports/temp",
       docs: "docs",
       jsdoc: "src/main/resources/alfresco",
       jsdocTemplates: "resources/jsdoc/templates/alfresco",
-      jsInst: "src/main/resources/alfrescoInst",
+      main: "src/main/resources/alfresco",
+      mainInstrumented: "src/main/resources/alfrescoInst",
       nodeBin: "node_modules/.bin/",
       root: "./",
       testResources: "src/test/resources",
+      testReports: "test_reports",
       vagrant: "resources/vagrant"
    },
 

@@ -20,33 +20,21 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, expect, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Date Tests",
+      testPage: "/Date",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/Date", "Date Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check custom property is rendered correctly": function () {
+      "Check custom property is rendered correctly": function() {
          // Test that the dates are rendered as expected. The model uses a very old ISO date which should ensure
          // that we get a relative date in the form "Modified over X years ago" so we're going to use a regular
          // expression that should continue to work in the future as the date gets further into the past
-         return browser.findByCssSelector("#CUSTOM_PROPS .value")
+         return this.remote.findByCssSelector("#CUSTOM_PROPS .value")
             .getVisibleText()
             .then(function(resultText) {
                assert(/(Modified over \d+ years ago by Brian Griffin)/g.test(resultText), "Custom property not rendered correctly: " + resultText);
@@ -54,7 +42,7 @@ registerSuite(function(){
       },
 
       "Check standard property is rendered correctly": function() {
-         return browser.findByCssSelector("#STANDARD_PROPS .value")
+         return this.remote.findByCssSelector("#STANDARD_PROPS .value")
             .getVisibleText()
             .then(function(resultText) {
                assert(/(Modified over \d+ years ago by Chris Griffin)/g.test(resultText), "Standard property not rendered correctly: " + resultText);
@@ -62,7 +50,7 @@ registerSuite(function(){
       },
 
       "Check simple date rendering": function() {
-         return browser.findByCssSelector("#SIMPLE_MODE .value")
+         return this.remote.findByCssSelector("#SIMPLE_MODE .value")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Tue 11 Apr 2000 12:42:02", "Simple date not rendered correctly");
@@ -70,16 +58,11 @@ registerSuite(function(){
       },
 
       "Ensure warnIfNotAvailable works": function() {
-         return browser.findByCssSelector("#NOT_AVAILABLE .value")
+         return this.remote.findByCssSelector("#NOT_AVAILABLE .value")
             .getVisibleText()
-            .then(function(visibleText){
+            .then(function(visibleText) {
                assert.equal(visibleText, "Not available");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

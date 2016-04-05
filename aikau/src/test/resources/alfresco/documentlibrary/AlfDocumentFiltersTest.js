@@ -1,3 +1,4 @@
+/*jshint browser:true*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -20,78 +21,65 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "AlfDocumentFilters Tests",
+      testPage: "/AlfDocumentFilters",
 
-      return {
-         name: "AlfDocumentFilters Tests",
+      "Filters label is displayed correctly": function() {
+         return this.remote.findByCssSelector("#FILTERS > .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "TestSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfDocumentFilters", "AlfDocumentFilters Tests").end();
-         },
+      "Filter label is displayed correctly": function() {
+         return this.remote.findByCssSelector("#FILTERS .alfresco-documentlibrary-AlfDocumentFilter span")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "TestSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Initial subscribing label is correct": function() {
+         return this.remote.findById("FILTER_DESCRIPTION")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Filter Not SetSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
+            });
+      },
 
-         "Filters label is displayed correctly": function() {
-            return browser.findByCssSelector("#FILTERS > .label")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "TestSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
-               });
-         },
-
-         "Filter label is displayed correctly": function() {
-            return browser.findByCssSelector("#FILTERS .alfresco-documentlibrary-AlfDocumentFilter span")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "TestSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
-               });
-         },
-
-         "Initial subscribing label is correct": function() {
-            return browser.findById("FILTER_DESCRIPTION")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Filter Not SetSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
-               });
-         },
-
-         "Click on filter to publish": function() {
-            return browser.findByCssSelector("#FILTERS .alfresco-documentlibrary-AlfDocumentFilter span")
-               .click()
+      "Click on filter to publish": function() {
+         return this.remote.findByCssSelector("#FILTERS .alfresco-documentlibrary-AlfDocumentFilter span")
+            .click()
             .end()
 
-            .getLastPublish("ALF_DOCLIST_FILTER_SELECTION")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "value", "all", "Payload not published correctly");
-               });
-         },
+         .getLastPublish("ALF_DOCLIST_FILTER_SELECTION")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "all", "Payload not published correctly");
+            });
+      },
 
-         "Subscribing label has been updated": function() {
-            return browser.findById("FILTER_DESCRIPTION")
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "TestSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
-               });
-         },
+      "Subscribing label has been updated": function() {
+         return this.remote.findById("FILTER_DESCRIPTION")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "TestSök<img src=\"1\" onerror=\"window.hacked=true\">", "Not the expected text");
+            });
+      },
 
-         "No XSS attacks were successful": function() {
-            var notHacked = browser.execute("!window.hacked");
-            assert(notHacked, "XSS attack in setting title succeeded");
-            return browser;
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "No XSS attacks were successful": function() {
+         return this.remote.execute(function() {
+               return window.hacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
+            });
+      }
    });
 });

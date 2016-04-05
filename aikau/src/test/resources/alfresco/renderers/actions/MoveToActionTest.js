@@ -20,10 +20,11 @@
 /**
  * @author Martin Doyle
  */
-define(["alfresco/TestCommon",
-        "intern!object",
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
         "intern/chai!assert"],
-        function(TestCommon, registerSuite, assert) {
+        function(module, TestCommon, defineSuite, assert) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
 
@@ -39,7 +40,7 @@ define(["alfresco/TestCommon",
       var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", index]);
       return browser.findByCssSelector(actionsSelector)
          .click()
-      .end()
+         .end()
 
       .findDisplayedByCssSelector(actionSelector)
          .end()
@@ -58,133 +59,117 @@ define(["alfresco/TestCommon",
          });
    }
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "MoveTo Action Test",
+      testPage: "/MoveTo",
 
-      return {
-         name: "MoveTo Action Test",
+      "Legacy single item copy works": function() {
+         return this.remote.findById("SINGLE_MOVE_VIA_ACTION_SERVICE")
+            .click()
+            .end()
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/MoveTo", "MoveTo Action Test").end();
-         },
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
+            .click()
+            .end()
 
-         beforeEach: function() {
-            browser.end();
-         },
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+            .click()
+            .end()
 
-         "Legacy single item copy works": function() {
-            return browser.findById("SINGLE_MOVE_VIA_ACTION_SERVICE")
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+            .click()
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
-               .click()
-               .end()
+         .getLastPublish("ALF_MOVE_LOCATION_PICKED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "nodes[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
+            });
+      },
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
-               .click()
-               .end()
+      "Legacy multiple item copy works": function() {
+         return this.remote.findById("MULTIPLE_MOVE_VIA_ACTION_SERVICE")
+            .click()
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
+            .click()
+            .end()
 
-            .getLastPublish("ALF_MOVE_LOCATION_PICKED")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "nodes[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4d");
-               });
-         },
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+            .click()
+            .end()
 
-         "Legacy multiple item copy works": function() {
-            return browser.findById("MULTIPLE_MOVE_VIA_ACTION_SERVICE")
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+            .click()
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
-               .click()
-               .end()
+         .getLastPublish("ALF_MOVE_LOCATION_PICKED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "nodes[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
+               assert.deepPropertyVal(payload, "nodes[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
+            });
+      },
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
-               .click()
-               .end()
+      "Context action works": function() {
+         var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
+         var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.actions", ["ACTIONS", 0]);
+         return this.remote.findByCssSelector(actionsSelector)
+            .clearLog()
+            .click()
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-               .end()
+         .findByCssSelector(actionSelector)
+            .click()
+            .end()
 
-            .getLastPublish("ALF_MOVE_LOCATION_PICKED")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "nodes[0]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
-                  assert.deepPropertyVal(payload, "nodes[1]", "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4f");
-               });
-         },
+         .getLastPublish("ALF_COPY_OR_MOVE_REQUEST", true)
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "documents[0].node.nodeRef", "some://dummy/node");
+            })
 
-         "Context action works": function() {
-            var actionsSelector = TestCommon.getTestSelector(actionsSelectors, "nth.label", ["ACTIONS", 0]);
-            var actionSelector = TestCommon.getTestSelector(actionsSelectors, "nth.dropdown.actions", ["ACTIONS", 0]);
-            return browser.findByCssSelector(actionsSelector)
-               .clearLog()
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
+            .click()
+            .end()
 
-            .findByCssSelector(actionSelector)
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+            .click()
+            .end()
 
-            .getLastPublish("ALF_COPY_OR_MOVE_REQUEST", true)
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "documents[0].node.nodeRef", "some://dummy/node");
-               })
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+            .click()
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
-               .click()
-               .end()
+         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
+            .end()
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
-               .click()
-               .end()
+         .getLastPublish("ALF_MOVE_LOCATION_PICKED")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "nodes[0]", "some://dummy/node");
+            });
+      },
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
-               .click()
-               .end()
+      "List reload called after move success": function() {
+         return this.remote.findByCssSelector("body")
+            .getLastPublish("SCOPED_ALF_DOCLIST_RELOAD_DATA", true);
+      },
 
-            .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-               .end()
-
-            .getLastPublish("ALF_MOVE_LOCATION_PICKED")
-               .then(function(payload) {
-                  assert.deepPropertyVal(payload, "nodes[0]", "some://dummy/node");
-               });
-         },
-
-         "List reload called after move success": function() {
-            return browser.findByCssSelector("body")
-               .getLastPublish("SCOPED_ALF_DOCLIST_RELOAD_DATA", true);
-         },
-
-         "Context action appears appropriately": function() {
-            return testActionVisibility(browser, [
-               "Folder node",
-               "Document node",
-               "User-owned working copy",
-               "!Non-owned working copy",
-               "User-owned locked node",
-               "!Non-owned locked node",
-               "!Node-locked node",
-               "!No write permission"
-            ]);
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Context action appears appropriately": function() {
+         return testActionVisibility(this.remote, [
+            "Folder node",
+            "Document node",
+            "User-owned working copy",
+            "!Non-owned working copy",
+            "User-owned locked node",
+            "!Non-owned locked node",
+            "!Node-locked node",
+            "!No write permission"
+         ]);
+      }
    });
 });

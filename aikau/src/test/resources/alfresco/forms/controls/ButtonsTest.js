@@ -20,37 +20,21 @@
 /**
  * @author Martin Doyle
  */
-define(["intern!object",
-        "intern/chai!assert", 
-        "alfresco/TestCommon"],
-        function(registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function() {
-      var browser;
+   defineSuite(module, {
+      name: "Buttons Tests",
+      testPage: "/Buttons",
 
-      return {
-         name: "Buttons Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Buttons", "Buttons Tests");
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Title attribute is set correctly": function() {
-            return browser.findById("DEFAULT_BUTTON")
-               .getAttribute("title")
-               .then(function(title) {
-                  assert.equal(title, "Custom title");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Title attribute is set correctly": function() {
+         return this.remote.findById("DEFAULT_BUTTON")
+            .getAttribute("title")
+            .then(function(title) {
+               assert.equal(title, "Custom title");
+            });
+      }
    });
 });

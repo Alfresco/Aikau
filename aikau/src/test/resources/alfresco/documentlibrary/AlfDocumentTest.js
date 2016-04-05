@@ -20,42 +20,25 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite"],
+        function(module, defineSuite) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "AlfDocument Tests",
+      testPage: "/AlfDocument",
 
-      return {
-         name: "AlfDocument Tests",
+      // See AKU-656 for the reasons for these tests...
+      "First document loads data": function() {
+         return this.remote.findById("PROPERTYLINK");
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfDocument", "AlfDocument").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         // See AKU-656 for the reasons for these tests...
-         "First document loads data": function() {
-            return browser.findById("PROPERTYLINK");
-         },
-
-         "Click first document property to populate second document": function() {
-            return browser.findByCssSelector("#PROPERTYLINK .value")
-               .click()
+      "Click first document property to populate second document": function() {
+         return this.remote.findByCssSelector("#PROPERTYLINK .value")
+            .click()
             .end()
 
-            .findById("PROPERTY");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findById("PROPERTY");
+      }
    });
 });

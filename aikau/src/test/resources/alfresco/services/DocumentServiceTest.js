@@ -20,85 +20,69 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Document Service Tests",
+      testPage: "/DocumentService",
 
-      return {
-         name: "Document Service Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/DocumentService", "Document Service Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Single document download (DocLib API)": function() {
-            return browser.findById("SINGLE_DOCUMENT_DOCLIB_label")
-               .click()
+      "Single document download (DocLib API)": function() {
+         return this.remote.findById("SINGLE_DOCUMENT_DOCLIB_label")
+            .click()
             .end()
 
-            .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
-               .getAttribute("src")
-               .then(function(src) {
-                  assert.include(src, "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true");
-               })
-               .clearLog();
-         },
-
-         "Single folder download (DocLib API)": function() {
-            return browser.findById("SINGLE_FOLDER_DOCLIB_label")
-               .click()
-            .end()
-
-            .getLastPublish("ALF_ARCHIVE_DELETE", "Archive download not requested")
+         .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4/2013-12-29%2009.58.43.jpg?a=true");
+            })
             .clearLog();
-         },
+      },
 
-         "Single document download (Search API)": function() {
-            return browser.findById("SINGLE_DOCUMENT_SEARCH_label")
-               .click()
+      "Single folder download (DocLib API)": function() {
+         return this.remote.findById("SINGLE_FOLDER_DOCLIB_label")
+            .click()
             .end()
 
-            .getLastPublish("ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS")
+         .getLastPublish("ALF_ARCHIVE_DELETE", "Archive download not requested")
+            .clearLog();
+      },
+
+      "Single document download (Search API)": function() {
+         return this.remote.findById("SINGLE_DOCUMENT_SEARCH_label")
+            .click()
+            .end()
+
+         .getLastPublish("ALF_DOWNLOAD_ON_NODE_RETRIEVAL_SUCCESS")
             .clearLog()
 
-            .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
-               .getAttribute("src")
-               .then(function(src) {
-                  assert.include(src, "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28/PDF.pdf?a=true");
-               })
-               .clearLog();
-         },
+         .findByCssSelector("iframe#ALF_DOCUMENT_SERVICE_DOWNLOAD_IFRAME")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "proxy/alfresco/slingshot/node/content/workspace/SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28/PDF.pdf?a=true");
+            })
+            .clearLog();
+      },
 
-         "Single folder download (Search API)": function() {
-            return browser.findById("SINGLE_FOLDER_SEARCH_label")
-               .click()
+      "Single folder download (Search API)": function() {
+         return this.remote.findById("SINGLE_FOLDER_SEARCH_label")
+            .click()
             .end()
 
-            .getLastPublish("ALF_ARCHIVE_DELETE", "Archive download not requested")
+         .getLastPublish("ALF_ARCHIVE_DELETE", "Archive download not requested")
             .clearLog();
-         },
+      },
 
-         "Single item download": function() {
-            return browser.findById("MULTIPLE_DOCUMENTS_label")
-               .click()
+      "Single item download": function() {
+         return this.remote.findById("MULTIPLE_DOCUMENTS_label")
+            .click()
             .end()
 
-            .getLastPublish("ALF_ARCHIVE_DELETE", "Archive download not requested")
+         .getLastPublish("ALF_ARCHIVE_DELETE", "Archive download not requested")
             .clearLog();
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      }
    });
 });

@@ -20,42 +20,29 @@
 /**
  * @author Martin Doyle
  */
-define([
-      "alfresco/TestCommon",
-      "intern!object",
-      "intern/chai!assert"
-   ],
-   function(TestCommon, registerSuite, assert) {
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, TestCommon, defineSuite, assert) {
 
-      registerSuite(function() {
-         var browser;
+   defineSuite(module, {
+      name: "URL Utils Test",
+      testPage: "/Index",
 
-         return {
-            name: "URL Utils Test",
-
-            setup: function() {
-               browser = this.remote;
-               return TestCommon.loadTestWebScript(this.remote, "/Index", "Hash Utils Test").end();
-            },
-
-            beforeEach: function() {
-               browser.end();
-            },
-
-            "updateHash doesn't double-encode": function() {
-               return browser.executeAsync(function(callback) {
-                     require(["alfresco/util/hashUtils"], function(hashUtils) {
-                        hashUtils.updateHash({
-                           myvar: "Something with a space in it"
-                        });
-                        callback();
-                     });
-                  })
-                  .getCurrentUrl()
-                  .then(function(currentUrl) {
-                     assert.include(currentUrl, "#myvar=Something%20with%20a%20space%20in%20it");
+      "updateHash doesn't double-encode": function() {
+         return this.remote.executeAsync(function(callback) {
+               require(["alfresco/util/hashUtils"], function(hashUtils) {
+                  hashUtils.updateHash({
+                     myvar: "Something with a space in it"
                   });
-            }
-         };
-      });
+                  callback();
+               });
+            })
+            .getCurrentUrl()
+            .then(function(currentUrl) {
+               assert.include(currentUrl, "#myvar=Something%20with%20a%20space%20in%20it");
+            });
+      }
    });
+});

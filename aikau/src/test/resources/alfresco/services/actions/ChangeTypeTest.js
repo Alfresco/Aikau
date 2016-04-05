@@ -20,14 +20,15 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon"],
-        function(registerSuite, assert, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
 
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
-   var selectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/Select"); 
+   var selectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/Select");
 
    var selectors = {
       buttons: {
@@ -44,104 +45,88 @@ define(["intern!object",
       typeSelector: {
          openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["CHANGE_TYPE_DIALOG_SELECT"]),
          options: TestCommon.getTestSelector(selectSelectors, "options", ["CHANGE_TYPE_DIALOG_SELECT"]),
-         option1: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["CHANGE_TYPE_DIALOG_SELECT","1"]),
-         option2: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["CHANGE_TYPE_DIALOG_SELECT","2"])
+         option1: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["CHANGE_TYPE_DIALOG_SELECT", "1"]),
+         option2: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["CHANGE_TYPE_DIALOG_SELECT", "2"])
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Change Type Tests",
+      testPage: "/ChangeType",
 
-      return {
-         name: "Change Type Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ChangeType", "Change Type Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Open dialog for node WITH metdata": function() {
-            return browser.findByCssSelector(selectors.buttons.changeNode)
-               .click()
+      "Open dialog for node WITH metdata": function() {
+         return this.remote.findByCssSelector(selectors.buttons.changeNode)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.dialogs.changeType.visible)
+         .findByCssSelector(selectors.dialogs.changeType.visible)
             .end()
 
-            .findByCssSelector(selectors.dialogs.changeType.title)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Change Type of ''Some Node Title''");
-               });
-         },
+         .findByCssSelector(selectors.dialogs.changeType.title)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Change Type of ''Some Node Title''");
+            });
+      },
 
-         "There are two types to select": function() {
-            return browser.findByCssSelector(selectors.typeSelector.openIcon)
-               .click()
+      "There are two types to select": function() {
+         return this.remote.findByCssSelector(selectors.typeSelector.openIcon)
+            .click()
             .end()
 
-            .findAllByCssSelector(selectors.typeSelector.options)
-               .then(function(options) {
-                  assert.lengthOf(options, 2);
-               });
-         },
+         .findAllByCssSelector(selectors.typeSelector.options)
+            .then(function(options) {
+               assert.lengthOf(options, 2);
+            });
+      },
 
-         "Select the first type": function() {
-            return browser.findDisplayedByCssSelector(selectors.typeSelector.option1)
-               .click()
+      "Select the first type": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.typeSelector.option1)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.dialogs.changeType.confirmationButton)
-               .click()
+         .findByCssSelector(selectors.dialogs.changeType.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("ALF_DISPLAY_NOTIFICATION")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "message", "Type of document ''Some Node Title'' was successfully changed");
-               });
-         },
+         .getLastPublish("ALF_DISPLAY_NOTIFICATION")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "Type of document ''Some Node Title'' was successfully changed");
+            });
+      },
 
-         "Open dialog for node WITHOUT metdata": function() {
-            return browser.findByCssSelector(selectors.buttons.changeNodeNoMetadata)
-               .click()
+      "Open dialog for node WITHOUT metdata": function() {
+         return this.remote.findByCssSelector(selectors.buttons.changeNodeNoMetadata)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.dialogs.changeType.visible)
+         .findByCssSelector(selectors.dialogs.changeType.visible)
             .end()
 
-            .findByCssSelector(selectors.dialogs.changeType.title)
-               .getVisibleText()
-               .then(function(text) {
-                  assert.equal(text, "Change Type of ''PDF.pdf''");
-               });
-         },
+         .findByCssSelector(selectors.dialogs.changeType.title)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Change Type of ''PDF.pdf''");
+            });
+      },
 
-         "Select the second type": function() {
-            return browser.findByCssSelector(selectors.typeSelector.openIcon)
-               .click()
+      "Select the second type": function() {
+         return this.remote.findByCssSelector(selectors.typeSelector.openIcon)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.typeSelector.option2)
-               .click()
+         .findDisplayedByCssSelector(selectors.typeSelector.option2)
+            .click()
             .end()
 
-            .findByCssSelector(selectors.dialogs.changeType.confirmationButton)
-               .click()
+         .findByCssSelector(selectors.dialogs.changeType.confirmationButton)
+            .click()
             .end()
 
-            .getLastPublish("ALF_DISPLAY_PROMPT")
-               .then(function(payload) {
-                  assert.propertyVal(payload, "message", "We couldn't change the type of ''PDF.pdf''. Check with your Alfresco Administrator that the type matches the data model.");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .getLastPublish("ALF_DISPLAY_PROMPT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "We couldn't change the type of ''PDF.pdf''. Check with your Alfresco Administrator that the type matches the data model.");
+            });
+      }
    });
 });

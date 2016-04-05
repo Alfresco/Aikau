@@ -19,161 +19,114 @@
 
 /**
  * This test uses a MockXhr service to test the user service responds as required.
- * 
+ *
  * @author Richard Smith
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "User Service Test (successful)",
+      testPage: "/UserServiceSuccess",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/UserServiceSuccess", "User Service Test (successful)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Check the starting 'last updated' copy": function () {
-         return browser.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
+      "Check the starting 'last updated' copy": function() {
+         return this.remote.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
-            .then(function (text){
+            .then(function(text) {
                expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to begin with");
             });
       },
 
       "Check the starting status copy": function() {
-         return browser.findByCssSelector("#HEADER_USER_STATUS > div.status")
+         return this.remote.findByCssSelector("#HEADER_USER_STATUS > div.status")
             .getVisibleText()
-            .then(function (text){
+            .then(function(text) {
                expect(text).to.equal("I'm so very happy", "The status should read 'I'm so very happy' to begin with");
             })
             .click();
       },
 
       "Check the finishing 'last updated' copy": function() {
-         return browser.findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
+         return this.remote.findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
             .click()
             .type("testing")
-         .end()
+            .end()
 
          .findByCssSelector("div.alfresco-dialog-AlfDialog div.footer span.alfresco-buttons-AlfButton:first-of-type span.dijitButtonNode")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
-            .then(function (text){
+            .then(function(text) {
                expect(text).to.equal("Last updated: just now", "The 'last updated' should read 'Last updated: just now' to finish");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "User Service Test (failure)",
+      testPage: "/UserServiceFailure",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/UserServiceFailure", "User Service Test (failure)").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "UserService - failure": function () {
+      "UserService - failure": function() {
          var testname = "UserServiceTest - Failure";
-         return browser.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
+         return this.remote.findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
-            .then(function (text){
-               TestCommon.log(testname,"Check the starting 'last updated' copy");
+            .then(function(text) {
+               TestCommon.log(testname, "Check the starting 'last updated' copy");
                expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to begin with");
             });
       },
 
       "Check the starting status copy": function() {
-         return browser.findByCssSelector("#HEADER_USER_STATUS > div.status")
+         return this.remote.findByCssSelector("#HEADER_USER_STATUS > div.status")
             .getVisibleText()
-            .then(function (text){
+            .then(function(text) {
                expect(text).to.equal("I'm not so very happy", "The status should read 'I'm not so very happy' to begin with");
             })
             .click();
       },
 
       "Check the finishing 'last updated' copy": function() {
-         return browser.findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
+         return this.remote.findById("HEADER_USER_STATUS_STATUS_TEXTAREA")
             .click()
             .type("testing")
-         .end()
+            .end()
 
          .findByCssSelector("div.alfresco-dialog-AlfDialog div.footer span.alfresco-buttons-AlfButton:first-of-type span.dijitButtonNode")
             .click()
-         .end()
+            .end()
 
          .findByCssSelector("#HEADER_USER_STATUS > div.lastUpdate")
             .getVisibleText()
-            .then(function (text){
+            .then(function(text) {
                expect(text).to.equal("Last updated: over 4 years ago", "The 'last updated' should read 'Last updated: over 4 years ago' to finish");
             })
-         .end();
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+            .end();
       }
-   };
    });
-   
-registerSuite(function(){
-   var browser;
 
-   return {
+   defineSuite(module, {
       name: "User Service Home Page Test",
+      testPage: "/UserServiceHomePage",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/UserServiceHomePage", "User Service Home Page Test").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-      
       "Check setting the home page": function() {
-         return browser.findByCssSelector("#HEADER_USER_SET_HOME_PAGE_label")
+         return this.remote.findByCssSelector("#HEADER_USER_SET_HOME_PAGE_label")
             .click()
-         .end()
-         .getLastPublish("ALF_SET_USER_HOME_PAGE", "Set user home page not published")
-         .getLastPublish("ALF_PREFERENCE_SET", "Set user home page preference not published")
+            .end()
+            .getLastPublish("ALF_SET_USER_HOME_PAGE", "Set user home page not published")
+            .getLastPublish("ALF_PREFERENCE_SET", "Set user home page preference not published")
             .then(function(payload) {
                assert.propertyVal(payload, "preference", "org.alfresco.share.user.homePage", "The user home page preference key was incorrect");
                assert.propertyVal(payload, "value", "NewHomePage", "The user home page value was incorrect");
             })
-         .getLastPublish("ALF_SET_USER_HOME_PAGE_SUCCESS", "Set user home page success not published");
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+            .getLastPublish("ALF_SET_USER_HOME_PAGE_SUCCESS", "Set user home page success not published");
       }
-   };
    });
 });

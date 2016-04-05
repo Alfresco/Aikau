@@ -50,10 +50,6 @@ define(["intern!object",
                .then(null, function() {
                   assert(false, "Couldn't find video element");
                });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
          }
       };
    });
@@ -79,10 +75,6 @@ define(["intern!object",
                .then(function(text) {
                   assert.include(text, "This document can't be previewed.");
                });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
          }
       };
    });
@@ -104,10 +96,6 @@ define(["intern!object",
 
          "Video cannot be previewed": function () {
             return browser.findByCssSelector(".alfresco-preview-AlfDocumentPreview video");
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
          }
       };
    });
@@ -137,10 +125,6 @@ define(["intern!object",
                .then(null, function() {
                   assert(false, "Couldn't find audio element");
                });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
          }
       };
    });

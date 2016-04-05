@@ -20,146 +20,130 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Multiple Favouriting Tests",
+      testPage: "/MultiFavourite",
 
-      return {
-         name: "Multiple Favouriting Tests",
+      "Check that nothing is shown as a favourite on page load": function() {
+         return this.remote.findAllByCssSelector(".alfresco-renderers-Toggle .favourite.on.hidden")
+            .then(function(elements) {
+               assert.lengthOf(elements, 6, "Unexpected number of unfavorited items");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/MultiFavourite", "Multiple Favouriting Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check that nothing is shown as a favourite on page load": function() {
-            return browser.findAllByCssSelector(".alfresco-renderers-Toggle .favourite.on.hidden")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 6, "Unexpected number of unfavorited items");
-               });
-         },
-
-         "Add favourites in bulk": function() {
-            return browser.findById("ADD_MULTIPLE_FAVOURITES_label")
-               .click()
+      "Add favourites in bulk": function() {
+         return this.remote.findById("ADD_MULTIPLE_FAVOURITES_label")
+            .click()
             .end()
             .getLastPublish("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE_SUCCESS", "Bulk favourite success topic not published");
-         },
+      },
 
-         "Folder 1 should be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_0 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Folder 1 should be shown as a favourite");
-               });
-         },
+      "Folder 1 should be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_0 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Folder 1 should be shown as a favourite");
+            });
+      },
 
-         "Folder 2 should be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_1 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Folder 2 should be shown as a favourite");
-               });
-         },
+      "Folder 2 should be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_1 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Folder 2 should be shown as a favourite");
+            });
+      },
 
-         "Folder 3 should NOT be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_2 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Folder 3 should NOT be shown as a favourite");
-               });
-         },
+      "Folder 3 should NOT be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_2 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Folder 3 should NOT be shown as a favourite");
+            });
+      },
 
-         "Document 1 should be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_3 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Document 1 should be shown as a favourite");
-               });
-         },
+      "Document 1 should be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_3 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Document 1 should be shown as a favourite");
+            });
+      },
 
-         "Document 2 should be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_4 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Document 2 should be shown as a favourite");
-               });
-         },
+      "Document 2 should be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_4 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Document 2 should be shown as a favourite");
+            });
+      },
 
-         "Document 3 should NOT be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_5 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Document 3 should NOT be shown as a favourite");
-               });
-         },
+      "Document 3 should NOT be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_5 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Document 3 should NOT be shown as a favourite");
+            });
+      },
 
-         "Remove favourites in bulk": function() {
-            return browser.findById("REMOVE_MULTIPLE_FAVOURITES_label")
-               .click()
+      "Remove favourites in bulk": function() {
+         return this.remote.findById("REMOVE_MULTIPLE_FAVOURITES_label")
+            .click()
             .end()
             .getLastPublish("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE_SUCCESS", "Bulk favourite removal success topic not published");
-         },
+      },
 
-         "Folder 1 should NOT be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_0 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Folder 1 should NOT be shown as a favourite");
-               });
-         },
+      "Folder 1 should NOT be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_0 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Folder 1 should NOT be shown as a favourite");
+            });
+      },
 
-         "Folder 2 should STILL be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_1 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Folder 2 should STILL be shown as a favourite");
-               });
-         },
+      "Folder 2 should STILL be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_1 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Folder 2 should STILL be shown as a favourite");
+            });
+      },
 
-         "Folder 3 should STILL not be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_2 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Folder 3 should STILL NOT be shown as a favourite");
-               });
-         },
+      "Folder 3 should STILL not be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_2 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Folder 3 should STILL NOT be shown as a favourite");
+            });
+      },
 
-         "Document 1 should STILL be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_3 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isTrue(displayed, "Document 1 should STILL be shown as a favourite");
-               });
-         },
+      "Document 1 should STILL be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_3 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Document 1 should STILL be shown as a favourite");
+            });
+      },
 
-         "Document 2 should NOT be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_4 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Document 2 should NOT be shown as a favourite");
-               });
-         },
+      "Document 2 should NOT be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_4 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Document 2 should NOT be shown as a favourite");
+            });
+      },
 
-         "Document 3 should STILL not be favourited": function() {
-            return browser.findByCssSelector("#FAVOURITE_ITEM_5 .favourite.enabled")
-               .isDisplayed()
-               .then(function(displayed) {
-                  assert.isFalse(displayed, "Document 3 should STILL NOT be shown as a favourite");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "Document 3 should STILL not be favourited": function() {
+         return this.remote.findByCssSelector("#FAVOURITE_ITEM_5 .favourite.enabled")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Document 3 should STILL NOT be shown as a favourite");
+            });
+      }
    });
 });

@@ -20,80 +20,63 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-      "intern/chai!assert",
-      "require",
-      "alfresco/TestCommon"
-   ],
-   function(registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert",
+        "require",
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
+   defineSuite(module, {
+      name: "Service Filtering Tests",
+      testPage: "/ServiceFiltering",
 
-   return {
+      "There should be a LoggingService": function() {
+         return this.remote.findAllByCssSelector(TestCommon.topicSelector("ALF_LOGGING_STATUS_CHANGE", "subscribe", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "LoggingService subscriptions not found");
+            });
+      },
 
-         name: "Service Filtering Tests",
+      "There should only be one DialogService": function() {
+         return this.remote.findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "subscribe", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "DialogService subscriptions count wrong");
+            });
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ServiceFiltering", "Service Filtering Tests").end();
-         },
+      "There should only be one NavigationService": function() {
+         return this.remote.findAllByCssSelector(TestCommon.topicSelector("ALF_NAVIGATE_TO_PAGE", "subscribe", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "NavigationService subscriptions count wrong");
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "There should be a LoggingService": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_LOGGING_STATUS_CHANGE", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "LoggingService subscriptions not found");
-               });
-         },
-
-         "There should only be one DialogService": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_FORM_DIALOG_REQUEST", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "DialogService subscriptions count wrong");
-               });
-         },
-
-         "There should only be one NavigationService": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_NAVIGATE_TO_PAGE", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "NavigationService subscriptions count wrong");
-               });
-         },
-
-         "There should two differently scoped NotificationServices": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("SCOPED_SERVICE_ALF_DISPLAY_NOTIFICATION", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Original scoped NotificationService subscriptions not found");
-               })
+      "There should two differently scoped NotificationServices": function() {
+         return this.remote.findAllByCssSelector(TestCommon.topicSelector("SCOPED_SERVICE_ALF_DISPLAY_NOTIFICATION", "subscribe", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Original scoped NotificationService subscriptions not found");
+            })
             .end()
             .findAllByCssSelector(TestCommon.topicSelector("DIFFERENT_SCOPED_SERVICE_ALF_DISPLAY_NOTIFICATION", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "Differently scoped NotificationService subscriptions not found");
-               })
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Differently scoped NotificationService subscriptions not found");
+            })
             .end;
-         },
+      },
 
-         "The CrudService should have been added": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_GET_ALL", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "CrudService not added");
-               });
-         },
+      "The CrudService should have been added": function() {
+         return this.remote.findAllByCssSelector(TestCommon.topicSelector("ALF_CRUD_GET_ALL", "subscribe", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "CrudService not added");
+            });
+      },
 
-         "The ContentService should have been added": function() {
-            return browser.findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_CONTENT_REQUEST", "subscribe", "any"))
-               .then(function(elements) {
-                  assert.lengthOf(elements, 1, "ContentService not added");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+      "The ContentService should have been added": function() {
+         return this.remote.findAllByCssSelector(TestCommon.topicSelector("ALF_CREATE_CONTENT_REQUEST", "subscribe", "any"))
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "ContentService not added");
+            });
+      }
    });
+});

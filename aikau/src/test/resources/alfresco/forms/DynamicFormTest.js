@@ -20,40 +20,25 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "DynamicForm Tests",
+      testPage: "/DynamicForm",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/DynamicForm", "DynamicForm Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end();
-      // },
-      
-     "Test first form displayed": function () {
-         browser = this.remote;
+      "Test first form displayed": function() {
          return TestCommon.loadTestWebScript(this.remote, "/DynamicForm", "DynamicForm Test").findByCssSelector("#Form1_Field")
             .then(null, function() {
                assert(false, "The first form was not displayed");
             });
       },
-      
+
       "Test initial value in first form set correctly": function() {
          this.remote.findByCssSelector("#Form1_Field .dijitInputContainer input")
             .getProperty("value")
@@ -61,30 +46,30 @@ registerSuite(function(){
                assert(resultText === "Value1", "The initial value in the first form was not set correctly: " + resultText);
             });
       },
-      
+
       "Test first form post values": function() {
          this.remote.findByCssSelector(".confirmationButton > span")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field1", "Value1"))
+            .end()
+            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field1", "Value1"))
             .then(function(elements) {
                assert(elements.length === 1, "First form didn't publish correctly");
             });
       },
-      
+
       "Test second form displays": function() {
          this.remote.findByCssSelector("#FORM_SELECT_SELECT .dijitArrowButtonInner")
             .click()
-         .end()
-         .findByCssSelector("#FORM_SELECT_SELECT_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .end()
+            .findByCssSelector("#FORM_SELECT_SELECT_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
             .click()
-         .end()
-         .findByCssSelector("#Form2_Field")
+            .end()
+            .findByCssSelector("#Form2_Field")
             .then(null, function() {
                assert(false, "The second form was not displayed");
             });
       },
-      
+
       "Test initial value in second form set correctly": function() {
          this.remote.findByCssSelector("#Form2_Field .dijitInputContainer input")
             .getProperty("value")
@@ -92,20 +77,15 @@ registerSuite(function(){
                assert(resultText === "Value2", "The initial value in the second form was not set correctly: " + resultText);
             });
       },
-      
+
       "Test second form post values": function() {
          this.remote.findByCssSelector(".confirmationButton > span")
             .click()
-         .end()
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field2", "Value2"))
+            .end()
+            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field2", "Value2"))
             .then(function(elements) {
                assert(elements.length === 1, "Second form didn't publish correctly");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

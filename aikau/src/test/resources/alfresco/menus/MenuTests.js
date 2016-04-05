@@ -466,10 +466,6 @@ define(["intern!object",
                   assert(text, "dd4.group1.mi2");
                });
 
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
          }
       };
    });

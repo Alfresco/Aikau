@@ -18,31 +18,21 @@
  */
 
 /**
- * 
+ *
  * @author Martin Doyle
  */
-define(["alfresco/TestCommon",
-        "intern!object", 
-        "intern/chai!assert"], 
-        function(TestCommon, registerSuite, assert) {
+define(["module",
+        "alfresco/TestCommon",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, TestCommon, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "TextArea Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/TextArea", "TextArea Tests");
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/TextArea",
 
       "Label is rendered correctly": function() {
-         return browser.findByCssSelector("#BASIC_TEXTAREA .label")
+         return this.remote.findByCssSelector("#BASIC_TEXTAREA .label")
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "Basic textarea");
@@ -50,7 +40,7 @@ registerSuite(function(){
       },
 
       "Rows/cols are set correctly": function() {
-         return browser.findByCssSelector("#SIZED_TEXTAREA textarea")
+         return this.remote.findByCssSelector("#SIZED_TEXTAREA textarea")
             .getProperty("rows")
             .then(function(rows) {
                assert.equal(rows, 3);
@@ -62,7 +52,7 @@ registerSuite(function(){
       },
 
       "Initial value is set correctly": function() {
-         return browser.findByCssSelector("#TEXTAREA_WITH_CONTENT textarea")
+         return this.remote.findByCssSelector("#TEXTAREA_WITH_CONTENT textarea")
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "A some arguable jeepers cheerful pled impalpable yikes nosily however irresolute so tortoise amphibious.");
@@ -70,7 +60,7 @@ registerSuite(function(){
       },
 
       "Correct font is used": function() {
-         return browser.findByCssSelector("#TEXTAREA_WITH_CONTENT textarea")
+         return this.remote.findByCssSelector("#TEXTAREA_WITH_CONTENT textarea")
             .getComputedStyle("fontFamily")
             .then(function(fontFamily) {
                assert.include(fontFamily, "Open Sans");
@@ -79,11 +69,6 @@ registerSuite(function(){
             .then(function(fontSize) {
                assert.equal(fontSize, "13px");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

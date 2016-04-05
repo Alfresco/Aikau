@@ -20,63 +20,46 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    var countResults = function(browser, expected) {
       browser.findAllByCssSelector(".alfresco-search-AlfSearchResult")
          .then(function(elements) {
             assert(elements.length === expected, "Counting Result, expected: " + expected + ", found: " + elements.length);
          })
-      .end();
+         .end();
    };
    var scrollToBottom = function(browser) {
       browser.execute("return window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight))")
          .sleep(2000)
-      .end();
+         .end();
    };
    var scrollToTop = function(browser) {
       browser.execute("return window.scrollTo(0,0)")
          .sleep(2000)
-      .end();
+         .end();
    };
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "Infinite Scroll Tests",
-      
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/InfiniteScrollList", "Infinite Scroll Tests").end();
-      },
-      
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/InfiniteScrollList",
 
       "Trigger Infinite Scroll": function() {
-         return browser.sleep(1000)
+         return this.remote.sleep(1000)
             // Trigger Infinite Scroll.
-            .then(function(){
-               scrollToBottom(browser);
-               scrollToTop(browser);
-               scrollToBottom(browser);
+            .then(() => {
+               scrollToBottom(this.remote);
+               scrollToTop(this.remote);
+               scrollToBottom(this.remote);
             })
 
-            // Count Results. there should be 50. (Request 2)
-            .then(function(){
-               countResults(browser, 50);
-            });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+         // Count Results. there should be 50. (Request 2)
+         .then(() => {
+            countResults(this.remote, 50);
+         });
       }
-   };
    });
 });

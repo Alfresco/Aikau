@@ -20,31 +20,21 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AccessibilityMenu Tests",
-
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AccessibilityMenu", "AccessibilityMenu Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
+      testPage: "/AccessibilityMenu",
 
       "Find the heading text": function() {
          // Find the heading text
-         return browser.findByCssSelector(".alfresco-accessibility-AccessibilityMenu__header")
+         return this.remote.findByCssSelector(".alfresco-accessibility-AccessibilityMenu__header")
             .getVisibleText()
             .then(function(headingText) {
                assert.equal(headingText, "Access key links:", "The heading text is wrong");
@@ -53,14 +43,14 @@ registerSuite(function(){
 
       "Find the menu items": function() {
          // Find the menu items
-         return browser.findAllByCssSelector(".alfresco-accessibility-AccessibilityMenu__access-key-item")
-            .then(function (menuitems) {
+         return this.remote.findAllByCssSelector(".alfresco-accessibility-AccessibilityMenu__access-key-item")
+            .then(function(menuitems) {
                assert.lengthOf(menuitems, 11, "The Accessibility Menu does not contain 11 access key items");
             });
       },
 
       "Test tab to skip to textbox (may not work on OS/X)": function() {
-         return browser.pressKeys(keys.TAB)
+         return this.remote.pressKeys(keys.TAB)
             .pressKeys(keys.TAB)
             .pressKeys(keys.TAB)
             .pressKeys(keys.ENTER)
@@ -70,31 +60,26 @@ registerSuite(function(){
 
       "Test button access key (may not work on OS/X)": function() {
          // Hit the browser with a sequence of different accesskey combinations and the letter 's' for a nav skip
-         return browser.pressKeys([keys.ALT, "b"])
+         return this.remote.pressKeys([keys.ALT, "b"])
             .pressKeys([keys.ALT]) // Release SHIFT (Chrome)
             .pressKeys([keys.ALT, keys.SHIFT, "b"])
             .pressKeys([keys.ALT, keys.SHIFT]) // Release ALT + SHIFT (Firefox)
 
-            // The button should now have focus - hit enter to use it...
-            .pressKeys(keys.ENTER)
+         // The button should now have focus - hit enter to use it...
+         .pressKeys(keys.ENTER)
             .getLastPublish("BUTTON_FOCUS_SUCCESS", "Button was not focused");
       },
 
       "Test menu access key (may not work on OS/X)": function() {
          // Hit the browser with a sequence of different accesskey combinations and the letter 's' for a nav skip
-         return browser.pressKeys([keys.ALT, "m"])
+         return this.remote.pressKeys([keys.ALT, "m"])
             .pressKeys([keys.ALT]) // Release SHIFT (Chrome)
             .pressKeys([keys.ALT, keys.SHIFT, "m"])
             .pressKeys([keys.ALT, keys.SHIFT]) // Release ALT + SHIFT (Firefox)
 
-            // The button should now have focus - hit enter to use it...
-            .pressKeys(keys.ENTER)
+         // The button should now have focus - hit enter to use it...
+         .pressKeys(keys.ENTER)
             .getLastPublish("MENU_FOCUS_SUCCESS", "Button was not focused");
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

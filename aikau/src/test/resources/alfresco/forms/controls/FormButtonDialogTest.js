@@ -21,58 +21,44 @@
  * @author Richard Smith
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!expect",
         "intern/chai!assert",
         "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, expect, assert, require, TestCommon) {
+        "alfresco/TestCommon"],
+        function(module, defineSuite, expect, assert, require, TestCommon) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "FormButtonDialog Test",
+      testPage: "/FormButtonDialog",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/FormButtonDialog", "FormButtonDialog").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      // teardown: function() {
-      //    browser.end().alfPostCoverageResults(browser);
-      // },
-      
-      "Test Form Exists": function () {
-         return browser.findByCssSelector("DIV#TEST_FORM > FORM")
+      "Test Form Exists": function() {
+         return this.remote.findByCssSelector("DIV#TEST_FORM > FORM")
             .then(function(el1) {
                expect(el1).to.be.an("object", "The Form could not be found");
             });
       },
 
       "Test Dialog Opening Button Exists": function() {
-         return browser.findById("TEST_DIALOG_BUTTON")
+         return this.remote.findById("TEST_DIALOG_BUTTON")
             .then(function(el2) {
                expect(el2).to.be.an("object", "The Button could not be found");
             });
       },
 
       "Test dialog opens on button click": function() {
-         return browser.findById("TEST_DIALOG_BUTTON")
+         return this.remote.findById("TEST_DIALOG_BUTTON")
             .click()
-         .end()
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
+            .end()
+            .findByCssSelector(".alfresco-dialog-AlfDialog")
             .then(null, function() {
                assert(false, "The Dialog did not appear");
             });
       },
 
       "Test dialog title is correct": function() {
-         return browser.findByCssSelector("span.dijitDialogTitle")
+         return this.remote.findByCssSelector("span.dijitDialogTitle")
             .getVisibleText()
             .then(function(resultText1) {
                expect(resultText1).to.equal("Twas brillig and the slithy toves...", "The Dialog title text is incorrect");
@@ -80,67 +66,67 @@ registerSuite(function(){
       },
 
       "Test dialog button count": function() {
-         return browser.findAllByCssSelector("div.alfresco-dialog-AlfDialog div.footer > span.alfresco-buttons-AlfButton")
-            .then(function (buttons) {
+         return this.remote.findAllByCssSelector("div.alfresco-dialog-AlfDialog div.footer > span.alfresco-buttons-AlfButton")
+            .then(function(buttons) {
                expect(buttons).to.have.length(2, "The popup Dialog does not contain 2 buttons");
             });
       },
 
       "Test dialog cancellation button exists": function() {
-         return browser.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.cancellation")
+         return this.remote.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.cancellation")
             .then(null, function() {
                assert(false, "The Dialog cancel button cannot be found");
             });
       },
 
       "Test dialog confirmation button label": function() {
-         return browser.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.confirmation span.dijitButtonText")
+         return this.remote.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.confirmation span.dijitButtonText")
             .getVisibleText()
-            .then(function (resultText2) {
+            .then(function(resultText2) {
                expect(resultText2).to.equal("Ok friend", "The copy on Dialog button one was incorrect");
             });
       },
 
       "Test dialog cancellation button label": function() {
-         return browser.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.cancellation span.dijitButtonText")
+         return this.remote.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.cancellation span.dijitButtonText")
             .getVisibleText()
-            .then(function (resultText3) {
+            .then(function(resultText3) {
                expect(resultText3).to.equal("No thanks buddy", "The copy on Dialog button two was incorrect");
             });
       },
 
       "Test check box exists in dialog": function() {
-         return browser.findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
-            .then(function (el3) {
+         return this.remote.findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
+            .then(function(el3) {
                expect(el3).to.be.an("object", "The Checkbox could not be found");
             });
       },
 
       "Test check box is NOT checked": function() {
-         return browser.findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
+         return this.remote.findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
             .isSelected()
-            .then(function (result3) {
+            .then(function(result3) {
                expect(result3).to.equal(false, "The Checkbox should not be selected when the Dialog form is first loaded");
             });
       },
 
       "Test check box can be checked": function() {
-         return browser.findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
+         return this.remote.findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
             .click()
-         .end()
-         .findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
+            .end()
+            .findByCssSelector("div#TEST_CHECKBOX_CONTAINER > div.control-row > div.control input")
             .isSelected()
-            .then(function (result4) {
+            .then(function(result4) {
                expect(result4).to.equal(true, "The Checkbox should now be selected");
             });
       },
 
       "Test cancel button does not destroy dialog": function() {
-         return browser.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.cancellation span")
+         return this.remote.findByCssSelector("span.alfresco-buttons-AlfButton.alfresco-dialogs-_AlfCreateFormDialogMixin.cancellation span")
             .click()
             .sleep(500)
-         .end()
-         .findAllByCssSelector(".alfresco-dialog-AlfDialog")
+            .end()
+            .findAllByCssSelector(".alfresco-dialog-AlfDialog")
             .then(function(elements) {
                // TODO: When dialogs are properly cleaned up, this should be a test for zero...
                assert(elements.length === 1, "The Dialog was found but should be hidden after the cancel button has been clicked");
@@ -148,27 +134,22 @@ registerSuite(function(){
       },
 
       "Test cancel button hides dialog": function() {
-         return browser.findByCssSelector(".alfresco-dialog-AlfDialog")
+         return this.remote.findByCssSelector(".alfresco-dialog-AlfDialog")
             .isDisplayed()
             .then(function(result) {
                assert(result === false, "The dialog should have been hidden");
             });
       },
-      
+
       "Test form submission": function() {
-         return browser.findByCssSelector("span.alfresco-buttons-AlfButton.confirmationButton > span")
+         return this.remote.findByCssSelector("span.alfresco-buttons-AlfButton.confirmationButton > span")
             .click()
             .sleep(500)
-         .end()
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "alfTopic", "TEST_FORM_SUBMITTED"))
+            .end()
+            .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "alfTopic", "TEST_FORM_SUBMITTED"))
             .then(null, function() {
                assert(false, "Form submission did not proceed as expected and the expected publish on 'TEST_FORM_SUBMITTED' was missing");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

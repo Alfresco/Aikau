@@ -19,78 +19,62 @@
 
 /**
  * This is a unit test for ClassicWindow
- * 
+ *
  * @author Richard Smith
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Classic Window Tests",
+      testPage: "/ClassicWindow",
 
-      return {
-         name: "Classic Window Tests",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ClassicWindow", "Classic Window Tests").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Check the classic windows are present": function () {
-            return browser.findById("WINDOW1")
+      "Check the classic windows are present": function() {
+         return this.remote.findById("WINDOW1")
             .end()
 
-            .findById("WINDOW2");
-         },
+         .findById("WINDOW2");
+      },
 
-         "Check the Classic Windows have appropriate title bars shown": function() {
-            return browser.findByCssSelector("#WINDOW1 .alfresco-layout-ClassicWindow__titlebar")
+      "Check the Classic Windows have appropriate title bars shown": function() {
+         return this.remote.findByCssSelector("#WINDOW1 .alfresco-layout-ClassicWindow__titlebar")
             .end()
 
-            .findByCssSelector("#WINDOW2 .alfresco-layout-ClassicWindow__titlebar")
-               .then(function () {
+         .findByCssSelector("#WINDOW2 .alfresco-layout-ClassicWindow__titlebar")
+            .then(function() {
                   assert.fail(null, null, "Classic Window 2 should not have a titlebar");
                },
-               function () {
-                  
+               function() {
+
                });
-         },
+      },
 
-         "Check Classic Window 1 has the appropriate title": function() {
-            return browser.findByCssSelector("#WINDOW1 .alfresco-layout-ClassicWindow__titlebar")
-               .getVisibleText()
-               .then(function (text) {
-                  assert.strictEqual(text, "Test title");
-               });
-         },
+      "Check Classic Window 1 has the appropriate title": function() {
+         return this.remote.findByCssSelector("#WINDOW1 .alfresco-layout-ClassicWindow__titlebar")
+            .getVisibleText()
+            .then(function(text) {
+               assert.strictEqual(text, "Test title");
+            });
+      },
 
-         /* global document*/
-         "Check for scrollbars on overflow": function() {
-            function nodeOverflows(selector) {
-               var node = document.querySelector(selector);
-               return node.scrollWidth > node.clientWidth;
-            }
-
-            return browser.execute(nodeOverflows, ["#WINDOW3 .alfresco-layout-ClassicWindow__content"])
-               .then(function(overflows) {
-                  assert.isTrue(overflows, "Scroll bar is not displayed");
-               });
-            // return browser.findByCssSelector("#WINDOW3 .alfresco-layout-ClassicWindow__content")
-            //    .then(function(element) {
-            //       console.log("Scroll width=" + element.scrollWidth + ", client width=" + element.clientWidth);
-            //       assert(element.scrollWidth > element.clientWidth, "Scroll bar is not displayed");
-            //    });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
+      /* global document*/
+      "Check for scrollbars on overflow": function() {
+         function nodeOverflows(selector) {
+            var node = document.querySelector(selector);
+            return node.scrollWidth > node.clientWidth;
          }
-      };
+
+         return this.remote.execute(nodeOverflows, ["#WINDOW3 .alfresco-layout-ClassicWindow__content"])
+            .then(function(overflows) {
+               assert.isTrue(overflows, "Scroll bar is not displayed");
+            });
+         // return this.remote.findByCssSelector("#WINDOW3 .alfresco-layout-ClassicWindow__content")
+         //    .then(function(element) {
+         //       console.log("Scroll width=" + element.scrollWidth + ", client width=" + element.clientWidth);
+         //       assert(element.scrollWidth > element.clientWidth, "Scroll bar is not displayed");
+         //    });
+      }
    });
 });

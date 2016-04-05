@@ -1,4 +1,3 @@
-
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -21,238 +20,222 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"], 
-        function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-   registerSuite(function(){
-      var testableDimensions = {}, 
-          browser;
+   var testableDimensions = {};
 
-      return {
-         name: "Basic Layout Tests",
+   defineSuite(module, {
+      name: "Basic Layout Tests",
+      testPage: "/BasicLayouts",
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/BasicLayouts", "Basic Layout Tests").end();
-         },
+      "Test top margin is set correctly on a vertical widget": function() {
+         return this.remote.findByCssSelector("#SURF_LOGO1")
+            .getAttribute("style")
+            .then(function(style) {
+               assert.equal(style, "margin-top: 10px;", "The style was not set correctly on a vertical widget with top margin: " + style);
+            });
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Test bottom margin is set correctly on a vertical widget": function() {
+         return this.remote.findByCssSelector("#SURF_LOGO2")
+            .getAttribute("style")
+            .then(function(style) {
+               assert.equal(style, "margin-bottom: 20px;", "The style was not set correctly on a vertical widget with bottom margin: " + style);
+            });
+      },
 
-         "Test top margin is set correctly on a vertical widget": function () {
-            return browser.findByCssSelector("#SURF_LOGO1")
-               .getAttribute("style")
-               .then(function(style) {
-                  assert.equal(style, "margin-top: 10px;", "The style was not set correctly on a vertical widget with top margin: " + style);
-               });
-         },
+      "Test both top and bottom margins are set correctly on a vertical widget": function() {
+         return this.remote.findByCssSelector("#SURF_LOGO3")
+            .getAttribute("style")
+            .then(function(style) {
+               assert.equal(style, "margin-top: 30px; margin-bottom: 40px;", "The style was not set correctly on a vertical widget with top and bottom margins: " + style);
+            });
+      },
 
-         "Test bottom margin is set correctly on a vertical widget": function() {
-            return browser.findByCssSelector("#SURF_LOGO2")
-               .getAttribute("style")
-               .then(function(style) {
-                  assert.equal(style, "margin-bottom: 20px;", "The style was not set correctly on a vertical widget with bottom margin: " + style);
-               });
-         },
+      "Test that empty horizontal widgets are rendered": function() {
+         return this.remote.findByCssSelector("#EMPTY_HORIZONTAL")
+            .then(null, function() {
+               assert(false, "Empty horizontal widgets was not rendered");
+            });
+      },
 
-         "Test both top and bottom margins are set correctly on a vertical widget": function() {
-            return browser.findByCssSelector("#SURF_LOGO3")
-               .getAttribute("style")
-               .then(function(style) {
-                  assert.equal(style, "margin-top: 30px; margin-bottom: 40px;", "The style was not set correctly on a vertical widget with top and bottom margins: " + style);
-               });
-         },
+      "Test that empty vertical widgets are rendered": function() {
+         return this.remote.findByCssSelector("#EMPTY_VERTICAL")
+            .then(null, function() {
+               assert(false, "Empty vertical widgets was not rendered");
+            });
+      },
 
-         "Test that empty horizontal widgets are rendered": function() {
-            return browser.findByCssSelector("#EMPTY_HORIZONTAL")
-               .then(null, function() {
-                  assert(false, "Empty horizontal widgets was not rendered");
-               });
-         },
+      "Test that empty left and right widgets are rendered": function() {
+         return this.remote.findByCssSelector("#EMPTY_LEFT_AND_RIGHT")
+            .then(null, function() {
+               assert(false, "Empty left and right widgets was not rendered");
+            });
+      },
 
-         "Test that empty vertical widgets are rendered": function() {
-            return browser.findByCssSelector("#EMPTY_VERTICAL")
-               .then(null, function() {
-                  assert(false, "Empty vertical widgets was not rendered");
-               });
-         },
+      "Test that RIGHT left and right layout widgets are ordered correctly": function() {
+         return this.remote.findByCssSelector("#ALFRESCO_LOGO2 + #ALFRESCO_LOGO1")
+            .then(null, function() {
+               assert(false, "Right layout widgets in the wrong order");
+            });
+      },
 
-         "Test that empty left and right widgets are rendered": function() {
-            return browser.findByCssSelector("#EMPTY_LEFT_AND_RIGHT")
-               .then(null, function() {
-                  assert(false, "Empty left and right widgets was not rendered");
-               });
-         },
+      "Test that LEFT left and right layout widgets are ordered correctly": function() {
+         return this.remote.findByCssSelector(".additional-test-class+.additional-test-class-2")
+            .then(null, function() {
+               assert(false, "Left layout widgets in the wrong order");
+            });
+      },
 
-         "Test that RIGHT left and right layout widgets are ordered correctly": function() {
-            return browser.findByCssSelector("#ALFRESCO_LOGO2 + #ALFRESCO_LOGO1")
-               .then(null, function() {
-                  assert(false, "Right layout widgets in the wrong order");
-               });
-         },
+      "Test that RIGHT left and right layout widgets are ordered correctly (LEGACY)": function() {
+         return this.remote.findByCssSelector("#ALFRESCO_LOGO4 + #ALFRESCO_LOGO3")
+            .then(null, function() {
+               assert(false, "Right layout widgets in the wrong order");
+            });
+      },
 
-         "Test that LEFT left and right layout widgets are ordered correctly": function() {
-            return browser.findByCssSelector(".additional-test-class+.additional-test-class-2")
-               .then(null, function() {
-                  assert(false, "Left layout widgets in the wrong order");
-               });
-         },
+      "Test that LEFT left and right layout widgets are ordered correctly (LEGACY)": function() {
+         return this.remote.findByCssSelector(".additional-test-class-3+.additional-test-class-4")
+            .then(null, function() {
+               assert(false, "Left layout widgets in the wrong order");
+            });
+      },
 
-         "Test that RIGHT left and right layout widgets are ordered correctly (LEGACY)": function() {
-            return browser.findByCssSelector("#ALFRESCO_LOGO4 + #ALFRESCO_LOGO3")
-               .then(null, function() {
-                  assert(false, "Right layout widgets in the wrong order");
-               });
-         },
+      "Test that empty centered widgets are rendered": function() {
+         return this.remote.findByCssSelector("#EMPTY_CENTERED_WIDGETS")
+            .then(null, function() {
+               assert(false, "Empty centered widgets was not rendered");
+            });
+      },
 
-         "Test that LEFT left and right layout widgets are ordered correctly (LEGACY)": function() {
-            return browser.findByCssSelector(".additional-test-class-3+.additional-test-class-4")
-               .then(null, function() {
-                  assert(false, "Left layout widgets in the wrong order");
-               });
-         },
+      "Test left alignment": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-LeftAndRight__left #SURF_LOGO4")
+            .then(null, function() {
+               assert(false, "Widget was not left aligned");
+            });
+      },
 
-         "Test that empty centered widgets are rendered": function() {
-            return browser.findByCssSelector("#EMPTY_CENTERED_WIDGETS")
-               .then(null, function() {
-                  assert(false, "Empty centered widgets was not rendered");
-               });
-         },
+      "Test right alignment": function() {
+         return this.remote.findByCssSelector(".alfresco-layout-LeftAndRight__right #ALFRESCO_LOGO1")
+            .then(null, function() {
+               assert(false, "logo was not right aligned");
+            });
+      },
 
-         "Test left alignment": function() {
-            return browser.findByCssSelector(".alfresco-layout-LeftAndRight__left #SURF_LOGO4")
-               .then(null, function() {
-                  assert(false, "Widget was not left aligned");
-               });
-         },
-
-         "Test right alignment": function() {
-            return browser.findByCssSelector(".alfresco-layout-LeftAndRight__right #ALFRESCO_LOGO1")
-               .then(null, function() {
-                  assert(false, "logo was not right aligned");
-               });
-         },
-
-         "Test left margin of horizontal widget": function() {
-            return browser.findByCssSelector("#LEVEL2_HORIZONTAL2")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  testableDimensions.horiz2 = width.substring(0, width.lastIndexOf("px"));
-               })
+      "Test left margin of horizontal widget": function() {
+         return this.remote.findByCssSelector("#LEVEL2_HORIZONTAL2")
+            .getComputedStyle("width")
+            .then(function(width) {
+               testableDimensions.horiz2 = width.substring(0, width.lastIndexOf("px"));
+            })
             .end()
             .findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(3)")
-               .getComputedStyle("margin-left")
-               .then(function(x) {
-                  assert.equal(x, "10px", "The left margin was not set correctly on a horizontal widget");
-               });
-         },
+            .getComputedStyle("margin-left")
+            .then(function(x) {
+               assert.equal(x, "10px", "The left margin was not set correctly on a horizontal widget");
+            });
+      },
 
-         "Test right margin of horizontal widget": function() {
-            return browser.findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(3)")
-               .getComputedStyle("margin-right")
-               .then(function(x) {
-                  assert.equal(x, "20px", "The right margin was not set correctly on a horizontal widget");
-               });
-         },
+      "Test right margin of horizontal widget": function() {
+         return this.remote.findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(3)")
+            .getComputedStyle("margin-right")
+            .then(function(x) {
+               assert.equal(x, "20px", "The right margin was not set correctly on a horizontal widget");
+            });
+      },
 
-         "Test width of horizontal element by remaining percentage": function() {
-            return browser.findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(3)")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  // Calculate what the width should be...
-                  // 75% of the width of the REMAINDER of the horizontal widget parent minus all the margins and the pixel width widget
-                  var x = width.substring(0, width.lastIndexOf("px"));
-                  var shouldBe = (testableDimensions.horiz2 - 90 - 300 - 3 - 30) * 0.75;
-                  assert.equal(shouldBe, x, "The width was not set correctly by remaining percentage: " + x + " (should be: " + shouldBe + ")");
-               });
-         },
+      "Test width of horizontal element by remaining percentage": function() {
+         return this.remote.findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(3)")
+            .getComputedStyle("width")
+            .then(function(width) {
+               // Calculate what the width should be...
+               // 75% of the width of the REMAINDER of the horizontal widget parent minus all the margins and the pixel width widget
+               var x = width.substring(0, width.lastIndexOf("px"));
+               var shouldBe = (testableDimensions.horiz2 - 90 - 300 - 3 - 30) * 0.75;
+               assert.equal(shouldBe, x, "The width was not set correctly by remaining percentage: " + x + " (should be: " + shouldBe + ")");
+            });
+      },
 
-         "Test width is set correctly": function() {
-            return browser.findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(2)")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  assert.equal(width, "300px", "The width was not set correctly by pixels");
-               });
-         },
+      "Test width is set correctly": function() {
+         return this.remote.findByCssSelector("#LEVEL2_HORIZONTAL2 > div > div:nth-child(2)")
+            .getComputedStyle("width")
+            .then(function(width) {
+               assert.equal(width, "300px", "The width was not set correctly by pixels");
+            });
+      },
 
-         "Test space is evenly divided (1)": function() {
-            return browser.findByCssSelector("#LEVEL2_HORIZONTAL3")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  testableDimensions.horiz3 = width.substring(0, width.lastIndexOf("px"));
-               })
+      "Test space is evenly divided (1)": function() {
+         return this.remote.findByCssSelector("#LEVEL2_HORIZONTAL3")
+            .getComputedStyle("width")
+            .then(function(width) {
+               testableDimensions.horiz3 = width.substring(0, width.lastIndexOf("px"));
+            })
             .end()
             .findByCssSelector("#LEVEL2_HORIZONTAL3 > div > div:nth-child(1)")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  var x = width.substring(0, width.lastIndexOf("px"));
-                  var shouldBe = (testableDimensions.horiz3 - 2 - 30) * 0.5;
-                  assert.equal(shouldBe, x, "The width was not set correctly by evenly dividing space, was: " + x + ", should be: " + shouldBe);
-               });
-         },
+            .getComputedStyle("width")
+            .then(function(width) {
+               var x = width.substring(0, width.lastIndexOf("px"));
+               var shouldBe = (testableDimensions.horiz3 - 2 - 30) * 0.5;
+               assert.equal(shouldBe, x, "The width was not set correctly by evenly dividing space, was: " + x + ", should be: " + shouldBe);
+            });
+      },
 
-         "Test space is evenly divided (2)": function() {
-            return browser.findByCssSelector("#LEVEL2_HORIZONTAL3 > div > div:nth-child(2)")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  var x = width.substring(0, width.lastIndexOf("px"));
-                  var shouldBe = (testableDimensions.horiz3 - 2 - 30) * 0.5;
-                  assert.equal(shouldBe, x, "The width was not set correctly by evenly dividing space");
-               });
-         },
+      "Test space is evenly divided (2)": function() {
+         return this.remote.findByCssSelector("#LEVEL2_HORIZONTAL3 > div > div:nth-child(2)")
+            .getComputedStyle("width")
+            .then(function(width) {
+               var x = width.substring(0, width.lastIndexOf("px"));
+               var shouldBe = (testableDimensions.horiz3 - 2 - 30) * 0.5;
+               assert.equal(shouldBe, x, "The width was not set correctly by evenly dividing space");
+            });
+      },
 
-         "Test that first excess pixel widget is rendered": function() {
-            return browser.findByCssSelector("#LOGO6")
-               .then(null, function() {
-                  assert(false, "first widget with excess pixels was not rendered");
-               });
-         },
+      "Test that first excess pixel widget is rendered": function() {
+         return this.remote.findByCssSelector("#LOGO6")
+            .then(null, function() {
+               assert(false, "first widget with excess pixels was not rendered");
+            });
+      },
 
-         "Test that second excess pixel widget is rendered": function() {
-            return browser.findByCssSelector("#LOGO7")
-               .then(null, function() {
-                  assert(false, "second widget with excess pixels was not rendered");
-               });
-         },
+      "Test that second excess pixel widget is rendered": function() {
+         return this.remote.findByCssSelector("#LOGO7")
+            .then(null, function() {
+               assert(false, "second widget with excess pixels was not rendered");
+            });
+      },
 
-         "Test that third excess pixel widget is rendered": function() {
-            return browser.findByCssSelector("#LOGO8")
-               .then(null, function() {
-                  assert(false, "widget1 with excess pixels was not rendered");
-               });
-         },
+      "Test that third excess pixel widget is rendered": function() {
+         return this.remote.findByCssSelector("#LOGO8")
+            .then(null, function() {
+               assert(false, "widget1 with excess pixels was not rendered");
+            });
+      },
 
-         "Find center-container class": function() {
-            return browser.findByCssSelector(".center-container")
-               .then(null, function() {
-                  assert(false, "center-container not found");
-               });
-         },
+      "Find center-container class": function() {
+         return this.remote.findByCssSelector(".center-container")
+            .then(null, function() {
+               assert(false, "center-container not found");
+            });
+      },
 
-         "Test logo is center aligned": function() {
-            return browser.findByCssSelector(".center-container #LOGO9")
-               .then(null, function() {
-                  assert(false, "logo was not center aligned");
-               });
-         },
+      "Test logo is center aligned": function() {
+         return this.remote.findByCssSelector(".center-container #LOGO9")
+            .then(null, function() {
+               assert(false, "logo was not center aligned");
+            });
+      },
 
-         "": function() {
-            return browser.findByCssSelector(".center-container")
-               .getComputedStyle("width")
-               .then(function(width) {
-                  var x = width.substring(0, width.lastIndexOf("px"));
-                  var shouldBe = 368;
-                  assert.equal(shouldBe, x, "The width was not set correctly");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+      "": function() {
+         return this.remote.findByCssSelector(".center-container")
+            .getComputedStyle("width")
+            .then(function(width) {
+               var x = width.substring(0, width.lastIndexOf("px"));
+               var shouldBe = 368;
+               assert.equal(shouldBe, x, "The width was not set correctly");
+            });
+      }
    });
 });

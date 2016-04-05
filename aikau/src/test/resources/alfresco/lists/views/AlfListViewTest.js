@@ -20,49 +20,33 @@
 /**
  * @author Martin Doyle
  */
-define(["alfresco/TestCommon",
-      "intern/chai!assert",
-      "intern!object"
-   ],
-   function(TestCommon, assert, registerSuite) {
+define(["module",
+        "alfresco/TestCommon",
+        "intern/chai!assert",
+        "alfresco/defineSuite"],
+        function(module, TestCommon, assert, defineSuite) {
 
-registerSuite(function(){
-   var browser;
+   defineSuite(module, {
+      name: "AlfListView Tests",
+      testPage: "/AlfListView",
 
-   return {
-         name: "AlfListView Tests",
+      "Can find data-load failure message": function() {
+         return this.remote.findByCssSelector("#DATA_LOAD_FAILURE .alfresco-lists-AlfList > .data-failure");
+      },
 
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/AlfListView", "AlfListView Tests").end();
-         },
+      "Can find no-data message": function() {
+         return this.remote.findByCssSelector("#NO_DATA .alfresco-lists-views-AlfListView__no-data");
+      },
 
-         beforeEach: function() {
-            browser.end();
-         },
+      "Can find render-error message": function() {
+         return this.remote.findByCssSelector("#ERROR .alfresco-lists-views-AlfListView__render-error");
+      },
 
-         "Can find data-load failure message": function() {
-            return browser.findByCssSelector("#DATA_LOAD_FAILURE .alfresco-lists-AlfList > .data-failure");
-         },
-
-         "Can find no-data message": function() {
-            return browser.findByCssSelector("#NO_DATA .alfresco-lists-views-AlfListView__no-data");
-         },
-
-         "Can find render-error message": function() {
-            return browser.findByCssSelector("#ERROR .alfresco-lists-views-AlfListView__render-error");
-         },
-
-         "Can find successfully loaded list": function() {
-            return browser.findAllByCssSelector("#SUCCESS .alfresco-renderers-Property")
-               .then(function(elements) {
-                  assert.lengthOf(elements, 4, "Did not render four list items successfully");
-               });
-         },
-
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
-      });
+      "Can find successfully loaded list": function() {
+         return this.remote.findAllByCssSelector("#SUCCESS .alfresco-renderers-Property")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "Did not render four list items successfully");
+            });
+      }
    });
+});

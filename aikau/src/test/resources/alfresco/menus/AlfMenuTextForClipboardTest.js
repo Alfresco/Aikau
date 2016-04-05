@@ -19,42 +19,32 @@
 
 /**
  * This is the unit test for the alfresco/menus/AlfMenuTextForClipboard widget.
- * 
+ *
  * PLEASE NOTE: Development of this test has been temporarily abandoned as I can't get the modifier keys for
- * the copy/paste actions to work correctly - I've raised the following question on StackOverflow: 
+ * the copy/paste actions to work correctly - I've raised the following question on StackOverflow:
  * http://stackoverflow.com/questions/20565341/how-do-i-keyboard-cut-and-paste-in-intern-functional-test
- * 
+ *
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "require",
         "alfresco/TestCommon",
-        "intern/dojo/node!leadfoot/keys"], 
-        function (registerSuite, assert, require, TestCommon, keys) {
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, defineSuite, assert, require, TestCommon, keys) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "AlfMenuTextForClipboard Tests",
+      testPage: "/AlfMenuTextForClipboard",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/AlfMenuTextForClipboard", "AlfMenuTextForClipboard Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-      "Tests": function () {
+      "Tests": function() {
          var testName = "Menu Text For Clipboard Test";
          return TestCommon.loadTestWebScript(this.remote, "/AlfMenuTextForClipboard", testName)
 
-            // Test #1
-            // Check the initial labels...
-            .pressKeys(keys.TAB)
+         // Test #1
+         // Check the initial labels...
+         .pressKeys(keys.TAB)
             .pressKeys(keys.ARROW_DOWN)
             .pressKeys(keys.ARROW_RIGHT)
             // .findByCssSelector("#TEXT1 span.label")
@@ -76,37 +66,30 @@ registerSuite(function(){
             .pressKeys(keys.ARROW_DOWN)
             .pressKeys(keys.ARROW_RIGHT)
 
-            // .findByCssSelector("#TEXT3 span.text")
-            // .addValue(['Control','x','NULL'],function(err) {
-            //             expect(err).to.be.null;
-            //         })
-            // .sleep(2000)
-            // .type([keys["Control"],"c"])
+         // .findByCssSelector("#TEXT3 span.text")
+         // .addValue(['Control','x','NULL'],function(err) {
+         //             expect(err).to.be.null;
+         //         })
+         // .sleep(2000)
+         // .type([keys["Control"],"c"])
 
-
-            .pressKeys(keys.TAB)
+         .pressKeys(keys.TAB)
             .pressKeys(keys.TAB);
-            // .pressKeys(keys.TAB)
-            // .findByCssSelector("#TEXTAREA textarea")
-            //    .click()
-            //    // .type("hello")
-            //    // .sleep(1000)
-            // .sleep(2000)
-            // .type([keys["Control"],"v"])
-               // .end()
-               // .sleep(2000)
+         // .pressKeys(keys.TAB)
+         // .findByCssSelector("#TEXTAREA textarea")
+         //    .click()
+         //    // .type("hello")
+         //    // .sleep(1000)
+         // .sleep(2000)
+         // .type([keys["Control"],"v"])
+         // .end()
+         // .sleep(2000)
 
-
-            // .findByCssSelector("#TEXT3 span.label")
-            //    .getVisibleText()
-            //    .then(function(resultText) {
-            //       assert(resultText == "Copy me!", "Test #1c - The inital label of TEXT3 has been set incorrectly: " + resultText);
-            //    })
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
+         // .findByCssSelector("#TEXT3 span.label")
+         //    .getVisibleText()
+         //    .then(function(resultText) {
+         //       assert(resultText == "Copy me!", "Test #1c - The inital label of TEXT3 has been set incorrectly: " + resultText);
+         //    })
       }
-   };
    });
 });

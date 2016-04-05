@@ -22,31 +22,19 @@
  * @author Erik Winlöf
  * @author Dave Draper
  */
-define(["intern!object",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-      function (registerSuite, assert, require, TestCommon) {
+define(["module",
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
-registerSuite(function(){
-   var browser;
-
-   return {
+   defineSuite(module, {
       name: "PieChart Tests",
+      testPage: "/PieChart",
 
-      setup: function() {
-         browser = this.remote;
-         return TestCommon.loadTestWebScript(this.remote, "/PieChart", "PieChart Tests").end();
-      },
-
-      beforeEach: function() {
-         browser.end();
-      },
-
-     "Check pie slices": function () {
+      "Check pie slices": function() {
          // Test #1
          // Check pie slices
-         return browser.findAllByCssSelector("#PIECHART_1 svg text")
+         return this.remote.findAllByCssSelector("#PIECHART_1 svg text")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Expected to find 2 items in the chart, but found " + elements.length);
             });
@@ -55,7 +43,7 @@ registerSuite(function(){
       "Check label 1": function() {
          // Test #2
          // Check labels
-         return browser.findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(2) text")
+         return this.remote.findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(2) text")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "one-hundred-100", "Expected to find label 'one-hundred-100', but found '" + text + "'");
@@ -65,16 +53,11 @@ registerSuite(function(){
       "Check label 2": function() {
          // Test #3
          // Check labels
-         return browser.findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(4) text")
+         return this.remote.findByCssSelector("#PIECHART_1 svg g g g g g:nth-child(4) text")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "two-hundred-200", "Expected to find label 'two-hundred-200', but found '" + text + "'");
             });
-      },
-
-      "Post Coverage Results": function() {
-         TestCommon.alfPostCoverageResults(this, browser);
       }
-   };
    });
 });

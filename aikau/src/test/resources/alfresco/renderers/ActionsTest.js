@@ -20,10 +20,11 @@
 /**
  * @author Dave Draper
  */
-define(["intern!object",
+define(["module",
+        "alfresco/defineSuite",
         "intern/chai!assert",
         "alfresco/TestCommon"],
-       function (registerSuite, assert, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
 
    var actionsSelectors = TestCommon.getTestSelectors("alfresco/renderers/Actions");
    var selectors = {
@@ -57,83 +58,67 @@ define(["intern!object",
       }
    };
 
-   registerSuite(function(){
-      var browser;
+   defineSuite(module, {
+      name: "Action Renderer Test",
+      testPage: "/ActionsRenderer",
 
-      return {
-         name: "Action Renderer Test",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/ActionsRenderer", "Action Renderer Test").end();
-         },
-
-         beforeEach: function() {
-            browser.end();
-         },
-
-         "Count REST API actions": function() {
-            return browser.waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+      "Count REST API actions": function() {
+         return this.remote.waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
             .end()
 
-            .findByCssSelector(selectors.restActions.first.label)
-               .click()
+         .findByCssSelector(selectors.restActions.first.label)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.restActions.first.dropDown)
+         .findDisplayedByCssSelector(selectors.restActions.first.dropDown)
             .end()
 
-            .findAllByCssSelector(selectors.restActions.first.action)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 10, "Unexpected number of REST API actions rendered");
-               });
-         },
+         .findAllByCssSelector(selectors.restActions.first.action)
+            .then(function(elements) {
+               assert.lengthOf(elements, 10, "Unexpected number of REST API actions rendered");
+            });
+      },
 
-         "Count custom actions": function() {
-            return browser.findByCssSelector(selectors.customActions.first.label)
-               .click()
+      "Count custom actions": function() {
+         return this.remote.findByCssSelector(selectors.customActions.first.label)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.customActions.first.dropDown)
-            .end()
-            
-            .findAllByCssSelector(selectors.customActions.first.action)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 2, "Unexpected number of custom actions rendered");
-               });
-         },
-
-         "Count filtered merged actions": function() {
-            return browser.findByCssSelector(selectors.mergedActions.first.label)
-               .click()
+         .findDisplayedByCssSelector(selectors.customActions.first.dropDown)
             .end()
 
-            .findDisplayedByCssSelector(selectors.mergedActions.first.dropDown)
-            .end()
-            
-            .findAllByCssSelector(selectors.mergedActions.first.action)
-               .then(function(elements) {
-                  assert.lengthOf(elements, 5, "Unexpected number of filtered merged REST API and custom actions rendered");
-               });
-         },
+         .findAllByCssSelector(selectors.customActions.first.action)
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "Unexpected number of custom actions rendered");
+            });
+      },
 
-         "Check that actions don't appear off the screen": function() {
-            return browser.findByCssSelector(selectors.footerActions.first.label)
-               .click()
+      "Count filtered merged actions": function() {
+         return this.remote.findByCssSelector(selectors.mergedActions.first.label)
+            .click()
             .end()
 
-            .findDisplayedByCssSelector(selectors.footerActions.first.dropDown)
+         .findDisplayedByCssSelector(selectors.mergedActions.first.dropDown)
             .end()
-            
-            .findDisplayedByCssSelector(selectors.footerActions.first.action1)
-               // NOTE: These tests should ensure that the menu item is visible.
-               .isDisplayed()
-               .click();
-         },
 
-         "Post Coverage Results": function() {
-            TestCommon.alfPostCoverageResults(this, browser);
-         }
-      };
+         .findAllByCssSelector(selectors.mergedActions.first.action)
+            .then(function(elements) {
+               assert.lengthOf(elements, 5, "Unexpected number of filtered merged REST API and custom actions rendered");
+            });
+      },
+
+      "Check that actions don't appear off the screen": function() {
+         return this.remote.findByCssSelector(selectors.footerActions.first.label)
+            .click()
+            .end()
+
+         .findDisplayedByCssSelector(selectors.footerActions.first.dropDown)
+            .end()
+
+         .findDisplayedByCssSelector(selectors.footerActions.first.action1)
+            // NOTE: These tests should ensure that the menu item is visible.
+            .isDisplayed()
+            .click();
+      }
    });
 });

@@ -1,9 +1,154 @@
-var notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
-   os = require("os"),
-   tcpPortUsed = require("tcp-port-used");
+var alfConfig = require("./_config"),
+   path = require("path"),
+   notify = require("../../node_modules/grunt-notify/lib/notify-lib"),
+   tcpPortUsed = require("tcp-port-used"),
+   istanbul = require("istanbul");
 
-// Modify grunt
 module.exports = function(grunt) {
+
+   // Generate a task for copying the uninstrumented code back...
+   grunt.registerTask("copyOriginalCode", "Copy Uninstrumented Code", function() {
+      var srcPath = "src/main/resources/alfresco";
+      var targetRoot = "target/classes/META-INF/js/aikau/";
+
+      // Return unique array of all file paths which match globbing pattern
+      var options1 = {
+         cwd: srcPath,
+         filter: "isFile"
+      };
+      var globPattern1 = "**/*";
+      var options2 = {
+         cwd: targetRoot,
+         filter: "isDirectory"
+      };
+      var globPattern2 = "*";
+
+      var targetVersion;
+      grunt.file.expand(options2, globPattern2)
+         .forEach(function(matches) {
+            console.log("Found target version: " + matches);
+            targetVersion = matches;
+            grunt.file.expand(options1, globPattern1)
+               .forEach(function(fileMatches) {
+                  var src = path.join(srcPath, fileMatches);
+                  var target = path.join(targetRoot + targetVersion + "/alfresco", fileMatches);
+                  grunt.file.copy(src, target);
+               });
+         });
+   });
+
+   // Generate a task for copying the instrumented code...
+   grunt.registerTask("copyInstrumentedCode", "Copy Instrumented Code", function() {
+      var srcPath = "src/main/resources/alfrescoInst";
+      var targetRoot = "target/classes/META-INF/js/aikau/";
+
+      // Return unique array of all file paths which match globbing pattern
+      var options1 = {
+         cwd: srcPath,
+         filter: "isFile"
+      };
+      var globPattern1 = "**/*";
+      var options2 = {
+         cwd: targetRoot,
+         filter: "isDirectory"
+      };
+      var globPattern2 = "*";
+
+      var targetVersion;
+      grunt.file.expand(options2, globPattern2)
+         .forEach(function(matches) {
+            console.log("Found target version: " + matches);
+            targetVersion = matches;
+            grunt.file.expand(options1, globPattern1)
+               .forEach(function(fileMatches) {
+                  var src = path.join(srcPath, fileMatches);
+                  var target = path.join(targetRoot + targetVersion + "/alfresco", fileMatches);
+                  console.log("Copying '" + src + "' to '" + target + "'");
+                  grunt.file.copy(src, target);
+               });
+         });
+   });
+
+   // Aliases
+   grunt.registerTask("hideExistingCoverageReports", ["copy:coverageReportsToTemp", "clean:coverageReports"]);
+   grunt.registerTask("showExistingCoverageReports", ["copy:coverageReportsFromTemp", "clean:coverageReportsTemp"]);
+
+   /* Register additional helper functions
+    * These are used in the above tasks.
+    */
+
+   // Generate the RequireEverything widget - a widget listing task, a file write and then a clean of the listing file
+   grunt.registerTask("generate-require-everything", "A task for listing widgets and then generating the RequireEverything widget from the list", function() {
+      grunt.task.run("folder_list:alf_widgets");
+      grunt.task.run("write-require-everything");
+      grunt.task.run("clean:requireEverythingWidgetsList");
+   });
+
+   // Generate the RequireEverything widget
+   // Should always be run after a "folder_list:alf_widgets" task
+   grunt.registerTask("write-require-everything", "A task for writing the RequireEverything widget file", function() {
+
+      var template = grunt.file.read(alfConfig.dir.testResources + "/" + alfConfig.requireEverything.template),
+         widgetFiles = grunt.file.readJSON(alfConfig.files.alfWidgets),
+         fileList = [];
+
+      // Iterate over widgetFiles, removing unwanted files and topping and tailing the file paths accordingly
+      for (var i = 0; i < widgetFiles.length; i++) {
+         var filePath = widgetFiles[i].location
+            .replace(alfConfig.requireEverything.widgetsPrefix, "")
+            .replace(alfConfig.requireEverything.widgetsSuffix, "");
+         if (alfConfig.requireEverything.exclusions.indexOf(filePath) === -1) {
+            fileList.push("\n\t\"" + filePath + "\"");
+         }
+      }
+
+      grunt.file.write(alfConfig.requireEverything.widget, template.replace("{0}", fileList.toString()));
+      grunt.log.writeln("Finished writing RequireEverything widget");
+   });
+
+   // Generate a coverage report using a vagrant initialised VM
+   // The VM is run up by the task
+   grunt.registerTask("coverage", "Updated coverage task for collecting coverage data using istanbul instrumentation", function() {
+      grunt.task.run("shell:stopTestApp");
+      grunt.task.run("generate-require-everything");
+      grunt.task.run("instrumentCode");
+      grunt.task.run("copyInstrumentedCode");
+      grunt.task.run("startUnitTestApp");
+      grunt.task.run("waitServer");
+      grunt.task.run("intern:dev");
+      grunt.task.run("shell:stopTestApp");
+      grunt.task.run("copyOriginalCode");
+   });
+
+   /* Register additional helper functions
+    * These are used in the above tasks.
+    */
+
+   // Delete existing instrumented code and run the coverage module instrumentation process to replace it
+   grunt.registerTask("instrumentCode", "Use istanbul to instrument the widgets with coverage collection data", function() {
+
+      // Reset instrumented directory
+      if (grunt.file.isDir(alfConfig.dir.mainInstrumented)) {
+         grunt.file.delete(alfConfig.dir.mainInstrumented, {
+            force: true
+         });
+      }
+      grunt.file.mkdir(alfConfig.dir.mainInstrumented);
+
+      // Get istanbul instrumenter
+      var instrumenter = new istanbul.Instrumenter();
+
+      // Loop through the 
+      grunt.file.recurse(alfConfig.dir.main, (abspath, rootdir, subdir, filename) => {
+         // grunt.log.writeln(`abspath=${abspath}, rootdir=${rootdir}, subdir=${subdir}, filename=${filename}`);
+         var orig = grunt.file.read(abspath),
+            relativePath = subdir ? path.join(subdir, filename) : filename,
+            isJS = filename.substr(-3) === ".js",
+            instrumented = isJS ? instrumenter.instrumentSync(orig, abspath) : orig;
+         // grunt.log.writeln(`Instrumenting ${abspath} (isJS=${isJS})`);
+         grunt.file.write(path.join(alfConfig.dir.mainInstrumented, relativePath), instrumented);
+      });
+   });
 
    // New Test
    grunt.registerTask("newTest", ["shell:stopTestApp", "vdown", "vup", "test"]);
@@ -76,108 +221,33 @@ module.exports = function(grunt) {
       });
    });
 
-   // Calculate this machine's (i.e. the server's) best IP address
-   // Preference is given to VM tunnel (which will work everywhere) and then an ethernet interface
-   var interfaceToUse = (function() {
-
-      // Setup variables
-      var networkInterfaces = os.networkInterfaces(),
-         interfaceNames = Object.keys(networkInterfaces),
-         vmInterface,
-         localInterface,
-         fallbackInterface;
-
-      // Analyse all interfaces
-      interfaceNames.forEach(function(interfaceName) {
-         var lowerName = interfaceName && interfaceName.toLowerCase();
-         networkInterfaces[interfaceName].forEach(function(nextInterface) {
-            /*jshint noempty:false*/
-            if (nextInterface.family === "IPv4" && !nextInterface.internal) {
-               if (!lowerName) {
-                  // Ignore unnamed interfaces (for the moment)
-               } else if (lowerName.indexOf("vbox") === 0) {
-                  vmInterface = nextInterface;
-                  vmInterface.name = interfaceName;
-               } else if (lowerName.indexOf("virtual") === 0) {
-                  vmInterface = nextInterface;
-                  vmInterface.name = interfaceName;
-               } else if (lowerName.indexOf("eth") === 0) {
-                  localInterface = nextInterface;
-                  localInterface.name = interfaceName;
-               } else if (lowerName.indexOf("en") === 0) {
-                  localInterface = nextInterface;
-                  localInterface.name = interfaceName;
-               } else {
-                  fallbackInterface = nextInterface;
-                  fallbackInterface.name = interfaceName;
-               }
-            }
-         });
-      });
-
-      // Choose prioritised interface
-      var chosenInterface = vmInterface || localInterface || fallbackInterface;
-
-      // In debug mode, output the IP information
-      grunt.log.debug("");
-      grunt.log.debug("\x1b[4m" + "Retrieving IP address of server" + "\x1b[0m");
-      grunt.log.debug("Using network interface '" + chosenInterface.name + "' with address of " + chosenInterface.address);
-      grunt.log.debug("");
-
-      // Pass back the IP
-      return chosenInterface;
-   })();
-
    // Update the grunt config
    grunt.config.merge({
       intern: {
          options: {
-            rowsCols: process.stdout.rows + "|" + process.stdout.columns, // Used by ConcurrentReporter
-            serverIP: interfaceToUse.address // Used by all
+            runType: "runner",
+            rowsCols: process.stdout.rows + "|" + process.stdout.columns,
+            coverageDir: alfConfig.dir.coverage,
+            testsDir: alfConfig.dir.testResources
          },
          bs: {
             options: {
-               runType: "runner",
-               config: "src/test/resources/intern_bs",
-               useLocalhost: true
+               config: "src/test/resources/intern_bs"
             }
          },
          bamboo: {
             options: {
-               runType: "runner",
-               config: "src/test/resources/intern_bamboo",
-               useLocalhost: true
+               config: "src/test/resources/intern_bamboo"
             }
          },
          dev: {
             options: {
-               runType: "runner",
                config: "src/test/resources/intern"
-            }
-         },
-         dev_coverage: {
-            options: {
-               runType: "runner",
-               config: "src/test/resources/intern",
-               doCoverage: true
             }
          },
          local: {
             options: {
-               runType: "runner",
                config: "src/test/resources/intern_local"
-            }
-         },
-         sl: {
-            options: {
-               runType: "runner",
-               config: "src/test/resources/intern_sl"
-            }
-         },
-         grid: {
-            options: {
-               runType: "runner",
-               config: "src/test/resources/intern_grid"
             }
          }
       }
