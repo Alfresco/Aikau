@@ -1,4 +1,4 @@
-Aikau 1.0.61 Release Notes
+Aikau 1.0.62 Release Notes
 ===
 
 Previous deprecations:
@@ -47,6 +47,13 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.62:
+* [AKU-842](https://issues.alfresco.com/jira/browse/AKU-842)       - Ensure infinite scrolling Document Library can be sorted via menu
+* [AKU-898](https://issues.alfresco.com/jira/browse/AKU-898)       - Support for UploadMonitor completed upload actions
+* [AKU-904](https://issues.alfresco.com/jira/browse/AKU-904)       - Added support for additional form config in form dialogs
+* [AKU-908](https://issues.alfresco.com/jira/browse/AKU-908)       - Inline edit renderers use buttons rather than labels for save/cancel
+* [AKU-912](https://issues.alfresco.com/jira/browse/AKU-912)       - Removal of hardcoded "Relevance" sorting from SearchBox links
+
 1.0.61:
 * [AKU-757](https://issues.alfresco.com/jira/browse/AKU-757)       - Prevent browser popup blocker on download requests
 * [AKU-903](https://issues.alfresco.com/jira/browse/AKU-903)       - Prevent click bubbling on PublishAction
