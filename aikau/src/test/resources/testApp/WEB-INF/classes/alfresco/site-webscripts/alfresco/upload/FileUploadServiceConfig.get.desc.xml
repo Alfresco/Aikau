@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>FileUploadService Custom Config Test</shortname>
-  <description>This page tests using a custom configuration for the FileUpload service</description>
-  <family>aikau-unit-tests</family>
-  <url>/FileUploadServiceConfig</url>
-</webscript>
