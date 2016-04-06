@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
             // }
             this.renderedValue = this.message(dateI18N, {
                0: this.getRelativeTime(modifiedDate), 
-               1: modifiedBy
+               1: this.encodeHTML(modifiedBy)
             });
          }
          this.updateRenderedValueClass();
