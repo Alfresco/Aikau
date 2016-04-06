@@ -565,6 +565,23 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Override the default dialog method to ensure that the dialog starts its position
+       * at the top of the page to avoid the page scrolling to focus on its content (see
+       * call to child.focus() below).
+       * 
+       * @instance
+       * @override
+       * @returns {Promise} Returns the superclass' promise
+       * @since 1.0.63
+       */
+      show: function alfresco_dialogs_AlfDialog__show() {
+         domStyle.set(this.domNode, {
+            top: (document.body.scrollTop || document.documentElement.scrollTop) + "px"
+         });
+         return this.inherited(arguments);
+      },
+
+      /**
        * Calls the resize() function
        *
        * @instance
