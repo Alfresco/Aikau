@@ -22,9 +22,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!expect",
         "intern/chai!assert"],
-        function(module, defineSuite, expect, assert) {
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "Date Tests",
@@ -37,7 +36,16 @@ define(["module",
          return this.remote.findByCssSelector("#CUSTOM_PROPS .value")
             .getVisibleText()
             .then(function(resultText) {
-               assert(/(Modified over \d+ years ago by Brian Griffin)/g.test(resultText), "Custom property not rendered correctly: " + resultText);
+               assert(/(Modified over \d+ years ago by TestSök <img ='><svg onload=\"window.hacked=true\"'>)/g.test(resultText), "Custom property not rendered correctly: " + resultText);
+            });
+      },
+
+      "No XSS attacks were successful": function() {
+         return this.remote.execute(function() {
+               return window.hacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
             });
       },
 

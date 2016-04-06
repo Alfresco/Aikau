@@ -39,7 +39,16 @@ define(["module",
             .findByCssSelector("#BASIC_ITEM_0 .value")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "Test", "Standard property not rendered correctly: " + resultText);
+               assert.equal(resultText, "TestSök <img ='><svg onload=\"window.hacked=true\"'>");
+            });
+      },
+
+      "No XSS attacks were successful": function() {
+         return this.remote.execute(function() {
+               return window.hacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
             });
       },
 
@@ -47,7 +56,7 @@ define(["module",
          return this.remote.findByCssSelector("#PREFIX_SUFFIX_ITEM_0 .value")
             .getVisibleText()
             .then(function(resultText) {
-               assert(resultText === "(Test)", "Prefix and suffix not rendered correctly: " + resultText);
+               assert.equal(resultText, "(TestSök <img ='><svg onload=\"window.hacked=true\"'>)");
             });
       },
 
@@ -76,7 +85,7 @@ define(["module",
       },
 
       "Check hover property is hidden": function() {
-         return this.remote.findByCssSelector(".alfresco-testing-SubscriptionLog")
+         return this.remote.findByCssSelector(".alfresco_logging_DebugLog")
             .then(element => {
                this.remote.moveMouseTo(element);
             })

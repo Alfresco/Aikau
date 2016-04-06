@@ -22,11 +22,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "intern/chai!expect",
-        "require",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, expect, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "DateLink Tests",
@@ -39,7 +36,7 @@ define(["module",
          return this.remote.findByCssSelector("#CUSTOM_PROPS .value")
             .getVisibleText()
             .then(function(resultText) {
-               assert(/(Modified over \d+ years ago by Brian Griffin)/g.test(resultText), "Test #1 - Custom property not rendered correctly: " + resultText);
+               assert(/(Modified over \d+ years ago by TestSök <img ='><svg onload=\"window.hacked=true\"'>)/g.test(resultText), "Test #1 - Custom property not rendered correctly: " + resultText);
             });
       },
 
@@ -51,38 +48,25 @@ define(["module",
             });
       },
 
+      "No XSS attacks were successful": function() {
+         return this.remote.execute(function() {
+               return window.hacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
+            });
+      },
+
       "Check the date click published as expected": function() {
          return this.remote.findByCssSelector("#CUSTOM_PROPS .value")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector(TestCommon.pubSubDataCssSelector("last", "alfTopic", "ALF_NAVIGATE_TO_PAGE"))
-            .then(
-               function() {},
-               function() {
-                  assert(false, "The datelink did not publish on 'ALF_NAVIGATE_TO_PAGE' after mouse clicks");
-               }
-            );
-      },
-
-      "Check the date click published the payload as expected (1)": function() {
-         return this.remote.findByCssSelector(TestCommon.pubSubDataCssSelector("last", "type", "PAGE_RELATIVE"))
-            .then(
-               function() {},
-               function() {
-                  assert(false, "The datelink did not publish the payload with 'type' as 'PAGE_RELATIVE'");
-               }
-            );
-      },
-
-      "Check the date click published the payload as expected (2)": function() {
-         return this.remote.findByCssSelector(TestCommon.pubSubDataCssSelector("last", "url", "/1/2/3/4/5"))
-            .then(
-               function() {},
-               function() {
-                  assert(false, "The datelink did not publish the payload with 'url' as '/1/2/3/4/5'");
-               }
-            );
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "type", "PAGE_RELATIVE");
+               assert.propertyVal(payload, "url", "/1/2/3/4/5");
+            });
       },
 
       "Test other configurations": function() {
