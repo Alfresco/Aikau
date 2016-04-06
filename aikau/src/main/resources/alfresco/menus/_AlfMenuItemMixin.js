@@ -148,15 +148,22 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_menus__AlfMenuItemMixin__postMixInProperties() {
+         // We need to keep a copy of the unencoded label, in case it needs to be used for the 
+         // title (which must remain unencoded, to prevent double-encoding)...
+         var originalLabel = this.label;
          if (this.label)
          {
-            this.params.label = this.label = this.message(this.label);
+            this.params.label = this.label = this.encodeHTML(this.message(this.label));
          }
-         if (this.title)
+         if (!this.title && originalLabel)
+         {
+            this.title = originalLabel;
+         }
+         else if (this.title)
          {
             this.title = this.message(this.title);
          }
-
+         this.params.title = this.title;
          this.inherited(arguments);
       },
 
