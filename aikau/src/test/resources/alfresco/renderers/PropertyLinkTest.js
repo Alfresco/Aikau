@@ -26,37 +26,39 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "PropertyLink Tests",
       testPage: "/PropertyLink",
 
+      "Check rendering is not double encoded": function() {
+         return this.remote.findDisplayedByCssSelector("#PROPLINK_ITEM_0 .inner .value")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "TestSök <img ='><svg onload=\"window.hacked=true\"'>");
+            });
+      },
+
+      "No XSS attacks were successful": function() {
+         return this.remote.execute(function() {
+               return window.hacked;
+            })
+            .then(function(hacked) {
+               assert.isFalse(!!hacked);
+            });
+      },
+
       "Check that currentItem is published": function() {
-         return this.remote.findByCssSelector("#LIST_WITH_HEADER_ITEMS tr:first-child td span.inner")
+         return this.remote.findByCssSelector("#PROPLINK_ITEM_0 .inner .value")
             .click()
-            .end()
+         .end()
 
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "name", "Site1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "'name' not included in currentItem data");
-            });
-      },
-
-      "Check that currentItem data is published": function() {
-         return this.remote.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "urlname", "site1"))
-            .then(function(elements) {
-               assert(elements.length === 1, "'urlname' not included in currentItem data");
-            });
-      },
-
-      "Check that topic is published": function() {
-         return this.remote.findAllByCssSelector(TestCommon.topicSelector("publishTopic", "publish", "last"))
-            .then(function(elements) {
-               assert(elements.length === 1, "topic not published correctly");
+         .getLastPublish("publishTopic")
+            .then(function(payload) {
+               assert.propertyVal(payload, "name", "TestSök <img ='><svg onload=\"window.hacked=true\"'>");
+               assert.propertyVal(payload, "urlname", "site1");
             });
       }
    });
