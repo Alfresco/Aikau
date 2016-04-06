@@ -117,7 +117,11 @@ define(["dojo/_base/declare",
             className: "alfresco-navigation-_HtmlAnchorMixin",
             href: url
          };
-         if (this.label) {
+         if (this.title)
+         {
+            anchorAttrs.title = this.message(this.title);
+         }
+         else if (this.label) {
             anchorAttrs.title = this.message(this.label);
          }
          if (this.excludeFromTabOrder) {
