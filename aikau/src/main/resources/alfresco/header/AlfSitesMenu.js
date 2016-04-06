@@ -458,7 +458,7 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * This is the the sort function used for ordering favourite site menu items.
+       * This is the sort function used for ordering favourite site menu items.
        * 
        * @instance
        * @param {object} item1 The first menu item to compare
@@ -551,7 +551,6 @@ define(["dojo/_base/declare",
        */
       _addMenuItem: function alfresco_header_AlfSitesMenu___addMenuItem(group, widget, index) {
          this.alfLog("log", "Adding menu item", widget, index, group);
-
          var item = this.createWidget({
             name: "alfresco/header/AlfMenuItem",
             config: widget.config
