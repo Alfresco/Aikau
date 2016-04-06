@@ -278,7 +278,7 @@ define(function() {
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/DocumentServiceTest",
-      "src/test/resources/alfresco/services/FileUploadServiceConfigTest",
+      "src/test/resources/alfresco/services/FileUploadServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
       "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",

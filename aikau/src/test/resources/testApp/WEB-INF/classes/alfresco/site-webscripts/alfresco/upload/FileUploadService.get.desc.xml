@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FileUploadService Test</shortname>
+  <description>This page exercises the FileUploadService</description>
+  <family>aikau-unit-tests</family>
+  <url>/FileUploadService</url>
+</webscript>
