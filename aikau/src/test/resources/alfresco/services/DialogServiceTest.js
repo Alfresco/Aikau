@@ -663,6 +663,26 @@ define(["module",
             .end()
 
          .findByCssSelector("#RESIZING_DIALOG.dialogHidden");
+      },
+
+      "Page does not scroll when dialogs opened": function() {
+         return this.remote.findById("CREATE_FORM_DIALOG")
+            .click()
+            .end()
+
+         .findByCssSelector("#FD2.dialogDisplayed")
+            .end()
+
+         .execute(function() {
+               var firstButton = document.querySelector(".alfresco-buttons-AlfButton"),
+                  clientRect = firstButton && firstButton.getBoundingClientRect(),
+                  buttonTop = clientRect && clientRect.top,
+                  buttonOffScreen = isNaN(buttonTop) || buttonTop < 0;
+               return buttonOffScreen;
+            })
+            .then(buttonOffScreen => {
+               assert.isFalse(buttonOffScreen);
+            });
       }
    });
 });
