@@ -207,7 +207,7 @@ define(["alfresco/core/Core",
             array.forEach(widgets, function(widget) {
                var conf = widget.config;
                if (conf) {
-                  for (propName in conf) {
+                  for (var propName in conf) {
                      if (conf.hasOwnProperty(propName) && propName.indexOf("widgets") === 0) {
                         countWidgets(conf[propName]);
                      }
