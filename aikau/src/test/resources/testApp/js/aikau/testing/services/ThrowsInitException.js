@@ -1,4 +1,3 @@
-/*globals Alfresco*/
 /**
  * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
@@ -35,7 +34,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       initService: function aikauTesting_services_ThrowsInitException__initService() {
-         this.willSurelyDoIt();
+         throw new Error("This is an error");
       }
    });
 });

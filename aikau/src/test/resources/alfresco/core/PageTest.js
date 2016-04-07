@@ -18,10 +18,10 @@
  */
 
 /**
- * This test assesses the CoreRwd mixin as applied to AlfMenuBarPopup
+ * This tests the basic page loading behaviour with regards to service and widget creation.
  *
- * @author Richard Smith
  * @author Dave Draper
+ * @since 1.0.63
  */
 define(["module",
         "alfresco/defineSuite"],
