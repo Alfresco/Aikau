@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {String[]}
        */
-      nonAmdDependencies: ["/js/lib/3rd-party/lightbox.js"],
+      nonAmdDependencies: ["/js/lib/3rd-party/lightbox/0.1/lightbox.js"],
       
       /**
        * If a service needs to act upon its post-mixed-in state before registering subscriptions then

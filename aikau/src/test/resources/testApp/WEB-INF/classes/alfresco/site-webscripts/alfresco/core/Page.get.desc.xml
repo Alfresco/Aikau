@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Page behaviour</shortname>
+  <description>Tests general page setup and rendering behaviours</description>
+  <family>aikau-unit-tests</family>
+  <url>/Page</url>
+</webscript>

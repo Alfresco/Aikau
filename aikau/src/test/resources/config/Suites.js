@@ -61,6 +61,7 @@ define(function() {
       "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/ObjectProcessingMixinTest",
+      "src/test/resources/alfresco/core/PageTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
       "src/test/resources/alfresco/core/ResponseScopeTest",
