@@ -1,4 +1,12 @@
 /*
+
+   IMPORTANT: If you edit this file, please change the name of the parent folder to indicate an
+              increment in version in order to ensure that (where multiple instances of Aikau the
+              Aikau JAR exist in the web application application) that the LightBoxService will
+              load the correct version of this file. See AKU-922 for details.
+ */
+
+/*
    Lightbox JS: Fullsize Image Overlays 
    by Lokesh Dhakar - http://www.huddletogether.com
 

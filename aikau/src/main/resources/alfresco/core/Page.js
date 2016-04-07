@@ -235,16 +235,12 @@ define(["alfresco/core/ProcessWidgets",
                catch (e) 
                {
                   _this.alfLog("error", "The following error occurred creating a service", e);
-                  this._showPage();
-                  if (callback)
-                  {
-                     callback.call((callbackScope || _this), service, index);
-                  }
+                  _this._showPage();
                }
             }
             else
             {
-               this._showPage();
+               _this._showPage();
                _this.alfLog("error", "The following service could not be found, so is not included on the page '" +  dep + "'. Please correct the use of this service in your page definition");
             }
             if (callback)
