@@ -98,9 +98,19 @@ define(["dojo/_base/declare",
       onDisplayNotification: function alfresco_services_NotificationService__onDisplayNotification(payload) {
          var message = lang.getObject("message", false, payload);
          if (message) {
-            var newNotification = new AlfNotification({
-               message: payload.message
-            });
+
+            // Define and use config to create a new notification
+            var config = {
+               message: payload.message,
+               widgets: payload.widgets,
+               id: payload.notificationId
+            }
+            if(typeof payload.autoClose !== "undefined") {
+               config.autoClose = payload.autoClose;
+            }
+            var newNotification = new AlfNotification(config);
+
+            // Show the notification
             newNotification.startup();
             newNotification.display().then(lang.hitch(this, function() {
                this.alfPublish(this.closeNotificationTopic, {}, true);

@@ -145,6 +145,27 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/buttons/AlfButton",
+         id: "NOTIFICATION_WIDGETS_BUTTON",
+         config: {
+            label: "Display non-closing notification with widgets",
+            publishTopic: "ALF_DISPLAY_NOTIFICATION",
+            publishPayload: {
+               message: "This is a message",
+               autoClose: false,
+               notificationId: "NON_CLOSING_NOTIFICATION",
+               widgets: [{
+                  name: "alfresco/buttons/AlfButton",
+                  id: "IN_NOTIFICATION_BUTTON",
+                  config: {
+                     label: "Push me!",
+                     publishTopic: "PUBLISH_FROM_NOTIFICATION"
+                  }
+               }]
+            }
+         }
+      },
+      {
          name: "alfresco/html/Spacer",
          config: {
             height: "500px"

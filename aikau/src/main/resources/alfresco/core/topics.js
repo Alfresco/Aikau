@@ -342,6 +342,11 @@ define([],function() {
        *
        * @event
        * @property {string} message The message to be displayed
+       * @property {string} [autoClose=true] Whether the notification should automatically close itself
+       * @property {object[]} [widgets] Widgets to be inserted into the notification below the message. Note that
+       *                                any widgets required must be either statically declared in the page model
+       *                                or in a widgets property of a custom widget/service, or be specifically
+       *                                required by a custom widget/service.
        * @property {string} [publishTopic] A topic to be published after the notification has closed
        * @property {object} [publishPayload] The payload to be published after the notification has closed
        * @property {boolean} [publishGlobal] Whether to publish the topic globally
