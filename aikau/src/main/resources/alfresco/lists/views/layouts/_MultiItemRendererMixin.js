@@ -478,11 +478,14 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event that gave focus.
        */
       onFocusClick: function alfresco_lists_views_layout___MultiItemRendererMixin__onFocusClick(evt) {
-         on.emit(this.domNode, "onItemFocused", {
-            bubbles: true,
-            cancelable: true,
-            item: this
-         });
+         if (!evt.preventFocusTheft)
+         {
+            on.emit(this.domNode, "onItemFocused", {
+               bubbles: true,
+               cancelable: true,
+               item: this
+            });
+         }
          event.stop(evt);
       }
    });
