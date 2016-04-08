@@ -88,6 +88,7 @@
  * @mixes module:alfresco/forms/controls/FormControlValidationMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/forms/controls/utilities/RulesEngineMixin
+ * @mixes module:alfresco/lists/KeyboardNavigationSuppressionMixin
  * @extendSafe
  * @author Dave Draper
  * @author Richard Smith
@@ -301,6 +302,22 @@ define(["dojo/_base/declare",
        * @since 1.0.33
        */
       getPubSubOptionsImmediately: true,
+
+      /**
+       * This attribute should only be configured to be true when the control is being used within the
+       * a [list]{@link module:alfresco/lists/AlfList} - for example as part of the widget model for
+       * [a list appendix]{@link module:alfresco/lists/views/AlfListView#widgetsForAppendix} or as 
+       * part of the rendering of an item. Configuring this to true will ensure that using the cursor
+       * keys will not control the selected list item and that focus will not be stolen from the wrapped
+       * control - however, this should be used with caution as it may limit or alter the behaviour
+       * of some form controls. See AKU-920/AKU-921 for the background of why this has been added.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.63
+       */
+      usedInList: false,
 
       /**
        * The default visibility status is always true (this can be overridden by extending controls).
@@ -1261,12 +1278,21 @@ define(["dojo/_base/declare",
                this.deferredValuePublication.resolve();
             }
 
-            on(this.domNode, "click", lang.hitch(this, this.suppressFocusRequest));
+            if (this.usedInList)
+            {
+               on(this.domNode, "click", lang.hitch(this, this.suppressFocusRequest));
+            }
          }
          else
          {
             // No action yet. Don't unsubscribe.
          }
+      },
+
+      suppressFocusRequest: function alfresco_lists_KeyboardNavigationSuppressionMixin__suppressFocusRequest(evt) {
+         evt.stopPropagation();
+         evt.preventDefault();
+         this.focus();
       },
 
       /**
@@ -1338,7 +1364,10 @@ define(["dojo/_base/declare",
             this._pendingValidationFailureDisplay = false;
             this.showValidationFailure();
          }
-         this.suppressContainerKeyboardNavigation(false);
+         if (this.usedInList)
+         {
+            this.suppressContainerKeyboardNavigation(false);
+         }
          this.inherited(arguments);
       },
 
@@ -1354,7 +1383,10 @@ define(["dojo/_base/declare",
        * @since 1.0.63
        */
       _onFocus: function alfresco_forms_controls_BaseFormControl___onFocus() {
-         this.suppressContainerKeyboardNavigation(true);
+         if (this.usedInList)
+         {
+            this.suppressContainerKeyboardNavigation(true);
+         }
          this.inherited(arguments);
       },
 

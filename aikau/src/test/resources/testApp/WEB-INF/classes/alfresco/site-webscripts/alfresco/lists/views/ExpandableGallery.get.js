@@ -164,6 +164,7 @@ model.jsonModel = {
                                                                                              id: "APPENDIX_TEXTBOX",
                                                                                              name: "alfresco/forms/controls/TextBox",
                                                                                              config: {
+                                                                                                usedInList: true,
                                                                                                 fieldId: "APPENDIX_TEXTBOX",
                                                                                                 name: "test",
                                                                                                 value: ""
