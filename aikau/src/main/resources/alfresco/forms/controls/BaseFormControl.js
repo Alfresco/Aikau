@@ -1289,12 +1289,6 @@ define(["dojo/_base/declare",
          }
       },
 
-      suppressFocusRequest: function alfresco_lists_KeyboardNavigationSuppressionMixin__suppressFocusRequest(evt) {
-         evt.stopPropagation();
-         evt.preventDefault();
-         this.focus();
-      },
-
       /**
        * Adds the widget into the current DOM fragment and then sets up subscriptions on widget processing complete
        * publications as we want to wait the most recently requested widget processing to complete (which in all likelihood
