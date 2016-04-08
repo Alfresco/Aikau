@@ -304,22 +304,6 @@ define(["dojo/_base/declare",
       getPubSubOptionsImmediately: true,
 
       /**
-       * This attribute should only be configured to be true when the control is being used within the
-       * a [list]{@link module:alfresco/lists/AlfList} - for example as part of the widget model for
-       * [a list appendix]{@link module:alfresco/lists/views/AlfListView#widgetsForAppendix} or as 
-       * part of the rendering of an item. Configuring this to true will ensure that using the cursor
-       * keys will not control the selected list item and that focus will not be stolen from the wrapped
-       * control - however, this should be used with caution as it may limit or alter the behaviour
-       * of some form controls. See AKU-920/AKU-921 for the background of why this has been added.
-       * 
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.63
-       */
-      usedInList: false,
-
-      /**
        * The default visibility status is always true (this can be overridden by extending controls).
        *
        * @instance
@@ -1278,10 +1262,12 @@ define(["dojo/_base/declare",
                this.deferredValuePublication.resolve();
             }
 
-            if (this.usedInList)
-            {
-               on(this.domNode, "click", lang.hitch(this, this.suppressFocusRequest));
-            }
+            on(this.domNode, "click", lang.hitch(this, function(evt) {
+               if (evt)
+               {
+                  evt.preventFocusTheft = true;
+               }
+            }));
          }
          else
          {
@@ -1358,10 +1344,7 @@ define(["dojo/_base/declare",
             this._pendingValidationFailureDisplay = false;
             this.showValidationFailure();
          }
-         if (this.usedInList)
-         {
-            this.suppressContainerKeyboardNavigation(false);
-         }
+         this.suppressContainerKeyboardNavigation(false);
          this.inherited(arguments);
       },
 
@@ -1377,10 +1360,7 @@ define(["dojo/_base/declare",
        * @since 1.0.63
        */
       _onFocus: function alfresco_forms_controls_BaseFormControl___onFocus() {
-         if (this.usedInList)
-         {
-            this.suppressContainerKeyboardNavigation(true);
-         }
+         this.suppressContainerKeyboardNavigation(true);
          this.inherited(arguments);
       },
 
