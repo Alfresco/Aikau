@@ -27,17 +27,11 @@ define(function() {
 
    // Whether to run all tests or just a few
    var runAllTests = true;
-   runAllTests = false; // Comment/uncomment this line to toggle
+   // runAllTests = false; // Comment/uncomment this line to toggle
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "src/test/resources/alfresco/forms/controls/CheckBoxTest",
-      // "src/test/resources/alfresco/forms/controls/FormButtonDialogTest",
-      // "src/test/resources/alfresco/forms/controls/PushButtonsTest",
-      // "src/test/resources/alfresco/search/SearchSuggestionsTest",
-      // "src/test/resources/alfresco/core/PageTest",
-      // "src/test/resources/alfresco/documentlibrary/views/MediaFilmStripViewTest",
-      // "src/test/resources/alfresco/forms/controls/ContainerPickerTest"
+      "src/test/resources/alfresco/upload/UploadMonitorTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "src/test/resources/alfresco/preview/PdfJsPreviewFaultsTest",
