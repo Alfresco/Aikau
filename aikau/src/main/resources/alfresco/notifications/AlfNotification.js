@@ -94,6 +94,20 @@ define(["alfresco/core/Core",
       id: null,
 
       /**
+       * This allows a simple inline-link to be added to the notification which, when clicked, will
+       * publish the provided topic and payload.
+       *
+       * @instance
+       * @type {Object}
+       * @property {String} label The text to display on the link
+       * @property {String} publishTopic The topic to be published
+       * @property {Object} [publishPayload] The payload to be published
+       * @default
+       * @since 1.0.63
+       */
+      inlineLink: null,
+
+      /**
        * Estimate how many seconds it might take a user to focus on a notification
        *
        * @instance
@@ -121,6 +135,19 @@ define(["alfresco/core/Core",
        * @since 1.0.63
        */
       widgets: null,
+
+      /**
+       * If the inlineLink object has been specified then use this widgets structure
+       * to create the button to be inserted.
+       *
+       * @instance
+       * @type {Object[]}
+       * @since 1.0.63
+       */
+      widgetsForInlineLink: [{
+         name: "alfresco/navigation/Link",
+         config: {}
+      }],
 
       /**
        * How many words per second a person will read, used to determine how long to display the message.
@@ -154,14 +181,32 @@ define(["alfresco/core/Core",
        * @override
        */
       postCreate: function alfresco_notifications_AlfNotification__postCreate() {
+
+         // Make sure to call the chained methods
          this.inherited(arguments);
+
+         // Update the CSS state if auto-close is enabled
          if (this.autoClose) {
             domClass.add(this.domNode, "alfresco-notifications-AlfNotification--auto-close");
          }
-         if (this.widgets && this.widgets.length) {
+
+         // Display either the inline button or the widgets (inline takes priority)
+         if (this.inlineLink) {
+            domClass.add(this.domNode, "alfresco-notifications-AlfNotification--has-inline-button");
+            var inlineLinkWidgets = lang.clone(this.widgetsForInlineLink);
+            lang.mixin(inlineLinkWidgets[0].config, {
+               label: this.inlineLink.label,
+               publishTopic: this.inlineLink.publishTopic,
+               publishPayload: this.inlineLink.publishPayload
+            });
+            this.processWidgets(inlineLinkWidgets, this.widgetsNode);
+            this.containerNode.insertBefore(this.widgetsNode, this.messageNode);
+         } else if (this.widgets && this.widgets.length) {
             domClass.add(this.domNode, "alfresco-notifications-AlfNotification--has-widgets");
             this.processWidgets(lang.clone(this.widgets), this.widgetsNode);
          }
+
+         // Add this widget to the end of the body
          document.body.appendChild(this.domNode);
       },
 

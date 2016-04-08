@@ -33,7 +33,8 @@ define(["module",
    var selectors = {
       buttons: {
          nonClosingWithWidgets: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_WIDGETS_BUTTON"]),
-         publishWithinNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["IN_NOTIFICATION_BUTTON"])
+         publishWithinNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["IN_NOTIFICATION_BUTTON"]),
+         inlineLinkNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_INLINE_LINK_BUTTON"])
       },
       notifications: {
          closeButton: TestCommon.getTestSelector(notificationSelectors, "button.close")
@@ -210,7 +211,7 @@ define(["module",
          .getLastPublish("ALF_NOTIFICATION_CLOSED");
       },
 
-      "Can prevent notification from automatically closing": function() {
+      "Notification can contain widgets and have auto-close disabled": function() {
          return this.remote.findByCssSelector(selectors.buttons.nonClosingWithWidgets)
             .clearLog()
             .click()
@@ -225,7 +226,27 @@ define(["module",
             .click()
             .end()
 
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED")
+
          .getLastPublish("PUBLISH_FROM_NOTIFICATION");
+      },
+
+      "Notification can have inline-link": function() {
+         return this.remote.findByCssSelector(selectors.buttons.inlineLinkNotification)
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-notifications-AlfNotification .alfresco-navigation-Link")
+            .click()
+            .end()
+
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED", 5000)
+
+         .getLastPublish("PUBLISH_BY_NOTIFICATION_LINK")
+            .then(function(payload) {
+               assert.propertyVal(payload, "sampleValue", "foo");
+            });
       }
    });
 });

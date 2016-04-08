@@ -46,6 +46,29 @@
          }
       }
    }
+   &--has-inline-button {
+      .alfresco-notifications-AlfNotification {
+         &__container {
+            padding: 20px;
+            line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+         }
+         &__close {
+            position: static;
+            right: 0;
+            float: right;
+         }
+         &__widgets {
+            display: block;
+            float: right;
+            margin: 0;
+            margin-right: @normal-font-size;
+            .alfresco-navigation-Link {
+               color: @notification-foreground;
+               text-decoration: underline;
+            }
+         }
+      }
+   }
    &--auto-close {
       .alfresco-notifications-AlfNotification {
          &__close {

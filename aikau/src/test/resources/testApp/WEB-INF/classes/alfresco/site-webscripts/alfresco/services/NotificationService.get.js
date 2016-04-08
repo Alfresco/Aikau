@@ -152,6 +152,7 @@ model.jsonModel = {
             publishTopic: "ALF_DISPLAY_NOTIFICATION",
             publishPayload: {
                message: "This is a message",
+               publishTopic: "ALF_NOTIFICATION_DESTROYED",
                autoClose: false,
                notificationId: "NON_CLOSING_NOTIFICATION",
                widgets: [{
@@ -162,6 +163,26 @@ model.jsonModel = {
                      publishTopic: "PUBLISH_FROM_NOTIFICATION"
                   }
                }]
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "NOTIFICATION_INLINE_LINK_BUTTON",
+         config: {
+            label: "Display notification with inline link",
+            publishTopic: "ALF_DISPLAY_NOTIFICATION",
+            publishPayload: {
+               message: "This is a message",
+               publishTopic: "ALF_NOTIFICATION_DESTROYED",
+               wordsPerSecond: 3,
+               inlineLink: {
+                  label: "Perform action",
+                  publishTopic: "PUBLISH_BY_NOTIFICATION_LINK",
+                  publishPayload: {
+                     sampleValue: "foo"
+                  }
+               }
             }
          }
       },

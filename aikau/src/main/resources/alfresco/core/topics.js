@@ -343,6 +343,9 @@ define([],function() {
        * @event
        * @property {string} message The message to be displayed
        * @property {string} [autoClose=true] Whether the notification should automatically close itself
+       * @property {number} [wordsPerSecond=5] How many words it is assumed one can read per second (decrease this
+       *                                       number to increase the duration of the notification being displayed
+       *                                       on-screen - assuming autoClose hasn't been disabled)
        * @property {object[]} [widgets] Widgets to be inserted into the notification below the message. Note that
        *                                any widgets required must be either statically declared in the page model
        *                                or in a widgets property of a custom widget/service, or be specifically

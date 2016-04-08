@@ -103,10 +103,14 @@ define(["dojo/_base/declare",
             var config = {
                message: payload.message,
                widgets: payload.widgets,
-               id: payload.notificationId
+               id: payload.notificationId,
+               inlineLink: payload.inlineLink
             };
             if(typeof payload.autoClose !== "undefined") {
                config.autoClose = payload.autoClose;
+            }
+            if(typeof payload.wordsPerSecond !== "undefined") {
+               config.wordsPerSecond = payload.wordsPerSecond;
             }
             var newNotification = new AlfNotification(config);
 
