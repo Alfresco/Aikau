@@ -81,11 +81,118 @@ model.jsonModel = {
                               publishPayloadItemMixin: true,
                               widgets: [
                                  {
+                                    id: "EXPAND_LINK",
+                                    name: "alfresco/renderers/PropertyLink",
+                                    config: {
+                                       label: "Alternative",
+                                       publishTopic: "EXPAND",
+                                       publishPayloadType: "PROCESS",
+                                       publishPayloadModifiers: ["processCurrentItemTokens"],
+                                       useCurrentItemAsPayload: false,
+                                       publishPayload: {
+                                          nodeRef: "{nodeRef}",
+                                          widgets: [
+                                             {
+                                                id: "EXPANDED_LIST",
+                                                name: "alfresco/lists/AlfList",
+                                                config: {
+                                                   currentData: {
+                                                      items: [
+                                                         {
+                                                            name: "{displayName}"
+                                                         }
+                                                      ]
+                                                   },
+                                                   pubSubScope: "EditCaveatGroupListView",
+                                                   waitForPageWidgets: false,
+                                                   widgets: [
+                                                      {
+                                                         id: "EXPANDED_LIST_VIEW",
+                                                         name: "alfresco/lists/views/AlfListView",
+                                                         config: {
+                                                            additionalCssClasses: "bordered",
+                                                            widgets: [
+                                                               {
+                                                                  name: "alfresco/lists/views/layouts/Row",
+                                                                  config: {
+                                                                     widgets: [
+                                                                        {
+                                                                           name: "alfresco/lists/views/layouts/Cell",
+                                                                           config: {
+                                                                              widgets: [
+                                                                                 {
+                                                                                    id: "EXPANDED_LIST_INLINE_EDIT",
+                                                                                    name: "alfresco/renderers/InlineEditProperty",
+                                                                                    config: {
+                                                                                       propertyToRender: "name",
+                                                                                       postParam: "fake",
+                                                                                       publishTopic: "ALT_INLINE_EDIT_SAVE",
+                                                                                       publishPayloadType: "PROCESS",
+                                                                                       publishPayloadModifiers: ["processCurrentItemTokens"],
+                                                                                       publishPayloadItemMixin: true,
+                                                                                       publishPayload: {
+                                                                                          data: "{name}"
+                                                                                       },
+                                                                                       publishGlobal: true
+                                                                                    }
+                                                                                 }
+                                                                              ]
+                                                                           }
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               }
+                                                            ],
+                                                            widgetsForAppendix: [
+                                                               {
+                                                                  name: "alfresco/lists/views/layouts/Row",
+                                                                  config: {
+                                                                     widgets: [
+                                                                        {
+                                                                           name: "alfresco/lists/views/layouts/Cell",
+                                                                           config: {
+                                                                              colspan: 2,
+                                                                              widgets: [
+                                                                                 {
+                                                                                    id: "APPENDIX_FORM",
+                                                                                    name: "alfresco/forms/Form",
+                                                                                    config: {
+                                                                                       okButtonPublishTopic: "SAVE",
+                                                                                       scopeFormControls: false,
+                                                                                       widgets: [
+                                                                                          {
+                                                                                             id: "APPENDIX_TEXTBOX",
+                                                                                             name: "alfresco/forms/controls/TextBox",
+                                                                                             config: {
+                                                                                                fieldId: "APPENDIX_TEXTBOX",
+                                                                                                name: "test",
+                                                                                                value: ""
+                                                                                             }
+                                                                                          }
+                                                                                       ]
+                                                                                    }
+                                                                                 }
+                                                                              ]
+                                                                           }
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               }
+                                                            ]
+                                                         }
+                                                      }
+                                                   ]
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 },
+                                 {
                                     id: "PROPERTY",
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "node.properties.cm:name"
-                                       
                                     }
                                  }
                               ]
