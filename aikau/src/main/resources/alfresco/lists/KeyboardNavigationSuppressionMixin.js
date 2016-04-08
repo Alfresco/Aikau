@@ -18,7 +18,9 @@
  */
 
 /**
- *
+ * This mixin provides both the ability to request the suppression of keyboard events that are handled by 
+ * the dijit/_KeyNavContainer mixin and the ability to perform the actual suppression. As such this should
+ * always be mixed into a module after dijit/_KeyNavContainer as it overrides some of its functions.
  * 
  * @module alfresco/lists/KeyboardNavigationSuppressionMixin
  * @author Dave Draper
@@ -31,6 +33,19 @@ define(["dojo/_base/declare",
    
    return declare(null, {
       
+      /**
+       * The ability to suppress keyboard navigation (e.g. the ability to move around the rendered list of items using
+       * the keyboard) has been added to support widgets that allow inline editing (such as the
+       * [InlineEditProperty]{@link alfresco/renderers/InlineEditProperty} widget). In order to allow their keyboard
+       * events to bubble up to the browser, this widget needs to stop searching for keyboard navigation matches.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.63
+       */
+      suppressKeyNavigation: false,
+
       /**
        * Checks for the CTRL-e combination and when detected moves into edit mode.
        * 
@@ -85,9 +100,10 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {boolean} suppress Whether or not to suppress keyboard navigation
+       * @param {element} [node] The node to suppress navigation from.
        */
-      suppressContainerKeyboardNavigation: function alfresco_lists_KeyboardNavigationSuppressionMixin__suppressContainerKeyboardNavigation(suppress) {
-         on.emit(this.domNode, "onSuppressKeyNavigation", {
+      suppressContainerKeyboardNavigation: function alfresco_lists_KeyboardNavigationSuppressionMixin__suppressContainerKeyboardNavigation(suppress, node) {
+         on.emit(node || this.domNode, "onSuppressKeyNavigation", {
             bubbles: true,
             cancelable: true,
             suppress: suppress
@@ -107,6 +123,50 @@ define(["dojo/_base/declare",
        */
       suppressFocusRequest: function alfresco_lists_KeyboardNavigationSuppressionMixin__suppressFocusRequest(evt) {
          evt && event.stop(evt);
+      },
+
+      /**
+       * Updates the [suppressKeyNavigation]{@link module:alfresco/lists/KeyboardNavigationSuppressionMixin#suppressKeyNavigation}
+       * with the emitted event details
+       *
+       * @instance
+       * @param {object} evt The emitted event.
+       * @since 1.0.63
+       */
+      onSuppressKeyNavigation: function alfresco_lists_KeyboardNavigationSuppressionMixin__onSuppressKeyNavigation(evt) {
+         this.suppressKeyNavigation = evt.suppress === true;
+      },
+
+      /**
+       * Extends the function mixed in from the dijit/_KeyNavContainer module to perform no action when
+       * [suppressKeyNavigation]{@link module:alfresco/lists/KeyboardNavigationSuppressionMixin#suppressKeyNavigation}
+       * is set to true.
+       * 
+       * @instance
+       * @param {object} evt The keyboard event
+       * @since 1.0.63
+       */
+      _onContainerKeypress: function alfresco_lists_KeyboardNavigationSuppressionMixin___onContainerKeypress(/*jshint unused:false*/ evt) {
+         if (this.suppressKeyNavigation === false)
+         {
+            this.inherited(arguments);
+         }
+      },
+
+      /**
+       * Extends the function mixed in from the dijit/_KeyNavContainer module to perform no action when
+       * [suppressKeyNavigation]{@link module:alfresco/lists/KeyboardNavigationSuppressionMixin#suppressKeyNavigation}
+       * is set to true.
+       * 
+       * @instance
+       * @param {object} evt The keyboard event
+       * @since 1.0.63
+       */
+      _onContainerKeydown: function lfresco_lists_KeyboardNavigationSuppressionMixin___onContainerKeydown(/*jshint unused:false*/ evt) {
+         if (this.suppressKeyNavigation === false)
+         {
+            this.inherited(arguments);
+         }
       }
    });
 });

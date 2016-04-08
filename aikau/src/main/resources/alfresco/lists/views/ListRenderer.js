@@ -42,6 +42,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes external:dojo/_KeyNavContainer
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/KeyboardNavigationSuppressionMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
@@ -49,6 +50,7 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dijit/_KeyNavContainer",
+        "alfresco/lists/KeyboardNavigationSuppressionMixin",
         "dojo/text!./templates/ListRenderer.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
@@ -59,10 +61,10 @@ define(["dojo/_base/declare",
         "dojo/keys",
         "jquery",
         "jqueryui"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _KeyNavContainer, template, _MultiItemRendererMixin, 
-                 AlfCore, JsNode, lang, array, on, keys, $) {
+        function(declare, _WidgetBase, _TemplatedMixin, _KeyNavContainer, KeyboardNavigationSuppressionMixin, template, 
+                 _MultiItemRendererMixin, AlfCore, JsNode, lang, array, on, keys, $) {
    
-   return declare([_WidgetBase, _TemplatedMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore], {
+   return declare([_WidgetBase, _TemplatedMixin, _KeyNavContainer, _MultiItemRendererMixin, KeyboardNavigationSuppressionMixin, AlfCore], {
       
       /**
        * The HTML template to use for the widget.
@@ -101,39 +103,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * The ability to suppress keyboard navigation (e.g. the ability to move around the rendered list of items using
-       * the keyboard) has been added to support widgets that allow inline editing (such as the
-       * [InlineEditProperty]{@link alfresco/renderers/InlineEditProperty} widget). In order to allow their keyboard
-       * events to bubble up to the browser, this widget needs to stop searching for keyboard navigation matches.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      suppressKeyNavigation: false,
-
-      /**
-       * Updates the [suppressKeyNavigation]{@link module:alfresco/lists/views/ListRenderer#suppressKeyNavigation}
-       * with the emitted event details
-       *
-       * @instance
-       * @param {object} evt The emitted event.
-       */
-      onSuppressKeyNavigation: function alfresco_lists_views_ListRenderer__onSuppressKeyNavigation(evt) {
-         this.suppressKeyNavigation = evt.suppress === true;
-      },
-      
-      /**
-       * This sets up the default keyboard handling for a view. The standard controls are navigation to the
-       * next item by pressing the down key and navigation to the previous item by pressing the up key.
-       * 
-       * @instance
-       */
-      setupKeyboardNavigation: function alfresco_lists_views_ListRenderer__setupKeyboardNavigation() {
-         this.connectKeyNavHandlers([keys.UP_ARROW], [keys.DOWN_ARROW]);
-      },
-      
-      /**
        * Overrides the _KevNavContainer function to call the "blur" function of the widget that has lost
        * focus (assuming it has one).
        * 
@@ -147,36 +116,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the function mixed in from the dijit/_KeyNavContainer module to perform no action when
-       * [suppressKeyNavigation]{@link module:alfresco/lists/views/ListRenderer#suppressKeyNavigation}
-       * is set to true.
-       * 
-       * @instance
-       * @param {object} evt The keyboard event
-       */
-      _onContainerKeydown: function alfresco_lists_views_ListRenderer___onContainerKeydown(/*jshint unused:false*/ evt) {
-         if (this.suppressKeyNavigation === false)
-         {
-            this.inherited(arguments);
-         }
-      },
-
-      /**
-       * Extends the function mixed in from the dijit/_KeyNavContainer module to perform no action when
-       * [suppressKeyNavigation]{@link module:alfresco/lists/views/ListRenderer#suppressKeyNavigation}
-       * is set to true.
-       * 
-       * @instance
-       * @param {object} evt The keyboard event
-       */
-      _onContainerKeypress: function alfresco_lists_views_ListRenderer___onContainerKeypress(/*jshint unused:false*/ evt) {
-         if (this.suppressKeyNavigation === false)
-         {
-            this.inherited(arguments);
-         }
-      },
-
-      /**
        * Handles requests to focus a specific child item that has been clicked on. This is a custom
        * event issued from a module mixing in the 
        * [_MultiItemRendererMixin]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin}.
@@ -186,6 +125,16 @@ define(["dojo/_base/declare",
        */
       onItemFocused: function alfresco_lists_views_ListRenderer__onItemFocused(evt) {
          this.focusChild(evt.item);
+      },
+
+      /**
+       * This sets up the default keyboard handling for a view. The standard controls are navigation to the
+       * next item by pressing the down key and navigation to the previous item by pressing the up key.
+       * 
+       * @instance
+       */
+      setupKeyboardNavigation: function alfresco_lists_views_ListRenderer__setupKeyboardNavigation() {
+         this.connectKeyNavHandlers([keys.UP_ARROW], [keys.DOWN_ARROW]);
       },
 
       /**

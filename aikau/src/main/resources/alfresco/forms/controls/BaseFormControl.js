@@ -88,6 +88,7 @@
  * @mixes module:alfresco/forms/controls/FormControlValidationMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/forms/controls/utilities/RulesEngineMixin
+ * @mixes module:alfresco/lists/KeyboardNavigationSuppressionMixin
  * @extendSafe
  * @author Dave Draper
  * @author Richard Smith
@@ -99,6 +100,7 @@ define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/forms/controls/FormControlValidationMixin",
         "alfresco/forms/controls/utilities/RulesEngineMixin",
+        "alfresco/lists/KeyboardNavigationSuppressionMixin",
         "dojo/text!./templates/BaseFormControl.html",
         "alfresco/core/topics",
         "alfresco/core/ObjectTypeUtils",
@@ -112,11 +114,13 @@ define(["dojo/_base/declare",
         "dojo/query",
         "dojo/dom-construct",
         "dojo/Deferred",
+        "dojo/on",
         "jquery"],
-        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin, template, topics,
-                 ObjectTypeUtils, arrayUtils, lang, array, domStyle, domClass, Tooltip, domAttr, query, domConstruct, Deferred, $) {
+        function(declare, _Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin, 
+                 KeyboardNavigationSuppressionMixin, template, topics, ObjectTypeUtils, arrayUtils, lang, array, domStyle, 
+                 domClass, Tooltip, domAttr, query, domConstruct, Deferred, on, $) {
 
-   return declare([_Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin], {
+   return declare([_Widget, _Templated, _FocusMixin, AlfCore, FormControlValidationMixin, RulesEngineMixin, KeyboardNavigationSuppressionMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -298,6 +302,22 @@ define(["dojo/_base/declare",
        * @since 1.0.33
        */
       getPubSubOptionsImmediately: true,
+
+      /**
+       * This attribute should only be configured to be true when the control is being used within the
+       * a [list]{@link module:alfresco/lists/AlfList} - for example as part of the widget model for
+       * [a list appendix]{@link module:alfresco/lists/views/AlfListView#widgetsForAppendix} or as 
+       * part of the rendering of an item. Configuring this to true will ensure that using the cursor
+       * keys will not control the selected list item and that focus will not be stolen from the wrapped
+       * control - however, this should be used with caution as it may limit or alter the behaviour
+       * of some form controls. See AKU-920/AKU-921 for the background of why this has been added.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.63
+       */
+      usedInList: false,
 
       /**
        * The default visibility status is always true (this can be overridden by extending controls).
@@ -1257,6 +1277,11 @@ define(["dojo/_base/declare",
             {
                this.deferredValuePublication.resolve();
             }
+
+            if (this.usedInList)
+            {
+               on(this.domNode, "click", lang.hitch(this, this.suppressFocusRequest));
+            }
          }
          else
          {
@@ -1332,6 +1357,29 @@ define(["dojo/_base/declare",
          {
             this._pendingValidationFailureDisplay = false;
             this.showValidationFailure();
+         }
+         if (this.usedInList)
+         {
+            this.suppressContainerKeyboardNavigation(false);
+         }
+         this.inherited(arguments);
+      },
+
+      /**
+       * This function is called whenever the form control gains focus. This results in the 
+       * [suppressContainerKeyboardNavigation]{@link module:alfresco/lists/KeyboardNavigationSuppressionMixin#suppressContainerKeyboardNavigation}
+       * function being called to ensure that when the form is placed inside a 
+       * [list]{@link module:alfresco/lists/AlfList} the [view]{@link module:alfresco/lists/views/AlfListView}
+       * does not use the key presses (typically the cursor keys) to navigate the user around items in the
+       * list.
+       *
+       * @instance
+       * @since 1.0.63
+       */
+      _onFocus: function alfresco_forms_controls_BaseFormControl___onFocus() {
+         if (this.usedInList)
+         {
+            this.suppressContainerKeyboardNavigation(true);
          }
          this.inherited(arguments);
       },

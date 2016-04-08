@@ -26,6 +26,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
+ * @mixes module:alfresco/lists/KeyboardNavigationSuppressionMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
@@ -35,6 +36,7 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "alfresco/core/ResizeMixin",
         "dijit/_KeyNavContainer",
+        "alfresco/lists/KeyboardNavigationSuppressionMixin",
         "dojo/text!./templates/Grid.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
@@ -52,11 +54,11 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dijit/registry",
         "dijit/focus"],
-        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, template, _MultiItemRendererMixin,
+        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, KeyboardNavigationSuppressionMixin, template, _MultiItemRendererMixin,
                  AlfCore, _LayoutMixin, WidgetsCreator, keys, on, lang, array, domAttr, domClass, domConstruct, domGeom, query, domStyle,
                  registry, focusUtil) {
 
-   return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, AlfCore, _LayoutMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, KeyboardNavigationSuppressionMixin, AlfCore, _LayoutMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -240,6 +242,8 @@ define(["dojo/_base/declare",
          }
 
          this.setupKeyboardNavigation();
+         on(this.domNode, "onSuppressKeyNavigation", lang.hitch(this, this.onSuppressKeyNavigation));
+         on(this.domNode, "onItemFocused", lang.hitch(this, this.onItemFocused));
 
          // Update the grid as the window changes...
          this.alfSetupResizeSubscriptions(this.resizeCells, this);
