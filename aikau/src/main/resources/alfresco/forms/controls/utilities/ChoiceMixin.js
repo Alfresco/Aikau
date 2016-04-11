@@ -215,7 +215,7 @@ define(["dojo/_base/declare",
          // NOTE: The first line (assigning event) is copied directly from dijit/focus to ensure the same
          //       event is captured
          var event = has("pointer-events") ? "pointerdown" : has("MSPointer") ? "MSPointerDown" : has("touch-events") ? "mousedown, touchstart" : "mousedown";
-         pointerListener = on(choiceNode, event, lang.hitch(this, function(evt) {
+         var pointerListener = on(choiceNode, event, lang.hitch(this, function(evt) {
             evt.stopPropagation();
             var clicker = new MouseEvent("pointerdown", {
               "target": this.domNode
