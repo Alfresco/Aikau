@@ -1,5 +1,4 @@
-<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/service-filtering.lib.js">
-<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/doclib/doclib.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/doclib/doclib.lib.js">
 
 var pageServices = [
    {
@@ -21,7 +20,7 @@ var pageServices = [
    "alfresco/services/LogoutService"];
 
 var docLibServices = getDocumentLibraryServices();
-var services = alfAddUniqueServices(pageServices, docLibServices);
+var services = pageServices.concat(docLibServices);
 
 var docLib = getDocLib({
    siteId: "site1", 
