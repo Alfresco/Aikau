@@ -207,6 +207,10 @@ define(["dojo/_base/declare",
             args.content = args.textContent;
             delete args.textContent;
          }
+         if (args.content)
+         {
+            args.content = this.encodeHTML(args.content);
+         }
          declare.safeMixin(args);
       },
 
@@ -367,7 +371,7 @@ define(["dojo/_base/declare",
          {
             // Add basic text content into the container node. An example of this would be for
             // setting basic text content in an confirmation dialog...
-            html.set(this.bodyNode, this.encodeHTML(this.content));
+            html.set(this.bodyNode, this.content);
          }
 
          this.alfSetupResizeSubscriptions(this.onWindowResize, this);
@@ -558,6 +562,23 @@ define(["dojo/_base/declare",
          {
             this.inherited(arguments);
          }
+      },
+
+      /**
+       * Override the default dialog method to ensure that the dialog starts its position
+       * at the top of the page to avoid the page scrolling to focus on its content (see
+       * call to child.focus() below).
+       * 
+       * @instance
+       * @override
+       * @returns {Promise} Returns the superclass' promise
+       * @since 1.0.63
+       */
+      show: function alfresco_dialogs_AlfDialog__show() {
+         domStyle.set(this.domNode, {
+            top: (document.body.scrollTop || document.documentElement.scrollTop) + "px"
+         });
+         return this.inherited(arguments);
       },
 
       /**

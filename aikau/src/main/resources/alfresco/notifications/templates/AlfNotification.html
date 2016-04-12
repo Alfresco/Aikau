@@ -1,6 +1,7 @@
-<div class="alfresco-notifications-AlfNotification">
-   <div class="alfresco-notifications-AlfNotification__container">
+<div class="alfresco-notifications-AlfNotification" id="${id}">
+   <div class="alfresco-notifications-AlfNotification__container" data-dojo-attach-point="containerNode">
       <div class="alfresco-notifications-AlfNotification__close" data-dojo-attach-event="click:_onCloseClick">&times;</div>
       <span class="alfresco-notifications-AlfNotification__message" data-dojo-attach-point="messageNode" aria-live="assertive" role="status">${message}</span>
+      <div class="alfresco-notifications-AlfNotification__widgets" data-dojo-attach-point="widgetsNode"></div>
    </div>
 </div>

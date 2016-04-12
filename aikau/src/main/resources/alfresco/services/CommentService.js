@@ -32,10 +32,11 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "webscripts/defaults",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, lang, array, AlfConstants) {
+        function(declare, BaseService, CoreXhr, webScriptDefaults, lang, array, AlfConstants) {
    
    return declare([BaseService, CoreXhr], {
       
@@ -81,7 +82,9 @@ define(["dojo/_base/declare",
          {
             startIndex = (payload.page - 1) * pageSize;
          }
-         var url = AlfConstants.URL_SERVICECONTEXT + "/sanitize/response?items=items&attribute=content&ws=/api/node/" + payload.nodeRef + "/comments%3Freverse=" + reverse + "%26startIndex=" + startIndex + "%26pageSize=" + pageSize;
+         var url = AlfConstants.URL_SERVICECONTEXT + webScriptDefaults.WEBSCRIPT_VERSION + 
+                   "/sanitize/response?items=items&attribute=content&ws=/api/node/" + payload.nodeRef + 
+                   "/comments%3Freverse=" + reverse + "%26startIndex=" + startIndex + "%26pageSize=" + pageSize;
          this.serviceXhr({
             url: url,
             alfTopic: payload.alfResponseTopic || null,

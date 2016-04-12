@@ -27,6 +27,25 @@ define(["module",
         "intern/dojo/node!leadfoot/keys"],
         function(module, defineSuite, assert, TestCommon, keys) {
 
+   var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
+   var inlineEditPropertySelectors = TestCommon.getTestSelectors("alfresco/renderers/InlineEditProperty");
+
+   var selectors = {
+      textBoxes: {
+         alternateExpanded: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["APPENDIX_TEXTBOX"]),
+         }
+      },
+      inlineEditProperties: {
+         alternateExpanded: {
+            editIcon: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.icon", ["EXPANDED_LIST_INLINE_EDIT_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.save", ["EXPANDED_LIST_INLINE_EDIT_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.cancel", ["EXPANDED_LIST_INLINE_EDIT_ITEM_0"]),
+            editInput: TestCommon.getTestSelector(inlineEditPropertySelectors, "edit.input", ["EXPANDED_LIST_INLINE_EDIT_ITEM_0"])
+         }
+      }
+   };
+
    defineSuite(module, {
       name: "Expandable Gallery View Tests",
       testPage: "/ExandableGallery",
@@ -95,7 +114,7 @@ define(["module",
          .pressKeys(keys.RETURN)
 
          .findByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel")
-            .end()
+         .end()
 
          .getActiveElement()
             .getProperty("value")
@@ -110,6 +129,85 @@ define(["module",
             .end()
 
          .waitForDeletedByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
+      },
+
+      "Check that inline edit can be typed into without losing focus": function() {
+         return this.remote.findByCssSelector("#EXPAND_LINK_ITEM_4 .label")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel")
+         .end()
+
+         .clearLog()
+
+         .findByCssSelector(selectors.inlineEditProperties.alternateExpanded.editIcon)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.alternateExpanded.editInput)
+            .clearValue()
+            .type("hello again")
+         .end()
+
+         .clearLog()
+
+         .findByCssSelector(selectors.inlineEditProperties.alternateExpanded.editSave)
+            .click()
+         .end()
+
+         .getLastPublish("ALT_INLINE_EDIT_SAVE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "fake", "hello again");
+            });
+      },
+
+      "Cursor key use on inline edit do not navigate list": function() {
+         // NOTE: Because save is not handled in test page, input field will still be focused...
+         var inputId;
+         return this.remote.findDisplayedByCssSelector(selectors.inlineEditProperties.alternateExpanded.editInput)
+            .clearValue()
+            .type("test")
+            .getAttribute("id")
+            .then(function(id) {
+               inputId = id;
+            })
+            .pressKeys([keys.ARROW_LEFT, keys.ARROW_UP, keys.ARROW_RIGHT, keys.ARROW_DOWN])
+         .end()
+         
+         .getActiveElement()
+            .getAttribute("id")
+            .then(function(id) {
+               assert.equal(inputId, id);
+            });
+      },
+
+      "It is possible to type into form control without losing focus": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.textBoxes.alternateExpanded.input)
+            .type("hello world")
+         .end()
+
+         .getLastPublish("EditCaveatGroupListView_valueChangeOf_APPENDIX_TEXTBOX")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "hello world");
+            });
+      },
+
+      "Cursor key use on focused form control do not navigate list": function() {
+         var inputId;
+         return this.remote.findDisplayedByCssSelector(selectors.textBoxes.alternateExpanded.input)
+            .getAttribute("id")
+            .then(function(id) {
+               inputId = id;
+            })
+            .pressKeys([keys.ARROW_LEFT, keys.ARROW_UP, keys.ARROW_RIGHT, keys.ARROW_DOWN])
+         .end()
+         
+         .getActiveElement()
+            .getAttribute("id")
+            .then(function(id) {
+               assert.equal(inputId, id);
+            });
       }
    });
 });

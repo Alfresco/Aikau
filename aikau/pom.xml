@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.63-SNAPSHOT</version>
+   <version>1.0.64-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -170,7 +170,7 @@
 
          <resource>
             <!-- WebScript library files go straight into a package -->
-            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/webscript/libs</targetPath>
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/${project.version}/libs</targetPath>
             <filtering>false</filtering>
             <directory>${basedir}/src/main/resources/webscript-libs</directory>
          </resource>

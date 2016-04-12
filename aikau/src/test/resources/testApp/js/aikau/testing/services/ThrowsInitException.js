@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,15 +18,23 @@
  */
 
 /**
- * 
- * @module webscripts/defaults
+ * @module aikauTesting/services/ThrowsInitException
+ * @extends module:alfresco/services/BaseService
  * @author Dave Draper
  */
-define(["dojo/_base/lang"], 
-        function(lang) {
+define(["dojo/_base/declare",
+        "alfresco/services/BaseService"],
+        function(declare, BaseService) {
    
-   return {
-      ACCEPT_LANGUAGE: "${data.headers.acceptLanguage!""}",
-      WEBSCRIPT_VERSION: "${webscript.version}"
-   };
+   return declare([BaseService], {
+      
+      /**
+       * Intentionally causes an exception for testing purposes
+       * 
+       * @instance
+       */
+      initService: function aikauTesting_services_ThrowsInitException__initService() {
+         throw new Error("This is an error");
+      }
+   });
 });

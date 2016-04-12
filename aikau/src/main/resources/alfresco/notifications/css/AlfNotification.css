@@ -20,16 +20,13 @@
       width: @notification-width;
    }
    &__close {
-      color: @notification-foreground-dimmed;
+      color: @notification-foreground;
       cursor: pointer;
       font-size: 25px;
       position: absolute;
       right: 10px;
       top: 0;
       transition: all .1s ease-out;
-      &:hover {
-         color: @notification-foreground;
-      }
    }
    &__message {
       color: @notification-foreground;
@@ -37,11 +34,55 @@
       font-size: @normal-font-size;
       line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
    }
+   &__widgets {
+      display: none;
+      margin-top: 20px;
+   }
    &--visible {
       .alfresco-notifications-AlfNotification {
          &__container {
             opacity: 1;
             top: 20vh;
+         }
+      }
+   }
+   &--has-inline-button {
+      .alfresco-notifications-AlfNotification {
+         &__container {
+            padding: 20px;
+            line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
+         }
+         &__close {
+            position: static;
+            right: 0;
+            float: right;
+         }
+         &__widgets {
+            display: block;
+            float: right;
+            margin: 0;
+            margin-right: @normal-font-size;
+            .alfresco-navigation-Link {
+               color: @notification-foreground;
+               text-decoration: underline;
+            }
+         }
+      }
+   }
+   &--auto-close {
+      .alfresco-notifications-AlfNotification {
+         &__close {
+            color: @notification-foreground-dimmed;
+            &:hover {
+               color: @notification-foreground;
+            }
+         }
+      }
+   }
+   &--has-widgets {
+      .alfresco-notifications-AlfNotification {
+         &__widgets {
+            display: block;
          }
       }
    }

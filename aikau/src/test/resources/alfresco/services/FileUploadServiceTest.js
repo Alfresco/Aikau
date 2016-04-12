@@ -36,7 +36,7 @@ define(["module",
 
    defineSuite(module, {
       name: "FileUploadService Config Tests",
-      testPage: "/FileUploadServiceConfig",
+      testPage: "/FileUploadService",
 
       "Configured success action does not prevent inprogress action payload from publishing": function() {
          return this.remote.findByCssSelector(selectors.buttons.doUpload)

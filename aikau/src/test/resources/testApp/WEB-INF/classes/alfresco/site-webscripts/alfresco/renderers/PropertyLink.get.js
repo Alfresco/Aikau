@@ -18,7 +18,7 @@ model.jsonModel = {
             id: "LIST_WITH_HEADER",
             currentData: {
                items: [
-                  {name: "Site1", urlname: "site1"},
+                  {name: "TestSök <img ='><svg onload=\"window.hacked=true\"'>", urlname: "site1"},
                   {name: "Site2", urlname: "site2"},
                   {name: "Site3", urlname: "site3"},
                   {name: "Site4", urlname: "site4"}
@@ -43,6 +43,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
+                                    id: "PROPLINK",
                                     name: "alfresco/renderers/PropertyLink",
                                     config: {
                                        propertyToRender: "name",
@@ -60,10 +61,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

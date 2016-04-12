@@ -28,8 +28,9 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
+        "dojo/has",
         "dojo/on"], 
-        function(declare, lang, array, domConstruct, domClass, on) {
+        function(declare, lang, array, domConstruct, domClass, has, on) {
 
    return declare([], {
 
@@ -204,6 +205,24 @@ define(["dojo/_base/declare",
          var choiceObject = {},
             selectListener = on(choiceNode, "click", lang.hitch(this, this._onChoiceClick, choiceObject)),
             closeListener = on(closeButton, "mousedown", lang.hitch(this, this._onChoiceCloseMouseDown, choiceObject));
+
+         // See AKU-777 for the details of this issue...
+         // On IE11 and Edge Dojo will capture additional events that result in focus being given to
+         // a surrounding input field. However to resolve this issue we need to capture the event,
+         // stop it from propogating and issue a new event in it's place. The original event needs to 
+         // be stopped because it is not possible to change the 'target' attribute of an event once
+         // created (it is read-only).
+         // NOTE: The first line (assigning event) is copied directly from dijit/focus to ensure the same
+         //       event is captured
+         var event = has("pointer-events") ? "pointerdown" : has("MSPointer") ? "MSPointerDown" : has("touch-events") ? "mousedown, touchstart" : "mousedown";
+         var pointerListener = on(choiceNode, event, lang.hitch(this, function(evt) {
+            evt.stopPropagation();
+            var clicker = new MouseEvent("pointerdown", {
+              "target": this.domNode
+            });
+            this.domNode.dispatchEvent(clicker);
+         }));
+
          this.own(selectListener, closeListener);
          lang.mixin(choiceObject, {
             domNode: choiceNode,
@@ -211,6 +230,7 @@ define(["dojo/_base/declare",
             closeButton: closeButton,
             selectListener: selectListener,
             closeListener: closeListener,
+            pointerListener: pointerListener,
             item: storeItem,
             value: value
          });
@@ -329,6 +349,7 @@ define(["dojo/_base/declare",
          domConstruct.destroy(choiceToRemove.domNode);
          choiceToRemove.selectListener.remove();
          choiceToRemove.closeListener.remove();
+         choiceToRemove.pointerListener.remove();
       },
 
       /**

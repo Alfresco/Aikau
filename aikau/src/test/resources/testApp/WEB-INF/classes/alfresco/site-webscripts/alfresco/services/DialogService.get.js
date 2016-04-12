@@ -22,9 +22,9 @@ model.jsonModel = {
             publishTopic: "ALF_CREATE_DIALOG_REQUEST",
             publishPayload: {
                dialogId: "FD1",
-               dialogTitle: "Form Dialog 1",
+               dialogTitle: "<img ='><svg onload=\"window.titleHacked=true\"'>",
                additionalCssClasses: "custom-classes",
-               textContent: "Hello World",
+               textContent: "<img ='><svg onload=\"window.bodyHacked=true\"'>",
                publishOnShow: [
                   {
                      publishTopic: "DISPLAYED_FD1",

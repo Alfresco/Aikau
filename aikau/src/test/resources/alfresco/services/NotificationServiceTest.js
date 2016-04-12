@@ -23,9 +23,23 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!expect",
-        "intern/chai!assert"],
-        function(module, defineSuite, expect, assert) {
+        "intern/chai!assert",
+        "alfresco/TestCommon"], 
+        function(module, defineSuite, assert, TestCommon) {
+
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton"),
+      notificationSelectors = TestCommon.getTestSelectors("alfresco/notifications/AlfNotification");
+
+   var selectors = {
+      buttons: {
+         nonClosingWithWidgets: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_WIDGETS_BUTTON"]),
+         publishWithinNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["IN_NOTIFICATION_BUTTON"]),
+         inlineLinkNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_INLINE_LINK_BUTTON"])
+      },
+      notifications: {
+         closeButton: TestCommon.getTestSelector(notificationSelectors, "button.close")
+      }
+   };
 
    defineSuite(module, {
       name: "NotificationService",
@@ -195,6 +209,44 @@ define(["module",
             .end()
 
          .getLastPublish("ALF_NOTIFICATION_CLOSED");
+      },
+
+      "Notification can contain widgets and have auto-close disabled": function() {
+         return this.remote.findByCssSelector(selectors.buttons.nonClosingWithWidgets)
+            .clearLog()
+            .click()
+            .sleep(5000) // That actions can continue after this point proves notification still open
+            .end()
+
+         .findByCssSelector(selectors.buttons.publishWithinNotification)
+            .click()
+            .end()
+
+         .findByCssSelector(selectors.notifications.closeButton)
+            .click()
+            .end()
+
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED")
+
+         .getLastPublish("PUBLISH_FROM_NOTIFICATION");
+      },
+
+      "Notification can have inline-link": function() {
+         return this.remote.findByCssSelector(selectors.buttons.inlineLinkNotification)
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-notifications-AlfNotification .alfresco-navigation-Link")
+            .click()
+            .end()
+
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED", 5000)
+
+         .getLastPublish("PUBLISH_BY_NOTIFICATION_LINK")
+            .then(function(payload) {
+               assert.propertyVal(payload, "sampleValue", "foo");
+            });
       }
    });
 });

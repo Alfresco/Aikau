@@ -20,7 +20,7 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
-                     name: "Test"
+                     name: "TestSök <img ='><svg onload=\"window.hacked=true\"'>"
                   }
                ]
             },
@@ -106,7 +106,7 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
-                     name: "Lorem ipsum Magna Ut incididunt minim do sunt ut cupidatat adipisicing velit Duis ex aute laborum exercitation aute consectetur veniam nisi dolor aliquip sit non ut ut in occaecat amet occaecat quis sunt exercitation ex in minim incididunt minim non."
+                     name: "TestSök <img ='><svg onload=\"window.hacked=true\"'> Lorem ipsum Magna Ut incididunt minim do sunt ut cupidatat adipisicing velit Duis ex aute laborum exercitation aute consectetur veniam nisi dolor aliquip sit non ut ut in occaecat amet occaecat quis sunt exercitation ex in minim incididunt minim non."
                   }
                ]
             },
@@ -138,10 +138,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

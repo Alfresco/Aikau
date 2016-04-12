@@ -27,11 +27,10 @@ define(function() {
 
    // Whether to run all tests or just a few
    var runAllTests = true;
-   runAllTests = false; // Comment/uncomment this line to toggle
+   // runAllTests = false; // Comment/uncomment this line to toggle
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "src/test/resources/alfresco/CodeCoverageBalancer",
       "src/test/resources/alfresco/upload/UploadMonitorTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
@@ -62,6 +61,7 @@ define(function() {
       "src/test/resources/alfresco/core/CoreXhrTest",
       "src/test/resources/alfresco/core/NotificationUtilsTest",
       "src/test/resources/alfresco/core/ObjectProcessingMixinTest",
+      "src/test/resources/alfresco/core/PageTest",
       "src/test/resources/alfresco/core/PublishPayloadMixinTest",
       "src/test/resources/alfresco/core/RenderFilterTest",
       "src/test/resources/alfresco/core/ResponseScopeTest",
@@ -278,7 +278,7 @@ define(function() {
       "src/test/resources/alfresco/services/DeleteSiteTest",
       "src/test/resources/alfresco/services/DialogServiceTest",
       "src/test/resources/alfresco/services/DocumentServiceTest",
-      "src/test/resources/alfresco/services/FileUploadServiceConfigTest",
+      "src/test/resources/alfresco/services/FileUploadServiceTest",
       "src/test/resources/alfresco/services/FullScreenDialogTest",
       "src/test/resources/alfresco/services/LoggingServiceTest",
       "src/test/resources/alfresco/services/NavigationServiceTest",

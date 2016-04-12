@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2013 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,15 +18,23 @@
  */
 
 /**
- * 
- * @module webscripts/defaults
+ * This tests the basic page loading behaviour with regards to service and widget creation.
+ *
  * @author Dave Draper
+ * @since 1.0.63
  */
-define(["dojo/_base/lang"], 
-        function(lang) {
-   
-   return {
-      ACCEPT_LANGUAGE: "${data.headers.acceptLanguage!""}",
-      WEBSCRIPT_VERSION: "${webscript.version}"
-   };
+define(["module",
+        "alfresco/defineSuite"],
+        function(module, defineSuite) {
+
+   defineSuite(module, {
+      name: "Page Behaviour Tests",
+      testPage: "/Page#searchTerm=test",
+
+      // See AKU-922 for the background on this test
+      "Search request is published": function() {
+         return this.remote.getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS");
+            
+      }
+   });
 });
