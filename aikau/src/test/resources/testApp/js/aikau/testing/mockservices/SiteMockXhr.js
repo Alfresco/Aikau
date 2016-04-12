@@ -26,11 +26,12 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/SiteTest/GetSite.json",
+        "dojo/text!./responseTemplates/SiteTest/GetModeratedSite.json",
         "dojo/text!./responseTemplates/SiteTest/PutSite.json",
         "dojo/text!./responseTemplates/SiteTest/DeleteSite.json",
         "dojo/text!./responseTemplates/SiteTest/PostBecomeSiteManager.json",
         "dojo/text!./responseTemplates/SiteTest/PostRequestSiteMembership.json"], 
-        function(declare, lang, MockXhr, getSite, putSite, deleteSite, postBecomeSiteManager, postRequestSiteMembership) {
+        function(declare, lang, MockXhr, getSite, getModeratedSite, putSite, deleteSite, postBecomeSiteManager, postRequestSiteMembership) {
    
    return declare([MockXhr], {
 
@@ -78,6 +79,16 @@ define(["dojo/_base/declare",
                   200,
                   {"Content-Type":"application/json;charset=UTF-8"},
                   getSite
+               ]
+            );
+
+            this.server.respondWith(
+               "GET",
+               "/aikau/proxy/alfresco/api/sites/site2",
+               [
+                  200,
+                  {"Content-Type":"application/json;charset=UTF-8"},
+                  getModeratedSite
                ]
             );
 

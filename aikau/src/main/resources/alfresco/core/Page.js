@@ -84,7 +84,7 @@ define(["alfresco/core/ProcessWidgets",
          {
             if (AlfConstants.DEBUG)
             {
-               require.on("error", this.onError);
+               require.on("error", lang.hitch(this, this.onError));
             }
 
             // If we're in debug mode, then we should add some DOM elements for the Developer View. This will
