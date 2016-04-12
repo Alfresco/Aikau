@@ -57,11 +57,12 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Markdown.html",
         "alfresco/core/Core",
         "alfresco/core/CoreXhr",
+        "webscripts/defaults",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "showdown"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreXhr, AlfConstants, lang, array, showdown) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreXhr, webScriptDefaults, AlfConstants, lang, array, showdown) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreXhr], {
 
@@ -164,7 +165,7 @@ define(["dojo/_base/declare",
                var html = this.converter.makeHtml(markdown);
 
                // Sanitize the output to ensure it is safe to render...
-               var url = AlfConstants.URL_SERVICECONTEXT + "sanitize/data";
+               var url = AlfConstants.URL_SERVICECONTEXT + webScriptDefaults.WEBSCRIPT_VERSION + "/sanitize/data";
                if (url) {
                   this.serviceXhr({
                      url: url,
