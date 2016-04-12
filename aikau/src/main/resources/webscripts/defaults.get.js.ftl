@@ -26,6 +26,7 @@ define(["dojo/_base/lang"],
         function(lang) {
    
    return {
-      ACCEPT_LANGUAGE: "${data.headers.acceptLanguage!""}"
+      ACCEPT_LANGUAGE: "${data.headers.acceptLanguage!""}",
+      WEBSCRIPT_VERSION: "${webscript.version}"
    };
 });

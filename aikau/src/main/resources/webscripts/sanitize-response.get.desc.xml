@@ -1,7 +1,7 @@
 <webscript>
   <shortname>Sanitize Content</shortname>
   <description>This WebScript can be used as a proxy to sanitize responses from Repository APIs to ensure the content can be rendered safely in a browser.</description>
-  <url>/sanitize/response</url>
+  <url>/${webscript.version}/sanitize/response</url>
   <format default="json">argument</format>
   <authentication>user</authentication>
 </webscript>
