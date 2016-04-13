@@ -21,24 +21,19 @@
  * Use this widget to render a single cell within a [Row]{@link module:alfresco/lists/views/layouts/Row}
  * 
  * @module alfresco/lists/views/layouts/Cell
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:alfresco/core/BaseWidget
+ * @mixes module:alfresco/core/_ConstructedWidgetMixin
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Cell.html",
-        "alfresco/core/Core",
+        "alfresco/core/BaseWidget",
+        "alfresco/core/_ConstructedWidgetMixin",
         "alfresco/lists/views/layouts/_LayoutMixin",
-        "dojo/dom-class",
-        "dojo/dom-style",
-        "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
+        "dojo/dom-construct"], 
+        function(declare, BaseWidget, _ConstructedWidgetMixin, _LayoutMixin, domConstruct) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
+   return declare([BaseWidget, _ConstructedWidgetMixin, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -48,14 +43,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Cell.css"}]
        */
       cssRequirements: [{cssFile:"./css/Cell.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -84,6 +71,34 @@ define(["dojo/_base/declare",
        * @default
        */
       width: null,
+      
+      /**
+       * Builds the DOM structure.
+       * 
+       * @instance buildDOMStructure
+       */
+      buildDOMStructure : function alfresco_lists_views_layouts_Cell__buildDOMStructure(rootNode) {
+          var nodeProps = this._buildDOMNodeProperties();
+          
+          nodeProps.className += " ";
+          nodeProps.className += "alfresco-lists-views-layouts-Cell";
+    
+          if (this.colspan)
+          {
+             nodeProps.colspan = this.colspan;
+          }
+          
+          if (this.width)
+          {
+             nodeProps.style = nodeProps.style || "";
+             nodeProps.style += "width:" + this.width + ";";
+             // avoid applying width as td DOM attribute
+             delete this.width;
+          }
+    
+          this.containerNode = this.domNode = domConstruct.create("td", nodeProps, rootNode);
+          this._setupWidgetInfo();
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
@@ -91,18 +106,6 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Cell__postCreate() {
-         if (this.colspan)
-         {
-            domAttr.set(this.domNode, "colspan", this.colspan);
-         }
-         if (this.width)
-         {
-            domStyle.set(this.domNode, "width", this.width);
-         }
-         if(this.additionalCssClasses)
-         {
-            domClass.add(this.domNode, this.additionalCssClasses);
-         }
          if (this.widgets)
          {
             this.processWidgets(this.widgets, this.containerNode);

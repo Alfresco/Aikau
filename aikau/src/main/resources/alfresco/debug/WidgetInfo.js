@@ -29,18 +29,20 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "alfresco/core/BaseWidget",
+        "alfresco/core/_ConstructedWidgetMixin",
         "dijit/_OnDijitClickMixin",
-        "dojo/text!./templates/WidgetInfo.html",
         "dojo/text!./templates/WidgetInfoData.html",
-        "alfresco/core/Core",
+        "dojo/_base/lang",
+        "dojo/dom-construct",
+        "dojo/on",
+        "dijit/a11yclick",
         "dijit/TooltipDialog",
         "dijit/popup",
         "dojo/string"], 
-        function(declare, _Widget, _Templated, _OnDijitClickMixin, template, dataTemplate, AlfCore, TooltipDialog, popup, string) {
+        function(declare, BaseWidget, _ConstructedWidgetMixin, _OnDijitClickMixin, dataTemplate, lang, domConstruct, on, a11yclick, TooltipDialog, popup, string) {
    
-   return declare([_Widget, _Templated, _OnDijitClickMixin, AlfCore], {
+   return declare([BaseWidget, _ConstructedWidgetMixin, _OnDijitClickMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -59,13 +61,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/WidgetInfo.properties"}],
       
       /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
-      
-      /**
        * Sets up the image source and it's alt text.
        * 
        * @instance
@@ -82,6 +77,31 @@ define(["dojo/_base/declare",
          {
             this.altText = this.message("widgetInfo.unknown.alt.text");
          }
+      },
+      
+      /**
+       * Builds the DOM structure.
+       * 
+       * @instance buildDOMStructure
+       */
+      buildDOMStructure : function alfresco_debug_WidgetInfo__buildDOMStructure(rootNode) {
+          var nodeProps = this._buildDOMNodeProperties();
+          
+          nodeProps.className += " ";
+          nodeProps.className += "alfresco-debug-WidgetInfo";
+          
+          this.domNode = domConstruct.create("div", nodeProps, rootNode);
+          
+          nodeProps = {
+              className : "image",
+              src : this.imgSrc,
+              alt : this.altText
+           };
+          this.imgNode = domConstruct.create("img", nodeProps, this.domNode);
+      },
+      
+      setupEvents : function alfresco_debug_WidgetInfo__setupEvents() {
+          this.own(on(this.imgNode, a11yclick, lang.hitch(this, this.showInfo)));
       },
 
       /**

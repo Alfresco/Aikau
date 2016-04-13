@@ -748,15 +748,6 @@ define(["dojo/_base/declare",
             }, this);
          }
 
-         if (this.widgetsToDestroy)
-         {
-            array.forEach(this.widgetsToDestroy, function(widget) {
-               if (widget && typeof widget.destroy === "function")
-               {
-                  widget.destroy();
-               }
-            }, this);
-         }
          if (typeof this.inherited === "function")
          {
             this.inherited(arguments);

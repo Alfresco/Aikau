@@ -22,8 +22,8 @@
  * configured with a widgets definition. Otherwise it can be extended to define specific views
  *
  * @module alfresco/lists/views/AlfListView
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:alfresco/core/BaseWidget
+ * @mixes module:alfresco/core/_ConstructedWidgetMixin
  * @mixes external:dojo/_KeyNavContainer
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
@@ -31,9 +31,8 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/AlfListView.html",
+        "alfresco/core/BaseWidget",
+        "alfresco/core/_ConstructedWidgetMixin",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "alfresco/lists/views/ListRenderer",
@@ -46,10 +45,10 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/query"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
+        function(declare, BaseWidget, _ConstructedWidgetMixin, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
                  RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
+   return declare([BaseWidget, _ConstructedWidgetMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -68,13 +67,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/AlfListView.css"}]
        */
       cssRequirements: [{cssFile:"./css/AlfListView.css"}],
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
 
       /**
        * This is the topic that will be subscribed to when [subscribeToDocRequests]
@@ -221,6 +213,25 @@ define(["dojo/_base/declare",
        * @default
        */
       widgetsForNoDataDisplay: null,
+      
+      /**
+       * Builds the DOM structure.
+       * 
+       * @instance buildDOMStructure
+       */
+      buildDOMStructure : function alfresco_lists_views_AlfListView__buildDOMStructure(rootNode) {
+          var nodeProps = this._buildDOMNodeProperties();
+          
+          nodeProps.className += " ";
+          nodeProps.className += "alfresco-lists-views-AlfListView";
+    
+          this.domNode = domConstruct.create("div", nodeProps, rootNode);
+          this._setupWidgetInfo();
+          this.tableNode = domConstruct.create("table", {
+              cellspacing : "0",
+              cellpadding : "0"
+          }, this.domNode);
+      },
 
       /**
        * Implements the widget life-cycle method to add drag-and-drop upload capabilities to the root DOM node.
@@ -236,9 +247,6 @@ define(["dojo/_base/declare",
          // This supports other widgets displaying the name (rather than value) of views and
          // also acts as a "role call" of views to check that an expected view is available
          this.alfSubscribe("ALF_VIEW_NAME_REQUEST", lang.hitch(this, this.onViewNameRequest));
-
-         // Add in any additional CSS classes...
-         domClass.add(this.domNode, (this.additionalCssClasses ? this.additionalCssClasses : ""));
 
          // Allow custom messages to be displayed when no items are available for display...
          if (!this.noItemsMessage)
@@ -470,6 +478,7 @@ define(["dojo/_base/declare",
          var dlr = new ListRenderer({
             id: this.id + "_ITEMS",
             widgets: this.widgets,
+            suppressWidgetInfo : this.suppressWidgetInfo,
             currentData: this.currentData,
             pubSubScope: this.pubSubScope,
             parentPubSubScope: this.parentPubSubScope,
