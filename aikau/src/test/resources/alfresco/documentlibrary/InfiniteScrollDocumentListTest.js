@@ -136,6 +136,18 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 4);
             });
+      },
+
+      // See AKU-924
+      "Use back button": function() {
+         return this.remote.goBack()
+
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+         .findAllByCssSelector(selectors.rows.all)
+            .then(function(elements) {
+               assert.lengthOf(elements, 4);
+            });
       }
    });
 

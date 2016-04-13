@@ -296,6 +296,10 @@ define(["dojo/_base/declare",
             this._updateCoreHashVars(payload);
             if (this._readyToLoad)
             {
+               if (this.useInfiniteScroll)
+               {
+                  this.clearViews();
+               }
                this.loadData();
                dataLoaded = true;
             }
