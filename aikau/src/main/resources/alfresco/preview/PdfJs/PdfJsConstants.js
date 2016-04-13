@@ -79,6 +79,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.64
        */
       PDF_PAGES_RENDERED: "ALF_PDFJS_PAGES_RENDERED",
       
