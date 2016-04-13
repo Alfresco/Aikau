@@ -88,6 +88,16 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/Paginator.properties"}],
       
       /**
+       * The label for the page back menu item.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.64
+       */
+      backLabel: "list.paginator.back.label",
+
+      /**
        * Indicates whether the paginator should be displayed in "compact" mode where only
        * the back and forward buttons are displayed.
        *
@@ -105,6 +115,18 @@ define(["dojo/_base/declare",
        * @default
        */
       currentPage: null,
+
+      /**
+       * The style of current page number. The default is "NUMBER" which indicates that just the
+       * page number should be displayed. The only alternative in the current version is
+       * "X_OF_Y" which will render the label in the form "1 of 4" (as in page 1 of 4).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.64
+       */
+      currentPageLabelStyle: "NUMBER",
       
       /**
        * The number of documents to show per page.
@@ -115,6 +137,16 @@ define(["dojo/_base/declare",
        */
       documentsPerPage: 25,
       
+      /**
+       * The label for the page forward menu item.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.64
+       */
+      forwardLabel: "list.paginator.next.label",
+
       /**
        * This indicates whether or not the pagination controls should be hidden whilst data is being
        * loaded.
@@ -199,6 +231,16 @@ define(["dojo/_base/declare",
        * @default
        */
       pageSizes: null,
+
+      /**
+       * Indicates whether or not the page selector menu should be displayed.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default 
+       * @since 1.0.64
+       */
+      showPageSelector: true,
 
       /**
        * The property in the response that indicates the starting index of overall data to request.
@@ -453,7 +495,18 @@ define(["dojo/_base/declare",
                // Update the page marker to show the current page...
                if (this.pageMarker)
                {
-                  this.pageMarker.set("label", this.currentPage.toString());
+                  switch (this.currentPageLabelStyle) {
+                     case "X_OF_Y": 
+                        this.pageMarker.set("label", this.message("list.paginator.currentPage.label", {
+                           "0": this.currentPage.toString(),
+                           "1": this.totalPages.toString()
+                        }));
+                        break;
+
+                     default:
+                        this.pageMarker.set("label", this.currentPage.toString());
+                  }
+                  
                   domClass.remove(this.pageMarker.domNode, "dijitDisabled dijitMenuItemDisabled");
                }
                
@@ -468,7 +521,7 @@ define(["dojo/_base/declare",
                }
                
                // Create the page labels, which for English will be along the lines of 1-25
-               if (this.compactMode === false)
+               if (this.compactMode === false && this.showPageSelector)
                {
                   var pageLabels = [];
                   var pageStart = 1;
@@ -587,12 +640,13 @@ define(["dojo/_base/declare",
          var pageSizeMenuItems = [];
          array.forEach(this.pageSizes, lang.hitch(this, this.createPageSizeMenuItem, pageSizeMenuItems));
 
+
          this.widgets = [
             {
                name: "alfresco/menus/AlfMenuBarItem",
                config: {
                   id: this.id + "_PAGE_BACK",
-                  label: this.message("list.paginator.back.label"),
+                  label: this.message(this.backLabel),
                   publishTopic: this.pageBackTopic
                }
             },
@@ -608,7 +662,7 @@ define(["dojo/_base/declare",
                name: "alfresco/menus/AlfMenuBarItem",
                config: {
                   id: this.id + "_PAGE_FORWARD",
-                  label: this.message("list.paginator.next.label"),
+                  label: this.message(this.forwardLabel),
                   publishTopic: this.pageForwardTopic
                }
             }
@@ -616,21 +670,7 @@ define(["dojo/_base/declare",
 
          if (this.compactMode === false)
          {
-            this.widgets.splice(0, 0, {
-               name: "alfresco/menus/AlfMenuBarSelect",
-               config: {
-                  id: this.id + "_PAGE_SELECTOR",
-                  label: this.message("list.paginator.pageSelect.label"),
-                  selectionTopic: this.pageSelectionTopic,
-                  widgets: [
-                     {
-                        name: "alfresco/menus/AlfMenuGroup"
-                     }
-                  ]
-               }
-            });
-
-            this.widgets.splice(4,0, {
+            this.widgets.splice(3,0, {
                name: "alfresco/menus/AlfMenuBarSelect",
                config: {
                   id: this.id + "_RESULTS_PER_PAGE_SELECTOR",
@@ -642,6 +682,24 @@ define(["dojo/_base/declare",
                         config: {
                            widgets: pageSizeMenuItems
                         }
+                     }
+                  ]
+               }
+            });
+         }
+
+         // Note showPageSelector is trumped by compactMode
+         if (this.compactMode === false && this.showPageSelector)
+         {
+            this.widgets.splice(0, 0, {
+               name: "alfresco/menus/AlfMenuBarSelect",
+               config: {
+                  id: this.id + "_PAGE_SELECTOR",
+                  label: this.message("list.paginator.pageSelect.label"),
+                  selectionTopic: this.pageSelectionTopic,
+                  widgets: [
+                     {
+                        name: "alfresco/menus/AlfMenuGroup"
                      }
                   ]
                }
@@ -667,7 +725,7 @@ define(["dojo/_base/declare",
          
          // This next line will work providing that the widgets attribute has been created as defined in the
          // postCreate function...
-         if (this.compactMode === false)
+         if (this.compactMode === false && this.showPageSelector)
          {
             this.pageSelector = registry.byId(this.id + "_PAGE_SELECTOR");
             var popupChildren = this.pageSelector.popup.getChildren();
