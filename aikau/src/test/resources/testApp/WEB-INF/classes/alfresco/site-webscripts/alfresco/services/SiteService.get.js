@@ -42,6 +42,17 @@ model.jsonModel = {
       },
       {
          name: "alfresco/buttons/AlfButton",
+         id: "EDIT_MODERATED_SITE",
+         config: {
+            label: "Edit Moderated Site",
+            publishTopic: "ALF_EDIT_SITE",
+            publishPayload: {
+               site: "site2"
+            }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
          id: "BECOME_SITE_MANAGER",
          config: {
             label: "Become Site Manager",

@@ -178,6 +178,31 @@ define(["module",
             });
       },
 
+      "Edit moderated site": function() {
+         return this.remote.findById("EDIT_MODERATED_SITE_label")
+            .click()
+            .end()
+
+         // The moderated checkbox should be checked
+         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_MODERATED .dijitCheckBoxChecked")
+         .end()
+
+         // The public visibility radio button should be selected
+         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_VISIBILITY_CONTROL .dijitRadioChecked input[value=PUBLIC]")
+         .end()
+
+         .clearLog()
+
+         .findById("EDIT_SITE_DIALOG_OK_label")
+            .click()
+            .end()
+
+         .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
+            .end()
+
+         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
+      },
+
       "Request to join site navigates user to their dashboard afterwards": function() {
          return this.remote.findById("REQUEST_SITE_MEMBERSHIP_label")
             .click()
