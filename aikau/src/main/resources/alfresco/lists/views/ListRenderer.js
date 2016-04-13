@@ -38,8 +38,8 @@
  * the requested item comes into view)</p>
  * 
  * @module alfresco/lists/views/ListRenderer
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:alfresco/core/BaseWidget
+ * @mixes module:alfresco/core/_ConstructedWidgetMixin
  * @mixes external:dojo/_KeyNavContainer
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/lists/KeyboardNavigationSuppressionMixin
@@ -47,32 +47,35 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "alfresco/core/BaseWidget",
+        "alfresco/core/_ConstructedWidgetMixin",
         "dijit/_KeyNavContainer",
         "alfresco/lists/KeyboardNavigationSuppressionMixin",
         "dojo/text!./templates/ListRenderer.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
-        "alfresco/core/Core",
         "alfresco/core/JsNode",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/dom-construct",
         "dojo/on",
         "dojo/keys",
         "jquery",
         "jqueryui"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _KeyNavContainer, KeyboardNavigationSuppressionMixin, template, 
-                 _MultiItemRendererMixin, AlfCore, JsNode, lang, array, on, keys, $) {
+        function(declare, _BaseWidget, _ConstructedWidgetMixin, _KeyNavContainer, KeyboardNavigationSuppressionMixin, template, 
+                 _MultiItemRendererMixin, JsNode, lang, array, domConstruct, on, keys, $) {
    
-   return declare([_WidgetBase, _TemplatedMixin, _KeyNavContainer, _MultiItemRendererMixin, KeyboardNavigationSuppressionMixin, AlfCore], {
+   return declare([_BaseWidget, _ConstructedWidgetMixin, _KeyNavContainer, _MultiItemRendererMixin, KeyboardNavigationSuppressionMixin], {
       
       /**
-       * The HTML template to use for the widget.
+       * Overriden flag inherited from {@link module:alfresco/core/CoreWidgetProcessing} to always create all rows in a detached DOM tree.
+       * 
        * @instance
-       * @type {String}
+       * @type {boolean}
+       * @default true
+       * @since 1.0.6x
        */
-      templateString: template,
-      
+      defaultToDetachedWidgetCreation: true,
+       
       /**
        * The widgets to be processed to generate each item in the rendered view.
        * 
@@ -81,6 +84,28 @@ define(["dojo/_base/declare",
        * @default
        */
       widgets: null,
+      
+      /**
+       * Builds the DOM structure.
+       * 
+       * @instance buildDOMStructure
+       */
+      buildDOMStructure : function alfresco_lists_views_ListRenderer__buildDOMStructure(rootNode) {
+          var nodeProps = this._buildDOMNodeProperties();
+    
+          this.containerNode = this.domNode = domConstruct.create("tbody", nodeProps, rootNode);
+          this._setupWidgetInfo();
+      },
+      
+      /**
+       * Sets up the DOM events.
+       * 
+       * @instance setupEvents
+       */
+      setupEvents : function alfresco_lists_views_layouts_Row__setupEvents() {
+          this.own(on(this.domNode, "onSuppressKeyNavigation", lang.hitch(this, this.onSuppressKeyNavigation)));
+          this.own(on(this.domNode, "onItemFocused", lang.hitch(this, this.onItemFocused)));
+      },
       
       /**
        * Implements the widget life-cycle method to add drag-and-drop upload capabilities to the root DOM node.
@@ -93,8 +118,6 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_lists_views_ListRenderer__postCreate() {
          this.inherited(arguments);
          this.setupKeyboardNavigation();
-         on(this.domNode, "onSuppressKeyNavigation", lang.hitch(this, this.onSuppressKeyNavigation));
-         on(this.domNode, "onItemFocused", lang.hitch(this, this.onItemFocused));
 
          if (this.itemKey)
          {

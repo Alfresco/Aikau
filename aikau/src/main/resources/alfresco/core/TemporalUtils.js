@@ -30,6 +30,8 @@ define(["dojo/_base/declare",
         "dojo/date/stamp",
         "dojo/query"], 
         function(declare, lang, AlfCore, stamp, query) {
+    
+   var cachedDateFormatsByI18nScope = {};
 
    return declare([AlfCore], {
 
@@ -51,29 +53,41 @@ define(["dojo/_base/declare",
 
          lang.mixin(this, config);
          
-         this.dateFormats = {};
-         this.dateFormats.DAY_NAMES = (this.message("days.medium") + "," + this.message("days.long")).split(",");
-         this.dateFormats.MONTH_NAMES = (this.message("months.short") + "," + this.message("months.long")).split(",");
-         this.dateFormats.TIME_AM = this.message("date-format.am");
-         this.dateFormats.TIME_PM = this.message("date-format.pm");
-         this.dateFormats.masks = {};
-         this.dateFormats.masks["default"] = this.message("date-format.default");
-         this.dateFormats.masks.defaultDateOnly = this.message("date-format.defaultDateOnly");
-         this.dateFormats.masks.shortDate = this.message("date-format.shortDate");
-         this.dateFormats.masks.mediumDate = this.message("date-format.mediumDate");
-         this.dateFormats.masks.longDate = this.message("date-format.longDate");
-         this.dateFormats.masks.fullDate = this.message("date-format.fullDate");
-         this.dateFormats.masks.shortTime = this.message("date-format.shortTime");
-         this.dateFormats.masks.mediumTime = this.message("date-format.mediumTime");
-         this.dateFormats.masks.longTime = this.message("date-format.longTime");
-         this.dateFormats.masks.isoDate = "yyyy-mm-dd";
-         this.dateFormats.masks.isoTime = "HH:MM:ss";
-         this.dateFormats.masks.isoDateTime = "yyyy-mm-dd'T'HH:MM:ss";
-         this.dateFormats.masks.isoFullDateTime = "yyyy-mm-dd'T'HH:MM:ss.lo";
-         this.dateFormats.i18n = {
-            dayNames: this.dateFormats.DAY_NAMES,
-            monthNames: this.dateFormats.MONTH_NAMES
-         };
+         // check already resolved dateFormats before doing
+         var lookupKey = this.i18nScope || 'default';
+         if (cachedDateFormatsByI18nScope.hasOwnProperty(lookupKey))
+         {
+             this.dateFormats = JSON.parse(cachedDateFormatsByI18nScope[lookupKey]);
+         }
+         else
+         {
+             this.dateFormats = {};
+             this.dateFormats.DAY_NAMES = (this.message("days.medium") + "," + this.message("days.long")).split(",");
+             this.dateFormats.MONTH_NAMES = (this.message("months.short") + "," + this.message("months.long")).split(",");
+             this.dateFormats.TIME_AM = this.message("date-format.am");
+             this.dateFormats.TIME_PM = this.message("date-format.pm");
+             this.dateFormats.masks = {};
+             this.dateFormats.masks["default"] = this.message("date-format.default");
+             this.dateFormats.masks.defaultDateOnly = this.message("date-format.defaultDateOnly");
+             this.dateFormats.masks.shortDate = this.message("date-format.shortDate");
+             this.dateFormats.masks.mediumDate = this.message("date-format.mediumDate");
+             this.dateFormats.masks.longDate = this.message("date-format.longDate");
+             this.dateFormats.masks.fullDate = this.message("date-format.fullDate");
+             this.dateFormats.masks.shortTime = this.message("date-format.shortTime");
+             this.dateFormats.masks.mediumTime = this.message("date-format.mediumTime");
+             this.dateFormats.masks.longTime = this.message("date-format.longTime");
+             this.dateFormats.masks.isoDate = "yyyy-mm-dd";
+             this.dateFormats.masks.isoTime = "HH:MM:ss";
+             this.dateFormats.masks.isoDateTime = "yyyy-mm-dd'T'HH:MM:ss";
+             this.dateFormats.masks.isoFullDateTime = "yyyy-mm-dd'T'HH:MM:ss.lo";
+             this.dateFormats.i18n = {
+                dayNames: this.dateFormats.DAY_NAMES,
+                monthNames: this.dateFormats.MONTH_NAMES
+             };
+             
+             // cache
+             cachedDateFormatsByI18nScope[lookupKey] = JSON.stringify(this.dateFormats);
+         }
       },
 
       /**

@@ -61,6 +61,38 @@ define(["dojo/_base/declare",
        * @default
        */
       currentItem: null,
+      
+      /**
+       * This flag can be used to suppress the inclusion of [debug WidgetInfo]{@link module:alfresco/debug/WidgetInfo}
+       * instances for child widgets, even when the [debug flag]{@link module:service/constants/Default#DEBUG} is set.
+       *  
+       * @instance
+       * @type {boolean}
+       * @default false
+       * @since 1.0.6x
+       */
+      suppressWidgetInfo: false,
+      
+      /**
+       * This flag can be used to always force the creation of widgets in a detached DOM.
+       *  
+       * @instance
+       * @type {boolean}
+       * @default false
+       * @since 1.0.6x
+       */
+      defaultToDetachedWidgetCreation: false,
+      
+      /**
+       * This will be used to keep track of all widgets that are created so that they can be destroyed
+       * when the current instance is destroyed.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.6x
+       */
+      widgetsToDestroy: null,
 
       /**
        * This string is used to identify locations of counts of widgets that are being processed.
@@ -86,7 +118,7 @@ define(["dojo/_base/declare",
 
       /**
        * This string is used to identify locations of arrays where widgets that are being created will be stored.
-       * THis should not be set or configured.
+       * This should not be set or configured.
        *
        * @instance
        * @type {string}
@@ -94,6 +126,28 @@ define(["dojo/_base/declare",
        * @since 1.0.36
        */
       _processingWidgetsLocationPrefix: "_processingWidgets",
+      
+      /**
+       * This string is used to identify locations where root nodes for detached widget DOM tree(s) will be stored.
+       * This should not be set or configured.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.6x
+       */
+      _processingRootNodePrefix : '_processingRootNode',
+
+      /**
+       * This string is used to identify locations where target nodes for widgets being processed will be stored.
+       * This should not be set or configured.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.6x
+       */
+      _processingTargetNodePrefix : '_processingTargetNode',
 
       /**
        * Used to keep track of all the widgets created as a result of a call to the
@@ -195,6 +249,14 @@ define(["dojo/_base/declare",
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._countDownLocationPrefix), widgets.length, this);
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), new Deferred(), this);
                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingWidgetsLocationPrefix), [], this);
+               
+               if (this.defaultToDetachedWidgetCreation === true || this._attachedToLiveDOM === undefined || this._attachedToLiveDOM === true)
+               {
+                   lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingTargetNodePrefix), rootNode, this);
+                   // use documentFragment to assemble complete widgets in detached DOM before attaching to potentially live target DOM tree
+                   rootNode = document.createDocumentFragment();
+                   lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingRootNodePrefix), rootNode, this);
+               }
 
                // Iterate over all the widgets in the configuration object and add them...
                array.forEach(widgets, lang.hitch(this, this.processWidget, rootNode, processWidgetsId));
@@ -296,14 +358,45 @@ define(["dojo/_base/declare",
             processedWidgets = array.filter(processedWidgets, function(item) {
                return (item !== null && typeof item !== "undefined");
             }, this);
+            
+            var targetRootNode = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingTargetNodePrefix), false, this);
+            var rootNode = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._processingRootNodePrefix), false, this);
+            
+            if (targetRootNode && rootNode)
+            {
+                // attach to target DOM tree (might or might not be the live DOM)
+                targetRootNode.appendChild(rootNode);
+            }
 
+            // this._attachedToLiveDOM potentially defined by BaseWidget that CoreWidgetProcessing has been mixed in
+            if ((this._attachedToLiveDOM === undefined || this._attachedToLiveDOM === true) && (!targetRootNode || document.body.contains(targetRootNode)))
+            {
+                array.forEach(processedWidgets, function(widget){
+                    if (typeof widget.attachedToLiveDOM === "function")
+                    {
+                        widget.attachedToLiveDOM();
+                    }
+                }, this);
+            }
+            
             // IMPORTANT: We need to reset the processedWidgets with the filtered version...
             var promise = lang.getObject(this.getWidgetProcessingLocation(processWidgetsId, this._processedWidgetsLocationPrefix), false, this);
             promise.resolve(processedWidgets);
 
             this.allWidgetsProcessed(processedWidgets, processWidgetsId);
             this.widgetProcessingComplete = true; // NOTE: Not safe to refer to when calling processWidgets multiple times from a single widget
-            this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
+            
+            if (!targetRootNode || ((this._attachedToLiveDOM === undefined || this._attachedToLiveDOM === true) && document.body.contains(targetRootNode)))
+            {
+                // we've directly manipulated the live DOM so inform anyone that might be interested
+                // we want to avoid subscribers to be informed about not yet active widgets
+                this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
+            }
+            
+            // cleanup callback, widget and DOM references to avoid memory issues
+            array.forEach([this._processedWidgetsLocationPrefix, this._processingWidgetsLocationPrefix, this._processingTargetNodePrefix, this._processingRootNodePrefix], function(prefix){
+                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, prefix), null, this);
+            }, this);
          }
       },
 
@@ -625,6 +718,10 @@ define(["dojo/_base/declare",
          {
             initArgs.groupMemberships = this.groupMemberships;
          }
+         if (initArgs.suppressWidgetInfo === undefined)
+         {
+             initArgs.suppressWidgetInfo = this.suppressWidgetInfo;
+         }
          return initArgs;
       },
 
@@ -674,87 +771,7 @@ define(["dojo/_base/declare",
          // The use of indirection is done so modules will not rolled into a build (should we do one)
          var requires = [widget.name];
          require(requires, function(WidgetType) {
-            /* jshint maxcomplexity:false,maxstatements:false*/
-            // Just to be sure, check that no widget doesn't already exist with that id and
-            // if it does, generate a new one...
-            if (typeof WidgetType === "function")
-            {
-               try
-               {
-                  var preferredDomNodeId;
-                  if (registry.byId(initArgs.id))
-                  {
-                     preferredDomNodeId = initArgs.id;
-                     initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
-                  }
-
-                  // Instantiate the new widget
-                  // This is an asynchronous response so we need a callback method...
-                  instantiatedWidget = new WidgetType(initArgs, domNode);
-                  if (!_this.widgetsToDestroy)
-                  {
-                     _this.widgetsToDestroy = [];
-                     _this.widgetsToDestroy.push(widget);
-                  }
-
-                  if (preferredDomNodeId)
-                  {
-                     domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
-                     instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
-                  }
-
-                  _this.alfLog("log", "Created widget", instantiatedWidget);
-                  if (typeof instantiatedWidget.startup === "function")
-                  {
-                     instantiatedWidget.startup();
-                  }
-
-                  var assignToScope = widget.assignToScope || _this;
-                  if (widget.assignTo)
-                  {
-                     assignToScope[widget.assignTo] = instantiatedWidget;
-                  }
-
-                  // Set any additional style attributes...
-                  if (initArgs.style && instantiatedWidget.domNode)
-                  {
-                     domStyle.set(instantiatedWidget.domNode, initArgs.style);
-                  }
-
-                  // Create a node for debug mode...
-                  if (AlfConstants.DEBUG && instantiatedWidget.domNode)
-                  {
-                     domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
-                     var infoWidget = new WidgetInfo({
-                        displayId: widget.id || "",
-                        displayType: widget.name,
-                        displayConfig: initArgs
-                     }).placeAt(instantiatedWidget.domNode);
-                     domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
-                  }
-
-                  // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
-                  // This should cover any widgets created by a call to the processWidgets function but will
-                  // not capture widgets instantiated directly (which we should look to phase out) but this is
-                  // why "additionalCssClasses" may still be defined and set explicitly in some widgets.
-                  if (instantiatedWidget.domNode && initArgs.additionalCssClasses)
-                  {
-                     domClass.add(instantiatedWidget.domNode, initArgs.additionalCssClasses);
-                  }
-                  promisedWidget.resolve(instantiatedWidget);
-               }
-               catch (e)
-               {
-                  _this.alfLog("error", "The following error occurred creating a widget", e, _this);
-                  promisedWidget.resolve(null);
-                  return null;
-               }
-            }
-            else
-            {
-               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", _this);
-               promisedWidget.resolve(null);
-            }
+             instantiatedWidget = _this._createWidgetImpl(WidgetType, widget, domNode, initArgs, promisedWidget);
          });
 
          if (!widget)
@@ -762,6 +779,102 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", widget, this);
          }
          return instantiatedWidget || promisedWidget.promise;
+      },
+      
+      /**
+       * Creates a widget instance after the widget module has been resolved.
+       */
+      _createWidgetImpl: function alfresco_core_CoreWidgetProcessing__createWidgetImpl(WidgetType, widget, domNode, initArgs, promisedWidget) {
+          var instantiatedWidget;
+          
+          /* jshint maxcomplexity:false,maxstatements:false*/
+          // Just to be sure, check that no widget doesn't already exist with that id and
+          // if it does, generate a new one...
+          if (typeof WidgetType === "function")
+          {
+             try
+             {
+                var preferredDomNodeId;
+                if (registry.byId(initArgs.id))
+                {
+                   preferredDomNodeId = initArgs.id;
+                   initArgs.id = widget.name.replace(/\//g, "_") + "___" + this.generateUuid();
+                }
+
+                // Instantiate the new widget
+                // This is an asynchronous response so we need a callback method...
+                instantiatedWidget = new WidgetType(initArgs, domNode);
+                if (!this.widgetsToDestroy)
+                {
+                   this.widgetsToDestroy = [];
+                }
+                this.widgetsToDestroy.push(instantiatedWidget);
+
+                if (preferredDomNodeId)
+                {
+                   domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                   instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
+                }
+
+                this.alfLog("log", "Created widget", instantiatedWidget);
+                if (typeof instantiatedWidget.startup === "function")
+                {
+                   instantiatedWidget.startup();
+                }
+
+                var assignToScope = widget.assignToScope || this;
+                if (widget.assignTo)
+                {
+                   assignToScope[widget.assignTo] = instantiatedWidget;
+                }
+
+                // Set any additional style attributes...
+                // initArgs.style is copied into instantiatedWidget
+                // (if something interferred we should not assume and set initArgs.style default)
+                if (instantiatedWidget.style && instantiatedWidget.domNode)
+                {
+                   domStyle.set(instantiatedWidget.domNode, instantiatedWidget.style);
+                }
+
+                // Create a node for debug mode...
+                // unless suppressed or pro-actively created by widget itself
+                if (AlfConstants.DEBUG && instantiatedWidget.domNode && instantiatedWidget.suppressWidgetInfo !== true && !domClass.contains(instantiatedWidget.domNode, "alfresco-debug-Info"))
+                {
+                   domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
+                   var infoWidget = new WidgetInfo({
+                      displayId: widget.id || "",
+                      displayType: widget.name,
+                      displayConfig: initArgs
+                   });
+                   domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
+                }
+
+                // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
+                // This should cover any widgets created by a call to the processWidgets function but will
+                // not capture widgets instantiated directly (which we should look to phase out) but this is
+                // why "additionalCssClasses" may still be defined and set explicitly in some widgets.
+                // initArgs.additionalCssClasses is copied into instantiatedWidget
+                // (if something interferred we should not assume and set initArgs.additionalCssClasses default)
+                if (instantiatedWidget.domNode && instantiatedWidget.additionalCssClasses)
+                {
+                   domClass.add(instantiatedWidget.domNode, instantiatedWidget.additionalCssClasses);
+                }
+                promisedWidget.resolve(instantiatedWidget);
+             }
+             catch (e)
+             {
+                this.alfLog("error", "The following error occurred creating a widget", e, this);
+                promisedWidget.resolve(null);
+                return null;
+             }
+          }
+          else
+          {
+             this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", this);
+             promisedWidget.resolve(null);
+          }
+          
+          return instantiatedWidget;
       },
 
       /**
@@ -1124,6 +1237,70 @@ define(["dojo/_base/declare",
             result = [];
          }
          return result;
+      },
+      
+      /**
+       * Overrides [attachedToLiveDOM]{@link module:alfresco/core/BaseWidget#attachedToLiveDOM} to propagate to all children widgets
+       * 
+       * @instance
+       */
+      attachedToLiveDOM: function alfresco_core_CoreWidgetProcessing__attachedToLiveDOM()
+      {
+          this.inherited(arguments);
+          
+          if (this.widgetsToDestroy)
+          {
+             array.forEach(this.widgetsToDestroy, function(widget) {
+                if (widget && widget.domNode &&
+                        this.domNode && this.domNode.contains(widget.domNode) &&
+                        typeof widget.attachedToLiveDOM === "function")
+                {
+                   widget.attachedToLiveDOM();
+                }
+             }, this);
+          }
+      },
+      
+      /**
+       * Overrides [detachedFromLiveDOM]{@link module:alfresco/core/BaseWidget#detachedFromLiveDOM} to propagate to all children widgets
+       * 
+       * @instance
+       */
+      detachedFromLiveDOM: function alfresco_core_CoreWidgetProcessing__detachedFromLiveDOM()
+      {
+          this.inherited(arguments);
+          
+          if (this.widgetsToDestroy)
+          {
+             array.forEach(this.widgetsToDestroy, function(widget) {
+                if (widget && widget.domNode &&
+                        this.domNode && this.domNode.contains(widget.domNode) &&
+                        typeof widget.detachedFromLiveDOM === "function")
+                {
+                   widget.detachedFromLiveDOM();
+                }
+             }, this);
+          }
+      },
+      
+      /**
+       * Overriden function to destroy all children widgets.
+       * 
+       * @instance
+       */
+      destroy: function alfresco_core_CoreWidgetProcessing__destroy(preserveDom) {
+          this.inherited(arguments);
+          
+          // widgetsToDestroy is managed/filled by CoreWidgetProcessing - it should be cleaned up here too
+          if (this.widgetsToDestroy)
+          {
+             array.forEach(this.widgetsToDestroy, function(widget) {
+                if (widget && typeof widget.destroy === "function")
+                {
+                   widget.destroy();
+                }
+             }, this);
+          }
       }
    });
 });

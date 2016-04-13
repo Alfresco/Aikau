@@ -1095,6 +1095,10 @@ define(["dojo/_base/declare",
 
          // Add the new view...
          domConstruct.place(view.domNode, this.viewsNode);
+         if (typeof view.attachedToLiveDOM === "function")
+         {
+             view.attachedToLiveDOM();
+         }
          domClass.remove(this.viewsNode, "share-hidden");
 
          // Tell the view that it's now on display...
