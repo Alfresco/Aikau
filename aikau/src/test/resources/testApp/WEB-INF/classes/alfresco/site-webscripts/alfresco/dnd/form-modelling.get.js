@@ -1,4 +1,4 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/dnd-models/forms.lib.js">
 
 model.jsonModel = {
    services: [

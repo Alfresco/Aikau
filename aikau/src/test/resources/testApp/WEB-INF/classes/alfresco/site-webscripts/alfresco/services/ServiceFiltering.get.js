@@ -1,4 +1,4 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/service-filtering.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/service-filtering.lib.js">
 
 var originalServices = [
    {
