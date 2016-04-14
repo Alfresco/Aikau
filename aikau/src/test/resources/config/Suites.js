@@ -256,6 +256,7 @@ define(function() {
       "src/test/resources/alfresco/renderers/TagsTest",
       "src/test/resources/alfresco/renderers/ThumbnailTest",
       "src/test/resources/alfresco/renderers/ThumbnailAspectAndSizeTest",
+      "src/test/resources/alfresco/renderers/ToggleStateActionsTest",
       "src/test/resources/alfresco/renderers/XhrActionsTest",
 
       "src/test/resources/alfresco/renderers/actions/CopyToActionTest",

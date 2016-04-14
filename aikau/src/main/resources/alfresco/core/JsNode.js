@@ -84,7 +84,10 @@ define(["dojo/_base/declare",
          }
          if (this.node)
          {
-            this.nodeRef = NodeUtils.processNodeRef(this.node.nodeRef);
+            if (this.node.nodeRef)
+            {
+               this.nodeRef = NodeUtils.processNodeRef(this.node.nodeRef);
+            }
             this.properties = this.node.properties || {};
             this.aspects = this.node.aspects || [];
             this.permissions = this.node.permissions || {};

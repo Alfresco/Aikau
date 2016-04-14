@@ -1355,6 +1355,34 @@ define([],function() {
       TINYMCE_EDITOR_FOCUSED: "ALF_TINYMCE_EDITOR_FOCUSED",
 
       /**
+       * A generic topic used by the [ToggleStateActions]{@link module:alfresco/renderers/ToggleStateActions}
+       * widget for making requests to toggle the widget to the off state. Typically this would be expected
+       * to be overridden with a custom topic.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.64
+       *
+       * @event
+       */
+      TOGGLE_OFF: "ALF_TOGGLE_OFF",
+
+      /**
+       * A generic topic used by the [ToggleStateActions]{@link module:alfresco/renderers/ToggleStateActions}
+       * widget for making requests to toggle the widget to the on state. Typically this would be expected
+       * to be overridden with a custom topic.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.64
+       *
+       * @event
+       */
+      TOGGLE_ON: "ALF_TOGGLE_ON",
+
+      /**
        * This can be published to change the current field being used to sort lists.
        * 
        * @instance
