@@ -91,7 +91,7 @@ define(["module",
             .click()
          .end()
 
-         .getLastPublish("TOGGLE_ON")
+         .getLastPublish("ALF_TOGGLE_ON")
          .clearLog()
 
          .findDisplayedByCssSelector(selectors.tsas.propertyMatch2.label)
@@ -125,7 +125,7 @@ define(["module",
          .end()
 
          // Check the topic is published...
-         .getLastPublish("TOGGLE_OFF")
+         .getLastPublish("ALF_TOGGLE_OFF")
          .clearLog()
 
          // Check the appropriate labels have changed...

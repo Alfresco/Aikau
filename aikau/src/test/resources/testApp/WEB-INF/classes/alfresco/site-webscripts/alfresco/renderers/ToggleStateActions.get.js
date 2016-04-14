@@ -75,10 +75,10 @@ model.jsonModel = {
                                                 toggleStateProperty: "item.properties.qshare:sharedId",
                                                 customActions: [
                                                    {
-                                                      id: "TOGGLE_OFF",
+                                                      id: "ALF_TOGGLE_OFF",
                                                       label: "Toggle Off",
                                                       index: "10",
-                                                      publishTopic: "TOGGLE_OFF"
+                                                      publishTopic: "ALF_TOGGLE_OFF"
                                                    }
                                                 ]
                                              }
@@ -102,10 +102,10 @@ model.jsonModel = {
                                                 toggleOffStateLabel: "No way",
                                                 customActions: [
                                                    {
-                                                      id: "TOGGLE_OFF",
+                                                      id: "ALF_TOGGLE_OFF",
                                                       label: "Toggle Off",
                                                       index: "10",
-                                                      publishTopic: "TOGGLE_OFF"
+                                                      publishTopic: "ALF_TOGGLE_OFF"
                                                    }
                                                 ]
                                              }

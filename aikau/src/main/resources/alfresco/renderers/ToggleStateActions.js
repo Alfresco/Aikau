@@ -60,12 +60,22 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Actions",
+        "alfresco/core/topics",
         "dojo/dom-class",
         "dojo/_base/lang"], 
-        function(declare, Actions, domClass, lang) {
+        function(declare, Actions, topics, domClass, lang) {
 
    return declare([Actions], {
 
+      /**
+       * An array of the i18n files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/ToggleStateActions.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/ToggleStateActions.properties"}],
+      
       /**
        * The property of the current item that uniquely identifies it. This attribute is used
        * to check that any published 
@@ -86,7 +96,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      toggleOnStateLabel: "On",
+      toggleOnStateLabel: "toggle.state.on.label",
 
       /**
        * This is the topic that is published when the button is clicked when in the "off" state.
@@ -99,9 +109,10 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default
+       * @default [TOGGLE_ON]{@link module:alfresco/core/topics#TOGGLE_ON}
+       * @event
        */
-      toggleOnRequestTopic: "TOGGLE_ON",
+      toggleOnRequestTopic: topics.TOGGLE_ON,
 
       /**
        * This is the topic that should be published to toggle from the "off" state to the "on" state.
@@ -114,9 +125,10 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default
+       * @default [TOGGLE_ON]{@link module:alfresco/core/topics#TOGGLE_ON}
+       * @event
        */
-      toggleOnSuccessTopic: "TOGGLE_ON",
+      toggleOnSuccessTopic: topics.TOGGLE_ON,
 
       /**
        * This is the topic that should be published to toggle from the "on" state to the "off" state.
@@ -129,9 +141,10 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default
+       * @default [TOGGLE_OFF]{@link module:alfresco/core/topics#TOGGLE_OFF}
+       * @event
        */
-      toggleOffSuccessTopic: "TOGGLE_OFF",
+      toggleOffSuccessTopic: topics.TOGGLE_OFF,
 
       /**
        * This is the label to display on the button when toggled to the "off" state.
@@ -140,7 +153,7 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      toggleOffStateLabel: "Off",
+      toggleOffStateLabel: "toggle.state.off.label",
 
       /**
        * This is the value that the 
@@ -207,6 +220,8 @@ define(["dojo/_base/declare",
        * the initial toggle state and to update the label, topic and payload of the associated button.
        * 
        * @instance
+       * @listens module:alfresco/renderers/ToggleStateActions#toggleOnSuccessTopic
+       * @listens module:alfresco/renderers/ToggleStateActions#toggleOffSuccessTopic
        */
       postCreate: function alfresco_renderers_ToggleStateActions__postCreate() {
          this.inherited(arguments);
