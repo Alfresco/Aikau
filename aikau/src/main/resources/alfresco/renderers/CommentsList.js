@@ -282,7 +282,8 @@ define(["dojo/_base/declare",
                                                       confirmationPrompt: "comment.delete.prompt",
                                                       successMessage: "comment.delete.success",
                                                       requiresConfirmation: true,
-                                                      pubSubScope: "{pubSubScope}"
+                                                      pubSubScope: "{pubSubScope}",
+                                                      responseScope: "{pubSubScope}"
                                                    },
                                                    publishGlobal: true,
                                                    publishPayloadModifiers: ["processCurrentItemTokens"],
