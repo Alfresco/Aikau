@@ -28,8 +28,9 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core"], 
-        function(declare, AlfCore) {
+        "alfresco/core/Core",
+        "alfresco/core/topics"], 
+        function(declare, AlfCore, topics) {
    
    return declare([AlfCore], {
 
@@ -137,9 +138,12 @@ define(["dojo/_base/declare",
             // If no explicit payload has been configured then use a default payload to generate a form dialog request...
             publishPayload = {
                contentWidth: "550px",
+               dialogId: "ALF_CREATE_CONTENT_DIALOG",
                dialogTitle: this.message(this.dialogTitle),
                dialogConfirmationButtonTitle: this.message(this.dialogConfirmationLabel),
                dialogCancellationButtonTitle: this.message(this.dialogCancellationLabel),
+               dialogCloseTopic: this.pubSubScope + topics.CONTENT_CREATED,
+               dialogEnableTopic: this.pubSubScope + topics.CONTENT_CREATION_FAILED,
                formSubmissionTopic: this.formSubmissionTopic,
                formSubmissionPayloadMixin: {
                   type: this.contentType,
