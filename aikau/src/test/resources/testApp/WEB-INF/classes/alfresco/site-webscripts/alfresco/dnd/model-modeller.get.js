@@ -1,7 +1,7 @@
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/forms.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/TabbedFormControls.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/FormControlTab.lib.js">
-<import resource="classpath:/alfresco/site-webscripts/org/alfresco/aikau/webscript/libs/dnd-models/dnd.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/dnd-models/forms.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/dnd-models/TabbedFormControls.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/dnd-models/FormControlTab.lib.js">
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/dnd-models/dnd.lib.js">
 
 model.jsonModel = {
    services: [
