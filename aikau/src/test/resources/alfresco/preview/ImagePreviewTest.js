@@ -34,17 +34,20 @@ define(["module",
       },
 
       "Find image source request": function() {
-         return this.remote.findAllByCssSelector(".alfresco-testing-MockXhr table tbody tr")
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Expected just one XHR request");
+         return this.remote.getXhrEntries({
+               method: "GET"
             })
-            .end()
+            .then(function(entries) {
+               assert.lengthOf(entries, 1, "Expected just one XHR request");
+            })
 
-         .findByCssSelector(".alfresco-testing-MockXhr table tbody tr:first-child td.mx-url")
-            .getVisibleText()
-            .then(function(text) {
-               var result = text.indexOf("/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache") !== -1;
-               assert(result, "Test #2b - AlfDocument didn't request node details: " + text);
+         .getXhrEntries({
+               method: "GET",
+               pos: "last"
+            })
+            .then(function(entry) {
+               assert.deepProperty(entry, "request.url");
+               assert.include(entry.request.url, "/aikau/service/components/documentlibrary/data/node/workspace/SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4?view=browse&noCache", "Invalid URL for node request");
             });
       }
    });
