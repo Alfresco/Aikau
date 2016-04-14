@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>alfresco/renderers/ToggleStateActions</shortname>
+  <description>A specialization of the 'alfresco/renderers/Actions' widget that has on and off states, where only the on state has the actions menu.</description>
+  <family>ExamplePage</family>
+  <url>/ToggleStateActions</url>
+</webscript>
