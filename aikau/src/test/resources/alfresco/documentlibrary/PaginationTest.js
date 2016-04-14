@@ -122,6 +122,22 @@ define(["module",
             });
       },
 
+      "Check customized back button label": function() {
+         return this.remote.findById("CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_BACK_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Last One");
+            });
+      },
+
+      "Check customized forward button label": function() {
+         return this.remote.findById("CUSTOM_PAGE_SIZE_PAGINATOR_PAGE_FORWARD_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Next One");
+            });
+      },
+
       "Test items loaded correctly (check first row of 25 items)": function() {
          return this.remote.findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) span.value")
             .getVisibleText()
@@ -559,6 +575,21 @@ define(["module",
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "50");
+            });
+      },
+
+      "Alternate page marker label": function() {
+         return this.remote.findById("HIDDEN_PAGE_SELECTOR_PAGINATOR_PAGE_MARKER_text")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "2 of 10");
+            });
+      },
+
+      "Page selector hidden by config": function() {
+         return this.remote.findAllByCssSelector("#HIDDEN_PAGE_SELECTOR_PAGINATOR_PAGE_SELECTOR_text")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
             });
       }
    });
