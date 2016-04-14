@@ -37,8 +37,16 @@ define(["dojo/_base/declare",
       setupServer: function alfresco_testing_UserMockXhr__setupServer() {
          try
          {
+            var parsedUsers = JSON.parse(users),
+               people = parsedUsers.people,
+               peopleJson = JSON.stringify(people);
             this.server.respondWith("GET",
-                                    /\/aikau\/proxy\/alfresco\/api\/people(.*)/,
+                                    /\/aikau\/proxy\/alfresco\/api\/people\/raw.*/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     peopleJson]);
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/api\/people[^/]*$/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      users]);

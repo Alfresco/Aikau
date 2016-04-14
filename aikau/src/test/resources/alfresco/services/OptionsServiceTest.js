@@ -101,6 +101,12 @@ define(["module",
             result: TestCommon.getTestSelector(msiSelectors, "result", ["MULTI_SELECT_INPUT_4"]),
             secondResult: TestCommon.getTestSelector(msiSelectors, "nth.result", ["MULTI_SELECT_INPUT_4", "2"]),
             searchbox: TestCommon.getTestSelector(msiSelectors, "searchbox", ["MULTI_SELECT_INPUT_4"]),
+         },
+         emptyItemsAttribute: {
+            loaded: TestCommon.getTestSelector(msiSelectors, "options.loaded.state", ["MULTI_SELECT_INPUT_5"]),
+            result: TestCommon.getTestSelector(msiSelectors, "result", ["MULTI_SELECT_INPUT_5"]),
+            secondResult: TestCommon.getTestSelector(msiSelectors, "nth.result", ["MULTI_SELECT_INPUT_5", "2"]),
+            searchbox: TestCommon.getTestSelector(msiSelectors, "searchbox", ["MULTI_SELECT_INPUT_5"]),
          }
       }
    };
@@ -329,6 +335,20 @@ define(["module",
                assert.equal(text, "Mike Jackson");
             })
             .click();
+      },
+
+      "itemsAttribute can be empty string": function() {
+         return this.remote.findByCssSelector(selectors.multiSelects.emptyItemsAttribute.searchbox)
+            .click()
+            .end()
+
+         .findByCssSelector(selectors.multiSelects.emptyItemsAttribute.loaded)
+            .end()
+
+         .findAllByCssSelector(selectors.multiSelects.emptyItemsAttribute.result)
+            .then(function(options) {
+               assert.lengthOf(options, 6);
+            });
       }
    });
 });
