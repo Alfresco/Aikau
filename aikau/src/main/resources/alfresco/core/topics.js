@@ -253,6 +253,11 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.64
+       *
+       * @event
+       * @param {object} [currentNode] The metadata about the node in which to create content
+       * @param {string} [currentNode.nodeRef] The nodeRef of the node in which to create content
+       * @param {string} [type="cm:content"] The type of content to create
        */
       CREATE_CONTENT_REQUEST: "ALF_CREATE_CONTENT_REQUEST",
 
