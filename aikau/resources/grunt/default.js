@@ -1,3 +1,4 @@
+/*jshint maxlen:false*/
 var ANSI = require("./ANSI");
 
 module.exports = function(grunt) {
@@ -12,7 +13,6 @@ ${ANSI.Bright}clientPatch${ANSI.Reset}    Build and copy the latest Aikau JAR to
 ${ANSI.Bright}jsdoc${ANSI.Reset}          Build the JSDoc
 ${ANSI.Bright}docs${ANSI.Reset}           Build the JSDoc, deploy to a temporary server, and launch a web browser to view it
 ${ANSI.Bright}jshint${ANSI.Reset}         JSHint the src and test code ${ANSI.Dim}(as Bamboo will do once committed)${ANSI.Reset}
-${ANSI.Bright}preload${ANSI.Reset}        Pre-load all of the available unit-test pages
 
 ${ANSI.FgBlue}Vagrant${ANSI.Reset}
 ${ANSI.Bright}vcreate${ANSI.Reset}        Create a new vagrant box ${ANSI.Dim}(this will destroy any existing one)${ANSI.Reset}
@@ -23,6 +23,7 @@ ${ANSI.Bright}vrestart${ANSI.Reset}       Restart the vagrant box ${ANSI.Dim}(ca
 ${ANSI.FgBlue}Unit-testing application${ANSI.Reset}
 ${ANSI.Bright}startApp${ANSI.Reset}       Start the testing application
 ${ANSI.Bright}stopApp${ANSI.Reset}        Stop the testing application
+${ANSI.Bright}preload${ANSI.Reset}        Pre-load all of the available unit-test pages
 
 ${ANSI.FgBlue}Development${ANSI.Reset}
 ${ANSI.Bright}watchDev${ANSI.Reset}       Watch for changes to the main codebase or to unit-test pages and reload the application

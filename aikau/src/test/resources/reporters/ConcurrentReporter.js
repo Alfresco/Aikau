@@ -137,7 +137,7 @@ define(["intern/dojo/node!fs",
 
       /**
        * Problem types
-       * 
+       *
        * @readonly
        * @enum {string}
        */
@@ -149,7 +149,7 @@ define(["intern/dojo/node!fs",
 
       /**
        * Result types
-       * 
+       *
        * @readonly
        * @enum {string}
        */
@@ -952,28 +952,31 @@ define(["intern/dojo/node!fs",
             console.log("Deprecations: " + deprecations);
             console.log("Time taken:   " + timeTaken);
 
-
-            // Show the summary of the results
-            console.log("");
-            console.log("");
-            console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-
-            // Output the messages (array literal determines output order)
-            var messageGroups = ["failed", "errors", "warnings", "deprecations"];
+            // Build the summary (array literal determines output order)
+            var messageGroups = ["failed", "errors", "warnings", "deprecations"],
+               summaryLines = [];
             messageGroups.forEach(function(groupName) {
 
                // Output this group?
                var messageLines = this.messages[groupName];
                if (messageLines.length && messageLines[0].indexOf("N/A") === -1) {
-                  console.log("");
-                  console.log(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
+                  summaryLines.push("");
+                  summaryLines.push(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
                   messageLines.forEach(function(nextLine) {
-                     console.log(nextLine + ANSI_CODES.Reset);
+                     summaryLines.push(nextLine + ANSI_CODES.Reset);
                   });
                }
             }, this);
+
+            // Show the summary of the results
+            if (summaryLines.length) {
+               console.log("");
+               console.log("");
+               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+               summaryLines.forEach(console.log);
+            }
 
             // Output the "results" (i.e. failures and skipped tests)
             Object.keys(this.results).forEach(function(resultType) {
@@ -1640,7 +1643,7 @@ define(["intern/dojo/node!fs",
                var propertyName = this.pad(propertyArgs[0] + ": ", longestProp, null, true),
                   propertyValue = propertyArgs[1],
                   ansiCodes = propertyArgs[2],
-                  message = this.reduce(propertyName + propertyValue, maxLen);//, reduceLeft); TODO - Do this properly!
+                  message = this.reduce(propertyName + propertyValue, maxLen); //, reduceLeft); TODO - Do this properly!
                this.write(col, row++, message, ansiCodes);
             }, this);
          },
@@ -1669,7 +1672,7 @@ define(["intern/dojo/node!fs",
           * This method is called when code coverage data has been retrieved from an environment.
           * This will occur once per remote environment when all unit tests have completed, and
           * again any time a new page is loaded.
-          * 
+          *
           * @instance
           * @param {string} sessionId Corresponds to a single remote environment. Will be null
           *                           for a local environment (e.g. in the Node.js client)

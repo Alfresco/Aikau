@@ -44,7 +44,7 @@ define(["./config/Suites"], function(Suites) {
             location: "./src/test/resources/reporters"
          }, {
             name: "dojo",
-            location: "./node_modules/intern/node_modules/dojo"
+            location: "./node_modules/intern/browser_modules/dojo"
          }, {
             name: "lodash",
             location: "./src/test/resources/lib/lodash",

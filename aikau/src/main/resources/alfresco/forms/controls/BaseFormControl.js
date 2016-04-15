@@ -1176,7 +1176,7 @@ define(["dojo/_base/declare",
        * @param {object} payload This is expected to be an empty object or null.
        */
       onWidgetAddedToDocument: function alfresco_forms_controls_BaseFormControl__onWidgetAddedToDocument(/*jshint unused:false*/ payload) {
-         // jshint maxstatements:false
+         // jshint maxstatements:false,maxcomplexity:false
          if (!this.___addedToDocument && $.contains(document.body, this.domNode))
          {
             this.___addedToDocument = true;

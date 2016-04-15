@@ -1,6 +1,36 @@
-var alfConfig = require("./_config");
+var alfConfig = require("./_config"),
+   tcpPortUsed = require("tcp-port-used");
 
 module.exports = function(grunt) {
+
+   // Register tasks to start/stop the test app
+   grunt.registerTask("startApp", function() {
+      grunt.log.writeln("Check Jetty unit test application state...");
+      var done = this.async();
+      tcpPortUsed.check(8089, "localhost")
+         .then(function(inUse) {
+            if (!inUse) {
+               grunt.log.writeln("Starting unit test app...");
+               grunt.task.run("shell:startTestApp");
+               done();
+            } else {
+               grunt.log.writeln("Jetty unit test application appears to be running already...");
+               done();
+            }
+         }, function(err) {
+            console.error("Unknown if Jetty unit test application is already running:", err.message);
+            done();
+         });
+   });
+   grunt.registerTask("stopApp", function() {
+      grunt.task.run("shell:stopTestApp");
+   });
+
+   // Reload the test app and clear in-server caches
+   grunt.registerTask("updateTest", ["updateApp"]);
+   grunt.registerTask("updateApp", ["notify:testUpdating", "shell:mavenProcessTestResources", "http:testAppReloadWebScripts", "http:testAppClearCaches", "notify:testUpdated"]);
+
+   // Update the config
    grunt.config.merge({
       shell: {
 
