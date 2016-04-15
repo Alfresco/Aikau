@@ -1038,7 +1038,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               this.setValue(this.value);
+               this.setValue(this.value || {});
             }
             
             // Create an object that we're going to use to check off all the form controls as they report their

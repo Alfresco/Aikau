@@ -50,6 +50,19 @@ define(["dojo/_base/declare",
       _released: false,
 
       /**
+       * To make sure that all publications are made in order after releasing, this flag is used to indicate
+       * that all queued publications have been made before publishing resulting publications. An example of this
+       * would be where a queued publication triggers another publication - it is imperative that this resulting
+       * publication does not "jump the queue". Instead it should itself be queued and wait for its turn.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.65
+       */
+      _unreleasedEmptied: false,
+
+      /**
        * @instance
        * @type {array}
        * @default []
@@ -62,7 +75,7 @@ define(["dojo/_base/declare",
        * @param {string} payload The payload to be delivered
        */
       publish: function alfresco_core_PubQueue__publish(scopedTopic, payload, caller) {
-         if (this._released === false)
+         if (this._released === false || this._unreleasedEmptied === false)
          {
             this._queue.push({
                topic: scopedTopic,
@@ -84,10 +97,14 @@ define(["dojo/_base/declare",
        */
       release: function alfresco_core_PubQueue__release() {
          this._released = true;
-         array.forEach(this._queue, function(publication) {
+         var publication = this._queue.shift();
+         while (publication)
+         {
             this.log(publication.topic, publication.payload, publication.caller);
             pubSub.publish(publication.topic, publication.payload);
-         }, this);
+            publication = this._queue.shift();
+         }
+         this._unreleasedEmptied = true;
       },
 
       /**
