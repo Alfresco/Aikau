@@ -393,10 +393,11 @@ define(["dojo/_base/declare",
                 this.alfPublish("ALF_WIDGET_PROCESSING_COMPLETE", {}, true);
             }
             
+            // NOTE: Commented out because it breaks promise resolution
             // cleanup callback, widget and DOM references to avoid memory issues
-            array.forEach([this._processedWidgetsLocationPrefix, this._processingWidgetsLocationPrefix, this._processingTargetNodePrefix, this._processingRootNodePrefix], function(prefix){
-                lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, prefix), null, this);
-            }, this);
+            // array.forEach([this._processedWidgetsLocationPrefix, this._processingWidgetsLocationPrefix, this._processingTargetNodePrefix, this._processingRootNodePrefix], function(prefix){
+            //     lang.setObject(this.getWidgetProcessingLocation(processWidgetsId, prefix), null, this);
+            // }, this);
          }
       },
 
