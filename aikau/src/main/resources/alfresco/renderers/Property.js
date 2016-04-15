@@ -24,30 +24,33 @@
  * of different configuration options that control how the property is ultimately displayed.
  *
  * @module alfresco/renderers/Property
- * @extends alfresco/core/BaseWidget
- * @mixes alfresco/core/_ConstructedWidgetMixin
+ * @extends external:dijit/_WidgetBase
+ * @mixes external:dojo/_TemplatedMixin
+ * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
  * @mixes module:alfresco/core/ValueDisplayMapMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/BaseWidget",
-        "alfresco/core/_ConstructedWidgetMixin",
-        "alfresco/renderers/_JsNodeMixin",
-        "alfresco/core/ValueDisplayMapMixin",
-        "alfresco/core/ObjectTypeUtils",
-        "alfresco/core/UrlUtilsMixin",
+        "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin", 
+        "alfresco/renderers/_JsNodeMixin", 
+        "alfresco/core/ValueDisplayMapMixin", 
+        "alfresco/core/Core", 
+        "dojo/text!./templates/Property.html", 
+        "alfresco/core/ObjectTypeUtils", 
+        "alfresco/core/UrlUtilsMixin", 
         "alfresco/core/TemporalUtils", 
-        "dojo/_base/lang",
-        "dojo/dom-construct",
-        "dojo/dom-class",
-        "dijit/Tooltip",
-        "dojo/on"],
-        function(declare, BaseWidget, _ConstructedWidgetMixin, _JsNodeMixin, ValueDisplayMapMixin,  
-            ObjectTypeUtils, UrlUtilsMixin, TemporalUtils, lang, domConstruct, domClass, Tooltip, on) {
+        "dojo/_base/lang", 
+        "dojo/dom-class", 
+        "dojo/dom-style", 
+        "dijit/Tooltip", 
+        "dojo/on"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, template, 
+            ObjectTypeUtils, UrlUtilsMixin, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
 
-   return declare([BaseWidget, _ConstructedWidgetMixin, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -70,6 +73,13 @@ define(["dojo/_base/declare",
       cssRequirements: [{
          cssFile: "./css/Property.css"
       }],
+
+      /**
+       * The HTML template to use for the widget.
+       * @instance
+       * @type {string}
+       */
+      templateString: template,
 
       /**
        * This is the object that the property to be rendered will be retrieved from.
@@ -238,15 +248,6 @@ define(["dojo/_base/declare",
        * @type {string[]}
        */
       _tooltipPositions: ["below-centered", "above-centered"],
-      
-      /**
-       * The internal flag to indicate wether tooltip has already been initialized
-       * 
-       * @instance
-       * @protected
-       * @type {boolean}
-       */
-      _tooltipInitialized: false,
 
       /**
        * Updates CSS classes based on the current state of the renderer. Currently this only
@@ -383,75 +384,37 @@ define(["dojo/_base/declare",
             this.renderedValueClass = this.renderedValueClass + " deemphasized";
          }
       },
-      
-      /**
-       * Builds the DOM structure.
-       * 
-       * @instance buildDOMStructure
-       */
-      buildDOMStructure : function alfresco_renderers_Property__buildDOMStructure(rootNode) {
-         var nodeProps, inner, label, value;
-
-         nodeProps = this._buildDOMNodeProperties();
-         
-         this.renderedValueNode = this.domNode = domConstruct.create("span", nodeProps, rootNode);
-         this._setupWidgetInfo();
-         
-         inner = domConstruct.create("span", {
-            className : "inner"
-         }, this.renderedValueNode);
-         label = domConstruct.create("span", {
-            className : "label",
-            innerHTML : this.encodeHTML(this.label)
-         }, inner);
-         value = domConstruct.create("span", {
-            className : "value",
-            innerHTML : this.renderedValue
-         }, inner);
-      },
-      
-      _buildDOMNodeProperties : function alfresco_renderers_Property__buildDOMNodeProperties() {
-          var nodeProps = this.inherited(arguments);
-          
-          nodeProps.className += " ";
-          nodeProps.className += this.renderedValueClass;
-          nodeProps.tabindex = "0";
-          
-          if (this.maxWidth)
-          {
-             nodeProps.className += " has-max-width";
-             nodeProps.style = nodeProps.style || "";
-             nodeProps.style += "max-width:" + this.maxWidth + ";";
-          }
-          
-          if (this.onlyShowOnHover === true)
-          {
-             nodeProps.className += " hover-only";
-          }
-          
-          if (this.warningDisplayed)
-          {
-              nodeProps.className += " faded";
-          }
-          
-          return nodeProps;
-      },
 
       /**
-       * Called when widget is attached to live DOM
+       * Determines whether or not the property should only be displayed when the item is hovered over.
        *
        * @instance
        */
-      attachedToLiveDOM: function alfresco_renderers_Property__attachedToLiveDOM() {
-         var target, tooltipPositions;
-          
-         this.inherited(arguments);
-         
-         if (this._tooltipInitialized === false && this.maxWidth && this.domNode.scrollWidth > this.domNode.clientWidth)
+      postCreate: function alfresco_renderers_Property__postCreate() {
+         this.updateCssClasses();
+         if (this.maxWidth) 
          {
-            target = this.domNode;
-            tooltipPositions = this._tooltipPositions;
-           
+            domClass.add(this.domNode, "has-max-width");
+            domStyle.set(this.domNode, {
+               maxWidth: this.maxWidth
+            });
+         }
+         if (this.onlyShowOnHover === true) 
+         {
+            domClass.add(this.domNode, "hover-only");
+         }
+      },
+
+      /**
+       * Called on widget startup
+       *
+       * @instance
+       */
+      startup: function alfresco_renderers_Property__startup() {
+         this.inherited(arguments);
+         if (this.maxWidth && this.domNode.scrollWidth > this.domNode.clientWidth) {
+            var target = this.domNode,
+               tooltipPositions = this._tooltipPositions;
             this.own(on(target, "focus,mouseover", function() {
                var content = lang.trim(target.textContent || target.innerText || "");
                Tooltip.show(content, target, tooltipPositions);
@@ -459,8 +422,6 @@ define(["dojo/_base/declare",
             this.own(on(target, "blur,mouseout", function() {
                Tooltip.hide(target);
             }));
-            
-            this._tooltipInitialized = true;
          }
       },
 
