@@ -4,9 +4,10 @@ module.exports = function(grunt) {
    grunt.config.merge({
 
       clean: {
-         instrumentedCode: alfConfig.dir.mainInstrumented,
-         jsdoc: alfConfig.dir.docs,
-         testScreenshots: alfConfig.files.testScreenshots
+         coverage: [alfConfig.dir.coverage],
+         instrumentedCode: [alfConfig.dir.mainInstrumented],
+         jsdoc: [alfConfig.dir.docs],
+         testScreenshots: [alfConfig.files.testScreenshots]
       }
 
    });

@@ -26,33 +26,18 @@ module.exports = function(grunt) {
       grunt.file.write(config.widget, parsedTemplate);
    });
 
-   // Create the coverage function
-   grunt.registerTask("coverage", function() {
-
-      // Do the pre-reqs
-      grunt.task.run("shell:stopTestApp");
-      grunt.task.run("generateRequireEverything");
-      grunt.task.run("instrumentCode");
-
-      // Copy the instrumented code
-      var targetDirs = grunt.file.expand(alfConfig.dir.appTargetDirs);
-      targetDirs.forEach(targetDir => {
+   // Functions to copy/restore the instrumented/original code
+   grunt.registerTask("copyInstrumented", function() {
+      grunt.file.expand(alfConfig.dir.appTargetDirs).forEach(targetDir => {
          grunt.file.recurse(alfConfig.dir.mainInstrumented, (abspath, rootdir) => {
             var relativePath = abspath.substr(rootdir.length).replace(/^(\/|\\)/, ""),
                targetPath = path.join(targetDir, alfConfig.dir.basePackage, relativePath);
             grunt.file.copy(abspath, targetPath);
          });
       });
-
-      // Start the app, run the tests, stop the app
-      grunt.task.run("startApp");
-      grunt.task.run("waitServer");
-      grunt.task.run("intern:dev");
-      grunt.task.run("shell:stopTestApp");
-      grunt.task.run("clean:instrumentedCode");
-
-      // Restore the original code
-      targetDirs.forEach(targetDir => {
+   });
+   grunt.registerTask("restoreInstrumented", function() {
+      grunt.file.expand(alfConfig.dir.appTargetDirs).forEach(targetDir => {
          grunt.file.recurse(alfConfig.dir.main, (abspath, rootdir) => {
             var relativePath = abspath.substr(rootdir.length).replace(/^(\/|\\)/, ""),
                targetPath = path.join(targetDir, alfConfig.dir.basePackage, relativePath);
@@ -60,6 +45,21 @@ module.exports = function(grunt) {
          });
       });
    });
+
+   // The coverage alias
+   grunt.registerTask("coverage", [
+      "shell:stopTestApp",
+      "generateRequireEverything",
+      "clean:coverage",
+      "instrumentCode",
+      "copyInstrumented",
+      "startApp",
+      "waitServer",
+      "intern:dev",
+      "shell:stopTestApp",
+      "restoreInstrumented",
+      "clean:instrumentedCode"
+   ]);
 
    // Delete existing instrumented code and run the coverage module instrumentation process to replace it
    grunt.registerTask("instrumentCode", "Use istanbul to instrument the widgets with coverage collection data", function() {

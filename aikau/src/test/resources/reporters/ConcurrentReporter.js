@@ -952,30 +952,33 @@ define(["intern/dojo/node!fs",
             console.log("Deprecations: " + deprecations);
             console.log("Time taken:   " + timeTaken);
 
+            // Show the summary of the results
+            console.log("");
+            console.log("");
+            console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+            console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
+            console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+
             // Build the summary (array literal determines output order)
             var messageGroups = ["failed", "errors", "warnings", "deprecations"],
-               summaryLines = [];
+               summaryLines = [],
+               summaryMessagesLogged = false;
             messageGroups.forEach(function(groupName) {
 
                // Output this group?
                var messageLines = this.messages[groupName];
                if (messageLines.length && messageLines[0].indexOf("N/A") === -1) {
-                  summaryLines.push("");
-                  summaryLines.push(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
+                  console.log("");
+                  console.log(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
                   messageLines.forEach(function(nextLine) {
-                     summaryLines.push(nextLine + ANSI_CODES.Reset);
+                     console.log(nextLine + ANSI_CODES.Reset);
                   });
+                  summaryMessagesLogged = true;
                }
             }, this);
-
-            // Show the summary of the results
-            if (summaryLines.length) {
+            if (!summaryMessagesLogged) {
                console.log("");
-               console.log("");
-               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-               console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
-               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-               summaryLines.forEach(console.log);
+               console.log("No problems!");
             }
 
             // Output the "results" (i.e. failures and skipped tests)
