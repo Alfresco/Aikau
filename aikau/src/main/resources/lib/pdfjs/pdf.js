@@ -1140,8 +1140,8 @@ PDFJS.createPromiseCapability = createPromiseCapability;
         });
       };
     }
-    if (typeof globalScope.Promise.prototype._catch !== 'function') {
-      globalScope.Promise.prototype._catch = function (onReject) {
+    if (typeof globalScope.Promise.prototype["catch"] !== 'function') {
+      globalScope.Promise.prototype["catch"] = function (onReject) {
         return globalScope.Promise.prototype.then(undefined, onReject);
       };
     }
@@ -1398,11 +1398,10 @@ PDFJS.createPromiseCapability = createPromiseCapability;
       });
       HandlerManager.scheduleHandlers(this);
       return nextPromise;
-    },
-
-    _catch: function Promise_catch(onReject) {
-      return this.then(undefined, onReject);
     }
+  };
+  Promise.prototype["catch"] = function Promise_catch(onReject) {
+      return this.then(undefined, onReject);
   };
 
   globalScope.Promise = Promise;
@@ -3272,7 +3271,7 @@ var PDFPageProxy = (function PDFPageProxyClosure() {
       Object.keys(this.intentStates).forEach(function(intent) {
         var intentState = this.intentStates[intent];
         intentState.renderTasks.forEach(function(renderTask) {
-          var renderCompleted = renderTask.capability.promise._catch(function () {}); // ignoring failures
+          var renderCompleted = renderTask.capability.promise["catch"](function () {}); // ignoring failures
           waitOn.push(renderCompleted);
           renderTask.cancel();
         });
@@ -7423,7 +7422,7 @@ FontLoader.prototype = {
     var getNativeFontPromise = function(nativeFontFace) {
       // Return a promise that is always fulfilled, even when the font fails to
       // load.
-      return nativeFontFace.loaded._catch(function(e) {
+      return nativeFontFace.loaded["catch"](function(e) {
         warn('Failed to load font "' + nativeFontFace.family + '": ' + e);
       });
     };
