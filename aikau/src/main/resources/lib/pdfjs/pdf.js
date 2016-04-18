@@ -3272,8 +3272,7 @@ var PDFPageProxy = (function PDFPageProxyClosure() {
       Object.keys(this.intentStates).forEach(function(intent) {
         var intentState = this.intentStates[intent];
         intentState.renderTasks.forEach(function(renderTask) {
-          var renderCompleted = renderTask.capability.promise.
-            catch(function () {}); // ignoring failures
+          var renderCompleted = renderTask.capability.promise._catch(function () {}); // ignoring failures
           waitOn.push(renderCompleted);
           renderTask.cancel();
         });
@@ -7424,7 +7423,7 @@ FontLoader.prototype = {
     var getNativeFontPromise = function(nativeFontFace) {
       // Return a promise that is always fulfilled, even when the font fails to
       // load.
-      return nativeFontFace.loaded.catch(function(e) {
+      return nativeFontFace.loaded._catch(function(e) {
         warn('Failed to load font "' + nativeFontFace.family + '": ' + e);
       });
     };
