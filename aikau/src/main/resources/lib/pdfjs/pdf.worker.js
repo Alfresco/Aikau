@@ -1140,8 +1140,8 @@ PDFJS.createPromiseCapability = createPromiseCapability;
         });
       };
     }
-    if (typeof globalScope.Promise.prototype._catch !== 'function') {
-      globalScope.Promise.prototype._catch = function (onReject) {
+    if (typeof globalScope.Promise.prototype["catch"] !== 'function') {
+      globalScope.Promise.prototype["catch"] = function (onReject) {
         return globalScope.Promise.prototype.then(undefined, onReject);
       };
     }
@@ -1398,11 +1398,10 @@ PDFJS.createPromiseCapability = createPromiseCapability;
       });
       HandlerManager.scheduleHandlers(this);
       return nextPromise;
-    },
-
-    _catch: function Promise_catch(onReject) {
-      return this.then(undefined, onReject);
     }
+  };
+  Promise.prototype["catch"] = function Promise_catch(onReject) {
+      return this.then(undefined, onReject);
   };
 
   globalScope.Promise = Promise;
