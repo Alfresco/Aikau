@@ -29,18 +29,9 @@ define(["intern/dojo/node!fs",
       "intern/dojo/node!os",
       "intern/dojo/node!process",
       "intern/dojo/node!istanbul",
-      "dojo/node!charm",
-      "safe-json-serialiser"
+      "dojo/node!charm"
    ],
-   function(fs, os, process, istanbul, Charm, safeJson) {
-
-      // This file-logging function can be used during debugging testing
-      var logFilename = process.cwd() + "/test_reports/ConcurrentReporter.log";
-
-      function logToFile(message) {
-         var timestamp = "[" + (new Date()).toISOString() + "] ";
-         fs.appendFileSync(logFilename, timestamp + message + os.EOL, "utf8");
-      }
+   function(fs, os, process, istanbul, Charm) {
 
       /**
        * ANSI codes for terminal text decoration
@@ -961,7 +952,6 @@ define(["intern/dojo/node!fs",
 
             // Build the summary (array literal determines output order)
             var messageGroups = ["failed", "errors", "warnings", "deprecations"],
-               summaryLines = [],
                summaryMessagesLogged = false;
             messageGroups.forEach(function(groupName) {
 
@@ -1628,7 +1618,7 @@ define(["intern/dojo/node!fs",
           * @param {int} maxLen The maximum length for these properties
           * @param {Boolean} [reduceLeft=false] Whether to reduce the left-hand side of the string
           */
-         writeProperties: function(col, row, properties, maxLen, reduceLeft) {
+         writeProperties: function(col, row, properties, maxLen, /*jshint unused:false*/ reduceLeft) {
 
             // Calculate longest property name
             var longestProp = 0;
@@ -1787,7 +1777,7 @@ define(["intern/dojo/node!fs",
           * @instance
           * @param {Object} executor The test executor
           */
-         runStart: function(executor) {
+         runStart: function(/*jshint unused:false*/ executor) {
             helper.logReporterMethod("runStart");
             if (helper.getTunnelState() !== "N/A") {
                helper.logTunnelState("Active");

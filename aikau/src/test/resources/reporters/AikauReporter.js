@@ -1,3 +1,4 @@
+/*jshint latedef:false*/
 define([], function() {
 
    /* Constants */
@@ -62,8 +63,8 @@ define([], function() {
          beforeSuite: 0
       },
       unusedTopicsCounter = {},
-      lastSuite,
-      lastEnv;
+      lastUsedSuite,
+      lastEnvironment;
 
    /* Helper functions */
    function addToCollection(collection, message) {
@@ -179,7 +180,7 @@ define([], function() {
          console.log("Took " + timeTaken + " to run " + counts.total + " tests in " + environmentNames.length + " environments: \"" + environmentNames.join("\", \"") + "\"");
 
          // Calculate total success percent (but don't let it be 100% if there are any errors/failures)
-         var totalSuccesses = counts.passed + counts.skipped;
+         var totalSuccesses = counts.passed + counts.skipped,
             successPercent = Math.round(totalSuccesses / counts.total * 1000) / 10;
          successPercent = successPercent === 100 ? (totalSuccesses === counts.total ? 100 : 99.9) : successPercent;
 
@@ -390,9 +391,9 @@ define([], function() {
          timers.beforeTest = Date.now();
          state.env = parentSuite.env;
          state.test = test.name;
-         if ((state.suite && lastSuite !== state.suite) || (state.env && lastEnv !== state.env)) {
-            lastSuite = state.suite;
-            lastEnv = state.env;
+         if ((state.suite && lastUsedSuite !== state.suite) || (state.env && lastEnvironment !== state.env)) {
+            lastUsedSuite = state.suite;
+            lastEnvironment = state.env;
             if (state.env) {
                console.log(state.env);
             }
