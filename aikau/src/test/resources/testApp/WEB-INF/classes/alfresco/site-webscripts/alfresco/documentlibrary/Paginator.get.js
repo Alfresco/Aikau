@@ -171,7 +171,9 @@ model.jsonModel = {
                                              config: {
                                                 pageSizePreferenceName: "test.pagesize.name",
                                                 documentsPerPage: 10,
-                                                pageSizes: [5,10,20]
+                                                pageSizes: [5,10,20],
+                                                backLabel: "Last One",
+                                                forwardLabel: "Next One"
                                              }
                                           }
                                        ]
@@ -371,6 +373,14 @@ model.jsonModel = {
                                     name: "alfresco/lists/Paginator",
                                     config: {
                                        compactMode: true
+                                    }
+                                 },
+                                 {
+                                    id: "HIDDEN_PAGE_SELECTOR_PAGINATOR",
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       showPageSelector: false,
+                                       currentPageLabelStyle: "X_OF_Y"
                                     }
                                  }
                               ]

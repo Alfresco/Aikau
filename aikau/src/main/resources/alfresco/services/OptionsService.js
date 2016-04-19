@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
        */
       onOptionsRequest: function alfresco_services_OptionsService__onOptionsRequest(payload) {
          if (payload.url &&
-             payload.itemsAttribute &&
+             (payload.itemsAttribute || payload.itemsAttribute === "") &&
              payload.labelAttribute &&
              payload.valueAttribute &&
              (payload.responseTopic || payload.alfResponseTopic))

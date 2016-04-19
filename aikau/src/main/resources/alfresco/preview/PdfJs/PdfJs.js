@@ -959,6 +959,8 @@ define(["dojo/_base/declare",
          //       this.onFindChange("find");
          //    }
          // }
+         
+         this.alfPublish(PdfJsConstants.PDF_PAGES_RENDERED);
       },
 
       /**

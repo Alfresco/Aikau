@@ -24,8 +24,9 @@
  * @module aikauTesting/RequireEverything
  * @author Richard Smith
  */
-define(["dojo/_base/declare",{0}],
-         function(declare) {
+define(["dojo/_base/declare",
+   {0}],
+   function(declare) {
    
    return declare(null, {});
 });

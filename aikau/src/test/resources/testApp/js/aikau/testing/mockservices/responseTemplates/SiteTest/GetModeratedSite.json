@@ -1,0 +1,20 @@
+{  
+   "url":"\/alfresco\/s\/api\/sites\/site2",
+   "sitePreset":"site-dashboard",
+   "shortName":"site2",
+   "title":"Moderated Site",
+   "description":"",
+   "createdDate":"2014-05-16T15:27:43.301+01:00",
+   "lastModifiedDate":"2014-05-16T15:27:44.388+01:00",
+   "visibility":"MODERATED",
+   "userIsSiteManager":"false",
+   "siteManagers":[  
+      {  
+         "entry":{  
+            "userName":"userFacetedSearch1400250449557@freetht1.test",
+            "firstName":"userFacetedSearch1400250449557@freetht1.test",
+            "lastName":"LName"
+         }
+      }
+   ]
+}

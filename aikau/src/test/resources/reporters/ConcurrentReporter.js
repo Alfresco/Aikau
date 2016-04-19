@@ -29,18 +29,9 @@ define(["intern/dojo/node!fs",
       "intern/dojo/node!os",
       "intern/dojo/node!process",
       "intern/dojo/node!istanbul",
-      "dojo/node!charm",
-      "safe-json-serialiser"
+      "dojo/node!charm"
    ],
-   function(fs, os, process, istanbul, Charm, safeJson) {
-
-      // This file-logging function can be used during debugging testing
-      var logFilename = process.cwd() + "/test_reports/ConcurrentReporter.log";
-
-      function logToFile(message) {
-         var timestamp = "[" + (new Date()).toISOString() + "] ";
-         fs.appendFileSync(logFilename, timestamp + message + os.EOL, "utf8");
-      }
+   function(fs, os, process, istanbul, Charm) {
 
       /**
        * ANSI codes for terminal text decoration
@@ -137,7 +128,7 @@ define(["intern/dojo/node!fs",
 
       /**
        * Problem types
-       * 
+       *
        * @readonly
        * @enum {string}
        */
@@ -149,7 +140,7 @@ define(["intern/dojo/node!fs",
 
       /**
        * Result types
-       * 
+       *
        * @readonly
        * @enum {string}
        */
@@ -468,10 +459,14 @@ define(["intern/dojo/node!fs",
           * @instance
           */
          createCoverageReport: function() {
-            var reporter = istanbul.Report.create("html", {
-               dir: this.config.coverageDir
-            });
-            reporter.writeReport(this.coverageCollector, true);
+            try {
+               var reporter = istanbul.Report.create("html", {
+                  dir: this.config.coverageDir
+               });
+               reporter.writeReport(this.coverageCollector, true);
+            } catch (e) {
+               this.exitWithError(e, "Error creating coverage report");
+            }
          },
 
          /**
@@ -948,7 +943,6 @@ define(["intern/dojo/node!fs",
             console.log("Deprecations: " + deprecations);
             console.log("Time taken:   " + timeTaken);
 
-
             // Show the summary of the results
             console.log("");
             console.log("");
@@ -956,8 +950,9 @@ define(["intern/dojo/node!fs",
             console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
             console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
 
-            // Output the messages (array literal determines output order)
-            var messageGroups = ["failed", "errors", "warnings", "deprecations"];
+            // Build the summary (array literal determines output order)
+            var messageGroups = ["failed", "errors", "warnings", "deprecations"],
+               summaryMessagesLogged = false;
             messageGroups.forEach(function(groupName) {
 
                // Output this group?
@@ -968,8 +963,13 @@ define(["intern/dojo/node!fs",
                   messageLines.forEach(function(nextLine) {
                      console.log(nextLine + ANSI_CODES.Reset);
                   });
+                  summaryMessagesLogged = true;
                }
             }, this);
+            if (!summaryMessagesLogged) {
+               console.log("");
+               console.log("No problems!");
+            }
 
             // Output the "results" (i.e. failures and skipped tests)
             Object.keys(this.results).forEach(function(resultType) {
@@ -1618,7 +1618,7 @@ define(["intern/dojo/node!fs",
           * @param {int} maxLen The maximum length for these properties
           * @param {Boolean} [reduceLeft=false] Whether to reduce the left-hand side of the string
           */
-         writeProperties: function(col, row, properties, maxLen, reduceLeft) {
+         writeProperties: function(col, row, properties, maxLen, /*jshint unused:false*/ reduceLeft) {
 
             // Calculate longest property name
             var longestProp = 0;
@@ -1636,7 +1636,7 @@ define(["intern/dojo/node!fs",
                var propertyName = this.pad(propertyArgs[0] + ": ", longestProp, null, true),
                   propertyValue = propertyArgs[1],
                   ansiCodes = propertyArgs[2],
-                  message = this.reduce(propertyName + propertyValue, maxLen);//, reduceLeft); TODO - Do this properly!
+                  message = this.reduce(propertyName + propertyValue, maxLen); //, reduceLeft); TODO - Do this properly!
                this.write(col, row++, message, ansiCodes);
             }, this);
          },
@@ -1665,7 +1665,7 @@ define(["intern/dojo/node!fs",
           * This method is called when code coverage data has been retrieved from an environment.
           * This will occur once per remote environment when all unit tests have completed, and
           * again any time a new page is loaded.
-          * 
+          *
           * @instance
           * @param {string} sessionId Corresponds to a single remote environment. Will be null
           *                           for a local environment (e.g. in the Node.js client)
@@ -1777,7 +1777,7 @@ define(["intern/dojo/node!fs",
           * @instance
           * @param {Object} executor The test executor
           */
-         runStart: function(executor) {
+         runStart: function(/*jshint unused:false*/ executor) {
             helper.logReporterMethod("runStart");
             if (helper.getTunnelState() !== "N/A") {
                helper.logTunnelState("Active");

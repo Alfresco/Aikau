@@ -58,12 +58,15 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#CREATE_CONTENT_REQUEST
+       * @listens module:alfresco/core/topics#DELETE_CONTENT
+       * @listens module:alfresco/core/topics#UPLOAD_TO_UNKNOWN_LOCATION
        */
       registerSubscriptions: function alfresco_services_ContentService__registerSubscriptions() {
          this.alfSubscribe(this.metadataChangeTopic, lang.hitch(this, this.handleCurrentNodeChange));
          this.alfSubscribe("ALF_SHOW_UPLOADER", lang.hitch(this, this.showUploader));
          this.alfSubscribe("ALF_CONTENT_SERVICE_UPLOAD_REQUEST_RECEIVED", lang.hitch(this, this.onFileUploadRequest));
-         this.alfSubscribe("ALF_CREATE_CONTENT_REQUEST", lang.hitch(this, this.onCreateContent));
+         this.alfSubscribe(topics.CREATE_CONTENT_REQUEST, lang.hitch(this, this.onCreateContent));
          this.alfSubscribe("ALF_UPDATE_CONTENT_REQUEST", lang.hitch(this, this.onUpdateContent));
          this.alfSubscribe(topics.DELETE_CONTENT, lang.hitch(this, this.onDeleteContent));
          this.alfSubscribe("ALF_EDIT_BASIC_METADATA_REQUEST", lang.hitch(this, this.onEditBasicMetadataRequest));
@@ -104,6 +107,7 @@ define(["dojo/_base/declare",
                           data: data,
                           method: "POST",
                           successCallback: this.onContentCreationSuccess,
+                          failureCallback: this.onContentCreationFailure,
                           callbackScope: this});
       },
 
@@ -118,7 +122,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#CONTENT_CREATED
        * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
        */
-      onContentCreationSuccess: function alfresco_services_ContentService__onContentCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
+      onContentCreationSuccess: function alfresco_services_ContentService__onContentCreationSuccess(response, originalRequestConfig) {
          var responseScope = lang.getObject("data.alfResponseScope", false, originalRequestConfig) || "";
 
          this.alfPublish(topics.CONTENT_CREATED, {
@@ -126,6 +130,35 @@ define(["dojo/_base/declare",
             nodeRef: response.persistedObject
          }, false, false, responseScope);
          this.alfPublish(this.reloadDataTopic, {}, false, false, responseScope);
+      },
+
+       /**
+       * This is a generic failure callback for content creation.
+       *
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.64
+       *
+       * @fires module:alfresco/core/topics#CONTENT_CREATION_FAILED
+       * @fires module:alfresco/core/topics#DISPLAY_PROMPT
+       */
+      onContentCreationFailure: function alfresco_services_ContentService__onContentCreationFailure(response, originalRequestConfig) {
+         var responseScope = lang.getObject("data.alfResponseScope", false, originalRequestConfig) || "";
+         this.alfPublish(topics.CONTENT_CREATION_FAILED, response, false, false, responseScope);
+
+         try
+         {
+            var message = JSON.parse(response.response.data).message;
+            this.alfServicePublish(topics.DISPLAY_PROMPT, {
+               message: message
+            });
+         }
+         catch(e)
+         {
+            this.alfLog("error", "Could not extract error message from content creation failure response", response);
+         }
+         
       },
 
       /**

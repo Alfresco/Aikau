@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Toggle State Actions Renderer</shortname>
+  <description>Shows examples of the 'alfresco/renderers/ToggleStateActions' widget</description>
+  <description></description>
+  <family>aikau-unit-tests</family>
+  <url>/ToggleStateActions</url>
+</webscript>

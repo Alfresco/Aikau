@@ -11,7 +11,8 @@ model.jsonModel = {
       },
       "alfresco/services/ActionService",
       "alfresco/services/actions/CreateTemplateContentService",
-      "alfresco/services/DialogService"
+      "alfresco/services/DialogService",
+      "alfresco/services/ContentService"
    ],
    widgets: [
       {
@@ -114,7 +115,29 @@ model.jsonModel = {
                   name: "alfresco/documentlibrary/AlfCreateContentMenuBarItem",
                   config: {
                      label: "Create Content",
-                     publishTopic: "ALF_CREATE_CONTENT_3"
+                     widgets: [
+                        {
+                           id: "NAME_TEXT_BOX",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              label: "Name",
+                              name: "prop_cm_name",
+                              value: "",
+                              requirementConfig: {
+                                 initialValue: true
+                              }
+                           }
+                        },
+                        {
+                           id: "CONTENT_TEXT_BOX",
+                           name: "alfresco/forms/controls/TextArea",
+                           config: {
+                              label: "Content",
+                              name: "prop_cm_content",
+                              value: ""
+                           }
+                        }
+                     ]
                   }
                }
             ]

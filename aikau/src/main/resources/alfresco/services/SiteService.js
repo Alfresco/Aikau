@@ -872,6 +872,13 @@ define(["dojo/_base/declare",
          var shortName = lang.getObject("shortName", false, response);
          if (response)
          {
+            // Set the moderated and visibility attributes appropriately...
+            response.moderated = response.visibility === "MODERATED";
+            if (response.moderated)
+            {
+               response.visibility = "PUBLIC";
+            }
+
             var dialogWidgets = lang.clone(this.widgetsForEditSiteDialog);
             this.processObject(["processInstanceTokens"], dialogWidgets);
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {

@@ -74,6 +74,16 @@ define([],function() {
       PDF_LOADED_TOPIC: "ALF_PDFJS_PDF_LOADED",
       
       /**
+       * Topic published to indicate that the PDF page container has been rendered.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.64
+       */
+      PDF_PAGES_RENDERED: "ALF_PDFJS_PAGES_RENDERED",
+      
+      /**
        * Topic for controlling whether or not the sidebar is displayed or hidden.
        *
        * @instance
