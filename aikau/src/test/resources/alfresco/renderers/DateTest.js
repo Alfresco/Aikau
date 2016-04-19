@@ -58,6 +58,14 @@ define(["module",
             });
       },
 
+      "Check standard property with missing user data is rendered correctly": function() {
+         return this.remote.findByCssSelector("#STANDARD_PROPS_MISSING_USER .value")
+            .getVisibleText()
+            .then(function(resultText) {
+               assert(/(Modified over \d+ years ago)/g.test(resultText), "Standard property with missing user not rendered correctly: " + resultText);
+            });
+      },
+
       "Check simple date rendering": function() {
          return this.remote.findByCssSelector("#SIMPLE_MODE .value")
             .getVisibleText()
