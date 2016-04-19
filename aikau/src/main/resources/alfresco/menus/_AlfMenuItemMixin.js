@@ -156,7 +156,7 @@ define(["dojo/_base/declare",
          }
          if (!this.title && originalLabel)
          {
-            this.title = originalLabel;
+            this.title = this.message(originalLabel);
          }
          else if (this.title)
          {
