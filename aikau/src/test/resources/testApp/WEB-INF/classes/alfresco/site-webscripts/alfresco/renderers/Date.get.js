@@ -45,6 +45,22 @@ model.jsonModel = {
          }
       },
       {
+         id: "STANDARD_PROPS_MISSING_USER",
+         name: "alfresco/renderers/Date",
+         config: {
+            currentItem: {
+               jsNode: {
+                  properties: {
+                     modified: {
+                        iso8601: "2000-04-11T12:42:02+00:00"
+                     }
+                  }
+               }
+            },
+            renderOnNewLine: true
+         }
+      },
+      {
          id: "SIMPLE_MODE",
          name: "alfresco/renderers/Date",
          config: {

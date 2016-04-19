@@ -136,25 +136,19 @@ define(["dojo/_base/declare",
                this.modifiedByProperty = "jsNode.properties.modifier.displayName";
             }
             var modifiedBy = lang.getObject(this.modifiedByProperty, false, this.currentItem);
-
-            var dateI18N = "details.modified-by";
-
-            // TODO: This section is currently commented out as it deals explicitly with 
-            //       working copies. This isn't needed in any production page yet and should
-            //       only be commented out when needed. The unit test should also be updated at
-            //       that time.
-            // if (this.currentItem.workingCopy && this.currentItem.workingCopy.isWorkingCopy)
-            // {
-            //    dateI18N = "details.editing-started-by";
-            // }
-            // else if (dateProperty === properties.created.iso8601)
-            // {
-            //    dateI18N = "details.created-by";
-            // }
-            this.renderedValue = this.message(dateI18N, {
-               0: this.getRelativeTime(modifiedDate), 
-               1: this.encodeHTML(modifiedBy)
-            });
+            if (modifiedBy)
+            {
+               this.renderedValue = this.message("details.modified-by", {
+                  0: this.getRelativeTime(modifiedDate), 
+                  1: this.encodeHTML(modifiedBy)
+               });
+            }
+            else
+            {
+               this.renderedValue = this.message("details.modified-by.missing-user", {
+                  0: this.getRelativeTime(modifiedDate)
+               });
+            }
          }
          this.updateRenderedValueClass();
       }
