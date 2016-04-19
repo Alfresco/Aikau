@@ -379,6 +379,7 @@ define([],function() {
        *                                any widgets required must be either statically declared in the page model
        *                                or in a widgets property of a custom widget/service, or be specifically
        *                                required by a custom widget/service.
+       * @property {string} [closeTopic] If this topic is published to, then the notification will be closed
        * @property {string} [publishTopic] A topic to be published after the notification has closed
        * @property {object} [publishPayload] The payload to be published after the notification has closed
        * @property {boolean} [publishGlobal] Whether to publish the topic globally
