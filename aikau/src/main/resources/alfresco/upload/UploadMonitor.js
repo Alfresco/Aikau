@@ -413,6 +413,7 @@ define(["alfresco/core/FileSizeMixin",
             upload.nodes.progressBar.parentNode.removeChild(upload.nodes.progressBar);
             upload.nodes.progress.textContent = this.displayUploadPercentage ? "100%" : "";
             domConstruct.place(upload.nodes.row, this.successfulItemsNode, "first");
+            domClass.remove(upload.nodes.row, this.baseClass + "__item--finishing");
 
             // Parse the request to get the information about the resulting nodes that have been created
             // This information could be used to allow actions or links to be generated for the uploaded content
