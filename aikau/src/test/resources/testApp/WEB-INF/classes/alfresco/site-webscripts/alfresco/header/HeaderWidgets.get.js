@@ -26,6 +26,13 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
+                                    id: "MENUBARITEM",
+                                    name: "alfresco/menus/AlfMenuBarItem",
+                                    config: {
+                                       label: "Something"
+                                    }
+                                 },
+                                 {
                                     id: "HEADER_POPUP",
                                     name: "alfresco/header/AlfMenuBarPopup",
                                     config: {
