@@ -24,9 +24,8 @@
 define(["module",
         "alfresco/defineSuite",
         "intern/chai!assert",
-        "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-        function(module, defineSuite, assert, TestCommon, keys) {
+        function(module, defineSuite, assert, keys) {
 
    defineSuite(module, {
       name: "Basic Header Widgets Tests",
@@ -106,10 +105,9 @@ define(["module",
       "Test status dialog is displayed on click": function() {
          return this.remote.findByCssSelector("#NO_STATUS > div.status")
             .click()
-            .sleep(500)
-            .end()
+         .end()
 
-         .findByCssSelector(".alfresco-dialog-AlfDialog")
+         .findByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed")
             .then(function() {}, function() {
                assert(false, "The update dialog was not displayed");
             });
@@ -129,13 +127,12 @@ define(["module",
             .type("Status Update")
             .pressKeys([keys.TAB])
             .pressKeys([keys.RETURN])
-            .sleep(250)
-            .end()
+         .end()
 
          // Check that the status update was posted correctly...
-         .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "status", "Status Update"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "User status not published correctly");
+         .getLastPublish("ALF_UPDATE_USER_STATUS")
+            .then(function(payload) {
+               assert.propertyVal(payload, "status", "Status Update", "User status not published correctly");
             });
       },
 
@@ -144,21 +141,20 @@ define(["module",
          // (with the bonus of checking the header versions of the menu items work)...
          return this.remote.findByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__text-wrapper")
             .click()
-            .end()
-            .sleep(150)
-            .findByCssSelector("#CASCADE_1_text")
+         .end()
+
+         .findDisplayedByCssSelector("#CASCADE_1_text")
             .click()
-            .end()
-            .sleep(150)
-            .findByCssSelector("#MENU_ITEM_1_text")
+         .end()
+
+         .findDisplayedByCssSelector("#MENU_ITEM_1_text")
             .click()
-            .end()
-            .sleep(150)
+         .end()
 
          // Open the popup again...
-         .findByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__text-wrapper")
+         .findDisplayedByCssSelector("#HEADER_POPUP .alfresco-menus-AlfMenuBarPopup__text-wrapper")
             .click()
-            .end()
+         .end()
 
          // Check the preset user status (which should be updated)...
          .findByCssSelector("#NO_STATUS > div.status")
@@ -295,23 +291,25 @@ define(["module",
       "Test remove favourite request published": function() {
          return this.remote.findByCssSelector("#SITES_MENU_text")
             .click()
-            .sleep(500)
-            .end()
+         .end()
+
+         .findDisplayedByCssSelector("#SITES_MENU_dropdown")
+         .end()
+
+         .findByCssSelector("#SITES_MENU_FAVOURITES")
+            .getAttribute("title")
+            .then(function(title) {
+               assert.equal(title, "Favorites");
+            })
+         .end()
 
          .findByCssSelector("#SITES_MENU_REMOVE_FAVOURITE_text")
             .click()
-            .end()
+         .end()
 
-         .findAllByCssSelector(TestCommon.topicSelector("ALF_REMOVE_FAVOURITE_SITE", "publish", "last"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Remove favourite topic not published");
-            });
-      },
-
-      "Test remove request published correctly": function() {
-         return this.remote.findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "site", "site1"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Favourite not removed correctly");
+         .getLastPublish("ALF_REMOVE_FAVOURITE_SITE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "site", "site1");
             });
       }
    });
