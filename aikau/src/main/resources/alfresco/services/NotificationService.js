@@ -104,7 +104,8 @@ define(["dojo/_base/declare",
                message: payload.message,
                widgets: payload.widgets,
                id: payload.notificationId,
-               inlineLink: payload.inlineLink
+               inlineLink: payload.inlineLink,
+               closeTopic: payload.closeTopic
             };
             if(typeof payload.autoClose !== "undefined") {
                config.autoClose = payload.autoClose;

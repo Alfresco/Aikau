@@ -68,6 +68,17 @@ define(["alfresco/core/Core",
       autoClose: true,
 
       /**
+       * If this property is specified, then it will be possible to close this notification by
+       * publishing to this topic.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.65
+       */
+      closeTopic: null,
+
+      /**
        * How many milliseconds to wait before destroying this widget after the notification has been hidden
        *
        * @instance
@@ -170,6 +181,12 @@ define(["alfresco/core/Core",
       postMixInProperties: function alfresco_notifications_AlfNotification__postMixInProperties() {
          if (!this.id || registry.byId(this.id)) {
             this.id = this.generateUuid();
+         }
+         if (this.closeTopic) {
+            var closeSubscription = this.alfSubscribe(this.closeTopic, lang.hitch(this, function() {
+               this.alfUnsubscribe(closeSubscription);
+               this._hide();
+            }));
          }
          this.inherited(arguments);
       },
