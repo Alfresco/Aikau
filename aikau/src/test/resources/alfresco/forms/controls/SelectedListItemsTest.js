@@ -27,14 +27,21 @@ define(["module",
         "alfresco/TestCommon"],
         function(module, defineSuite, assert, TestCommon) {
 
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var selectorSelectors = TestCommon.getTestSelectors("alfresco/renderers/Selector");
 
    var selectors = {
+      buttons: {
+         selectItems: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BUTTON"])
+      },
       form: {
          confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["FORM"])
       },
       selectors: {
+         first: {
+            checked: TestCommon.getTestSelector(selectorSelectors, "nth.selector.checked", ["SELECTOR", "0"])
+         },
          fourth: {
             element: TestCommon.getTestSelector(selectorSelectors, "nth.selector", ["SELECTOR", "3"]),
             checked: TestCommon.getTestSelector(selectorSelectors, "nth.selector.checked", ["SELECTOR", "3"])
@@ -42,6 +49,9 @@ define(["module",
          fifth: {
             element: TestCommon.getTestSelector(selectorSelectors, "nth.selector", ["SELECTOR", "4"]),
             checked: TestCommon.getTestSelector(selectorSelectors, "nth.selector.checked", ["SELECTOR", "4"])
+         },
+         eigth: {
+            checked: TestCommon.getTestSelector(selectorSelectors, "nth.selector.checked", ["SELECTOR", "7"])
          }
       }
    };
@@ -84,6 +94,24 @@ define(["module",
                assert.deepPropertyVal(payload, "selectedItems[0].nodeRef", "workspace://SpacesStore/d040aa05-ad54-495f-bf4e-3266b96391e9");
                assert.deepPropertyVal(payload, "selectedItems[1].nodeRef", "workspace://SpacesStore/ee0461e1-daa0-4efc-a142-3f709452fa0b");
             });
+      },
+
+      "Select items via form setValueTopic": function() {
+         return this.remote.findByCssSelector(selectors.buttons.selectItems)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.selectors.eigth.checked);
       }
+   });
+
+   defineSuite(module, {
+      name: "SelectedListItems Tests (Publish selected items on page load)",
+      testPage: "/SelectedListItems?publishOnPageLoad=true",
+
+      "Values can be selected before list has rendered": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.selectors.first.checked);
+      }
+
    });
 });
