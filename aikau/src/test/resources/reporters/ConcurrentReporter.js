@@ -29,9 +29,19 @@ define(["intern/dojo/node!fs",
       "intern/dojo/node!os",
       "intern/dojo/node!process",
       "intern/dojo/node!istanbul",
-      "dojo/node!charm"
+      "dojo/node!charm",
+      "safe-json-serialiser"
    ],
-   function(fs, os, process, istanbul, Charm) {
+   function(fs, os, process, istanbul, Charm, safeJson) {
+      "use strict";
+
+      // This file-logging function can be used during debugging testing
+      var logFilename = process.cwd() + "/test_reports/ConcurrentReporter.log";
+
+      function logToFile(message) {
+         var timestamp = "[" + (new Date()).toISOString() + "] ";
+         fs.appendFileSync(logFilename, timestamp + message + os.EOL, "utf8");
+      }
 
       /**
        * ANSI codes for terminal text decoration
@@ -119,6 +129,7 @@ define(["intern/dojo/node!fs",
       var CONFIG = {
          BreakOnError: false,
          ClearScreenBeforeResults: true,
+         LongRunningTestMs: 2000,
          OutputReporterInfo: true,
          Title: "UNIT TESTS",
          TitleHelp: "(Ctrl-C to abort)",
@@ -305,7 +316,9 @@ define(["intern/dojo/node!fs",
           * The environments within which the tests are requested to be run
           *
           * @type {Object}
-          * @property {boolean} envName The name of the environment as the key, with true as the value
+          * @property {Object} envName The name of the environment as the key (the default value is an empty object)
+          * @property {String} envName.realName The full name of the real, fulfilling environment, once it is encountered
+          * @property {Object} envName.info Information about the environment, populated once its tests have all run
           */
          requestedEnvironments: {},
 
@@ -394,6 +407,14 @@ define(["intern/dojo/node!fs",
           * @type {int}
           */
          timeTakenMs: 0,
+
+         /**
+          * The timings of all the tests/suites/environments
+          *
+          * @instance
+          * @type {Object}
+          */
+         timings: {},
 
          /**
           * How many rows are available for displaying messages
@@ -535,7 +556,7 @@ define(["intern/dojo/node!fs",
           * @param {Object} testOrSuite The test or suite
           * @returns {Object} The environment names with two properties "full" and "short"
           */
-         getEnv: function(testOrSuite, /*jshint unused:false*/ shortened) {
+         getEnv: function(testOrSuite) {
             try {
                var env = (testOrSuite.remote && testOrSuite.remote.environmentType),
                   shortName = "Unknown",
@@ -550,10 +571,14 @@ define(["intern/dojo/node!fs",
                } else {
                   this.logProblem(PROBLEM_TYPE.Warning, "\"" + testOrSuite.name + "\"", "Unable to retrieve environment info", true);
                }
-               return {
+               var rootSuite = testOrSuite;
+               while (rootSuite.parent) {
+                  rootSuite = rootSuite.parent;
+               }
+               return (rootSuite.realInfo = {
                   short: shortName,
                   full: fullName
-               };
+               });
             } catch (e) {
                this.exitWithError(e, "Error retrieving environment details for test/suite with name \"" + testOrSuite.name + "\"");
             }
@@ -672,6 +697,36 @@ define(["intern/dojo/node!fs",
          },
 
          /**
+          * Log the info from a completed environment object
+          *
+          * @instance
+          * @param {Object} env A suite object, which may or may not be an environment (the test is whether it has a parent)
+          */
+         logCompletedEnvironment: function(env) {
+
+            // Only deal with environment objects
+            if (env.parent) {
+               return;
+            }
+
+            // Clone and clean the test object, keeping only specific properties
+            var clonedEnv = JSON.parse(safeJson.stringify(env)),
+               keysToKeep = ["tests", "name", "timeElapsed"],
+               cleanedEnv = (function cleanEnv(envObj) {
+                  Object.keys(envObj).forEach(key => {
+                     if (keysToKeep.indexOf(key) === -1) {
+                        delete envObj[key];
+                     }
+                  });
+                  (envObj.tests || []).forEach(cleanEnv);
+                  return envObj;
+               })(clonedEnv);
+
+            // Store the environment info
+            this.requestedEnvironments[env.name].info = cleanedEnv;
+         },
+
+         /**
           * Log a new test being recorded
           *
           * @instance
@@ -679,7 +734,7 @@ define(["intern/dojo/node!fs",
           */
          logNewTest: function(test) {
             var testEnv = this.getRequestedEnv(test);
-            this.requestedEnvironments[testEnv] = true;
+            this.requestedEnvironments[testEnv] = {};
             this.incrementCounter("total");
          },
 
@@ -879,7 +934,7 @@ define(["intern/dojo/node!fs",
           * @instance
           */
          outputFinalResults: function() {
-            /*jshint maxstatements:false*/
+            /*jshint maxstatements:false,maxcomplexity:false*/
 
             // Function variables
             var loggedSectionTitle = false;
@@ -894,189 +949,247 @@ define(["intern/dojo/node!fs",
             // Next, stop using charm ... it's all console logging from now on
             charm.destroy();
 
-            // Output the environments (requested and actual)
-            console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "===== ENVIRONMENTS =====" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
-            console.log("");
-            Object.keys(this.requestedEnvironments).forEach(function(requestedEnv) {
-               var actualEnv = this.requestedEnvironments[requestedEnv];
-               console.log("\"" + requestedEnv + "\" was fulfilled by \"" + actualEnv + "\"");
-            }, this);
+            // Handle any errors
+            try {
 
-            // Output the stats
-            console.log("");
-            console.log("");
-            console.log(ANSI_CODES.Bright + "=================" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "===== STATS =====" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "=================" + ANSI_CODES.Reset);
-            console.log("");
-
-            // Create passed/failed/skipped messages
-            var total = this.testCounts.total,
-               passed = this.testCounts.passed,
-               failed = this.testCounts.failed,
-               skipped = this.testCounts.skipped,
-               errors = this.testCounts.errors,
-               warnings = this.testCounts.warnings,
-               deprecations = this.testCounts.deprecations;
-            if (passed && passed !== total && (failed || skipped)) {
-               passed += " (" + (passed / total * 100).toFixed(1) + "%)";
-            }
-            if (failed && failed !== total && (passed || skipped)) {
-               failed += " (" + (failed / total * 100).toFixed(1) + "%)";
-            }
-            if (skipped && skipped !== total && (passed || failed)) {
-               skipped += " (" + (skipped / total * 100).toFixed(1) + "%)";
-            }
-
-            // Format time-taken
-            var timeTaken = this.msToHumanReadable(this.timeTakenMs);
-
-            // Output the stats
-            console.log("Total tests:  " + total);
-            console.log("Passed:       " + passed);
-            console.log("Failed:       " + failed);
-            console.log("Skipped:      " + skipped);
-            console.log("Errors:       " + errors);
-            console.log("Warnings:     " + warnings);
-            console.log("Deprecations: " + deprecations);
-            console.log("Time taken:   " + timeTaken);
-
-            // Show the summary of the results
-            console.log("");
-            console.log("");
-            console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
-            console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-
-            // Build the summary (array literal determines output order)
-            var messageGroups = ["failed", "errors", "warnings", "deprecations"],
-               summaryMessagesLogged = false;
-            messageGroups.forEach(function(groupName) {
-
-               // Output this group?
-               var messageLines = this.messages[groupName];
-               if (messageLines.length && messageLines[0].indexOf("N/A") === -1) {
-                  console.log("");
-                  console.log(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
-                  messageLines.forEach(function(nextLine) {
-                     console.log(nextLine + ANSI_CODES.Reset);
-                  });
-                  summaryMessagesLogged = true;
-               }
-            }, this);
-            if (!summaryMessagesLogged) {
+               // Output the environments (requested and actual)
+               console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== ENVIRONMENTS =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "========================" + ANSI_CODES.Reset);
                console.log("");
-               console.log("No problems!");
-            }
+               Object.keys(this.requestedEnvironments).forEach(function(requestedEnv) {
+                  var actualEnv = this.requestedEnvironments[requestedEnv].realName;
+                  console.log("\"" + requestedEnv + "\" was fulfilled by \"" + actualEnv + "\"");
+               }, this);
 
-            // Output the "results" (i.e. failures and skipped tests)
-            Object.keys(this.results).forEach(function(resultType) {
+               // Output the stats
+               console.log("");
+               console.log("");
+               console.log(ANSI_CODES.Bright + "=================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== STATS =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "=================" + ANSI_CODES.Reset);
+               console.log("");
 
-               // Log results by environment
-               Object.keys(this.environments).forEach(function(envKey) {
+               // Create passed/failed/skipped messages
+               var total = this.testCounts.total,
+                  passed = this.testCounts.passed,
+                  failed = this.testCounts.failed,
+                  skipped = this.testCounts.skipped,
+                  errors = this.testCounts.errors,
+                  warnings = this.testCounts.warnings,
+                  deprecations = this.testCounts.deprecations;
+               if (passed && passed !== total && (failed || skipped)) {
+                  passed += " (" + (passed / total * 100).toFixed(1) + "%)";
+               }
+               if (failed && failed !== total && (passed || skipped)) {
+                  failed += " (" + (failed / total * 100).toFixed(1) + "%)";
+               }
+               if (skipped && skipped !== total && (passed || failed)) {
+                  skipped += " (" + (skipped / total * 100).toFixed(1) + "%)";
+               }
 
-                  // Group results by suite
-                  var thisEnvResultsBySuite = {},
-                     allResultsByType = this.results[resultType];
-                  Object.keys(allResultsByType).forEach(function(suiteName) {
-                     var nextSuiteTestResults = allResultsByType[suiteName];
-                     Object.keys(nextSuiteTestResults).forEach(function(testName) {
-                        var environments = nextSuiteTestResults[testName],
-                           resultMessage = environments[envKey];
-                        if (resultMessage) {
-                           var thisEnvTestResults = thisEnvResultsBySuite[suiteName] || {};
-                           thisEnvTestResults[testName] = resultMessage;
-                           thisEnvResultsBySuite[suiteName] = thisEnvTestResults;
-                        }
+               // Format time-taken
+               var timeTaken = this.msToHumanReadable(this.timeTakenMs);
+
+               // Output the stats
+               console.log("Total tests:  " + total);
+               console.log("Passed:       " + passed);
+               console.log("Failed:       " + failed);
+               console.log("Skipped:      " + skipped);
+               console.log("Errors:       " + errors);
+               console.log("Warnings:     " + warnings);
+               console.log("Deprecations: " + deprecations);
+               console.log("Time taken:   " + timeTaken);
+
+               // Show the summary of the results
+               console.log("");
+               console.log("");
+               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== SUMMARY =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+
+               // Build the summary (array literal determines output order)
+               var messageGroups = ["failed", "errors", "warnings", "deprecations"],
+                  summaryMessagesLogged = false;
+               messageGroups.forEach(function(groupName) {
+
+                  // Output this group?
+                  var messageLines = this.messages[groupName];
+                  if (messageLines.length && messageLines[0].indexOf("N/A") === -1) {
+                     console.log("");
+                     console.log(ANSI_CODES.Bright + groupName.toUpperCase() + ANSI_CODES.Reset);
+                     messageLines.forEach(function(nextLine) {
+                        console.log(nextLine + ANSI_CODES.Reset);
                      });
+                     summaryMessagesLogged = true;
+                  }
+               }, this);
+               if (!summaryMessagesLogged) {
+                  console.log("");
+                  console.log("No problems!");
+               }
+
+               // Output the "results" (i.e. failures and skipped tests)
+               Object.keys(this.results).forEach(function(resultType) {
+
+                  // Log results by environment
+                  Object.keys(this.environments).forEach(function(envKey) {
+
+                     // Group results by suite
+                     var thisEnvResultsBySuite = {},
+                        allResultsByType = this.results[resultType];
+                     Object.keys(allResultsByType).forEach(function(suiteName) {
+                        var nextSuiteTestResults = allResultsByType[suiteName];
+                        Object.keys(nextSuiteTestResults).forEach(function(testName) {
+                           var environments = nextSuiteTestResults[testName],
+                              resultMessage = environments[envKey];
+                           if (resultMessage) {
+                              var thisEnvTestResults = thisEnvResultsBySuite[suiteName] || {};
+                              thisEnvTestResults[testName] = resultMessage;
+                              thisEnvResultsBySuite[suiteName] = thisEnvTestResults;
+                           }
+                        });
+                     }, this);
+
+                     // Check if there are results to display
+                     if (Object.keys(thisEnvResultsBySuite).length) {
+
+                        // Output the section title (need to break to avoid "fail" creating grunt output weirdness—double chevrons)
+                        var sectionTitleText = resultType.toUpperCase().replace(/^(\w{2})(.+)$/, "$1" + ANSI_CODES.Bright + "$2");
+                        if (!loggedSectionTitle) {
+                           console.log("");
+                           console.log("");
+                           console.log(ANSI_CODES.Bright + (new Array(resultType.length + 13)).join("=") + ANSI_CODES.Reset);
+                           console.log(ANSI_CODES.Bright + "===== " + sectionTitleText + " =====" + ANSI_CODES.Reset);
+                           console.log(ANSI_CODES.Bright + (new Array(resultType.length + 13)).join("=") + ANSI_CODES.Reset);
+                           loggedSectionTitle = true;
+                        }
+
+                        // Log the environment name
+                        console.log("");
+                        console.log(ANSI_CODES.Bright + "--- " + this.environments[envKey] + " ---" + ANSI_CODES.Reset);
+
+                        // Output the suites/tests/results
+                        Object.keys(thisEnvResultsBySuite).forEach(function(suiteName) {
+                           console.log("");
+                           console.log(ANSI_CODES.Bright + ANSI_CODES.FgRed + suiteName + ANSI_CODES.Reset);
+                           var nextSuiteTestResults = thisEnvResultsBySuite[suiteName];
+                           Object.keys(nextSuiteTestResults).forEach(function(testName) {
+                              var resultMessage = nextSuiteTestResults[testName];
+                              console.log(ANSI_CODES.Bright + "\"" + testName + "\"" + ANSI_CODES.Reset);
+                              console.log(resultMessage);
+                           });
+                        });
+                     }
                   }, this);
 
-                  // Check if there are results to display
-                  if (Object.keys(thisEnvResultsBySuite).length) {
+                  // Reset title flag
+                  loggedSectionTitle = false;
 
-                     // Output the section title (need to break to avoid "fail" creating grunt output weirdness—double chevrons)
-                     var sectionTitleText = resultType.toUpperCase().replace(/^(\w{2})(.+)$/, "$1" + ANSI_CODES.Bright + "$2");
+               }, this);
+
+               // Show information about timings
+               console.log("");
+               console.log("");
+               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== TIMINGS =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
+               console.log("");
+               console.log(ANSI_CODES.Bright + "--- Average test durations ---" + ANSI_CODES.Reset);
+               console.log("");
+
+               // Calculate the average average test time per environment and remove non-slow-running test times
+               var numLongRunningTests = 0;
+               Object.keys(this.requestedEnvironments).forEach(envKey => {
+                  let testTimes = [],
+                     requestedEnv = this.requestedEnvironments[envKey],
+                     nextEnvInfo = JSON.parse(JSON.stringify(requestedEnv.info));
+                  requestedEnv.longTests = (function filterLongTests(testObj) {
+                     if (testObj.tests) {
+                        testObj.tests = testObj.tests.filter(filterLongTests);
+                     } else {
+                        testTimes.push(testObj.timeElapsed);
+                        testObj.timeElapsed > CONFIG.LongRunningTestMs && numLongRunningTests++;
+                     }
+                     var hasLongRunningTests = testObj.tests && testObj.tests.length,
+                        isLongRunningTest = !testObj.tests && testObj.timeElapsed > CONFIG.LongRunningTestMs;
+                     return (hasLongRunningTests || isLongRunningTest) && testObj;
+                  })(nextEnvInfo);
+                  let numTests = testTimes.length,
+                     averageTestTime = testTimes.reduce((prev, next) => prev + next, 0) / numTests;
+                  console.log(`${requestedEnv.realName}: ${Math.round(averageTestTime)}ms`);
+               });
+
+               // Output the slow-running tests
+               if (numLongRunningTests) {
+                  console.log("");
+                  console.log(ANSI_CODES.Bright + "--- Long-running tests (over " + CONFIG.LongRunningTestMs + "ms) ---" + ANSI_CODES.Reset);
+                  Object.keys(this.requestedEnvironments).forEach(envKey => {
+                     let requestedEnv = this.requestedEnvironments[envKey],
+                        envName = requestedEnv.realName,
+                        longTests = requestedEnv.longTests;
+                     console.log("");
+                     console.log(ANSI_CODES.Bright + envName + ANSI_CODES.Reset);
+                     longTests.tests.forEach(suite => {
+                        console.log(suite.name);
+                        suite.tests.forEach(test => {
+                           console.log(`  - "${test.name}" took ${Math.round(test.timeElapsed / 10) / 100} secs`);
+                        });
+                     });
+                  });
+               }
+
+               // Log the other problems
+               loggedSectionTitle = false;
+               Object.keys(this.problems).forEach(function(problemType) {
+
+                  // Run through the problems
+                  var problems = this.problems[problemType];
+                  Object.keys(problems).forEach(function(groupName) {
+
+                     // Log title
                      if (!loggedSectionTitle) {
+                        var sectionTitle = "===== " + problemType.toUpperCase() + " =====",
+                           underOverLine = new Array(sectionTitle.length + 1).join("=");
                         console.log("");
                         console.log("");
-                        console.log(ANSI_CODES.Bright + "====================" + ANSI_CODES.Reset);
-                        console.log(ANSI_CODES.Bright + "===== " + sectionTitleText + " =====" + ANSI_CODES.Reset);
-                        console.log(ANSI_CODES.Bright + "====================" + ANSI_CODES.Reset);
+                        console.log(ANSI_CODES.Bright + underOverLine + ANSI_CODES.Reset);
+                        console.log(ANSI_CODES.Bright + sectionTitle + ANSI_CODES.Reset);
+                        console.log(ANSI_CODES.Bright + underOverLine + ANSI_CODES.Reset);
                         loggedSectionTitle = true;
                      }
 
-                     // Log the environment name
+                     // Log group name
                      console.log("");
-                     console.log(ANSI_CODES.Bright + "--- " + this.environments[envKey] + " ---" + ANSI_CODES.Reset);
+                     console.log(ANSI_CODES.Bright + ANSI_CODES.FgRed + groupName + ANSI_CODES.Reset);
 
-                     // Output the suites/tests/results
-                     Object.keys(thisEnvResultsBySuite).forEach(function(suiteName) {
-                        console.log("");
-                        console.log(ANSI_CODES.Bright + ANSI_CODES.FgRed + suiteName + ANSI_CODES.Reset);
-                        var nextSuiteTestResults = thisEnvResultsBySuite[suiteName];
-                        Object.keys(nextSuiteTestResults).forEach(function(testName) {
-                           var resultMessage = nextSuiteTestResults[testName];
-                           console.log(ANSI_CODES.Bright + "\"" + testName + "\"" + ANSI_CODES.Reset);
-                           console.log(resultMessage);
-                        });
+                     // Log groups' problems
+                     var groupProblems = problems[groupName];
+                     Object.keys(groupProblems).forEach(function(problemMessage) {
+                        var problem = groupProblems[problemMessage],
+                           messageToOutput = "\"" + problemMessage + "\"";
+                        if (problem.count > 1) {
+                           messageToOutput += " (x" + problem.count + ")";
+                        }
+                        console.log(ANSI_CODES.Bright + messageToOutput + ANSI_CODES.Reset);
+                        if (problem.stack) {
+                           console.log(problem.stack);
+                        }
                      });
-                  }
+                  });
+
+                  // Reset title flag
+                  loggedSectionTitle = false;
+
                }, this);
 
-               // Reset title flag
-               loggedSectionTitle = false;
+               // Couple of lines space
+               console.log("");
+               console.log("");
 
-            }, this);
-
-            // Log the other problems
-            loggedSectionTitle = false;
-            Object.keys(this.problems).forEach(function(problemType) {
-
-               // Run through the problems
-               var problems = this.problems[problemType];
-               Object.keys(problems).forEach(function(groupName) {
-
-                  // Log title
-                  if (!loggedSectionTitle) {
-                     var sectionTitle = "===== " + problemType.toUpperCase() + " =====",
-                        underOverLine = new Array(sectionTitle.length + 1).join("=");
-                     console.log("");
-                     console.log("");
-                     console.log(ANSI_CODES.Bright + underOverLine + ANSI_CODES.Reset);
-                     console.log(ANSI_CODES.Bright + sectionTitle + ANSI_CODES.Reset);
-                     console.log(ANSI_CODES.Bright + underOverLine + ANSI_CODES.Reset);
-                     loggedSectionTitle = true;
-                  }
-
-                  // Log group name
-                  console.log("");
-                  console.log(ANSI_CODES.Bright + ANSI_CODES.FgRed + groupName + ANSI_CODES.Reset);
-
-                  // Log groups' problems
-                  var groupProblems = problems[groupName];
-                  Object.keys(groupProblems).forEach(function(problemMessage) {
-                     var problem = groupProblems[problemMessage],
-                        messageToOutput = "\"" + problemMessage + "\"";
-                     if (problem.count > 1) {
-                        messageToOutput += " (x" + problem.count + ")";
-                     }
-                     console.log(ANSI_CODES.Bright + messageToOutput + ANSI_CODES.Reset);
-                     if (problem.stack) {
-                        console.log(problem.stack);
-                     }
-                  });
-               });
-
-               // Reset title flag
-               loggedSectionTitle = false;
-
-            }, this);
-
-            // Couple of lines space
-            console.log("");
-            console.log("");
+            } catch (e) {
+               this.exitWithError(e, "Error outputting final results");
+            }
          },
 
          /**
@@ -1113,7 +1226,7 @@ define(["intern/dojo/node!fs",
             this.lastStarted.suite = test.parent.name;
             this.lastStarted.env = actualEnv.full;
             this.environments[actualEnv.short] = actualEnv.full;
-            this.requestedEnvironments[requestedEnv] = actualEnv.full;
+            this.requestedEnvironments[requestedEnv].realName = actualEnv.full;
          },
 
          /**
@@ -1777,7 +1890,7 @@ define(["intern/dojo/node!fs",
           * @instance
           * @param {Object} executor The test executor
           */
-         runStart: function(/*jshint unused:false*/ executor) {
+         runStart: function( /*jshint unused:false*/ executor) {
             helper.logReporterMethod("runStart");
             if (helper.getTunnelState() !== "N/A") {
                helper.logTunnelState("Active");
@@ -1817,6 +1930,7 @@ define(["intern/dojo/node!fs",
           */
          suiteEnd: function( /*jshint unused:false*/ suite) {
             helper.logReporterMethod("suiteEnd");
+            helper.logCompletedEnvironment(suite);
          },
 
          /**
