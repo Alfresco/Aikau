@@ -10,7 +10,8 @@ model.jsonModel = {
                error: true
             }
          }
-      }
+      },
+      "alfresco/services/DialogService"
    ],
    widgets: [
       {
@@ -119,6 +120,62 @@ model.jsonModel = {
                   }
                }
             ]
+         }
+      },
+      {
+         name: "alfresco/html/Spacer",
+         config: {
+            height: "30px"
+         }
+      },
+      {
+         id: "CREATE_FORM_IN_DIALOG",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show Form",
+            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "DIALOG_WITH_FORM",
+               dialogTitle: "Form With Control Row",
+               widgetsContent: [ 
+                  {
+                     id: "FORM_WITH_CONTROL_ROW",
+                     name: "alfresco/forms/Form",
+                     config: {
+                        pubSubScope: "CONTROL_ROW_FORM_",
+                        widgets: [
+                           {
+                              id: "CONTROL_ROW",
+                              name: "alfresco/forms/ControlRow",
+                              config: {
+                                 title: "Control Row 2",
+                                 widgets: [ 
+                                    {
+                                       id: "CONTROL_ROW_TEXT_BOX",
+                                       name: "alfresco/forms/controls/TextBox",
+                                       config: {
+                                          fieldId: "CONTROL_ROW_TEXT_BOX",
+                                          name: "Test",
+                                          label: "Test"
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  } 
+               ],
+               widgetsButtons: [ 
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     config: {
+                        label: "Close dialog",
+                        publishTopic: "CUSTOM_TOPIC"
+                     }
+                  }
+               ]
+            }
          }
       },
       {

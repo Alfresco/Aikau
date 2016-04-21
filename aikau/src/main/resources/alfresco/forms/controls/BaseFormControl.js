@@ -1801,10 +1801,14 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var v = lang.getObject(this.get("name"), false, values);
-            if (v !== undefined)
+            var name = this.get("name");
+            if (name)
             {
-               this.setValue(v);
+               var v = lang.getObject(this.get("name"), false, values);
+               if (typeof v !== "undefined")
+               {
+                  this.setValue(v);
+               }
             }
          }
       },
