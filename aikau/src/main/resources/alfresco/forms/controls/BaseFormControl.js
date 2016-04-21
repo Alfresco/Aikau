@@ -304,6 +304,17 @@ define(["dojo/_base/declare",
       getPubSubOptionsImmediately: true,
 
       /**
+       * Indicates that this form control can have a value which is a subset of the available
+       * options that can be chosen from. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.65
+       */
+      supportsMultiValue: false,
+
+      /**
        * The default visibility status is always true (this can be overridden by extending controls).
        *
        * @instance
@@ -914,9 +925,25 @@ define(["dojo/_base/declare",
        * @param {array} options The options to choose from
        */
       setOptionsValue: function alfresco_forms_controls_BaseFormControl__setOptionsValue(value, options) {
-         var optionsContainsValue = array.some(options, function(option) {
-            return option.value === value;
-         });
+         var optionsContainsValue = false;
+         if (options && options.length > 0)
+         {
+            if (!this.supportsMultiValue)
+            {
+               optionsContainsValue = array.some(options, function(option) {
+                  return option.value === value;
+               });
+            }
+            else
+            {
+               value = array.filter(value, function(currValue) {
+                  return  array.some(options, function(option) {
+                     return currValue === option.value;
+                  });
+               });
+               optionsContainsValue = value.length > 0;
+            }
+         }
 
          if (optionsContainsValue)
          {

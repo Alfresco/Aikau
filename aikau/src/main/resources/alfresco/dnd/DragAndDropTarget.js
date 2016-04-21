@@ -37,6 +37,8 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectProcessingMixin",
         "dojo/text!./templates/DragAndDropTarget.html",
         "alfresco/core/Core",
+        "alfresco/core/PubQueue",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dijit/registry",
@@ -51,7 +53,7 @@ define(["dojo/_base/declare",
         "dojo/_base/event",
         "dojo/keys",
         "dojo/dnd/Manager"], 
-        function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, 
+        function(declare, _Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, template, AlfCore, PubQueue, topics,
                  lang, array, registry, Source, Target, domConstruct, domClass, aspect, on, Constants, Deferred, Event, keys, DndManager) {
    
    return declare([_Widget, _Templated, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore], {
@@ -359,18 +361,46 @@ define(["dojo/_base/declare",
       setValue: function alfresco_dnd_DragAndDropTarget__setValue(value) {
          if (value !== undefined && value !== null && value !== "")
          {
-            array.forEach(value, function(item) {
-               var data = {
-                  type: lang.clone(item.type),
-                  value: item
-               };
-               var createdItem = this.creator(data);
-               this.previewTarget.insertNodes(true, [createdItem.data]);
-               this.alfPublish(Constants.itemAddedTopic, createdItem.data);
-            }, this);
-
-            this.previewTarget.selectNone();
+            // See AKU-938 which resulted in ensuring that publications are always published
+            // in the correct order. Prior to this change it was possible for publications made
+            // to the modelling service to "jump the queue" so that they were processed synchronously.
+            // However, since correcting publication order behaviour it is essential that we make
+            // sure that the publication queue is fully emptied otherwise we need to wait for 
+            // the page to finish loading (as this indicates that the publication queue has been emptied)
+            if (!this.useModellingService || PubQueue.getSingleton()._unreleasedEmptied)
+            {
+               this.createDndNodesForValue(value);
+            }
+            else
+            {
+               // Set up a subcription for the page readiness...
+               var handle = this.alfSubscribe(topics.PAGE_WIDGETS_READY, lang.hitch(this, function() {
+                  this.alfUnsubscribe(handle);
+                  this.createDndNodesForValue(value);
+               }));
+            }
          }
+      },
+
+      /**
+       * Create the drag-and-drop nodes as required for the supplied value.
+       * 
+       * @instance
+       * @param {object} value The value to set.
+       * @since 1.0.65
+       */
+      createDndNodesForValue: function alfresco_dnd_DragAndDropTarget__createDndNodesForValue(value) {
+         array.forEach(value, function(item) {
+            var data = {
+               type: lang.clone(item.type),
+               value: item
+            };
+            var createdItem = this.creator(data);
+            this.previewTarget.insertNodes(true, [createdItem.data]);
+            this.alfPublish(Constants.itemAddedTopic, createdItem.data);
+         }, this);
+
+         this.previewTarget.selectNone();
       },
       
       /**
