@@ -133,8 +133,11 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_pickers_DocumentListPicker__postCreate() {
-         this.processObject(["processInstanceTokens"], this.widgets);
-         this.processWidgets(this.widgets, this.itemsNode);
+         // NOTE: Need to set viewModifiers for all subsequent calls to renderView...
+         this.viewModifiers =  ["processInstanceTokens"];
+         var clonedWidgets = lang.clone(this.widgets);
+         this.processObject(this.viewModifiers, clonedWidgets);
+         this.processWidgets(clonedWidgets, this.itemsNode);
       },
 
       /**

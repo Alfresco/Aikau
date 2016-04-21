@@ -47,6 +47,15 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 4, "Did not render four list items successfully");
             });
+      },
+
+      // See AKU-933
+      "List modifiers work": function() {
+         return this.remote.findByCssSelector("#PROPERTY_ITEM_0 span.value")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Tinky Winky");
+            });
       }
    });
 });
