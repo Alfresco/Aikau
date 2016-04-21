@@ -318,6 +318,21 @@ define(["dojo/_base/declare",
       viewMap: null,
 
       /**
+       * This can be configured to an array of modifying functions (typically provided by the
+       * [ObjectProcessingMixin]{@link module:alfresco/core/ObjectProcessingMixin} but can be provided
+       * by extending or mixed in modules) to process the [widget models]{@link module:alfresco/lists/AlfList#widgets}
+       * used to render views. A common example might be to use the 
+       * [processInstanceTokens]{@link module:alfresco/core/ObjectProcessingMixin#processInstanceTokens} to pass on
+       * instance values of the list onto the views that are rendered.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.65
+       */
+      viewModifiers: null,
+
+      /**
        * The preference property to use for saving the current view. Initially defaulted to
        * the document library view preference but can be overridden if desired.
        *
@@ -1265,6 +1280,10 @@ define(["dojo/_base/declare",
                // (otherwise it will be set in the original model and re-used)...
                var index = this.viewDefinitionMap[this._currentlySelectedView];
                var clonedWidgets = [JSON.parse(JSON.stringify(this.widgets[index]))];
+               if (this.viewModifiers)
+               {
+                  this.processObject(this.viewModifiers, clonedWidgets);
+               }
                this.processWidgets(clonedWidgets, null, "NEW_VIEW_INSTANCE");
             }
          }
