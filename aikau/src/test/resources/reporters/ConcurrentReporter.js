@@ -550,6 +550,18 @@ define(["intern/dojo/node!fs",
          },
 
          /**
+          * Get the average value from an array of numbers.
+          *
+          * @instance
+          * @param {Number[]} values The values to average
+          * @returns {Number} The average value
+          */
+         getAverage: function(values) {
+            var total = values.reduce((prev, next) => prev + next, 0);
+            return total / values.length;
+         },
+
+         /**
           * Get the real runtime environment of a test/suite
           *
           * @instance
@@ -585,6 +597,20 @@ define(["intern/dojo/node!fs",
          },
 
          /**
+          * Remove outliers from a dataset, using standard deviation, and get the normalised average
+          *
+          * @instance
+          * @param {Number[]} values An array of numbers
+          * @returns {Number} The normalised average
+          */
+         getNormalisedAverage: function(values) {
+            var stdDev = this.getStdDeviation(values),
+               average = this.getAverage(values),
+               normalised = values.filter(value => Math.abs(value - average) < stdDev);
+            return this.getAverage(normalised);
+         },
+
+         /**
           * Get the environment for a test/suite that's been requested in the configuration
           *
           * @instance
@@ -614,6 +640,20 @@ define(["intern/dojo/node!fs",
             }
             var shortName = SHORT_NAMES[inStr.toLowerCase()];
             return shortName || inStr.toUpperCase();
+         },
+
+         /**
+          * Get the standard deviation of an array of numbers.
+          *
+          * @instance
+          * @param {Number[]} values The values to obtain the standard deviation of
+          * @returns {Number} The standard deviation
+          */
+         getStdDeviation: function(values) {
+            var average = this.getAverage(values),
+               squareDiffs = values.map(value => Math.pow(value - average, 2)),
+               averageSqDiffs = this.getAverage(squareDiffs);
+            return Math.sqrt(averageSqDiffs);
          },
 
          /**
@@ -1088,44 +1128,63 @@ define(["intern/dojo/node!fs",
 
                }, this);
 
-               // Show information about timings
+               // Show information about average test durations
                console.log("");
                console.log("");
-               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-               console.log(ANSI_CODES.Bright + "===== TIMINGS =====" + ANSI_CODES.Reset);
-               console.log(ANSI_CODES.Bright + "===================" + ANSI_CODES.Reset);
-               console.log("");
-               console.log(ANSI_CODES.Bright + "--- Average test durations ---" + ANSI_CODES.Reset);
-               console.log("");
+               console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== TEST DURATIONS =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
 
                // Calculate the average average test time per environment and remove non-slow-running test times
                var numLongRunningTests = 0;
                Object.keys(this.requestedEnvironments).forEach(envKey => {
-                  let testTimes = [],
+                  var testTimes = [],
+                     longestTestTime = 0,
+                     shortestTestTime = Number.MAX_VALUE,
                      requestedEnv = this.requestedEnvironments[envKey],
-                     nextEnvInfo = JSON.parse(JSON.stringify(requestedEnv.info));
+                     clonedEnvInfo = JSON.parse(JSON.stringify(requestedEnv.info));
+                  logToFile(`longestTestTime=${longestTestTime}, shortestTestTime=${shortestTestTime}`);
                   requestedEnv.longTests = (function filterLongTests(testObj) {
+                     var timeTaken = testObj.timeElapsed;
                      if (testObj.tests) {
                         testObj.tests = testObj.tests.filter(filterLongTests);
                      } else {
-                        testTimes.push(testObj.timeElapsed);
-                        testObj.timeElapsed > CONFIG.LongRunningTestMs && numLongRunningTests++;
+                        if (longestTestTime < timeTaken) {
+                           longestTestTime = timeTaken;
+                        }
+                        if (shortestTestTime > timeTaken) {
+                           shortestTestTime = timeTaken;
+                        }
+                        testTimes.push(timeTaken);
+                        timeTaken > CONFIG.LongRunningTestMs && numLongRunningTests++;
                      }
                      var hasLongRunningTests = testObj.tests && testObj.tests.length,
-                        isLongRunningTest = !testObj.tests && testObj.timeElapsed > CONFIG.LongRunningTestMs;
+                        isLongRunningTest = !testObj.tests && timeTaken > CONFIG.LongRunningTestMs;
                      return (hasLongRunningTests || isLongRunningTest) && testObj;
-                  })(nextEnvInfo);
-                  let numTests = testTimes.length,
-                     averageTestTime = testTimes.reduce((prev, next) => prev + next, 0) / numTests;
-                  console.log(`${requestedEnv.realName}: ${Math.round(averageTestTime)}ms`);
+                  })(clonedEnvInfo);
+                  var secsOrMs = ms => ms > 1000 ? `${Math.round(ms/100)/10} secs` : `${Math.round(ms)}ms`,
+                     average = secsOrMs(this.getAverage(testTimes)),
+                     normalisedAverage = secsOrMs(this.getNormalisedAverage(testTimes)),
+                     longest = secsOrMs(longestTestTime),
+                     shortest = secsOrMs(shortestTestTime);
+                  console.log("");
+                  console.log(ANSI_CODES.Bright + "--- " + requestedEnv.realName + " ---" + ANSI_CODES.Reset);
+                  console.log("");
+                  console.log(`Fastest test: ${shortest}`);
+                  console.log(`Slowest test: ${longest}`);
+                  console.log(`Average test duration: ${average}`);
+                  console.log(`Average within standard-deviation:: ${normalisedAverage}`);
                });
 
                // Output the slow-running tests
                if (numLongRunningTests) {
                   console.log("");
-                  console.log(ANSI_CODES.Bright + "--- Long-running tests (over " + CONFIG.LongRunningTestMs + "ms) ---" + ANSI_CODES.Reset);
+                  console.log("");
+                  console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
+                  console.log(ANSI_CODES.Bright + "===== SLOWEST TESTS =====" + ANSI_CODES.Reset);
+                  console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
                   Object.keys(this.requestedEnvironments).forEach(envKey => {
-                     let requestedEnv = this.requestedEnvironments[envKey],
+                     var requestedEnv = this.requestedEnvironments[envKey],
                         envName = requestedEnv.realName,
                         longTests = requestedEnv.longTests;
                      console.log("");
