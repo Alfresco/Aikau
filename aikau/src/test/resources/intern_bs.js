@@ -16,9 +16,6 @@ define(["./config/Suites"], function(Suites) {
          browserName: "internet explorer",
          version: "11",
          platform: "WINDOWS"
-      }, {
-         browserName: "safari",
-         platform: "MAC"
       }],
       xenvData = [{
          browserName: "chrome",
@@ -41,6 +38,13 @@ define(["./config/Suites"], function(Suites) {
 
       // Dig Dug tunnel handler
       tunnel: "BrowserStackTunnel",
+
+      // Dig dug tunnel options
+      tunnelOptions: {
+         hostname: "hub.browserstack.com",
+         protocol: "https",
+         port: 443
+      },
 
       // Configuration options for the module loader; any AMD configuration options supported by the Dojo loader can be
       // used here

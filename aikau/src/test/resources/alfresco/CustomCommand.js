@@ -353,7 +353,7 @@ define(["intern/dojo/node!fs",
          getTextContent: function(selector) {
             return new this.constructor(this, function() {
                var browser = this.parent;
-               return browser.execute(cssSelector => {
+               return browser.execute(function (cssSelector) {
                   var elem = document.querySelector(cssSelector);
                   return elem && elem.textContent;
                }, [selector]);
@@ -682,7 +682,7 @@ define(["intern/dojo/node!fs",
                   .takeScreenshot()
                   .then(function(screenshot) {
                      fs.writeFile(screenshotPath, screenshot.toString("binary"), "binary", function(err) {
-                        browser.execute(id => {
+                        browser.execute(function(id) {
                            var infoBlock = document.getElementById(id);
                            if(infoBlock) {
                               infoBlock.parentNode.removeChild(infoBlock);
