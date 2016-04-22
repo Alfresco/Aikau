@@ -72,22 +72,20 @@
  * @author Martin Doyle
  * @since 1.0.44
  */
-define([
-      "alfresco/core/Core",
-      "alfresco/core/ObjectProcessingMixin",
-      "dijit/_FocusMixin",
-      "dijit/_TemplatedMixin",
-      "dijit/_WidgetBase",
-      "dojo/_base/array",
-      "dojo/_base/declare",
-      "dojo/_base/lang",
-      "dojo/dom-class",
-      "dojo/dom-construct",
-      "dojo/dom-style",
-      "dojo/on",
-      "dojo/text!./templates/PushButtonsControl.html"
-   ],
-   function(Core, ObjectProcessingMixin, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, domClass, domConstruct, domStyle, on, template) {
+define(["alfresco/core/Core", 
+        "alfresco/core/ObjectProcessingMixin", 
+        "dijit/_FocusMixin", 
+        "dijit/_TemplatedMixin", 
+        "dijit/_WidgetBase", 
+        "dojo/_base/array", 
+        "dojo/_base/declare", 
+        "dojo/_base/lang", 
+        "dojo/dom-class", 
+        "dojo/dom-construct", 
+        "dojo/dom-style", 
+        "dojo/on", 
+        "dojo/text!./templates/PushButtonsControl.html"], 
+        function(Core, ObjectProcessingMixin, _FocusMixin, _TemplatedMixin, _WidgetBase, array, declare, lang, domClass, domConstruct, domStyle, on, template) {
 
       return declare([_WidgetBase, _TemplatedMixin, _FocusMixin, Core, ObjectProcessingMixin], {
 
@@ -127,6 +125,25 @@ define([
           * @default
           */
          id: null,
+
+         /**
+          * <p>The maximum number of choices selectable by the user. This will always
+          * be one in single-item mode. Attempts to select an item once this limit
+          * has been reached will result in the oldest selection being deselected.
+          * If the value is 0 (the default), then there will be no forced limit on
+          * the number of choices in multi-item mode.</p>
+          *
+          * <p><strong>NOTE:</strong> The accessibility of this control relies on
+          * the fact that, underneath, it's backed by either radio buttons or
+          * checkboxes. The use of this property can make checkboxes behave like
+          * radio buttons, and so its accessibility could be affected.</p>
+          *
+          * @instance
+          * @type {number}
+          * @default
+          * @since 1.0.65
+          */
+         maxChoices: 0,
 
          /**
           * Maximum number of buttons on a line (zero means no limit)
@@ -197,6 +214,18 @@ define([
          percentGap: 1,
 
          /**
+          * A FIFO queue of selections that is active only in multi-item mode when
+          * maxChoices is not zero, and will be used to deselect oldest selections
+          * when the maxChoices is exceeeded.
+          *
+          * @instance
+          * @type {Object[]}
+          * @default
+          * @since 1.0.65
+          */
+         selections: null,
+
+         /**
           * The total width of the control in pixels. Zero indicates that
           * the control should take as much space as needed.
           *
@@ -213,6 +242,7 @@ define([
           */
          constructor: function() {
             this.opts = [];
+            this.selections = [];
          },
 
          /**
@@ -252,7 +282,8 @@ define([
                   name: this.name,
                   id: optionId,
                   className: this.rootClass + "__input",
-                  type: this.multiMode ? "checkbox" : "radio"
+                  type: this.multiMode ? "checkbox" : "radio",
+                  value: option.value
                }, this.domNode),
                labelNode = domConstruct.create("label", {
                   "for": optionId, // Quoted because reserved word
@@ -264,7 +295,7 @@ define([
             labelNode.appendChild(labelContent);
 
             // Setup change-listener
-            var changeListener = on(inputNode, "change", lang.hitch(this, this._markValueChanged));
+            var changeListener = on(inputNode, "change", lang.hitch(this, this._onInputChanged));
             this.own(changeListener);
 
             // Put the new option into the options-map
@@ -373,7 +404,6 @@ define([
           * @param {*} value The value to be set
           */
          setValue: function alfresco_forms_controls_PushButtonsControl__setValue(value) {
-            this.alfLog("debug", this.name + ": setValue(" + JSON.stringify(value) + ")");
 
             // Discard null, undefined and empty-string values
             if (value === null || typeof value === "undefined") {
@@ -388,6 +418,12 @@ define([
                return;
             }
 
+            // Make sure the maxChoices value prevents setting too many values
+            if (valueIsArray && this.maxChoices && value.length > this.maxChoices) {
+               this.alfLog("warn", "setValue() not completed as number of values (" + value.length + ") exceeds max-choices setting (" + this.maxChoices + ")");
+               return;
+            }
+
             // Get valid values and normalise value to an array
             var validValues = array.map(this.opts, function(opt) {
                   return opt.option.value;
@@ -398,35 +434,64 @@ define([
             }
 
             // Check that all new values are valid
-            var hasInvalidValues = array.some(valuesToUse, function(nextValue) {
-               return array.indexOf(validValues, nextValue) === -1;
+            var hasInvalidValues = array.some(valuesToUse, function(nextValueToUse) {
+               return !validValues.some(function(nextValidValue) {
+                  return nextValidValue === nextValueToUse;
+               });
             });
             if (hasInvalidValues) {
                this.alfLog("warn", "setValue() not completed as supplied value " + JSON.stringify(value) + " does not match current option values: " + JSON.stringify(validValues));
                return;
             }
 
-            // Set the values (and if we're in multi-mode then we deselect
-            // the other values)
+            // Set the values (and if we're in multi-mode then we deselect the other values)
             array.forEach(this.opts, function(opt) {
+               var checkedBefore = opt.inputNode.checked;
                if (this.multiMode) {
                   opt.inputNode.checked = false;
                }
                if (array.indexOf(valuesToUse, opt.option.value) !== -1) {
                   opt.inputNode.checked = true;
                }
+               if (opt.inputNode.checked !== checkedBefore) {
+                  on.emit(opt.inputNode, "change", {
+                     bubbles: true,
+                     cancelable: true
+                  });
+               }
             }, this);
-
-            // Fire a value-changed event
-            this._markValueChanged();
          },
 
          /**
           * Fires when the value is changed.
           *
           * @instance
+          * @param {Object} evt The change event
+          * @since 1.0.65
           */
-         _markValueChanged: function alfresco_forms_controls_PushButtonsControl___markValueChanged() {
+         _onInputChanged: function alfresco_forms_controls_PushButtonsControl___onInputChanged(evt) {
+            var input = evt.target,
+               isSelected = input.checked,
+               nodeToDeselect;
+            if (this.multiMode && this.maxChoices) {
+               var newSelections = this.selections.slice();
+               if (isSelected) {
+                  newSelections.push(input);
+                  if (newSelections.length > this.maxChoices) {
+                     nodeToDeselect = newSelections.shift();
+                     nodeToDeselect.checked = false;
+                     on.emit(nodeToDeselect, "change", {
+                        bubbles: true,
+                        cancelable: true
+                     });
+                  }
+               } else {
+                  newSelections = newSelections.filter(function(selectedNode) {
+                     return selectedNode !== input;
+                  });
+               }
+               this.selections = newSelections;
+            }
             this._changeAttrValue("value", this.getValue());
          }
       });

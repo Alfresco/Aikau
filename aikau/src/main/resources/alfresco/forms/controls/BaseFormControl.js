@@ -187,6 +187,17 @@ define(["dojo/_base/declare",
       fieldId: "",
 
       /**
+       * When set to true, and this is a multi-value control, then the initial value will - if nothing
+       * is specifically set - be set to the first value available.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.65
+       */
+      firstValueIsDefault: true,
+
+      /**
        * The label identifying the data to provide. The value supplied will be checked against the available
        * scoped NLS resources to attempt to translate message keys into localized values.
        *
@@ -951,7 +962,7 @@ define(["dojo/_base/declare",
             this.setValue(value);
             this.value = value;
          }
-         else if (options && options.length > 0)
+         else if (options && options.length > 0 && this.firstValueIsDefault)
          {
             this.setValue(options[0].value);
             this.value = options[0].value;
