@@ -1303,7 +1303,7 @@ define(["dojo/_base/declare",
          // Publish the details of the loaded documents. The initial use case for this was to allow
          // the selected items menu to know how many items were available for selection but it
          // clearly has many other uses...
-         this.totalRecords = this.currentData.items.length;
+         this.totalRecords = this.currentData.items ? this.currentData.items.length : 0;
          this.startIndex = 0;
          if (response !== null)
          {

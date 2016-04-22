@@ -564,16 +564,15 @@ define(["dojo/_base/declare",
             // TODO: Inform user that request is in progress?
             this.alfLog("log", "Search request ignored because progress is already in progress");
             this._searchPending = true;
-         }
-         else
-         {
             if (this.currentRequestId)
             {
                 this.alfPublish("ALF_STOP_SEARCH_REQUEST", {
                    requestId: this.currentRequestId
                 }, true);
             }
-
+         }
+         else
+         {
             // InfiniteScroll uses pagination under the covers.
             var startIndex = (this.currentPage - 1) * this.currentPageSize;
             if (!this.useInfiniteScroll ||
