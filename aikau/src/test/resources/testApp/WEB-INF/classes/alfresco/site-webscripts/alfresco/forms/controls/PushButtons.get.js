@@ -96,8 +96,9 @@ model.jsonModel = {
                      additionalCssClasses: "grey-gradient",
                      name: "properfootball",
                      label: "Only proper form of football?",
-                     description: "Config options: width=400, multiMode=true",
+                     description: "Config options: width=400, multiMode=true, maxChoices=2",
                      width: 400,
+                     maxChoices: 2,
                      multiMode: true,
                      optionsConfig: {
                         publishTopic: "GET_FOOTBALL_OPTIONS",
@@ -143,11 +144,39 @@ model.jsonModel = {
                            },
                            {
                               label: "Scala",
-                              value: "scale"
+                              value: "scala"
                            },
                            {
                               label: "Go",
                               value: "go"
+                           }
+                        ]
+                     }
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/PushButtons",
+                  id: "ONE_DESELECTABLE_CHOICE",
+                  config: {
+                     additionalCssClasses: "grey-gradient",
+                     name: "onedeselectable",
+                     label: "Deselectable single-choice buttons",
+                     description: "Config options: multiMode=true, maxChoices=1",
+                     maxChoices: 1,
+                     multiMode: true,
+                     optionsConfig: {
+                        fixed: [
+                           {
+                              label: "One",
+                              value: "one"
+                           },
+                           {
+                              label: "Two",
+                              value: "two"
+                           },
+                           {
+                              label: "Three",
+                              value: "three"
                            }
                         ]
                      }

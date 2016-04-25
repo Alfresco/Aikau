@@ -34,13 +34,24 @@
 define(["alfresco/core/CoreWidgetProcessing",
         "alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
-        "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-class",
         "alfresco/forms/controls/PushButtonsControl"],
-       function(CoreWidgetProcessing, BaseFormControl, declare, array, lang, domClass) {
+       function(CoreWidgetProcessing, BaseFormControl, declare, lang, domClass) {
 
    return declare([BaseFormControl, CoreWidgetProcessing], {
+
+      /**
+       * When set to true, and this is a multi-value control, then the initial value will - if nothing
+       * is specifically set - be set to the first value available.
+       *
+       * @instance
+       * @override
+       * @type {boolean}
+       * @default
+       * @since 1.0.65
+       */
+      firstValueIsDefault: false,
 
       /**
        * Run after widget created.
@@ -84,6 +95,9 @@ define(["alfresco/core/CoreWidgetProcessing",
          }
          if (!isNaN(this.minPadding)) {
             widgetConfig.minPadding = this.minPadding;
+         }
+         if (!isNaN(this.maxChoices)) {
+            widgetConfig.maxChoices = this.maxChoices;
          }
 
          // Pass back the config
