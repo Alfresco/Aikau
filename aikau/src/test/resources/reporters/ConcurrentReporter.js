@@ -130,6 +130,7 @@ define(["intern/dojo/node!fs",
          BreakOnError: false,
          ClearScreenBeforeResults: true,
          LongRunningTestMs: 2000,
+         NumLongestRunningTests: 10,
          OutputReporterInfo: true,
          Title: "UNIT TESTS",
          TitleHelp: "(Ctrl-C to abort)",
@@ -407,14 +408,6 @@ define(["intern/dojo/node!fs",
           * @type {int}
           */
          timeTakenMs: 0,
-
-         /**
-          * The timings of all the tests/suites/environments
-          *
-          * @instance
-          * @type {Object}
-          */
-         timings: {},
 
          /**
           * How many rows are available for displaying messages
@@ -752,18 +745,94 @@ define(["intern/dojo/node!fs",
             // Clone and clean the test object, keeping only specific properties
             var clonedEnv = JSON.parse(safeJson.stringify(env)),
                keysToKeep = ["tests", "name", "timeElapsed"],
-               cleanedEnv = (function cleanEnv(envObj) {
-                  Object.keys(envObj).forEach(key => {
+               envTests = (function cleanEnv(testObj, testIndexes) {
+
+                  // Remove the redundant properties
+                  Object.keys(testObj).forEach(key => {
                      if (keysToKeep.indexOf(key) === -1) {
-                        delete envObj[key];
+                        delete testObj[key];
                      }
                   });
-                  (envObj.tests || []).forEach(cleanEnv);
-                  return envObj;
-               })(clonedEnv);
 
-            // Store the environment info
-            this.requestedEnvironments[env.name].info = cleanedEnv;
+                  // Work out if this is a test object (as opposed to a suite or environment)
+                  if (testIndexes.indexOf(".") !== -1) {
+                     testObj.testIndexes = testIndexes;
+                  }
+
+                  // Recurse
+                  (testObj.tests || []).forEach((test, index) => {
+                     var nextPath = (testIndexes && `${testIndexes}.`) + index;
+                     cleanEnv(test, nextPath);
+                  });
+
+                  // Return this object
+                  return testObj;
+
+               })(clonedEnv, "");
+
+            // Find the tests that exceed the [CONFIG.LongRunningTestMs] duration and record timing stats
+            var longRunningTests = [],
+               longestTestTime = 0,
+               shortestTestTime = Number.MAX_VALUE,
+               testTimes = [];
+            (function findLongRunningTests(testObj) {
+
+               // If it has a path, it must be a real test (not a suite/environment)
+               if (testObj.testIndexes) {
+
+                  // Update the min/max test durations and add the time to the superset of all times
+                  var timeTaken = testObj.timeElapsed;
+                  testTimes.push(timeTaken);
+                  if (longestTestTime < timeTaken) {
+                     longestTestTime = timeTaken;
+                  }
+                  if (shortestTestTime > timeTaken) {
+                     shortestTestTime = timeTaken;
+                  }
+
+                  // Add long-running tests to the collection
+                  if (testObj.timeElapsed > CONFIG.LongRunningTestMs) {
+                     longRunningTests.push({
+                        testIndexes: testObj.testIndexes,
+                        time: timeTaken
+                     });
+                  }
+               }
+
+               // Recurse
+               (testObj.tests || []).forEach((test, index) => {
+                  findLongRunningTests(test);
+               });
+            })(envTests);
+
+            // Calculate the longest-running tests and mark them
+            longRunningTests.sort((a, b) => b.time - a.time);
+            if (longRunningTests.length > CONFIG.NumLongestRunningTests) {
+               longRunningTests = longRunningTests.slice(0, CONFIG.NumLongestRunningTests);
+            }
+            longRunningTests.forEach(test => {
+               var testObj = envTests;
+               test.testIndexes.split(".").forEach(nextTestIndex => {
+                  testObj = testObj.tests[nextTestIndex];
+               });
+               testObj.longest = true;
+            });
+
+            // Remove all of the non-longest tests from the envTests object
+            (function removeTests(testObj) {
+               testObj.tests = (testObj.tests || []).filter(removeTests);
+               return testObj.tests.length || testObj.longest;
+            })(envTests);
+
+            // Add all of the timing info to the environment object
+            this.requestedEnvironments[env.name].info = {
+               envTests: envTests,
+               shortest: shortestTestTime,
+               longest: longestTestTime,
+               average: Math.round(this.getAverage(testTimes)),
+               normalisedAverage: Math.round(this.getNormalisedAverage(testTimes)),
+               numLongRunningTests: longRunningTests.length
+            };
          },
 
          /**
@@ -1136,37 +1205,16 @@ define(["intern/dojo/node!fs",
                console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
 
                // Calculate the average average test time per environment and remove non-slow-running test times
-               var numLongRunningTests = 0;
+               var totalLongRunningTests = 0;
                Object.keys(this.requestedEnvironments).forEach(envKey => {
-                  var testTimes = [],
-                     longestTestTime = 0,
-                     shortestTestTime = Number.MAX_VALUE,
-                     requestedEnv = this.requestedEnvironments[envKey],
-                     clonedEnvInfo = JSON.parse(JSON.stringify(requestedEnv.info));
-                  logToFile(`longestTestTime=${longestTestTime}, shortestTestTime=${shortestTestTime}`);
-                  requestedEnv.longTests = (function filterLongTests(testObj) {
-                     var timeTaken = testObj.timeElapsed;
-                     if (testObj.tests) {
-                        testObj.tests = testObj.tests.filter(filterLongTests);
-                     } else {
-                        if (longestTestTime < timeTaken) {
-                           longestTestTime = timeTaken;
-                        }
-                        if (shortestTestTime > timeTaken) {
-                           shortestTestTime = timeTaken;
-                        }
-                        testTimes.push(timeTaken);
-                        timeTaken > CONFIG.LongRunningTestMs && numLongRunningTests++;
-                     }
-                     var hasLongRunningTests = testObj.tests && testObj.tests.length,
-                        isLongRunningTest = !testObj.tests && timeTaken > CONFIG.LongRunningTestMs;
-                     return (hasLongRunningTests || isLongRunningTest) && testObj;
-                  })(clonedEnvInfo);
-                  var secsOrMs = ms => ms > 1000 ? `${Math.round(ms/100)/10} secs` : `${Math.round(ms)}ms`,
-                     average = secsOrMs(this.getAverage(testTimes)),
-                     normalisedAverage = secsOrMs(this.getNormalisedAverage(testTimes)),
-                     longest = secsOrMs(longestTestTime),
-                     shortest = secsOrMs(shortestTestTime);
+                  var requestedEnv = this.requestedEnvironments[envKey],
+                     info = requestedEnv.info,
+                     msToString = ms => ms > 1000 ? `${Math.round(ms/100)/10} secs` : `${Math.round(ms)}ms`,
+                     average = msToString(info.average),
+                     normalisedAverage = msToString(info.normalisedAverage),
+                     longest = msToString(info.longest),
+                     shortest = msToString(info.shortest);
+                  totalLongRunningTests += info.numLongRunningTests;
                   console.log("");
                   console.log(ANSI_CODES.Bright + "--- " + requestedEnv.realName + " ---" + ANSI_CODES.Reset);
                   console.log("");
@@ -1177,24 +1225,33 @@ define(["intern/dojo/node!fs",
                });
 
                // Output the slow-running tests
-               if (numLongRunningTests) {
+               if (totalLongRunningTests) {
                   console.log("");
                   console.log("");
                   console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
                   console.log(ANSI_CODES.Bright + "===== SLOWEST TESTS =====" + ANSI_CODES.Reset);
                   console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
+                  console.log("");
+                  console.log(`${ANSI_CODES.Bright}NOTE:${ANSI_CODES.Reset} These are the top ${CONFIG.NumLongestRunningTests} slowest running tests per environment, where the test duration was at least ${CONFIG.LongRunningTestMs}ms`);
                   Object.keys(this.requestedEnvironments).forEach(envKey => {
                      var requestedEnv = this.requestedEnvironments[envKey],
                         envName = requestedEnv.realName,
-                        longTests = requestedEnv.longTests;
+                        envInfo = requestedEnv.info,
+                        envTests = envInfo.envTests;
                      console.log("");
-                     console.log(ANSI_CODES.Bright + envName + ANSI_CODES.Reset);
-                     longTests.tests.forEach(suite => {
-                        console.log(suite.name);
-                        suite.tests.forEach(test => {
-                           console.log(`  - "${test.name}" took ${Math.round(test.timeElapsed / 10) / 100} secs`);
+                     console.log(ANSI_CODES.Bright + "--- " + envName + " ---" + ANSI_CODES.Reset);
+                     if (envInfo.numLongRunningTests) {
+                        envTests.tests.forEach(suite => {
+                           console.log("");
+                           console.log(ANSI_CODES.Bright + suite.name + ANSI_CODES.Reset);
+                           suite.tests.forEach(test => {
+                              console.log(`  - "${test.name}" took ${Math.round(test.timeElapsed / 10) / 100} secs`);
+                           });
                         });
-                     });
+                     } else {
+                        console.log("");
+                        console.log("No long-running tests for this environment");
+                     }
                   });
                }
 
