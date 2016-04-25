@@ -1176,17 +1176,17 @@ define(["intern/dojo/node!fs",
 
                         // Log the environment name
                         console.log("");
-                        console.log(ANSI_CODES.Bright + "--- " + this.environments[envKey] + " ---" + ANSI_CODES.Reset);
+                        console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + this.environments[envKey] + ANSI_CODES.Reset);
 
                         // Output the suites/tests/results
                         Object.keys(thisEnvResultsBySuite).forEach(function(suiteName) {
                            console.log("");
-                           console.log(ANSI_CODES.Bright + ANSI_CODES.FgRed + suiteName + ANSI_CODES.Reset);
+                           console.log(ANSI_CODES.Bright + suiteName + ANSI_CODES.Reset);
                            var nextSuiteTestResults = thisEnvResultsBySuite[suiteName];
                            Object.keys(nextSuiteTestResults).forEach(function(testName) {
                               var resultMessage = nextSuiteTestResults[testName];
-                              console.log(ANSI_CODES.Bright + "\"" + testName + "\"" + ANSI_CODES.Reset);
-                              console.log(resultMessage);
+                              console.log("\"" + testName + "\"");
+                              console.log(ANSI_CODES.Dim + resultMessage + ANSI_CODES.Reset);
                            });
                         });
                      }
@@ -1216,8 +1216,7 @@ define(["intern/dojo/node!fs",
                      shortest = msToString(info.shortest);
                   totalLongRunningTests += info.numLongRunningTests;
                   console.log("");
-                  console.log(ANSI_CODES.Bright + "--- " + requestedEnv.realName + " ---" + ANSI_CODES.Reset);
-                  console.log("");
+                  console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + requestedEnv.realName + ANSI_CODES.Reset);
                   console.log(`Fastest test: ${shortest}`);
                   console.log(`Slowest test: ${longest}`);
                   console.log(`Average test duration: ${average}`);
@@ -1239,10 +1238,9 @@ define(["intern/dojo/node!fs",
                         envInfo = requestedEnv.info,
                         envTests = envInfo.envTests;
                      console.log("");
-                     console.log(ANSI_CODES.Bright + "--- " + envName + " ---" + ANSI_CODES.Reset);
+                     console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + envName + ANSI_CODES.Reset);
                      if (envInfo.numLongRunningTests) {
                         envTests.tests.forEach(suite => {
-                           console.log("");
                            console.log(ANSI_CODES.Bright + suite.name + ANSI_CODES.Reset);
                            suite.tests.forEach(test => {
                               console.log(`  - "${test.name}" took ${Math.round(test.timeElapsed / 10) / 100} secs`);
