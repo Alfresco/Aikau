@@ -28,15 +28,10 @@ model.jsonModel = {
                               width: 16,
                               title: "Undo upload",
                               publishTopic: "UNDO_UPLOAD",
-                              publishPayloadType: "PROCESS",
                               publishPayload: {
                                  nodeRef: "{response.nodeRef}",
                                  fileName: "{fileObj.name}"
-                              },
-                              useCurrentItemAsPayload: false,
-                              publishPayloadModifiers: [
-                                 "processCurrentItemTokens"
-                              ]
+                              }
                            }
                         }
                      ]
@@ -45,7 +40,8 @@ model.jsonModel = {
             ]
          }
       },
-      "alfresco/services/NotificationService"
+      "alfresco/services/NotificationService",
+      "aikauTesting/mockservices/FileUploadMockService"
    ],
    widgets: [
       {

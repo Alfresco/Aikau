@@ -347,15 +347,15 @@ define(["alfresco/core/CoreXhr",
        * @since 1.0.56
        */
       onUploadCancelRequest: function alfresco_services__BaseUploadService__onUploadCancelRequest(payload) {
-         var fileId = payload && payload.fileId,
-            fileInfo = this.fileStore[fileId];
+         var uploadId = payload && payload.uploadId,
+            fileInfo = this.fileStore[uploadId];
          if (fileInfo) {
             try {
                if (fileInfo.progress === 0) {
                   fileInfo.request = { // Manually force status of 0 to notify of cancellation
                      status: 0
                   };
-                  this.failureListener(fileId); // Manually call the failure listener for this file
+                  this.failureListener(uploadId); // Manually call the failure listener for this file
                } else {
                   fileInfo.request.abort();
                }
@@ -716,9 +716,9 @@ define(["alfresco/core/CoreXhr",
          while ((nextFile = filesToUpload.shift())) {
 
             // Ensure a unique file ID
-            var fileId = "file" + Date.now();
+            var fileId = Date.now();
             while (this.fileStore.hasOwnProperty(fileId)) {
-               fileId = "file" + Date.now();
+               fileId = Date.now();
             }
 
             // Add the data to the upload property of XMLHttpRequest so that we can determine which file each

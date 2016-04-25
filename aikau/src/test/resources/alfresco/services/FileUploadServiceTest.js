@@ -72,6 +72,13 @@ define(["module",
                assert.propertyVal(payload, "fileName", "File for v1 API.docx");
                assert.propertyVal(payload, "nodeRef", "workspace://SpacesStore/c2128109-6b01-450f-9a8c-ec2dc4934553");
             });
+      },
+
+      "'Undo' action removes upload line": function() {
+         return this.remote.findAllByCssSelector(".alfresco-upload-UploadMonitor__successful-items tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
       }
    });
 });
