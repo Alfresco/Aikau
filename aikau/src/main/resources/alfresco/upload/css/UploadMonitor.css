@@ -1,5 +1,6 @@
 .alfresco-upload-UploadMonitor {
    box-sizing: border-box;
+   min-height: 20px;
    overflow: hidden;
    * {
       box-sizing: inherit;

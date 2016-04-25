@@ -1465,6 +1465,24 @@ define([],function() {
       UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
 
       /**
+       * This topic can be published to to request modification of a line-item in the
+       * [UploadMonitor widget]{@link module:alfresco/upload/UploadMonitor}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.65
+       *
+       * @event
+       * @property {String} uploadId The ID of the upload item to modify. This will be
+       *                             passed by every configured action when it publishes
+       *                             for a specific upload.
+       * @property {String} action The desired action, which must be "REMOVE". More actions
+       *                           will be added later.
+       */
+      UPLOAD_MODIFY_ITEM: "ALF_UPLOAD_MODIFY_ITEM",
+
+      /**
        * This topic is published to request an upload.
        *
        * @instance

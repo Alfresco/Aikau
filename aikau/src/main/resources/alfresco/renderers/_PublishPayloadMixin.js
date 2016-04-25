@@ -209,7 +209,7 @@ define(["dojo/_base/declare",
        * @param {object} [receivedPayload] A payload that has been received that triggers the generation.
        * @returns {object} The generated payload.
        */
-      getGeneratedPayload: function alfresco_renderers__PublishPayloadMixin__generatePayload(regenerate, receivedPayload) {
+      getGeneratedPayload: function alfresco_renderers__PublishPayloadMixin__getGeneratedPayload(regenerate, receivedPayload) {
          if (this._generatedPayload === null || regenerate === true || receivedPayload !== null)
          {
             this._generatedPayload = this.generatePayload(this.publishPayload, this.currentItem, receivedPayload, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
@@ -266,7 +266,7 @@ define(["dojo/_base/declare",
          {
             if (this.currentItem !== null)
             {
-               lang.mixin(generatedPayload, currentItem);
+               generatedPayload = lang.mixin(generatedPayload || {}, currentItem);
             }
             else
             {

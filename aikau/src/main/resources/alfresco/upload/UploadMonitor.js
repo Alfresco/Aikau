@@ -200,6 +200,18 @@ define(["alfresco/core/FileSizeMixin",
       },
 
       /**
+       * Run after the widget has been created.
+       *
+       * @instance
+       * @override
+       * @since 1.0.65
+       * @listens module:alfresco/core/topics#UPLOAD_MODIFY_ITEM
+       */
+      postCreate: function alfesco_upload_UploadMonitor__postCreate() {
+         this.alfSubscribe(topics.UPLOAD_MODIFY_ITEM, lang.hitch(this, this.handleModifyItem));
+      },
+
+      /**
        * Create the actions widgets, ensure that the default publishPayloadType is set
        * to CURRENT_ITEM, and set the current item to be the supplied upload info.
        *
@@ -217,7 +229,7 @@ define(["alfresco/core/FileSizeMixin",
 
             // Grab the widgets property for this state
             var propName = "widgetsFor" + propType + "Actions",
-               widgets = this[propName];
+               widgets = this[propName] && lang.clone(this[propName]);
             if (widgets && widgets.length) {
 
                // Create state-specific class
@@ -226,12 +238,13 @@ define(["alfresco/core/FileSizeMixin",
                // Mix in the default payload type and a class to control visibility
                array.forEach(widgets, function(action) {
                   action.config = lang.mixin({
-                     publishPayloadType: "CURRENT_ITEM",
+                     publishPayloadType: "PROCESS",
                      publishGlobal: true,
-                     additionalCssClasses: actionClass + " " + actionStateClass
-                  }, action.config || {}, {
+                     publishPayloadItemMixin: true,
+                     additionalCssClasses: actionClass + " " + actionStateClass,
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
                      currentItem: actionPayload
-                  });
+                  }, action.config || {});
                }, this);
 
                // Create the widgets under the appropriate node
@@ -311,7 +324,7 @@ define(["alfresco/core/FileSizeMixin",
             id: fileId,
             file: file,
             actionPayload: {
-               fileId: fileId,
+               uploadId: fileId,
                fileSize: file.size,
                fileName : file.name,
                fileObj: file
@@ -340,9 +353,9 @@ define(["alfresco/core/FileSizeMixin",
        * @param {object} error The details of why the file could not be uploaded.
        */
       addFailedFile: function alfesco_upload_UploadMonitor__addFailedFile(fileName, error) {
-         var uniqueFileId = fileName + Date.now();
+         var uniqueFileId = Date.now();
          while (this._uploads.hasOwnProperty(uniqueFileId)) {
-            uniqueFileId = fileName + Date.now();
+            uniqueFileId = Date.now();
          }
          this.addInProgressFile(uniqueFileId, {
             name: fileName
@@ -486,6 +499,28 @@ define(["alfresco/core/FileSizeMixin",
 
          } else {
             this.alfLog("warn", "Attempt to mark as failed an upload that is not being tracked (id=" + fileId + ")");
+         }
+      },
+
+      /**
+       * Handle modification requests for a specific item
+       *
+       * @instance
+       * @param {Object} payload The published payload
+       * @since 1.0.65
+       */
+      handleModifyItem: function alfesco_upload_UploadMonitor__handleModifyItem(payload) {
+         var upload;
+         if (payload && payload.uploadId && (upload = this._uploads[payload.uploadId]) && payload.action) {
+            switch (payload.action) {
+               case "REMOVE":
+                  var uploadRow = upload.nodes.row;
+                  uploadRow.parentNode.removeChild(uploadRow);
+                  break;
+               default:
+                  this.alfLog("warn", "Invalid action requested for modifying item: ", payload.action);
+                  break;
+            }
          }
       },
 
