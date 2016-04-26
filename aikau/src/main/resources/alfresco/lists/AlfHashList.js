@@ -168,13 +168,22 @@ define(["dojo/_base/declare",
             var hashString = hashUtils.getHashString();
             if (hashString === "")
             {
-               if (this.useLocalStorageHashFallback === true && 
-                   ("localStorage" in window && window.localStorage !== null))
+               try 
                {
-                  // No hash has been provided, check local storage for last hash...
-                  var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
-                  hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
-                  this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
+                  if (this.useLocalStorageHashFallback === true && 
+                      ("localStorage" in window && window.localStorage !== null))
+                  {
+                     // No hash has been provided, check local storage for last hash...
+                     var locallyStoredHash = localStorage.getItem(this.useLocalStorageHashFallbackKey);
+                     hashString = (locallyStoredHash !== null) ? locallyStoredHash : "";
+                     this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.updateLocallyStoredHash));
+                  }
+               }
+               catch(e)
+               {
+                  // No action when error occurs. The only reason that we're wrapping the local storage
+                  // utilization in a try/catch block is to prevent failures when Firefox is used with
+                  // SSO with cookies disabled. See MNT-16167 for details.
                }
 
                if (hashString)
