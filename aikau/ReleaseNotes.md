@@ -1,4 +1,4 @@
-Aikau 1.0.62 Release Notes
+Aikau 1.0.65 Release Notes
 ===
 
 Previous deprecations:
@@ -47,6 +47,17 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.65:
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+* [AKU-](https://issues.alfresco.com/jira/browse/AKU-)       -
+
+
+
 1.0.62:
 * [AKU-842](https://issues.alfresco.com/jira/browse/AKU-842)       - Ensure infinite scrolling Document Library can be sorted via menu
 * [AKU-898](https://issues.alfresco.com/jira/browse/AKU-898)       - Support for UploadMonitor completed upload actions
