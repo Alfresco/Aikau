@@ -1,5 +1,6 @@
 <webscript>
   <shortname>Simple Picker Test</shortname>
+  <description>This page demonstrates a couple of configurations ofr the 'alfresco/forms/controls/SimplePicker' for unit testing purposes.</description>
   <family>aikau-unit-tests</family>
   <url>/SimplePicker</url>
 </webscript>
