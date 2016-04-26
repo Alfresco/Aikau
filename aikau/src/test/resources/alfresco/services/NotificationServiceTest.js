@@ -34,7 +34,9 @@ define(["module",
       buttons: {
          nonClosingWithWidgets: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_WIDGETS_BUTTON"]),
          publishWithinNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["IN_NOTIFICATION_BUTTON"]),
-         inlineLinkNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_INLINE_LINK_BUTTON"])
+         inlineLinkNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_INLINE_LINK_BUTTON"]),
+         longNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_BUTTON_LARGE"]),
+         closeNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CLOSE_NOTIFICATION_BUTTON"])
       },
       notifications: {
          closeButton: TestCommon.getTestSelector(notificationSelectors, "button.close")
@@ -66,7 +68,7 @@ define(["module",
       },
 
       "Can close notification early": function() {
-         return this.remote.findByCssSelector("#NOTIFICATION_BUTTON_LARGE")
+         return this.remote.findByCssSelector(selectors.buttons.longNotification)
             .clearLog()
             .click()
             .end()
@@ -247,6 +249,22 @@ define(["module",
             .then(function(payload) {
                assert.propertyVal(payload, "sampleValue", "foo");
             });
+      },
+
+      "Can close notification by publishing on specified topic": function() {
+         return this.remote.findByCssSelector(selectors.buttons.longNotification)
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-notifications-AlfNotification")
+            .end()
+
+         .findByCssSelector(selectors.buttons.closeNotification)
+            .click()
+            .end()
+
+         .getLastPublish("ALF_NOTIFICATION_DESTROYED");
       }
    });
 });

@@ -379,6 +379,7 @@ define([],function() {
        *                                any widgets required must be either statically declared in the page model
        *                                or in a widgets property of a custom widget/service, or be specifically
        *                                required by a custom widget/service.
+       * @property {string} [closeTopic] If this topic is published to, then the notification will be closed
        * @property {string} [publishTopic] A topic to be published after the notification has closed
        * @property {object} [publishPayload] The payload to be published after the notification has closed
        * @property {boolean} [publishGlobal] Whether to publish the topic globally
@@ -1462,6 +1463,24 @@ define([],function() {
        * @event
        */
       UPLOAD_CANCELLATION: "ALF_UPLOAD_DIALOG_CANCEL_CLICK",
+
+      /**
+       * This topic can be published to to request modification of a line-item in the
+       * [UploadMonitor widget]{@link module:alfresco/upload/UploadMonitor}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.65
+       *
+       * @event
+       * @property {String} uploadId The ID of the upload item to modify. This will be
+       *                             passed by every configured action when it publishes
+       *                             for a specific upload.
+       * @property {String} action The desired action, which must be "REMOVE". More actions
+       *                           will be added later.
+       */
+      UPLOAD_MODIFY_ITEM: "ALF_UPLOAD_MODIFY_ITEM",
 
       /**
        * This topic is published to request an upload.

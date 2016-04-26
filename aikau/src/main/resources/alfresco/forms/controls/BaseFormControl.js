@@ -187,6 +187,17 @@ define(["dojo/_base/declare",
       fieldId: "",
 
       /**
+       * When set to true, and this is a multi-value control, then the initial value will - if nothing
+       * is specifically set - be set to the first value available.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.65
+       */
+      firstValueIsDefault: true,
+
+      /**
        * The label identifying the data to provide. The value supplied will be checked against the available
        * scoped NLS resources to attempt to translate message keys into localized values.
        *
@@ -302,6 +313,17 @@ define(["dojo/_base/declare",
        * @since 1.0.33
        */
       getPubSubOptionsImmediately: true,
+
+      /**
+       * Indicates that this form control can have a value which is a subset of the available
+       * options that can be chosen from. 
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.65
+       */
+      supportsMultiValue: false,
 
       /**
        * The default visibility status is always true (this can be overridden by extending controls).
@@ -914,9 +936,25 @@ define(["dojo/_base/declare",
        * @param {array} options The options to choose from
        */
       setOptionsValue: function alfresco_forms_controls_BaseFormControl__setOptionsValue(value, options) {
-         var optionsContainsValue = array.some(options, function(option) {
-            return option.value === value;
-         });
+         var optionsContainsValue = false;
+         if (options && options.length > 0)
+         {
+            if (!this.supportsMultiValue)
+            {
+               optionsContainsValue = array.some(options, function(option) {
+                  return option.value === value;
+               });
+            }
+            else
+            {
+               value = array.filter(value, function(currValue) {
+                  return  array.some(options, function(option) {
+                     return currValue === option.value;
+                  });
+               });
+               optionsContainsValue = value.length > 0;
+            }
+         }
 
          if (optionsContainsValue)
          {
@@ -924,7 +962,7 @@ define(["dojo/_base/declare",
             this.setValue(value);
             this.value = value;
          }
-         else if (options && options.length > 0)
+         else if (options && options.length > 0 && this.firstValueIsDefault)
          {
             this.setValue(options[0].value);
             this.value = options[0].value;
@@ -1801,10 +1839,14 @@ define(["dojo/_base/declare",
          }
          else
          {
-            var v = lang.getObject(this.get("name"), false, values);
-            if (v !== undefined)
+            var name = this.get("name");
+            if (name)
             {
-               this.setValue(v);
+               var v = lang.getObject(this.get("name"), false, values);
+               if (typeof v !== "undefined")
+               {
+                  this.setValue(v);
+               }
             }
          }
       },

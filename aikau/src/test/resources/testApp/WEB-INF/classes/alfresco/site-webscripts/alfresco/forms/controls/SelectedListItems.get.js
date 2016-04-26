@@ -1,3 +1,11 @@
+/* global page */
+/* jshint sub:true */
+var publishOnPageLoad = false;
+if (page.url.args["publishOnPageLoad"])
+{
+   publishOnPageLoad = page.url.args["publishOnPageLoad"] === "true";
+}
+
 model.jsonModel = {
    services: [
       {
@@ -13,11 +21,32 @@ model.jsonModel = {
    ],
    widgets: [
       {
+         id: "BUTTON",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            pubSubScope: "FORM",
+            label: "Select items",
+            publishTopic: "SELECT_ITEMS",
+            publishPayload: {
+               selectedItems: [
+                  {
+                     nodeRef: "workspace://SpacesStore/d040aa05-ad54-495f-bf4e-3266b96391e9"
+                  },
+                  {
+                     nodeRef: "workspace://SpacesStore/a8d2eb8b-dba3-438b-b24b-69a25be698ba"
+                  }
+               ]
+            }
+         }
+      },
+      {
          id: "FORM",
          name: "alfresco/forms/Form",
          config: {
             pubSubScope: "FORM",
             okButtonPublishTopic: "SAVE",
+            setValueTopic: "SELECT_ITEMS",
+            setValueTopicGlobalScope: false,
             value: {
                selectedItems: [
                   {
@@ -107,3 +136,21 @@ model.jsonModel = {
       }
    ]
 };
+
+if (publishOnPageLoad) {
+   model.jsonModel.publishOnReady = [
+      {
+         publishTopic: "FORMSELECT_ITEMS",
+         publishPayload: {
+            selectedItems: [
+               {
+                  nodeRef: "workspace://SpacesStore/d040aa05-ad54-495f-bf4e-3266b96391e9"
+               },
+               {
+                  nodeRef: "workspace://SpacesStore/0ca6baf8-599b-4b72-9e22-6e761fac54cb"
+               }
+            ]
+         }
+      }
+   ];
+}

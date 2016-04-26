@@ -119,6 +119,36 @@ define(["module",
             .then(function(payload) {
                assert.propertyVal(payload, "bestlanguage", "javascript");
             });
+      },
+
+      "Multi-mode control can act as deselectable radio buttons": function() {
+         return this.remote.findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.sameMembers(payload.onedeselectable, [], "Initial state of radio-checkbox invalid");
+            })
+
+         .findByCssSelector("#ONE_DESELECTABLE_CHOICE_CONTROL label:nth-of-type(1)")
+            .click()
+            .end()
+
+         .findByCssSelector("#ONE_DESELECTABLE_CHOICE_CONTROL label:nth-of-type(2)")
+            .click()
+            .end()
+
+         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("SCOPED_POST_FORM", true)
+            .then(function(payload) {
+               assert.sameMembers(payload.onedeselectable, ["two"], "Modified state of radio-checkbox invalid");
+            });
       }
    });
 });

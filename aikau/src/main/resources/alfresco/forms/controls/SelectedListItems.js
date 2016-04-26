@@ -37,10 +37,11 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/aspect",
         "dojo/dom-class",
         "alfresco/core/topics",
         "alfresco/lists/AlfList"], 
-        function(declare, BaseFormControl, CoreWidgetProcessing, array, lang, domClass, topics) {
+        function(declare, BaseFormControl, CoreWidgetProcessing, array, lang, aspect, domClass, topics) {
    
    return declare([BaseFormControl, CoreWidgetProcessing], {
       
@@ -125,6 +126,13 @@ define(["dojo/_base/declare",
                if (this._listRendered)
                {
                   this.selectItemsInList();
+               }
+               else
+               {
+                  var aspectHandle = aspect.after(this.wrappedWidget.onDataLoadSuccess, lang.hitch(this, function() {
+                     aspectHandle.remove();
+                     this.selectItemsInList();
+                  }), true);
                }
             }
          }

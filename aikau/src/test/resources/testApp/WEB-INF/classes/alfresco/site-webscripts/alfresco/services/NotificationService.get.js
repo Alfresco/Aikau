@@ -18,7 +18,7 @@ model.jsonModel = {
       {
          name: "alfresco/html/Spacer",
          config: {
-            height: "20vh"
+            height: "50vh"
          }
       },
       {
@@ -76,8 +76,18 @@ model.jsonModel = {
             label: "Display notification (long)",
             publishTopic: "ALF_DISPLAY_NOTIFICATION",
             publishPayload: {
-               message: "This is a longer message. I shall Lorem Ipsum it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor feugiat tristique. Nulla sed egestas elit. Quisque malesuada eget felis eget auctor. Aenean mattis quam nisl, sit amet sollicitudin ex posuere eget."
+               message: "This is a longer message. I shall Lorem Ipsum it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor feugiat tristique. Nulla sed egestas elit. Quisque malesuada eget felis eget auctor. Aenean mattis quam nisl, sit amet sollicitudin ex posuere eget.",
+               closeTopic: "CLOSE_ME",
+               publishTopic: "ALF_NOTIFICATION_DESTROYED"
             }
+         }
+      },
+      {
+         name: "alfresco/buttons/AlfButton",
+         id: "CLOSE_NOTIFICATION_BUTTON",
+         config: {
+            label: "Close long notification",
+            publishTopic: "CLOSE_ME"
          }
       },
       {

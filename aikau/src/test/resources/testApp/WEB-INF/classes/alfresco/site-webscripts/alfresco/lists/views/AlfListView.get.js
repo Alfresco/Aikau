@@ -12,6 +12,8 @@ var createList = function(id, label, loadTopic) {
          }, {
             name: "alfresco/lists/AlfList",
             config: {
+               propertyToken: "name",
+               viewModifiers: ["processInstanceTokens"],
                loadDataPublishTopic: loadTopic,
                widgets: [{
                   name: "alfresco/lists/views/AlfListView",
@@ -23,9 +25,10 @@ var createList = function(id, label, loadTopic) {
                               name: "alfresco/lists/views/layouts/Cell",
                               config: {
                                  widgets: [{
-                                    name: "alfresco/renderers/Property",
+                                    id: "PROPERTY",
+                                    name: "alfresco/renderers/PropertyLink",
                                     config: {
-                                       propertyToRender: "name"
+                                       propertyToRender: "{propertyToken}"
                                     }
                                  }]
                               }
