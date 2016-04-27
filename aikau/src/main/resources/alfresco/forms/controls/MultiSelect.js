@@ -985,7 +985,7 @@ define([
             this._currentSearchValue = newValue;
 
             // Update searchBox size
-            this.offScreenSearch.innerHTML = newValue;
+            this.offScreenSearch.textContent = newValue;
             var contentWidth = this.offScreenSearch.offsetWidth;
             domStyle.set(this.searchBox, "width", (contentWidth + 20) + "px");
 
