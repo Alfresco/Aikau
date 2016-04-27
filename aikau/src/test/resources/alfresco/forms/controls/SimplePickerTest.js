@@ -23,10 +23,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "Simple Picker Tests",
@@ -62,11 +60,13 @@ define(["module",
 
       "Test that PICKER2 posted value contains pre-selected item": function() {
          return this.remote.findByCssSelector("#FORM .confirmationButton > span")
+            .clearLog()
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST", "picker2", "name", "One"))
-            .then(null, function() {
-               assert(false, "Pre-selected item was not reflected in initial form value post");
+         .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "picker2.0.name", "One");
             });
       },
 
@@ -83,11 +83,13 @@ define(["module",
 
       "Test that the picked item is reflected in the posted form value": function() {
          return this.remote.findByCssSelector("#FORM .confirmationButton > span")
+            .clearLog()
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST", "picker1", "name", "Three"))
-            .then(null, function() {
-               assert(false, "Picked item from PICKER1 is not reflected in form value post");
+         .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "picker1.0.name", "Three");
             });
       },
 
@@ -119,12 +121,14 @@ define(["module",
 
       "Test form value post after removing previously picked item": function() {
          return this.remote.findByCssSelector("#FORM .confirmationButton > span")
+            .clearLog()
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM_POST", "picker1", "name", "Three"))
-            .then(function(elements) {
-               // NOTE: We should still find the previous post in the SubscriptionLog which is why we're checking for one...
-               assert.lengthOf(elements, 1, "Removed item from PICKER1 is not reflected in form value post");
+         .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "picker2.0.name", "One");
+               assert.notDeepProperty(payload, "picker1.1.name");
             });
       }
    });
