@@ -31,6 +31,7 @@ define(["module",
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
    var formControlSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/BaseFormControl");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
 
    var selectors = {
       form: {
@@ -58,11 +59,24 @@ define(["module",
          matchSource: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["MATCH_SOURCE"]),
             validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["MATCH_SOURCE"])
-         }
+         },
+         dialogTextBox: {
+            validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["DIALOG_FORM_TEXTBOX"])
+         },
+         
       },
       buttons: {
          blockResponse: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BLOCK_RESPONSE"]),
-         unblockResponse: TestCommon.getTestSelector(buttonSelectors, "button.label", ["UNBLOCK_RESPONSE"])
+         unblockResponse: TestCommon.getTestSelector(buttonSelectors, "button.label", ["UNBLOCK_RESPONSE"]),
+         showValidationDialog: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SHOW_VALIDATION_IN_DIALOG"]),
+      },
+      dialogs: {
+         checkMessage: {
+            confirmationButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.confirmation.button", ["VALIDATION_DIALOG"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(dialogSelectors, "disabled.form.dialog.confirmation.button", ["VALIDATION_DIALOG"]),
+            displayed: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["VALIDATION_DIALOG"]),
+            hidden: TestCommon.getTestSelector(dialogSelectors, "hidden.dialog", ["VALIDATION_DIALOG"]),
+         }
       }
    };
 
@@ -309,6 +323,17 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 0, "The forms confirmation button should be disabled");
             });
+      },
+
+      "Validation message visible with no label in form dialog": function() {
+         return this.remote.findByCssSelector(selectors.buttons.showValidationDialog)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.checkMessage.displayed)
+         .end()
+
+         .findDisplayedByCssSelector(selectors.textBoxes.dialogTextBox.validationMessage);
       }
    });
 });

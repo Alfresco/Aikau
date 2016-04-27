@@ -18,8 +18,14 @@
       margin: 0 4px;
       width: 16px;
    }
+   &--no-label {
+      > .title-row {
+         display: none;
+      }
+   }
    &--invalid {
       > .title-row {
+         display: block;
          > .alfresco-forms-controls-BaseFormControl__validation-error {
             display: inline-block;
          }

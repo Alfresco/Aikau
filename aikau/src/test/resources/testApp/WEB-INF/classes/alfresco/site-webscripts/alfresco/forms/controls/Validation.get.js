@@ -11,6 +11,7 @@ model.jsonModel = {
             }
          }
       },
+      "alfresco/services/DialogService",
       "aikauTesting/mockservices/FormControlValidationTestService",
       "alfresco/services/ErrorReporter"
    ],
@@ -24,7 +25,8 @@ model.jsonModel = {
                   id: "TEST_CONTROL",
                   name: "alfresco/forms/controls/DojoValidationTextBox",
                   config: {
-                     label: "Three Letters Or More",
+                     label: null, // PLEASE NOTE: Label left intentionally blank for testing purposes (AKU-951)
+                     description: "Three Letters Or More",
                      name: "name",
                      value: "",
                      validationConfig: [
@@ -140,7 +142,40 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "SHOW_VALIDATION_IN_DIALOG",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show validation in dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "VALIDATION_DIALOG",
+               dialogTitle: "Validation in Form Dialog",
+               formSubmissionTopic: "POST_DIALOG_FORM",
+               formSubmissionGlobal: true,
+               widgets: [
+                  {
+                     id: "DIALOG_FORM_TEXTBOX",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        label: null, // PLEASE NOTE: Label left intentionally blank for testing purposes (AKU-951)
+                        description: "Three Letters Or More",
+                        name: "name",
+                        value: "",
+                        validationConfig: [
+                           {
+                              validation: "minLength",
+                              length: 3,
+                              errorMessage: "Too short"
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
