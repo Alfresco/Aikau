@@ -1249,7 +1249,6 @@ define(["dojo/_base/declare",
             }
             else
             {
-               // domStyle.set(this._titleRowNode, {display: "none"});
                domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--no-label");
             }
 
