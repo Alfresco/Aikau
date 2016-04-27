@@ -1073,6 +1073,10 @@ define(["dojo/_base/declare",
          {
             this.validationInProgressImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationInProgressImg);
          }
+
+         // Make sure that the label is set, in case it's explicitly set as null and overrides the default...
+         this.label = this.label || "";
+
          this.validationInProgressAltText = this.message(this.validationInProgressAltText, {
             0: this.message(this.label)
          });
@@ -1245,7 +1249,7 @@ define(["dojo/_base/declare",
             }
             else
             {
-               domStyle.set(this._titleRowNode, {display: "none"});
+               domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--no-label");
             }
 
             // Set the description...
