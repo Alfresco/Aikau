@@ -155,6 +155,8 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onPageWidgetsReady: function alfresco_lists_AlfHashList__onPageWidgetsReady(/*jshint unused:false*/payload) {
+         /*jshint maxcomplexity:false*/
+
          // Remove the subscription to ensure it's only processed once...
          this.alfUnsubscribe(this.pageWidgetsReadySubcription);
 

@@ -599,7 +599,7 @@ define(["intern/dojo/node!fs",
          getNormalisedAverage: function(values) {
             var stdDev = this.getStdDeviation(values),
                average = this.getAverage(values),
-               normalised = values.filter(value => Math.abs(value - average) < stdDev);
+               normalised = values.filter(value => Math.abs(value - average) <= stdDev);
             return this.getAverage(normalised);
          },
 
@@ -1110,6 +1110,68 @@ define(["intern/dojo/node!fs",
                console.log("Deprecations: " + deprecations);
                console.log("Time taken:   " + timeTaken);
 
+               // Show information about average test durations
+               console.log("");
+               console.log("");
+               console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "===== TEST DURATIONS =====" + ANSI_CODES.Reset);
+               console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
+
+               // Calculate the average average test time per environment and remove non-slow-running test times
+               var totalLongRunningTests = 0;
+               Object.keys(this.requestedEnvironments).every(envKey => {
+                  var requestedEnv = this.requestedEnvironments[envKey],
+                     info = requestedEnv.info;
+                  if (!info || !info.average) {
+                     console.log("");
+                     console.log("No data!");
+                     return; // Something's gone wrong!
+                  }
+                  var msToString = ms => ms > 1000 ? `${Math.round(ms/100)/10} secs` : `${Math.round(ms)}ms`,
+                     average = msToString(info.average),
+                     normalisedAverage = msToString(info.normalisedAverage),
+                     longest = msToString(info.longest),
+                     shortest = msToString(info.shortest);
+                  totalLongRunningTests += info.numLongRunningTests;
+                  console.log("");
+                  console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + requestedEnv.realName + ANSI_CODES.Reset);
+                  console.log(`Fastest test: ${shortest}`);
+                  console.log(`Slowest test: ${longest}`);
+                  console.log(`Average test duration: ${average}`);
+                  console.log(`Average within standard-deviation:: ${normalisedAverage}`);
+                  return true;
+               });
+
+               // Output the slow-running tests
+               if (totalLongRunningTests) {
+                  console.log("");
+                  console.log("");
+                  console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
+                  console.log(ANSI_CODES.Bright + "===== SLOWEST TESTS =====" + ANSI_CODES.Reset);
+                  console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
+                  console.log("");
+                  console.log(`${ANSI_CODES.Bright}NOTE:${ANSI_CODES.Reset} These are the ${CONFIG.NumLongestRunningTests} slowest-running tests per environment, where the test duration was at least ${CONFIG.LongRunningTestMs}ms`);
+                  Object.keys(this.requestedEnvironments).forEach(envKey => {
+                     var requestedEnv = this.requestedEnvironments[envKey],
+                        envName = requestedEnv.realName,
+                        envInfo = requestedEnv.info,
+                        envTests = envInfo.envTests;
+                     console.log("");
+                     console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + envName + ANSI_CODES.Reset);
+                     if (envInfo.numLongRunningTests) {
+                        envTests.tests.forEach(suite => {
+                           console.log(ANSI_CODES.Bright + suite.name + ANSI_CODES.Reset);
+                           suite.tests.forEach(test => {
+                              console.log(`  - "${test.name}" took ${Math.round(test.timeElapsed / 10) / 100} secs`);
+                           });
+                        });
+                     } else {
+                        console.log("");
+                        console.log("No long-running tests for this environment");
+                     }
+                  });
+               }
+
                // Show the summary of the results
                console.log("");
                console.log("");
@@ -1196,62 +1258,6 @@ define(["intern/dojo/node!fs",
                   loggedSectionTitle = false;
 
                }, this);
-
-               // Show information about average test durations
-               console.log("");
-               console.log("");
-               console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
-               console.log(ANSI_CODES.Bright + "===== TEST DURATIONS =====" + ANSI_CODES.Reset);
-               console.log(ANSI_CODES.Bright + "==========================" + ANSI_CODES.Reset);
-
-               // Calculate the average average test time per environment and remove non-slow-running test times
-               var totalLongRunningTests = 0;
-               Object.keys(this.requestedEnvironments).forEach(envKey => {
-                  var requestedEnv = this.requestedEnvironments[envKey],
-                     info = requestedEnv.info,
-                     msToString = ms => ms > 1000 ? `${Math.round(ms/100)/10} secs` : `${Math.round(ms)}ms`,
-                     average = msToString(info.average),
-                     normalisedAverage = msToString(info.normalisedAverage),
-                     longest = msToString(info.longest),
-                     shortest = msToString(info.shortest);
-                  totalLongRunningTests += info.numLongRunningTests;
-                  console.log("");
-                  console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + requestedEnv.realName + ANSI_CODES.Reset);
-                  console.log(`Fastest test: ${shortest}`);
-                  console.log(`Slowest test: ${longest}`);
-                  console.log(`Average test duration: ${average}`);
-                  console.log(`Average within standard-deviation:: ${normalisedAverage}`);
-               });
-
-               // Output the slow-running tests
-               if (totalLongRunningTests) {
-                  console.log("");
-                  console.log("");
-                  console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
-                  console.log(ANSI_CODES.Bright + "===== SLOWEST TESTS =====" + ANSI_CODES.Reset);
-                  console.log(ANSI_CODES.Bright + "=========================" + ANSI_CODES.Reset);
-                  console.log("");
-                  console.log(`${ANSI_CODES.Bright}NOTE:${ANSI_CODES.Reset} These are the top ${CONFIG.NumLongestRunningTests} slowest running tests per environment, where the test duration was at least ${CONFIG.LongRunningTestMs}ms`);
-                  Object.keys(this.requestedEnvironments).forEach(envKey => {
-                     var requestedEnv = this.requestedEnvironments[envKey],
-                        envName = requestedEnv.realName,
-                        envInfo = requestedEnv.info,
-                        envTests = envInfo.envTests;
-                     console.log("");
-                     console.log(ANSI_CODES.Bright + ANSI_CODES.FgBlue + envName + ANSI_CODES.Reset);
-                     if (envInfo.numLongRunningTests) {
-                        envTests.tests.forEach(suite => {
-                           console.log(ANSI_CODES.Bright + suite.name + ANSI_CODES.Reset);
-                           suite.tests.forEach(test => {
-                              console.log(`  - "${test.name}" took ${Math.round(test.timeElapsed / 10) / 100} secs`);
-                           });
-                        });
-                     } else {
-                        console.log("");
-                        console.log("No long-running tests for this environment");
-                     }
-                  });
-               }
 
                // Log the other problems
                loggedSectionTitle = false;
