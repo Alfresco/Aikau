@@ -30,9 +30,15 @@
       color: @primary-font-color;
       cursor: pointer;
       display: inline-block;
+      float: left;
       font-size: @small-font-size;
       text-align: center;
       transition: background .2s ease-out, color .2s ease-out;
+      &__content {
+         margin: 0 8px;
+         overflow: hidden;
+         text-overflow: ellipsis;
+      }
    }
 }
 
