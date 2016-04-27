@@ -843,6 +843,7 @@ define(["module",
             .end()
 
          .execute(function() {
+               /*jshint browser:true*/
                return !!window.jsInjected;
             })
             .then(function(jsInjected) {
