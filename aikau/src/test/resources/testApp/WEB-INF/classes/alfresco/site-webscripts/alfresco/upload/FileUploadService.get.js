@@ -18,6 +18,7 @@ model.jsonModel = {
                {
                   name: "alfresco/upload/UploadMonitor",
                   config: {
+                     useEllipsisForLongFilenames: true,
                      widgetsForSuccessfulActions: [
                         {
                            name: "alfresco/html/SVGImage",
@@ -56,6 +57,26 @@ model.jsonModel = {
                   {
                      size: 1337,
                      name: "File for v1 API.docx"
+                  }
+               ],
+               targetData: {
+                  destination: "some://fake/node"
+               }
+            }
+         }
+      },
+      {
+         id: "LONG_FILENAME_UPLOAD",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Long Filename Upload",
+            publishTopic: "ALF_UPLOAD_REQUEST",
+            publishPayload: {
+               alfResponseTopic: "UPLOAD_COMPLETE_OR_CANCELLED",
+               files: [
+                  {
+                     size: 987654351,
+                     name: "This is a really long filename that should definitely cause display problems on any sensible display resolution.xls"
                   }
                ],
                targetData: {
