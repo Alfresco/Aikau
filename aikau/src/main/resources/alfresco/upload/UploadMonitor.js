@@ -106,6 +106,18 @@ define(["alfresco/core/FileSizeMixin",
       maxUploadNameLength: 50,
 
       /**
+       * If set to true, this will override the [maxUploadNameLength property]{@see module:alfresco/upload/UploadMonitor#maxUploadNameLength}
+       * and any long filenames will instead be truncated instead by the available space, with an ellipsis used at the end of the string to
+       * denote any missing characters.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.66
+       */
+      useEllipsisForLongFilenames: false,
+
+      /**
        * <p>This collection of [PublishAction]{@link module:alfresco/renderers/PublishAction} widgets
        * will be displayed against each inprogress item in the upload monitor. The upload item
        * (containing relevant information) will be added as the current item, and the
@@ -209,6 +221,9 @@ define(["alfresco/core/FileSizeMixin",
        */
       postCreate: function alfesco_upload_UploadMonitor__postCreate() {
          this.alfSubscribe(topics.UPLOAD_MODIFY_ITEM, lang.hitch(this, this.handleModifyItem));
+         if (this.useEllipsisForLongFilenames) {
+            domClass.add(this.domNode, this.baseClass + "--use-ellipsis");
+         }
       },
 
       /**
@@ -274,7 +289,8 @@ define(["alfresco/core/FileSizeMixin",
             }, itemRow),
             itemNameContent = domConstruct.create("div", {
                className: this.baseClass + "__item__name__content",
-               textContent: this.getDisplayText(file)
+               textContent: this.getDisplayText(file),
+               title: this.getDisplayText(file, true)
             }, itemName),
             itemProgress = domConstruct.create("td", {
                className: this.baseClass + "__item__progress"
@@ -370,9 +386,10 @@ define(["alfresco/core/FileSizeMixin",
        *
        * @instance
        * @param {object} file The upload file
+       * @param {boolean} [doNotTruncate=false] If true then will prevent truncating the display text
        * @returns {string} The name of the upload to be deisplayed
        */
-      getDisplayText: function alfesco_upload_UploadMonitor__getDisplayText(file) {
+      getDisplayText: function alfesco_upload_UploadMonitor__getDisplayText(file, doNotTruncate) {
 
          // Create upload name as "filename.ext, xxx kB"
          var filename = file.name,
@@ -381,7 +398,9 @@ define(["alfresco/core/FileSizeMixin",
             uploadName = filename + separator + filesize;
 
          // If filename is too long, adjust
-         if (uploadName.length > this.maxUploadNameLength) {
+         if (this.useEllipsisForLongFilenames) {
+            uploadName = uploadName.split("").reverse().join("");
+         } else if (!doNotTruncate && uploadName.length > this.maxUploadNameLength) {
 
             // Calculate how long name can be
             var maxNameLength = this.maxUploadNameLength - filesize.length - separator.length;
