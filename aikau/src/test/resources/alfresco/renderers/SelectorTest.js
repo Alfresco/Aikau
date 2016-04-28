@@ -18,11 +18,8 @@
  */
 
 /**
- * This test renders examples of FileTypes.
- *
- * The test is simple and much of its validity is in the use of slightly damaged or incomplete models to inspect edge cases.
- *
- * @author Richard Smith
+ * @author Dave Draper
+ * @since 1.0.66
  */
 define(["module",
         "alfresco/defineSuite",
