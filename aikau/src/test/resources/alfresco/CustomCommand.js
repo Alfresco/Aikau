@@ -554,6 +554,27 @@ define(["intern/dojo/node!fs",
          },
 
          /**
+          * Reload the page (but using a get of the current page, rather than reload, to avoid coverage info loss)
+          *
+          * @instance
+          * @since 1.0.66
+          */
+         reload: function() {
+
+            // Boilerplate
+            return new this.constructor(this, function() {
+               var browser = this.parent;
+
+               return browser.getCurrentUrl()
+                  .then(function(currentUrl) {
+                     return browser.get(currentUrl);
+                  })
+                  .findByCssSelector("body")
+                  .end()
+            });
+         },
+
+         /**
           * <p>Take a screenshot, and save to the src/test/screenshots directory. Can take up to
           * three arguments, in any order, where the argument type dictates how it's treated.</p>
           *
