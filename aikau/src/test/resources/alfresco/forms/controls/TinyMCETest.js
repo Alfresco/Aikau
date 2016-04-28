@@ -47,6 +47,15 @@ define(["module",
             }).clearLog();
       },
 
+      // See AKU-952
+      "Custom editor can be used": function() {
+         return this.remote.findByCssSelector(".custom-tiny-mce-editor");
+      },
+
+      "Custom toolbar and plugins can be configured": function() {
+         return this.remote.findByCssSelector("#TINY_MCE_2 .mce-i-spellchecker");
+      },
+
       // See AKU-711...
       "Focus is set in dialog form": function() {
          return this.remote.findById("CREATE_FORM_DIALOG_label")

@@ -348,13 +348,22 @@ define(["dojo/_base/declare",
                }
             };
          }
-         config.plugins = [
-            "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-            "searchreplace code fullscreen insertdatetime nonbreaking",
-            "table contextmenu paste textcolor visualblocks autoresize"
-         ];
+         if (!config.plugins)
+         {
+            config.plugins = [
+               "advlist autolink link image lists charmap print preview hr anchor pagebreak",
+               "searchreplace code fullscreen insertdatetime nonbreaking",
+               "table contextmenu paste textcolor visualblocks autoresize"
+            ];
+         }
+         if (config.additionalPlugins)
+         {
+            config.plugins = config.plugins.concat(config.additionalPlugins);
+         }
+         
          config.init_instance_callback = lang.hitch(this, this.editorInitialized);
 
+         this.updateEditorConfig(config);
          this.editor = new tinymce.Editor(this.editorNode, config, tinymce.EditorManager);
 
          // Allow back the "embed" tag as TinyMCE now removes it - this is allowed by our this.editors
@@ -365,6 +374,20 @@ define(["dojo/_base/declare",
          this.editor.render();
          this.editor.save();
          return this;
+      },
+
+      /**
+       * This is an extension point function that provides the opportunity for extending widgets to 
+       * make updates to the default configuration. This allows non-configurable options to be added
+       * to the configuration such as specific callback overrides for configuration plugins.
+       * 
+       * @instance
+       * @param {object} config The configuration object to be updated
+       * @since 1.0.66
+       * @overridable
+       */
+      updateEditorConfig: function alfresco_editors_TinyMCE__createEditor(/* jshint unused:false*/ config) {
+         // No action by default
       },
 
       /**
