@@ -288,11 +288,15 @@ define(["alfresco/core/Core",
                labelNode = domConstruct.create("label", {
                   "for": optionId, // Quoted because reserved word
                   className: this.rootClass + "__label"
-               }, this.domNode);
+               }, this.domNode),
+               labelContentNode = domConstruct.create("div", {
+                  className: this.rootClass + "__label__content"
+               }, labelNode);
 
             // Add the label content (just text initially)
-            var labelContent = document.createTextNode(option.label || option.name || option.value);
-            labelNode.appendChild(labelContent);
+            var labelText = (option.label || option.name || option.value);
+            labelContentNode.textContent = labelText;
+            labelNode.setAttribute("title", labelText);
 
             // Setup change-listener
             var changeListener = on(inputNode, "change", lang.hitch(this, this._onInputChanged));
@@ -303,6 +307,7 @@ define(["alfresco/core/Core",
                id: optionId,
                inputNode: inputNode,
                labelNode: labelNode,
+               labelContentNode: labelContentNode,
                changeListener: changeListener,
                option: option
             });
@@ -386,7 +391,7 @@ define(["alfresco/core/Core",
             if (!this.width) {
                var maxLabelWidth = 0;
                array.forEach(this.opts, function(opt) {
-                  maxLabelWidth = Math.max(maxLabelWidth, opt.labelNode.scrollWidth);
+                  maxLabelWidth = Math.max(maxLabelWidth, opt.labelContentNode.scrollWidth);
                });
                var minLineLength = (maxLabelWidth + this.minPadding) * buttonsPerLine / (availButtonPercent / 100);
                domStyle.set(this.domNode, "width", Math.ceil(minLineLength) + "px");
