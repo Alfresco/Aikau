@@ -252,6 +252,7 @@ define(function() {
       "alfresco/renderers/PublishPayloadMixinOnActionsTest",
       "alfresco/renderers/ReorderTest",
       "alfresco/renderers/SearchResultPropertyLinkTest",
+      "alfresco/renderers/SelectorTest",
       "alfresco/renderers/SocialRenderersTest",
       "alfresco/renderers/TagsTest",
       "alfresco/renderers/ThumbnailTest",

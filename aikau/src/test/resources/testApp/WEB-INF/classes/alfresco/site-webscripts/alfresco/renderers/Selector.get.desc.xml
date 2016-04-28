@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Selector Renderer</shortname>
+  <description>Displays Selector renderers for testing.</description>
+  <family>aikau-unit-tests</family>
+  <url>/Selector</url>
+</webscript>
