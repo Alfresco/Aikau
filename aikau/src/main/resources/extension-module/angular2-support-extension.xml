@@ -1,0 +1,17 @@
+<extension>
+   <id>Angular 2 Support Extension (version: ${project.version})</id>
+   <modules>
+      <module>
+         <id>Angular2 Support (version: ${project.version})</id>
+         <version>${project.version}</version>
+         <auto-deploy>false</auto-deploy>
+         <evaluator type="default.extensibility.evaluator"/>
+         <customizations>
+            <customization>
+               <targetPackageRoot>dojo</targetPackageRoot>
+               <sourcePackageRoot>customizations/${webscript.version}</sourcePackageRoot>
+            </customization>
+         </customizations>
+    </module>
+  </modules>
+</extension>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Angular 2 Prototype</shortname>
+  <description>Example page for testing Angular 2 integration. This page will NOT work unless the support module is applied and the page is updated to reference some Angular 2 Components.</description>
+  <family>aikau-unit-tests</family>
+  <url>/Angular2</url>
+</webscript>
