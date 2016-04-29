@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       createFormControl: function alfresco_forms_controls_TinyMCE__createFormControl(config) {
-         if (!this.widgetsForEditor && !this.widgetsForEditor[0])
+         if (!this.widgetsForEditor || !this.widgetsForEditor[0])
          {
             this.alfLog("warn", "There is no 'widgetsForEditor' model defined, using default", this);
             this.widgetsForEditor = [
