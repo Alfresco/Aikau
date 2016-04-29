@@ -224,7 +224,7 @@ model.jsonModel = {
                                     id: "LONG_BUTTONS",
                                     config: {
                                        additionalCssClasses: "grey-gradient",
-                                       name: "onedeselectable",
+                                       name: "longbuttons",
                                        label: "Long button labels",
                                        description: "Config options: multiMode=true, noWrap=true, width=300",
                                        multiMode: true,
