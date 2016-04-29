@@ -28,6 +28,29 @@ model.jsonModel = {
                      label: "Content",
                      name: "RichText"
                   }
+               },
+               {
+                  id: "TINY_MCE_2",
+                  name: "alfresco/forms/controls/TinyMCE",
+                  config: {
+                     label: "Custom Editor",
+                     name: "RichText2",
+                     editorConfig: {
+                        toolbar: "spellchecker",
+                        browser_spellcheck: true,
+                        additionalPlugins: [
+                           "spellchecker"
+                        ]
+                     },
+                     widgetsForEditor: [
+                        {
+                           name: "aikauTesting/widgets/CustomTinyMceEditor",
+                           config: {
+                              additionalCssClasses: "custom-tiny-mce-editor"
+                           }
+                        }
+                     ]
+                  }
                }
             ]
          }
@@ -57,9 +80,6 @@ model.jsonModel = {
       },
       {
          name: "alfresco/logging/DebugLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
       }
    ]
 };
