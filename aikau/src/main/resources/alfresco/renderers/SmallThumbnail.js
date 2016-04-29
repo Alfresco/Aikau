@@ -31,6 +31,29 @@ define(["dojo/_base/declare",
    return declare([Thumbnail], {
       
       /**
+       * Overrides the [inherited attribute]{@link module:alfresco/renderers/Thumbnail#folderImage} to 
+       * use the appropriately sized folder image.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.66
+       */
+      folderImage: "folder-32.png",
+
+      /**
+       * Overrides the [inherited attribute]{@link module:alfresco/renderers/Thumbnail#folderImageSize} to 
+       * use when mapping folder images to 
+       * [folderImageAspectMappings]{@link module:alfresco/renderers/Thumbnails#folderImageAspectMappings}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.66
+       */
+      folderImageSize: "32",
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/renderers/Thumbnail#postMixInProperties}
        * to set the standard small thumbnail dimensions.
        * 
@@ -59,7 +82,7 @@ define(["dojo/_base/declare",
              jsNode = this.currentItem.jsNode;
          if (jsNode.isContainer || (jsNode.isLink && jsNode.linkedNode.isContainer))
          {
-            url = require.toUrl("alfresco/renderers/css/images/filetypes/generic-folder-32.png");
+            url = this.getFolderImage();
             // TODO: DnD
          }
          else

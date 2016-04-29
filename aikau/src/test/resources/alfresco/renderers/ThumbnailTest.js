@@ -43,8 +43,24 @@ define(["module",
       "Check there are the expected number of thumbnails successfully rendered": function() {
          return this.remote.findAllByCssSelector("span.alfresco-renderers-Thumbnail")
             .then(function(elements) {
-               assert.lengthOf(elements, 9, "There should be 9 thumbnails successfully rendered");
+               assert.lengthOf(elements, 11);
             });
+      },
+
+      "Normal smart folder has the right image": function() {
+         return this.remote.findDisplayedByCssSelector("#NORMAL_SMART_FOLDER .alfresco-renderers-Thumbnail__image")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "smart-folder-64.png");
+         });
+      },
+
+      "Small smart folder has the right image": function() {
+         return this.remote.findDisplayedByCssSelector("#SMALL_SMART_FOLDER .alfresco-renderers-Thumbnail__image")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "smart-folder-32.png");
+         });
       },
 
       "Standard document link": function() {

@@ -110,6 +110,7 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_ItemLinkMixin",
         "service/constants/Default",
         "alfresco/core/topics",
+        "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/_base/event",
         "dojo/dom-class",
@@ -120,7 +121,7 @@ define(["dojo/_base/declare",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                  _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, template, AlfCore, _ItemLinkMixin,
-                 AlfConstants, topics, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
+                 AlfConstants, topics, array, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                    AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
@@ -230,13 +231,39 @@ define(["dojo/_base/declare",
 
       /**
        * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
-       * and "folder-256.png".
+       * and "folder-256.png". 
        *
        * @instance
        * @type {string}
        * @default
        */
       folderImage: "folder-64.png",
+
+      /**
+       * This is a mapping of aspects to folder images. It was added to support custom folder images for 
+       * Smart Folders but can be reconfigured as necessary. If no configuration is provided then a default
+       * set of mappings will be assigned.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.66
+       */
+      folderImageAspectMappings: null,
+
+      /**
+       * This is a suffix to append to folder images matched according to the 
+       * [folderImageAspectMappings]{@link module:alfresco/renderers/Thumbnails#folderImageAspectMappings}.
+       * Folder image sizes are typically "32", "48", "64" and "256". For backwards compatibility reasons, this
+       * will only be used when a folder is matched to an entry in the 
+       * [folderImageAspectMappings]{@link module:alfresco/renderers/Thumbnails#folderImageAspectMappings}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.66
+       */
+      folderImageSize: "64",
 
       /**
        * Indicates whether or not the thumbnail image should be given a shadow effect.
@@ -522,6 +549,14 @@ define(["dojo/_base/declare",
          this.imgAltText = "";
          this.imgTitle = "";
 
+         // See AKU-941 - support for smart folders
+         if (!this.folderImageAspectMappings)
+         {
+            this.folderImageAspectMappings = {
+               "smf:smartFolder": "alfresco/renderers/css/images/filetypes/smart-folder"
+            };
+         }
+
          if (this.currentItem && this.thumbnailUrlTemplate)
          {
             // If we have an explicitly decared thumbnail URL template then use that initially, this
@@ -611,7 +646,25 @@ define(["dojo/_base/declare",
        * @instance
        */
       getFolderImage: function alfresco_renderers_Thumbnail__getDefaultFolderImage() {
-         return require.toUrl("alfresco/renderers") + "/css/images/" + this.folderImage;
+         var url, jsNode = this.currentItem.jsNode;
+         if(jsNode && jsNode.aspects)
+         {
+            array.some(jsNode.aspects, function(aspect) {
+               var mappedImage = this.folderImageAspectMappings[aspect];
+               if(mappedImage) 
+               {
+                  var image = mappedImage + "-" + this.folderImageSize + ".png";
+                  url = require.toUrl(image);
+               }
+               return !!mappedImage;
+            }, this);
+            
+         }
+         if (!url)
+         {
+            url = require.toUrl("alfresco/renderers/css/images/" + this.folderImage);
+         }
+         return url;
       },
       
       /**
