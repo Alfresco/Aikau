@@ -110,6 +110,7 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_ItemLinkMixin",
         "service/constants/Default",
         "alfresco/core/topics",
+        "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/_base/event",
         "dojo/dom-class",
@@ -120,7 +121,7 @@ define(["dojo/_base/declare",
         "dojo/when"], 
         function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                  _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, template, AlfCore, _ItemLinkMixin,
-                 AlfConstants, topics, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
+                 AlfConstants, topics, array, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
                    AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
@@ -648,15 +649,16 @@ define(["dojo/_base/declare",
          var url, jsNode = this.currentItem.jsNode;
          if(jsNode && jsNode.aspects)
          {
-            for (var key in this.folderImageAspectMappings)
-            {
-               if(this.folderImageAspectMappings.hasOwnProperty(key) && jsNode.aspects.indexOf("smf:smartFolder") !== -1) 
+            array.some(jsNode.aspects, function(aspect) {
+               var mappedImage = this.folderImageAspectMappings[aspect];
+               if(mappedImage) 
                {
-                  var image = this.folderImageAspectMappings[key] + "-" + this.folderImageSize + ".png";
+                  var image = mappedImage + "-" + this.folderImageSize + ".png";
                   url = require.toUrl(image);
-                  break;
                }
-            }
+               return !!mappedImage;
+            }, this);
+            
          }
          if (!url)
          {
