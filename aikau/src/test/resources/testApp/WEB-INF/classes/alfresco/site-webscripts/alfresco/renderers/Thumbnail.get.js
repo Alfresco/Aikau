@@ -287,6 +287,57 @@ model.jsonModel = {
          }
       },
       {
+         id: "SMART_FOLDERS",
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Smart folder",
+            widgets: [
+               {
+                  id: "NORMAL_SMART_FOLDER",
+                  name: "alfresco/renderers/Thumbnail",
+                  config: {
+                     currentItem: {
+                        node: {
+                           isContainer: true,
+                           aspects: [
+                              "cm:auditable",
+                              "sys:referenceable",
+                              "cm:titled",
+                              "smf:smartFolder",
+                              "cm:taggable",
+                              "sys:localized"
+                           ]
+                        },
+                        nodeRef: "workspace://SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28",
+                        displayName: "Smart Folder"
+                     }
+                  }
+               },
+               {
+                  id: "SMALL_SMART_FOLDER",
+                  name: "alfresco/renderers/SmallThumbnail",
+                  config: {
+                     currentItem: {
+                        node: {
+                           isContainer: true,
+                           aspects: [
+                              "cm:auditable",
+                              "sys:referenceable",
+                              "cm:titled",
+                              "smf:smartFolder",
+                              "cm:taggable",
+                              "sys:localized"
+                           ]
+                        },
+                        nodeRef: "workspace://SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28",
+                        displayName: "Smart Folder"
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "aikauTesting/mockservices/ThumbnailsMockXhr"
       },
       {

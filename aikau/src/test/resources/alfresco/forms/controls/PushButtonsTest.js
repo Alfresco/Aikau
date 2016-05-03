@@ -32,7 +32,7 @@ define(["module",
       testPage: "/PushButtons",
 
       "Initial value is set correctly": function() {
-         return this.remote.findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+         return this.remote.findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()
@@ -60,7 +60,7 @@ define(["module",
             .click()
             .end()
 
-         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()
@@ -92,7 +92,7 @@ define(["module",
             .pressKeys(keys.SPACE)
             .end()
 
-         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()
@@ -110,7 +110,7 @@ define(["module",
             .click()
             .end()
 
-         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()
@@ -122,7 +122,7 @@ define(["module",
       },
 
       "Multi-mode control can act as deselectable radio buttons": function() {
-         return this.remote.findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+         return this.remote.findByCssSelector("#RIGHT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()
@@ -140,7 +140,7 @@ define(["module",
             .click()
             .end()
 
-         .findByCssSelector("#TEST_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector("#RIGHT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
             .end()

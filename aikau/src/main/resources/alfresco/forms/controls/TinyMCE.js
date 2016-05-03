@@ -24,12 +24,13 @@
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @author Dave Draper
  */
-define(["alfresco/forms/controls/BaseFormControl",
-        "dojo/_base/declare",
-        "alfresco/editors/TinyMCE"], 
-        function(BaseFormControl, declare, TinyMCE) {
+define(["dojo/_base/declare",
+        "alfresco/forms/controls/BaseFormControl",
+        "alfresco/core/CoreWidgetProcessing",
+        "dojo/_base/lang"], 
+        function(declare, BaseFormControl, CoreWidgetProcessing, lang) {
    
-   return declare([BaseFormControl], {
+   return declare([BaseFormControl, CoreWidgetProcessing], {
       
       /**
        * This indicates whether or not the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}
@@ -56,17 +57,34 @@ define(["alfresco/forms/controls/BaseFormControl",
             immediateInit: false,
             contentChangeScope: this,
             contentChangeHandler: this.onEditorValueChange,
-            autoResize: this.autoResize
+            autoResize: this.autoResize,
+            editorConfig: this.editorConfig
          };
       },
       
       /**
-       * Creates a new instance of the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}.
+       * Builds the configured [editor model]{@link module:alfresco/forms/controls/TinyMCE#widgetsForEditor}.
        * 
        * @instance
        */
       createFormControl: function alfresco_forms_controls_TinyMCE__createFormControl(config) {
-         var editor = new TinyMCE(config);
+         if (!this.widgetsForEditor || !this.widgetsForEditor[0])
+         {
+            this.alfLog("warn", "There is no 'widgetsForEditor' model defined, using default", this);
+            this.widgetsForEditor = [
+               {
+                  name: "alfresco/editors/TinyMCE"
+               }
+            ];
+         }
+      
+         // Clone the default model and mixin in the configured configuration into the declared model...
+         var editorWidgets = lang.clone(this.widgetsForEditor);
+         var declaredConfig = lang.getObject("0.config", true, editorWidgets);
+         lang.mixin(declaredConfig, config);
+         
+         // Create the widget
+         var editor = this.createWidget(editorWidgets[0]);
          return editor;
       },
 
@@ -118,6 +136,22 @@ define(["alfresco/forms/controls/BaseFormControl",
          {
             this.wrappedWidget.setDisabled(this._disabled);
          }
-      }
+      },
+
+      /**
+       * This is the default model for creating the editor to be displayed. It provides a way in which
+       * the default editor can be extended and used within the standard form control. The main reason 
+       * for wanting to use a customized version of the [default TinyMCE editor]{@link module:alfresco/editors/TinyMCE} is
+       * to provide custom callbacks for plugins. 
+       * 
+       * @instance
+       * @type {object[]}
+       * @since 1.0.66
+       */
+      widgetsForEditor: [
+         {
+            name: "alfresco/editors/TinyMCE"
+         }
+      ]
    });
 });

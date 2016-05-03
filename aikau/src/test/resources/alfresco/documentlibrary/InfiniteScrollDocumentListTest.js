@@ -96,13 +96,8 @@ define(["module",
       },
 
       "Reload the page and check initial sorting displayed": function() {
-         return this.remote.getCurrentUrl()
-            .then(currentUrl => {
-               return this.remote.get(currentUrl);
-            })
-            .findByCssSelector("body")
-            .end()
-
+         return this.remote.reload()
+         
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
          .findDisplayedByCssSelector(selectors.headerCells.all.indicators);

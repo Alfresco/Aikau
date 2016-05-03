@@ -58,6 +58,7 @@ define(["module",
          secondResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "2"]),
          fourthResult: TestCommon.getTestSelector(MultiSelectInputSelectors, "nth.result", ["MULTISELECT_1", "4"]),
          searchbox: TestCommon.getTestSelector(MultiSelectInputSelectors, "searchbox", ["MULTISELECT_1"]),
+         noresults: TestCommon.getTestSelector(MultiSelectInputSelectors, "no.results.message", ["MULTISELECT_1"])
       },
       control2: {
          loaded: TestCommon.getTestSelector(MultiSelectInputSelectors, "options.loaded.state", ["MULTISELECT_2"]),
@@ -816,6 +817,41 @@ define(["module",
             .then(function(text) {
                assert.equal(text, "tag11", "Did not display second tag label correctly");
             });
+      },
+
+      // STATE AFTER THIS TEST
+      //
+      // Control 1
+      //    choices: "tag1", "tag11"
+      //    *searchbox: "<img src="1" onerror="window.jsInjected=true;">"
+      //    results dropdown: hidden
+      //
+      // Control 2
+      //    choices: "Those that belong to the emperor"
+      //    searchbox: ""
+      //    results dropdown: hidden
+      //
+      // Misc
+      //    *focused element: Focus-helper button
+      //
+      "Input string is not inserted into DOM as HTML": function() {
+         return this.remote.findByCssSelector(selectors.control1.searchbox)
+            .type("<img src=\"1\" onerror=\"window.jsInjected=true;\">")
+            .end()
+
+         .findDisplayedByCssSelector(selectors.control1.noresults)
+            .end()
+
+         .execute(function() {
+               /*jshint browser:true*/
+               return !!window.jsInjected;
+            })
+            .then(function(jsInjected) {
+               assert.isFalse(jsInjected);
+            })
+      
+         .findById("FOCUS_HELPER_BUTTON")
+            .click();
       }
    });
 

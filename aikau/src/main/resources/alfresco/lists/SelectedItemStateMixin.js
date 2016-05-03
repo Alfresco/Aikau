@@ -178,7 +178,7 @@ define(["dojo/_base/declare",
          if (payload && payload.value)
          {
             var itemKey = lang.getObject(this.itemKeyProperty, false, payload.value);
-            if (itemKey)
+            if (typeof itemKey !== "undefined")
             {
                delete this.currentlySelectedItems[itemKey];
                if (this.selectionTimeout)
@@ -203,7 +203,7 @@ define(["dojo/_base/declare",
          if (payload && payload.value)
          {
             var itemKey = lang.getObject(this.itemKeyProperty, false, payload.value);
-            if (itemKey)
+            if (typeof itemKey !== "undefined")
             {
                this.currentlySelectedItems[itemKey] = payload.value;
                if (this.selectionTimeout)

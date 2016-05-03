@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.66-SNAPSHOT</version>
+   <version>1.0.67-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -176,6 +176,13 @@
          </resource>
 
          <resource>
+            <!-- Extension WebScripts can't use a version with dots, so an Ant plugin renames the target folder later -->
+             <targetPath>./alfresco/site-webscripts/customizations/${project.version}</targetPath>
+            <filtering>true</filtering>
+            <directory>${basedir}/src/main/resources/extension-webscripts</directory>
+         </resource>
+
+         <resource>
             <!-- WebScripts go into their own package -->
             <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/${project.version}/webscripts</targetPath>
             <filtering>true</filtering>
@@ -275,6 +282,19 @@
                         <copy todir="${project.build.testOutputDirectory}/testApp/WEB-INF/classes">
                            <fileset dir="${project.build.testOutputDirectory}" includes="**/*.class" />
                         </copy>
+                      </target>
+                  </configuration>
+                </execution>
+                <execution>
+                  <id>rename-extensions-folder</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <echo>Renaming folder</echo>
+                        <move file="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${webscript.version}" />
                       </target>
                   </configuration>
                 </execution>

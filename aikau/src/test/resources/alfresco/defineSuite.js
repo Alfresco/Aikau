@@ -23,23 +23,11 @@
  * @author Martin Doyle
  * @since 1.0.62
  */
-define(["intern/dojo/node!fs", 
-        "intern/dojo/node!os", 
-        "intern/dojo/node!path", 
-        "intern/dojo/node!process", 
-        "safe-json-serialiser", 
+define(["safe-json-serialiser", 
         "intern!object", 
         "intern/chai!assert", 
-        "alfresco/TestCommon", 
-        "intern"], 
-        function(fs, os, path, process, safeJson, registerSuite, assert, TestCommon, intern) {
-
-   // // This file-logging function can be used during debugging testing
-   // function logToFile(message) {
-   //    var timestamp = "[" + (new Date()).toISOString() + "] ",
-   //       logFilename = process.cwd() + "/test_reports/defineSuite.log";
-   //    fs.appendFileSync(logFilename, timestamp + message + os.EOL, "utf8");
-   // }
+        "alfresco/TestCommon"], 
+        function(safeJson, registerSuite, assert, TestCommon) {
 
    // Pass back a function which will augment the suite and then register it
    return function(module, suiteDefinition) {
@@ -50,8 +38,7 @@ define(["intern/dojo/node!fs",
       }
 
       // Setup variables
-      var testFile = path.relative(intern.args.testsDir, module.id),
-         suiteToRegister = typeof suiteDefinition === "function" ? suiteDefinition() : suiteDefinition;
+      var suiteToRegister = typeof suiteDefinition === "function" ? suiteDefinition() : suiteDefinition;
 
       // Transfer config variables to a config object
       var suiteConfig = {};
@@ -61,7 +48,7 @@ define(["intern/dojo/node!fs",
       });
 
       // Setup the suite name
-      var suiteName = `${testFile}: "${suiteConfig.name}"`;
+      var suiteName = `${module.id}: "${suiteConfig.name}"`;
 
       // Define the "base" suite
       var baseSuite = {

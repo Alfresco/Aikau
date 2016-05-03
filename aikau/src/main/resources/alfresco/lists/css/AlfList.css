@@ -24,6 +24,7 @@
          line-height: @list-loading-message-line-height;
          padding: @list-loading-message-padding;
          top: -100%;
+         pointer-events: none;
          transition: @list-loading-message-transition;
       }
    }

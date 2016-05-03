@@ -1,4 +1,4 @@
-Aikau 1.0.65 Release Notes
+Aikau 1.0.66 Release Notes
 ===
 
 Previous deprecations:
@@ -47,6 +47,17 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.66:
+* [AKU-941](https://issues.alfresco.com/jira/browse/AKU-941)       - Add support for Smart Folders in alfresco/renderers/Thumbnail
+* [AKU-944](https://issues.alfresco.com/jira/browse/AKU-944)       - Improve encoding on data typed into MultiSelectInput
+* [AKU-946](https://issues.alfresco.com/jira/browse/AKU-946)       - Ensure list loading element does not block pointer events
+* [AKU-947](https://issues.alfresco.com/jira/browse/AKU-947)       - Improved rendering of long text on PushButton values
+* [AKU-949](https://issues.alfresco.com/jira/browse/AKU-949)       - Improved local storage handling in lists
+* [AKU-951](https://issues.alfresco.com/jira/browse/AKU-951)       - Ensure error messages are displayed on form controls without labels
+* [AKU-952](https://issues.alfresco.com/jira/browse/AKU-952)       - Improve TinyMCE configuration options
+* [AKU-953](https://issues.alfresco.com/jira/browse/AKU-953)       - Improve SelectedItemStateMixin value handling
+* [AKU-955](https://issues.alfresco.com/jira/browse/AKU-955)       - Improve rendering of upload display in FileUploadService
+
 1.0.65:
 * [AKU-907](https://issues.alfresco.com/jira/browse/AKU-907)       - Supoort line item removal from UploadMonitor
 * [AKU-929](https://issues.alfresco.com/jira/browse/AKU-929)       - Support close Notification by published topic

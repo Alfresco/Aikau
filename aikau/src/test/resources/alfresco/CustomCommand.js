@@ -27,28 +27,16 @@
  * @since 1.0.62
  */
 define(["intern/dojo/node!fs",
-      "intern/dojo/node!os",
-      "intern/dojo/node!process",
       "intern/dojo/node!leadfoot/Command",
       "intern/dojo/node!leadfoot/keys",
       "intern/dojo/Promise",
       "intern/dojo/lang",
-      "lodash",
-      "safe-json-serialiser"
+      "lodash"
    ],
-   function(fs, os, process, Command, keys, Promise, lang, _, safeJson) {
+   function(fs, Command, keys, Promise, lang, _) {
 
       // Necessary for ES6 features
       "use strict";
-
-      // This file-logging function can be used during debugging testing
-      function logToFile(message) {
-         var timestamp = "[" + (new Date()).toISOString() + "] ",
-            logFilename = process.cwd() + "/test_reports/CustomCommand.log",
-            safeMessage = typeof message === "string" ? message : safeJson.stringify(message);
-         fs.appendFileSync(logFilename, timestamp + safeMessage + os.EOL, "utf8");
-      }
-      logToFile(safeJson.stringify(""));
 
       // Define and add the custom properties
       // NOTE: Variables then methods, all alphabetical
@@ -550,6 +538,27 @@ define(["intern/dojo/node!fs",
                      horizontal: contentIsWider && canScrollHorizontally
                   };
                }, [selector]);
+            });
+         },
+
+         /**
+          * Reload the page (but using a get of the current page, rather than reload, to avoid coverage info loss)
+          *
+          * @instance
+          * @since 1.0.66
+          */
+         reload: function() {
+
+            // Boilerplate
+            return new this.constructor(this, function() {
+               var browser = this.parent;
+
+               return browser.getCurrentUrl()
+                  .then(function(currentUrl) {
+                     return browser.get(currentUrl);
+                  })
+                  .findByCssSelector("body")
+                  .end();
             });
          },
 
