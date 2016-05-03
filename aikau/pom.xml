@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.66-SNAPSHOT</version>
+   <version>1.0.66</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -294,8 +294,7 @@
                   <configuration>
                      <target>
                         <echo>Renaming folder</echo>
-                        <move file="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${project.version}"
-                              tofile="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${webscript.version}"/>
+                        <move file="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${webscript.version}" />
                       </target>
                   </configuration>
                 </execution>
