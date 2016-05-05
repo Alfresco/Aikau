@@ -45,9 +45,10 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/dom-construct",
         "dojo/dom-class",
+        "dojo/dom-style",
         "dojo/query"],
         function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, _AlfDndDocumentUploadMixin, ListRenderer,
-                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, query) {
+                 RenderAppendixSentinel, AlfCore, JsNode, WidgetsCreator, lang, array, domConstruct, domClass, domStyle, query) {
 
    return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _AlfDndDocumentUploadMixin], {
 
@@ -106,6 +107,17 @@ define(["dojo/_base/declare",
        * @default
        */
       itemsProperty: "response.items",
+
+      /**
+       * Minimum height for this view. Not used by default. Can be either a Number (treated as pixels) or
+       * a String (treated as CSS units).
+       *
+       * @instance
+       * @type {Number|String}
+       * @default
+       * @since 1.0.67
+       */
+      minHeight: null,
 
       /**
        * This can be set to be a custom message that is displayed when there are no items to
@@ -264,6 +276,12 @@ define(["dojo/_base/declare",
             this.renderView(false);
          }
          this._renderOptionalElements();
+
+         // Apply any min-height value
+         if (typeof this.minHeight === "number") {
+            this.minHeight += "px";
+         }
+         this.minHeight && domStyle.set(this.domNode, "min-height", this.minHeight);
       },
 
       /**
