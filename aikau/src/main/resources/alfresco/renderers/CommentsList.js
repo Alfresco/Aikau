@@ -43,6 +43,16 @@ define(["dojo/_base/declare",
    return declare([ProcessWidgets, ObjectProcessingMixin], {
 
       /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/CommentsList.css"}]
+       * @since 1.0.67
+       */
+      cssRequirements: [{cssFile:"./css/CommentsList.css"}],
+
+      /**
        * An array of the i18n files to use with this widget.
        *
        * @instance
@@ -106,6 +116,7 @@ define(["dojo/_base/declare",
                         publishPayloadType: "PROCESS",
                         publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
                         publishPayload: {
+                           dialogId: "ALF_COMMENTS_LIST_COMMENT_DIALOG",
                            dialogTitle: "comment.add",
                            dialogConfirmationButtonTitle: "comment.add.confirm",
                            dialogCancellationButtonTitle: "comment.add.cancel",
@@ -124,6 +135,9 @@ define(["dojo/_base/declare",
                                  name: "alfresco/forms/controls/TinyMCE",
                                  config: {
                                     name: "content",
+                                    requirementConfig: {
+                                       initialValue: true
+                                    },
                                     autoResize: "{addCommentsFullScreen}"
                                  }
                               }

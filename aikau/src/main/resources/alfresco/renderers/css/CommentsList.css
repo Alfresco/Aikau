@@ -1,0 +1,14 @@
+// This ensures the title row is NEVER displayed for comments dialog
+.alfresco-dialog-AlfDialog#ALF_COMMENTS_LIST_COMMENT_DIALOG {
+   .dialog-body {
+      .alfresco-forms-Form.root-dialog-form {
+         > form {
+            > .alfresco-forms-controls-BaseFormControl {
+               > .title-row {
+                  display: none;
+               }
+            }
+         }
+      }
+   }
+}
