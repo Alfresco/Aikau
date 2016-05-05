@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the comment update
        */
-      onEditSave: function alfresco_renderers_EditableComment__onEditSave(payload) {
+   onEditSave: function alfresco_renderers_EditableComment__onEditSave(payload) {
          this.onCancelEdit();
          var dataPayload = lang.clone(payload);
 
@@ -245,6 +245,11 @@ define(["dojo/_base/declare",
 
          // Mix the data into the configured payload and publish it!
          lang.mixin(generatedPayload, dataPayload);
+
+         // See AKU-957 - make sure that the parent pubSubScope is used. There might be a future case
+         // where we need to make this configurable, but this should work in all scopes - it was previously
+         // working at global scope, but the parentPubScope makes sense in all circumstances.
+         generatedPayload.responseScope = this.parentPubSubScope;
          this.alfPublish(this.publishTopic, generatedPayload, this.publishGlobal);
       },
 
