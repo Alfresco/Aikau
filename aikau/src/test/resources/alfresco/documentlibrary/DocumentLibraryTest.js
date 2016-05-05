@@ -172,6 +172,10 @@ define(["module",
          });
       },
 
+      "Upload is enabled for path view": function() {
+         return this.remote.findDisplayedByCssSelector(".alfresco-documentlibrary-AlfDocumentList--upload-enabled");
+      },
+
       "Switch to favourites filter": function() {
          return this.remote.then(() => {
                return switchToFilter(this.remote, "SCOPED_");
@@ -181,6 +185,13 @@ define(["module",
                var currHash = hashObjFromUrl(currentUrl);
                assert.propertyVal(currHash, "filter", "favourites", "Hash does not have correct filter parameter");
                assert.propertyVal(currHash, "description", "My%20Favorite%20Files%20and%20Folders", "Hash does not have correct description parameter");
+            });
+      },
+
+      "Upload is disabled for filter view": function() {
+         return this.remote.findAllByCssSelector(".alfresco-documentlibrary-AlfDocumentList--upload-enabled")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
             });
       },
 

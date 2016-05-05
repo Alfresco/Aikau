@@ -129,13 +129,21 @@ define(["dojo/_base/declare",
        */
       copyViewData: function alfresco_lists_AlfList__copyViewData(/*jshint unused:false*/oldView, newView) {
          this.inherited(arguments);
-         if (this.currentFilter && this.currentFilter.path)
+
+         // See AKU-954: Ensure DND upload permissions are set correctly...
+         var userPermissions = lang.getObject("currentData.metadata.parent.permissions.user", false, this);
+         var isContainer = lang.getObject("currentData.metadata.parent.isContainer", false, this);
+         if (userPermissions &&
+             ((isContainer === true && userPermissions.CreateChildren === true) ||
+             (isContainer === false && userPermissions.Write === true)))
          {
             newView.addUploadDragAndDrop(newView.dragAndDropNode);
+            domClass.add(newView.domNode, "alfresco-documentlibrary-AlfDocumentList--upload-enabled");
          }
          else
          {
             newView.removeUploadDragAndDrop(newView.dragAndDropNode);
+            domClass.remove(newView.domNode, "alfresco-documentlibrary-AlfDocumentList--upload-enabled");
          }
       },
 
