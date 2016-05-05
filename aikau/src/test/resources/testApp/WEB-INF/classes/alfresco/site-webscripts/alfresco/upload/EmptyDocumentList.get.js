@@ -13,11 +13,72 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/documentlibrary/AlfDocumentList",
+         name: "alfresco/layout/HorizontalWidgets",
          config: {
+            widgetMarginLeft: 10,
+            widgetMarginRight: 10,
             widgets: [
                {
-                  name: "alfresco/documentlibrary/views/AlfSimpleView"
+                  name: "alfresco/layout/VerticalWidgets",
+                  config: {
+                     widgets: [
+                        {
+                           name: "alfresco/html/Heading",
+                           config: {
+                              level: 3,
+                              label: "Empty list"
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR",
+                           config: {
+                              style: "background: #ccc; margin: 0 0 20px; width: 99%;"
+                           }
+                        },
+                        {
+                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           config: {
+                              currentData: [],
+                              pubSubScope: "EMPTY_LIST_",
+                              widgets: [
+                                 {
+                                    name: "alfresco/documentlibrary/views/AlfSimpleView"
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/layout/VerticalWidgets",
+                  config: {
+                     widgets: [
+                        {
+                           name: "alfresco/html/Heading",
+                           config: {
+                              level: 3,
+                              label: "Short list"
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR",
+                           config: {
+                              style: "background: #ccc; margin: 0 0 20px; width: 99%;"
+                           }
+                        },
+                        {
+                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "alfresco/documentlibrary/views/AlfSimpleView"
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
                }
             ]
          }
@@ -25,7 +86,7 @@ model.jsonModel = {
       {
          name: "alfresco/testing/NodesMockXhr",
          config: {
-            totalItems: 0
+            totalItems: 1
          }
       },
       {
