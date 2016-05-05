@@ -37,7 +37,7 @@
  */
 
 /**
- * Used by {@link module:AlfDocumentListView} and {@link module:ListRenderer}
+ * Used by {@link module:AlfListView} and {@link module:ListRenderer}
  *
  * @external dojo/_KeyNavContainer
  * @see http://dojotoolkit.org/reference-guide/1.9/dojo/_KeyNavContainer
