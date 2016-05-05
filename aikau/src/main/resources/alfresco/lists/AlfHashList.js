@@ -206,11 +206,20 @@ define(["dojo/_base/declare",
             }
             else 
             {
-               if (this.useLocalStorageHashFallback === true && 
-                   ("localStorage" in window && window.localStorage !== null))
+               try 
                {
-                  // Store the initial hash...
-                  localStorage.setItem(this.useLocalStorageHashFallbackKey, hashString);
+                  if (this.useLocalStorageHashFallback === true && 
+                      ("localStorage" in window && window.localStorage !== null))
+                  {
+                     // Store the initial hash...
+                     localStorage.setItem(this.useLocalStorageHashFallbackKey, hashString);
+                  }
+               }
+               catch(e)
+               {
+                  // No action when error occurs. The only reason that we're wrapping the local storage
+                  // utilization in a try/catch block is to prevent failures when Firefox is used with
+                  // SSO with cookies disabled. See MNT-16167 for details.
                }
 
                var currHash = ioQuery.queryToObject(hashString);
@@ -285,10 +294,19 @@ define(["dojo/_base/declare",
        */
       updateLocallyStoredHash: function alfresco_lists_AlfHashList__updateLocallyStoredHash(/*jshint unused:false*/payload) {
          // Save the hash to local storage if required...
-         if(this.useLocalStorageHashFallback === true && 
-            ("localStorage" in window && window.localStorage !== null))
+         try
          {
-            localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
+            if(this.useLocalStorageHashFallback === true && 
+               ("localStorage" in window && window.localStorage !== null))
+            {
+               localStorage.setItem(this.useLocalStorageHashFallbackKey, hashUtils.getHashString());
+            }
+         }
+         catch(e)
+         {
+            // No action when error occurs. The only reason that we're wrapping the local storage
+            // utilization in a try/catch block is to prevent failures when Firefox is used with
+            // SSO with cookies disabled. See MNT-16167 for details.
          }
       },
 
