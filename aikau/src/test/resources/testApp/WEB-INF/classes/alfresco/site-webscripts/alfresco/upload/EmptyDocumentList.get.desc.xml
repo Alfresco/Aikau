@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Empty DocumentList</shortname>
+  <description>This test page is used to display an empty AlfDocumentList widget</description>
+  <family>aikau-unit-tests</family>
+  <url>/EmptyDocumentList</url>
+</webscript>
