@@ -27,7 +27,7 @@
         float:left;
         margin-top: -1.5em;
     }
-   .alfresco-documentlibrary-views-layouts-AlfDocumentListView thead .alfresco-buttons-AlfButton {
+   .alfresco-documentlibrary-views-AlfDocumentListView thead .alfresco-buttons-AlfButton {
       margin-top: -35px;
       position: absolute;
       margin-left: -5px;
