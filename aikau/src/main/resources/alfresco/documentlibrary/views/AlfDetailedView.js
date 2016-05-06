@@ -19,12 +19,12 @@
 
 /**
  * @module alfresco/documentlibrary/views/AlfDetailedView
- * @extends module:alfresco/lists/views/AlfListView
+ * @extends module:alfresco/lists/views/AlfDocumentListView
  * @author Dave Draper
  * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/views/AlfListView"], 
+        "alfresco/lists/views/AlfDocumentListView"], 
         function(declare, AlfDocumentListView) {
 
    return declare([AlfDocumentListView], {
@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {string} "detailed"
        */
-      getViewName: function alfresco_documentlibrary_views_AlfDocumentListView__getViewName() {
+      getViewName: function alfresco_documentlibrary_views_AlfDetailedView__getViewName() {
          return "detailed";
       },
 

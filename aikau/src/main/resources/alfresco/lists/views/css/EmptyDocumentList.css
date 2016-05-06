@@ -1,0 +1,25 @@
+.alfresco-lists-views-EmptyDocumentList {
+   border: 2px dashed #ccc;
+   border-radius: 10px;
+   padding: 75px 0;
+   text-align: center;
+   &__message {
+      color: #666;
+      font-size: 20px;
+      line-height: 50px;
+   }
+   .upload-icon {
+      fill: #eee;
+   }
+   .no-content-icon {
+      fill: #eee;
+   }
+}
+
+.alfresco-documentlibrary-_AlfDndDocumentUploadMixin {
+   &--dnd-highlight {
+      .alfresco-lists-views-EmptyDocumentList {
+         opacity: .2;
+      }
+   }
+}

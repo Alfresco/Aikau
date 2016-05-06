@@ -103,6 +103,17 @@ define(["dojo/_base/declare",
       symbolId: null,
 
       /**
+       * An optional class that can be used to specialise the CSS rules that can be applied to an instance of an
+       * SVG. If not specified, it will be auto-generated.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.67
+       */
+      useClass: null,
+
+      /**
        * 
        * @instance
        */
@@ -126,6 +137,11 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "No 'symbolId' was provided so no SVG image could be rendered", this);
+         }
+
+         // Setup a default useClass if required
+         if (!this.useClass) {
+            this.useClass = this.generateUuid();
          }
       },
 

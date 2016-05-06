@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {string} "detailed"
        */
-      getViewName: function alfresco_documentlibrary_views_AlfDocumentListView__getViewName() {
+      getViewName: function alfresco_search_AlfSearchListView__getViewName() {
          return "detailed";
       },
       

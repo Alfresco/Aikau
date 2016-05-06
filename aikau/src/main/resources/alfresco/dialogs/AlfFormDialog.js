@@ -28,6 +28,7 @@
  * @module alfresco/dialogs/AlfFormDialog
  * @extends external:dijit/Dialog
  * @author Dave Draper
+ * @deprecated Since 1.0.67 - use the [DialogService]{@link module:alfresco/services/DialogService} instead.
  */
 define(["dojo/_base/declare",
         "alfresco/dialogs/AlfDialog",
@@ -175,7 +176,7 @@ define(["dojo/_base/declare",
             when(payload.dialogContent, lang.hitch(this, function(dialogContent) {
                if (dialogContent && dialogContent.length)
                {
-                  var data = payload.dialogContent[0].getValue();
+                  var data = dialogContent[0].getValue();
                   if (!this.formSubmissionPayload)
                   {
                      this.formSubmissionPayload = {};

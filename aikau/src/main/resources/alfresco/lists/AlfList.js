@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
         "dojo/io-query",
         "dojo/sniff"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
-                 DynamicWidgetProcessingTopics, AlfDocumentListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct,
+                 DynamicWidgetProcessingTopics, AlfListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct,
                  domClass, ioQuery, sniff) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
@@ -367,7 +367,7 @@ define(["dojo/_base/declare",
       waitForPageWidgets: true,
 
       /**
-       * The widgets processed by AlfDocumentList should all be instances of "alfresco/documentlibrary/AlfDocumentListView".
+       * The widgets processed by AlfDocumentList should all be instances of "alfresco/lists/views/AlfListView".
        * Any widget that is instantiated that does not inherit from that class will not be included as a view.
        *
        * @instance
@@ -765,7 +765,7 @@ define(["dojo/_base/declare",
 
       /**
        * This is called from [allWidgetsProcessed]{@link module:alfresco/lists/AlfList#allWidgetsProcessed} for
-       * each widget defined. Only widgets that inherit from [AlfDocumentListView]{@link module:alfresco/lists/views/AlfListView}
+       * each widget defined. Only widgets that inherit from [AlfListView]{@link module:alfresco/lists/views/AlfListView}
        * will be successfully registered.
        *
        * @instance
@@ -773,7 +773,7 @@ define(["dojo/_base/declare",
        * @param {number} index
        */
       registerView: function alfresco_lists_AlfList__registerView(view, index) {
-         if (view.isInstanceOf(AlfDocumentListView))
+         if (view.isInstanceOf(AlfListView))
          {
             this.alfLog("log", "Registering view", view);
             var viewSelectionConfig = view.getViewSelectionConfig();
@@ -790,7 +790,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            this.alfLog("warn", "The following widget was provided as a view, but it does not inherit from 'alfresco/documentlibrary/AlfDocumentListView'", view);
+            this.alfLog("warn", "The following widget was provided as a view, but it does not inherit from 'alfresco/lists/views/AlfListView'", view);
          }
       },
 

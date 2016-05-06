@@ -1,41 +1,35 @@
 .alfresco-documentlibrary-_AlfDndDocumentUploadMixin {
-   
-   &--dndHighlight {
-      opacity: @upload-highlight-opacity;
-   }
-}
-
-.alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay {
-   box-sizing: border-box;
-   display: none;
-   opacity: @upload-highlight-overlay-opacity;
-   position: absolute;
-   border: @upload-highlight-border;
-   border-radius: 10px;
-   pointer-events: none;
-   background-color: @upload-highlight-overlay-background;
-   
-   &--display {
-      display: table;
-   }
-
-   &__info {
-      display: table-cell;
+   &__overlay {
+      background-color: @upload-highlight-overlay-background;
+      border: @upload-highlight-border;
       border-radius: 10px;
-      width: 100%;
-      text-align: center;
-      vertical-align: middle;
-      background-image: url("./images/dnd-highlight-bg.png");
-
-      &__title {
-         color: @de-emphasized-font-color;
-         font-size: @large-font-size;
+      box-sizing: border-box;
+      display: none;
+      opacity: @upload-highlight-overlay-opacity;
+      pointer-events: none;
+      position: absolute;
+      &__info {
+         background-image: url("./images/dnd-highlight-bg.png");
+         border-radius: 10px;
+         display: table-cell;
          text-align: center;
-         line-height: 60px;
+         vertical-align: middle;
+         width: 100%;
+         &__title {
+            color: @de-emphasized-font-color;
+            font-size: @large-font-size;
+            line-height: 60px;
+            text-align: center;
+         }
+         &__icon {
+            text-align: center;
+         }
       }
-
-      &__icon {
-         text-align: center;
+      &--display {
+         display: table;
       }
+   }
+   &--dnd-highlight {
+      opacity: @upload-highlight-opacity;
    }
 }

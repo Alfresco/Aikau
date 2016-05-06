@@ -86,13 +86,21 @@ define(["dojo/_base/declare",
 
          // Load the user preferences...
          this._preferencesLoaded = new Deferred();
-         var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences";
-         this.serviceXhr({url : url,
+         // early-resolve when localPreferences have been provided via config
+         if (this.localPreferences !== undefined && this.localPreferences !== null)
+         {
+             this._preferencesLoaded.resolve(this.localPreferences);
+         }
+         else
+         {
+             var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences";
+             this.serviceXhr({url : url,
                           successCallback: function(response) {
                               this._preferencesLoaded.resolve(response);
                           },
                           callbackScope: this,
                           method: "GET"});
+         }
       },
       
       /**

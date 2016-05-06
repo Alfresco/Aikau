@@ -20,7 +20,7 @@
             "path": "/",
             "widgets": [
                {
-                  "name": "alfresco/documentlibrary/views/AlfDocumentListView",
+                  "name": "alfresco/lists/views/AlfListView",
                   "config": {
                      "widgets": [
                         {
