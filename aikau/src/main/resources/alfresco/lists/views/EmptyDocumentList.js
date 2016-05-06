@@ -25,6 +25,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @author Martin Doyle
+ * @since 1.0.67
  */
 define(["alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
