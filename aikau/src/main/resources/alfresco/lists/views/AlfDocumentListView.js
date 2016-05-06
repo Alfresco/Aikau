@@ -26,8 +26,9 @@
  * @since 1.0.67
  */
 define(["dojo/_base/declare",
+        "dojo/_base/lang",
         "alfresco/lists/views/AlfListView"],
-        function(declare, AlfListView) {
+        function(declare, lang, AlfListView) {
 
    return declare([AlfListView], {
 
@@ -54,6 +55,28 @@ define(["dojo/_base/declare",
          {
             name: "alfresco/lists/views/EmptyDocumentList"
          }
-      ]
+      ],
+
+      /**
+       * This method is called when there is no data to be shown. By default this just shows a standard localized
+       * message to say that there is no data.
+       *
+       * @instance
+       * @override
+       */
+      renderNoDataDisplay: function alfresco_lists_views_AlfListView__renderNoDataDisplay() {
+
+         // Determine whether user can upload and pass on to the widgetsForNoDataDisplay config(s)
+         var permissions = lang.getObject("_currentNode.parent.permissions", false, this),
+            canUpload = permissions && lang.getObject("user.CreateChildren", false, permissions) === true;
+         this.widgetsForNoDataDisplay.forEach(function(widget) {
+            widget.config = lang.mixin(widget.config || {}, {
+               canUpload: canUpload
+            });
+         });
+
+         // Defer to parent
+         this.inherited(arguments);
+      }
    });
 });

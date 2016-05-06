@@ -11,6 +11,9 @@
    .upload-icon {
       fill: #eee;
    }
+   .no-content-icon {
+      fill: #eee;
+   }
 }
 
 .alfresco-documentlibrary-_AlfDndDocumentUploadMixin {

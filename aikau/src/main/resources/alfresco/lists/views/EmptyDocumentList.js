@@ -72,6 +72,15 @@ define(["alfresco/core/Core",
       baseClass: "alfresco-lists-views-EmptyDocumentList",
 
       /**
+       * Whether the current user can upload
+       *
+       * @instance
+       * @type {Boolean}
+       * @default
+       */
+      canUpload: false,
+
+      /**
        * The message to display underneath the upload icon.
        *
        * @instance
@@ -79,6 +88,34 @@ define(["alfresco/core/Core",
        * @default
        */
       dropToUploadMessage: "drop-to-upload.message",
+
+      /**
+       * The message to display when there is no content, but user cannot upload
+       *
+       * @instance
+       * @type {String}
+       * @default
+       */
+      noContentMessage: "no-content.message",
+
+      /**
+       * Define the widget that will display the SVG no-content image.
+       *
+       * @instance
+       * @type {Object[]}
+       */
+      widgetsForNoContentIcon: [
+         {
+            name: "alfresco/html/SVGImage",
+            config: {
+               source: "alfresco/html/svg/forbidden.svg",
+               symbolId: "forbidden",
+               height: 100,
+               width: 100,
+               useClass: "no-content-icon"
+            }
+         }
+      ],
 
       /**
        * Define the widget that will display the SVG upload image.
@@ -106,9 +143,16 @@ define(["alfresco/core/Core",
        * @override
        */
       postCreate: function alfresco_lists_views_EmptyDocumentList__postCreate() {
+
+         // Call parent
          this.inherited(arguments);
-         this.messageNode.textContent = this.message(this.dropToUploadMessage);
-         this.processWidgets(lang.clone(this.widgetsForUploadIcon), this.svgNode);
+
+         // Update the text
+         this.messageNode.textContent = this.message(this.canUpload ? this.dropToUploadMessage : this.noContentMessage);
+
+         // Process and add the icon widget
+         var iconWidgets = lang.clone(this.canUpload ? this.widgetsForUploadIcon : this.widgetsForNoContentIcon);
+         this.processWidgets(iconWidgets, this.svgNode);
       }
    });
 });
