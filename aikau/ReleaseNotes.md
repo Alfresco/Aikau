@@ -1,6 +1,10 @@
 Aikau 1.0.66 Release Notes
 ===
 
+New deprecations:
+---
+* alfresco/dialogs/AlfFormDialog                                 (use alfresco/services/DialogService)
+
 Previous deprecations:
 ---
 * alfresco/renderers/Thumbnail.js
