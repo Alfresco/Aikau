@@ -1,4 +1,4 @@
-Aikau 1.0.66 Release Notes
+Aikau 1.0.67 Release Notes
 ===
 
 New deprecations:
@@ -51,6 +51,16 @@ Previous deprecations:
 
 Resolved issues:
 ---
+
+1.0.67:
+* [AKU-942](https://issues.alfresco.com/jira/browse/AKU-942)       - Add info for empty AlfDocumentList folder views
+* [AKU-949](https://issues.alfresco.com/jira/browse/AKU-949)       - Additinonal local storage access protection
+* [AKU-954](https://issues.alfresco.com/jira/browse/AKU-954)       - Ensure DND upload highlighting only shown for appropriate permissions
+* [AKU-956](https://issues.alfresco.com/jira/browse/AKU-956)       - Prevent saving empty comments
+* [AKU-957](https://issues.alfresco.com/jira/browse/AKU-957)       - Ensure comment edits trigger CommentsList refresh
+* [AKU-958](https://issues.alfresco.com/jira/browse/AKU-958)       - Fix archetype Spring config for Surf 6 login
+* [ALF-21614](https://issues.alfresco.com/jira/browse/ALF-21614)   - AlfFormDialog fix (and deprecation)
+
 1.0.66:
 * [AKU-941](https://issues.alfresco.com/jira/browse/AKU-941)       - Add support for Smart Folders in alfresco/renderers/Thumbnail
 * [AKU-944](https://issues.alfresco.com/jira/browse/AKU-944)       - Improve encoding on data typed into MultiSelectInput
