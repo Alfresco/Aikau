@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The details of the comment update
        */
-   onEditSave: function alfresco_renderers_EditableComment__onEditSave(payload) {
+      onEditSave: function alfresco_renderers_EditableComment__onEditSave(payload) {
          this.onCancelEdit();
          var dataPayload = lang.clone(payload);
 
