@@ -559,7 +559,7 @@ define(["dojo/_base/declare",
             }
             
             this.setDndHighlightDimensions(this.dragAndDropNode);
-            domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
+            domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dnd-highlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
 
             // Emit a custom event that tells all outer elements to remove the DND highlight as only one highlight should
@@ -751,7 +751,7 @@ define(["dojo/_base/declare",
       removeDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
          if (this.dragAndDropNode)
          {
-            domClass.remove(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dndHighlight");
+            domClass.remove(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dnd-highlight");
             if (this.dragAndDropOverlayNode)
             {
                domClass.remove(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");

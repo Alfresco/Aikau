@@ -25,9 +25,9 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView"], 
-        function(declare, AlfDocumentListView) {
+        function(declare, AlfListView) {
    
-   return declare([AlfDocumentListView], {
+   return declare([AlfListView], {
       
       /**
        * Returns the name of the view that is used when saving user view preferences.

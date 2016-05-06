@@ -25,7 +25,7 @@
  * only have one child widget construct. However, during subsequent development it was established that
  * a widget might want to construct different sets of child widgets in a different way but it was only possible
  * to override the widget process in one way. This module solves that problem by allowing a widget to always 
- * construct children in the standard. An example of its use can be found in the [AlfDocumentListView]{@link module:alfresco/lists/views/AlfListView#renderNoDataDisplay}.
+ * construct children in the standard. An example of its use can be found in the [AlfListView]{@link module:alfresco/lists/views/AlfListView#renderNoDataDisplay}.
  *
  * @module alfresco/core/WidgetsCreator
  * @author Dave Draper

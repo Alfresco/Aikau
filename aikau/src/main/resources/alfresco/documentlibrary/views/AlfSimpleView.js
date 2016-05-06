@@ -22,11 +22,11 @@
  * less information on each node.
  *
  * @module alfresco/documentlibrary/views/AlfSimpleView
- * @extends module:alfresco/lists/views/AlfListView
+ * @extends module:alfresco/lists/views/AlfDocumentListView
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/views/AlfListView"],
+        "alfresco/lists/views/AlfDocumentListView"],
         function(declare, AlfDocumentListView) {
 
    return declare([AlfDocumentListView], {
@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
        * @instance
        * @returns {string} "simple"
        */
-      getViewName: function alfresco_documentlibrary_views_AlfDocumentListView__getViewName() {
+      getViewName: function alfresco_documentlibrary_views_AlfSimpleView__getViewName() {
          return "simple";
       },
 

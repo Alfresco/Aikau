@@ -25,7 +25,7 @@
       }
 
       .alfresco-lists-AlfList > *,
-      .alfresco-documentlibrary-views-layouts-AlfDocumentListView {
+      .alfresco-documentlibrary-views-AlfDocumentListView {
          margin: 0;
          padding: 0;
       }
@@ -47,7 +47,7 @@
       padding: @standard-column-spacing;
    }
    
-   .alfresco-documentlibrary-views-layouts-AlfDocumentListView > table > tbody > tr > td {
+   .alfresco-documentlibrary-views-AlfDocumentListView > table > tbody > tr > td {
       padding: 6px 8px 6px 0;
    }
 }

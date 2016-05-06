@@ -1,5 +1,5 @@
 /* Overrides the AlfDocumentListView styling for tables to remove all borders */
-.alfresco-documentlibrary-views-layouts-AlfDocumentListView {
+.alfresco-documentlibrary-views-AlfDocumentListView {
    > table {
       border-bottom: none;
       > tbody > tr > td {
