@@ -413,7 +413,7 @@ define(["dojo/_base/declare",
             switch (type)
             {
                case "PUBLICATION":
-                  event.topic = payload.alfPublishScope + payload.alfTopic;
+                  event.topic = payload.alfTopic;
                   event.payload = payload;
 
                   // If the widget that triggered the publish has been passed, pass that through, highlighting the id.
