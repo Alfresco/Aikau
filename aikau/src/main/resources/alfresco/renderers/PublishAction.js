@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_JsNodeMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/PublishAction.html",
-        "alfresco/core/Core"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, AlfCore) {
+        "alfresco/core/Core",
+        "dojo/dom-class"],
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, AlfCore, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, AlfCore], {
       
@@ -84,6 +85,29 @@ define(["dojo/_base/declare",
        * @default
        */
       publishTopic: "ALF_ITEM_SELECTED",
+
+      /**
+       * Indicates that this should only be displayed when the item (note: NOT the renderer) is
+       * hovered over.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      onlyShowOnHover: false,
+
+      /**
+       * Overrides the default to handle onlyShowOnHover for the current item.
+       *
+       * @instance
+       */
+      postCreate: function alfresco_renderers_PublishAction__postCreate() {
+         this.inherited(arguments);
+         if (this.onlyShowOnHover === true)
+         {
+            domClass.add(this.domNode, "hover-only");
+         }
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.
