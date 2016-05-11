@@ -1,8 +1,29 @@
 .alfresco-renderers-PublishAction {
 
    cursor: pointer;
-   
+
    &__image {
       vertical-align: text-bottom;
    }
+}
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item {
+   &:hover {
+      .alfresco-renderers-PublishAction.hover-only {
+         > span {
+            visibility: visible;
+         }
+         > img {
+             visibility: visible;
+            }
+      }
+   }
+   .alfresco-renderers-PublishAction.hover-only {
+      > span {
+         visibility: hidden;
+      }
+      > img {
+        visibility: hidden;
+      }
+      outline: none;
+    }
 }
