@@ -307,6 +307,10 @@ Alfresco.AikauLightbox = (function() {
          {
             objLoadingImage.setAttribute("alt", Alfresco.util.message.call(this, "lightbox.loading"));
          }
+         else
+         {
+            objLoadingImage.setAttribute("alt", "Loading...");
+         }
          objLoadingImage.style.position = "absolute";
          objLoadingImage.style.zIndex = "150";
          objLoadingImageLink.appendChild(objLoadingImage);
@@ -347,6 +351,10 @@ Alfresco.AikauLightbox = (function() {
          if (Alfresco && Alfresco.util && typeof Alfresco.util.message === "function")
          {
             objCloseButton.setAttribute("alt",Alfresco.util.message.call(this, "lightbox.close"));
+         }
+         else
+         {
+            objCloseButton.setAttribute("alt", "Close");
          }
          objCloseButton.style.position = "absolute";
          objCloseButton.style.zIndex = "200";
