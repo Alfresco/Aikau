@@ -104,24 +104,31 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Date__postMixInProperties() {
+         if (this.label) 
+         {
+            this.label = this.message(this.label) + ": ";
+         } 
+         else 
+         {
+            this.label = "";
+         }
+          
          if (this.simple && this.propertyToRender)
          {
-            var dateProperty = lang.getObject(this.propertyToRender, false, this.currentItem);
-            if (dateProperty)
+            if (ObjectTypeUtils.isString(this.propertyToRender) &&
+                ObjectTypeUtils.isObject(this.currentItem) &&
+                lang.exists(this.propertyToRender, this.currentItem)) 
             {
-               this.renderedValue = this.renderDate(dateProperty);
-            }
-            else if (this.warnIfNotAvailable)
+                this.renderPropertyNotFound = false;
+                var dateProperty = lang.getObject(this.propertyToRender, false, this.currentItem);
+                this.originalRenderedValue = this.renderedValue = this.renderDate(dateProperty);
+            } 
+            else 
             {
-               var warningMessage = this.getNotAvailableMessage();
-               this.renderedValue = this.renderedValuePrefix + warningMessage + this.renderedValueSuffix;
-               this.warningDisplayed = true;
+               this.alfLog("log", "Property does not exist:", this);
             }
-            else
-            {
-               this.alfLog("warn", "Could not find '" + this.propertyToRender + "' in currentItem", this);
-               this.renderedValue = "";
-            }
+            
+            this.renderedValue = this.generateRendering(this.renderedValue);
          }
          else
          {
