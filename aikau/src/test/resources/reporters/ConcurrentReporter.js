@@ -743,16 +743,8 @@ define(["intern/dojo/node!fs",
             }
 
             // Clone and clean the test object, keeping only specific properties
-            var clonedEnv = JSON.parse(safeJson.stringify(env)),
-               keysToKeep = ["tests", "name", "timeElapsed"],
+            var clonedEnv = JSON.parse(safeJson.stringify(env), ["tests", "name", "timeElapsed"]),
                envTests = (function cleanEnv(testObj, testIndexes) {
-
-                  // Remove the redundant properties
-                  Object.keys(testObj).forEach(key => {
-                     if (keysToKeep.indexOf(key) === -1) {
-                        delete testObj[key];
-                     }
-                  });
 
                   // Work out if this is a test object (as opposed to a suite or environment)
                   if (testIndexes.indexOf(".") !== -1) {
