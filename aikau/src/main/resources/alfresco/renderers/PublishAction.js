@@ -67,9 +67,10 @@ define(["dojo/_base/declare",
       altText: "",
 
       /**
-       * This should be set to the icon to use. Currently this is just mapped to an actual image that is located
-       * in the css/images folder however it should ultimately map to a CSS selector that defines a section of 
-       * an image sprite.
+       * This property has been superseded by the [src]{@link module:alfresco/renderers/PublishAction#src} and
+       * [srcType]{@link module:alfresco/renderers/PublishAction#srcType} properties, however it continues to
+       * work as it did previously, which is that the name of an icon (e.g. "add-icon-16") can be specified
+       * which is resolved according to the pattern `alfresco/renderers/css/images/${this.iconClass}.png`.
        *
        * @instance
        * @type {string}
@@ -100,9 +101,7 @@ define(["dojo/_base/declare",
       /**
        * The URL of the image to use (this is used in conjunction with the
        * [srcType]{@link module:alfresco/renderers/PublishAction#srcType}
-       * property). If a src is provided, then the
-       * [classes]{@link module:alfresco/renderers/PublishAction#classes}
-       * property will not be used.
+       * property).
        *
        * @instance
        * @type {string}
