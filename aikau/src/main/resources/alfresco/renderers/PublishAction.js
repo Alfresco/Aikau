@@ -34,8 +34,10 @@ define(["dojo/_base/declare",
         "alfresco/renderers/_JsNodeMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/PublishAction.html",
+        "alfresco/enums/urlTypes", 
+        "alfresco/util/urlUtils",
         "alfresco/core/Core"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, AlfCore) {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, urlTypes, urlUtils, AlfCore) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, AlfCore], {
       
@@ -73,7 +75,17 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      iconClass: "add-icon-16",
+      iconClass: null,
+
+      /**
+       * This property is auto-populated and will be injected into the template.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.68
+       */
+      imageSrc: null,
 
      /**
        * This defines the topic that will be published on when the associated image is clicked. The payload will be
@@ -84,6 +96,31 @@ define(["dojo/_base/declare",
        * @default
        */
       publishTopic: "ALF_ITEM_SELECTED",
+
+      /**
+       * The URL of the image to use (this is used in conjunction with the
+       * [srcType]{@link module:alfresco/renderers/PublishAction#srcType}
+       * property). If a src is provided, then the
+       * [classes]{@link module:alfresco/renderers/PublishAction#classes}
+       * property will not be used.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.68
+       */
+      src: "alfresco/renderers/css/images/add-icon-16.png",
+
+      /**
+       * The type of URL to use (see [urlTypes]{@link module:alfresco/enums/urlTypes}
+       * for possible values).
+       *
+       * @instance
+       * @type {string}
+       * @default {@link module:alfresco/enums/urlTypes#REQUIRE_PATH}
+       * @since 1.0.68
+       */
+      srcType: urlTypes.REQUIRE_PATH,
 
       /**
        * Set up the attributes to be used when rendering the template.
@@ -102,12 +139,9 @@ define(["dojo/_base/declare",
 
          if (this.iconClass)
          {
-            this.imageSrc = require.toUrl("alfresco/renderers/css/images/" + this.iconClass + ".png");
+            this.src = "alfresco/renderers/css/images/" + this.iconClass + ".png";
          }
-         else
-         {
-            this.imageSrc = require.toUrl("alfresco/renderers/css/images/add-icon-16.png");
-         }
+         this.imageSrc = urlUtils.convertUrl(this.src, this.srcType);
 
          // Localize the alt text...
          var altTextId = this.currentItem ? this.currentItem[this.propertyToRender] : "";
