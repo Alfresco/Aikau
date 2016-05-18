@@ -38,16 +38,56 @@ define(["module",
          });
       },
 
-      "Clicking on action publishes correctly": function() {
-         return this.remote.findById("EDIT_ME")
+      "Actions have correct images": function() {
+         return this.remote.findByCssSelector("#DEFAULT .alfresco-renderers-PublishAction__image")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "alfresco/renderers/css/images/add-icon-16.png", "Default icon incorrect");
+            })
+            .end()
+
+         .findByCssSelector("#CUSTOM_WITH_PAYLOAD .alfresco-renderers-PublishAction__image")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "alfresco/renderers/css/images/edit-16.png", "Custom icon incorrect");
+            })
+            .end()
+
+         .findByCssSelector("#CUSTOM_IMAGE .alfresco-renderers-PublishAction__image")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "/aikau/images/app-logo-48.png", "Custom image URL incorrect");
+            });
+      },
+
+      "Default action publishes correct topic": function() {
+         return this.remote.findById("DEFAULT")
             .clearLog()
             .click()
             .end()
 
-         .getLastPublish("EDIT_ME")
+         .getLastPublish("PUBLISH_ACTION_DEFAULT");
+      },
+
+      "Clicking on action with custom icon publishes payload correctly": function() {
+         return this.remote.findById("CUSTOM_WITH_PAYLOAD")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("PUBLISH_ACTION_CUSTOM_WITH_PAYLOAD")
             .then(function(payload) {
                assert.propertyVal(payload, "editMode", true);
             });
+      },
+
+      "Action with custom image publishes correct topic": function() {
+         return this.remote.findById("CUSTOM_IMAGE")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("PUBLISH_ACTION_CUSTOM_IMAGE");
       },
 
       "Action clicks do not bubble upwards": function() {
