@@ -683,6 +683,9 @@ define(["alfresco/core/CoreXhr",
                formData.append("fileData", uploadData.filedata);
                formData.append("fileName", uploadData.filename);
                formData.append("autoRename", !uploadData.overwrite);
+               if (uploadData.thumbnails) {
+                  formData.append("renditions", uploadData.thumbnails);
+               }
                if (uploadData.uploaddirectory) {
                   formData.append("relativePath", uploadData.uploaddirectory);
                }
