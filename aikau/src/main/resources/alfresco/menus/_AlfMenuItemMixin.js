@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
          }
          if (!this.iconAltText && this.title)
          {
-            this.iconAltText = originalLabel;
+            this.iconAltText = this.message(originalLabel);
          }
          else if (this.iconAltText)
          {
