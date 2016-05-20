@@ -82,14 +82,18 @@ define(["module",
 
       "Image will publish topic when ENTER pressed": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement("#IMAGE_CLASS_STYLE_TOPIC")
+            .tabToElement({
+               selector: "#IMAGE_CLASS_STYLE_TOPIC"
+            })
             .pressKeys(keys.ENTER)
             .getLastPublish("LOGO_TOPIC_PUBLISHED");
       },
 
       "Image will act as link when ENTER pressed": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement("#IMAGE_CLASS_LINK a")
+            .tabToElement({
+               selector: "#IMAGE_CLASS_LINK a"
+            })
             .pressKeys(keys.ENTER)
             .end()
 

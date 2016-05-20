@@ -44,7 +44,10 @@ define(["module",
       },
 
       "Image with actions can be tabbed to and actioned": function() {
-         return this.remote.findByCssSelector("body").end().tabToElement("#IMAGE1")
+         return this.remote.findByCssSelector("body").end()
+            .tabToElement({
+               selector: "#IMAGE1"
+            })
             .clearLog()
             .pressKeys(keys.ENTER)
             .end()

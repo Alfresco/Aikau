@@ -106,7 +106,9 @@ define(["module",
 
       "Use the keyboard to test label set (using label)": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement(selectors.menuBarSelects.mbs1.menuItem)
+            .tabToElement({
+               selector: selectors.menuBarSelects.mbs1.menuItem
+            })
 
          .pressKeys(keys.ARROW_DOWN)
 

@@ -28,28 +28,24 @@ define(["module",
         "intern/dojo/node!leadfoot/keys"],
         function(module, defineSuite, assert, require, TestCommon, keys) {
 
-   var pause = 150;
    defineSuite(module, {
       name: "Multi-source DND tests",
       testPage: "/multi-source-dnd",
 
       "Select item in source one, then select item in source two to deselect item in source one": function() {
-         // Select the item in the first source...
-         return this.remote.pressKeys(keys.TAB)
-            .sleep(pause)
+         return this.remote.tabToElement({
+               selector: "#DRAG_PALETTE1 .alfresco-dnd-DragAndDropItem"
+            })
             .pressKeys(keys.ENTER)
 
-         // Tab to the second source and select its item...
-         .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
+         .tabToElement({
+               selector: "#DRAG_PALETTE2 .alfresco-dnd-DragAndDropItem"
+            })
+            .clearLog()
             .pressKeys(keys.ENTER)
-            .sleep(pause)
 
-         // Check that just one item is selected...
+         .getLastPublish("ALF_DND_SOURCE_ITEM_SELECTED")
+
          .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The wrong number of items were selected");
@@ -104,41 +100,28 @@ define(["module",
 
    var setupDroppedItems = function(browser) {
       // Select the item in the first source...
-      return browser.pressKeys(keys.TAB)
-         .sleep(pause)
+      return browser.tabToElement({
+            selector: "#DRAG_PALETTE1 .alfresco-dnd-DragAndDropItem"
+         })
          .pressKeys(keys.ENTER)
 
       // Tab to the drop target and add the selected item...
-      .pressKeys(keys.TAB)
-         .sleep(pause)
+      .tabToElement({
+            selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget"
+         })
          .pressKeys(keys.ENTER)
-         .sleep(pause)
 
       // Tab to the single use item and select...
-      .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
+      .tabToElement({
+            selector: "#DRAG_PALETTE2 .alfresco-dnd-DragAndDropItem"
+         })
          .pressKeys(keys.ENTER)
 
       // Tab back to the dropped target and add...
-      .pressKeys(keys.SHIFT)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.TAB)
-         .sleep(pause)
-         .pressKeys(keys.SHIFT) // Release shift key
+      .tabToElement({
+            selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget .dojoDndTarget",
+            reverse: true
+         })
          .pressKeys(keys.ENTER)
 
       // Make sure everything is setup correctly

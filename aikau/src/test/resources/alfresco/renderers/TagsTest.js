@@ -125,7 +125,9 @@ define(["module",
          // Tab to the third Tags renderer and use the keyboard shortcut to edit it...
          // An immediate request for existing tags should be made
          return this.remote.findByCssSelector("body")
-            .tabToElement("#TAGS_3 .inlineEditValue")
+            .tabToElement({
+               selector: "#TAGS_3 .inlineEditValue"
+            })
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
             .end()
@@ -177,7 +179,9 @@ define(["module",
          // Tab to the third Tags renderer and use the keyboard shortcut to edit it...
          // An immediate request for existing tags should be made
          return this.remote.findByCssSelector("body")
-            .tabToElement("#TAGS_2 .inlineEditValue")
+            .tabToElement({
+               selector: "#TAGS_2 .inlineEditValue"
+            })
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
             .end()
