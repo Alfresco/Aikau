@@ -80,9 +80,10 @@ define(["module",
          return this.remote.findByCssSelector("#FORM1 .confirmationButton > span")
             .click()
             .end()
-            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1_POST", "data", "name", "bob"))
-            .then(null, function() {
-               assert(false, "Form didn't contain the value from the dropped item");
+
+         .getLastPublish("FORM1_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data[0].name", "bob");
             });
       },
 
@@ -97,9 +98,10 @@ define(["module",
          return this.remote.findByCssSelector("#FORM2 .confirmationButton > span")
             .click()
             .end()
-            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM2_POST", "data", "preset", "value1"))
-            .then(null, function() {
-               assert(false, "Preset form didn't contain the initialised value.");
+
+         .getLastPublish("FORM2_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data[0].preset", "value1");
             });
       },
 
@@ -114,9 +116,14 @@ define(["module",
       },
 
       "Test deleted preset value form value": function() {
-         return this.remote.findAllByCssSelector(TestCommon.pubDataRowsCssSelector("FORM2_POST", "data"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 0, "Preset dropped item was not deleted");
+         return this.remote.findByCssSelector("#FORM2 .confirmationButton > span")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("FORM2_POST")
+            .then(function(payload) {
+               assert.lengthOf(payload.data, 0);
             });
       }
    });
@@ -154,8 +161,10 @@ define(["module",
       testPage: "/basic-dnd",
 
       "Select item using keyboard": function() {
-         return this.remote.pressKeys(keys.TAB)
-            .sleep(pause)
+         return this.remote.tabToElement({
+               selector: "#DRAG_PALETTE .alfresco-dnd-DragAndDropItem",
+               index: 0
+            })
             .pressKeys(keys.ENTER)
             .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
             .then(function(elements) {
@@ -164,16 +173,10 @@ define(["module",
       },
 
       "Add item to target": function() {
-         // 3 more tabs should highlight the first drop target...
-         return this.remote.pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-
-         // Hitting return should add the selected item...
-         .pressKeys(keys.ENTER)
+         return this.remote.tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget"
+            })
+            .pressKeys(keys.ENTER)
             .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The item was not added");
@@ -181,40 +184,22 @@ define(["module",
       },
 
       "Submit the form to check the right item was added": function() {
-         // Six more tabs should highlight the confirmation button
-         return this.remote.pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
+         return this.remote.tabToElement({
+               selector: "#FORM1 .dijitButtonNode [data-dojo-attach-point*=\"focusNode\"]"
+            })
             .pressKeys(keys.ENTER)
-            .findByCssSelector(TestCommon.pubDataNestedValueCssSelector("FORM1_POST", "data", "name", "bob"))
-            .then(null, function() {
-               assert(false, "Form didn't contain the value added by keyboard");
+            .getLastPublish("FORM1_POST")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data[0].name", "bob");
             });
       },
 
       "Select another item": function() {
-         // Shift tab 7 times should get back to the last item
-         return this.remote.pressKeys([keys.SHIFT])
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys([keys.SHIFT]) // Remember to release the shift key!
+         return this.remote.tabToElement({
+               selector: "#DRAG_PALETTE .alfresco-dnd-DragAndDropItem",
+               index: 2,
+               reverse: true
+            })
             .pressKeys(keys.ENTER)
             .findAllByCssSelector(".alfresco-dnd-DragAndDropItem.selected")
             .then(function(elements) {
@@ -224,12 +209,10 @@ define(["module",
       },
 
       "Add the next item": function() {
-         // Just one more tab should get to the target again...
-         return this.remote.pressKeys(keys.TAB)
-            .sleep(pause)
-
-         // Hitting return should add the selected item...
-         .pressKeys(keys.ENTER)
+         return this.remote.tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget"
+            })
+            .pressKeys(keys.ENTER)
             .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The second item was not added");
@@ -245,13 +228,10 @@ define(["module",
       },
 
       "Move item down a place": function() {
-         // 3 tabs should get to the move down action...
-         return this.remote.pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
+         return this.remote.tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget .action.down",
+               index: 0
+            })
             .pressKeys(keys.ENTER)
             .findByCssSelector("#FORM1 .previewPanel .alfresco-dnd-DroppedItemWrapper:nth-child(1) > .label")
             .getVisibleText()
@@ -261,11 +241,11 @@ define(["module",
       },
 
       "Move item back up a place": function() {
-         // We should still be focused on the same node, so a single shift-tab will get to the move up action...
-         return this.remote.pressKeys([keys.SHIFT])
-            .pressKeys(keys.TAB)
-            .pressKeys([keys.SHIFT]) // Release the SHIFT key!
-            .sleep(pause)
+         return this.remote.tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget .action.up",
+               index: 1,
+               reverse: true
+            })
             .pressKeys(keys.ENTER)
             .findByCssSelector("#FORM1 .previewPanel .alfresco-dnd-DroppedItemWrapper:nth-child(1) > .label")
             .getVisibleText()
@@ -274,20 +254,17 @@ define(["module",
             });
       },
 
-      // TODO: This test is passing on Chrome but failing on Firefox
-      // "Delete an item": function() {
-      //    // 2 tabs should get to the delete item action
-      //    return this.remote.pressKeys(keys.TAB)
-      //       .sleep(pause)
-      //       .pressKeys(keys.TAB)
-      //       .sleep(pause)
-      //       .pressKeys(keys.ENTER)
-
-      //       .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
-      //          .then(function(elements) {
-      //                assert.lengthOf(elements, 1, "The item was not deleted");
-      //          });
-      // }
+      "Delete an item": function() {
+         return this.remote.tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .dojoDndTarget .action.delete",
+               index: 0
+            })
+            .pressKeys(keys.ENTER)
+            .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
+               .then(function(elements) {
+                     assert.lengthOf(elements, 1, "The item was not deleted");
+               });
+      }
    });
 
    defineSuite(module, {
