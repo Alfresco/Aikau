@@ -36,15 +36,21 @@ define(["module",
       "Check outer widget doesn't inherit configuration": function() {
          // Select the available widget...
          return this.remote.findByCssSelector("body")
-            .tabToElement(".alfresco-dnd-DragAndDropItem")
+            .tabToElement({
+               selector: ".alfresco-dnd-DragAndDropItem"
+            })
             .pressKeys(keys.ENTER)
 
          // Tab to the target and add the widget...
-         .tabToElement("#ROOT_DROPPED_ITEMS1 .previewPanel")
+         .tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .previewPanel"
+            })
             .pressKeys(keys.ENTER)
 
          // Edit the item...
-         .tabToElement("#ROOT_DROPPED_ITEMS1 .previewPanel .action.edit")
+         .tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .previewPanel .action.edit"
+            })
             .pressKeys(keys.ENTER)
 
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogDisplayed") // Wait for the dialog to render
@@ -67,15 +73,21 @@ define(["module",
             .end()
 
          // Re-select the draggable item...
-         .tabToElement(".alfresco-dnd-DragAndDropItem")
+         .tabToElement({
+               selector: ".alfresco-dnd-DragAndDropItem"
+            })
             .pressKeys(keys.ENTER)
 
          // Add it to the previously dropped item..
-         .tabToElement("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget .previewPanel .previewPanel")
+         .tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget .previewPanel .previewPanel"
+            })
             .pressKeys(keys.ENTER)
 
          // Edit the nested widget...
-         .tabToElement("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget .previewPanel .previewPanel .action.edit")
+         .tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget .previewPanel .previewPanel .action.edit"
+            })
             .pressKeys(keys.ENTER)
 
          // Now check that there are 3 form controls (should have inherited one additional configuration field)
@@ -93,7 +105,9 @@ define(["module",
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden") // Wait for the dialog to be hidden
             .end()
 
-         .tabToElement("#ROOT_DROPPED_ITEMS1 .previewPanel .action.edit")
+         .tabToElement({
+               selector: "#ROOT_DROPPED_ITEMS1 .previewPanel .action.edit"
+            })
             .sleep(pause)
             .pressKeys(keys.ENTER)
 

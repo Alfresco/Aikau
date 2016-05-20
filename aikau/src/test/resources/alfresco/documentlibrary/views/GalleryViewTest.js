@@ -143,7 +143,9 @@ define(["module",
 
       "Test selecting first item (Folder 1)": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement(".alfresco-lists-views-layouts-Grid tr:first-child td:first-child .alfresco-renderers-Thumbnail .alfresco-renderers-Selector")
+            .tabToElement({
+               selector: ".alfresco-lists-views-layouts-Grid tr:first-child td:first-child .alfresco-renderers-Thumbnail .alfresco-renderers-Selector"
+            })
             .pressKeys(keys.SPACE)
             .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
             .then(function(payload) {

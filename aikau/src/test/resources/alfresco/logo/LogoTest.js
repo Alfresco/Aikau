@@ -103,14 +103,18 @@ define(["module",
 
       "Logo will publish topic when ENTER pressed": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement("#LOGO_WITH_TOPIC")
+            .tabToElement({
+               selector: "#LOGO_WITH_TOPIC"
+            })
             .pressKeys(keys.ENTER)
             .getLastPublish("LOGO_TOPIC_PUBLISHED");
       },
 
       "Logo will act as link when ENTER pressed": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement("#LOGO_WITH_URL a")
+            .tabToElement({
+               selector: "#LOGO_WITH_URL a"
+            })
             .pressKeys(keys.ENTER)
             .end()
 
