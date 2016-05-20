@@ -27,8 +27,6 @@ define(["module",
         "intern/dojo/node!leadfoot/keys"],
         function(module, defineSuite, assert, TestCommon, keys) {
 
-   var pause = 150;
-
    defineSuite(module, {
       name: "Basic DND tests",
       testPage: "/basic-dnd",

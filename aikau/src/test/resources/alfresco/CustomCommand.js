@@ -744,8 +744,8 @@ define(["intern/dojo/node!fs",
                function tabAndCheck() {
                   return browser.pressKeys(reverse ? [keys.SHIFT, keys.TAB] : keys.TAB)
                      .pressKeys(keys.NULL)
-                     .execute(function(targetElemSelector, index) {
-                        var targetElem = document.querySelectorAll(targetElemSelector)[index];
+                     .execute(function(targetElemSelector, elemIndex) {
+                        var targetElem = document.querySelectorAll(targetElemSelector)[elemIndex];
                         return targetElem && targetElem === document.activeElement;
                      }, [selector, index])
                      .then(function(foundElem) {
