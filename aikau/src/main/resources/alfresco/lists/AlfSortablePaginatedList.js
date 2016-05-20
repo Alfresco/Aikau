@@ -161,8 +161,10 @@ define(["dojo/_base/declare",
       setPageSize: function alfresco_lists_AlfSortablePaginatedList__setPageSize(value) {
          if (value)
          {
-            this.onItemsPerPageChange({
-               value: value
+            this.alfPublish(this.docsPerpageSelectionTopic, {
+               label: this.message("list.paginator.perPage.label", {0: value}),
+               value: value,
+               selected: true
             });
          }
          this.currentPageSize = value || this.currentPageSize || 25;

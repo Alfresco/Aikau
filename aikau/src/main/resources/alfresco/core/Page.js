@@ -77,6 +77,9 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        */
       postCreate: function alfresco_core_Page__postCreate() {
+         // See AKU-956 - register a new page with with the PubQueue...
+         PubQueue.getSingleton().registerPage();
+
          /*jshint devel:true*/
          shims.apply();
          
