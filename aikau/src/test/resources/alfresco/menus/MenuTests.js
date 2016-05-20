@@ -98,18 +98,20 @@ define(["intern!object",
 
          "Open the drop-down menu and select the FIRST menut item using the space bar": function() {
             return browser.findByCssSelector("body")
-               .tabToElement(selectors.popupMenus.dropDown1.menuItem)
+               .tabToElement({
+                  selector: selectors.popupMenus.dropDown1.menuItem
+               })
                .pressKeys(keys.ARROW_DOWN)
 
-               .findDisplayedByCssSelector(selectors.popupMenus.dropDown1.popup)
+            .findDisplayedByCssSelector(selectors.popupMenus.dropDown1.popup)
                .end()
 
-               .pressKeys(keys.SPACE)
+            .pressKeys(keys.SPACE)
 
-               .getLastPublish("KEYBOARD_CLICK")
-                  .then(function(payload) {
-                     assert.propertyVal(payload, "item", "MENU_ITEM_1");
-                  });
+            .getLastPublish("KEYBOARD_CLICK")
+               .then(function(payload) {
+                  assert.propertyVal(payload, "item", "MENU_ITEM_1");
+               });
          },
 
          "Open the drop-down menu and select the SECOND menu item using the return key": function() {
