@@ -1,5 +1,11 @@
 .alfresco-renderers-EditableComment {
-
+   form {
+      > .alfresco-forms-controls-BaseFormControl {
+         > .title-row {
+            display: none;
+         }
+      }
+   }
 }
 
 .alfresco-renderers-EditableComment.read > .edit {
