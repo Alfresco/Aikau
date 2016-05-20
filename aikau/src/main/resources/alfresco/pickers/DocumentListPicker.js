@@ -232,6 +232,7 @@ define(["dojo/_base/declare",
             {
                // once we have the node ref, load it using the same mechanism as before.
                this.rootNodeRef = doclibNodeRef;
+               this.requestInProgress = false;
                this.onFolderClick({nodeRef: doclibNodeRef});
             }
             else

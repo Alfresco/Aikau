@@ -187,4 +187,33 @@ define(["module",
             });
       }
    });
+
+   defineSuite(module, {
+      name: "Document Picker Test (Sites)",
+      testPage: "/DocumentPicker",
+
+      "Check site items are displayed": function() {
+         return this.remote.findByCssSelector("#DOCUMENT_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(1)")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker")
+            .findDisplayedByCssSelector(".alfresco-menus-_AlfMenuItemMixin:nth-child(1) .alf-menu-bar-label-node")
+               .click()
+            .end()
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-lists-views-AlfListView tr")
+         .end()
+
+         .findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4);
+            });
+      }
+   });
 });
