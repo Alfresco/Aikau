@@ -68,7 +68,36 @@ define(["dojo/_base/declare",
        * @default []
        */
       _queue: [],
+
+      /**
+       * It is possible for multiple Surf Components to exist on a browser page where each Surf Component is creating
+       * a new Aikau page. In order for the PubQueue to only allow the release of publications once all pages have 
+       * finished being created it is necessary to track the number of pages being rendered. This counter is 
+       * incremented with every call to [registerPage]{@link module:alfresco/core/PubQueue#registerPage} and
+       * decremented with every call to [release]{@link module:alfresco/core/PubQueue#release}. See AKU-965 for more
+       * information.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.68
+       */
+      _pageCount: 0,
       
+      /**
+       * This function should only be called from the [Page]{@link module:alfresco/core/Page} widget before the page
+       * is constructed. It increments the [_pageCount]{@link module:alfresco/core/PubQueue#_pageCount} counter to ensure
+       * that all pages finish rendering before publications are released.
+       * 
+       * @instance
+       * @since 1.0.68
+       */
+      registerPage: function alfresco_core_PubQueue__registerPage() {
+         this._pageCount++;
+         this._released = false;
+         this._unreleasedEmptied = false;
+      },
+
       /**
        * @instance
        * @param {string} scopedTopic The topic to publish on
@@ -96,15 +125,19 @@ define(["dojo/_base/declare",
        * @instance
        */
       release: function alfresco_core_PubQueue__release() {
-         this._released = true;
-         var publication = this._queue.shift();
-         while (publication)
+         this._pageCount--;
+         if (this._pageCount === 0)
          {
-            this.log(publication.topic, publication.payload, publication.caller);
-            pubSub.publish(publication.topic, publication.payload);
-            publication = this._queue.shift();
+            this._released = true;
+            var publication = this._queue.shift();
+            while (publication)
+            {
+               this.log(publication.topic, publication.payload, publication.caller);
+               pubSub.publish(publication.topic, publication.payload);
+               publication = this._queue.shift();
+            }
+            this._unreleasedEmptied = true;
          }
-         this._unreleasedEmptied = true;
       },
 
       /**
