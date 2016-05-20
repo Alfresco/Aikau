@@ -51,8 +51,9 @@ define(["dojo/_base/declare",
         "alfresco/renderers/Property", 
         "alfresco/core/TemporalUtils",
         "alfresco/core/UrlUtilsMixin",
+        "alfresco/core/ObjectTypeUtils",
         "dojo/_base/lang"], 
-        function(declare, Property, TemporalUtils, UrlUtilsMixin, lang) {
+        function(declare, Property, TemporalUtils, UrlUtilsMixin, ObjectTypeUtils, lang) {
 
    return declare([Property, UrlUtilsMixin, TemporalUtils], {
       
@@ -104,24 +105,31 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Date__postMixInProperties() {
+         if (this.label)
+         {
+            this.label = this.message(this.label) + ": ";
+         }
+         else
+         {
+            this.label = "";
+         }
+
          if (this.simple && this.propertyToRender)
          {
-            var dateProperty = lang.getObject(this.propertyToRender, false, this.currentItem);
-            if (dateProperty)
+            if (ObjectTypeUtils.isString(this.propertyToRender) &&
+               ObjectTypeUtils.isObject(this.currentItem) &&
+               lang.exists(this.propertyToRender, this.currentItem))
             {
-               this.renderedValue = this.renderDate(dateProperty);
-            }
-            else if (this.warnIfNotAvailable)
-            {
-               var warningMessage = this.getNotAvailableMessage();
-               this.renderedValue = this.renderedValuePrefix + warningMessage + this.renderedValueSuffix;
-               this.warningDisplayed = true;
+               this.renderPropertyNotFound = false;
+               var dateProperty = lang.getObject(this.propertyToRender, false, this.currentItem);
+               this.originalRenderedValue = this.renderedValue = this.renderDate(dateProperty);
             }
             else
             {
-               this.alfLog("warn", "Could not find '" + this.propertyToRender + "' in currentItem", this);
-               this.renderedValue = "";
+               this.alfLog("log", "Property does not exist:", this);
             }
+
+            this.renderedValue = this.generateRendering(this.renderedValue);
          }
          else
          {
@@ -130,7 +138,7 @@ define(["dojo/_base/declare",
                this.modifiedDateProperty = "jsNode.properties.modified.iso8601";
             }
             var modifiedDate = lang.getObject(this.modifiedDateProperty, false, this.currentItem);
-            
+
             if (!this.modifiedByProperty)
             {
                this.modifiedByProperty = "jsNode.properties.modifier.displayName";
@@ -139,7 +147,7 @@ define(["dojo/_base/declare",
             if (modifiedBy)
             {
                this.renderedValue = this.message("details.modified-by", {
-                  0: this.getRelativeTime(modifiedDate), 
+                  0: this.getRelativeTime(modifiedDate),
                   1: this.encodeHTML(modifiedBy)
                });
             }
