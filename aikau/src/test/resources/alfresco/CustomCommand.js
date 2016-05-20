@@ -735,11 +735,6 @@ define(["intern/dojo/node!fs",
                   numTabs = 0,
                   dfd = new Promise.Deferred();
 
-               // Allow JUST providing a CSS selector
-               if (typeof arguments[0] === "string") {
-                  selector = arguments[0];
-               }
-
                // Sanitise arguments
                if (!selector) {
                   throw new Error("No valid selector provided in tabToElement()");
