@@ -435,7 +435,7 @@ function getDocumentLibraryServices() {
       },
       {
          id: "UPLOAD_SERVICE",
-         name:  "alfresco/services/UploadService"
+         name:  "alfresco/services/FileUploadService"
       },
       {
          id: "CREATE_TEMPLATED_CONTENT_SERVICE",
