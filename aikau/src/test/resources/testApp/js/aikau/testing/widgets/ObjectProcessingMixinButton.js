@@ -104,7 +104,7 @@ define(["alfresco/buttons/AlfButton",
                });
                break;
             default:
-               throw new Error(`Unsupported test type (${this.testType})`);
+               throw new Error("Unsupported test type (" + this.testType + ")");
                break;
          }
 
