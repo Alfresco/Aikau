@@ -202,12 +202,13 @@ define(["module",
          .end()
 
          .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker .alfresco-menus-_AlfMenuItemMixin:nth-child(1) .alf-menu-bar-label-node")
+            .click()
          .end()
 
-         .findDisplayedByCssSelector(".alfresco-lists-views-AlfListView tr")
+         .findDisplayedByCssSelector(".alfresco-dialog-AlfDialog .alfresco-lists-views-AlfListView tr")
          .end()
 
-         .findAllByCssSelector(".alfresco-lists-views-AlfListView tr")
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert.lengthOf(elements, 4);
             });
