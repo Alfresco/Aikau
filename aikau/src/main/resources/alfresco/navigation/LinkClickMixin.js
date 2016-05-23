@@ -72,8 +72,8 @@ define(["dojo/_base/declare",
       processMiddleOrCtrlClick: function alfresco_navigation_LinkClickMixin__processMiddleOrCtrlClick(evt, publishTopic, publishPayload) {
          if (this.newTabOnMiddleOrCtrlClick && publishTopic === this.navigateToPageTopic) 
          {
-            var middleButton = evt.button === 2,
-               leftButton = evt.button === 1,
+            var middleButton = evt.button === 1,
+               leftButton = evt.button === 0,
                ctrlKey = has("mac") ? evt.metaKey : evt.ctrlKey;
             if (middleButton || (leftButton && ctrlKey))
             {
