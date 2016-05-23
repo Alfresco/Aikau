@@ -201,10 +201,7 @@ define(["module",
             .click()
          .end()
 
-         .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker")
-            .findDisplayedByCssSelector(".alfresco-menus-_AlfMenuItemMixin:nth-child(1) .alf-menu-bar-label-node")
-               .click()
-            .end()
+         .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker .alfresco-menus-_AlfMenuItemMixin:nth-child(1) .alf-menu-bar-label-node")
          .end()
 
          .findDisplayedByCssSelector(".alfresco-lists-views-AlfListView tr")
