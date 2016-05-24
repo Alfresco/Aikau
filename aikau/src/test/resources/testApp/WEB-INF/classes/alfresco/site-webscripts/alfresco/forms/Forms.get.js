@@ -100,6 +100,7 @@ model.jsonModel = {
                   id: "STANDARD_FORM",
                   name: "alfresco/forms/Form",
                   config: {
+                     pubSubScope: "STANDARD_FORM_",
                      okButtonPublishTopic: "PUBLISH_FORM_DATA",
                      cancelButtonPublishTopic: "CANCEL_FORM_DATA",
                      widgets: [
@@ -207,7 +208,8 @@ model.jsonModel = {
                   id: "CUSTOM_FIELDS_FORM",
                   name: "alfresco/forms/Form",
                   config: {
-                     okButtonPublishTopic: "PUBLISH_CONDITIONAL_FORM_DATA",
+                     pubSubScope: "CONDITIONAL_",
+                     okButtonPublishTopic: "FORM_DATA",
                      widgets: [
                         {
                            id: "TARGET_OPTIONS",
@@ -261,6 +263,7 @@ model.jsonModel = {
                   id: "SET_VALUE_VIA_PUBSUB_FORM",
                   name: "alfresco/forms/Form",
                   config: {
+                     pubSubScope: "SETTABLE_",
                      setValueTopic: "SET_FORM_VALUE",
                      okButtonPublishTopic: "OK",
                      widgets: [
@@ -311,7 +314,160 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Value Change Tracking",
+            widgets: [
+               {
+                  id: "VALUE_CHANGE_TRACKING_FORM",
+                  name: "alfresco/forms/Form",
+                  config: {
+                     pubSubScope: "VALUE_CHANGES_",
+                     setValueTopic: "SET_FORM_VALUE",
+                     okButtonPublishTopic: "OK",
+                     widgets: [
+                        {
+                           id: "SELECT_1",
+                           name: "alfresco/forms/controls/Select",
+                           config: {
+                              name: "A",
+                              label: "A",
+                              description: "Change this value to auto-set the textbox below",
+                              fieldId: "PRESET_A",
+                              value: "1",
+                              optionsConfig: {
+                                 fixed: [
+                                    {
+                                       "label": "1",
+                                       "value": "1"
+                                    },
+                                    {
+                                       "label": "2",
+                                       "value": "2"
+                                    }
+                                 ]
+                              }
+                           }
+                        }, 
+                        {
+                           id: "SELECT_2",
+                           name: "alfresco/forms/controls/Select",
+                           config: {
+                              name: "B",
+                              label: "B",
+                              description: "Change this value to auto-set the textbox below",
+                              fieldId: "PRESET_B",
+                              value: "1",
+                              optionsConfig: {
+                                 fixed: [
+                                    {
+                                       "label": "1",
+                                       "value": "1"
+                                    },
+                                    {
+                                       "label": "2",
+                                       "value": "2"
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           id: "TEXT_BOX_6",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                              label: "Auto-set value",
+                              description: "This field will be automatically updated as the select boxes change value",
+                              name: "hidden",
+                              fieldId: "PRESET",
+                              value: "11",
+                              autoSetConfig: [
+                                 {
+                                    rulePassValue: "11",
+                                    rulesMethod: "ALL",
+                                    rules: [
+                                       {
+                                          targetId: "PRESET_A",
+                                          is: ["1"]
+                                       },
+                                       {
+                                          targetId: "PRESET_B",
+                                          is: ["1"]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    rulePassValue: "12",
+                                    rulesMethod: "ALL",
+                                    rules: [
+                                       {
+                                          targetId: "PRESET_A",
+                                          is: ["1"]
+                                       },
+                                       {
+                                          targetId: "PRESET_B",
+                                          is: ["2"]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    rulePassValue: "21",
+                                    rulesMethod: "ALL",
+                                    rules: [
+                                       {
+                                          targetId: "PRESET_A",
+                                          is: ["2"]
+                                       },
+                                       {
+                                          targetId: "PRESET_B",
+                                          is: ["1"]
+                                       }
+                                    ]
+                                 }, 
+                                 {
+                                    rulePassValue: "22",
+                                    rulesMethod: "ALL",
+                                    rules: [
+                                       {
+                                          targetId: "PRESET_A",
+                                          is: ["2"]
+                                       },
+                                       {
+                                          targetId: "PRESET_B",
+                                          is: ["2"]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "LABEL_1",
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Should be visible when texbox is '11'",
+                              visibilityConfig: {
+                                 initialValue: true,
+                                 rulesMethod: "ALL",
+                                 rules: [
+                                    {
+                                       topic: "_valueChangeOf_PRESET",
+                                       attribute: "value",
+                                       is: ["11"],
+                                       strict: true
+                                    }
+                                 ]
+                              }
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

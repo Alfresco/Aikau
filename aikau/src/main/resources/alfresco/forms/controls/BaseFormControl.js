@@ -541,13 +541,20 @@ define(["dojo/_base/declare",
        * @param {boolean} hasPassedRule Indicated whether or not evaluation of the rules were successful
        */
       autoSetValue: function alfresco_forms_controls_BaseFormControl__autoSetValue(passValue, failValue, hasPassedRule) {
+         // passValue/failValue may not be set to any value in autoSetConfig to achieve positive-/negative-only rule behaviour
          if (hasPassedRule === true)
          {
-            this.setValue(passValue);
+            if (typeof passValue !== "undefined")
+            {
+                this.setValue(passValue);
+            }
          }
          else
          {
-            this.setValue(failValue);
+            if (typeof failValue !== "undefined")
+            {
+                this.setValue(failValue);
+            }
          }
       },
 
