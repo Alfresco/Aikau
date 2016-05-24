@@ -60,6 +60,18 @@ define(["alfresco/enums/urlTypes",
       cssRequirements: [{cssFile:"./css/_PublishOrLinkMixin.css"}],
 
       /**
+       * By default, clicks on the image will bubble up. To prevent click bubbling, simply set this to false. If
+       * a [publishTopic](module:alfresco/renderers/_PublishPayloadMixin#publishTopic) has been provided, then
+       * this will default to false automatically, however it can be overridden by explicitly setting this to true.
+       *
+       * @instance
+       * @type {boolean}
+       * @default true
+       * @since 1.0.69
+       */
+      clickBubbling: null,
+
+      /**
        * When set to true, the widget/anchors will be removed from the page tab-order by setting the tabindex to -1.
        * This overrides and changes the [inherited value]{@link alfresco/navigation/_HtmlAnchorMixin#excludeFromTabOrder}.
        *
@@ -113,6 +125,19 @@ define(["alfresco/enums/urlTypes",
       wrapAllChildren: true,
 
       /**
+       * This is run immediately after properties are mixed in, and before the widget is started.
+       *
+       * @instance
+       * @since 1.0.69
+       */
+      postMixInProperties: function() {
+         this.inherited(arguments);
+         if (this.clickBubbling === null) {
+            this.clickBubbling = !this.publishTopic;
+         }
+      },
+
+      /**
        * Run after widget created
        *
        * @instance
@@ -126,13 +151,13 @@ define(["alfresco/enums/urlTypes",
          } else if (this.publishTopic) {
             this.domNode.setAttribute("tabIndex", this.excludeFromTabOrder ? -1 : 0);
             domClass.add(this.domNode, "alfresco-core-PublishOrLinkMixin--clickable");
-            this.own(on(this.domNode, "click", lang.hitch(this, this.doPublish)));
-            this.own(on(this.domNode, "keydown", lang.hitch(this, function(evt) {
-               if (evt.keyCode === keys.ENTER) {
-                  this.doPublish();
-               }
-            })));
          }
+         this.own(on(this.domNode, "click", lang.hitch(this, this.onClick)));
+         this.own(on(this.domNode, "keydown", lang.hitch(this, function(evt) {
+            if (evt.keyCode === keys.ENTER) {
+               this.doPublish();
+            }
+         })));
       },
 
       /**
@@ -141,7 +166,21 @@ define(["alfresco/enums/urlTypes",
        * @instance
        */
       doPublish: function alfresco_core__PublishOrLinkMixin__doPublish() {
-         this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal, this.publishToParent);
+         this.publishTopic && this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal, this.publishToParent);
+      },
+
+      /**
+       * Publish to the specified topic.
+       *
+       * @instance
+       * @param {Object} evt Dojo-normalised event object
+       * @since 1.0.69
+       */
+      onClick: function alfresco_core__PublishOrLinkMixin__onClick(evt) {
+         if (!this.clickBubbling) {
+            evt.stopPropagation();
+         }
+         this.doPublish();
       }
    });
 });
