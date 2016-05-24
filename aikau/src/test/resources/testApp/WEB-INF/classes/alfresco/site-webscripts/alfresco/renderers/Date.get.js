@@ -13,6 +13,13 @@ model.jsonModel = {
    ],
    widgets:[
       {
+         name: "alfresco/html/Heading",
+         config: {
+            level: 3,
+            label: "Custom properties"
+         }
+      },
+      {
          id: "CUSTOM_PROPS",
          name: "alfresco/renderers/Date",
          config: {
@@ -23,6 +30,13 @@ model.jsonModel = {
             modifiedDateProperty: "modifiedOn",
             modifiedByProperty: "modifiedBy",
             renderOnNewLine: true
+         }
+      },
+      {
+         name: "alfresco/html/Heading",
+         config: {
+            level: 3,
+            label: "Standard properties (with label)"
          }
       },
       {
@@ -41,7 +55,15 @@ model.jsonModel = {
                   }
                }
             },
-            renderOnNewLine: true
+            renderOnNewLine: true,
+            label: "details.description.none"
+         }
+      },
+      {
+         name: "alfresco/html/Heading",
+         config: {
+            level: 3,
+            label: "Standard properties (missing user)"
          }
       },
       {
@@ -61,6 +83,13 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/html/Heading",
+         config: {
+            level: 3,
+            label: "Simple mode (with label)"
+         }
+      },
+      {
          id: "SIMPLE_MODE",
          name: "alfresco/renderers/Date",
          config: {
@@ -69,7 +98,15 @@ model.jsonModel = {
             },
             simple: true,
             propertyToRender: "date",
-            renderOnNewLine: true
+            renderOnNewLine: true,
+            label: "details.description.none"
+         }
+      },
+      {
+         name: "alfresco/html/Heading",
+         config: {
+            level: 3,
+            label: "Not available"
          }
       },
       {

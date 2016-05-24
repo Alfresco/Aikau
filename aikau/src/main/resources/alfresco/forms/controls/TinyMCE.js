@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_TinyMCE__setupChangeEvents() {
-         // No action.
+         this.wrappedWidget.editor.on("keyup", lang.hitch(this, this.onEditorValueChange));
       },
 
       /**

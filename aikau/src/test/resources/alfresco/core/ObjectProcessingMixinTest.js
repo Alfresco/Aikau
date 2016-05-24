@@ -27,16 +27,65 @@ define(["module",
 
    defineSuite(module, {
       name: "ObjectProcessingMixin Tests",
-      testPage: "/ObjectProcessingMixin",
+      testPage: "/ObjectProcessingMixin#hashName=hashValue",
 
       "Trying to process a recursive object succeeds and can be used as payload": function() {
          return this.remote.findById("PROCESS_RECURSIVE")
+            .clearLog()
             .click()
             .end()
 
          .getLastPublish("GENERATED", true)
             .then(function(payload) {
                assert.deepPropertyVal(payload, "obj1.obj2", "[recursive object]");
+            });
+      },
+
+      "Array inside item remains array when published": function() {
+         return this.remote.findById("PROCESS_ARRAY")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("GENERATED", true)
+            .then(function(payload) {
+               assert.sameMembers(payload.val, ["A", "B", "C"]);
+            });
+      },
+
+      "Nested array inside item remains array when published": function() {
+         return this.remote.findById("PROCESS_NESTED_ARRAY")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("GENERATED", true)
+            .then(function(payload) {
+               assert.sameMembers(payload.val, ["A", "B", "C"]);
+            });
+      },
+
+      "Can use 'processHashTokens' successfully": function() {
+         return this.remote.findById("PROCESS_HASH_TOKENS")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("GENERATED", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "val", "hashValue");
+            });
+      },
+
+      "Can use 'processMessageTokens' successfully": function() {
+         return this.remote.findById("PROCESS_MESSAGE_TOKENS")
+            .clearLog()
+            .click()
+            .end()
+
+         .getLastPublish("GENERATED", true)
+            .then(function(payload) {
+               assert.propertyVal(payload, "val", "propertyValue");
             });
       }
    });

@@ -62,7 +62,9 @@ define(["module",
 
       "Tab to and open right, drop-down": function() {
          return this.remote.findByCssSelector("body")
-            .tabToElement("#DDB2_DROP_DOWN_BUTTON")
+            .tabToElement({
+               selector: "#DDB2_DROP_DOWN_BUTTON"
+            })
             .pressKeys(keys.ENTER)
             .end()
 

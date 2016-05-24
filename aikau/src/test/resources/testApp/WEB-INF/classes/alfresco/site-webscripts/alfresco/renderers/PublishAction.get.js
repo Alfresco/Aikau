@@ -13,14 +13,51 @@ model.jsonModel = {
    ],
    widgets:[
       {
+         name: "alfresco/html/Heading",
+         config: {
+            label: "Default image",
+            level: 3
+         }
+      },
+      {
          name: "alfresco/renderers/PublishAction",
-         id: "EDIT_ME",
+         id: "DEFAULT",
+         config: {
+            publishTopic: "PUBLISH_ACTION_DEFAULT"
+         }
+      },
+      {
+         name: "alfresco/html/Heading",
+         config: {
+            label: "Custom icon with payload",
+            level: 3
+         }
+      },
+      {
+         name: "alfresco/renderers/PublishAction",
+         id: "CUSTOM_WITH_PAYLOAD",
          config: {
             iconClass: "edit-16",
-            publishTopic: "EDIT_ME",
+            publishTopic: "PUBLISH_ACTION_CUSTOM_WITH_PAYLOAD",
             publishPayload: {
                editMode: true
             }
+         }
+      },
+      {
+         name: "alfresco/html/Heading",
+         config: {
+            label: "Custom image URL",
+            level: 3
+         }
+      },
+      {
+         name: "alfresco/renderers/PublishAction",
+         id: "CUSTOM_IMAGE",
+         config: {
+            src: "images/app-logo-48.png",
+            srcType: "CONTEXT_RELATIVE",
+            publishTopic: "PUBLISH_ACTION_CUSTOM_IMAGE"
          }
       },
       {

@@ -29,8 +29,9 @@
 define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
-        "alfresco/core/ObjectTypeUtils"],
-        function(declare, lang, array, ObjectTypeUtils) {
+        "alfresco/core/ObjectTypeUtils",
+        "alfresco/util/hashUtils"],
+        function(declare, lang, array, ObjectTypeUtils, hashUtils) {
 
    return declare(null, {
 
@@ -67,7 +68,7 @@ define(["dojo/_base/declare",
          var processedValue = value;
 
          // Regular expression to match token in curly braces
-         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*}$/g;
+         var re = /^{[a-zA-Z_$][0-9a-zA-Z_$]*(\.[a-zA-Z_$][0-9a-zA-Z_$]*)*}$/g;
 
          // If the whole string is the token, replace it if it matches
          if (re.test(value)) {
@@ -75,8 +76,8 @@ define(["dojo/_base/declare",
             var tokenWithoutBraces = value.slice(1, -1);
 
             // If taken exists in object, replace it.
-            if (typeof object[tokenWithoutBraces] !== "undefined") {
-               processedValue = object[tokenWithoutBraces];
+            if (lang.exists(tokenWithoutBraces, object)) {
+               processedValue = lang.getObject(tokenWithoutBraces, false, object);
             }
          }
          else {
@@ -121,6 +122,50 @@ define(["dojo/_base/declare",
       processCurrentMetadataTokens: function alfresco_core_ObjectProcessingMixin__processCurrentMetadataTokens(valueToProcess) {
          // Search for tokens in the current metadata
          return this.processTokens(valueToProcess, this.currentMetadata);
+      },
+      
+      /**
+       * Wrapper for processTokens, searching within the currently set hash values
+       *
+       * @instance
+       * @param {string} valueToProcess The value to process.
+       * @returns {*} The processed value
+       * @since 1.0.68
+       */
+      processHashTokens: function alfresco_core_ObjectProcessingMixin__processHashTokens(valueToProcess) {
+          // this allows simple mixin of hash values e.g. into payloads
+          return this.processTokens(valueToProcess, hashUtils.getHash());
+      },
+      
+      /**
+       * This utility function will resolve any token against configured i18n properties
+       *
+       * @instance
+       * @param {string} valueToProcess The value to process.
+       * @returns {*} The processed value
+       * @since 1.0.68
+       */
+      processMessageTokens: function alfresco_core_ObjectProcessingMixin__processMessageTokens(valueToProcess) {
+          var processedValue;
+          
+          if (typeof this.message === "function") {
+              processedValue = lang.replace(valueToProcess, lang.hitch(this, function(tokenIncludingBraces, tokenWithoutBraces) {
+                  var value, message;
+                  
+                  value = tokenIncludingBraces;
+                  message = this.message(tokenWithoutBraces);
+                  if (ObjectTypeUtils.isString(message) && message !== tokenWithoutBraces) {
+                      value = message;
+                  }
+                  
+                  return value;
+              }));
+          }
+          else {
+              processedValue = valueToProcess;
+          }
+          
+          return processedValue;
       },
 
       /**

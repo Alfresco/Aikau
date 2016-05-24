@@ -67,7 +67,7 @@ define(["module",
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "url", "site/eventResult/calendar?date=2015-04-01", "Did not navigate to correct page");
+               assert.propertyVal(payload, "url", "site/eventResult/calendar?date=2015-04-01", "Did not navigate to correct page");
             });
       },
 
@@ -78,7 +78,7 @@ define(["module",
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2Fone%2Ftwo%2Fthree%2Ffour%2Ftest1%20%26%20test2", "Special characters were not encoded");
+               assert.propertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2Fone%2Ftwo%2Fthree%2Ffour%2Ftest1%20%26%20test2", "Special characters were not encoded");
             });
       },
 
@@ -89,7 +89,7 @@ define(["module",
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2F%2Fone%2Ftwo%2Fthree%2Ffour", "In folder link goes to the correct path");
+               assert.propertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2F%2Fone%2Ftwo%2Fthree%2Ffour", "In folder link goes to the correct path");
             });
       },
 
@@ -128,7 +128,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "CURRENT", "Name link should use CURRENT target");
+               assert.propertyVal(payload, "target", "CURRENT", "Name link should use CURRENT target");
             })
             .clearLog();
       },
@@ -139,7 +139,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "CURRENT", "Site link should use CURRENT target");
+               assert.propertyVal(payload, "target", "CURRENT", "Site link should use CURRENT target");
             })
             .clearLog();
       },
@@ -150,7 +150,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "CURRENT", "Path link should use CURRENT target");
+               assert.propertyVal(payload, "target", "CURRENT", "Path link should use CURRENT target");
             })
             .clearLog();
       },
@@ -161,59 +161,59 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "CURRENT", "Date link should use CURRENT target");
+               assert.propertyVal(payload, "target", "CURRENT", "Date link should use CURRENT target");
             })
             .clearLog();
       },
 
       "Control click name goes to new target": function() {
          return this.remote.findByCssSelector("#SR_DISPLAY_NAME .value")
-            .pressKeys([keys.CONTROL])
+            .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Control click name link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Control click name link should use NEW target");
             })
             .clearLog();
       },
 
       "Control click site goes to new target": function() {
          return this.remote.findByCssSelector("#SR_SITE .value")
-            .pressKeys([keys.CONTROL])
+            .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Control click site link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Control click site link should use NEW target");
             })
             .clearLog();
       },
 
       "Control click path goes to new target": function() {
          return this.remote.findByCssSelector("#SR_PATH .value")
-            .pressKeys([keys.CONTROL])
+            .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Control click path link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Control click path link should use NEW target");
             })
             .clearLog();
       },
 
       "Control click date goes to new target": function() {
          return this.remote.findByCssSelector("#SR_DATE .value")
-            .pressKeys([keys.CONTROL])
+            .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Control click date link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Control click date link should use NEW target");
             })
             .clearLog();
       }
@@ -229,7 +229,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
             .clearLog();
       },
@@ -240,7 +240,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
             .clearLog();
       },
@@ -251,7 +251,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
             .clearLog();
       },
@@ -262,7 +262,7 @@ define(["module",
             .end()
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.deepPropertyVal(payload, "target", "NEW", "Name link should use NEW target");
+               assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
             .clearLog();
       }

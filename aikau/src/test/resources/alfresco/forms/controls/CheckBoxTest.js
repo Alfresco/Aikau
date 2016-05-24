@@ -111,7 +111,9 @@ define(["module",
       "Keyboard navigation and selection is supported": function() {
          return this.remote.findByCssSelector(selectors.buttons.updateCheckboxes)
             .click()
-            .tabToElement(selectors.checkBoxes.default.checkBox)
+            .tabToElement({
+               selector: selectors.checkBoxes.default.checkBox
+            })
             .pressKeys(keys.SPACE)
             .end()
 

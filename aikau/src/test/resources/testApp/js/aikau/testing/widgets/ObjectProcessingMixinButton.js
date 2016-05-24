@@ -32,14 +32,26 @@ define(["alfresco/buttons/AlfButton",
    return declare([AlfButton, ObjectProcessingMixin], {
 
       /**
-       * Button label
+       * The current item to act upon
        *
        * @instance
        * @override
+       * @type {object}
+       * @default
+       * @since 1.0.68
+       */
+      currentItem: null,
+
+      /**
+       * The type of test being run (i.e. what should this button do). Value
+       * should be one of "RECURSIVE", "ARRAY" or "NESTED_ARRAY".
+       *
+       * @instance
        * @type {string}
        * @default
+       * @since 1.0.68
        */
-      label: "Generate and publish recursive payload",
+      testType: null,
 
       /**
        * Run after properties have been mixed into the instance
@@ -49,6 +61,12 @@ define(["alfresco/buttons/AlfButton",
        */
       postMixInProperties: function() {
          this.inherited(arguments);
+         this.currentItem = {
+            foo: {
+               bar: ["A", "B", "C"]
+            },
+            bar: ["A", "B", "C"]
+         };
       },
 
       /**
@@ -59,8 +77,38 @@ define(["alfresco/buttons/AlfButton",
        */
       onClick: function alfresco_buttons_AlfButton__onClick(evt) {
 
+         // Build the payload
+         var payload;
+         switch (this.testType) {
+            case "RECURSIVE":
+               payload = this.processObject([], this._createRecursiveObject());
+               break;
+            case "ARRAY":
+               payload = this.processObject(["processCurrentItemTokens"], {
+                  val: "{bar}"
+               });
+               break;
+            case "NESTED_ARRAY":
+               payload = this.processObject(["processCurrentItemTokens"], {
+                  val: "{foo.bar}"
+               });
+               break;
+            case "HASH":
+               payload = this.processObject(["processHashTokens"], {
+                  val: "{hashName}"
+               });
+               break;
+            case "MESSAGE":
+               payload = this.processObject(["processMessageTokens"], {
+                  val: "{propertyName}"
+               });
+               break;
+            default:
+               throw new Error("Unsupported test type (" + this.testType + ")");
+               break;
+         }
+
          // Publish generated payload
-         var payload = this.processObject([], this._createRecursiveObject());
          this.alfPublish("GENERATED", payload, true);
 
          // Stop the event
@@ -77,7 +125,8 @@ define(["alfresco/buttons/AlfButton",
        */
       _createRecursiveObject: function() {
          var obj1 = {
-               foo: "bar"
+               foo: "bar",
+               wibble: ["A", "B", "C"]
             },
             obj2 = {
                hey: "you",

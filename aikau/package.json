@@ -19,7 +19,7 @@
     "istanbul": "0.4.3",
     "jsdoc": "3.4.0",
     "jshint-stylish": "2.2.0",
-    "less": "2.6.1",
+    "less": "2.7.1",
     "load-grunt-tasks": "3.5.0",
     "node-coverage": "1.0.7",
     "properties-reader": "0.0.15",

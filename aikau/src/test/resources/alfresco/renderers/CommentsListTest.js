@@ -119,6 +119,11 @@ define(["module",
             });
       },
 
+      "Remove comment content to check save is disabled": function() {
+         return this.remote.execute("tinymce.get(1).setContent('');")
+            .findByCssSelector(".alfresco-renderers-EditableComment .alfresco-forms-Form .confirmationButton");
+      },
+
       "Save edit": function() {
          return this.remote.findAllByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-editors-TinyMCE iframe") // Wait for control
             .end()
@@ -175,50 +180,64 @@ define(["module",
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findDisplayedByCssSelector(".alfresco-lists-AlfList .alfresco-lists-views-layouts-Row:first-child .alfresco-renderers-PublishAction:nth-child(3) > img")
             .click()
          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-         .end()
+         .getLastPublish("COMMENTS1_ALF_DOCLIST_SORT")
+         .clearLog()
+
+         .sleep(2000)
 
          .findByCssSelector("#COMMENT_LIST .alfresco-lists-AlfList")
             .getVisibleText()
