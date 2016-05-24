@@ -69,20 +69,21 @@ define(["dojo/_base/declare",
        * @mmethod processConfig
        * @param {string} attribute
        * @param {object} config
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        */
-      processConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processConfig(attribute, config) {
+      processConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processConfig(attribute, config, widget) {
          if (config)
          {
             // Set the initial value...
             if (typeof config.initialValue !== "undefined")
             {
-               this[attribute](config.initialValue);
+               this[attribute](config.initialValue, widget);
             }
 
             // Process the rule subscriptions...
             if (typeof config.rules !== "undefined")
             {
-               this.processRulesConfig(attribute, config);
+               this.processRulesConfig(attribute, config, widget);
             }
             else
             {
@@ -111,8 +112,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} attribute E.g. visibility, editability, requirement
        * @param {object} config The full configuration for rules processing
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        */
-      processRulesConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processRulesConfig(attribute, config) {
+      processRulesConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processRulesConfig(attribute, config, widget) {
          // TODO: Implement rules for handling changes in validity (each type could have rule type of "isValid"
          //       and should subscribe to changes in validity. The reason for this would be to allow changes
          //       on validity. Validity may change asynchronously from value as it could be performed via a
@@ -124,12 +126,13 @@ define(["dojo/_base/declare",
             // Ensure that the rulesEngineData object has been created
             this._rulesEngineData = {};
          }
+
          if (typeof this._rulesEngineData[attribute] === "undefined")
          {
             // Ensure that the rulesEngineData object has specific information about the form control attribute...
             this._rulesEngineData[attribute] = {};
          }
-         array.forEach(config.rules, lang.hitch(this, this.processRule, attribute, config));
+         array.forEach(config.rules, lang.hitch(this, this.processRule, attribute, config, widget));
       },
 
       /**
@@ -139,10 +142,11 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} attribute The attribute that the rule effects (e.g. visibility)
        * @param {object} config The full configuration for rules processing
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        * @param {object} rule The rule to process.
        * @param {number} index The index of the rule.
        */
-      processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, rule, /*jshint unused:false*/ index) {
+      processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, widget, rule, /*jshint unused:false*/ index) {
          if (rule.targetId)
          {
             if (typeof this._rulesEngineData[attribute][rule.targetId] === "undefined")
@@ -155,7 +159,7 @@ define(["dojo/_base/declare",
             this._rulesEngineData[attribute][rule.targetId].rules = rule;
 
             // Subscribe to changes in the relevant property...
-            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute, config));
+            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute, config, widget));
          }
          else
          {
@@ -171,9 +175,10 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} attribute
        * @param {object} config The full configuration for rules processing
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        * @param {object} payload The publication posted on the topic that triggered the rule
        */
-      evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, payload) {
+      evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, widget, payload) {
          this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + this.fieldId + "'");
 
          // Set the current value that triggered the evaluation of rules...
@@ -192,7 +197,7 @@ define(["dojo/_base/declare",
             status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
          }
 
-         this[attribute](status);
+         this[attribute](status, widget);
          return status;
       },
 

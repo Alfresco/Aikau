@@ -447,19 +447,55 @@ model.jsonModel = {
                            config: {
                               label: "Should be visible when texbox is '11'",
                               visibilityConfig: {
+                                 useFormStyle: true,
                                  initialValue: true,
                                  rulesMethod: "ALL",
                                  rules: [
                                     {
-                                       topic: "_valueChangeOf_PRESET",
+                                       // topic: "_valueChangeOf_PRESET",
+                                       targetId: "PRESET",
                                        attribute: "value",
                                        is: ["11"],
                                        strict: true
-                                    }
+                                    },
+                                    {
+                                       // topic: "_valueChangeOf_PRESET_A",
+                                       targetId: "PRESET_A",
+                                       attribute: "value",
+                                       is: [ "1" ],
+                                       strict: true
+                                    },
+                                    {
+                                       // topic: "_valueChangeOf_PRESET_B",
+                                       targetId: "PRESET_B",
+                                       attribute: "value",
+                                       is: [ "1" ],
+                                       strict: true
+                                   }
                                  ]
                               }
                            }
-                        }
+                        },
+                        {
+                           id: "TEXT_BOX_7",
+                           name: "alfresco/forms/controls/TextBox",
+                           config: {
+                               name: "DependentTextBox",
+                               label: "DependentTextBox",
+                               value: "",
+                               visibilityConfig: {
+                                   initialValue: true,
+                                   rulesMethod: "ALL",
+                                   rules: [{
+                                       "targetId": "PRESET_A",
+                                       "is": [ "1" ]
+                                   }, {
+                                       "targetId": "PRESET_B",
+                                       "is": [ "1" ]
+                                   }]
+                               }
+                           }
+                       }
                      ]
                   }
                }

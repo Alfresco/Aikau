@@ -29,6 +29,7 @@
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/forms/controls/utilities/RulesEngineMixin",
         "alfresco/core/ObjectTypeUtils",
         "dijit/registry",
         "dojo/_base/array",
@@ -40,9 +41,9 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, RulesEngineMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
-   return declare([AlfCore, ObjectProcessingMixin], {
+   return declare([AlfCore, ObjectProcessingMixin, RulesEngineMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -308,6 +309,25 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is called when form style visibility configuration is used. 
+       * 
+       * @instance
+       * @param  {boolean} status Whether or not the widget should be displayed or not.
+       * @param  {object} widget The widget to toggle the visibility of
+       * @since 1.0.69
+       */
+      _visibilitySetting: function alfresco_core_CoreWidgetProcessing___visibilitySetting(status, widget) {
+         if (status)
+         {
+            domStyle.set(widget.domNode, "display", "");
+         }
+         else
+         {
+            domStyle.set(widget.domNode, "display", "none");
+         }
+      },
+
+      /**
        * Sets up the dynamic visibility handling for the supplied widget.
        *
        * @instance
@@ -328,38 +348,47 @@ define(["dojo/_base/declare",
          // as requested and then set up the subcriptions...
          if (widget[configAttribute])
          {
-            var initialValue = lang.getObject(configAttribute + ".initialValue", false, widget);
-            initialValue = negate ? !initialValue : initialValue;
-            if (initialValue != null && initialValue === false)
+            // See AKU-974 - support for "form" style visibility config...
+            var useFormStyle = lang.getObject(configAttribute + ".useFormStyle", false, widget);
+            if (useFormStyle)
             {
-               // Hide the widget if requested to initially...
-               domStyle.set(widget.domNode, "display", "none");
+               this.processConfig("_visibilitySetting", widget.visibilityConfig, widget);
             }
-            var rules = lang.getObject(configAttribute + ".rules", false, widget);
-            if (rules)
+            else
             {
-               array.forEach(rules, function(rule) {
-                  var topic = rule.topic,
-                      attribute = rule.attribute,
-                      is = rule.is,
-                      isNot = rule.isNot,
-                      strict = rule.strict != null ? rule.strict : true,
-                      useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
-                  if (topic && attribute && (is || isNot))
-                  {
-                     var rulesObj = {
-                           attribute: attribute,
-                           lookupObject: useCurrentItem && widget.currentItem,
-                           is: is,
-                           isNot: isNot,
-                           negate: negate,
-                           strict: strict
-                        },
-                        successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
-                        failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
-                     widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
-                  }
-               }, this);
+               var initialValue = lang.getObject(configAttribute + ".initialValue", false, widget);
+               initialValue = negate ? !initialValue : initialValue;
+               if (initialValue != null && initialValue === false)
+               {
+                  // Hide the widget if requested to initially...
+                  domStyle.set(widget.domNode, "display", "none");
+               }
+               var rules = lang.getObject(configAttribute + ".rules", false, widget);
+               if (rules)
+               {
+                  array.forEach(rules, function(rule) {
+                     var topic = rule.topic,
+                         attribute = rule.attribute,
+                         is = rule.is,
+                         isNot = rule.isNot,
+                         strict = rule.strict != null ? rule.strict : true,
+                         useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
+                     if (topic && attribute && (is || isNot))
+                     {
+                        var rulesObj = {
+                              attribute: attribute,
+                              lookupObject: useCurrentItem && widget.currentItem,
+                              is: is,
+                              isNot: isNot,
+                              negate: negate,
+                              strict: strict
+                           },
+                           successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
+                           failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
+                        widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
+                     }
+                  }, this);
+               }
             }
          }
       },
