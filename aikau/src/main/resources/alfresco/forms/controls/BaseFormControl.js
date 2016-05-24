@@ -544,14 +544,14 @@ define(["dojo/_base/declare",
          // passValue/failValue may not be set to any value in autoSetConfig to achieve positive-/negative-only rule behaviour
          if (hasPassedRule === true)
          {
-            if (passValue !== undefined)
+            if (typeof passValue !== "undefined")
             {
                 this.setValue(passValue);
             }
          }
          else
          {
-            if (failValue !== undefined)
+            if (typeof failValue !== "undefined")
             {
                 this.setValue(failValue);
             }
