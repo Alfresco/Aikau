@@ -100,6 +100,7 @@ model.jsonModel = {
                   id: "STANDARD_FORM",
                   name: "alfresco/forms/Form",
                   config: {
+                     pubSubScope: "STANDARD_FORM_",
                      okButtonPublishTopic: "PUBLISH_FORM_DATA",
                      cancelButtonPublishTopic: "CANCEL_FORM_DATA",
                      widgets: [
@@ -207,7 +208,8 @@ model.jsonModel = {
                   id: "CUSTOM_FIELDS_FORM",
                   name: "alfresco/forms/Form",
                   config: {
-                     okButtonPublishTopic: "PUBLISH_CONDITIONAL_FORM_DATA",
+                     pubSubScope: "CONDITIONAL_",
+                     okButtonPublishTopic: "FORM_DATA",
                      widgets: [
                         {
                            id: "TARGET_OPTIONS",
@@ -261,6 +263,7 @@ model.jsonModel = {
                   id: "SET_VALUE_VIA_PUBSUB_FORM",
                   name: "alfresco/forms/Form",
                   config: {
+                     pubSubScope: "SETTABLE_",
                      setValueTopic: "SET_FORM_VALUE",
                      okButtonPublishTopic: "OK",
                      widgets: [
@@ -311,7 +314,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
