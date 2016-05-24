@@ -153,8 +153,9 @@ define(["alfresco/enums/urlTypes",
        * Publish to the specified topic.
        *
        * @instance
+       * @param {Object} evt The click-event that triggered the publish.
        */
-      doPublish: function alfresco_core__PublishOrLinkMixin__doPublish() {
+      doPublish: function alfresco_core__PublishOrLinkMixin__doPublish(evt) {
          if (!this.clickBubbling) {
             evt.stopPropagation();
          }

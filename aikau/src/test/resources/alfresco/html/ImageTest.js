@@ -84,20 +84,7 @@ define(["module",
          return this.remote.findById("IMAGE_WITH_DIMENSIONS")
             .click()
             .execute(function() {
-               return window.bodyClicked;
-            })
-            .then(function(bodyClicked) {
-               assert.isFalse(bodyClicked);
-            });
-      },
-
-      "Click on image with topic does not bubble": function() {
-         return this.remote.execute(function() {
-               window.bodyClicked = false;
-            })
-            .findById("IMAGE_CLASS_STYLE_TOPIC")
-            .click()
-            .execute(function() {
+               /*jshint browser:true*/
                return window.bodyClicked;
             })
             .then(function(bodyClicked) {
@@ -107,11 +94,13 @@ define(["module",
 
       "Click on image without bubbling disabled does bubble": function() {
          return this.remote.execute(function() {
+               /*jshint browser:true*/
                window.bodyClicked = false;
             })
             .findById("IMAGE_CLASS_AND_DIMENSIONS")
             .click()
             .execute(function() {
+               /*jshint browser:true*/
                return window.bodyClicked;
             })
             .then(function(bodyClicked) {
