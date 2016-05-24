@@ -71,6 +71,9 @@ define(["module",
          text4: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_4"])
          },
+         text6: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_6"])
+         },
          addText1: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["ADD_TEXT_BOX_1"])
          },
@@ -293,6 +296,76 @@ define(["module",
          .getLastPublish("CONDITIONAL_FORM_DATA")
             .then(function(payload) {
                assert.propertyVal(payload, "TARGET", "KNOWN1");
+            });
+      },
+
+      "Label should be displayed initially": function() {
+         return this.remote.findDisplayedById("LABEL_1");
+      },
+
+      "Manually clearing text box should hide label": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.text6.input)
+            .clearValue()
+            .type("hide")
+         .end()
+
+         .findByCssSelector("#LABEL_1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Auto-set text box via select to display label": function() {
+         return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         // Need to select "2" before "1" can be selected to trigger the auto-set...
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#SELECT_2_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_2_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#SELECT_2_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_2_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findDisplayedById("LABEL_1");
+      },
+
+      "Auto-set text box via select to hide label": function() {
+         return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#LABEL_1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
             });
       }
    });
