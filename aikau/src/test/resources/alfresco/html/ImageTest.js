@@ -77,6 +77,39 @@ define(["module",
    });
 
    defineSuite(module, {
+      name: "Image click bubbling tests",
+      testPage: "/Image",
+
+      "Click on image with bubbling disabled does not bubble": function() {
+         return this.remote.findById("IMAGE_WITH_DIMENSIONS")
+            .click()
+            .execute(function() {
+               /*jshint browser:true*/
+               return window.bodyClicked;
+            })
+            .then(function(bodyClicked) {
+               assert.isFalse(bodyClicked);
+            });
+      },
+
+      "Click on image without bubbling disabled does bubble": function() {
+         return this.remote.execute(function() {
+               /*jshint browser:true*/
+               window.bodyClicked = false;
+            })
+            .findById("IMAGE_CLASS_AND_DIMENSIONS")
+            .click()
+            .execute(function() {
+               /*jshint browser:true*/
+               return window.bodyClicked;
+            })
+            .then(function(bodyClicked) {
+               assert.isTrue(bodyClicked);
+            });
+      }
+   });
+
+   defineSuite(module, {
       name: "Image Keyboard Tests",
       testPage: "/Image",
 

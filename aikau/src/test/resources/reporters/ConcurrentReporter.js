@@ -129,7 +129,7 @@ define(["intern/dojo/node!fs",
       var CONFIG = {
          BreakOnError: false,
          ClearScreenBeforeResults: true,
-         LongRunningTestMs: 2000,
+         LongRunningTestMs: 3000,
          NumLongestRunningTests: 10,
          OutputReporterInfo: true,
          Title: "UNIT TESTS",

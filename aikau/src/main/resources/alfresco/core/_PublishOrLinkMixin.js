@@ -60,6 +60,16 @@ define(["alfresco/enums/urlTypes",
       cssRequirements: [{cssFile:"./css/_PublishOrLinkMixin.css"}],
 
       /**
+       * By default, clicks on the image will bubble up. To prevent click bubbling, simply set this to false.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.69
+       */
+      clickBubbling: true,
+
+      /**
        * When set to true, the widget/anchors will be removed from the page tab-order by setting the tabindex to -1.
        * This overrides and changes the [inherited value]{@link alfresco/navigation/_HtmlAnchorMixin#excludeFromTabOrder}.
        *
@@ -132,6 +142,10 @@ define(["alfresco/enums/urlTypes",
                   this.doPublish();
                }
             })));
+         } else if (!this.clickBubbling) {
+            this.own(on(this.domNode, "click", function(evt) {
+               evt.stopPropagation();
+            }));
          }
       },
 
@@ -139,8 +153,12 @@ define(["alfresco/enums/urlTypes",
        * Publish to the specified topic.
        *
        * @instance
+       * @param {Object} evt The click-event that triggered the publish.
        */
-      doPublish: function alfresco_core__PublishOrLinkMixin__doPublish() {
+      doPublish: function alfresco_core__PublishOrLinkMixin__doPublish(evt) {
+         if (!this.clickBubbling) {
+            evt.stopPropagation();
+         }
          this.alfPublish(this.publishTopic, this.publishPayload, this.publishGlobal, this.publishToParent);
       }
    });
