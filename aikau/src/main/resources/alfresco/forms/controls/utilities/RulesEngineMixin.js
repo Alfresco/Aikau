@@ -155,19 +155,21 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the rule.
        */
       processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, widget, rule, /*jshint unused:false*/ index) {
-         if (rule.targetId)
+         if (rule.targetId || rule.topic)
          {
-            if (typeof widget._rulesEngineData[attribute][rule.targetId] === "undefined")
+            var dataKey = rule.targetId || (widget.pubSubScope + rule.topic);
+            if (typeof widget._rulesEngineData[attribute][dataKey] === "undefined")
             {
-               widget._rulesEngineData[attribute][rule.targetId] = {};
+               widget._rulesEngineData[attribute][dataKey] = {};
             }
 
             // Set the rules to be processed for the current rule...
             // NOTE: Previous rules can be potentically overridden here...
-            widget._rulesEngineData[attribute][rule.targetId].rules = rule;
+            widget._rulesEngineData[attribute][dataKey].rules = rule;
 
             // Subscribe to changes in the relevant property...
-            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute, config, widget));
+            var topic = rule.targetId ? "_valueChangeOf_" + rule.targetId : rule.topic;
+            this.alfSubscribe(topic, lang.hitch(this, this.evaluateRules, attribute, config, widget));
          }
          else
          {
@@ -190,22 +192,26 @@ define(["dojo/_base/declare",
          this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + widget.fieldId || widget.id + "'");
 
          // Set the current value that triggered the evaluation of rules...
-         widget._rulesEngineData[attribute][payload.fieldId].currentValue = payload.value;
-         var rulesEngineKeys = Object.keys(widget._rulesEngineData[attribute]);
-         var status;
-         if (config.rulesMethod === "ANY")
+         var dataKey = payload.fieldId || payload.alfTopic;
+         if (typeof widget._rulesEngineData[attribute][dataKey] !== "undefined")
          {
-            // NOTE: Array.every returns true for empty arrays, but Array.some returns false. We want to work on the
-            //       assumption that rules evaluate to true if there is no data to look at which is why we check the
-            //       length of the keys array...
-            status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
+            widget._rulesEngineData[attribute][dataKey].currentValue = payload.value;
+            var rulesEngineKeys = Object.keys(widget._rulesEngineData[attribute]);
+            var status;
+            if (config.rulesMethod === "ANY")
+            {
+               // NOTE: Array.every returns true for empty arrays, but Array.some returns false. We want to work on the
+               //       assumption that rules evaluate to true if there is no data to look at which is why we check the
+               //       length of the keys array...
+               status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
+            }
+            else
+            {
+               status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
+            }
+            this[attribute](status, widget);
          }
-         else
-         {
-            status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
-         }
-
-         this[attribute](status, widget);
+         
          return status;
       },
 

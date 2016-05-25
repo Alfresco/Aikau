@@ -490,7 +490,7 @@ model.jsonModel = {
                            config: {
                               label: "Should be visible when texbox is '11' and A and B are both 1",
                               visibilityConfig: {
-                                 useFormStyle: true,
+                                 useState: true,
                                  initialValue: true,
                                  rulesMethod: "ALL",
                                  rules: [
@@ -519,7 +519,7 @@ model.jsonModel = {
                            config: {
                               label: "Should be visible when texbox is '11' OR A is 1 OR B is 1",
                               visibilityConfig: {
-                                 useFormStyle: true,
+                                 useState: true,
                                  initialValue: true,
                                  rulesMethod: "ANY",
                                  rules: [
@@ -536,6 +536,32 @@ model.jsonModel = {
                                        is: [ "1" ]
                                    }
                                  ]
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR"
+                        },
+                        {
+                           id: "LABEL_4",
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Should be visible when A is 1 OR B is 1",
+                              visibilityConfig: {
+                                 useState: true,
+                                 initialValue: true,
+                                 rulesMethod: "ANY",
+                                 rules: [{
+                                    topic: "_valueChangeOf_PRESET_A",
+                                    attribute: "value",
+                                    is: [ "1" ],
+                                    strict: true
+                                 }, {
+                                    topic: "_valueChangeOf_PRESET_B",
+                                    attribute: "value",
+                                    is: [ "1" ],
+                                    strict: true
+                                }]
                               }
                            }
                         },

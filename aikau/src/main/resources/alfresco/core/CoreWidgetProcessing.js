@@ -349,8 +349,8 @@ define(["dojo/_base/declare",
          if (widget[configAttribute])
          {
             // See AKU-974 - support for "form" style visibility config...
-            var useFormStyle = lang.getObject(configAttribute + ".useFormStyle", false, widget);
-            if (useFormStyle)
+            var useState = lang.getObject(configAttribute + ".useState", false, widget);
+            if (useState)
             {
                this.processConfig("_visibilitySetting", widget.visibilityConfig, widget);
             }
