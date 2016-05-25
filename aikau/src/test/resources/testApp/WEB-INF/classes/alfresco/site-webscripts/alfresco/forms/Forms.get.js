@@ -442,46 +442,12 @@ model.jsonModel = {
                            }
                         },
                         {
-                           id: "LABEL_1",
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "Should be visible when texbox is '11'",
-                              visibilityConfig: {
-                                 useFormStyle: true,
-                                 initialValue: true,
-                                 rulesMethod: "ALL",
-                                 rules: [
-                                    {
-                                       // topic: "_valueChangeOf_PRESET",
-                                       targetId: "PRESET",
-                                       attribute: "value",
-                                       is: ["11"],
-                                       strict: true
-                                    },
-                                    {
-                                       // topic: "_valueChangeOf_PRESET_A",
-                                       targetId: "PRESET_A",
-                                       attribute: "value",
-                                       is: [ "1" ],
-                                       strict: true
-                                    },
-                                    {
-                                       // topic: "_valueChangeOf_PRESET_B",
-                                       targetId: "PRESET_B",
-                                       attribute: "value",
-                                       is: [ "1" ],
-                                       strict: true
-                                   }
-                                 ]
-                              }
-                           }
-                        },
-                        {
                            id: "TEXT_BOX_7",
                            name: "alfresco/forms/controls/TextBox",
                            config: {
                                name: "DependentTextBox",
                                label: "DependentTextBox",
+                               description: "This will be displayed if A and B are both 1",
                                value: "",
                                visibilityConfig: {
                                    initialValue: true,
@@ -495,7 +461,87 @@ model.jsonModel = {
                                    }]
                                }
                            }
-                       }
+                        },
+                        {
+                           id: "LABEL_1",
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Should be visible when texbox is '11'",
+                              visibilityConfig: {
+                                 initialValue: true,
+                                 rulesMethod: "ALL",
+                                 rules: [
+                                    {
+                                       topic: "_valueChangeOf_PRESET",
+                                       attribute: "value",
+                                       is: ["11"],
+                                       strict: true
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR"
+                        },
+                        {
+                           id: "LABEL_2",
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Should be visible when texbox is '11' and A and B are both 1",
+                              visibilityConfig: {
+                                 useFormStyle: true,
+                                 initialValue: true,
+                                 rulesMethod: "ALL",
+                                 rules: [
+                                    {
+                                       targetId: "PRESET",
+                                       is: ["11"]
+                                    },
+                                    {
+                                       targetId: "PRESET_A",
+                                       is: [ "1" ]
+                                    },
+                                    {
+                                       targetId: "PRESET_B",
+                                       is: [ "1" ]
+                                   }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR"
+                        },
+                        {
+                           id: "LABEL_3",
+                           name: "alfresco/html/Label",
+                           config: {
+                              label: "Should be visible when texbox is '11' OR A is 1 OR B is 1",
+                              visibilityConfig: {
+                                 useFormStyle: true,
+                                 initialValue: true,
+                                 rulesMethod: "ANY",
+                                 rules: [
+                                    {
+                                       targetId: "PRESET",
+                                       is: ["11"]
+                                    },
+                                    {
+                                       targetId: "PRESET_A",
+                                       is: [ "1" ]
+                                    },
+                                    {
+                                       targetId: "PRESET_B",
+                                       is: [ "1" ]
+                                   }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR"
+                        }
                      ]
                   }
                }

@@ -74,6 +74,14 @@ define(["dojo/_base/declare",
       processConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processConfig(attribute, config, widget) {
          if (config)
          {
+            // If no widget has been provided then assume the current widget is the subject of the rules. This
+            // change is required following AKU-974 where this module was mixed into CoreWidgetProcessing to
+            // support form style visibility processing on any widget
+            if (!widget)
+            {
+               widget = this;
+            }
+
             // Set the initial value...
             if (typeof config.initialValue !== "undefined")
             {
@@ -121,16 +129,16 @@ define(["dojo/_base/declare",
          //       remote request.
 
          // Set up the data structure that will be required for processing the rules for the target property changes...
-         if (!this._rulesEngineData)
+         if (!widget._rulesEngineData)
          {
             // Ensure that the rulesEngineData object has been created
-            this._rulesEngineData = {};
+            widget._rulesEngineData = {};
          }
 
-         if (typeof this._rulesEngineData[attribute] === "undefined")
+         if (typeof widget._rulesEngineData[attribute] === "undefined")
          {
             // Ensure that the rulesEngineData object has specific information about the form control attribute...
-            this._rulesEngineData[attribute] = {};
+            widget._rulesEngineData[attribute] = {};
          }
          array.forEach(config.rules, lang.hitch(this, this.processRule, attribute, config, widget));
       },
@@ -149,14 +157,14 @@ define(["dojo/_base/declare",
       processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, widget, rule, /*jshint unused:false*/ index) {
          if (rule.targetId)
          {
-            if (typeof this._rulesEngineData[attribute][rule.targetId] === "undefined")
+            if (typeof widget._rulesEngineData[attribute][rule.targetId] === "undefined")
             {
-               this._rulesEngineData[attribute][rule.targetId] = {};
+               widget._rulesEngineData[attribute][rule.targetId] = {};
             }
 
             // Set the rules to be processed for the current rule...
             // NOTE: Previous rules can be potentically overridden here...
-            this._rulesEngineData[attribute][rule.targetId].rules = rule;
+            widget._rulesEngineData[attribute][rule.targetId].rules = rule;
 
             // Subscribe to changes in the relevant property...
             this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute, config, widget));
@@ -179,22 +187,22 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication posted on the topic that triggered the rule
        */
       evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, widget, payload) {
-         this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + this.fieldId + "'");
+         this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + widget.fieldId || widget.id + "'");
 
          // Set the current value that triggered the evaluation of rules...
-         this._rulesEngineData[attribute][payload.fieldId].currentValue = payload.value;
-         var rulesEngineKeys = Object.keys(this._rulesEngineData[attribute]);
+         widget._rulesEngineData[attribute][payload.fieldId].currentValue = payload.value;
+         var rulesEngineKeys = Object.keys(widget._rulesEngineData[attribute]);
          var status;
          if (config.rulesMethod === "ANY")
          {
             // NOTE: Array.every returns true for empty arrays, but Array.some returns false. We want to work on the
             //       assumption that rules evaluate to true if there is no data to look at which is why we check the
             //       length of the keys array...
-            status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
+            status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
          }
          else
          {
-            status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
+            status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
          }
 
          this[attribute](status, widget);

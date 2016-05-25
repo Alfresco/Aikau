@@ -93,7 +93,7 @@ define(["alfresco/core/topics",
        * @since 1.0.49
        */
       fireChangeEvent: function alfresco_forms_controls_TextBox__fireChangeEvent(name, oldValue, newValue) {
-         if (this.__oldValue !== newValue) {
+         if (oldValue !== newValue) {
             this.onValueChangeEvent(name, oldValue, newValue);
          }
       },
