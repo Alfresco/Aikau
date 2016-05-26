@@ -157,7 +157,21 @@ define(["dojo/_base/declare",
       processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, widget, rule, /*jshint unused:false*/ index) {
          if (rule.targetId || rule.topic)
          {
-            var dataKey = rule.targetId || (widget.pubSubScope + rule.topic);
+            // As of AKU-974 the RulesEngine support non form controls, so we need to determine whether or not
+            // to use the targetId or topic for persisting data. At this stage we also need to update the config
+            // with a flag to assist processing of the data. This is done because there we want there is not
+            // an either/or test possible on topic or field id when evaluating the rules later (because alfTopic
+            // is always available!)...
+            var topic = "_valueChangeOf_" + rule.targetId;
+            var dataKey = rule.targetId;
+            if (!dataKey)
+            {
+               topic = rule.topic;
+               dataKey = widget.pubSubScope + rule.topic;
+               config._useTopic = true;
+            }
+
+            // Create an attribute to capure the value changes...
             if (typeof widget._rulesEngineData[attribute][dataKey] === "undefined")
             {
                widget._rulesEngineData[attribute][dataKey] = {};
@@ -168,7 +182,6 @@ define(["dojo/_base/declare",
             widget._rulesEngineData[attribute][dataKey].rules = rule;
 
             // Subscribe to changes in the relevant property...
-            var topic = rule.targetId ? "_valueChangeOf_" + rule.targetId : rule.topic;
             this.alfSubscribe(topic, lang.hitch(this, this.evaluateRules, attribute, config, widget));
          }
          else
@@ -189,13 +202,20 @@ define(["dojo/_base/declare",
        * @param {object} payload The publication posted on the topic that triggered the rule
        */
       evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, widget, payload) {
-         this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + widget.fieldId || widget.id + "'");
+         this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + (widget.fieldId || widget.id) + "'");
 
          // Set the current value that triggered the evaluation of rules...
-         var dataKey = payload.fieldId || payload.alfTopic;
+         var dataKey = config._useTopic ? payload.alfTopic : payload.fieldId;
          if (typeof widget._rulesEngineData[attribute][dataKey] !== "undefined")
          {
-            widget._rulesEngineData[attribute][dataKey].currentValue = payload.value;
+            var data = widget._rulesEngineData[attribute][dataKey];
+            var attributeKey = lang.getObject("rules.attribute", false, data);
+            if (!attributeKey)
+            {
+               attributeKey = "value";
+            }
+
+            widget._rulesEngineData[attribute][dataKey].currentValue = payload[attributeKey];
             var rulesEngineKeys = Object.keys(widget._rulesEngineData[attribute]);
             var status;
             if (config.rulesMethod === "ANY")

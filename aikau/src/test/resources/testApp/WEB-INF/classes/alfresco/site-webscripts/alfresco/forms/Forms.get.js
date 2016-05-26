@@ -550,18 +550,51 @@ model.jsonModel = {
                               visibilityConfig: {
                                  useState: true,
                                  initialValue: true,
-                                 rulesMethod: "ANY",
-                                 rules: [{
-                                    topic: "_valueChangeOf_PRESET_A",
-                                    attribute: "value",
-                                    is: [ "1" ],
-                                    strict: true
-                                 }, {
-                                    topic: "_valueChangeOf_PRESET_B",
-                                    attribute: "value",
-                                    is: [ "1" ],
-                                    strict: true
-                                }]
+                                 rulesMethod: "ALL",
+                                 rules: [
+                                    {
+                                       topic: "_valueChangeOf_PRESET_A",
+                                       attribute: "value",
+                                       is: [ "1" ],
+                                       strict: true
+                                    },
+                                    {
+                                       topic: "_valueChangeOf_PRESET_B",
+                                       attribute: "value",
+                                       is: [ "1" ],
+                                       strict: true
+                                    },
+                                    {
+                                       topic: "SHOW",
+                                       attribute: "key",
+                                       is: [ "ON" ]
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           name: "alfresco/html/HR"
+                        },
+                        {
+                           id: "BUTTON_1",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Show",
+                              publishTopic: "SHOW",
+                              publishPayload: {
+                                 key: "ON"
+                              }
+                           }
+                        },
+                        {
+                           id: "BUTTON_2",
+                           name: "alfresco/buttons/AlfButton",
+                           config: {
+                              label: "Hide",
+                              publishTopic: "SHOW",
+                              publishPayload: {
+                                 key: "OFF"
                               }
                            }
                         },
