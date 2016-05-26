@@ -141,13 +141,6 @@
          > form {
             > .alfresco-forms-controls-BaseFormControl {
                min-width: @dialog-control-section + 2;
-               &--invalid {
-                  > .title-row {
-                     > span.validation-message {
-                        display: block;
-                     }
-                  }
-               }
                > .description-row > .description {
                   margin: 0 0 @standard-line-height @dialog-label-section + 4;
                }
@@ -163,6 +156,18 @@
                   }
                   > .validation-message {
                      margin: 7px 0 0 -5px;
+                  }
+               }
+               &--no-label {
+                  > .title-row {
+                     display: none;
+                  }
+               }
+               &--invalid {
+                  > .title-row {
+                     > span.validation-message {
+                        display: block;
+                     }
                   }
                }
             }
