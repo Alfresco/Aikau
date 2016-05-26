@@ -248,8 +248,8 @@ buildPageModel({
             {
                name: "alfresco/buttons/AlfButton",
                config: {
-                  label: "Show Logo",
-                  publishTopic: "NOW_YOU_SEE_ME",
+                  label: "Click Me...",
+                  publishTopic: "ONE",
                   publishPayload: {
                      value: "show"
                   }
@@ -258,21 +258,31 @@ buildPageModel({
             {
                name: "alfresco/buttons/AlfButton",
                config: {
-                  label: "Hide Logo",
-                  publishTopic: "NOW_YOU_DO_NOT",
+                  label: "...and Click Me to show",
+                  publishTopic: "TWO",
                   publishPayload: {
-                     value: "hide"
+                     show: true
                   }
                }
             },
             {
                name: "alfresco/logo/Logo",
                config: {
-                  currentItem: {
-                     targetValue: "show"
-                  },
                   visibilityConfig: {
-                     
+                     useState: true,
+                     initialValue: false,
+                     rulesMethod: "ALL",
+                     rules: [
+                        {
+                           topic: "ONE",
+                           is: ["show"]
+                        },
+                        {
+                           topic: "TWO",
+                           attribute: "show",
+                           is: [true]
+                        }
+                     ]
                   }
                }
             }

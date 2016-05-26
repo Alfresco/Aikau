@@ -317,14 +317,7 @@ define(["dojo/_base/declare",
        * @since 1.0.69
        */
       _visibilitySetting: function alfresco_core_CoreWidgetProcessing___visibilitySetting(status, widget) {
-         if (status)
-         {
-            domStyle.set(widget.domNode, "display", "");
-         }
-         else
-         {
-            domStyle.set(widget.domNode, "display", "none");
-         }
+         domStyle.set(widget.domNode, "display", status ? "" : "none");
       },
 
       /**
@@ -358,7 +351,7 @@ define(["dojo/_base/declare",
             {
                var initialValue = lang.getObject(configAttribute + ".initialValue", false, widget);
                initialValue = negate ? !initialValue : initialValue;
-               if (initialValue != null && initialValue === false)
+               if (initialValue === false)
                {
                   // Hide the widget if requested to initially...
                   domStyle.set(widget.domNode, "display", "none");
