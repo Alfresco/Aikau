@@ -89,7 +89,7 @@ define(["module",
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.propertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2F%2Fone%2Ftwo%2Fthree%2Ffour", "In folder link goes to the correct path");
+               assert.propertyVal(payload, "url", "site/normalResult/documentlibrary?path=%2Fone%2Ftwo%2Fthree%2Ffour", "In folder link goes to the correct path");
             });
       },
 
