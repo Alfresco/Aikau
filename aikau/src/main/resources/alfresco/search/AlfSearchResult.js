@@ -448,11 +448,16 @@ define(["dojo/_base/declare",
          }
          else
          {
+            if (this.currentItem.path[0] !== "/")
+            {
+               this.currentItem.path = "/" + this.currentItem.path;
+            }
+
             // Create processed path as pathLink on this.currentItem
             var isRepo = !lang.exists("site.title", this.currentItem);
             this.currentItem.pathLink = isRepo ?
                encodeURIComponent("/" + this.currentItem.path.split("/").slice(2).join("/")) :
-               encodeURIComponent("/" + this.currentItem.path);
+               encodeURIComponent(this.currentItem.path);
 
             // jshint nonew:false
             new PropertyLink({
