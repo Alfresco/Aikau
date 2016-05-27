@@ -887,7 +887,7 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the filter configuration
        * @returns {boolean} True if the filter criteria have been met and false otherwise.
        */
-      processFilterConfig: function alfresco_core_WidgetsProcessingFilterMixin__processFilterConfig(renderFilterConfig, /*jshint unused:false*/ index) {
+      processFilterConfig: function alfresco_core_CoreWidgetProcessing__processFilterConfig(renderFilterConfig, /*jshint unused:false*/ index) {
          var passesFilter = false;
          if (this.filterPropertyExists(renderFilterConfig))
          {
@@ -1013,7 +1013,7 @@ define(["dojo/_base/declare",
        * @param {string|boolean|number} target The target object to match (ideally this should be a string, boolean or a number
        * @returns {boolean} true If the supplied value matches the target value and false otherwise.
        */
-      processFilter: function alfresco_core_WidgetsProcessingFilterMixin__processFilter(renderFilterConfig, target, currValue) {
+      processFilter: function alfresco_core_CoreWidgetProcessing__processFilter(renderFilterConfig, target, currValue) {
          if (ObjectTypeUtils.isString(currValue))
          {
             currValue = lang.trim(currValue);
@@ -1047,7 +1047,7 @@ define(["dojo/_base/declare",
        * @param {{property: string, values: string[]|string}} renderFilterConfig The filter configuration to process.
        * @returns {boolean} true if the property exists and false if it doesn't.
        */
-      filterPropertyExists: function alfresco_core_WidgetsProcessingFilterMixin__filterPropertyExists(renderFilterConfig) {
+      filterPropertyExists: function alfresco_core_CoreWidgetProcessing__filterPropertyExists(renderFilterConfig) {
          var targetObject = this.currentItem;
          if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
          {
@@ -1071,7 +1071,7 @@ define(["dojo/_base/declare",
        * @returns {object} The property of [currentItem]{@link module:alfresco/core/WidgetsProcessingFilterMixin#currentItem} defined
        * by the "property" attribute of the filter configuration.
        */
-      getRenderFilterPropertyValue: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterPropertyValue(renderFilterConfig) {
+      getRenderFilterPropertyValue: function alfresco_core_CoreWidgetProcessing__getRenderFilterPropertyValue(renderFilterConfig) {
          var targetObject = this.currentItem;
          if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
          {
@@ -1090,7 +1090,7 @@ define(["dojo/_base/declare",
        * @param {{property: string, values: string[]|string}} renderFilter The filter configuration to process.
        * @returns {string} The name of the filter
        */
-      getCustomRenderFilterProperty: function alfresco_core_WidgetsProcessingFilterMixin__getCustomRenderFilterProperty(currentItem) {
+      getCustomRenderFilterProperty: function alfresco_core_CoreWidgetProcessing__getCustomRenderFilterProperty(currentItem) {
          var result = null;
          if (currentItem instanceof Boolean || typeof currentItem === "boolean")
          {
@@ -1109,7 +1109,7 @@ define(["dojo/_base/declare",
        * @returns {string[]} An array (assumed to be of strings) that is either empty, the same array supplied as an argument or a single
        * string element supplied as an argument.
        */
-      getRenderFilterValues: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterValues(renderFilter) {
+      getRenderFilterValues: function alfresco_core_CoreWidgetProcessing__getRenderFilterValues(renderFilter) {
          var result = null;
          if (ObjectTypeUtils.isArray(renderFilter.values))
          {

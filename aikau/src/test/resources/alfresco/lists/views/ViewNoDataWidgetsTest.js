@@ -21,8 +21,9 @@
  * @author Dave Draper
  */
 define(["module",
-        "alfresco/defineSuite"],
-        function(module, defineSuite) {
+        "alfresco/defineSuite",
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "View With No Data Widgets Tests",
@@ -30,6 +31,17 @@ define(["module",
 
       "No data widgets displayed": function() {
          return this.remote.findDisplayedById("NO_DATA_WARNING");
+      },
+
+      "Render filter in no data display (rule pass)": function() {
+         return this.remote.findDisplayedById("LOGO1");
+      },
+
+      "Render filter in no data display (rule fail)": function() {
+         return this.remote.findAllByCssSelector("#LOGO2")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
       },
 
       "Data failure widgets displayed": function() {
