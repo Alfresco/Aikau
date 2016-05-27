@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Row Model Processing</shortname>
+  <description>This is an example of processing models in rows.</description>
+  <family>aikau-unit-tests</family>
+  <url>/RowModelProcessing</url>
+</webscript>
