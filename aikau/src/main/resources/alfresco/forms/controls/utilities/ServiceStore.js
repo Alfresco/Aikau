@@ -117,7 +117,8 @@ define(["dojo/_base/declare",
             payload.alfResponseTopic = responseTopic;
             var resultsProperty = this.publishPayload.resultsProperty || "response";
             this._getOptionsHandle = [];
-            this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, "onGetOptions", response, resultsProperty, id)));
+            this._getOptionsHandle.push(this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onGetOptions, response, resultsProperty, id)));
+            this._getOptionsHandle.push(this.alfSubscribe(responseTopic, lang.hitch(this, this.onGetOptions, response, resultsProperty, id)));
             this.alfPublish(this.publishTopic, payload, this.publishGlobal);
          }
          else if (this.fixed)

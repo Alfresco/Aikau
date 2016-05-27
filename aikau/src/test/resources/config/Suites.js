@@ -134,6 +134,7 @@ define(function() {
       "alfresco/forms/controls/DisablingSubmitFormTest",
       "alfresco/forms/controls/DocumentPickerTest",
       "alfresco/forms/controls/DocumentPickerSingleItemTest",
+      "alfresco/forms/controls/FilteringSelectTest",
       "alfresco/forms/controls/FormButtonDialogTest",
       "alfresco/forms/controls/MultipleEntryFormControlTest",
       "alfresco/forms/controls/MultiSelectInputTest",
