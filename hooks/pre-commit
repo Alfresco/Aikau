@@ -1,0 +1,4 @@
+#!/bin/bash
+source ~/.bash_profile
+node -e 'console.error("Hello world")'
+exit 1
