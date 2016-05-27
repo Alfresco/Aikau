@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FilteringSelect form control</shortname>
+  <description>Shows an example of the alfresco/forms/controls/FilteringSelect form control</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilteringSelect</url>
+</webscript>
