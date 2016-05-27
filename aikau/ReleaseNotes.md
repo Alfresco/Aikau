@@ -1,12 +1,9 @@
-Aikau 1.0.67 Release Notes
+Aikau 1.0.69 Release Notes
 ===
 
-New deprecations:
+Current deprecations:
 ---
 * alfresco/dialogs/AlfFormDialog                                 (use alfresco/services/DialogService)
-
-Previous deprecations:
----
 * alfresco/renderers/Thumbnail.js
   * onNodePromiseResolved                                        (configure usePreviewService to be true)
   * onLoadNode                                                   (configure usePreviewService to be true)
@@ -51,6 +48,22 @@ Previous deprecations:
 
 Resolved issues:
 ---
+1.0.69:
+* [AKU-968](https://issues.alfresco.com/jira/browse/AKU-968)       - Support for preventing click bubbling in PublishOrLinkMixin
+* [AKU-970](https://issues.alfresco.com/jira/browse/AKU-970)       - Improve visibilityConfig in forms
+* [AKU-972](https://issues.alfresco.com/jira/browse/AKU-972)       - Ensure FilteringSelect option can be preselected
+* [AKU-973](https://issues.alfresco.com/jira/browse/AKU-973)       - Improve widgetsForNoDataDisplay rendering in AlfListView
+* [AKU-974](https://issues.alfresco.com/jira/browse/AKU-974)       - Support state management in visibilityConfig for all widgets
+* [AKU-975](https://issues.alfresco.com/jira/browse/AKU-975)       - Ensure forward slash present in folder link AlfSearchResult
+* [AKU-977](https://issues.alfresco.com/jira/browse/AKU-977)       - Fix SimplePicker layout issue
+
+1.0.68:
+* [AKU-956](https://issues.alfresco.com/jira/browse/AKU-956)       - Prevent empty comments from being saved
+* [AKU-962](https://issues.alfresco.com/jira/browse/AKU-962)       - Fix siteMode in DocumentListPicker
+* [AKU-965](https://issues.alfresco.com/jira/browse/AKU-965)       - Support multiple Aikau Surf Component true publication order
+* [AKU-966](https://issues.alfresco.com/jira/browse/AKU-966)       - Configurable icon paths in PublishAction
+* [AKU-969](https://issues.alfresco.com/jira/browse/AKU-969)       - Internationalization for simple date rendering
+* [AKU-971](https://issues.alfresco.com/jira/browse/AKU-971)       - ObjectProcessingMixin improvements
 
 1.0.67:
 * [AKU-942](https://issues.alfresco.com/jira/browse/AKU-942)       - Add info for empty AlfDocumentList folder views
