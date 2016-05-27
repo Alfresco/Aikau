@@ -576,11 +576,8 @@ define(["dojo/_base/declare",
          // the default message with them...
          if (this.widgetsForNoDataDisplay)
          {
-            var wc = new WidgetsCreator({
-               widgets: this.widgetsForNoDataDisplay
-            });
             domConstruct.empty(this.messageNode);
-            wc.buildWidgets(this.messageNode);
+            this.processWidgets(this.widgetsForNoDataDisplay, this.messageNode, "WIDGETS_FOR_NO_DATA_DISPLAY");
          }
       },
 

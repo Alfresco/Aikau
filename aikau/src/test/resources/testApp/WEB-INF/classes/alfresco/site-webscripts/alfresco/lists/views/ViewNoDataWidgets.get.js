@@ -30,6 +30,9 @@ model.jsonModel = {
                            id: "VIEW1",
                            name: "alfresco/lists/views/AlfListView",
                            config: {
+                              testCustomFilterData: {
+                                 show: true
+                              },
                               widgetsForNoDataDisplay: [
                                  {
                                     id: "NO_DATA_WARNING",
@@ -39,6 +42,35 @@ model.jsonModel = {
                                           {
                                              message: "No data to display!",
                                              level: 1
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    id: "LOGO1",
+                                    name: "alfresco/logo/Logo",
+                                    config: {
+                                       renderFilter: [
+                                          {
+                                             target: "testCustomFilterData",
+                                             property: "show",
+                                             values: [true],
+                                             renderOnAbsentProperty: true
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    id: "LOGO2",
+                                    name: "alfresco/logo/Logo",
+                                    config: {
+                                       logoClasses: "surf-logo-large",
+                                       renderFilter: [
+                                          {
+                                             target: "testCustomFilterData",
+                                             property: "show",
+                                             values: [false],
+                                             renderOnAbsentProperty: true
                                           }
                                        ]
                                     }
