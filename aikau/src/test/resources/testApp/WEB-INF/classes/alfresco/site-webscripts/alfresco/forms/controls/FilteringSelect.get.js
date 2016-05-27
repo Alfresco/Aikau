@@ -1,3 +1,4 @@
+/* global url */
 model.jsonModel = {
    services: [
       {

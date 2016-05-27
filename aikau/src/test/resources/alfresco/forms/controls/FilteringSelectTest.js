@@ -24,16 +24,27 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "require"],
-        function(module, defineSuite, assert, require) {
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "FilteringSelect Tests",
       testPage: "/FilteringSelect",
 
-      "Test it works": function() {
-         assert.fail(null, null, "It doesn't work");
+      "Value assigned to control is selected": function() {
+         this.remote.findByCssSelector("#FILTERING_SELECT_1_CONTROL")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "abeecher");
+            });
+      },
+
+      "Value assigned to form is selected": function() {
+         this.remote.findByCssSelector("#FILTERING_SELECT_2_CONTROL")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "abeecher");
+            });
       }
    });
 });
