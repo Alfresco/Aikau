@@ -33,7 +33,9 @@ define(["module",
    var selectors = {
       buttons: {
          setHash: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_HASH"]),
-         setForm: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE"])
+         setForm: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE"]),
+         showLabel4: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BUTTON_1"]),
+         hideLabel4: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BUTTON_2"])
       },
       forms: {
          hashForm: {
@@ -299,11 +301,35 @@ define(["module",
             });
       },
 
-      "Label should be displayed initially": function() {
+      "Label 1 should be displayed initially": function() {
          return this.remote.findDisplayedById("LABEL_1");
       },
 
-      "Manually clearing text box should hide label": function() {
+      "Label 2 should be displayed initially": function() {
+         return this.remote.findDisplayedById("LABEL_2");
+      },
+
+      "Label 3 should be displayed initially": function() {
+         return this.remote.findDisplayedById("LABEL_3");
+      },
+
+      "Label 4 should be hidden initially": function() {
+         return this.remote.findByCssSelector("#LABEL_4")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Click the 'show' button to reveal label 4": function() {
+         return this.remote.findByCssSelector(selectors.buttons.showLabel4)
+            .click()
+         .end()
+
+         .findDisplayedById("LABEL_4");
+      },
+
+      "Manually clearing text box should hide label 1 and 2": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.text6.input)
             .clearValue()
             .type("hide")
@@ -312,25 +338,30 @@ define(["module",
          .findByCssSelector("#LABEL_1")
             .isDisplayed()
             .then(function(displayed) {
-               assert.isFalse(displayed);
+               assert.isFalse(displayed, "Label 1 should not be displayed");
+            })
+         .end()
+
+         .findByCssSelector("#LABEL_2")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 2 should not be displayed");
             });
       },
 
-      "Auto-set text box via select to display label": function() {
+      "Labels 3 and 4 should still be displayed after text box has been cleared": function() {
+         return this.remote.findDisplayedById("LABEL_3")
+         .end()
+
+         .findDisplayedById("LABEL_4");
+      },
+
+      "Auto-set text box via selects to hide labels 3 and 4": function() {
          return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
             .click()
          .end()
 
-         // Need to select "2" before "1" can be selected to trigger the auto-set...
          .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
-            .click()
-         .end()
-
-         .findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
-            .click()
-         .end()
-
-         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .click()
          .end()
 
@@ -342,6 +373,29 @@ define(["module",
             .click()
          .end()
 
+        .findByCssSelector("#LABEL_3")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 3 should not be visible");
+            })
+         .end()
+
+         .findByCssSelector("#LABEL_4")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 4 should not be visible");
+            });
+      },
+
+      "Auto-set text box via selects to reveal labels": function() {
+         return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
          .findByCssSelector("#SELECT_2_CONTROL .dijitSelectLabel")
             .click()
          .end()
@@ -350,7 +404,16 @@ define(["module",
             .click()
          .end()
 
-         .findDisplayedById("LABEL_1");
+         .findDisplayedById("LABEL_1")
+         .end()
+
+         .findDisplayedById("LABEL_2")
+         .end()
+
+         .findDisplayedById("LABEL_3")
+         .end()
+
+         .findDisplayedById("LABEL_4");
       },
 
       "Auto-set text box via select to hide label": function() {
@@ -363,6 +426,18 @@ define(["module",
          .end()
 
          .findByCssSelector("#LABEL_1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Click the 'hide' button to hide label 4": function() {
+         return this.remote.findByCssSelector(selectors.buttons.hideLabel4)
+            .click()
+         .end()
+
+         .findByCssSelector("#LABEL_4")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed);

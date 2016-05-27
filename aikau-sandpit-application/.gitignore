@@ -3,3 +3,4 @@
 
 # Ignored files (please keep alphabetical)
 *.log
+*.log.*

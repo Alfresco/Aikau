@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Visibility Config</shortname>
+  <description>Examples of how you can use the 'visibilityConfig' configuration to control the dynamic visibility of widgets.</description>
+  <family>ExamplePage</family>
+  <url>/VisibilityConfig</url>
+</webscript>

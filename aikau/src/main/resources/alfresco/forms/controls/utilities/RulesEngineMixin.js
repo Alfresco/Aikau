@@ -69,20 +69,29 @@ define(["dojo/_base/declare",
        * @mmethod processConfig
        * @param {string} attribute
        * @param {object} config
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        */
-      processConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processConfig(attribute, config) {
+      processConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processConfig(attribute, config, widget) {
          if (config)
          {
+            // If no widget has been provided then assume the current widget is the subject of the rules. This
+            // change is required following AKU-974 where this module was mixed into CoreWidgetProcessing to
+            // support form style visibility processing on any widget
+            if (!widget)
+            {
+               widget = this;
+            }
+
             // Set the initial value...
             if (typeof config.initialValue !== "undefined")
             {
-               this[attribute](config.initialValue);
+               this[attribute](config.initialValue, widget);
             }
 
             // Process the rule subscriptions...
             if (typeof config.rules !== "undefined")
             {
-               this.processRulesConfig(attribute, config);
+               this.processRulesConfig(attribute, config, widget);
             }
             else
             {
@@ -111,25 +120,27 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} attribute E.g. visibility, editability, requirement
        * @param {object} config The full configuration for rules processing
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        */
-      processRulesConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processRulesConfig(attribute, config) {
+      processRulesConfig: function alfresco_forms_controls_utilities_RulesEngineMixin__processRulesConfig(attribute, config, widget) {
          // TODO: Implement rules for handling changes in validity (each type could have rule type of "isValid"
          //       and should subscribe to changes in validity. The reason for this would be to allow changes
          //       on validity. Validity may change asynchronously from value as it could be performed via a
          //       remote request.
 
          // Set up the data structure that will be required for processing the rules for the target property changes...
-         if (!this._rulesEngineData)
+         if (!widget._rulesEngineData)
          {
             // Ensure that the rulesEngineData object has been created
-            this._rulesEngineData = {};
+            widget._rulesEngineData = {};
          }
-         if (typeof this._rulesEngineData[attribute] === "undefined")
+
+         if (typeof widget._rulesEngineData[attribute] === "undefined")
          {
             // Ensure that the rulesEngineData object has specific information about the form control attribute...
-            this._rulesEngineData[attribute] = {};
+            widget._rulesEngineData[attribute] = {};
          }
-         array.forEach(config.rules, lang.hitch(this, this.processRule, attribute, config));
+         array.forEach(config.rules, lang.hitch(this, this.processRule, attribute, config, widget));
       },
 
       /**
@@ -139,23 +150,39 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} attribute The attribute that the rule effects (e.g. visibility)
        * @param {object} config The full configuration for rules processing
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        * @param {object} rule The rule to process.
        * @param {number} index The index of the rule.
        */
-      processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, rule, /*jshint unused:false*/ index) {
-         if (rule.targetId)
+      processRule: function alfresco_forms_controls_utilities_RulesEngineMixin__processRule(attribute, config, widget, rule, /*jshint unused:false*/ index) {
+         if (rule.targetId || rule.topic)
          {
-            if (typeof this._rulesEngineData[attribute][rule.targetId] === "undefined")
+            // As of AKU-974 the RulesEngine support non form controls, so we need to determine whether or not
+            // to use the targetId or topic for persisting data. At this stage we also need to update the config
+            // with a flag to assist processing of the data. This is done because there we want there is not
+            // an either/or test possible on topic or field id when evaluating the rules later (because alfTopic
+            // is always available!)...
+            var topic = "_valueChangeOf_" + rule.targetId;
+            var dataKey = rule.targetId;
+            if (!dataKey)
             {
-               this._rulesEngineData[attribute][rule.targetId] = {};
+               topic = rule.topic;
+               dataKey = widget.pubSubScope + rule.topic;
+               config._useTopic = true;
+            }
+
+            // Create an attribute to capure the value changes...
+            if (typeof widget._rulesEngineData[attribute][dataKey] === "undefined")
+            {
+               widget._rulesEngineData[attribute][dataKey] = {};
             }
 
             // Set the rules to be processed for the current rule...
             // NOTE: Previous rules can be potentically overridden here...
-            this._rulesEngineData[attribute][rule.targetId].rules = rule;
+            widget._rulesEngineData[attribute][dataKey].rules = rule;
 
             // Subscribe to changes in the relevant property...
-            this.alfSubscribe("_valueChangeOf_" + rule.targetId, lang.hitch(this, this.evaluateRules, attribute, config));
+            this.alfSubscribe(topic, lang.hitch(this, this.evaluateRules, attribute, config, widget));
          }
          else
          {
@@ -171,28 +198,40 @@ define(["dojo/_base/declare",
        * @instance
        * @param {string} attribute
        * @param {object} config The full configuration for rules processing
+       * @param {object} [widget=this] The widget to apply rules changes to (defaults to the calling object, i.e. this)
        * @param {object} payload The publication posted on the topic that triggered the rule
        */
-      evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, payload) {
-         this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + this.fieldId + "'");
+      evaluateRules: function alfresco_forms_controls_utilities_RulesEngineMixin__evaluateRules(attribute, config, widget, payload) {
+         this.alfLog("log", "RULES EVALUATION('" + attribute + "'): Field '" + (widget.fieldId || widget.id) + "'");
 
          // Set the current value that triggered the evaluation of rules...
-         this._rulesEngineData[attribute][payload.fieldId].currentValue = payload.value;
-         var rulesEngineKeys = Object.keys(this._rulesEngineData[attribute]);
-         var status;
-         if (config.rulesMethod === "ANY")
+         var dataKey = config._useTopic ? payload.alfTopic : payload.fieldId;
+         if (typeof widget._rulesEngineData[attribute][dataKey] !== "undefined")
          {
-            // NOTE: Array.every returns true for empty arrays, but Array.some returns false. We want to work on the
-            //       assumption that rules evaluate to true if there is no data to look at which is why we check the
-            //       length of the keys array...
-            status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
-         }
-         else
-         {
-            status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, this._rulesEngineData[attribute]));
-         }
+            var data = widget._rulesEngineData[attribute][dataKey];
+            var attributeKey = lang.getObject("rules.attribute", false, data);
+            if (!attributeKey)
+            {
+               attributeKey = "value";
+            }
 
-         this[attribute](status);
+            widget._rulesEngineData[attribute][dataKey].currentValue = payload[attributeKey];
+            var rulesEngineKeys = Object.keys(widget._rulesEngineData[attribute]);
+            var status;
+            if (config.rulesMethod === "ANY")
+            {
+               // NOTE: Array.every returns true for empty arrays, but Array.some returns false. We want to work on the
+               //       assumption that rules evaluate to true if there is no data to look at which is why we check the
+               //       length of the keys array...
+               status = rulesEngineKeys.length === 0 || array.some(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
+            }
+            else
+            {
+               status = array.every(rulesEngineKeys, lang.hitch(this, this.evaluateRule, widget._rulesEngineData[attribute]));
+            }
+            this[attribute](status, widget);
+         }
+         
          return status;
       },
 
