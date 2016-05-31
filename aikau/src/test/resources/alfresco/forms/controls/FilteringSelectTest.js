@@ -18,7 +18,9 @@
  */
 
 /**
- * @author Dave Draper
+ * This tests the FilteringSelect control.
+ * 
+ * @author Martin Doyle
  */
 define(["module",
         "alfresco/defineSuite",
@@ -26,26 +28,23 @@ define(["module",
         function(module, defineSuite, assert) {
 
    defineSuite(module, {
-      name: "View With No Data Widgets Tests",
-      testPage: "/ViewNoDataWidgets",
+      name: "FilteringSelect Tests",
+      testPage: "/FilteringSelect",
 
-      "No data widgets displayed": function() {
-         return this.remote.findDisplayedById("NO_DATA_WARNING");
-      },
-
-      "Render filter in no data display (rule pass)": function() {
-         return this.remote.findDisplayedById("LOGO1");
-      },
-
-      "Render filter in no data display (rule fail)": function() {
-         return this.remote.findAllByCssSelector("#LOGO2")
-            .then(function(elements) {
-               assert.lengthOf(elements, 0);
+      "Value assigned to control is selected": function() {
+         this.remote.findByCssSelector("#FILTERING_SELECT_1_CONTROL")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "abeecher");
             });
       },
 
-      "Data failure widgets displayed": function() {
-         return this.remote.findDisplayedById("DATA_FAIL_WARNING");
+      "Value assigned to form is selected": function() {
+         this.remote.findByCssSelector("#FILTERING_SELECT_2_CONTROL")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "abeecher");
+            });
       }
    });
 });

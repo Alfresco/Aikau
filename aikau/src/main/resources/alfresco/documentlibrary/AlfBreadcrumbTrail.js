@@ -400,7 +400,7 @@ define(["dojo/_base/declare",
             {
                config.publishTopic = "ALF_NAVIGATE_TO_PAGE";
                config.publishPayload = {
-                  url: "path=" + (path || "/"),
+                  url: "path=" + (path || "/") + "&currentPage=1",
                   type: "HASH",
                   target: "CURRENT",
                   modifyCurrent: true

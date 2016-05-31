@@ -1,0 +1,3 @@
+#!/bin/bash
+export PATH=/usr/local/bin:$PATH # This is messy, but it's the best guess at where grunt/node will be
+grunt --gruntfile aikau/Gruntfile.js jshint

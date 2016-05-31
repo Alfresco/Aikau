@@ -29,6 +29,7 @@
 define(["dojo/_base/declare",
         "alfresco/core/Core",
         "alfresco/core/ObjectProcessingMixin",
+        "alfresco/forms/controls/utilities/RulesEngineMixin",
         "alfresco/core/ObjectTypeUtils",
         "dijit/registry",
         "dojo/_base/array",
@@ -40,9 +41,9 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectProcessingMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, RulesEngineMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
-   return declare([AlfCore, ObjectProcessingMixin], {
+   return declare([AlfCore, ObjectProcessingMixin, RulesEngineMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -308,6 +309,18 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is called when form style visibility configuration is used. 
+       * 
+       * @instance
+       * @param  {boolean} status Whether or not the widget should be displayed or not.
+       * @param  {object} widget The widget to toggle the visibility of
+       * @since 1.0.69
+       */
+      _visibilitySetting: function alfresco_core_CoreWidgetProcessing___visibilitySetting(status, widget) {
+         domStyle.set(widget.domNode, "display", status ? "" : "none");
+      },
+
+      /**
        * Sets up the dynamic visibility handling for the supplied widget.
        *
        * @instance
@@ -328,38 +341,47 @@ define(["dojo/_base/declare",
          // as requested and then set up the subcriptions...
          if (widget[configAttribute])
          {
-            var initialValue = lang.getObject(configAttribute + ".initialValue", false, widget);
-            initialValue = negate ? !initialValue : initialValue;
-            if (initialValue != null && initialValue === false)
+            // See AKU-974 - support for "form" style visibility config...
+            var useState = lang.getObject(configAttribute + ".useState", false, widget);
+            if (useState)
             {
-               // Hide the widget if requested to initially...
-               domStyle.set(widget.domNode, "display", "none");
+               this.processConfig("_visibilitySetting", widget.visibilityConfig, widget);
             }
-            var rules = lang.getObject(configAttribute + ".rules", false, widget);
-            if (rules)
+            else
             {
-               array.forEach(rules, function(rule) {
-                  var topic = rule.topic,
-                      attribute = rule.attribute,
-                      is = rule.is,
-                      isNot = rule.isNot,
-                      strict = rule.strict != null ? rule.strict : true,
-                      useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
-                  if (topic && attribute && (is || isNot))
-                  {
-                     var rulesObj = {
-                           attribute: attribute,
-                           lookupObject: useCurrentItem && widget.currentItem,
-                           is: is,
-                           isNot: isNot,
-                           negate: negate,
-                           strict: strict
-                        },
-                        successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
-                        failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
-                     widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
-                  }
-               }, this);
+               var initialValue = lang.getObject(configAttribute + ".initialValue", false, widget);
+               initialValue = negate ? !initialValue : initialValue;
+               if (initialValue === false)
+               {
+                  // Hide the widget if requested to initially...
+                  domStyle.set(widget.domNode, "display", "none");
+               }
+               var rules = lang.getObject(configAttribute + ".rules", false, widget);
+               if (rules)
+               {
+                  array.forEach(rules, function(rule) {
+                     var topic = rule.topic,
+                         attribute = rule.attribute,
+                         is = rule.is,
+                         isNot = rule.isNot,
+                         strict = rule.strict != null ? rule.strict : true,
+                         useCurrentItem = rule.useCurrentItem != null ? rule.useCurrentItem : false;
+                     if (topic && attribute && (is || isNot))
+                     {
+                        var rulesObj = {
+                              attribute: attribute,
+                              lookupObject: useCurrentItem && widget.currentItem,
+                              is: is,
+                              isNot: isNot,
+                              negate: negate,
+                              strict: strict
+                           },
+                           successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
+                           failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
+                        widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
+                     }
+                  }, this);
+               }
             }
          }
       },
@@ -887,7 +909,7 @@ define(["dojo/_base/declare",
        * @param {number} index The index of the filter configuration
        * @returns {boolean} True if the filter criteria have been met and false otherwise.
        */
-      processFilterConfig: function alfresco_core_WidgetsProcessingFilterMixin__processFilterConfig(renderFilterConfig, /*jshint unused:false*/ index) {
+      processFilterConfig: function alfresco_core_CoreWidgetProcessing__processFilterConfig(renderFilterConfig, /*jshint unused:false*/ index) {
          var passesFilter = false;
          if (this.filterPropertyExists(renderFilterConfig))
          {
@@ -1013,7 +1035,7 @@ define(["dojo/_base/declare",
        * @param {string|boolean|number} target The target object to match (ideally this should be a string, boolean or a number
        * @returns {boolean} true If the supplied value matches the target value and false otherwise.
        */
-      processFilter: function alfresco_core_WidgetsProcessingFilterMixin__processFilter(renderFilterConfig, target, currValue) {
+      processFilter: function alfresco_core_CoreWidgetProcessing__processFilter(renderFilterConfig, target, currValue) {
          if (ObjectTypeUtils.isString(currValue))
          {
             currValue = lang.trim(currValue);
@@ -1047,7 +1069,7 @@ define(["dojo/_base/declare",
        * @param {{property: string, values: string[]|string}} renderFilterConfig The filter configuration to process.
        * @returns {boolean} true if the property exists and false if it doesn't.
        */
-      filterPropertyExists: function alfresco_core_WidgetsProcessingFilterMixin__filterPropertyExists(renderFilterConfig) {
+      filterPropertyExists: function alfresco_core_CoreWidgetProcessing__filterPropertyExists(renderFilterConfig) {
          var targetObject = this.currentItem;
          if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
          {
@@ -1071,7 +1093,7 @@ define(["dojo/_base/declare",
        * @returns {object} The property of [currentItem]{@link module:alfresco/core/WidgetsProcessingFilterMixin#currentItem} defined
        * by the "property" attribute of the filter configuration.
        */
-      getRenderFilterPropertyValue: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterPropertyValue(renderFilterConfig) {
+      getRenderFilterPropertyValue: function alfresco_core_CoreWidgetProcessing__getRenderFilterPropertyValue(renderFilterConfig) {
          var targetObject = this.currentItem;
          if (renderFilterConfig.target && lang.exists(renderFilterConfig.target))
          {
@@ -1090,7 +1112,7 @@ define(["dojo/_base/declare",
        * @param {{property: string, values: string[]|string}} renderFilter The filter configuration to process.
        * @returns {string} The name of the filter
        */
-      getCustomRenderFilterProperty: function alfresco_core_WidgetsProcessingFilterMixin__getCustomRenderFilterProperty(currentItem) {
+      getCustomRenderFilterProperty: function alfresco_core_CoreWidgetProcessing__getCustomRenderFilterProperty(currentItem) {
          var result = null;
          if (currentItem instanceof Boolean || typeof currentItem === "boolean")
          {
@@ -1109,7 +1131,7 @@ define(["dojo/_base/declare",
        * @returns {string[]} An array (assumed to be of strings) that is either empty, the same array supplied as an argument or a single
        * string element supplied as an argument.
        */
-      getRenderFilterValues: function alfresco_core_WidgetsProcessingFilterMixin__getRenderFilterValues(renderFilter) {
+      getRenderFilterValues: function alfresco_core_CoreWidgetProcessing__getRenderFilterValues(renderFilter) {
          var result = null;
          if (ObjectTypeUtils.isArray(renderFilter.values))
          {

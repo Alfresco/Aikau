@@ -134,6 +134,7 @@ define(function() {
       "alfresco/forms/controls/DisablingSubmitFormTest",
       "alfresco/forms/controls/DocumentPickerTest",
       "alfresco/forms/controls/DocumentPickerSingleItemTest",
+      "alfresco/forms/controls/FilteringSelectTest",
       "alfresco/forms/controls/FormButtonDialogTest",
       "alfresco/forms/controls/MultipleEntryFormControlTest",
       "alfresco/forms/controls/MultiSelectInputTest",
@@ -195,6 +196,7 @@ define(function() {
       "alfresco/lists/views/HtmlListViewTest",
       "alfresco/lists/views/ViewNoDataWidgetsTest",
       "alfresco/lists/views/layouts/EditableRowTest",
+      "alfresco/lists/views/layouts/RowModelProcessingTest",
       "alfresco/lists/views/layouts/RowTest",
 
       "alfresco/logging/DebugLogTest",

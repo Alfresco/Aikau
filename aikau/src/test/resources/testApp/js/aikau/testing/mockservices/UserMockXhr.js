@@ -19,7 +19,7 @@
 
 /**
  *
- * @module aikauTesting/UserMockXhr
+ * @module aikauTesting/mockservices/UserMockXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

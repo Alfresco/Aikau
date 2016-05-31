@@ -22,6 +22,7 @@ model.jsonModel = {
          name: "alfresco/html/Image",
          id: "IMAGE_WITH_DIMENSIONS",
          config: {
+            clickBubbling: false,
             height: 75,
             src: "images/app-logo-48.png",
             srcType: "CONTEXT_RELATIVE",

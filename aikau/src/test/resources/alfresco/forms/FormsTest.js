@@ -23,22 +23,85 @@
 define(["module",
         "alfresco/defineSuite",
         "intern/chai!assert",
-        "require",
         "alfresco/TestCommon"],
-        function(module, defineSuite, assert, require, TestCommon) {
+        function(module, defineSuite, assert, TestCommon) {
+
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
+   var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
+
+   var selectors = {
+      buttons: {
+         setHash: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_HASH"]),
+         setForm: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_FORM_VALUE"]),
+         showLabel4: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BUTTON_1"]),
+         hideLabel4: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BUTTON_2"])
+      },
+      forms: {
+         hashForm: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["HASH_FORM"])
+         },
+         standardForm: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["STANDARD_FORM"]),
+            confirmationButtonContent: TestCommon.getTestSelector(formSelectors, "confirmation.button.content", ["STANDARD_FORM"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button.disabled", ["STANDARD_FORM"]),
+            disabledConfirmationButtonContent: TestCommon.getTestSelector(formSelectors, "confirmation.button.disabled.content", ["STANDARD_FORM"])
+         },
+         setValueForm: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["SET_VALUE_VIA_PUBSUB_FORM"])
+         },
+         customFieldsForm: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["CUSTOM_FIELDS_FORM"])
+         }
+      },
+      textBoxes: {
+         hash1: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["HASH_TEXT_BOX_1"])
+         },
+         hash2: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["HASH_TEXT_BOX_2"])
+         },
+         text1: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_1"])
+         },
+         text2: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_2"])
+         },
+         text3: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_3"])
+         },
+         text4: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_4"])
+         },
+         text6: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TEXT_BOX_6"])
+         },
+         addText1: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["ADD_TEXT_BOX_1"])
+         },
+         addText2: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["ADD_TEXT_BOX_2"])
+         },
+         customTarget: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["CUSTOM_TARGET"])
+         }
+      }
+   };
 
    defineSuite(module, {
       name: "Forms Tests",
       testPage: "/Forms",
 
       "Test setting browser hash fragment with form post": function() {
-         return this.remote.findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.textBoxes.hash1.input)
             .type("test1")
-            .end()
-            .findByCssSelector("#HASH_TEXT_BOX_2 .dijitInputContainer input")
+         .end()
+            
+         .findByCssSelector(selectors.textBoxes.hash2.input)
             .type("test2")
-            .end()
-            .findByCssSelector("#HASH_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
+         .end()
+      
+         .findByCssSelector(selectors.forms.hashForm.confirmationButton)
             .click()
             .execute("return window.location.hash.toString()")
             .then(function(hash) {
@@ -47,29 +110,32 @@ define(["module",
       },
 
       "Test updating browser hash updates form": function() {
-         return this.remote.findByCssSelector("#SET_HASH")
+         return this.remote.findByCssSelector(selectors.buttons.setHash)
             .click()
-            .end()
-            .findByCssSelector("#HASH_TEXT_BOX_1 .dijitInputContainer input")
+         .end()
+            
+         .findByCssSelector(selectors.textBoxes.hash1.input)
             .getProperty("value")
             .then(function(resultText) {
-               assert(resultText === "updatedField1", "field1 was not set by the hash: " + resultText);
+               assert.equal(resultText, "updatedField1");
             })
-            .end()
-            .findByCssSelector("#HASH_TEXT_BOX_2 .dijitInputContainer input")
+         .end()
+            
+         .findByCssSelector(selectors.textBoxes.hash2.input)
             .getProperty("value")
             .then(function(resultText) {
-               assert(resultText === "updatedField2", "field2 was not set by the hash: " + resultText);
+               assert.equal(resultText, "updatedField2");
             });
       },
 
       "Test confirmation form button initially disabled": function() {
-         return this.remote.findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
+         return this.remote.findAllByCssSelector(selectors.forms.standardForm.disabledConfirmationButton)
             .then(function(elements) {
-               assert(elements.length === 1, "Standard form button was not initially disabled");
+               assert.lengthOf(elements, 1);
             })
-            .end()
-            .findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton span.dijitButtonContents")
+         .end()
+            
+         .findByCssSelector(selectors.forms.standardForm.disabledConfirmationButtonContent)
             .getAttribute("disabled")
             .then(function(disabled) {
                assert.equal(disabled, "true");
@@ -77,18 +143,21 @@ define(["module",
       },
 
       "Test confirmation button is enabled with valid fields": function() {
-         return this.remote.findByCssSelector("#TEXT_BOX_1 .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.textBoxes.text1.input)
             .type("test3")
-            .end()
-            .findByCssSelector("#TEXT_BOX_2 .dijitInputContainer input")
+         .end()
+            
+         .findByCssSelector(selectors.textBoxes.text2.input)
             .type("9")
-            .end()
-            .findAllByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton.dijitButtonDisabled")
+         .end()
+            
+         .findAllByCssSelector(selectors.forms.standardForm.disabledConfirmationButton)
             .then(function(elements) {
-               assert(elements.length === 0, "Standard form button was not enabled following valid data entry");
+               assert.lengthOf(elements, 0);
             })
-            .end()
-            .findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton span.dijitButtonContents")
+         .end()
+         
+         .findByCssSelector(selectors.forms.standardForm.confirmationButtonContent)
             .getAttribute("disabled")
             .then(function(disabled) {
                assert.equal(disabled, "false");
@@ -96,82 +165,68 @@ define(["module",
       },
 
       "Test form value publication": function() {
-         return this.remote.findByCssSelector("#STANDARD_FORM .buttons .alfresco-buttons-AlfButton.confirmationButton > span")
+         return this.remote.findByCssSelector(selectors.forms.standardForm.confirmationButton)
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field3", "test3"))
-            .then(function(elements) {
-               assert(elements.length === 1, "field3 in standard form didn't publish correctly");
-            })
-            .end().findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field4", "9"))
-            .then(function(elements) {
-               assert(elements.length === 1, "field4 in standard form didn't publish correctly");
+         .end()
+            
+         .getLastPublish("STANDARD_FORM_PUBLISH_FORM_DATA")
+            .then(function(payload) {
+               assert.propertyVal(payload, "field3", "test3");
+               assert.propertyVal(payload, "field4", "9");
             });
       },
 
       "Test additional form buttons rendered": function() {
          return this.remote.findAllByCssSelector("#ADD_BUTTON_1")
             .then(function(elements) {
-               assert(elements.length === 1, "The first additional button could not be found");
+               assert.lengthOf(elements, 1);
             })
-            .end()
-            .findAllByCssSelector("#ADD_BUTTON_2")
+         .end()
+            
+         .findAllByCssSelector("#ADD_BUTTON_2")
             .then(function(elements) {
-               assert(elements.length === 1, "The second additional button could not be found");
+               assert.lengthOf(elements, 1);
             });
       },
 
       "Test additional form buttons publish correct data": function() {
-         return this.remote.findByCssSelector("#ADD_TEXT_BOX_1 .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.textBoxes.addText1.input)
             .type("test4")
-            .end()
-            .findByCssSelector("#ADD_TEXT_BOX_2 .dijitInputContainer input")
+         .end()
+            
+         .findByCssSelector(selectors.textBoxes.addText2.input)
             .type("test5")
-            .end()
-            .findByCssSelector("#ADD_BUTTON_1")
+         .end()
+      
+         .findByCssSelector("#ADD_BUTTON_1")
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field5", "test4"))
-            .then(function(elements) {
-               assert(elements.length === 1, "The additional button didn't publish field5 correctly");
-            })
-            .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "field6", "test5"))
-            .then(function(elements) {
-               assert(elements.length === 1, "The additional button didn't publish field6 correctly");
-            })
-            .end()
-            .findAllByCssSelector(TestCommon.pubSubDataCssSelector("last", "extra", "stuff"))
-            .then(function(elements) {
-               assert(elements.length === 1, "The additional button didn't publish 'extra' correctly");
-            });
-      },
+         .end()
 
-      "Test custom scope set correctly": function() {
-         return this.remote.findAllByCssSelector(TestCommon.topicSelector("CUSTOM_SCOPE_AddButton1", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Custom scope not set");
+         .getLastPublish("CUSTOM_SCOPE_AddButton1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "field5", "test4");
+               assert.propertyVal(payload, "field6", "test5");
+               assert.propertyVal(payload, "extra", "stuff");
             });
       },
 
       "Test global scope set correctly": function() {
-         return this.remote.findAllByCssSelector(TestCommon.topicSelector("SET_HASH", "publish", "any"))
-            .then(function(elements) {
-               assert(elements.length === 1, "Global scope not set");
-            });
+         return this.remote.getLastPublish("SET_HASH");
       },
 
       "Test setting form value by publication": function() {
-         return this.remote.findByCssSelector("#TEXT_BOX_3 .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.textBoxes.text3.input)
             .getProperty("value")
             .then(function(resultText) {
                assert.equal(resultText, "", "Text box to be set via publication is not empty before test");
             })
-            .end()
-            .findByCssSelector("#SET_FORM_VALUE")
+         .end()
+            
+         .findByCssSelector(selectors.buttons.setForm)
             .click()
-            .end()
-            .findByCssSelector("#TEXT_BOX_3 .dijitInputContainer input")
+         .end()
+      
+         .findByCssSelector(selectors.textBoxes.text3.input)
             .getProperty("value")
             .then(function(resultText) {
                assert.equal(resultText, "Value Set", "Text box value was not set via publication");
@@ -179,62 +234,213 @@ define(["module",
       },
 
       "Test noValueUpdateWhenHiddenOrDisabled (disabled)": function() {
-         return this.remote.findByCssSelector("#SET_VALUE_VIA_PUBSUB_FORM .confirmationButton > span")
+         return this.remote.findByCssSelector(selectors.forms.setValueForm.confirmationButton)
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub3"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "default", "The default data was updated despite being disabled by the updated value");
+         .end()
+
+         .getLastPublish("SETTABLE_OK")
+            .then(function(payload) {
+               assert.propertyVal(payload, "pub3", "default");
             });
       },
 
       "Test noValueUpdateWhenHiddenOrDisabled (enabled)": function() {
-         return this.remote.findByCssSelector("#TEXT_BOX_4 .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.textBoxes.text4.input)
             .clearValue()
-            .end()
-            .findByCssSelector("#SET_FORM_VALUE_2")
+         .end()
+      
+         .findByCssSelector("#SET_FORM_VALUE_2")
             .click()
-            .end()
-            .findByCssSelector("#SET_VALUE_VIA_PUBSUB_FORM .confirmationButton > span")
+         .end()
+   
+         .findByCssSelector(selectors.forms.setValueForm.confirmationButton)
+            .clearLog()
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "pub3"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Update Success", "The default data was not updated despite being enabled");
+         .end()
+
+         .getLastPublish("SETTABLE_OK")
+            .then(function(payload) {
+               assert.property(payload, "pub3");
             });
       },
 
       "Test postWhenHiddenOrDisabled (displayed) and noPostWhenValueIs (hidden)": function() {
          return this.remote.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(3) .radio-button-widget input")
             .click()
-            .end()
-            .findByCssSelector("#CUSTOM_TARGET .dijitInputContainer input")
+         .end()
+         
+         .findByCssSelector(selectors.textBoxes.customTarget.input)
             .clearValue()
             .type("bob")
-            .end()
-            .findByCssSelector("#CUSTOM_FIELDS_FORM .confirmationButton > span")
+         .end()
+   
+         .findByCssSelector(selectors.forms.customFieldsForm.confirmationButton)
+            .clearLog()
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "TARGET"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "bob", "The custom target data was not posted");
+         .end()
+
+         .getLastPublish("CONDITIONAL_FORM_DATA")
+            .then(function(payload) {
+               assert.propertyVal(payload, "TARGET", "bob");
             });
       },
 
       "Test postWhenHiddenOrDisabled (hidden) and noPostWhenValueIs (displayed)": function() {
          return this.remote.findByCssSelector("#TARGET_OPTIONS .radio-button:nth-child(1) .radio-button-widget input")
             .click()
-            .end()
-            .findByCssSelector("#CUSTOM_FIELDS_FORM .confirmationButton > span")
+         .end()
+            
+         .findByCssSelector(selectors.forms.customFieldsForm.confirmationButton)
+            .clearLog()
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "TARGET"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "KNOWN1", "The custom target data was not posted");
+         .end()
+
+         .getLastPublish("CONDITIONAL_FORM_DATA")
+            .then(function(payload) {
+               assert.propertyVal(payload, "TARGET", "KNOWN1");
+            });
+      },
+
+      "Label 1 should be displayed initially": function() {
+         return this.remote.findDisplayedById("LABEL_1");
+      },
+
+      "Label 2 should be displayed initially": function() {
+         return this.remote.findDisplayedById("LABEL_2");
+      },
+
+      "Label 3 should be displayed initially": function() {
+         return this.remote.findDisplayedById("LABEL_3");
+      },
+
+      "Label 4 should be hidden initially": function() {
+         return this.remote.findByCssSelector("#LABEL_4")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Click the 'show' button to reveal label 4": function() {
+         return this.remote.findByCssSelector(selectors.buttons.showLabel4)
+            .click()
+         .end()
+
+         .findDisplayedById("LABEL_4");
+      },
+
+      "Manually clearing text box should hide label 1 and 2": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.text6.input)
+            .clearValue()
+            .type("hide")
+         .end()
+
+         .findByCssSelector("#LABEL_1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 1 should not be displayed");
+            })
+         .end()
+
+         .findByCssSelector("#LABEL_2")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 2 should not be displayed");
+            });
+      },
+
+      "Labels 3 and 4 should still be displayed after text box has been cleared": function() {
+         return this.remote.findDisplayedById("LABEL_3")
+         .end()
+
+         .findDisplayedById("LABEL_4");
+      },
+
+      "Auto-set text box via selects to hide labels 3 and 4": function() {
+         return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#SELECT_2_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_2_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+        .findByCssSelector("#LABEL_3")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 3 should not be visible");
+            })
+         .end()
+
+         .findByCssSelector("#LABEL_4")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "Label 4 should not be visible");
+            });
+      },
+
+      "Auto-set text box via selects to reveal labels": function() {
+         return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#SELECT_2_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_2_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findDisplayedById("LABEL_1")
+         .end()
+
+         .findDisplayedById("LABEL_2")
+         .end()
+
+         .findDisplayedById("LABEL_3")
+         .end()
+
+         .findDisplayedById("LABEL_4");
+      },
+
+      "Auto-set text box via select to hide label": function() {
+         return this.remote.findByCssSelector("#SELECT_1_CONTROL .dijitSelectLabel")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SELECT_1_CONTROL_dropdown table tr:nth-child(2) td.dijitMenuItemLabel")
+            .click()
+         .end()
+
+         .findByCssSelector("#LABEL_1")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Click the 'hide' button to hide label 4": function() {
+         return this.remote.findByCssSelector(selectors.buttons.hideLabel4)
+            .click()
+         .end()
+
+         .findByCssSelector("#LABEL_4")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
             });
       }
    });
