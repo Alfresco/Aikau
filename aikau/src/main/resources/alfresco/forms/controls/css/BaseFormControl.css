@@ -162,11 +162,22 @@
                   > .title-row {
                      display: none;
                   }
+                  > .description-row {
+                     > .description {
+                        margin: 0;
+                     }
+                  }
                }
                &--invalid {
                   > .title-row {
+                     display: block;
                      > span.validation-message {
                         display: block;
+                     }
+                  }
+                  > .description-row {
+                     > .description {
+                        margin: 0 0 @standard-line-height @dialog-label-section + 4;
                      }
                   }
                }
