@@ -143,6 +143,12 @@
             <directory>${basedir}/src/main/resources/alfresco</directory>
          </resource>
 
+         <resource>
+            <targetPath>META-INF/js/aikau/${project.version}/modules</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/aikau</directory>
+         </resource>
+
          <!-- Put the release notes in the root of the JAR file -->
          <resource>
             <targetPath>.</targetPath>
