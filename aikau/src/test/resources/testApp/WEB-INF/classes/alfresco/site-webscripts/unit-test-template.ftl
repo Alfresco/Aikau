@@ -24,9 +24,6 @@
    <@region scope="global" id="bootstrap" chromeless="true"/>
    <link rel="stylesheet" type="text/css" href="${url.context}${sitedata.getDojoPackageLocation('dijit')}/themes/claro/claro.css"/>
    
-   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-
    <@outputJavaScript/>
    <@outputCSS/>
    
