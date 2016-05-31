@@ -5,6 +5,7 @@ module.exports = {
    files: {
       alfTestModels: "src/test/resources/alfresco_model_files.json",
       app: "src/main/resources/alfresco/**",
+      app2: "src/main/resources/aikau/**",
       coverageReports: "code-coverage-reports/*.json",
       css: "src/main/resources/**/*.css",
       gruntFile: "Gruntfile.js",

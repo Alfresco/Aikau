@@ -44,9 +44,10 @@ define(["dojo/_base/declare",
        * 
        * @instance cssRequirements {Array}
        * @type {object[]}
-       * @default [{cssFile:"./css/material.css"}]
+       * @default [{cssFile:"./css/material-icons.css"},{cssFile:"./css/material.css"}]
        */
-      cssRequirements: [{cssFile:"./css/material.css"}],
+      cssRequirements: [{cssFile:"./css/material-icons.css"},
+                        {cssFile:"./css/material.css"}],
 
       /**
        * The HTML template to use for the widget.
@@ -62,6 +63,16 @@ define(["dojo/_base/declare",
       nonAmdDependencies: ["./material.js"],
 
       /**
+       * An optional DOM node to be used as the target for creating child widgets in. This is used
+       * by [postCreate]{@link module:aikau/mdl/BaseMdlWidget#postCreate}.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
+      _targetNode: null,
+
+      /**
        * Creates any child widgets
        *
        * @instance
@@ -72,7 +83,7 @@ define(["dojo/_base/declare",
             // this.processWidgets(this.widgets, this.domNode);
             this.createChildren({
                widgets: this.widgets,
-               targetNode: this.domNode
+               targetNode: this._targetNode || this.domNode
             });
          }
       },

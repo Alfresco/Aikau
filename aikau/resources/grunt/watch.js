@@ -10,7 +10,7 @@ module.exports = function(grunt) {
    grunt.config.merge({
       watch: {
          dev: {
-            files: [alfConfig.files.app, alfConfig.files.testApp, alfConfig.files.testFramework, "!" + alfConfig.requireEverything.widget],
+            files: [alfConfig.files.app, alfConfig.files.app2, alfConfig.files.testApp, alfConfig.files.testFramework, "!" + alfConfig.requireEverything.widget],
             tasks: ["updateApp"],
             options: {
                livereload: true
