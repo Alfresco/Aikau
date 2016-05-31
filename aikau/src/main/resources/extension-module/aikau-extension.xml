@@ -24,6 +24,7 @@
                         <package name="dijit"         location="js/lib/dojo-${dependency.dojo.version}/dijit"/>
                         <package name="dojox"         location="js/lib/dojo-${dependency.dojo.version}/dojox"/>
                         <package name="alfresco"      location="js/aikau/${project.version}/alfresco"/>
+                        <package name="aikau"         location="js/aikau/${project.version}/modules"/>
                         <package name="surf"          location="js/surf"/>
                         <package name="cm"            location="js/lib/code-mirror"/>
                         <package name="jquery"        location="js/lib/jquery-${dependency.jquery.version}" main="jquery-${dependency.jquery.version}.min"/>
