@@ -73,12 +73,22 @@ define(["dojo/_base/declare",
       _targetNode: null,
 
       /**
+       * Indicates whether or not child widgets should be created as soon as the widget itself
+       * is created.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      createChildrenImmediately: true,
+
+      /**
        * Creates any child widgets
        *
        * @instance
        */
       postCreate: function aikau_mdl_BaseMdlWidget__postCreate(){
-         if (this.widgets)
+         if (this.widgets && this.createChildrenImmediately)
          {
             // this.processWidgets(this.widgets, this.domNode);
             this.createChildren({
