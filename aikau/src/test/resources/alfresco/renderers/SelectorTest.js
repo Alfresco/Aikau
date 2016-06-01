@@ -64,6 +64,21 @@ define(["module",
             })
 
          .findDisplayedByCssSelector("#SELECTED_ITEMS.dijitDisabled");
+      },
+
+      "Second selector is disabled": function() {
+         return this.remote.findByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--disabled");
+      },
+
+      "Second selector cannot be selected": function() {
+         return this.remote.findByCssSelector("#SELECTOR_ITEM_1")
+            .click()
+         .end()
+
+         .findAllByCssSelector("#SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
       }
    });
 });
