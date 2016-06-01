@@ -40,72 +40,24 @@ define(["dojo/_base/declare",
       createChildrenImmediately: false,
 
       /**
-       * Internal flag to indicate whether or not the menu items have been created.
-       * 
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      _menuItemsCreated: false,
-
-
-
-      /**
-       * 
-       * @instance
-       */
-      postCreate: function aikau_buttons_Button__postCreate() {
-         this.inherited(arguments);
-
-         if (this.leadingIcon)
-         {
-            domConstruct.create("i", {
-               className: "material-icons",
-               innerHTML: this.leadingIcon
-            }, this.buttonNode, "first");
-         }
-         if (this.trailingIcon)
-         {
-            domConstruct.create("i", {
-               className: "material-icons",
-               innerHTML: this.trailingIcon
-            }, this.buttonNode, "last");
-         }
-         
-      },
-
-      /**
-       * Override the default click handler to create the menu items.
+       * Create the menu items once the widget has been added to the document.
        *
        * @instance
-       * @param  {object} evt The click event
        */
-      onClick: function aikau_menus_Menu__onClick() {
-         // TODO: Only works on second click.
-         // 
-         // We're probably going to need to have some kind of event indicating when the 
-         // widget is added to the live DOM. At the moment it's not possible to render
-         // the button/menu correctly because it relies on nested elements. We can't
-         // create the element on postCreate because it is not part of the live DOM.
-         // 
+      onAddedToDocument: function aikau_mdl_BaseMdlWidget__onAddedToDocument() {
+         // No action by default
+         var menuNode = domConstruct.create("ul", {
+            className: "mdl-menu mdl-js-menu mdl-js-ripple-effect",
+            "for": this.id
+         }, this.domNode, "after");
 
-         if (!this._menuItemsCreated && this.widgets)
-         {
-            var menuNode = domConstruct.create("ul", {
-               className: "mdl-menu mdl-js-menu mdl-js-ripple-effect",
-               "for": this.id
-            }, this.domNode, "after");
-            
+         this.createChildren({
+            widgets: this.widgets,
+            targetNode: menuNode
+         });
 
-            this.createChildren({
-               widgets: this.widgets,
-               targetNode: menuNode
-            });
-            this._menuItemsCreated = true;
-
-            /* global componentHandler */
-            componentHandler.upgradeElement(menuNode);
-         }
+         /* global componentHandler */
+         componentHandler.upgradeElement(menuNode);
       }
    });
 });

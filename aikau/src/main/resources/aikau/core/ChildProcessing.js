@@ -55,7 +55,6 @@ define(["dojo/_base/declare",
        */
       postCreationProcessing: function aikau_core_ChildProcessing__postCreationProcessing(input) {
          // jshint unused:false
-         // No action by default
       },
 
       /**
@@ -96,11 +95,15 @@ define(["dojo/_base/declare",
                promises[index] = childData.promisedChild;
             }));
 
+            if (!this._childWidgets)
+            {
+               this._childWidgets = [];
+            }
+
             // Use "all" here to add the created widgets to the targetNode once they have all been
             // created (or have failed to create)...
             all(promises).then(lang.hitch(this, lang.hitch(this, function(results) {
-               for (var key in results)
-               {
+               for (var key in results) {
                   if (results.hasOwnProperty(key)) {
                      var childWidget = results[key];
                      if (childWidget)
@@ -110,9 +113,21 @@ define(["dojo/_base/declare",
                         this.postCreationProcessing({
                            widget: childWidget
                         });
+
+                        this._childWidgets.push(childWidget);
                      }
                   }
                }
+               
+               // If the targetNode is already in the browser document, then we can
+               // inform all the created children that they too are now in the browser
+               // document once creation has completed...
+               var targetNodeInDocument = document.body.contains(input.targetNode);
+               if (targetNodeInDocument)
+               {
+                  this._addedToDocument.resolve(); 
+               }
+
             })));
 
             // TODO: Keep track of widgets to be destroyed?
@@ -225,6 +240,7 @@ define(["dojo/_base/declare",
                {
                   domClass.add(instantiatedWidget.domNode, input.args.additionalCssClasses);
                }
+
                input.promise.resolve(instantiatedWidget);
             }
             catch (e)

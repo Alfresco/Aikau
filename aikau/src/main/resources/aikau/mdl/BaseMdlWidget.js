@@ -34,8 +34,11 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Header.html",
         "alfresco/core/Core",
-        "aikau/core/ChildProcessing"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, Core, ChildProcessing) {
+        "aikau/core/ChildProcessing",
+        "dojo/Deferred",
+        "dojo/_base/array",
+        "dojo/_base/lang"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, Core, ChildProcessing, Deferred, array, lang) {
    
    return declare([_WidgetBase, _TemplatedMixin, Core, ChildProcessing], {
 
@@ -83,11 +86,37 @@ define(["dojo/_base/declare",
       createChildrenImmediately: true,
 
       /**
+       *
+       * @instance
+       */
+      onAddedToDocument: function aikau_mdl_BaseMdlWidget__onAddedToDocument() {
+         // No action by default
+         this.alfLog("info", "Added to document", this.id);
+      },
+
+      /**
        * Creates any child widgets
        *
        * @instance
        */
-      postCreate: function aikau_mdl_BaseMdlWidget__postCreate(){
+      postCreate: function aikau_mdl_BaseMdlWidget__postCreate() {
+
+         // TODO: This should be in a core module, not here - but it serves its purpose for now
+         this._addedToDocument = new Deferred();
+         this._addedToDocument
+            .then(lang.hitch(this, this.onAddedToDocument))
+            .then(lang.hitch(this, function() {
+               if (this._childWidgets)
+               {
+                  array.forEach(this._childWidgets, function(widget) {
+                     if (widget._addedToDocument && typeof widget._addedToDocument.resolve === "function")
+                     {
+                        widget._addedToDocument.resolve();
+                     }
+                  });
+               }
+            }));
+
          if (this.widgets && this.createChildrenImmediately)
          {
             // this.processWidgets(this.widgets, this.domNode);
@@ -105,6 +134,7 @@ define(["dojo/_base/declare",
        * @param  {object[]} widgets [description]
        */
       postCreationProcessing: function aikau_mdl_BaseMdlWidget__postCreationProcessing(input) {
+         this.inherited(arguments);
          if (input.widget && input.widget.domNode)
          {
             /* global componentHandler */
