@@ -97,6 +97,26 @@ define(["module",
             .then(function(bodyClicked) {
                assert.isFalse(bodyClicked);
             });
+      },
+
+      "Hidden when not hovered over": function() {
+         return this.remote.findByCssSelector("#PUBLISH_ACTION_ITEM_0 .alfresco-renderers-PublishAction__image")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Displayed when hovered over": function() {
+         return this.remote.findByCssSelector("#PROP_CELL_ITEM_0 .inner .value")
+            .moveMouseTo()
+         .end()
+
+         .findByCssSelector("#PUBLISH_ACTION_ITEM_0 .alfresco-renderers-PublishAction__image")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed);
+            });
       }
    });
 });
