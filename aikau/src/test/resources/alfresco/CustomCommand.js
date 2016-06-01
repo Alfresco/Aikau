@@ -107,6 +107,35 @@ define(["intern/dojo/node!fs",
          },
 
          /**
+          * Drag a node onto another one
+          *
+          * @instance
+          * @param {String} sourceSelector The CSS selector for the node to drag
+          * @param {String} toSelector The CSS selector for the node to drag onto
+          * @since 1.0.70
+          */
+         dragOnto: function(sourceSelector, toSelector) {
+
+            // Boilerplate stuff
+            return new this.constructor(this, function() {
+               var browser = this.parent;
+
+               // Use drag-code from https://github.com/theintern/leadfoot/issues/64#issuecomment-145493928
+               return browser.findByCssSelector(sourceSelector)
+                  .click()
+                  .moveMouseTo()
+                  .pressMouseButton(1)
+                  .moveMouseTo(10, -10)
+                  .end()
+
+               .findByCssSelector(toSelector)
+                  .moveMouseTo()
+                  .releaseMouseButton()
+                  .end();
+            });
+         },
+
+         /**
           * Get the payload for all matching log entries. Uses getLogEntries() under the hood.
           *
           * @instance
