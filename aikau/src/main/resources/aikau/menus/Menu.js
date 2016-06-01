@@ -44,7 +44,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      onAddedToDocument: function aikau_mdl_BaseMdlWidget__onAddedToDocument() {
+      onAddedToDocument: function aikau_menus_Menu__onAddedToDocument() {
          // No action by default
          var menuNode = domConstruct.create("ul", {
             className: "mdl-menu mdl-js-menu mdl-js-ripple-effect",

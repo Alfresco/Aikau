@@ -1,0 +1,15 @@
+.aikau-layout-Alfresco {
+   
+   .mdl-layout__header-row {
+      padding: 0 40px 0 40px;
+   }
+
+   .mdl-layout__drawer {
+      box-shadow: none;
+   }
+
+   .aikau-layout_Alfresco__toolbar {
+      background: #fafafa;
+      border-bottom: 1px solid #e0e0e0;
+   }
+}

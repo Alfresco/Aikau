@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
                      var childWidget = results[key];
                      if (childWidget)
                      {
-                        childWidget.placeAt(input.targetNode);
+                        childWidget.placeAt(input.targetNode, input.targetPosition || "last");
 
                         this.postCreationProcessing({
                            widget: childWidget
