@@ -9,4 +9,8 @@
    &.alfresco-lists-ItemSelectionMixin--selected {
       background-image: url(./images/AllSelected.png);
    }
+
+   &.alfresco-lists-ItemSelectionMixin--disabled {
+      opacity: 0.3;
+   }
 }

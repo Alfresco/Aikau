@@ -35,8 +35,12 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
         "alfresco/lists/ItemSelectionMixin",
-        "dojo/text!./templates/Selector.html"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ItemSelectionMixin, template) {
+        "dojo/text!./templates/Selector.html",
+        "dojo/_base/array",
+        "dojo/_base/lang",
+        "dojo/dom-class"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ItemSelectionMixin, template, 
+                 array, lang, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ItemSelectionMixin], {
       
@@ -57,6 +61,31 @@ define(["dojo/_base/declare",
       templateString: template,
       
       /**
+       * The dot-notation property to use in the 
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} to use to 
+       * indicate when the selector is disabled.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.70
+       */
+      disableProperty: null,
+
+      /**
+       * An array of values to match against the 
+       * [disableProperty]{@link module:alfresco/renderers/Selector#disableProperty} of the 
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}. If any of the values
+       * are matched then the selector will be disabled.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.70
+       */
+      disabledOnValues: null,
+
+      /**
        * Set up the attributes to be used when rendering the template.
        * 
        * @instance
@@ -68,6 +97,42 @@ define(["dojo/_base/declare",
          // events...
          // this.alfSubscribe(this.documentSelectionTopic, lang.hitch(this, this.onFileSelection), this.publishGlobal, this.publishToParent);
          this.createItemSelectionSubscriptions();
+      },
+
+      /**
+       * Checks the [disableProperty]{@link module:alfresco/renderers/Selector#disableProperty} of the 
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} against the 
+       * [array of values]{@link module:alfresco/renderers/Selector#disableProperty} that will cause the
+       * selector to be disabled.
+       * 
+       * @instance
+       * @since 1.0.70
+       */
+      postCreate: function alfresco_renderers_Selector__postCreate() {
+         this.inherited(arguments);
+         if(this.isDisabled())
+         {
+            this.selectOnClick = false;
+            domClass.add(this.domNode, "alfresco-lists-ItemSelectionMixin--disabled");
+         }
+      },
+
+      /**
+       * Checks the disabled state of the current item.
+       * 
+       * @instance
+       * @since 1.0.70
+       */
+      isDisabled: function alfresco_renderers_Selector__isDisabled() {
+         var disabled = false;
+         if (this.disableProperty && this.disabledOnValues)
+         {
+            var disablePropertyValue = lang.getObject(this.disableProperty, false, this.currentItem);
+            disabled = array.some(this.disabledOnValues, function(target) {
+               return disablePropertyValue === target;
+            });
+         }
+         return disabled;
       }
    });
 });
