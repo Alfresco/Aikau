@@ -61,6 +61,63 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/lists/views/AlfListView",
+         config: {
+            currentData: {
+               items: [
+                  {
+                     displayName: "Moomin"
+                  },
+                  {
+                     displayName: "Giants"
+                  }
+               ]
+            },
+            widgets: [
+               {
+                  id: "ROW",
+                  name: "alfresco/lists/views/layouts/Row",
+                  config: {
+                     widgets: [
+                        {
+                           id: "PROP_CELL",
+                           name: "alfresco/lists/views/layouts/Cell",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "PROPERTY",
+                                    name: "alfresco/renderers/Property",
+                                    config: {
+                                       propertyToRender: "displayName",
+                                       onlyShowOnHover: false
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           id: "ACTION_CELL",
+                           name: "alfresco/lists/views/layouts/Cell",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "PUBLISH_ACTION",
+                                    name: "alfresco/renderers/PublishAction",
+                                    config: {
+                                       onlyShowOnHover: true,
+                                       publishTopic: "PUBLISH_ACTION_FOR_HOVER"
+                                    }
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]
