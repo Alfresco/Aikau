@@ -64,8 +64,11 @@ define(["dojo/_base/declare",
        * @param {object}   input The input to the function
        * @param {object[]} input.widgets An array of widget models to be created
        * @param {object}   input.targetNode The DOM node to attach the created widgets to
+       * @returns {object} A promise of the children to be created.
        */
       createChildren: function aikau_core_ChildProcessing__createChildren(input) {
+         var children = new Deferred();
+
          // TODO: Are we better using something like lodash here?
          if (lang.isArray(input.widgets))
          {
@@ -100,38 +103,86 @@ define(["dojo/_base/declare",
                this._childWidgets = [];
             }
 
+            // If the targetNode is already in the browser document, then we can
+            // inform all the created children that they too are now in the browser
+            // document once creation has completed...
+            var targetNodeInDocument = document.body.contains(input.targetNode);
+            
+            // It is necessary to create a Deferred object for widgets at the "top" of the
+            // creation chain that were not created in calls to this function. This ensures
+            // that there is something to resolve...
+            if (!this._addedToDocument)
+            {
+               this._addedToDocument = new Deferred();
+            }
+
             // Use "all" here to add the created widgets to the targetNode once they have all been
             // created (or have failed to create)...
             all(promises).then(lang.hitch(this, lang.hitch(this, function(results) {
+               
+               // Create an array to hold all the child widgets that get created, this will be 
+               // used as the value with which to resolve the returned promise...
+               var createdChildren = [];
                for (var key in results) {
                   if (results.hasOwnProperty(key)) {
                      var childWidget = results[key];
                      if (childWidget)
                      {
+                        // Add the created widget into the target node...
                         childWidget.placeAt(input.targetNode, input.targetPosition || "last");
 
+                        // Call post creation widget functioning...
                         this.postCreationProcessing({
                            widget: childWidget
                         });
 
-                        this._childWidgets.push(childWidget);
+                        // Create a new Deferred object for each child widget to be resolved when
+                        // it is added to the document. Chain a call to the onAddedToDocument function
+                        // using the widget itself as the execution scope...
+                        childWidget._addedToDocument = new Deferred();
+                        childWidget._addedToDocument.then(lang.hitch(childWidget, childWidget.onAddedToDocument));
+                        
+                        // Finally, add the widget to the array to used to resolve the returned promise...
+                        createdChildren.push(childWidget);
                      }
                   }
                }
                
-               // If the targetNode is already in the browser document, then we can
-               // inform all the created children that they too are now in the browser
-               // document once creation has completed...
-               var targetNodeInDocument = document.body.contains(input.targetNode);
+               // If this widget is already in the document then we can resolve its "added to document"
+               // promise immediately, this will trigger a chained function to notify all the child widgets
+               // that they are in the document...
                if (targetNodeInDocument)
                {
                   this._addedToDocument.resolve(); 
                }
 
+               // Resove the promise with the created children...
+               children.resolve(createdChildren);
             })));
 
             // TODO: Keep track of widgets to be destroyed?
          }
+         else
+         {
+            // If there are no children to create then just resolve with an empty list
+            children.resolve([]);
+         }
+
+         // We are going to return a promise chain here that will ultimately contain the created
+         // widgets, but we want to insert a function in the chain to ensure that all the child
+         // widgets "added to document" promises are resolved when the current widget is added 
+         // to the document...
+         return children.then(lang.hitch(this, function(widgets) {
+            this._addedToDocument.then(function() {
+               array.forEach(widgets, function(widget) {
+                  if (widget._addedToDocument && typeof widget._addedToDocument.resolve === "function")
+                  {
+                     widget._addedToDocument.resolve();
+                  }
+               });
+            });
+            return widgets;
+         }));
       },
       
       /**

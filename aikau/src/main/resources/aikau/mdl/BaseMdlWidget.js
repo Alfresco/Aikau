@@ -100,23 +100,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function aikau_mdl_BaseMdlWidget__postCreate() {
-
-         // TODO: This should be in a core module, not here - but it serves its purpose for now
-         this._addedToDocument = new Deferred();
-         this._addedToDocument
-            .then(lang.hitch(this, this.onAddedToDocument))
-            .then(lang.hitch(this, function() {
-               if (this._childWidgets)
-               {
-                  array.forEach(this._childWidgets, function(widget) {
-                     if (widget._addedToDocument && typeof widget._addedToDocument.resolve === "function")
-                     {
-                        widget._addedToDocument.resolve();
-                     }
-                  });
-               }
-            }));
-
          if (this.widgets && this.createChildrenImmediately)
          {
             // this.processWidgets(this.widgets, this.domNode);

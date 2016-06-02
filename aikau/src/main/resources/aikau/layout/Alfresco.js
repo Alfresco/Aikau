@@ -25,8 +25,9 @@
  */
 define(["dojo/_base/declare",
         "aikau/mdl/BaseMdlWidget", 
-        "dojo/text!./templates/Alfresco.html"], 
-        function(declare, BaseMdlWidget, template) {
+        "dojo/text!./templates/Alfresco.html",
+        "dojo/_base/lang"], 
+        function(declare, BaseMdlWidget, template, lang) {
    
    return declare([BaseMdlWidget], {
 
