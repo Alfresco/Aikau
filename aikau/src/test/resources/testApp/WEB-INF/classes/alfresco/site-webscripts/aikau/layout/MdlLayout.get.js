@@ -1,17 +1,37 @@
-model.jsonModel = {
-   services: [
-      {
-         name: "alfresco/services/LoggingService",
-         config: {
-            loggingPreferences: {
-               enabled: true,
-               all: true,
-               warn: true,
-               error: true
-            }
+<import resource="classpath:alfresco/site-webscripts/org/alfresco/aikau/{aikauVersion}/libs/doclib/doclib.lib.js">
+
+var pageServices = [
+   {
+      name: "alfresco/services/LoggingService",
+      config: {
+         loggingPreferences: {
+            enabled: true,
+            all: true
          }
       }
-   ],
+   },
+   "alfresco/services/NavigationService",
+   "alfresco/services/LogoutService"];
+
+var docLibServices = getDocumentLibraryServices();
+var services = pageServices.concat(docLibServices);
+
+var docLib = getDocLibList({
+   siteId: null, 
+   containerId: null, 
+   rootNode: "alfresco://company/home", 
+   rootLabel: "Documents",
+   getUserPreferences: false
+});
+
+docLib.config.widgets = [
+   {
+      name: "aikau/lists/views/TableView"
+   }
+];
+
+model.jsonModel = {
+   services: services,
    widgets: [
       {
          name: "aikau/layout/Alfresco",
@@ -129,8 +149,22 @@ model.jsonModel = {
                }
             ],
             widgetsForContent: [
+               docLib,
                {
-                  name: "alfresco/logo/Logo"
+                  name: "alfresco/testing/NodesMockXhr",
+                  config: {
+                     totalItems: 40,
+                     folderRatio: [100]
+                  }
+               }
+            ],
+            widgetsForFixedSearch: [
+               {
+                  name: "aikau/buttons/Button",
+                  config: {
+                     buttonClasses: "mdl-button--fab mdl-button--colored",
+                     leadingIcon: "search"
+                  }
                }
             ]
          }

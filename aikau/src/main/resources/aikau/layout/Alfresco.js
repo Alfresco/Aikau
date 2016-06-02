@@ -74,6 +74,10 @@ define(["dojo/_base/declare",
             widgets: this.widgetsForContent,
             targetNode: this.contentNode
          });
+         this.createChildren({
+            widgets: this.widgetsForFixedSearch,
+            targetNode: this.fixedSearchNode
+         });
       }
    });
 });
