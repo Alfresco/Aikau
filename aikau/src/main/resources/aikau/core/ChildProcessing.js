@@ -128,9 +128,12 @@ define(["dojo/_base/declare",
                      var childWidget = results[key];
                      if (childWidget)
                      {
-                        // Add the created widget into the target node...
-                        childWidget.placeAt(input.targetNode, input.targetPosition || "last");
-
+                        // Add the created widget into the target node if provided...
+                        if (input.targetNode)
+                        {
+                           childWidget.placeAt(input.targetNode, input.targetPosition || "last");
+                        }
+                        
                         // Call post creation widget functioning...
                         this.postCreationProcessing({
                            widget: childWidget
@@ -139,8 +142,11 @@ define(["dojo/_base/declare",
                         // Create a new Deferred object for each child widget to be resolved when
                         // it is added to the document. Chain a call to the onAddedToDocument function
                         // using the widget itself as the execution scope...
-                        childWidget._addedToDocument = new Deferred();
-                        childWidget._addedToDocument.then(lang.hitch(childWidget, childWidget.onAddedToDocument));
+                        if (typeof childWidget.onAddedToDocument === "function") 
+                        {
+                           childWidget._addedToDocument = new Deferred();
+                           childWidget._addedToDocument.then(lang.hitch(childWidget, childWidget.onAddedToDocument));
+                        }
                         
                         // Finally, add the widget to the array to used to resolve the returned promise...
                         createdChildren.push(childWidget);

@@ -32,13 +32,9 @@
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Header.html",
         "alfresco/core/Core",
-        "aikau/core/ChildProcessing",
-        "dojo/Deferred",
-        "dojo/_base/array",
-        "dojo/_base/lang"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, Core, ChildProcessing, Deferred, array, lang) {
+        "aikau/core/ChildProcessing"], 
+        function(declare, _WidgetBase, _TemplatedMixin, Core, ChildProcessing) {
    
    return declare([_WidgetBase, _TemplatedMixin, Core, ChildProcessing], {
 
