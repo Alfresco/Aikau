@@ -29,7 +29,7 @@
       }
    }
    > * {
-      margin: @standard-line-height @standard-column-width;
+      // margin: @standard-line-height @standard-column-width;
    }
    > .alfresco-lists-AlfList__views {
       margin: 0;

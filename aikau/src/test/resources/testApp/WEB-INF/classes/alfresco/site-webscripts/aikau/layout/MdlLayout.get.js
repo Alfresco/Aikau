@@ -26,7 +26,96 @@ var docLib = getDocLibList({
 
 docLib.config.widgets = [
    {
-      name: "aikau/lists/views/TableView"
+      name: "alfresco/lists/views/AlfListView",
+      config: {
+         widgetsForHeader: [
+            {
+               name: "alfresco/lists/views/layouts/HeaderCell",
+               config: {
+                  label: "Name",
+                  sortable: true,
+                  sortValue: "cm:name",
+                  useHash: "{useHash}"
+               }
+            },
+            {
+               name: "alfresco/lists/views/layouts/HeaderCell",
+               config: {
+                  label: "Modified on",
+                  sortable: true,
+                  sortValue: "cm:modified",
+                  useHash: "{useHash}"
+               }
+            },
+            {
+               name: "alfresco/lists/views/layouts/HeaderCell",
+               config: {
+                  label: "by",
+                  sortable: true,
+                  sortValue: "cm:modifier",
+                  useHash: "{useHash}"
+               }
+            }
+         ],
+         widgets: [
+            {
+               name: "alfresco/lists/views/layouts/Row",
+               config: {
+                  widgets: [
+                     {
+                        name: "alfresco/lists/views/layouts/Cell",
+                        config: {
+                           widgets: [
+                              {
+                                 name: "alfresco/renderers/InlineEditPropertyLink",
+                                 config: {
+                                    propertyToRender: "node.properties.cm:name",
+                                    permissionProperty: "node.permissions.user.Write",
+                                    postParam: "prop_cm_name",
+                                    renderAsLink: true
+                                 }
+                              }
+                           ]
+                        }
+                     },
+                     {
+                        name: "alfresco/lists/views/layouts/Cell",
+                        config: {
+                           widgets: [
+                              {
+                                 name: "alfresco/renderers/Date"
+                              }
+                           ]
+                        }
+                     },
+                     {
+                        name: "alfresco/lists/views/layouts/Cell",
+                        config: {
+                           widgets: [
+                              {
+                                 name: "alfresco/renderers/Property",
+                                 config: {
+                                    propertyToRender: "node.properties.cm:modifier",
+                                    postParam: "prop_cm_modifier",
+                                    publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                                    publishPayloadType: "PROCESS",
+                                    publishPayloadModifiers: ["processCurrentItemTokens"],
+                                    useCurrentItemAsPayload: false,
+                                    publishPayload: {
+                                       url: "user/{node.properties.cm:creator.userName}/profile",
+                                       type: "PAGE_RELATIVE",
+                                       target: "CURRENT"
+                                    }
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               }
+            }
+         ]
+      }
    }
 ];
 

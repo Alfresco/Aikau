@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
          // widgets "added to document" promises are resolved when the current widget is added 
          // to the document...
          return children.then(lang.hitch(this, function(widgets) {
-            this._addedToDocument.then(function() {
+            this._addedToDocument && this._addedToDocument.then(function() {
                array.forEach(widgets, function(widget) {
                   if (widget._addedToDocument && typeof widget._addedToDocument.resolve === "function")
                   {

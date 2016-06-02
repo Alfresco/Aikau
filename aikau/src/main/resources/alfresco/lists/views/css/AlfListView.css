@@ -15,9 +15,9 @@
 }
 
 .alfresco-lists-views-AlfListView > table > tbody > tr > td {
-   padding: @standard-line-height @standard-column-width @standard-line-height 0;
-   margin: 0;
-   vertical-align: top;
+   // padding: @standard-line-height @standard-column-width @standard-line-height 0;
+   // margin: 0;
+   // vertical-align: top;
 }
 
 .alfresco-lists-views-AlfListView.no-borders > table, 
