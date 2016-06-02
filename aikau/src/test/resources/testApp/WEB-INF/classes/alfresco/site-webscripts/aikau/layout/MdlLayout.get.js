@@ -214,7 +214,16 @@ model.jsonModel = {
                   }
                }
             ],
-            widgetsForToolbar: [
+            widgetsForToolbarLeft: [
+               getDocLibBreadcrumbTrail({
+                  siteId: null, 
+                  containerId: null, 
+                  rootNode: "alfresco://company/home", 
+                  rootLabel: "Documents",
+                  getUserPreferences: false
+               })
+            ],
+            widgetsForToolbarRight: [
                {
                   name: "aikau/buttons/Button",
                   config: {

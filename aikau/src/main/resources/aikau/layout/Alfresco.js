@@ -68,7 +68,12 @@ define(["dojo/_base/declare",
             targetNode: this.drawerNode
          });
          this.createChildren({
-            widgets: this.widgetsForToolbar,
+            widgets: this.widgetsForToolbarLeft,
+            targetNode: this.toolbarSpacerNode,
+            targetPosition: "before"
+         });
+         this.createChildren({
+            widgets: this.widgetsForToolbarRight,
             targetNode: this.toolbarNode
          });
          this.createChildren({

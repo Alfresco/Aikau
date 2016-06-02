@@ -1227,7 +1227,7 @@ function getDocLibToolbar(options) {
 function getDocLibBreadcrumbTrail(options) {
    
    var hideBreadcrumbTrail = false;
-   if (options.docLibPreferences)
+   if (options.docLibPreferences && typeof options.docLibPreferences.hideBreadcrumbTrail !== "undefined")
    {
       hideBreadcrumbTrail = options.docLibPreferences.hideBreadcrumbTrail;
    }
