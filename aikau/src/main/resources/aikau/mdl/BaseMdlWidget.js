@@ -82,7 +82,9 @@ define(["dojo/_base/declare",
       createChildrenImmediately: true,
 
       /**
-       *
+       * TODO: This is only being kept as an example - we don't always want to do this with no 
+       * action because it will be expensive.
+       * 
        * @instance
        */
       onAddedToDocument: function aikau_mdl_BaseMdlWidget__onAddedToDocument() {

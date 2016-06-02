@@ -63,6 +63,20 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function aikau_layout_Drawer__postCreate() {
+         this.createChildren({
+            widgets: this.widgetsForDrawer,
+            targetNode: this.drawerNode
+         });
+
+         // Adding content only applies for fixed drawers because of positioning...
+         if (this.fixed)
+         {
+            this.createChildren({
+               widgets: this.widgetsForContent,
+               targetNode: this.contentNode
+            });
+         }
+
          this._targetNode = this.nodeForChildren;
          this.inherited(arguments);
       }

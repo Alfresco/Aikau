@@ -252,7 +252,7 @@ model.jsonModel = {
                   name: "alfresco/testing/NodesMockXhr",
                   config: {
                      totalItems: 40,
-                     folderRatio: [100]
+                     folderRatio: [50]
                   }
                }
             ],
@@ -339,7 +339,7 @@ model.jsonModel = {
       //             name: "aikau/layout/Drawer",
       //             config: {
       //                fixed: true,
-      //                widgets: [
+      //                widgetsForDrawer: [
       //                   {
       //                      name: "aikau/buttons/Button",
       //                      config: {
@@ -380,13 +380,8 @@ model.jsonModel = {
       //                         ]
       //                      }
       //                   }
-      //                ]
-      //             }
-      //          },
-      //          {
-      //             name: "aikau/layout/Content",
-      //             config: {
-      //                widgets: [
+      //                ],
+      //                widgetsForContent: [
       //                   {
       //                      name: "alfresco/logo/Logo"
       //                   }
