@@ -133,7 +133,7 @@ define(["dojo/_base/declare",
                         {
                            childWidget.placeAt(input.targetNode, input.targetPosition || "last");
                         }
-                        
+
                         // Call post creation widget functioning...
                         this.postCreationProcessing({
                            widget: childWidget
@@ -144,7 +144,10 @@ define(["dojo/_base/declare",
                         // using the widget itself as the execution scope...
                         if (typeof childWidget.onAddedToDocument === "function") 
                         {
-                           childWidget._addedToDocument = new Deferred();
+                           if (!childWidget._addedToDocument)
+                           {
+                              childWidget._addedToDocument = new Deferred();
+                           }
                            childWidget._addedToDocument.then(lang.hitch(childWidget, childWidget.onAddedToDocument));
                         }
                         
