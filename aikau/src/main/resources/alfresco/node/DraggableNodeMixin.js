@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.39
        */
-      isDraggable: true,
+      isDraggable: false,
 
       /**
        * This will be assigned a reference to the "dojo/dnd/Moveable" instance created by the 
