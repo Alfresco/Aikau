@@ -112,6 +112,13 @@ define(["module",
             });
       },
 
+      "Check count label": function() {
+         return this.remote.getLastPublish("ALF_SEARCH_RESULTS_COUNT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "label", "Found 3 wotsits");
+            });
+      },
+
       "Test that setting identical search term DOES not re-issue search (to address eventual consistency)": function() {
          // Click the button to set the SAME search term (a new request shouldn't be issued)...
          // Return response from previous request...
