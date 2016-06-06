@@ -100,6 +100,16 @@ define(["dojo/_base/declare",
       itemKeyProperty: "nodeRef",
 
       /**
+       * The message key to use when displaying the number of results found.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.70
+       */
+      resultsCountMessage: "faceted-search.results-menu.results-found-patch",
+
+      /**
        * The current term to search on
        *
        * @instance
@@ -737,7 +747,7 @@ define(["dojo/_base/declare",
             // Publish the number of search results found...
             this.alfPublish("ALF_SEARCH_RESULTS_COUNT", {
                count: resultsCount,
-               label: this.message("faceted-search.results-menu.results-found-patch", {
+               label: this.message(this.resultsCountMessage, {
                   0: resultsCount
                })
             });

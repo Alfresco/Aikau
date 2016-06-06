@@ -237,6 +237,7 @@ model.jsonModel = {
                "sortField",
                "sortAscending"
             ],
+            resultsCountMessage: "custom.results.count",
             widgets: [
                {
                   name: "alfresco/search/AlfSearchListView"
