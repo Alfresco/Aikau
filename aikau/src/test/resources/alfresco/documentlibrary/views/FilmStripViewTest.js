@@ -649,7 +649,7 @@ define(["module",
          return this.remote.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
             .isDisplayed()
             .then(function(displayed) {
-               assert.isTrue(displayed);
+               assert.isFalse(displayed);
             });
       },
 

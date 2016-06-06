@@ -65,17 +65,21 @@ define(["module",
                var getOffsetHours = function() {
                      return (new Date()).getTimezoneOffset() / 60;
                   },
+                  runnerOffset = getOffsetHours(),
                   result;
 
                // Run the test
                return this.remote.execute(getOffsetHours)
-                  .then(function(offset) {
+                  .then(function(browserOffset) {
+
+                     // Work out the real offset
+                     var realOffset = browserOffset - runnerOffset;
 
                      // Construct date-time part of ISO timestamp
                      var dateTime = "2014-12-04T09:30:10";
 
                      // Construct timezone suffix
-                     var timezone = (offset < 0 ? "-" : "+") + Math.abs(offset);
+                     var timezone = (realOffset < 0 ? "-" : "+") + Math.abs(realOffset);
                      if (timezone.length === 2) {
                         timezone = timezone[0] + "0" + timezone.substr(1);
                      }

@@ -39,19 +39,7 @@ define(["module",
 
       "Drag nested items and check that palette is not cleared": function() {
          // See AKU-413...
-         return this.remote.findByCssSelector(".middleTestItemWrapper:nth-child(1) > .dojoDndHandle")
-            .moveMouseTo()
-            .click()
-            .pressMouseButton()
-            .moveMouseTo(1, 1)
-            .end()
-            .findByCssSelector("#DRAG_PALETTE1 .dojoDndItem:first-child > div")
-            .then(element => {
-               return this.remote.moveMouseTo(element)
-                  .sleep(1000) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-                  .releaseMouseButton();
-            })
-            .end()
+         return this.remote.dragOnto(".middleTestItemWrapper:nth-child(1) > .dojoDndHandle", "#DRAG_PALETTE1 .dojoDndItem:first-child > div")
             .findAllByCssSelector("#DRAG_PALETTE1 .dojoDndItem")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "There should still be 3 elements remaining on the palette after drag");
@@ -90,19 +78,7 @@ define(["module",
       },
 
       "Move a deep nested item into another target": function() {
-         return this.remote.findByCssSelector(".middleTestItemWrapper:nth-child(1) .innerTestItemWrapper:nth-child(1) .dojoDndHandle")
-            .moveMouseTo()
-            .click()
-            .pressMouseButton()
-            .moveMouseTo(1, 1)
-            .end()
-            .findByCssSelector(".middleTestItemWrapper:nth-child(2) .previewPanel > div:first-child")
-            .then(element => {
-               return this.remote.moveMouseTo(element)
-                  .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-                  .releaseMouseButton();
-            })
-            .end()
+         return this.remote.dragOnto(".middleTestItemWrapper:nth-child(1) .innerTestItemWrapper:nth-child(1) .dojoDndHandle", ".middleTestItemWrapper:nth-child(2) .previewPanel > div:first-child")
             .clearLog()
             .findByCssSelector(".confirmationButton > span")
             .click()
