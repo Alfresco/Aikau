@@ -329,9 +329,11 @@ define(["dojo/_base/declare",
                      config: {
                         name: "{postParam}",
                         value: "{renderedValue}",
-                        requirementConfig: {
-                           initialValue: true
-                        }
+                        validationConfig: [
+                           {
+                              validation: "textContentRequired"
+                           }
+                        ]
                      }
                   }
                ]

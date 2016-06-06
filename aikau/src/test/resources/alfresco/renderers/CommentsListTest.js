@@ -120,7 +120,7 @@ define(["module",
       },
 
       "Remove comment content to check save is disabled": function() {
-         return this.remote.execute("tinymce.get(1).setContent('');")
+         return this.remote.execute("tinymce.get(1).setContent('    ');")
             .findByCssSelector(".alfresco-renderers-EditableComment .alfresco-forms-Form .confirmationButton");
       },
 

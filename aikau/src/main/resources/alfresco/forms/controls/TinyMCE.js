@@ -89,12 +89,45 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This is a custom validator for this specific form control. It is necessary in order to support
+       * the ability to check for the TinyMCE editor being empty as text (rather than as HTML).
+       * 
+       * @instance
+       * @param {object} validationConfig The configuration for this validator
+       * @since 1.0.70
+       */
+      textContentRequired: function alfresco_forms_controls_TinyMCE__textContentRequired(validationConfig) {
+         var isValid = true;
+
+         try
+         {
+            if (this.wrappedWidget && this.wrappedWidget.editor)
+            {
+               var textContent = this.wrappedWidget.editor.getContent({format: "text"});
+               if (lang.trim(textContent) === "")
+               {
+                  isValid = false;
+               }
+            }
+         }
+         catch(e)
+         {
+            // NOTE: Development/testing experience has shown the requirement to wrap this code in a
+            //       try/catch block to handle occasional TinyMCE errors. These errors do not present
+            //       a problem to the validation flow (as it will typically repeat) but can throw the
+            //       whole validation management out of whack if the exception is not captured here.
+         }
+         
+         this.reportValidationResult(validationConfig, isValid);
+      },
+
+      /**
        * TinyMCE requires that the editor DOM element is in the document rather than in a fragment
        * so we delay initialising the editor until it is placed into the document.
        *
        * @instance
        */
-      placeWidget: function alfresco_forms_controls_BaseFormControl__placeWrappedWidget() {
+      placeWidget: function alfresco_forms_controls_TinyMCE__placeWrappedWidget() {
          this.inherited(arguments);
          this.wrappedWidget.init();
       },
@@ -130,7 +163,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {boolean} status Indicates the current status
        */
-      alfDisabled: function alfresco_forms_controls_BaseFormControl__alfDisabled(/*jshint unused:false*/ status) {
+      alfDisabled: function alfresco_forms_controls_TinyMCE__alfDisabled(/*jshint unused:false*/ status) {
          this.inherited(arguments);
          if (this.wrappedWidget)
          {

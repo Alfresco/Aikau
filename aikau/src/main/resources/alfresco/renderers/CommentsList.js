@@ -138,6 +138,11 @@ define(["dojo/_base/declare",
                                     requirementConfig: {
                                        initialValue: true
                                     },
+                                    validationConfig: [
+                                       {
+                                          validation: "textContentRequired"
+                                       }
+                                    ],
                                     autoResize: "{addCommentsFullScreen}"
                                  }
                               }
