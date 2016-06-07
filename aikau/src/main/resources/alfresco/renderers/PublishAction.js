@@ -36,8 +36,10 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/PublishAction.html",
         "alfresco/enums/urlTypes", 
         "alfresco/util/urlUtils",
-        "alfresco/core/Core"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, template, urlTypes, urlUtils, AlfCore) {
+        "alfresco/core/Core",
+        "dojo/dom-class"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, 
+                 template, urlTypes, urlUtils, AlfCore, domClass) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, AlfCore], {
       
@@ -88,7 +90,18 @@ define(["dojo/_base/declare",
        */
       imageSrc: null,
 
-     /**
+      /**
+       * Indicates that this should only be displayed when the item (note: NOT the renderer) is
+       * hovered over.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.70
+       */
+      onlyShowOnHover: false,
+
+      /**
        * This defines the topic that will be published on when the associated image is clicked. The payload will be
        * the "currentItem" attribute.
        *
@@ -147,6 +160,20 @@ define(["dojo/_base/declare",
          this.altText = this.message(this.altText, {
             0: altTextId
          });
+      },
+
+      /**
+       * Ensures that CSS classes are correctly applied.
+       * 
+       * @instance
+       * @since 1.0.70
+       */
+      postCreate: function alfresco_renderers_PublishAction__postCreate() {
+         this.inherited(arguments);
+         if (this.onlyShowOnHover === true) 
+         {
+            domClass.add(this.domNode, "alfresco-renderers-PublishAction--show-on-hover");
+         }
       },
 
       /**

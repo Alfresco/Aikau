@@ -31,9 +31,10 @@ define(["intern/dojo/node!fs",
       "intern/dojo/node!leadfoot/keys",
       "intern/dojo/Promise",
       "intern/dojo/lang",
+      "config/Config",
       "lodash"
    ],
-   function(fs, Command, keys, Promise, lang, _) {
+   function(fs, Command, keys, Promise, lang, Config, _) {
 
       // Necessary for ES6 features
       "use strict";
@@ -103,6 +104,35 @@ define(["intern/dojo/node!fs",
                   var clearButton = document.getElementById("mockXhr_clearLog");
                   clearButton && clearButton.click();
                });
+            });
+         },
+
+         /**
+          * Drag a node onto another one
+          *
+          * @instance
+          * @param {String} sourceSelector The CSS selector for the node to drag
+          * @param {String} toSelector The CSS selector for the node to drag onto
+          * @since 1.0.70
+          */
+         dragOnto: function(sourceSelector, toSelector) {
+
+            // Boilerplate stuff
+            return new this.constructor(this, function() {
+               var browser = this.parent;
+
+               // Use drag-code from https://github.com/theintern/leadfoot/issues/64#issuecomment-145493928
+               return browser.findByCssSelector(sourceSelector)
+                  .click()
+                  .moveMouseTo()
+                  .pressMouseButton(1)
+                  .moveMouseTo(10, -10)
+                  .end()
+
+               .findByCssSelector(toSelector)
+                  .moveMouseTo()
+                  .releaseMouseButton()
+                  .end();
             });
          },
 
@@ -240,7 +270,7 @@ define(["intern/dojo/node!fs",
 
             // Apply defaults to arguments
             opts = lang.mixin({
-               queryTimeout: 2000,
+               queryTimeout: Config.timeout.find,
                pos: "all",
                messageIfError: "",
                isGlobal: false,
@@ -359,7 +389,7 @@ define(["intern/dojo/node!fs",
           * @param {string} [opts.method] The method use in the XHR request (this will
           *                               be automatically capitalised)
           * @param {object} [opts.headers={}] Looks for all of the specified header name/values
-          * @param {int} [opts.queryTimeout=2000] How long to wait for the first match
+          * @param {int} [opts.queryTimeout] How long to wait for the first match
           * @param {string} [opts.body] Searches for this string inside the request body
           * @param {string} [opts.messageIfError] Used as a prefix to any returned error message
           * @returns {object|object[]} If "first" or "last" was specified as the 'pos'
@@ -372,7 +402,7 @@ define(["intern/dojo/node!fs",
 
             // Apply defaults to arguments
             opts = lang.mixin({
-               queryTimeout: 2000,
+               queryTimeout: Config.timeout.find,
                pos: "all",
                url: "",
                method: "",

@@ -6,3 +6,15 @@
       vertical-align: text-bottom;
    }
 }
+
+.alfresco-lists-views-layout-_MultiItemRendererMixin__item {
+   &:hover {
+      .alfresco-renderers-PublishAction--show-on-hover {
+         visibility: visible;
+      }
+   }
+   .alfresco-renderers-PublishAction--show-on-hover {
+      visibility: hidden;
+      outline: none;
+    }
+}

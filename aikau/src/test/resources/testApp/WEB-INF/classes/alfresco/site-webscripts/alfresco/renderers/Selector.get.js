@@ -54,10 +54,12 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
-                     name: "One"
+                     name: "One",
+                     disabled: false
                   },
                   {
-                     name: "Two"
+                     name: "Two",
+                     disabled: true
                   }
                ]
             },
@@ -82,7 +84,9 @@ model.jsonModel = {
                                              id: "SELECTOR",
                                              name: "alfresco/renderers/Selector",
                                              config: {
-                                                itemKey: "index"
+                                                itemKey: "index",
+                                                disableProperty: "disabled",
+                                                disabledOnValues: ["disabled", true, "bobbins"]
                                              }
                                           }
                                        ]

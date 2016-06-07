@@ -18,7 +18,6 @@ model.jsonModel = {
                {
                   name: "alfresco/upload/UploadMonitor",
                   config: {
-                     useEllipsisForLongFilenames: true,
                      widgetsForSuccessfulActions: [
                         {
                            name: "alfresco/html/SVGImage",

@@ -18,6 +18,8 @@
  */
 
 /**
+ * For more info on access keys, see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey
+ * 
  * @author Dave Draper
  */
 define(["module",
@@ -49,33 +51,37 @@ define(["module",
             });
       },
 
-      "Test tab to skip to textbox (may not work on OS/X)": function() {
-         return this.remote.pressKeys(keys.TAB)
-            .pressKeys(keys.TAB)
-            .pressKeys(keys.TAB)
+      "Test tab to skip to textbox": function() {
+         return this.remote.tabToElement({
+               selector: "[accesskey=\"t\"]"
+            })
             .pressKeys(keys.ENTER)
             .pressKeys("H") // NOTE: need to use pressKeys and not type here
             .getLastPublish("_valueChangeOf_textbox", "Text box was not focused");
       },
 
-      "Test button access key (may not work on OS/X)": function() {
+      "Test button access key": function() {
          // Hit the browser with a sequence of different accesskey combinations and the letter 's' for a nav skip
          return this.remote.pressKeys([keys.ALT, "b"])
-            .pressKeys([keys.ALT]) // Release SHIFT (Chrome)
+            .pressKeys(keys.NULL) // Release modifiers
             .pressKeys([keys.ALT, keys.SHIFT, "b"])
-            .pressKeys([keys.ALT, keys.SHIFT]) // Release ALT + SHIFT (Firefox)
+            .pressKeys(keys.NULL) // Release modifiers
+            .pressKeys([keys.ALT, keys.CONTROL, "b"])
+            .pressKeys(keys.NULL) // Release modifiers
 
          // The button should now have focus - hit enter to use it...
          .pressKeys(keys.ENTER)
             .getLastPublish("BUTTON_FOCUS_SUCCESS", "Button was not focused");
       },
 
-      "Test menu access key (may not work on OS/X)": function() {
+      "Test menu access key": function() {
          // Hit the browser with a sequence of different accesskey combinations and the letter 's' for a nav skip
          return this.remote.pressKeys([keys.ALT, "m"])
-            .pressKeys([keys.ALT]) // Release SHIFT (Chrome)
+            .pressKeys(keys.NULL) // Release modifiers
             .pressKeys([keys.ALT, keys.SHIFT, "m"])
-            .pressKeys([keys.ALT, keys.SHIFT]) // Release ALT + SHIFT (Firefox)
+            .pressKeys(keys.NULL) // Release modifiers
+            .pressKeys([keys.ALT, keys.CONTROL, "m"])
+            .pressKeys(keys.NULL) // Release modifiers
 
          // The button should now have focus - hit enter to use it...
          .pressKeys(keys.ENTER)

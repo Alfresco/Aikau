@@ -20,58 +20,70 @@
 /**
  * @author Dave Draper
  */
-define(["module",
-        "alfresco/defineSuite",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, TestCommon) {
+define(["module", 
+        "alfresco/defineSuite", 
+        "intern/chai!assert", 
+        "intern/dojo/lang", 
+        "intern/dojo/node!leadfoot/Command"], 
+        function(module, defineSuite, assert, lang, Command) {
 
-   function clickButton(browser, buttonId) {
-      return browser.findByCssSelector("[widgetid=\"" + buttonId + "\"] .dijitButtonNode")
-         .click()
-         .sleep(500)
-         .end();
-   }
+   // Decorate the Command object with specific extensions for this module
+   // NOTE: Not ideal prefixing the function names, but need to scope them as this
+   // is essentially a global object. Longer-term, this should be refactored to be
+   // handled more elegantly.
+   lang.mixin(Command.prototype, {
+      PaginationTest_clickButton: function(buttonId) {
+         return new this.constructor(this, function() {
+            var browser = this.parent;
+            return browser.findByCssSelector("[widgetid=\"" + buttonId + "\"] .dijitButtonNode")
+               .click()
+               .end();
+         });
+      },
 
-   function gotoNextPage(browser, scope) {
-      return function() {
-         return browser.end()
-            .findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
-            .clearLog()
-            .click()
-            .end()
+      PaginationTest_gotoNextPage: function(scope) {
+         return new this.constructor(this, function() {
+            var browser = this.parent;
+            return browser.findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_FORWARD")
+               .clearLog()
+               .click()
+               .end()
 
-         .getLastPublish("CUSTOM_ALF_DOCLIST_REQUEST_FINISHED");
-      };
-   }
+            .getLastPublish("ALF_PAGE_FORWARD")
 
-   function checkPage(browser, scope, pageNum) {
-      var firstItem = ((pageNum - 1) * 10) + 1;
-      return function() {
-         return browser.end()
-            .findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_MARKER")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "" + pageNum, "Should be displaying that page number is " + pageNum);
-            })
-            .end()
+            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-         .findByCssSelector("#" + scope + "PAGE_SIZES .alfresco-lists-views-layouts-Row:first-child")
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "" + firstItem, "Should be displaying results from page " + pageNum);
-            })
-            .end();
-      };
-   }
+            .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading");
+         });
+      },
+
+      PaginationTest_checkPage: function(scope, pageNum) {
+         var firstItem = ((pageNum - 1) * 10) + 1;
+         return new this.constructor(this, function() {
+            var browser = this.parent;
+            return browser.findById(scope + "PAGE_SIZE_PAGINATOR_PAGE_MARKER")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "" + pageNum, "Should be displaying that page number is " + pageNum);
+               })
+               .end()
+
+            .findByCssSelector("#" + scope + "PAGE_SIZES .alfresco-lists-views-layouts-Row:first-child")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "" + firstItem, "Should be displaying results from page " + pageNum);
+               })
+               .end();
+         });
+      }
+   });
 
    defineSuite(module, {
       name: "Pagination Tests",
       testPage: "/Paginator",
 
       "Test page selector drop-down label intialization": function() {
-         return this.remote.findByCssSelector("body") // Need a session to start checking for a publish
-            .getLastPublish("ALF_WIDGETS_READY")
+         return this.remote.getLastPublish("ALF_WIDGETS_READY")
             .end()
 
          .findByCssSelector("#PAGINATOR_PAGE_SELECTOR_text")
@@ -354,74 +366,68 @@ define(["module",
 
    // See AKU-330...
    defineSuite(module, function() {
-      var browser;
-
       return {
          name: "Pagination Tests (Custom page sizes)",
-
-         setup: function() {
-            browser = this.remote;
-            return TestCommon.loadTestWebScript(this.remote, "/Paginator", "Pagination Tests (Custom page sizes)");
-         },
+         testPage: "/Paginator",
 
          "Starting page is initialised and working (useHash=false)": function() {
-            return checkPage(browser, "CUSTOM_", 1)()
-               .then(gotoNextPage(browser, "CUSTOM_"))
-               .then(checkPage(browser, "CUSTOM_", 2));
+            return this.remote.PaginationTest_checkPage("CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("CUSTOM_")
+               .PaginationTest_checkPage("CUSTOM_", 2);
          },
 
          "Changing filter changes to page 1 (useHash=false)": function() {
-            return clickButton(browser, "CHANGE_FILTER")
-               .then(checkPage(browser, "CUSTOM_", 1))
-               .then(gotoNextPage(browser, "CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("CHANGE_FILTER")
+               .PaginationTest_checkPage("CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("CUSTOM_");
          },
 
          "Changing tag changes to page 1 (useHash=false)": function() {
-            return clickButton(browser, "CHANGE_TAG")
-               .then(checkPage(browser, "CUSTOM_", 1))
-               .then(gotoNextPage(browser, "CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("CHANGE_TAG")
+               .PaginationTest_checkPage("CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("CUSTOM_");
          },
 
          "Changing category changes to page 1 (useHash=false)": function() {
-            return clickButton(browser, "CHANGE_CATEGORY")
-               .then(checkPage(browser, "CUSTOM_", 1))
-               .then(gotoNextPage(browser, "CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("CHANGE_CATEGORY")
+               .PaginationTest_checkPage("CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("CUSTOM_");
          },
 
          "Changing path changes to page 1 (useHash=false)": function() {
-            return clickButton(browser, "CHANGE_PATH")
-               .then(checkPage(browser, "CUSTOM_", 1))
-               .then(gotoNextPage(browser, "CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("CHANGE_PATH")
+               .PaginationTest_checkPage("CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("CUSTOM_");
          },
 
          "Starting page is initialised and working (useHash=true)": function() {
-            return checkPage(browser, "HASH_CUSTOM_", 1)()
-               .then(gotoNextPage(browser, "HASH_CUSTOM_"))
-               .then(checkPage(browser, "HASH_CUSTOM_", 2));
+            return this.remote.PaginationTest_checkPage("HASH_CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("HASH_CUSTOM_")
+               .PaginationTest_checkPage("HASH_CUSTOM_", 2);
          },
 
          "Changing filter changes to page 1 (useHash=true)": function() {
-            return clickButton(browser, "HASH_CHANGE_FILTER")
-               .then(checkPage(browser, "HASH_CUSTOM_", 1))
-               .then(gotoNextPage(browser, "HASH_CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("HASH_CHANGE_FILTER")
+               .PaginationTest_checkPage("HASH_CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("HASH_CUSTOM_");
          },
 
          "Changing tag changes to page 1 (useHash=true)": function() {
-            return clickButton(browser, "HASH_CHANGE_TAG")
-               .then(checkPage(browser, "HASH_CUSTOM_", 1))
-               .then(gotoNextPage(browser, "HASH_CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("HASH_CHANGE_TAG")
+               .PaginationTest_checkPage("HASH_CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("HASH_CUSTOM_");
          },
 
          "Changing category changes to page 1 (useHash=true)": function() {
-            return clickButton(browser, "HASH_CHANGE_CATEGORY")
-               .then(checkPage(browser, "HASH_CUSTOM_", 1))
-               .then(gotoNextPage(browser, "HASH_CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("HASH_CHANGE_CATEGORY")
+               .PaginationTest_checkPage("HASH_CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("HASH_CUSTOM_");
          },
 
          "Changing path changes to page 1 (useHash=true)": function() {
-            return clickButton(browser, "HASH_CHANGE_PATH")
-               .then(checkPage(browser, "HASH_CUSTOM_", 1))
-               .then(gotoNextPage(browser, "HASH_CUSTOM_"));
+            return this.remote.PaginationTest_clickButton("HASH_CHANGE_PATH")
+               .PaginationTest_checkPage("HASH_CUSTOM_", 1)
+               .PaginationTest_gotoNextPage("HASH_CUSTOM_");
          }
       };
    });

@@ -47,19 +47,7 @@ define(["module",
       },
 
       "Test Drag From Palette To DropItems": function() {
-         return this.remote.findByCssSelector("#dojoUnique1 .title")
-            .moveMouseTo()
-            .click()
-            .pressMouseButton()
-            .moveMouseTo(1, 1)
-            .end()
-            .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
-            .then(element => {
-               return this.remote.moveMouseTo(element)
-                  .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-                  .releaseMouseButton();
-            })
-            .end()
+         return this.remote.dragOnto("#dojoUnique1 .title", ".alfresco-dnd-DragAndDropTarget > div")
             .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The dropped item was found");
@@ -310,19 +298,7 @@ define(["module",
       },
 
       "Drag and drop and item": function() {
-         return this.remote.findByCssSelector("#dojoUnique1 .title")
-            .moveMouseTo()
-            .click()
-            .pressMouseButton()
-            .moveMouseTo(1, 1)
-            .end()
-            .findByCssSelector(".alfresco-dnd-DragAndDropTarget > div")
-            .then(element => {
-               return this.remote.moveMouseTo(element)
-                  .sleep(500) // The drag is 'elastic' and this sleep allows the item to catch up with the mouse movement
-                  .releaseMouseButton();
-            })
-            .end()
+         return this.remote.dragOnto("#dojoUnique1 .title", ".alfresco-dnd-DragAndDropTarget > div")
             .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The dropped item was found");

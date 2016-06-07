@@ -1,4 +1,4 @@
-Aikau 1.0.69 Release Notes
+Aikau 1.0.70 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,15 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.70:
+* [AKU-945](https://issues.alfresco.com/jira/browse/AKU-945)       - Standardize form control layout
+* [AKU-955](https://issues.alfresco.com/jira/browse/AKU-955)       - Handle text mis-alignment in FileUploadService
+* [AKU-956](https://issues.alfresco.com/jira/browse/AKU-956)       - Added custom TinyMCE specific empty content validator
+* [AKU-959](https://issues.alfresco.com/jira/browse/AKU-959)       - Support for disable state in Selector renderer
+* [AKU-963](https://issues.alfresco.com/jira/browse/AKU-963)       - Support for onlyShowOnHover in PublishAction
+* [AKU-979](https://issues.alfresco.com/jira/browse/AKU-979)       - Disable isDraggable by default
+* [AKU-980](https://issues.alfresco.com/jira/browse/AKU-980)       - Configurable result count message in AlfSearchList
+
 1.0.69:
 * [AKU-968](https://issues.alfresco.com/jira/browse/AKU-968)       - Support for preventing click bubbling in PublishOrLinkMixin
 * [AKU-970](https://issues.alfresco.com/jira/browse/AKU-970)       - Improve visibilityConfig in forms

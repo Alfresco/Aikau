@@ -319,14 +319,18 @@ define(["alfresco/core/ProcessWidgets",
        * @instance
        * @param {Array} services An array of all the services that have been processed
        */
-      allServicesProcessed: function alfresco_core_Core__allServicesProcessed(services) {
+      allServicesProcessed: function alfresco_core_Page__allServicesProcessed(services) {
          /*jshint unused:false*/
          this.alfLog("log", "All services processed");
-         if (this.widgets)
+         if (this.widgets && this.widgets.length)
          {
             // Make sure to process widgets if there are no services...
             // Otherwise they will be processed once all the services are instantiated...
             this.processWidgets(this.widgets, this.containerNode);
+         }
+         else
+         {
+            PubQueue.getSingleton().release();
          }
       },
 
