@@ -32,9 +32,9 @@ define(["dojo/_base/declare",
         "alfresco/util/hashUtils",
         "dojo/io-query",
         "dojo/dom-class"],
-        function(declare, AlfSortablePaginatedList, JsNode, topics, array, lang, hashUtils, ioQuery, domClass) {
+        function(declare, AlfFilteredList, JsNode, topics, array, lang, hashUtils, ioQuery, domClass) {
 
-   return declare([AlfSortablePaginatedList], {
+   return declare([AlfFilteredList], {
 
       /**
        * An array of the i18n files to use with this widget.
