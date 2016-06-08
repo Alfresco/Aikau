@@ -28,11 +28,18 @@ define(["dojo/_base/declare",
         "dojo/on",
         "alfresco/layout/StickyPanel",
         "alfresco/notifications/AlfNotification",
+        "alfresco/notifications/ProgressIndicator",
         "alfresco/core/topics"],
-        function(declare, BaseService, lang, on, StickyPanel, AlfNotification, topics) {
+        function(declare, BaseService, lang, on, StickyPanel, AlfNotification, ProgressIndicator, topics) {
 
    // We only ever allow one sticky panel currently
    var theStickyPanel = null;
+
+   // We only ever allow one progress indicator
+   var theProgressIndicator = null;
+
+   // We need to have a static count of activities for the global progress/activity indicator
+   var numProgressActivities = 0;
 
    return declare([BaseService], {
 
@@ -42,7 +49,9 @@ define(["dojo/_base/declare",
        * @instance
        * @type {Array}
        */
-      i18nRequirements: [{i18nFile: "./i18n/NotificationService.properties"}],
+      i18nRequirements: [{
+         i18nFile: "./i18n/NotificationService.properties"
+      }],
 
       /**
        * This is the topic that is subscribed to for handling requests to close a displayed
@@ -82,11 +91,32 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/services/NotificationService#displayNotificationTopic
        * @listens module:alfresco/services/NotificationService#displayPromptTopic
        * @listens module:alfresco/core/topics#DISPLAY_STICKY_PANEL
+       * @listens module:alfresco/core/topics#PROGRESS_INDICATOR_ADD_ACTIVITY
+       * @listens module:alfresco/core/topics#PROGRESS_INDICATOR_REMOVE_ACTIVITY
        */
       registerSubscriptions: function alfresco_services_NotificationService__registerSubscriptions() {
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
          this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
          this.alfSubscribe(topics.DISPLAY_STICKY_PANEL, lang.hitch(this, this.onDisplayStickyPanel));
+         this.alfSubscribe(topics.PROGRESS_INDICATOR_ADD_ACTIVITY, lang.hitch(this, this.onAddProgressActivity));
+         this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY, lang.hitch(this, this.onRemoveProgressActivity));
+         this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES, lang.hitch(this, this.onRemoveAllProgressActivities));
+      },
+
+      /**
+       * Increments the quantity of in-progress activities and displays the progress-indicator if not already displayed.
+       *
+       * @instance
+       * @since 1.0.71
+       * @param {Object} payload The publication payload
+       */
+      onAddProgressActivity: function alfresco_services_NotificationService__onAddProgressActivity(payload) {
+         if (numProgressActivities++ === 0) {
+            theProgressIndicator = new ProgressIndicator({
+               autoHideSecs: payload.autoHideSecs || 30
+            });
+            theProgressIndicator.show();
+         }
       },
 
       /**
@@ -107,10 +137,10 @@ define(["dojo/_base/declare",
                inlineLink: payload.inlineLink,
                closeTopic: payload.closeTopic
             };
-            if(typeof payload.autoClose !== "undefined") {
+            if (typeof payload.autoClose !== "undefined") {
                config.autoClose = payload.autoClose;
             }
-            if(typeof payload.wordsPerSecond !== "undefined") {
+            if (typeof payload.wordsPerSecond !== "undefined") {
                config.wordsPerSecond = payload.wordsPerSecond;
             }
             var newNotification = new AlfNotification(config);
@@ -209,19 +239,56 @@ define(["dojo/_base/declare",
                dialogId: "NOTIFICATION_PROMPT",
                dialogTitle: this.message(title),
                textContent: message,
-               widgetsButtons: [
-                  {
-                     id: "NOTIFCATION_PROMPT_ACKNOWLEDGEMENT",
-                     name: "alfresco/buttons/AlfButton",
-                     config: {
-                        label: "notification.ok.label",
-                        additionalCssClasses: "call-to-action"
-                     }
+               widgetsButtons: [{
+                  id: "NOTIFCATION_PROMPT_ACKNOWLEDGEMENT",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "notification.ok.label",
+                     additionalCssClasses: "call-to-action"
                   }
-               ]
+               }]
             });
          } else {
             this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
+         }
+      },
+
+      /**
+       * Decrements the quantity of in-progress activities and hides the progress-indicator if its displayed.
+       *
+       * @instance
+       * @since 1.0.71
+       * @param {Object} payload The publication payload
+       */
+      onRemoveAllProgressActivities: function alfresco_services_NotificationService__onRemoveAllProgressActivities( /*jshint unused:false*/ payload) {
+         this.resetProgressIndicator();
+      },
+
+      /**
+       * Decrements the quantity of in-progress activities and hides the progress-indicator if its displayed.
+       *
+       * @instance
+       * @since 1.0.71
+       * @param {Object} payload The publication payload
+       */
+      onRemoveProgressActivity: function alfresco_services_NotificationService__onRemoveProgressActivity( /*jshint unused:false*/ payload) {
+         if (--numProgressActivities <= 0) {
+            this.resetProgressIndicator();
+         }
+      },
+
+      /**
+       * Hide the progress indicator (destroy it) and reset the number of activities to zero.
+       *
+       * @instance
+       * @since 1.0.71
+       */
+      resetProgressIndicator: function alfresco_services_NotificationService__resetProgressIndicator() {
+         if (theProgressIndicator) {
+            theProgressIndicator.hide().then(function() {
+               theProgressIndicator = null;
+            });
+            numProgressActivities = 0;
          }
       }
    });

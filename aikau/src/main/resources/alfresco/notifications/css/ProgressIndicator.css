@@ -1,0 +1,84 @@
+@loader-content-bg: #333;
+@loader-content-fg: #ddd;
+
+.alfresco-notifications-ProgressIndicator {
+   background: rgba(0,0,0,.1);
+   bottom: 0;
+   left: 0;
+   position: fixed;
+   right: 0;
+   top: 0;
+   transform: translateZ(0);
+   z-index: 9999; /* This isn't ideal, but searching all z-indexes is even worse (better solution possible?) */
+   &__close-button {
+      color: #eee;
+      cursor: pointer;
+      font-size: 50px;
+      font-weight: 700;
+      line-height: 60px;
+      position: absolute;
+      right: 20px;
+      text-shadow: 0 0 2px rgba(0,0,0,.5);
+      top: 0;
+   }
+   &__content {
+      background: @loader-content-bg;
+      border-radius: 20px;
+      color: @loader-content-fg;
+      left: 50%;
+      margin: 0 auto;
+      opacity: .85;
+      padding: 40px;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      transform: translate(-50%, -50%);
+   }
+   &__loader {
+      animation: progress-loader 2s linear infinite;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 .2em;
+      color: @loader-content-fg;
+      font-size: 11px;
+      height: 10em;
+      margin: 0 0 30px;
+      position: relative;
+      text-indent: -99999em;
+      width: 10em;
+      &::before, &::after {
+         animation: progress-loader 2s infinite ease-out;
+         background: @loader-content-bg;
+         border-radius: 50%;
+         content: "";
+         height: 10.2em;
+         position: absolute;
+         width: 5.2em;
+      }
+      &::before {
+         animation-delay: 1.5s;
+         border-radius: 10.2em 0 0 10.2em;
+         left: -.1em;
+         top: -.1em;
+         transform-origin: 5.2em 5.1em;
+      }
+      &::after {
+         border-radius: 0 10.2em 10.2em 0;
+         left: 5.1em;
+         top: -.1em;
+         transform-origin: 0 5.1em;
+      }
+   }
+   &__loading-img {
+      display: block;
+      margin-bottom: 20px;
+   }
+   &--displayed {
+      overflow: hidden;
+   }
+}
+
+@keyframes progress-loader {
+   100% {
+      transform: rotate(360deg);
+   }
+}

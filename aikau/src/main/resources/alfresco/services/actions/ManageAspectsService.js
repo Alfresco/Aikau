@@ -147,6 +147,7 @@ define(["dojo/_base/declare",
       onManageAspects: function alfresco_services_actions_ManageAspectsService__onManageAspects(payload) {
          if (payload && payload.node)
          {
+            this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
             this.serviceXhr({
                url: AlfConstants.PROXY_URI + "slingshot/doclib/aspects/node/" + payload.node.nodeRef.replace("://", "/"),
                method: "GET",
@@ -209,6 +210,7 @@ define(["dojo/_base/declare",
                }
             ]
          });
+         this.alfServicePublish(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY);
       },
 
       /**
@@ -226,6 +228,7 @@ define(["dojo/_base/declare",
          }
          else
          {
+            this.alfServicePublish(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY);
             this.alfLog("error", "The response to a request for currently available aspects did not contain a 'current' attribute", response, originalRequestConfig, this);
          }
       },
@@ -283,6 +286,7 @@ define(["dojo/_base/declare",
        * @param  {object} originalRequestConfig The object passed when making the original XHR request
        */
       onAspectsFailure: function  alfresco_services_actions_ManageAspectsService__onAspectsFailure(response, originalRequestConfig) {
+         this.alfServicePublish(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY);
          this.alfLog("error", "It was not possible to retrieve a list of currently available aspects", response, originalRequestConfig, this);
          this.alfPublish("ALF_DISPLAY_PROMPT", {
             message: this.message("services.actionservice.ManageAspects.aspectRetrievalFailed", {
