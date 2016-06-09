@@ -26,8 +26,6 @@
  */
 define(["alfresco/core/Core",
         "alfresco/core/topics",
-        "alfresco/enums/urlTypes",
-        "alfresco/util/urlUtils", 
         "dojo/_base/declare",
         "dojo/Deferred",
         "dojo/dom-class",
@@ -38,8 +36,7 @@ define(["alfresco/core/Core",
         "dijit/_WidgetBase",
         "dijit/registry",
         "dojo/text!./templates/ProgressIndicator.html"],
-        function(AlfCore, topics, urlTypes, urlUtils, declare, Deferred, domClass,
-            domStyle, keys, on, _TemplatedMixin, _WidgetBase, registry, template) {
+        function(AlfCore, topics, declare, Deferred, domClass, domStyle, keys, on, _TemplatedMixin, _WidgetBase, registry, template) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
@@ -138,15 +135,6 @@ define(["alfresco/core/Core",
       loadingMessage: "progress-indicator.loading-message",
 
       /**
-       * The src for the loading animation image
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      loadingLogoSrc: "alfresco/notifications/css/images/ani_ring_fff-on-666.gif",
-
-      /**
        * The scrollbar width for this browser-environment
        *
        * @instance
@@ -167,7 +155,6 @@ define(["alfresco/core/Core",
             this.id = this.generateUuid();
          }
          this.loadingMessage = this.message(this.loadingMessage);
-         this.loadingLogoSrc = urlUtils.convertUrl(this.loadingLogoSrc, urlTypes.REQUIRE_PATH);
          this.inherited(arguments);
       },
 

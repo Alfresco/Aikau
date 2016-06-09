@@ -93,6 +93,7 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#DISPLAY_STICKY_PANEL
        * @listens module:alfresco/core/topics#PROGRESS_INDICATOR_ADD_ACTIVITY
        * @listens module:alfresco/core/topics#PROGRESS_INDICATOR_REMOVE_ACTIVITY
+       * @listens module:alfresco/core/topics#PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES
        */
       registerSubscriptions: function alfresco_services_NotificationService__registerSubscriptions() {
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
@@ -239,14 +240,16 @@ define(["dojo/_base/declare",
                dialogId: "NOTIFICATION_PROMPT",
                dialogTitle: this.message(title),
                textContent: message,
-               widgetsButtons: [{
-                  id: "NOTIFCATION_PROMPT_ACKNOWLEDGEMENT",
-                  name: "alfresco/buttons/AlfButton",
-                  config: {
-                     label: "notification.ok.label",
-                     additionalCssClasses: "call-to-action"
+               widgetsButtons: [
+                  {
+                     id: "NOTIFCATION_PROMPT_ACKNOWLEDGEMENT",
+                     name: "alfresco/buttons/AlfButton",
+                     config: {
+                        label: "notification.ok.label",
+                        additionalCssClasses: "call-to-action"
+                     }
                   }
-               }]
+               ]
             });
          } else {
             this.alfLog("warn", "It was not possible to display the message because no suitable 'message' attribute was provided", payload);
