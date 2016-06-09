@@ -26,12 +26,9 @@
  */
 define(["alfresco/core/Core",
         "alfresco/core/topics",
-        "alfresco/core/CoreWidgetProcessing",
         "alfresco/enums/urlTypes",
         "alfresco/util/urlUtils", 
-        "dojo/_base/array",
         "dojo/_base/declare",
-        "dojo/_base/lang",
         "dojo/Deferred",
         "dojo/dom-class",
         "dojo/dom-style",
@@ -41,10 +38,10 @@ define(["alfresco/core/Core",
         "dijit/_WidgetBase",
         "dijit/registry",
         "dojo/text!./templates/ProgressIndicator.html"],
-        function(AlfCore, topics, CoreWidgetProcessing, urlTypes, urlUtils, array, declare, lang, Deferred, domClass,
+        function(AlfCore, topics, urlTypes, urlUtils, declare, Deferred, domClass,
             domStyle, keys, on, _TemplatedMixin, _WidgetBase, registry, template) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
       /**
        * An array of the CSS files to use with this widget.
