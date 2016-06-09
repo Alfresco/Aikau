@@ -33,7 +33,8 @@ model.jsonModel = {
                }
             }
       },
-      "alfresco/services/NavigationService"
+      "alfresco/services/NavigationService",
+      "alfresco/services/NotificationService"
    ],
    widgets: [
       label,

@@ -924,9 +924,10 @@ define([],function() {
        * @since 1.0.71
        *
        * @event
-       * @property {Number} [autoHideSecs=30] After this number of seconds, the indicator will automatically hide. This has
-       *                                      been added to prevent locking out all interact if the indicator is not successfully
-       *                                      removed from the UI.
+       * @property {Function} [displayCallback] This function will be called  once the indicator is on-screen. This can
+       *                                        be used to ensure that the indicator is fully displayed before any
+       *                                        intensive JS could cause the display transition to halt, potentially
+       *                                        preventing the indicator from displaying.
        */
       PROGRESS_INDICATOR_ADD_ACTIVITY: "ALF_PROGRESS_INDICATOR_ADD_ACTIVITY",
 

@@ -113,7 +113,7 @@ define(["dojo/_base/declare",
       onAddProgressActivity: function alfresco_services_NotificationService__onAddProgressActivity(payload) {
          if (numProgressActivities++ === 0) {
             theProgressIndicator = new ProgressIndicator({
-               autoHideSecs: payload.autoHideSecs || 30
+               displayCallback: payload.displayCallback
             });
             theProgressIndicator.show();
          }

@@ -35,12 +35,14 @@ define(["alfresco/core/Core",
         "dojo/Deferred",
         "dojo/dom-class",
         "dojo/dom-style",
+        "dojo/keys",
+        "dojo/on",
         "dijit/_TemplatedMixin",
         "dijit/_WidgetBase",
         "dijit/registry",
         "dojo/text!./templates/ProgressIndicator.html"],
         function(AlfCore, topics, CoreWidgetProcessing, urlTypes, urlUtils, array, declare, lang, Deferred, domClass,
-            domStyle, _TemplatedMixin, _WidgetBase, registry, template) {
+            domStyle, keys, on, _TemplatedMixin, _WidgetBase, registry, template) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
 
@@ -90,14 +92,35 @@ define(["alfresco/core/Core",
        * @type {number}
        * @default
        */
-      destroyAfterHideMs: 0,
+      destroyAfterHideMs: 500,
 
       /**
        * Variable to hold the Deferred object that will resolve once this notification is destroyed
        *
+       * @instance
        * @type {object}
+       * @default
        */
       destroyDeferred: null,
+
+      /**
+       * This function will be called once the indicator has been displayed.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       */
+      displayCallback: null,
+
+      /**
+       * How many milliseconds it takes for the indicator to be displayed. This is a reference to the
+       * current CSS transition value for the indicator (i.e. try to keep it in sync with the CSS).
+       *
+       * @instance
+       * @type {number}
+       * @default
+       */
+      displayMs: 500,
 
       /**
        * The notification ID (helps with customisation)
@@ -160,6 +183,7 @@ define(["alfresco/core/Core",
       postCreate: function alfresco_notifications_ProgressIndicator__postCreate() {
          this.inherited(arguments);
          document.body.appendChild(this.domNode);
+         this.own(on(document.body, "keydown", this.onKeyPress.bind(this)));
       },
 
       /**
@@ -171,20 +195,6 @@ define(["alfresco/core/Core",
       destroy: function alfresco_notifications_AlfNotification__destroy() {
          this.destroyDeferred.resolve();
          this.inherited(arguments);
-      },
-
-      /**
-       * Get the scrollbar width for the current browser environment. This is cached
-       * after first retrieval for faster access.
-       *
-       * @instance
-       * @returns {number} The scrollbar width
-       */
-      _getScrollbarWidth: function alfresco_services_DialogService___getScrollbarWidth() {
-         if (!this._scrollbarWidth) {
-            this._scrollbarWidth = window.innerWidth - document.documentElement.offsetWidth;
-         }
-         return this._scrollbarWidth;
       },
 
       /**
@@ -212,8 +222,27 @@ define(["alfresco/core/Core",
        * @param {Object} evt The Dojo-normalised event object
        */
       onCloseClick: function alfresco_notifications_ProgressIndicator__onCloseClick( /*jshint unused:false*/ evt) {
-         this.alfServicePublish(topics.PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES);
          this.alfLog("warn", "Progress indicator manually closed");
+         this.alfServicePublish(topics.PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES);
+      },
+
+      /**
+       * Handle keypresses on the document.
+       *
+       * @instance
+       * @param {Object} evt The Dojo-normalised event object
+       */
+      onKeyPress: function alfresco_notifications_ProgressIndicator__onKeyPress(evt) {
+         var charOrCode = evt.charCode || evt.keyCode;
+         switch (charOrCode) {
+            case keys.ESCAPE:
+               this.alfLog("warn", "Progress indicator closed by pressing ESCAPE key");
+               this.alfServicePublish(topics.PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES);
+               evt.stopPropagation();
+               break;
+            default:
+               // Do not trap the keypress
+         }
       },
 
       /**
@@ -227,7 +256,22 @@ define(["alfresco/core/Core",
          domStyle.set(document.body, "margin-right", this._getScrollbarWidth() + "px");
          setTimeout(function() {
             domClass.add(document.documentElement, this.baseClass + "--displayed");
+            this.displayCallback && setTimeout(this.displayCallback, this.displayMs);
          }.bind(this)); // Add to page before showing, else transition fails
+      },
+
+      /**
+       * Get the scrollbar width for the current browser environment. This is cached
+       * after first retrieval for faster access.
+       *
+       * @instance
+       * @returns {number} The scrollbar width
+       */
+      _getScrollbarWidth: function alfresco_services_DialogService___getScrollbarWidth() {
+         if (!this._scrollbarWidth) {
+            this._scrollbarWidth = window.innerWidth - document.documentElement.offsetWidth;
+         }
+         return this._scrollbarWidth;
       }
    });
 });

@@ -124,6 +124,24 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Get the aspects via XHR and then call the success/failure handlers.
+       *
+       * @instance
+       * @param {[type]} payload The payload of the initial request
+       * @since 1.0.71
+       */
+      getAspects: function alfresco_services_actions_ManageAspectsService__getAspects(payload) {
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "slingshot/doclib/aspects/node/" + payload.node.nodeRef.replace("://", "/"),
+            method: "GET",
+            item: payload,
+            successCallback: this.onAspectsSuccess,
+            failureCallback: this.onAspectsFailure,
+            callbackScope: this
+         });
+      },
+
+      /**
        * Sets up the service using the configuration provided. This will check to see what aspects are available,
        * addable and removable. If no addble or removable aspects are explicitly configured then it is assumed that
        * all available aspects are both addable and removable. Only aspects that are configured as being available
@@ -147,14 +165,8 @@ define(["dojo/_base/declare",
       onManageAspects: function alfresco_services_actions_ManageAspectsService__onManageAspects(payload) {
          if (payload && payload.node)
          {
-            this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
-            this.serviceXhr({
-               url: AlfConstants.PROXY_URI + "slingshot/doclib/aspects/node/" + payload.node.nodeRef.replace("://", "/"),
-               method: "GET",
-               item: payload,
-               successCallback: this.onAspectsSuccess,
-               failureCallback: this.onAspectsFailure,
-               callbackScope: this
+            this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY, {
+               displayCallback: this.getAspects.bind(this, payload)
             });
          }
          else
