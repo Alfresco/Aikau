@@ -347,9 +347,6 @@ define(["dojo/_base/declare",
          // Setup some arrays for recording the valid and invalid widgets...
          this.invalidFormControls = [];
          
-         // Create any configured warnings...
-         this.createWarnings();
-         
          // If requested in the configuration, the value of a form can be set via a publication,
          // however to avoid generating subscriptions unnecessarily the subscription is only
          // set if explicitly requested. Global scope is intentionally used for the subscription
@@ -367,6 +364,9 @@ define(["dojo/_base/declare",
          {
             this.pubSubScope = this.generateUuid();
          }
+
+         // Create any configured warnings...
+         this.createWarnings();
 
          // When any of these topics are published, submit the form
          if (this.publishValueSubscriptions && this.publishValueSubscriptions.length) {
