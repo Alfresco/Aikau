@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
        * Get the aspects via XHR and then call the success/failure handlers.
        *
        * @instance
-       * @param {[type]} payload The payload of the initial request
+       * @param {object} payload The payload of the initial request
        * @since 1.0.71
        */
       getAspects: function alfresco_services_actions_ManageAspectsService__getAspects(payload) {
