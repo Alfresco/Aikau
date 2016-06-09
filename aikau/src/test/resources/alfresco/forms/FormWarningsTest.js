@@ -33,24 +33,27 @@ define(["module",
       testPage: "/FormWarnings",
 
       "Test initial warning visibility": function() {
-         return this.remote.findAllByCssSelector(".alfresco-forms-Form__warnings-top .alfresco-header-Warning")
+         return this.remote.findAllByCssSelector("#BANNER_FORM .alfresco-forms-Form__warnings-top .alfresco-header-Warning")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The form warnings were not displayed at the top of the form");
             })
             .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(1)")
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(1)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The first warning should have been displayed on page load");
             })
-            .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(2)")
+         .end()
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(2)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The second warning should NOT have been displayed on page load");
             })
-            .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(3)")
+         .end()
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(3)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The second warning should NOT have been displayed on page load");
@@ -62,8 +65,9 @@ define(["module",
             .clearValue()
             .type("a")
             .pressKeys(keys.BACKSPACE)
-            .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(1)")
+         .end()
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(1)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The first warning should have been hidden when field 1 was cleared");
@@ -73,8 +77,9 @@ define(["module",
       "Add some text to field two and check that a second warning is displayed": function() {
          return this.remote.findByCssSelector("#FIELD2 .dijitInputContainer input")
             .type("warn")
-            .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(2)")
+         .end()
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(2)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The second warning should have been displayed when field 2 was set to 'warn'");
@@ -84,8 +89,9 @@ define(["module",
       "Set field three to be 'blank' and check that third warning is NOT displayed": function() {
          return this.remote.findByCssSelector("#FIELD3 .dijitInputContainer input")
             .type("blank")
-            .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(3)")
+         .end()
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(3)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The third warning should NOT have been displayed when field 3 was set to 'blank'");
@@ -95,21 +101,50 @@ define(["module",
       "Add some text to field three and check that the third warning is NOW displayed": function() {
          return this.remote.findByCssSelector("#FIELD4 .dijitInputContainer input")
             .type("test")
-            .end()
-            .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(3)")
+         .end()
+            
+         .findByCssSelector("#BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(3)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The third warning should have NOW been displayed when field 4 was set to a value");
             });
       },
 
+      "No warnings displayed for generated scope form": function() {
+         return this.remote.findAllByCssSelector("#GENERATED_SCOPE_BANNER_FORM .alfresco-forms-Form__warnings-top .alfresco-header-Warning")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1);
+            })
+         .end()
+
+         .findByCssSelector("#GENERATED_SCOPE_BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(1)")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Add some text to field five to reveal its warning": function() {
+         return this.remote.findByCssSelector("#FIELD5 .dijitInputContainer input")
+            .type("test")
+         .end()
+
+         .findByCssSelector("#GENERATED_SCOPE_BANNER_FORM_WARNINGS .alfresco-header-Warning__info:nth-child(1)")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed);
+            });
+      },
+
       "Create a form dialog with warnings": function() {
          return this.remote.findById("CREATE_FORM_DIALOG_label")
             .click()
-            .end()
-            .findAllByCssSelector("#FORM_WARNING_DIALOG .dialogDisplayed")
-            .end()
-            .findAllByCssSelector("#FORM_WARNING_DIALOG .alfresco-forms-Form__warnings-bottom .alfresco-header-Warning")
+         .end()
+            
+         .findAllByCssSelector("#FORM_WARNING_DIALOG .dialogDisplayed")
+         .end()
+            
+         .findAllByCssSelector("#FORM_WARNING_DIALOG .alfresco-forms-Form__warnings-bottom .alfresco-header-Warning")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The form dialog warnings were not displayed at the bottom of the form");
             });

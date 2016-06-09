@@ -15,8 +15,8 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/forms/Form",
          id: "BANNER_FORM",
+         name: "alfresco/forms/Form",
          config: {
             pubSubScope: "FORM1_",
             warnings: [
@@ -97,6 +97,37 @@ model.jsonModel = {
                      name: "field4",
                      label: "Field 4",
                      description: "If Field 3 is set to 'blank' then this must NOT have a value to avoid a warning being displayed",
+                     value: ""
+                  }
+               }
+            ]
+         }
+      },
+      {
+         id: "GENERATED_SCOPE_BANNER_FORM",
+         name: "alfresco/forms/Form",
+         config: {
+            warnings: [
+               {
+                  message: "Warning: Field 5 is not blank",
+                  initialValue: true,
+                  rules: [
+                     {
+                        targetId: "FIELD5",
+                        isNot: [""]
+                     }
+                  ]
+               }
+            ],
+            widgets: [
+               {
+                  id: "FIELD5",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     fieldId: "FIELD5",
+                     name: "field5",
+                     label: "Field 5",
+                     description: "Add a value to show a Warning",
                      value: ""
                   }
                }
