@@ -44,6 +44,20 @@ model.jsonModel = {
          }
       },
       {
+         id: "LINKING_PATH_BREADCRUMBS",
+         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+         config: {
+            showRootLabel: false,
+            currentPath: "/ambition/is/the/path/to/success",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayloadType: "PROCESS",
+            publishPayloadModifiers: ["processInstanceTokens"],
+            publishPayload: {
+               url: "documentlibrary#filter=path|/{path}"
+            }
+         }
+      },
+      {
          id: "HASH_BREADCRUMBS",
          name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
          config: {

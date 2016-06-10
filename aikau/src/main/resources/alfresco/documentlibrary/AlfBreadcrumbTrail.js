@@ -382,6 +382,25 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function can be used to copy the publication configuration from the breadcrumb trail
+       * to an individual [AlfBreadcrumb]{@link module:alfresco/documentlibrary/AlfBreadcrumb}.
+       * 
+       * @instance
+       * @param {object} config The configuration object to copy the publication configuration to
+       * @since 1.0.71
+       */
+      copyPublicationConfig: function alfresco_documentlibrary_AlfBreadcrumbTrail__copyPublicationConfig(config) {
+         config.publishTopic = this.publishTopic;
+         config.publishPayload = this.publishPayload;
+         config.publishPayloadItemMixin = this.publishPayloadItemMixin;
+         config.publishPayloadModifiers = this.publishPayloadModifiers;
+         config.publishPayloadType = this.publishPayloadType;
+         config.publishGlobal = this.publishGlobal;
+         config.publishToParent = this.publishToParent;
+      },
+
+
+      /**
        * Renders an individual [AlfBreadcrumb]{@link module:alfresco/documentlibrary/AlfBreadcrumb} in the breadcrumb trail.
        * 
        * @instance
@@ -407,6 +426,13 @@ define(["dojo/_base/declare",
                };
                config.publishGlobal = true;
             }
+            else if (this.publishTopic)
+            {
+               // If a specific publishTopic has been provided then use this for all the breadcrumbs 
+               // (with the exception of the last breadcrumb as this can be individually
+               // configured)...
+               this.copyPublicationConfig(config);
+            }
             else
             {
                config.publishTopic = this.pathChangeTopic;
@@ -421,6 +447,11 @@ define(["dojo/_base/declare",
             config.publishPayload = this.generatePayload(this.lastBreadcrumbPublishPayload, this.currentItem, null, this.lastBreadcrumbPublishPayloadType, this.lastBreadcrumbPublishPayloadItemMixin, this.lastBreadcrumbPublishPayloadModifiers);
             config.publishGlobal = this.lastBreadcrumbPublishGlobal;
             config.publishToParent = this.lastBreadcrumbPublishToParent;
+         }
+         else if (this.publishTopic)
+         {
+            // Still allows for explicit last breadcrumb configuration to trump global configuration...
+            this.copyPublicationConfig(config);
          }
          this.renderBreadcrumb(config);
       },
