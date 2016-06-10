@@ -248,9 +248,16 @@ define(["dojo/_base/declare",
                }
             }
             domConstruct.place(form, document.body);
-            this.displayProgressIndicator().then(function(){
+            if (!data.target || data.target === this.currentTarget)
+            {
+               this.displayProgressIndicator().then(function(){
+                  form.submit();
+               });
+            }
+            else
+            {
                form.submit();
-            });
+            }
          }
       },
 
