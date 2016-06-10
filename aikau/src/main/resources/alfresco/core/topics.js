@@ -913,6 +913,50 @@ define([],function() {
       PREVIEWS_SHOWN: "ALF_PREVIEWS_SHOWN",
 
       /**
+       * This topic can be used to denote that an activity has begun, for which a global progress indicator should be shown.
+       * This can be called multiple times, and for each "ADD" a corresponding "REMOVE" should be called via the
+       * [PROGRESS_INDICATOR_REMOVE_ACTIVITY topic]{@link module:alfresco/core/topics#PROGRESS_INDICATOR_REMOVE_ACTIVITY}.
+       * When there are no remaining current activities, the indicator should be hidden.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.71
+       *
+       * @event
+       * @property {Function} [displayCallback] This function will be called  once the indicator is on-screen. This can
+       *                                        be used to ensure that the indicator is fully displayed before any
+       *                                        intensive JS could cause the display transition to halt, potentially
+       *                                        preventing the indicator from displaying.
+       */
+      PROGRESS_INDICATOR_ADD_ACTIVITY: "ALF_PROGRESS_INDICATOR_ADD_ACTIVITY",
+
+      /**
+       * This topic can be used to denote that an activity has finished, and that the progress indicator can be removed if
+       * no other activities are running. Calling this topic when no activities are running will have no effect.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.71
+       *
+       * @event
+       */
+      PROGRESS_INDICATOR_REMOVE_ACTIVITY: "ALF_PROGRESS_INDICATOR_REMOVE_ACTIVITY",
+
+      /**
+       * This topic can be used to immediately mark all activities as finished and to therefore remove the progress indicator.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.71
+       *
+       * @event
+       */
+      PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES: "ALF_PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES",
+
+      /**
        * This topic is published to indicate that data needs to be uploaded. This is typically list based data but can
        * be used by other widgets.
        *

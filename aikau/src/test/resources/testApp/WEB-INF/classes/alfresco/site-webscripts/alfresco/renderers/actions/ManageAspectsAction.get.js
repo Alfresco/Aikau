@@ -9,6 +9,7 @@ model.jsonModel = {
             }
          }
       },
+      "alfresco/services/NotificationService",
       "alfresco/services/DialogService",
       {
          name: "alfresco/services/actions/ManageAspectsService",

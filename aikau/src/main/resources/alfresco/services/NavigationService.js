@@ -29,6 +29,7 @@
 define(["dojo/_base/declare",
         "module",
         "alfresco/core/ObjectTypeUtils",
+        "alfresco/core/topics",
         "alfresco/enums/urlTypes",
         "alfresco/services/BaseService",
         "alfresco/services/_NavigationServiceTopicMixin",
@@ -36,8 +37,9 @@ define(["dojo/_base/declare",
         "alfresco/util/urlUtils",
         "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/Deferred",
         "dojo/dom-construct"],
-        function(declare, module, ObjectTypeUtils, urlTypes, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, domConstruct) {
+        function(declare, module, ObjectTypeUtils, topics, urlTypes, BaseService, _NavigationServiceTopicMixin, hashUtils, urlUtils, array, lang, Deferred, domConstruct) {
 
    return declare([BaseService, _NavigationServiceTopicMixin], {
 
@@ -145,6 +147,22 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Display the progress indicator (or at least request it, if NotificationService isn't on the page).
+       *
+       * @instance
+       * @returns {Object} A promise that will resolve once it's (probably) displayed.
+       * @since 1.0.71
+       */
+      displayProgressIndicator: function alfresco_services_NavigationService__displayProgressIndicator() {
+         var dfd = new Deferred();
+         this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
+         setTimeout(function() {
+            dfd.resolve();
+         }, 500); // This is to give the progress indicator time to appear
+         return dfd.promise;
+      },
+
+      /**
        * This is the default page navigation handler. It is called when the service receives a publication on
        * the [navigateToPageTopic]{@link module:alfresco/services/_NavigationServiceTopicMixin#navigateToPageTopic} topic. At the moment
        * it makes the assumption that the URL data will be relative to the Share page context.
@@ -172,7 +190,9 @@ define(["dojo/_base/declare",
                }
                else if (!data.target || data.target === this.currentTarget)
                {
-                  window.location = url;
+                  this.displayProgressIndicator().then(function(){
+                     window.location = url;
+                  });
                }
                else if (data.target === this.newTarget)
                {
@@ -228,7 +248,16 @@ define(["dojo/_base/declare",
                }
             }
             domConstruct.place(form, document.body);
-            form.submit();
+            if (!data.target || data.target === this.currentTarget)
+            {
+               this.displayProgressIndicator().then(function(){
+                  form.submit();
+               });
+            }
+            else
+            {
+               form.submit();
+            }
          }
       },
 
@@ -242,7 +271,9 @@ define(["dojo/_base/declare",
        */
       reloadPage: function alfresco_services_NavigationService__reloadPage(data) {
          this.alfLog("log", "Page reload request received:", data);
-         window.location.reload(true);
+         this.displayProgressIndicator().then(function(){
+            window.location.reload(true);
+         });
       }
    });
 });

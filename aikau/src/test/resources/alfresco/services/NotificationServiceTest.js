@@ -36,7 +36,9 @@ define(["module",
          publishWithinNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["IN_NOTIFICATION_BUTTON"]),
          inlineLinkNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_INLINE_LINK_BUTTON"]),
          longNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["NOTIFICATION_BUTTON_LARGE"]),
-         closeNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CLOSE_NOTIFICATION_BUTTON"])
+         closeNotification: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CLOSE_NOTIFICATION_BUTTON"]),
+         addActivity: TestCommon.getTestSelector(buttonSelectors, "button.label", ["ADD_ACTIVITY_BUTTON"]),
+         removeActivity: TestCommon.getTestSelector(buttonSelectors, "button.label", ["REMOVE_ACTIVITY_BUTTON"])
       },
       notifications: {
          closeButton: TestCommon.getTestSelector(notificationSelectors, "button.close")
@@ -265,6 +267,36 @@ define(["module",
             .end()
 
          .getLastPublish("ALF_NOTIFICATION_DESTROYED");
+      },
+
+      "Can cause progress indicator to appear": function() {
+         return this.remote.findByCssSelector(selectors.buttons.addActivity)
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-notifications-ProgressIndicator--displayed");
+      },
+
+      "Can cause progress indicator to disappear again": function() {
+         return this.remote.execute(function(buttonSelector) {
+            document.querySelector(buttonSelector).click();
+         }, [selectors.buttons.removeActivity])
+
+         .waitForDeletedByCssSelector(".alfresco-notifications-ProgressIndicator");
+      },
+
+      "Can manually force progress indicator to disappear": function() {
+         return this.remote.findByCssSelector(selectors.buttons.addActivity)
+            .clearLog()
+            .click()
+            .end()
+
+         .findByCssSelector(".alfresco-notifications-ProgressIndicator__close-button")
+            .click()
+            .end()
+
+         .waitForDeletedByCssSelector(".alfresco-notifications-ProgressIndicator");
       }
    });
 });
