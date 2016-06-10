@@ -57,6 +57,17 @@ define(["module",
             });
       },
 
+      "Click publication configured breadcrumb": function() {
+         return this.remote.findByCssSelector("#LINKING_PATH_BREADCRUMBS .alfresco-documentlibrary-AlfBreadcrumb:nth-child(3) .breadcrumb")
+            .click()
+         .end()
+
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+            .then(function(payload) {
+               assert.propertyVal(payload, "url", "documentlibrary#filter=path|/ambition/is/the");
+            });
+      },
+
       "Counting hash breadcrumbs...": function() {
          // Test 1...
          // Check the path is initially displayed...
