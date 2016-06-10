@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>CollapsibleSection (form layout)</shortname>
+  <description>Demonstrates the use of an alfresco/forms/CollapsibleSection in a form.</description>
+  <family>aikau-unit-tests</family>
+  <url>/CollapsibleSection</url>
+</webscript>
