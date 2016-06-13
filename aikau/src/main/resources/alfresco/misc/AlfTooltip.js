@@ -127,10 +127,11 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-style",
         "dojo/on",
+        "dojo/query",
         "dojo/when",
         "dijit/popup"], 
         function(declare, _WidgetBase, _TemplatedMixin, template, TooltipDialog, AlfCore, CoreWidgetProcessing,
-                 lang, array, domConstruct, domStyle, on, when, popup) {
+                 lang, array, domConstruct, domStyle, on, query, when, popup) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -141,6 +142,34 @@ define(["dojo/_base/declare",
        */
       templateString: template,
       
+      /**
+       * <p>This is an optional CSS selector that can be provided to identify a child node that the tooltip
+       * should be anchored to. Ideally this should only match a single node, but if it matches multiple
+       * nodes then the first result will be used. This selector is only used within the DOM that descends
+       * from this widget - not across the entire page.</p>
+       * <p>PLEASE NOTE: Use of this attribute is potentially fragile depending
+       * upon the selector used - there are no guarantees that the CSS classes or HTML structure of widgets
+       * will not change between releases of Aikau! It is strongly recommended that if future proof selectors
+       * are required that feature requests are made to add them.</p>
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.71
+       */
+      anchorSelector: null,
+
+      /**
+       * An optional array of the orientation preferences for the tooltip. An example configuration might
+       * be ["below-centered", "above-centered"] for example.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.71
+       */
+      orientation: null,
+
       /**
        * This is the widget model that will be displayed inside the tooltip.
        * 
@@ -242,9 +271,23 @@ define(["dojo/_base/declare",
                onMouseLeave: lang.hitch(this, this.onTooltipMouseLeave)
             });
          }
+
+         // If a CSS selector has been provided for finding the element to anchor to, then
+         // use it to set the target node...
+         var targetNode = this.domNode;
+         if (this.anchorSelector)
+         {
+            var results = query(this.anchorSelector, this.domNode);
+            if (results.length)
+            {
+               targetNode = results[0];
+            }
+         }
+
          popup.open({
             popup: this._tooltip,
-            around: this.domNode
+            around: targetNode,
+            orient: this.orientation
          });
       },
 

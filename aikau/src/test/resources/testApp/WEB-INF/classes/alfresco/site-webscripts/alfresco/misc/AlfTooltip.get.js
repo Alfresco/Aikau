@@ -13,118 +13,127 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         id: "WINDOW",
-         name: "alfresco/layout/ClassicWindow",
+         name: "alfresco/layout/HorizontalWidgets",
          config: {
-            title: "Single tooltip",
             widgets: [
                {
-                  id: "SINGLE_ITEM",
-                  name: "alfresco/misc/AlfTooltip",
+                  id: "WINDOW",
+                  name: "alfresco/layout/ClassicWindow",
                   config: {
+                     title: "Single tooltip",
                      widgets: [
                         {
-                           id: "LOGO1",
-                           name: "alfresco/logo/Logo"
-                        }
-                     ],
-                     widgetsForTooltip: [
-                        {
-                           id: "LABEL1",
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "This is the tooltip content"
-                           }
-                        }
-                     ],
-                     tooltipStyle: "width: 300px;"
-                  }
-               }
-            ]
-         }
-      },
-      {
-         id: "WINDOW_REQUIRES_CLICK",
-         name: "alfresco/layout/ClassicWindow",
-         config: {
-            title: "Single tooltip with click",
-            widgets: [
-               {
-                  id: "SINGLE_ITEM_REQUIRES_CLICK",
-                  name: "alfresco/misc/AlfTooltip",
-                  config: {
-                     widgets: [
-                        {
-                           id: "LOGO1_REQUIRES_CLICK",
-                           name: "alfresco/logo/Logo"
-                        }
-                     ],
-                     widgetsForTooltip: [
-                        {
-                           id: "LABEL1_REQUIRES_CLICK",
-                           name: "alfresco/html/Label",
-                           config: {
-                              label: "This is the tooltip content when clicked"
-                           }
-                        }
-                     ],
-                     triggeringEvent: "click"
-                  }
-               }
-            ]
-         }
-      },
-      {
-         id: "LIST_WINDOW",
-         name: "alfresco/layout/ClassicWindow",
-         config: {
-            title: "List of tooltips",
-            widgets: [
-               {
-                  id: "LIST1",
-                  name: "alfresco/lists/AlfList",
-                  config: {
-                     currentData: {
-                        items: [
-                           {
-                              name: "one",
-                              description: "the first"
-                           },
-                           {
-                              name: "two",
-                              description: "the second"
-                           }
-                        ]
-                     },
-                     widgets: [
-                        {
-                           name: "alfresco/lists/views/AlfListView",
+                           id: "SINGLE_ITEM",
+                           name: "alfresco/misc/AlfTooltip",
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/lists/views/layouts/Row",
+                                    id: "LOGO1",
+                                    name: "alfresco/logo/Logo"
+                                 }
+                              ],
+                              widgetsForTooltip: [
+                                 {
+                                    id: "LABEL1",
+                                    name: "alfresco/html/Label",
+                                    config: {
+                                       label: "This is the tooltip content"
+                                    }
+                                 }
+                              ],
+                              tooltipStyle: "width: 300px;"
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "WINDOW_REQUIRES_CLICK",
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "Single tooltip with click",
+                     widgets: [
+                        {
+                           id: "SINGLE_ITEM_REQUIRES_CLICK",
+                           name: "alfresco/misc/AlfTooltip",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "LOGO1_REQUIRES_CLICK",
+                                    name: "alfresco/logo/Logo"
+                                 }
+                              ],
+                              widgetsForTooltip: [
+                                 {
+                                    id: "LABEL1_REQUIRES_CLICK",
+                                    name: "alfresco/html/Label",
+                                    config: {
+                                       label: "This is the tooltip content when clicked"
+                                    }
+                                 }
+                              ],
+                              triggeringEvent: "click"
+                           }
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "LIST_WINDOW",
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "List of tooltips",
+                     widgets: [
+                        {
+                           id: "LIST1",
+                           name: "alfresco/lists/AlfList",
+                           config: {
+                              currentData: {
+                                 items: [
+                                    {
+                                       name: "one",
+                                       description: "the first"
+                                    },
+                                    {
+                                       name: "two",
+                                       description: "the second"
+                                    }
+                                 ]
+                              },
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/views/AlfListView",
                                     config: {
                                        widgets: [
                                           {
-                                             name: "alfresco/lists/views/layouts/Cell",
+                                             name: "alfresco/lists/views/layouts/Row",
                                              config: {
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/misc/AlfTooltip",
+                                                      name: "alfresco/lists/views/layouts/Cell",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/renderers/Property",
+                                                               name: "alfresco/misc/AlfTooltip",
                                                                config: {
-                                                                  propertyToRender: "name"
-                                                               }
-                                                            }
-                                                         ],
-                                                         widgetsForTooltip: [
-                                                            {
-                                                               name: "alfresco/renderers/Property",
-                                                               config: {
-                                                                  propertyToRender: "description"
+                                                                  anchorSelector: ".alfresco-renderers-Property span.value",
+                                                                  orientation: ["below-centered", "above-centered"],
+                                                                  widgets: [
+                                                                     {
+                                                                        name: "alfresco/renderers/Property",
+                                                                        config: {
+                                                                           propertyToRender: "name"
+                                                                        }
+                                                                     }
+                                                                  ],
+                                                                  widgetsForTooltip: [
+                                                                     {
+                                                                        name: "alfresco/renderers/Property",
+                                                                        config: {
+                                                                           propertyToRender: "description"
+                                                                        }
+                                                                     }
+                                                                  ]
                                                                }
                                                             }
                                                          ]
@@ -141,71 +150,71 @@ model.jsonModel = {
                         }
                      ]
                   }
-               }
-            ]
-         }
-      },
-      {
-         id: "LIST_WITH_XHR",
-         name: "alfresco/layout/ClassicWindow",
-         config: {
-            title: "List of tooltips that make XHR request for data",
-            widgets: [
+               },
                {
-                  id: "LIST2",
-                  name: "alfresco/lists/AlfList",
+                  id: "LIST_WITH_XHR",
+                  name: "alfresco/layout/ClassicWindow",
                   config: {
-                     currentData: {
-                        items: [
-                           {
-                              name: "one",
-                              nodeRef: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4"
-                           }
-                        ]
-                     },
+                     title: "List of tooltips that make XHR request for data",
                      widgets: [
                         {
-                           name: "alfresco/lists/views/AlfListView",
+                           id: "LIST2",
+                           name: "alfresco/lists/AlfList",
                            config: {
+                              currentData: {
+                                 items: [
+                                    {
+                                       name: "one",
+                                       nodeRef: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4"
+                                    }
+                                 ]
+                              },
                               widgets: [
                                  {
-                                    name: "alfresco/lists/views/layouts/Row",
+                                    name: "alfresco/lists/views/AlfListView",
                                     config: {
                                        widgets: [
                                           {
-                                             name: "alfresco/lists/views/layouts/Cell",
+                                             name: "alfresco/lists/views/layouts/Row",
                                              config: {
                                                 widgets: [
                                                    {
-                                                      name: "alfresco/misc/AlfTooltip",
+                                                      name: "alfresco/lists/views/layouts/Cell",
                                                       config: {
                                                          widgets: [
                                                             {
-                                                               name: "alfresco/renderers/Property",
+                                                               name: "alfresco/misc/AlfTooltip",
                                                                config: {
-                                                                  propertyToRender: "name"
-                                                               }
-                                                            }
-                                                         ],
-                                                         widgetsForTooltip: [
-                                                            {
-                                                               name: "alfresco/documentlibrary/AlfDocument",
-                                                               config: {
-                                                                  xhrRequired: true,
-                                                                  rawData: false,
                                                                   widgets: [
                                                                      {
                                                                         name: "alfresco/renderers/Property",
                                                                         config: {
-                                                                           propertyToRender: "displayName",
-                                                                           renderOnNewLine: true
+                                                                           propertyToRender: "name"
                                                                         }
-                                                                     },
+                                                                     }
+                                                                  ],
+                                                                  widgetsForTooltip: [
                                                                      {
-                                                                        name: "alfresco/renderers/Thumbnail",
+                                                                        name: "alfresco/documentlibrary/AlfDocument",
                                                                         config: {
-                                                                           renditionName: "imgpreview",
-                                                                           width: "300px"
+                                                                           xhrRequired: true,
+                                                                           rawData: false,
+                                                                           widgets: [
+                                                                              {
+                                                                                 name: "alfresco/renderers/Property",
+                                                                                 config: {
+                                                                                    propertyToRender: "displayName",
+                                                                                    renderOnNewLine: true
+                                                                                 }
+                                                                              },
+                                                                              {
+                                                                                 name: "alfresco/renderers/Thumbnail",
+                                                                                 config: {
+                                                                                    renditionName: "imgpreview",
+                                                                                    width: "300px"
+                                                                                 }
+                                                                              }
+                                                                           ]
                                                                         }
                                                                      }
                                                                   ]
@@ -233,7 +242,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/PreviewMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };
