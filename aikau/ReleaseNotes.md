@@ -1,4 +1,4 @@
-Aikau 1.0.70 Release Notes
+Aikau 1.0.71 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,16 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.71:
+* [AKU-981](https://issues.alfresco.com/jira/browse/AKU-981)       - Support for legacyMode fallback via whitelist validation in alfresco/renderers/Indicators
+* [AKU-983](https://issues.alfresco.com/jira/browse/AKU-983)       - Added generic "processing" notification
+* [AKU-986](https://issues.alfresco.com/jira/browse/AKU-986)       - Improved alfresco/misc/AlfTooltip orientation options
+* [AKU-987](https://issues.alfresco.com/jira/browse/AKU-987)       - Handle variable publication scopes in alfresco/buttons/AlfDynamicPayloadButton
+* [AKU-989](https://issues.alfresco.com/jira/browse/AKU-989)       - Added alfresco/forms/CollapsibleSection widget
+* [AKU-990](https://issues.alfresco.com/jira/browse/AKU-990)       - Variable pubSubScope form warnings support
+* [AKU-991](https://issues.alfresco.com/jira/browse/AKU-991)       - NodeRef attribute fallback in alfresco/services/NodePreviewService
+* [AKU-992](https://issues.alfresco.com/jira/browse/AKU-992)       - Support for simple links in alfresco/documentlibrary/AlfBreadcrumbTrail
+
 1.0.70:
 * [AKU-945](https://issues.alfresco.com/jira/browse/AKU-945)       - Standardize form control layout
 * [AKU-955](https://issues.alfresco.com/jira/browse/AKU-955)       - Handle text mis-alignment in FileUploadService
