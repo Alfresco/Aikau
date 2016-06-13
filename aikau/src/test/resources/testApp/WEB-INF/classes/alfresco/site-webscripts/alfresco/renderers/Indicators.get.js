@@ -39,7 +39,7 @@ model.jsonModel = {
                   {
                      "id": "cloud-indirect-sync",
                      "index": "90",
-                     "icon": "cloud-indirect-sync-16.png",
+                     "icon": "not-in-white-list-16.png",
                      "label": "status.cloud-indirect-sync",
                      "overrides": ["exif"],
                      "action": "onCloudIndirectSyncIndicatorAction"

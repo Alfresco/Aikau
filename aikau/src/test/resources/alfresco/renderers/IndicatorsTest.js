@@ -92,6 +92,14 @@ define(["module",
             });
       },
 
+      "Icon not in whitelist defaults to legacy mode": function() {
+         return this.remote.findByCssSelector("#INDICATORS1 img:nth-of-type(3)")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.equal(src, "/aikau/res/components/documentlibrary/indicators/not-in-white-list-16.png");
+            });
+      },
+
       "Indicator in legacyMode has correct URL": function() {
          return this.remote.findByCssSelector("#INDICATORS3 .indicator:nth-of-type(1)")
             .getAttribute("src")
