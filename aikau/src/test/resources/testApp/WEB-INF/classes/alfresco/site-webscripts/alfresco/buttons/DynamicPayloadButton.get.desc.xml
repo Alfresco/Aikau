@@ -1,5 +1,6 @@
 <webscript>
   <shortname>Dynamic Payload Button Test</shortname>
+  <description>Used to test the 'alfresco/buttons/AlfDynamicPayloadButton'</description>
   <family>aikau-unit-tests</family>
   <url>/dynamicPayloadButton</url>
 </webscript>

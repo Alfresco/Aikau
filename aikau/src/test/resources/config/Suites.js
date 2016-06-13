@@ -111,6 +111,7 @@ define(function() {
       "alfresco/footer/FooterTest",
 
       "alfresco/forms/AutoSaveFormsTest",
+      "alfresco/forms/CollapsibleSectionTest",
       "alfresco/forms/ControlRowTest",
       "alfresco/forms/CrudFormTest",
       "alfresco/forms/DynamicFormTest",

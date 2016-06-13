@@ -113,6 +113,34 @@ define(["dojo/_base/declare",
       iconMapping: null,
 
       /**
+       * This is a white list of the icons available in Aikau. If any indicator is configured without
+       * [iconMapping]{@link module:alfresco/renderers/Indicators#iconMapping} and is rendering a
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} that does not map
+       * one of these values then [legacyMode]{@link module:alfresco/renderers/Indicators#legacyMode}
+       * will automatically be enabled.
+       * 
+       * @instance
+       * @type {string[]}
+       * @since 1.0.71
+       * @default
+       */
+      iconWhiteList: [
+         "active-workflows-16.png",
+         "cloud-indirect-sync-16.png",
+         "cloud-indirect-sync-failed-16.png",
+         "cloud-synced-16.png",
+         "cloud-sync-failed-16.png",
+         "editing-16.png",
+         "exif-16.png",
+         "geographic-16.png",
+         "locked-16.png",
+         "lock-owner-16.png",
+         "rules-16.png",
+         "simple-workflow-16.png",
+         "transferred-node-16.png"
+      ],
+
+      /**
        * This indicates whether or not to use the root path of "/res/components/documentlibrary/indicators/" for icon
        * images. This would be the path expected when the widget is being used within the Alfresco Share application
        * and all icons would need to be found at this location to satify customization requirements.
@@ -272,7 +300,7 @@ define(["dojo/_base/declare",
          {
             // If mapping is unsuccessful then use either the legcacy path or the "pure" Aikau path to set the 
             // icon image source...
-            if (this.legacyMode)
+            if (this.legacyMode || !this.iconInWhiteList(indicator.icon))
             {
                src = AlfConstants.URL_RESCONTEXT + "components/documentlibrary/indicators/" + indicator.icon;
             }
@@ -291,6 +319,21 @@ define(["dojo/_base/declare",
          if (indicator.action) {
             on(img, "click", lang.hitch(this, this.onActionClick, indicator));
          }
+      },
+
+      /**
+       * Checks the [whitelist]{@link module:alfresco/renderers/Indicators#iconWhiteList}
+       * for the presence of the supplied icon.
+       * 
+       * @instance
+       * @param  {string} icon The icon to check the whitelist for
+       * @return {boolean} True if the icon is found and false otherwise
+       * @since 1.0.71
+       */
+      iconInWhiteList: function alfresco_renderers_Indicators__iconInWhiteList(icon) {
+         return array.some(this.iconWhiteList, function(currIcon) {
+            return currIcon === icon;
+         });
       },
 
       /**

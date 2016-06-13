@@ -36,12 +36,14 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "dijit/_CssStateMixin",
         "alfresco/node/NodeDropTargetMixin",
+        "alfresco/renderers/_PublishPayloadMixin",
         "dojo/text!./templates/AlfBreadcrumb.html",
         "alfresco/core/Core",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _CssStateMixin, NodeDropTargetMixin, template, AlfCore, _AlfDocumentListTopicMixin) {
+        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _CssStateMixin, NodeDropTargetMixin,
+                 _PublishPayloadMixin, template, AlfCore, _AlfDocumentListTopicMixin) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _CssStateMixin, NodeDropTargetMixin, AlfCore, _AlfDocumentListTopicMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _CssStateMixin, NodeDropTargetMixin, _PublishPayloadMixin, AlfCore, _AlfDocumentListTopicMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -116,7 +118,8 @@ define(["dojo/_base/declare",
       onClick: function alfresco_documentlibrary_AlfBreadcrumb(/* jshint unused:false */ evt) {
          if (this.publishTopic)
          {
-            this.alfPublish(this.publishTopic, this.publishPayload, (this.publishGlobal === true));
+            var publishPayload = this.generatePayload(this.publishPayload, this.currentItem, null, this.publishPayloadType, this.publishPayloadItemMixin, this.publishPayloadModifiers);
+            this.alfPublish(this.publishTopic, publishPayload, (this.publishGlobal === true));
          }
       }
    });

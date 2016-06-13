@@ -36,10 +36,8 @@ define(["module",
          return this.remote.findByCssSelector("#MANAGE_ASPECTS1_label")
             .click()
             .end()
-            .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.alfresco-dialog-AlfDialog")
-            .then(null, function() {
-               assert(false, "The manage aspects dialog did not appear");
-            });
+
+         .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG");
       },
 
       "Test available aspects count": function() {
@@ -138,7 +136,10 @@ define(["module",
          .getLastPublish("ALF_DISPLAY_PROMPT")
             .then(function(payload) {
                assert.propertyVal(payload, "message", "It was not possible to retrieve the aspects applied to No Data Node", "The error prompt was not requested when failing to retrieve aspects");
-            });
+            })
+
+         .findByCssSelector("#NOTIFICATION_PROMPT .alfresco-buttons-AlfButton .dijitButtonNode")
+            .click();
       },
 
       "Test failure to save aspect changes": function() {

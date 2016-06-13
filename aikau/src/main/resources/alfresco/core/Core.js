@@ -589,22 +589,29 @@ define(["dojo/_base/declare",
        * @param {function} callback The callback function to call when the topic is published on.
        * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
        * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
+       * @param {String} [customScope] A custom scope to use for this publish (will only be used if both global and parentScope are falsy)
        * @returns {object} A handle to the subscription
        */
-      alfSubscribe: function alfresco_core_Core__alfSubscribe(topic, callback, global, parentScope) {
-         var scopedTopic = topic;
-         if (global === true)
+      alfSubscribe: function alfresco_core_Core__alfSubscribe(topic, callback, global, parentScope, customScope) {
+         var publishScope = "";
+         var scopedTopic;
+         if (global === true) 
          {
-            // No action required - use global scope
-         }
-         else if (parentScope === true)
+            // No action required
+         } 
+         else if (parentScope === true) 
          {
-            scopedTopic = this.parentPubSubScope + topic;
-         }
-         else
+            publishScope = this.parentPubSubScope;
+         } 
+         else if (typeof customScope !== "undefined") 
          {
-            scopedTopic = this.pubSubScope + topic;
+            publishScope = customScope;
+         } 
+         else 
+         {
+            publishScope = this.pubSubScope;
          }
+         scopedTopic = publishScope + topic;
 
          if (AlfConstants.DEBUG)
          {

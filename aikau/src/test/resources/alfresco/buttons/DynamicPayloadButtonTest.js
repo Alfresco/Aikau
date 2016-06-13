@@ -23,9 +23,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "Dynamic Payload Button Tests",
@@ -34,105 +33,177 @@ define(["module",
       "Check the original payload": function() {
          return this.remote.findByCssSelector("#DYNAMIC_BUTTON_label")
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Original Value", "The original payload value has been changed unexpectedly");
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Original Value");
             });
       },
 
       "Check the original hash based payload": function() {
          return this.remote.findByCssSelector("#DYNAMIC_BUTTON_2_label")
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "initial"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "test", "The original payload value has been changed unexpectedly");
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC_2")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Another Value");
             });
       },
 
       "Override the complete payload": function() {
          return this.remote.findByCssSelector("#FULL_OVERRIDE_label")
             .click()
-            .end()
-            .findByCssSelector("#DYNAMIC_BUTTON_label")
+         .end()
+
+         .clearLog()
+         
+         .findByCssSelector("#DYNAMIC_BUTTON_label")
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override 1", "The original payload value was not updated");
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Override 1");
             });
       },
 
       "Mixin in values and override": function() {
          return this.remote.findByCssSelector("#MIXIN_WITH_OVERRIDES_label")
             .click()
-            .end()
-            .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override 2", "The original payload value was not updated");
-            });
-      },
+         .end()
 
-      "Check additional data was included in payload": function() {
-         return this.remote.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "data", "extra data"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data was not found");
+         .clearLog()
+         
+         .findByCssSelector("#DYNAMIC_BUTTON_label")
+            .click()
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Override 2");
+               assert.deepPropertyVal(payload, "additional.data", "extra data");
             });
       },
 
       "Mixin in values without an override": function() {
          return this.remote.findByCssSelector("#MIXIN_NO_OVERRIDES_label")
             .click()
-            .end()
-            .findByCssSelector("#DYNAMIC_BUTTON_label")
-            .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override 2", "The previously updated payload value changed again unexpectedly");
-            });
-      },
+         .end()
 
-      "Check additional data  performs override": function() {
-         return this.remote.findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "data", "bonus data"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data was not found");
+         .clearLog()
+         
+         .findByCssSelector("#DYNAMIC_BUTTON_label")
+            .click()
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Override 2");
+               assert.deepPropertyVal(payload, "additional.data", "bonus data");
             });
       },
 
       "Override via has update": function() {
          return this.remote.findByCssSelector("#HASH_OVERRIDE_label")
             .click()
-            .end()
-            .findByCssSelector("#DYNAMIC_BUTTON_label")
+         .end()
+
+         .clearLog()
+         
+         .findByCssSelector("#DYNAMIC_BUTTON_label")
             .click()
-            .end()
-            .findByCssSelector(TestCommon.pubSubDataValueCssSelector("last", "value"))
-            .getVisibleText()
-            .then(function(text) {
-               assert.equal(text, "Override3", "The previously updated payload value was not updated via hash change");
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "Override3");
             });
       },
 
       "Add extra data via has update": function() {
          return this.remote.findByCssSelector("#HASH_OVERRIDE_EXTRA_label")
             .click()
-            .end()
-            .findByCssSelector("#DYNAMIC_BUTTON_label")
+         .end()
+
+         .clearLog()
+         
+         .findByCssSelector("#DYNAMIC_BUTTON_label")
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.pubDataNestedValueCssSelector("DYNAMIC_BUTTON_TOPIC", "additional", "hash", "hashData"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Additional data provided via hash was not found");
+         .end()
+
+         .getLastPublish("DYNAMIC_BUTTON_TOPIC")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "additional.hash", "hashData");
+            });
+      },
+
+      "Global scoped data is set": function() {
+         return this.remote.findByCssSelector("#GLOBAL_DATA_label")
+            .click()
+         .end()
+
+         .clearLog()
+
+         .findByCssSelector("#DYNAMIC_BUTTON_3_label")
+            .click()
+         .end()
+
+         .getLastPublish("SCOPE_DYNAMIC_BUTTON_TOPIC_3")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data.global", "global");
+            });
+      },
+
+      "Parent scoped data is set": function() {
+         return this.remote.findByCssSelector("#PARENT_SCOPE_DATA_label")
+            .click()
+         .end()
+
+         .clearLog()
+
+         .findByCssSelector("#DYNAMIC_BUTTON_3_label")
+            .click()
+         .end()
+
+         .getLastPublish("SCOPE_DYNAMIC_BUTTON_TOPIC_3")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data.parent", "parent");
+            });
+      },
+
+      "Custom scoped data is set": function() {
+         return this.remote.findByCssSelector("#CUSTOM_SCOPE_DATA_label")
+            .click()
+         .end()
+
+         .clearLog()
+
+         .findByCssSelector("#DYNAMIC_BUTTON_3_label")
+            .click()
+         .end()
+
+         .getLastPublish("SCOPE_DYNAMIC_BUTTON_TOPIC_3")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data.custom", "custom");
+            });
+      },
+
+      "Default scoped data is set": function() {
+         return this.remote.findByCssSelector("#DEFAULT_SCOPE_DATA_label")
+            .click()
+         .end()
+
+         .clearLog()
+
+         .findByCssSelector("#DYNAMIC_BUTTON_3_label")
+            .click()
+         .end()
+
+         .getLastPublish("SCOPE_DYNAMIC_BUTTON_TOPIC_3")
+            .then(function(payload) {
+               assert.deepPropertyVal(payload, "data.default", "default");
             });
       }
    });
