@@ -144,7 +144,11 @@ define(["dojo/_base/declare",
       setupPayloadSubscriptions: function alfresco_buttons_AlfDynamicPayloadButton__setupPayloadSubscriptions(pps) {
          if (pps.topic)
          {
-            this.alfSubscribe(pps.topic, lang.hitch(this, this.onPayloadUpdate, pps.dataMapping));
+            this.alfSubscribe(pps.topic, 
+                              lang.hitch(this, this.onPayloadUpdate, pps.dataMapping), 
+                              pps.subscribeGlobal,
+                              pps.subscribeParent,
+                              pps.subscribeScope);
          }
          else
          {
