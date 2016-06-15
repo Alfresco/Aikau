@@ -245,6 +245,18 @@ define(["module",
             .then(function(url) {
                assert.include(url, "page/tp/ws/NavigationService", "Loaded URL incorrect");
             });
+      },
+
+      "Same page with hash doesn't show progress": function() {
+         return this.remote.findDisplayedById("SAME_PAGE_BUT_WITH_HASHES_text")
+            .clearLog()
+            .click()
+         .end()
+
+         .getAllPublishes("ALF_PROGRESS_INDICATOR_ADD_ACTIVITY")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0);
+            });
       }
    });
 });
