@@ -163,6 +163,15 @@ define(["dojo/_base/declare",
       propertyToRender: null,
 
       /**
+       * Whether this indicator is clickable and publishes a action request or not.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      supportActions: true,
+
+      /**
        * This is an auto-populated instance property that holds a cleaned-up array of indicators for the current item.
        *
        * @instance
@@ -285,7 +294,7 @@ define(["dojo/_base/declare",
          }
          var label = this.message(indicator.label, messageArgs),
             classes = ["indicator"];
-         if (indicator.action) {
+         if (this.supportActions && indicator.action) {
             classes.push("has-action");
          }
 
@@ -316,7 +325,7 @@ define(["dojo/_base/declare",
             "alt": indicator.id,
             "class": classes.join(" ")
          }, this.containerNode);
-         if (indicator.action) {
+         if (this.supportActions && indicator.action) {
             on(img, "click", lang.hitch(this, this.onActionClick, indicator));
          }
       },
