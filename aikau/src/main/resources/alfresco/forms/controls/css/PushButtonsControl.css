@@ -11,12 +11,6 @@
       position: absolute;
       width: 0;
 
-      + label {
-         background: @push-button-background;
-         border-color: @push-button-border-color;
-         color: @push-button-text-color;
-      }
-
       &:checked + label {
          background: @push-button-background-checked;
          border-color: @push-button-border-color-checked;
@@ -55,15 +49,17 @@
    }
 
    &__label {
-      border: 1px solid #aaa;
-      border-radius: 3px;
+      border: 1px solid @push-button-border-color;
+      border-radius: @push-button-border-radius;
       box-sizing: inherit;
       color: @push-button-text-color;
+      background: @push-button-background;
+      border-color: @push-button-border-color;
       cursor: pointer;
       display: inline-block;
       float: left;
       font-size: @small-font-size;
-      line-height: 32px;
+      line-height: @push-button-line-height;
       text-align: center;
       transition: background .2s ease-out, color .2s ease-out;
       &__content {
