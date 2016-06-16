@@ -114,6 +114,17 @@ define(["module",
             .then(function(src) {
                assert.equal(src, "/aikau/res/some/custom/image.jpg");
             });
+      },
+
+      "Indicators can have actions disabled": function() {
+         return this.remote.findByCssSelector("#INDICATORS4 .indicator")
+            .click()
+         .end()
+
+         .getAllPublishes("CUSTOM_ACTION_2")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0, "Navigation publication should not have been made");
+            });
       }
    });
 });
