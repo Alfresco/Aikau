@@ -95,6 +95,31 @@ model.jsonModel = {
          }
       },
       {
+         id: "INDICATORS4",
+         name: "alfresco/renderers/Indicators",
+         config: {
+            supportActions: false,
+            currentItem: {
+               node: {
+                  nodeRef: "some://dummy/node",
+                  properties: {
+                     name: "Test"
+                  }
+               },
+               indicators: [
+                  {
+                     "id": "bob",
+                     "index": "10",
+                     "icon": "locked-16.png",
+                     "label": "Not translated",
+                     "action": "custom",
+                     "publishTopic": "CUSTOM_ACTION_2",
+                     "publishPayload": {}
+                  }
+               ]
+            }
+         }
+      },{
          name: "alfresco/logging/DebugLog"
       }
    ]
