@@ -249,6 +249,51 @@ model.jsonModel = {
                                     config: {
                                        height: "20px"
                                     }
+                                 },
+                                 {
+                                    name: "alfresco/forms/controls/PushButtons",
+                                    id: "BEST_LANGUAGE",
+                                    config: {
+                                       name: "marks",
+                                       label: "Example Marks",
+                                       description: "Config options: noWrap=true, maxLineLength=3",
+                                       maxLineLength: 3,
+                                       noWrap: true,
+                                       simpleLayout: true,
+                                       multiMode:true,
+                                       optionsConfig: {
+                                          fixed: [
+                                             {
+                                                label: "This label gets truncated because it's really quite long",
+                                                value: "1"
+                                             },
+                                             {
+                                                label: "Short Mark",
+                                                value: "2"
+                                             },
+                                             {
+                                                label: "A Longer Mark",
+                                                value: "3"
+                                             },
+                                             {
+                                                label: "Another Longer Mark",
+                                                value: "4"
+                                             },
+                                             {
+                                                label: "Special Department",
+                                                value: "5"
+                                             },
+                                             {
+                                                label: "A",
+                                                value: "6"
+                                             },
+                                             {
+                                                label: "One For Luck",
+                                                value: "7"
+                                             }
+                                          ]
+                                       }
+                                    }
                                  }
                               ]
                            }

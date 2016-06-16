@@ -80,7 +80,8 @@ define(["alfresco/core/CoreWidgetProcessing",
             id: this.id + "_CONTROL",
             multiMode: !!this.multiMode,
             name: this.name,
-            noWrap: !!this.noWrap
+            noWrap: !!this.noWrap,
+            simpleLayout: !!this.simpleLayout
          };
 
          // Set config only if available
