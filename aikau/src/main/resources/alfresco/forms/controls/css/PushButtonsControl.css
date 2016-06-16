@@ -4,38 +4,66 @@
    margin-top: 2px;
    overflow: hidden;
    position: relative;
+
    &__input {
       height: 0;
       left: -100%;
       position: absolute;
       width: 0;
+
       &:checked + label {
-         background: @button-color-default;
-         color: #fff;
+         background: @push-button-background-checked;
+         border-color: @push-button-border-color-checked;
+         color: @push-button-text-color-checked;
       }
-      &:focus + label, &:hover + label {
-         border-color: @focused-border-color;
+      &:hover + label {
+         background: @push-button-background-hover;
+         border-color: @push-button-border-color-hover;
+         color: @push-button-text-color-hover;
+      }
+      &:focus + label {
+         background: @push-button-background-hover;
+         border-color: @push-button-border-color-hover;
+         color: @push-button-text-color-hover;
       }
       &:checked {
          &:focus + label, &:hover + label {
-            background: @focused-border-color;
-            border-color: @button-color-default;
+            background: @push-button-background-focus;
+            border-color: @push-button-border-color-focus;
+            color: @push-button-text-color-focus;
          }
       }
    }
+
+   &--simple-layout {
+
+      .alfresco-forms-controls-PushButtonsControl {
+         &__label {
+            min-width: @push-button-min-width;
+            max-width: @push-button-max-width;
+            white-space: nowrap;
+            margin-right: @push-button-margin;
+            margin-bottom: @push-button-margin;
+         }
+      }
+   }
+
    &__label {
-      border: 1px solid @button-color-default;
-      border-radius: 10px;
+      border: 1px solid @push-button-border-color;
+      border-radius: @push-button-border-radius;
       box-sizing: inherit;
-      color: @primary-font-color;
+      color: @push-button-text-color;
+      background: @push-button-background;
+      border-color: @push-button-border-color;
       cursor: pointer;
       display: inline-block;
       float: left;
       font-size: @small-font-size;
+      line-height: @push-button-line-height;
       text-align: center;
       transition: background .2s ease-out, color .2s ease-out;
       &__content {
-         margin: 0 8px;
+         margin: 0 16px;
          overflow: hidden;
          text-overflow: ellipsis;
       }
