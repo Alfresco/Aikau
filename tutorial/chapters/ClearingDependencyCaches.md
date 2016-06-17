@@ -12,8 +12,8 @@ You can either manually clear the Surf caches as you make changes or completely 
 ### Clearing Dependency Caches
 
 ##### Step 1.
-In your browser, open the page [http://localhost:8090/aikau-sample/service/index](http://localhost:8090/aikau-sample/service/index). You should see the following page:
-![Screnshot showing the service index page](../resources/ClearDependencyCaches.png "Screnshot of the service index page")
+In your browser, open the page [http://localhost:8090/aikau-sample/service/console](http://localhost:8090/aikau-sample/service/console). You should see the following page:
+![Screnshot showing the service index page](../resources/ServiceConsole.png "Screnshot of the service console page")
 
 ##### Step 2.
 Click the button marked "Clear Dependency Caches" to empty the Surf caches. The next time you load a page Surf will generate a new file containing any code changes that you have made.
