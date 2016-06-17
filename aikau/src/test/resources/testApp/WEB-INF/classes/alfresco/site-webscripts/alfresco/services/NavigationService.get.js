@@ -248,7 +248,27 @@ model.jsonModel = {
                         
                      }
                   }
+               },
+               {
+                  id: "SAME_PAGE_BUT_WITH_HASHES",
+                  name: "alfresco/menus/AlfMenuBarItem",
+                  config: {
+                     label: "Page relative no site with hash",
+                     publishTopic: "ALF_NAVIGATE_TO_PAGE",
+                     publishPayload: {
+                        url: "tp/ws/NavigationService#hash=test",
+                        type: "PAGE_RELATIVE",
+                        target: "CURRENT"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
+                     publishPayloadItemMixin: true,
+                     currentItem: {
+                        
+                     }
+                  }
                }
+
             ]
          }
       },

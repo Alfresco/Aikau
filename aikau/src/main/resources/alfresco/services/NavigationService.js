@@ -190,9 +190,22 @@ define(["dojo/_base/declare",
                }
                else if (!data.target || data.target === this.currentTarget)
                {
-                  this.displayProgressIndicator().then(function(){
+                  // Make a good attempt at ensuring that we're not trying to go back to the same page
+                  // This has been added to ensure that the progress indicator is not shown when entering
+                  // new search terms in the SearchBox when already on the Search page (in Share)... 
+                  // This may require further enhancement...
+                  var hashIndex = url.indexOf("#");
+                  if ((hashIndex !== -1 && url.substring(0, hashIndex) === window.location.pathname) ||
+                      (url === window.location.pathname))
+                  {
                      window.location = url;
-                  });
+                  }
+                  else
+                  {
+                     this.displayProgressIndicator().then(function(){
+                        window.location = url;
+                     });
+                  }
                }
                else if (data.target === this.newTarget)
                {
