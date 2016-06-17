@@ -75,6 +75,17 @@ define(["module",
          //       console.log("Scroll width=" + element.scrollWidth + ", client width=" + element.clientWidth);
          //       assert(element.scrollWidth > element.clientWidth, "Scroll bar is not displayed");
          //    });
+      },
+
+      "Check margin removal": function() {
+         return this.remote.findById("WINDOW4")
+            .getComputedStyle("margin")
+            .then(function(margin) {
+               // NOTE: Depending upon the browser, this should return either "0px" or "" - it should definitely
+               //       NOT return anything suggesting that a margin is set (which is neither value that is being
+               //       checked for)...
+               assert(margin === "0px" || margin === "");
+            });
       }
    });
 });

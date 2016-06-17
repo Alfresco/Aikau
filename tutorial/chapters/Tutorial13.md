@@ -20,13 +20,15 @@ Add the following as the first entry in the “widgets” array attribute of you
       {
         name: "alfresco/layout/ClassicWindow",
         config: {
-          title: "Groups"
+          title: "Groups",
+          additionalCssClasses: "no-margin"
         }
       },
       {
         name: "alfresco/layout/ClassicWindow",
         config: {
-          title: "Users"
+          title: "Users",
+          additionalCssClasses: "no-margin"
         }
       }
     ]
@@ -89,14 +91,16 @@ Each window is given an equal share of the available horizontal space by default
             name: "alfresco/layout/ClassicWindow",
             widthPc: "75",
             config: {
-               title: "Groups"
+               title: "Groups",
+               additionalCssClasses: "no-margin"
             }
          },
          {
             name: "alfresco/layout/ClassicWindow",
             widthPc: "25",
             config: {
-               title: "Users"
+               title: "Users",
+               additionalCssClasses: "no-margin"
             }
          }
       ]
@@ -119,14 +123,16 @@ widgets: [
       name: "alfresco/layout/ClassicWindow",
       widthPc: "75",
       config: {
-         title: "Groups"
+         title: "Groups",
+         additionalCssClasses: "no-margin"
       }
    },
    {
       name: "alfresco/layout/ClassicWindow",
       widthPx: "500",
       config: {
-         title: "Users"
+         title: "Users",
+         additionalCssClasses: "no-margin"
       }
    }
 ]
