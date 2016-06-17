@@ -377,6 +377,21 @@ define(["module",
 
       "Check that faded style has been reapplied": function() {
          return this.remote.findByCssSelector("#INLINE_EDIT_NO_VALUE_WITH_WARNING_ITEM_0 > .alfresco-renderers-Property.faded");
+      },
+
+      "Edit via publish": function() {
+         return this.remote.findByCssSelector("#EDIT_ACTION_ITEM_0 .alfresco-renderers-PublishAction__image")
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.inlineEditProperties.first.editInput)
+            .then(null, function() {
+               assert(false, "No edit field found");
+            })
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Edit field not displayed");
+            });
       }
    });
 });

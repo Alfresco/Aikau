@@ -76,7 +76,8 @@ model.jsonModel = {
                                              is: ["New"]
                                           }
                                        ],
-                                       renderOnNewLine: true
+                                       renderOnNewLine: true,
+                                       editSubscriptionsTopics: ["EDIT_PROPERTY"]
                                     }
                                  },
                                  {
@@ -152,6 +153,21 @@ model.jsonModel = {
                                        renderedValueSuffix: ")",
                                        warnIfNotAvailable: true,
                                        warnIfNotAvailableMessage: "No property set"
+                                    }
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/Cell",
+                           config: {
+                              widgets: [
+                                 {
+                                    id: "EDIT_ACTION",
+                                    name: "alfresco/renderers/PublishAction",
+                                    config: {
+                                       publishTopic: "EDIT_PROPERTY",
+                                       publishPayloadType: "CURRENT_ITEM"
                                     }
                                  }
                               ]
