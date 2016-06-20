@@ -32,10 +32,24 @@ define(["module",
 
    defineSuite(module, {
       name: "AlfHashList Tests",
+      testPage: "/AlfHashListPayloadData#lib=Personal&path=d/e/f",
+
+      "Payload Data Loading is successful when the hash vars are NOT filtered out": function() {
+         return this.remote.findDisplayedByCssSelector(".alfresco-lists-AlfList__views").end()
+
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "path", "d/e/f", "Path value incorrect");
+            });
+      }
+   });
+
+   defineSuite(module, {
+      name: "AlfHashList Tests",
       testPage: "/AlfHashList#var1=initial",
 
       "Test initial load request": function() {
-         return this.remote.findByCssSelector("body") // Need to start session
+         return this.remote.findDisplayedByCssSelector(".alfresco-html-Heading") // Need to start session
             .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
       },
 
@@ -67,7 +81,7 @@ define(["module",
          return this.remote.findByCssSelector("#SET_HASH1")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
 
@@ -88,7 +102,7 @@ define(["module",
          return this.remote.findByCssSelector("#SET_HASH2")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
 
@@ -109,7 +123,7 @@ define(["module",
          return this.remote.findByCssSelector("#SET_HASH3")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
 
@@ -130,7 +144,7 @@ define(["module",
          return this.remote.findByCssSelector("#SET_HASH4")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
 
@@ -145,20 +159,20 @@ define(["module",
       },
 
       "Navigating to another page and then back will re-apply hash": function() {
-         var anotherPageUrl = TestCommon.generateWebscriptUrl("/Index"),
-            returnUrl = TestCommon.generateWebscriptUrl("/AlfHashList#var1=test1&var2=test2&var3=test3");
+         var anotherPageUrl = TestCommon.generateWebscriptUrl("/Index");
+         var returnUrl = TestCommon.generateWebscriptUrl("/AlfHashList#var1=test1&var2=test2&var3=test3");
 
-         return this.remote.findByCssSelector("body")
+         return this.remote.findDisplayedByCssSelector(".alfresco-html-Heading")
             .clearLog()
-            .end()
+         .end()
 
          .get(anotherPageUrl)
-            .findByCssSelector("body")
-            .end()
+            .findDisplayedByCssSelector(".alfresco-layout-TitleDescriptionAndContent")
+         .end()
 
          .get(returnUrl)
-            .findByCssSelector("body")
-            .end()
+            .findDisplayedByCssSelector(".alfresco-html-Heading")
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -179,40 +193,21 @@ define(["module",
             .then(function(overflows) {
                assert.isTrue(overflows, "Scroll bar is not displayed");
             });
-      },
+      }
+   });
 
-      "Payload Data Loading is prevented when the hash vars are filter out": function() {
-         var badUrl = TestCommon.generateWebscriptUrl("/AlfHashListPayloadData#lib=Libraries&path=a/b/c");
+   defineSuite(module, {
+      name: "AlfHashList Tests",
+      testPage: "/AlfHashListPayloadData#lib=Libraries&path=a/b/c",
 
-         return this.remote.findByCssSelector("body")
-            .clearLog()
-            .end()
-
-         .get(badUrl)
-            .findByCssSelector("body")
-            .end()
+      "Payload Data Loading is prevented when the hash vars are filtered out": function() {
+         return this.remote.findDisplayedByCssSelector(".alfresco-lists-AlfList__views").end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
                assert.notProperty(payload, "path", "There should be no path value in the payload");
-            });
-      },
+            }).clearLog();
 
-      "Payload Data Loading is successful when the hash vars are not filter out": function() {
-         var goodUrl = TestCommon.generateWebscriptUrl("/AlfHashListPayloadData#lib=Personal&path=d/e/f");
-
-         return this.remote.findByCssSelector("body")
-            .clearLog()
-            .end()
-
-         .get(goodUrl)
-            .findByCssSelector("body")
-            .end()
-
-         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
-            .then(function(payload) {
-               assert.propertyVal(payload, "path", "d/e/f", "Path value incorrect");
-            });
       }
    });
 });

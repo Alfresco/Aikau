@@ -90,14 +90,13 @@ define(["module",
          return this.remote.findByCssSelector("#COMPOSITE_DROPDOWN .dijitArrowButtonInner")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL_popup1")
             .click()
-            .end()
+         .end()
 
-         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
-            .end()
+         .getLastPublish("COMPOSITE_ALF_DOCLIST_REQUEST_FINISHED", 1500)
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
