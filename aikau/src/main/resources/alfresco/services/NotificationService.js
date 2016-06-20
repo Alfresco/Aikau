@@ -92,7 +92,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.72
        */
-      showProgressIndictor: false,
+      showProgressIndicator: false,
 
       /**
        * Sets up the subscriptions for the NotificationService
@@ -111,7 +111,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
          this.alfSubscribe(topics.DISPLAY_STICKY_PANEL, lang.hitch(this, this.onDisplayStickyPanel));
 
-         if (this.showProgressIndictor)
+         if (this.showProgressIndicator)
          {
             this.alfSubscribe(topics.PROGRESS_INDICATOR_ADD_ACTIVITY, lang.hitch(this, this.onAddProgressActivity));
             this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY, lang.hitch(this, this.onRemoveProgressActivity));
