@@ -10,7 +10,12 @@ model.jsonModel = {
                }
             }
       },
-      "alfresco/services/NotificationService",
+      {
+         name: "alfresco/services/NotificationService",
+         config: {
+            showProgressIndicator: true
+         }
+      },
       "alfresco/services/DialogService",
       "alfresco/services/ErrorReporter"
    ],
