@@ -33,8 +33,8 @@ define(["module",
 
       // See AKU-922 for the background on this test
       "Search request is published": function() {
-         return this.remote.getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS");
-            
+         return this.remote.findDisplayedByCssSelector("#SEARCH_LIST").end()
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS");
       }
    });
 });
