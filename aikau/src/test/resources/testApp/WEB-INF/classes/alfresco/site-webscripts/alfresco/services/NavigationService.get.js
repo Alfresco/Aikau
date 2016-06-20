@@ -34,7 +34,12 @@ model.jsonModel = {
             }
       },
       "alfresco/services/NavigationService",
-      "alfresco/services/NotificationService"
+      {
+         name: "alfresco/services/NotificationService",
+         config: {
+            showProgressIndicator: true
+         }
+      }
    ],
    widgets: [
       label,

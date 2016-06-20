@@ -84,6 +84,17 @@ define(["dojo/_base/declare",
       displayPromptTopic: topics.DISPLAY_PROMPT,
 
       /**
+       * Controls whether or not the subscriptions are created for progress indicator requests so if this
+       * is configured to be false then the progress indicator will never be shown.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.72
+       */
+      showProgressIndicator: false,
+
+      /**
        * Sets up the subscriptions for the NotificationService
        *
        * @instance
@@ -99,9 +110,13 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
          this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
          this.alfSubscribe(topics.DISPLAY_STICKY_PANEL, lang.hitch(this, this.onDisplayStickyPanel));
-         this.alfSubscribe(topics.PROGRESS_INDICATOR_ADD_ACTIVITY, lang.hitch(this, this.onAddProgressActivity));
-         this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY, lang.hitch(this, this.onRemoveProgressActivity));
-         this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES, lang.hitch(this, this.onRemoveAllProgressActivities));
+
+         if (this.showProgressIndicator)
+         {
+            this.alfSubscribe(topics.PROGRESS_INDICATOR_ADD_ACTIVITY, lang.hitch(this, this.onAddProgressActivity));
+            this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ACTIVITY, lang.hitch(this, this.onRemoveProgressActivity));
+            this.alfSubscribe(topics.PROGRESS_INDICATOR_REMOVE_ALL_ACTIVITIES, lang.hitch(this, this.onRemoveAllProgressActivities));
+         }
       },
 
       /**
