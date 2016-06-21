@@ -98,25 +98,6 @@ define(["alfresco/core/Core",
       destroyDeferred: null,
 
       /**
-       * This function will be called once the indicator has been displayed.
-       *
-       * @instance
-       * @type {object}
-       * @default
-       */
-      displayCallback: null,
-
-      /**
-       * How many milliseconds it takes for the indicator to be displayed. This is a reference to the
-       * current CSS transition value for the indicator (i.e. try to keep it in sync with the CSS).
-       *
-       * @instance
-       * @type {number}
-       * @default
-       */
-      displayMs: 500,
-
-      /**
        * The notification ID (helps with customisation)
        *
        * @instance
@@ -167,6 +148,8 @@ define(["alfresco/core/Core",
       postCreate: function alfresco_notifications_ProgressIndicator__postCreate() {
          this.inherited(arguments);
          document.body.appendChild(this.domNode);
+         domClass.add(document.documentElement, this.baseClass + "--displayed");
+         domStyle.set(document.body, "margin-right", this._getScrollbarWidth() + "px");
          this.own(on(document.body, "keydown", this.onKeyPress.bind(this)));
       },
 
@@ -189,9 +172,11 @@ define(["alfresco/core/Core",
        * @returns {Object} A promise that will be resolved when this widget has been destroyed
        */
       hide: function alfresco_notifications_ProgressIndicator___hide() {
+         this.destroyDeferred = new Deferred();
          if (this.domNode && document.body.contains(this.domNode.parentNode)) {
             domStyle.set(document.body, "margin-right", "0");
             domClass.remove(document.documentElement, this.baseClass + "--displayed");
+            domClass.add(this.domNode, this.baseClass + "--hiding");
             setTimeout(function() {
                this.destroy();
             }.bind(this), this.destroyAfterHideMs);
@@ -227,21 +212,6 @@ define(["alfresco/core/Core",
             default:
                // Do not trap the keypress
          }
-      },
-
-      /**
-       * Show the progress indicator.
-       *
-       * @instance
-       * @override
-       */
-      show: function alfresco_notifications_ProgressIndicator__show() {
-         this.destroyDeferred = new Deferred();
-         domStyle.set(document.body, "margin-right", this._getScrollbarWidth() + "px");
-         setTimeout(function() {
-            domClass.add(document.documentElement, this.baseClass + "--displayed");
-            this.displayCallback && setTimeout(this.displayCallback, this.displayMs);
-         }.bind(this)); // Add to page before showing, else transition fails
       },
 
       /**
