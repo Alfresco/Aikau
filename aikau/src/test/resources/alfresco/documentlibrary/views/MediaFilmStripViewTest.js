@@ -54,9 +54,9 @@ define(["module",
       "Show the audio preview, check video is paused": function() {
          return this.remote.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .next img")
             .click()
-            .end()
+         .end()
 
-         .findDisplayedByCssSelector("video")
+         .findByCssSelector("video")
             .execute("return document.querySelector('video').paused")
             .then(function(paused) {
                assert.isTrue(paused);

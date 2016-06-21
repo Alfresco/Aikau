@@ -647,6 +647,7 @@ define(["module",
 
       "Fifth item NOT displayed again": function() {
          return this.remote.findByCssSelector("#PAGED_FILMSTRIP_VIEW_ITEMS li:nth-child(5)")
+            .sleep(1000) // Need to sleep to allow scrolling animation to complete
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed);

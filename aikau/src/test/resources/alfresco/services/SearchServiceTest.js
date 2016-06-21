@@ -33,7 +33,7 @@ define(["module",
 
       "Check there are the expected number of mocked results": function() {
          // See AKU-619 - it should not be necessary to provide a search term in order for searching to occur...
-         return this.remote.findByCssSelector("body").end()
+         return this.remote.findDisplayedByCssSelector("#FCTSRCH_SEARCH_ADVICE_NO_RESULTS").end()
 
          // Need to give the results a chance to render...
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")

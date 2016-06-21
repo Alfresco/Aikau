@@ -151,9 +151,9 @@ define(["module",
 
       "Check that the alternative search label is still hidden": function() {
          // Click the button to simulate a search result containing suggested search terms
-         return this.remote.findByCssSelector("#SIM_NORMAL_SEARCH_label")
+         return this.remote.findDisplayedByCssSelector("#SIM_NORMAL_SEARCH_label")
             .click()
-            .end()
+         .end()
 
          // Check that neither the alternative search nor the search suggestions are displayed...
          .findByCssSelector(".alfresco-search-AlternativeSearchLabel")
