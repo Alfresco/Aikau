@@ -115,6 +115,17 @@ define(["dojo/_base/declare",
       targetUrlType: urlTypes.PAGE_RELATIVE,
 
       /**
+       * This is an internal variable used to preserve a copy of the original browser window title
+       * to be used when updated are made by publication.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.73
+       */
+      _originalLabel: null,
+
+      /**
        * It's important to perform label encoding before buildRendering occurs (e.g. before postCreate)
        * to ensure that an unencoded label isn't set and then replaced. 
        * 
@@ -124,12 +135,14 @@ define(["dojo/_base/declare",
          if (this.label)
          {
             var label = this.label ? this.label : "";
-
             if (this.setBrowserTitle === true)
             {
                document.title = this.browserTitlePrefix + " \u00bb " + this.label; // Set the browser title
             }
          
+            // Preserve a copy of the original label for resetting the title (in the case where 
+            // only a new prefix or a request to hide the prefix is made)...
+            this._originalLabel = this.label;
             this.label = this.encodeHTML(this.message(label));
          }
          if (this.browserTitlePrefix)
@@ -139,7 +152,9 @@ define(["dojo/_base/declare",
       },
       
       /**
+       *
        * @instance
+       * @listens module:alfresco/core/topics#UPDATE_PAGE_TITLE
        */
       postCreate: function alfresco_header_Title__postCreate() {
          this.textNode.innerHTML = this.label;
@@ -209,11 +224,19 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published on the update title topic
        */
       updatePageTitle: function alfresco_header_Title__updatePageTitle(payload) {
-         if (payload && payload.title)
+         if (payload)
          {
-            var title = this.message(payload.title);
+            var title = this.message(payload.title || this._originalLabel);
             this.textNode.innerHTML = this.encodeHTML(title);
-            document.title = this.browserTitlePrefix + " \u00bb " + title; // Set the browser title
+
+            if (payload.hideBrowserTitlePrefix)
+            {
+               document.title = title;
+            }
+            else
+            {
+               document.title = (payload.browserTitlePrefix || this.browserTitlePrefix) + " \u00bb " + title;
+            }
          }
       }
    });
