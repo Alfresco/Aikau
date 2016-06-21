@@ -1,4 +1,4 @@
-Aikau 1.0.71 Release Notes
+Aikau 1.0.72 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,14 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.72:
+* [AKU-947](https://issues.alfresco.com/jira/browse/AKU-947)       - Added 'simpleLayout' config option to PushButtons
+* [AKU-982](https://issues.alfresco.com/jira/browse/AKU-982)       - Added support for disabling actions in Indicators
+* [AKU-995](https://issues.alfresco.com/jira/browse/AKU-995)       - Additional layout CSS class for ClassicWindow
+* [AKU-997](https://issues.alfresco.com/jira/browse/AKU-997)       - Support for toggling edit mode via topic in InlineEditProperty
+* [AKU-998](https://issues.alfresco.com/jira/browse/AKU-998)       - PubQueue fix for pages with neither widgets nor services
+* [AKU-1001](https://issues.alfresco.com/jira/browse/AKU-1001)     - Improvements to progress indicator on navigation
+
 1.0.71:
 * [AKU-981](https://issues.alfresco.com/jira/browse/AKU-981)       - Support for legacyMode fallback via whitelist validation in alfresco/renderers/Indicators
 * [AKU-983](https://issues.alfresco.com/jira/browse/AKU-983)       - Added generic "processing" notification

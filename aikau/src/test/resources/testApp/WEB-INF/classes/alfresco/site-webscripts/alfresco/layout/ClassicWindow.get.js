@@ -59,6 +59,29 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/layout/HorizontalWidgets",
+         config: {
+            widgets: [
+               {
+                  id: "WINDOW4",
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "One",
+                     additionalCssClasses: "no-margin"
+                  }
+               },
+               {
+                  id: "WINDOW5",
+                  name: "alfresco/layout/ClassicWindow",
+                  config: {
+                     title: "Two",
+                     additionalCssClasses: "no-margin"
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

@@ -163,6 +163,18 @@ define(["dojo/_base/declare",
       propertyToRender: null,
 
       /**
+       * Indicates whether or not the configured actions for the indicators supported. So if this is configured
+       * to be false then no indicator will be clickable regardless of whether or not an action has been
+       * provided for it.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.72
+       */
+      supportActions: true,
+
+      /**
        * This is an auto-populated instance property that holds a cleaned-up array of indicators for the current item.
        *
        * @instance
@@ -285,7 +297,7 @@ define(["dojo/_base/declare",
          }
          var label = this.message(indicator.label, messageArgs),
             classes = ["indicator"];
-         if (indicator.action) {
+         if (this.supportActions && indicator.action) {
             classes.push("has-action");
          }
 
@@ -316,7 +328,7 @@ define(["dojo/_base/declare",
             "alt": indicator.id,
             "class": classes.join(" ")
          }, this.containerNode);
-         if (indicator.action) {
+         if (this.supportActions && indicator.action) {
             on(img, "click", lang.hitch(this, this.onActionClick, indicator));
          }
       },

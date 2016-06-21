@@ -120,6 +120,22 @@ define(["dojo/_base/declare",
       editOnClickRenderedValue: true,
 
       /**
+       * An optional array of topics to be subscribed to that can trigger editing. The typical use case is when
+       * another widget (a [PublishAcing]{@link module:alfresco/renderers/PublishAction} for example) is provided
+       * that when clicked will toggle editing of the property. The current caveat is that the payload published
+       * must be the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} of this widget. This
+       * would be achieved by setting a 
+       * [publishPayloadType]{@link module:alfresco/renderers/_PublishPayloadMixin#publishPayloadType} of
+       * "CURRENT_ITEM" and for both widgets (the publisher and the subscriber) rendering the same item.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.72
+       */
+      editSubscriptionsTopics: null,
+
+      /**
        * References the widget used for editing. Created by calling the 
        * [getFormWidget]{@link module:alfresco/renderers/InlineEditProperty#getFormWidget}
        * for the first time.
@@ -287,6 +303,19 @@ define(["dojo/_base/declare",
                domClass.add(this.editIconNode, "disabled");
                this._disableEdit = true;
             }
+         }
+
+         // See AKU-997...
+         if (this.editSubscriptionsTopics)
+         {
+            array.forEach(this.editSubscriptionsTopics, lang.hitch(this, function(topic) {
+               this.alfSubscribe(topic, lang.hitch(this, function(payload) {
+                  if (payload === this.currentItem)
+                  {
+                     this.onEditClick();
+                  }
+               }));
+            }));
          }
       },
 

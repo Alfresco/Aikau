@@ -147,22 +147,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Display the progress indicator (or at least request it, if NotificationService isn't on the page).
-       *
-       * @instance
-       * @returns {Object} A promise that will resolve once it's (probably) displayed.
-       * @since 1.0.71
-       */
-      displayProgressIndicator: function alfresco_services_NavigationService__displayProgressIndicator() {
-         var dfd = new Deferred();
-         this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
-         setTimeout(function() {
-            dfd.resolve();
-         }, 500); // This is to give the progress indicator time to appear
-         return dfd.promise;
-      },
-
-      /**
        * This is the default page navigation handler. It is called when the service receives a publication on
        * the [navigateToPageTopic]{@link module:alfresco/services/_NavigationServiceTopicMixin#navigateToPageTopic} topic. At the moment
        * it makes the assumption that the URL data will be relative to the Share page context.
@@ -190,9 +174,21 @@ define(["dojo/_base/declare",
                }
                else if (!data.target || data.target === this.currentTarget)
                {
-                  this.displayProgressIndicator().then(function(){
+                  // Make a good attempt at ensuring that we're not trying to go back to the same page
+                  // This has been added to ensure that the progress indicator is not shown when entering
+                  // new search terms in the SearchBox when already on the Search page (in Share)... 
+                  // This may require further enhancement...
+                  var hashIndex = url.indexOf("#");
+                  if ((hashIndex !== -1 && url.substring(0, hashIndex) === window.location.pathname) ||
+                      (url === window.location.pathname))
+                  {
                      window.location = url;
-                  });
+                  }
+                  else
+                  {
+                     this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
+                     window.location = url;
+                  }
                }
                else if (data.target === this.newTarget)
                {
@@ -250,9 +246,8 @@ define(["dojo/_base/declare",
             domConstruct.place(form, document.body);
             if (!data.target || data.target === this.currentTarget)
             {
-               this.displayProgressIndicator().then(function(){
-                  form.submit();
-               });
+               this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
+               form.submit();
             }
             else
             {
@@ -271,9 +266,8 @@ define(["dojo/_base/declare",
        */
       reloadPage: function alfresco_services_NavigationService__reloadPage(data) {
          this.alfLog("log", "Page reload request received:", data);
-         this.displayProgressIndicator().then(function(){
-            window.location.reload(true);
-         });
+         this.alfServicePublish(topics.PROGRESS_INDICATOR_ADD_ACTIVITY);
+         window.location.reload(true);
       }
    });
 });
