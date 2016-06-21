@@ -275,7 +275,7 @@ define(["module",
             .click()
             .end()
 
-         .findByCssSelector(".alfresco-notifications-ProgressIndicator--displayed");
+         .findByCssSelector(".alfresco-notifications-ProgressIndicator");
       },
 
       "Can cause progress indicator to disappear again": function() {

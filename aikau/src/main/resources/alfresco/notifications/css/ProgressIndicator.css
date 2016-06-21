@@ -9,7 +9,6 @@
    right: 0;
    top: 0;
    transform: translateZ(0);
-   transition: opacity .3s ease-out;
    z-index: 9999; /* This isn't ideal, but searching all z-indexes is even worse (better solution possible?) */
    &__close-button {
       color: #eee;
@@ -32,9 +31,8 @@
       padding: 40px;
       position: absolute;
       text-align: center;
-      top: 55%;
+      top: 50%;
       transform: translate(-50%, -50%);
-      transition: top .3s cubic-bezier(.5,0,1,.75);
    }
    &__loader {
       animation: progress-loader 3s linear infinite;
@@ -76,9 +74,13 @@
    }
    &--displayed {
       overflow: hidden;
+   }
+   &--hiding {
+      opacity: 0;
+      transition: opacity .3s ease-out;
       .alfresco-notifications-ProgressIndicator {
          &__content {
-            top: 50%;
+            top: 60%;
             transition: top .5s cubic-bezier(0,1,.5,1);
          }
       }
