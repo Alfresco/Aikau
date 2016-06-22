@@ -105,11 +105,14 @@ define(["alfresco/layout/AlfTabContainer",
        * @instance
        * @return {object[]} An array of the form controls to iterate over.
        */
-      getFormLayoutChildren: function alfresco_forms_LayoutMixin__getFormLayoutChildren() {
+      getFormLayoutChildren: function alfresco_forms_TabbedControls__getFormLayoutChildren() {
          var _tabbedFormControls = [];
-         array.forEach(this.tabContainerWidget.getChildren(), lang.hitch(this, function(contentPane) {
-            _tabbedFormControls = _tabbedFormControls.concat(contentPane.getChildren());
-         }));
+         if (this.tabContainerWidget)
+         {
+            array.forEach(this.tabContainerWidget.getChildren(), lang.hitch(this, function(contentPane) {
+               _tabbedFormControls = _tabbedFormControls.concat(contentPane.getChildren());
+            }));
+         }
          return _tabbedFormControls;
       }
    });
