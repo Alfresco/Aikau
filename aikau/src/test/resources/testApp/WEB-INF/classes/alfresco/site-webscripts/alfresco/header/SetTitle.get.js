@@ -1,3 +1,11 @@
+/* global page */
+/* jshint sub:true */
+var hidePrefix = false;
+if (page.url.args["hidePrefix"])
+{
+   hidePrefix = page.url.args["hidePrefix"] === "true";
+}
+
 model.jsonModel = {
    services: [
       {
@@ -28,7 +36,9 @@ model.jsonModel = {
       {
          name: "alfresco/header/SetTitle",
          config: {
-            title: "test.page.updated.title"
+            title: "test.page.updated.title",
+            hideBrowserTitlePrefix: hidePrefix,
+            browserTitlePrefix: "New prefix"
          }
       },
       {
