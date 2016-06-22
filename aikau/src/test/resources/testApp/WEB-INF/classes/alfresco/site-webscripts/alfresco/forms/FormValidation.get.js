@@ -147,6 +147,76 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Disablement change triggers validation",
+            widgets: [
+               {
+                  id: "FORM3",
+                  name: "alfresco/forms/Form",
+                  config: {
+                     okButtonPublishTopic: "SAVE",
+                     cancelButtonPublishTopic: "CANCEL",
+                     pubSubScope: "FORM3_",
+                     showValidationErrorsImmediately: true,
+                     widgets: [
+                        {
+                           id: "SELECT",
+                           name: "alfresco/forms/controls/Select",
+                           config: {
+                              fieldId: "SELECT",
+                              label: "Trigger",
+                              name: "select",
+                              description: "Changing value TO 'B' should enable text box AND make it required",
+                              value: "A",
+                              optionsConfig: {
+                                 fixed: [
+                                    {
+                                       label: "A", value: "A"
+                                    },
+                                    {
+                                       label: "B", value: "B"
+                                    }
+                                 ]
+                              }
+                           }
+                        },
+                        {
+                           id: "TA",
+                           name: "alfresco/forms/controls/TextArea",
+                           config: {
+                              fieldId: "TA",
+                              label: "Result",
+                              name: "text2",
+                              description: "This should become required and cause form submission button to become disabled",
+                              value: "",
+                              disablementConfig: {
+                                 initialValue: true,
+                                 rules: [
+                                    {
+                                       targetId: "SELECT",
+                                       is: ["A"]
+                                    }
+                                 ]
+                              },
+                             requirementConfig: {
+                                 initialValue: false,
+                                 rules: [
+                                    {
+                                       targetId: "SELECT",
+                                       isNot: ["A"]
+                                    }
+                                 ]
+                              }
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]

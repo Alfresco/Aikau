@@ -418,6 +418,7 @@ define(["dojo/_base/declare",
          {
             this.wrappedWidget.set("disabled", status);
          }
+         this.validate();
       },
 
       /**
