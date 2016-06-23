@@ -647,10 +647,11 @@ define(["dojo/_base/declare",
        * @param {function} [failure] The function to run if unsuccessful
        * @param {boolean} [global] Indicates that the pub/sub scope should not be applied
        * @param {boolean} [parentScope] Indicates that the pub/sub scope inherited from the parent should be applied
+       * @param {string} [customScope] A custom pub/sub scope that should be applied
        * @returns {object} A handle to the subscription
        * @since 1.0.44
        */
-      alfConditionalSubscribe: function alfresco_core_CoreWidgetProcessing__alfConditionalSubscribe(topic, rules, success, failure, global, parentScope) {
+      alfConditionalSubscribe: function alfresco_core_CoreWidgetProcessing__alfConditionalSubscribe(topic, rules, success, failure, global, parentScope, customScope) {
          return this.alfSubscribe(topic, lang.hitch(this, function(payload) {
             var rulesObj = lang.mixin({
                   testObject: payload
@@ -658,7 +659,7 @@ define(["dojo/_base/declare",
                successHandler = success && lang.partial(success, payload),
                failureHandler = failure && lang.partial(failure, payload);
             objUtils.evaluateRules(rulesObj, successHandler, failureHandler);
-         }), global, parentScope);
+         }), global, parentScope, customScope);
       },
 
       /**
