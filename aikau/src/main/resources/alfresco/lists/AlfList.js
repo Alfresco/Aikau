@@ -1154,7 +1154,14 @@ define(["dojo/_base/declare",
                payload = {};
             }
 
-            payload.alfResponseTopic = this.pubSubScope + this.loadDataPublishTopic;
+            if (!payload.alfResponseTopic)
+            {
+               payload.alfResponseTopic = this.pubSubScope + this.loadDataPublishTopic;
+            }
+            else
+            {
+               payload.alfResponseTopic = this.pubSubScope + payload.alfResponseTopic;
+            }
 
             if (this.dataFilters)
             {
