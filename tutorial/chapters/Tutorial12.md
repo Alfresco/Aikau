@@ -37,7 +37,7 @@ We can now do something similar to provide an alternative approach to setting th
    name: "alfresco/menus/AlfMenuBarSelect",
    config: {
       title: "Sort By",
-      selectionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+      selectionTopic: "ALF_DOCLIST_SORT",
       widgets: [
          {
             name: "alfresco/menus/AlfMenuGroup",
@@ -50,7 +50,7 @@ We can now do something similar to provide an alternative approach to setting th
                         title: "Sort By Group Identifier",
                         value: "shortName",
                         group: "GROUP_SORT_FIELDS",
-                        publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+                        publishTopic: "ALF_DOCLIST_SORT",
                         checked: true,
                         publishPayload: {
                            label: "Identifier",
@@ -108,6 +108,9 @@ Add the following to the page model before the `alfresco/menus/AlfMenuBarSelect`
 {
    name: "alfresco/menus/AlfMenuBarToggle",
    config: {
+      subscriptionTopic: "ALF_DOCLIST_SORT",
+      subscriptionAttribute: "direction",
+      checkedValue: "ascending",
       checked: true,
       onConfig: {
          title: "Change sort order to descending",
