@@ -1476,6 +1476,11 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
+       *
+       * @event
+       * @property {string}  [title] The new title for the browser window
+       * @property {string}  [browserTitlePrefix] The new prefix for the title of the browser window
+       * @property {boolean} [hideBrowserTitlePrefix] Indicates whether or not the title prefix should be hidden
        */
       UPDATE_PAGE_TITLE: "ALF_UPDATE_PAGE_TITLE",
 

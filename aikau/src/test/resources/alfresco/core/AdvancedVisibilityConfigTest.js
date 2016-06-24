@@ -57,8 +57,9 @@ define(["module",
       "Check LOGO1 is still displayed (non-strict)": function() {
          return this.remote.findByCssSelector("#TEST_NON_STRICT_1")
             .click()
-            .end()
-            .findByCssSelector("#LOGO1")
+         .end()
+         
+         .findByCssSelector("#LOGO1")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO1 was hidden");
@@ -68,8 +69,9 @@ define(["module",
       "Check LOGO2 is still displayed (Current Item Rule)": function() {
          return this.remote.findByCssSelector("#HIDE_LOGO_2")
             .click()
-            .end()
-            .findByCssSelector("#LOGO2")
+         .end()
+      
+         .findByCssSelector("#LOGO2")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO2 was hidden");
@@ -79,8 +81,9 @@ define(["module",
       "Check LOGO3 is now hidden (Invisibility Rule)": function() {
          return this.remote.findByCssSelector("#HIDE_LOGO_3")
             .click()
-            .end()
-            .findByCssSelector("#LOGO3")
+         .end()
+      
+         .findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
                assert.isFalse(result, "LOGO3 was still displayed");
@@ -90,11 +93,68 @@ define(["module",
       "Check LOGO3 is now displayed (Invisibility Rule)": function() {
          return this.remote.findByCssSelector("#SHOW_LOGO_3")
             .click()
-            .end()
-            .findByCssSelector("#LOGO3")
+         .end()
+       
+         .findByCssSelector("#LOGO3")
             .isDisplayed()
             .then(function(result) {
                assert.isTrue(result, "LOGO3 was not displayed");
+            });
+      },
+
+      "All scoped Logos should be initially displayed": function() {
+         return this.remote.findDisplayedById("LOGO4")
+         .end()
+
+         .findDisplayedById("LOGO5")
+         .end()
+
+         .findDisplayedById("LOGO6")
+         .end();
+      },
+
+      "Global scoped hide should only hide global scope subscribed logo": function() {
+         return this.remote.findByCssSelector("#HIDE_LOGO_4_label")
+            .click()
+         .end()
+
+         .findDisplayedById("LOGO5")
+         .end()
+
+         .findDisplayedById("LOGO6")
+         .end()
+
+         .findById("LOGO4")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Parent scoped hide should only hide parent scope subscribed logo": function() {
+         return this.remote.findByCssSelector("#HIDE_LOGO_5_label")
+            .click()
+         .end()
+
+         .findDisplayedById("LOGO6")
+         .end()
+
+         .findById("LOGO5")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Custom scoped hide should only hide custom scope subscribed logo": function() {
+         return this.remote.findByCssSelector("#HIDE_LOGO_6_label")
+            .click()
+         .end()
+
+         .findById("LOGO6")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
             });
       }
    });

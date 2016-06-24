@@ -376,7 +376,21 @@ define(["module",
       "Test document title": function() {
          return this.remote.execute("return document.title;")
             .then(function(title) {
-               assert(title.indexOf("Unit Tests" === 0), "The document title was not updated");
+               assert.include(title, "Updated Title", "The document title was not updated");
+               assert.include(title, "New prefix", "The document title prefix was not updated");
+            });
+      }
+   });
+
+   defineSuite(module, {
+      name: "Set Title Tests (Hide Prefix)",
+      testPage: "/SetTitle?hidePrefix=true",
+
+      "Prefix is hidden": function() {
+         return this.remote.execute("return document.title;")
+            .then(function(title) {
+               assert.include(title, "Updated Title", "The document title was not updated");
+               assert.notInclude(title, "New prefix", "The document title prefix was not hidden");
             });
       }
    });

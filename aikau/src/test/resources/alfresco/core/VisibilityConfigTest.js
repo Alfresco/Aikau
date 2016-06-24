@@ -50,8 +50,9 @@ define(["module",
          // Test 2: Check that LOGO1 can be hidden can then displayed by isNot rules
          return this.remote.findByCssSelector("#HIDE_LOGO_1")
             .click()
-            .end()
-            .findByCssSelector("#LOGO1")
+         .end()
+      
+         .findByCssSelector("#LOGO1")
             .getComputedStyle("display")
             .then(function(result) {
                assert.equal(result, "none", "LOGO1 was not hidden");
@@ -61,8 +62,9 @@ define(["module",
       "Check that LOGO1 gets revealed": function() {
          return this.remote.findByCssSelector("#SHOW_LOGO_1")
             .click()
-            .end()
-            .findByCssSelector("#LOGO1")
+         .end()
+         
+         .findByCssSelector("#LOGO1")
             .getComputedStyle("display")
             .then(function(result) {
                assert.equal(result, "block", "LOGO1 was not revealed");
@@ -73,8 +75,9 @@ define(["module",
          // Test 3: Check that LOGO2 can be displayed and then hidden by is rules
          return this.remote.findByCssSelector("#SHOW_LOGO_2_A")
             .click()
-            .end()
-            .findByCssSelector("#LOGO2")
+         .end()
+      
+         .findByCssSelector("#LOGO2")
             .getComputedStyle("display")
             .then(function(result) {
                assert.equal(result, "block", "LOGO2 was not revealed");
@@ -84,8 +87,9 @@ define(["module",
       "Check that LOGO2 gets hidden": function() {
          return this.remote.findByCssSelector("#HIDE_LOGO_2")
             .click()
-            .end()
-            .findByCssSelector("#LOGO2")
+         .end()
+      
+         .findByCssSelector("#LOGO2")
             .getComputedStyle("display")
             .then(function(result) {
                assert.equal(result, "none", "LOGO2 was not hidden");
@@ -95,8 +99,9 @@ define(["module",
       "Check that LOGO2 gets revealed again": function() {
          return this.remote.findByCssSelector("#SHOW_LOGO_2_B")
             .click()
-            .end()
-            .findByCssSelector("#LOGO2")
+         .end()
+      
+         .findByCssSelector("#LOGO2")
             .getComputedStyle("display")
             .then(function(result) {
                assert.equal(result, "block", "LOGO2 was not revaled again");

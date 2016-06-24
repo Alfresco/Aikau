@@ -378,7 +378,13 @@ define(["dojo/_base/declare",
                            },
                            successCallback = lang.hitch(this, this.onVisibilityProcessedSuccess, widget),
                            failureCallback = lang.hitch(this, this.onVisibilityProcessedFailure, widget);
-                        widget.alfConditionalSubscribe(topic, rulesObj, successCallback, failureCallback);
+                        widget.alfConditionalSubscribe(topic, 
+                                                       rulesObj, 
+                                                       successCallback, 
+                                                       failureCallback, 
+                                                       rule.subscribeGlobal, 
+                                                       rule.subscribeParent,
+                                                       rule.subscribeScope);
                      }
                   }, this);
                }

@@ -52,13 +52,41 @@ define(["dojo/_base/declare",
        * @default
        */
       title: "",
+
+      /**
+       * Indicates whether or not the browser title prefix as defined by
+       * [browserTitlePrefix]{@link module:alfresco/header/Title#browserTitlePrefix} should be hidden
+       * or not.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.73
+       */
+      hideBrowserTitlePrefix: false,
       
       /**
+       * A new prefix to replace the one defined by
+       * [browserTitlePrefix]{@link module:alfresco/header/Title#browserTitlePrefix}.
+       * 
        * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.73
+       */
+      browserTitlePrefix: null,
+
+      /**
+       * Publishes a request to update the title of the page.
+       * 
+       * @instance
+       * @fires module:alfresco/core/topics#UPDATE_PAGE_TITLE
        */
       postCreate: function alfresco_header_SetTitle__postCreate() {
          this.alfPublish(topics.UPDATE_PAGE_TITLE, {
-            title: this.message(this.title)
+            title: this.message(this.title),
+            hideBrowserTitlePrefix: this.hideBrowserTitlePrefix,
+            browserTitlePrefix: this.browserTitlePrefix
          });
       }
    });

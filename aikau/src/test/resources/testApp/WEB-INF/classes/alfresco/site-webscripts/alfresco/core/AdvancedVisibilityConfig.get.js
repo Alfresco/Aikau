@@ -127,11 +127,112 @@ model.jsonModel = {
             }
          }
       },
+      // TESTS FOR SCOPING...
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "SCOPED_TEST_WIDGETS",
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            title: "Scoped Rules",
+            pubSubScope: "WINDOW_SCOPE_",
+            widgets: [
+               {
+                  id: "HIDE_LOGO_4",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "Hide (Global Scope)",
+                     publishTopic: "SCOPED_HIDE",
+                     publishPayload: {
+                        value: "HIDE"
+                     },
+                     publishGlobal:true
+                  }
+               },
+               {
+                  id: "HIDE_LOGO_5",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "Hide (Parent Scope)",
+                     publishTopic: "SCOPED_HIDE",
+                     publishPayload: {
+                        value: "HIDE"
+                     }
+                  }
+               },
+               {
+                  id: "HIDE_LOGO_6",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "Hide (Custom Scope)",
+                     pubSubScope: "CUSTOM_",
+                     publishTopic: "SCOPED_HIDE",
+                     publishPayload: {
+                        value: "HIDE"
+                     },
+                     publishParent:true
+                  }
+               },
+               {
+                  id: "LOGO4",
+                  name: "alfresco/logo/Logo",
+                  config: {
+                     pubSubScope: "SCOPE_",
+                     logoClasses: "surf-logo-large",
+                     invisibilityConfig: {
+                        initialValue: false,
+                        rules: [
+                           {
+                              topic: "SCOPED_HIDE",
+                              subscribeGlobal: true,
+                              attribute: "value",
+                              is: ["HIDE"]
+                           }
+                        ]
+                     }
+                  }
+               },
+               {
+                  id: "LOGO5",
+                  name: "alfresco/logo/Logo",
+                  config: {
+                     pubSubScope: "SCOPE_",
+                     logoClasses: "surf-logo-large",
+                     invisibilityConfig: {
+                        initialValue: false,
+                        rules: [
+                           {
+                              topic: "SCOPED_HIDE",
+                              subscribeParent: true,
+                              attribute: "value",
+                              is: ["HIDE"]
+                           }
+                        ]
+                     }
+                  }
+               },
+               {
+                  id: "LOGO6",
+                  name: "alfresco/logo/Logo",
+                  config: {
+                     pubSubScope: "SCOPE_",
+                     logoClasses: "surf-logo-large",
+                     invisibilityConfig: {
+                        initialValue: false,
+                        rules: [
+                           {
+                              topic: "SCOPED_HIDE",
+                              subscribeScope: "CUSTOM_",
+                              attribute: "value",
+                              is: ["HIDE"]
+                           }
+                        ]
+                     }
+                  }
+               }
+            ]
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

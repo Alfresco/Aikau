@@ -1,4 +1,4 @@
-Aikau 1.0.72 Release Notes
+Aikau 1.0.73 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,14 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.73:
+* [AKU-996](https://issues.alfresco.com/jira/browse/AKU-996)       - Improvements to menus handling sorting
+* [AKU-988](https://issues.alfresco.com/jira/browse/AKU-988)       - Support scoping in visibilityConfig
+* [AKU-1000](https://issues.alfresco.com/jira/browse/AKU-1000)     - Support for removing document title prefix via alfresco/header/SetTitle
+ 
+1.0.72.1:
+* [AKU-1002](https://issues.alfresco.com/jira/browse/AKU-1002)       - Trigger form control validation on disable state change
+
 1.0.72:
 * [AKU-947](https://issues.alfresco.com/jira/browse/AKU-947)       - Added 'simpleLayout' config option to PushButtons
 * [AKU-982](https://issues.alfresco.com/jira/browse/AKU-982)       - Added support for disabling actions in Indicators
@@ -55,6 +63,9 @@ Resolved issues:
 * [AKU-997](https://issues.alfresco.com/jira/browse/AKU-997)       - Support for toggling edit mode via topic in InlineEditProperty
 * [AKU-998](https://issues.alfresco.com/jira/browse/AKU-998)       - PubQueue fix for pages with neither widgets nor services
 * [AKU-1001](https://issues.alfresco.com/jira/browse/AKU-1001)     - Improvements to progress indicator on navigation
+
+1.0.71.1:
+* [AKU-998](https://issues.alfresco.com/jira/browse/AKU-998)       - PubQueue release when no widgets or services
 
 1.0.71:
 * [AKU-981](https://issues.alfresco.com/jira/browse/AKU-981)       - Support for legacyMode fallback via whitelist validation in alfresco/renderers/Indicators

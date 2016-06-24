@@ -253,7 +253,8 @@ define(["dojo/_base/declare",
          this.alfPublish(topics.SORT_LIST, {
             direction: (this.sortedAscending) ? "ascending" : "descending",
             value: this.sortValue,
-            requester: this
+            requester: this,
+            label: this.label
          });
       },
 
