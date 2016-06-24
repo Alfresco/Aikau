@@ -107,6 +107,20 @@ define(["dojo/_base/declare",
       sortField: "cm:name",
 
       /**
+       * The initial label of the sort field. It is not necessary to set this if no other widgets require
+       * it. However, it will be updated on external sort requests if a "label" attribute is provided. The
+       * reason for setting it is so that other widgets (such as an 
+       * [AlfMenuBarSelect]{@link module:alfresco/menus/AlfMenuBarSelect}) used to control the sort field
+       * can be updated with the appropriate label.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.73
+       */
+      sortFieldLabel: "",
+
+      /**
        * Extends the [inherited function]{@link module:alfresco/lists/AlfList#showView} to set the sort data for
        * any [HeaderCell]{@link module:alfresco/lists/views/layouts/HeaderCell} widgets that might be included in the
        * view.
@@ -123,6 +137,7 @@ define(["dojo/_base/declare",
             this.alfPublish(topics.SORT_LIST, {
                direction: (this.sortAscending) ? "ascending" : "descending",
                value: this.sortField,
+               label: this.sortFieldLabel,
                requester: this
             });
          }
@@ -232,6 +247,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the request
        */
       onSortRequest: function alfresco_lists_AlfSortablePaginatedList__onSortRequest(payload) {
+         /* jshint maxcomplexity:false */
          this.alfLog("log", "Sort requested: ", payload);
          if (payload && payload.requester !== this && (payload.direction !== null || payload.value !== null))
          {
@@ -242,6 +258,10 @@ define(["dojo/_base/declare",
             if (payload.value)
             {
                this.sortField = payload.value;
+            }
+            if (payload.label)
+            {
+               this.sortFieldLabel = payload.label;
             }
             if (this._readyToLoad === true)
             {
