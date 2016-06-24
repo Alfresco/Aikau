@@ -44,6 +44,12 @@ define(["module",
             ascending: TestCommon.getTestSelector(headerCellSelectors, "ascending.indicator", ["TABLE_VIEW_NAME_HEADING"]),
             descending: TestCommon.getTestSelector(headerCellSelectors, "descending.indicator", ["TABLE_VIEW_NAME_HEADING"]),
             label: TestCommon.getTestSelector(headerCellSelectors, "label", ["TABLE_VIEW_NAME_HEADING"])
+         },
+         description: {
+            indicators: TestCommon.getTestSelector(headerCellSelectors, "indicator", ["TABLE_VIEW_DESCRIPTION_HEADING"]),
+            ascending: TestCommon.getTestSelector(headerCellSelectors, "ascending.indicator", ["TABLE_VIEW_DESCRIPTION_HEADING"]),
+            descending: TestCommon.getTestSelector(headerCellSelectors, "descending.indicator", ["TABLE_VIEW_DESCRIPTION_HEADING"]),
+            label: TestCommon.getTestSelector(headerCellSelectors, "label", ["TABLE_VIEW_DESCRIPTION_HEADING"])
          }
       },
       sortMenu: {
@@ -110,9 +116,9 @@ define(["module",
 
       "Sort via menu": function() {
          // Open the sort menu...
-         return this.remote.findByCssSelector(selectors.sortMenu.label)
+         return this.remote.findDisplayedByCssSelector(selectors.sortMenu.label)
             .click()
-            .end()
+         .end()
 
          .clearLog()
 
@@ -123,7 +129,7 @@ define(["module",
          // Click the fourth sort item...
          .findDisplayedByCssSelector(selectors.sortItems.fourth)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
@@ -175,10 +181,10 @@ define(["module",
          return this.remote.findByCssSelector(selectors.headerCells.name.label)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
-            .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
          .findAllByCssSelector(selectors.rows.all)
             .then(function(elements) {
@@ -194,7 +200,7 @@ define(["module",
          return this.remote.findByCssSelector(selectors.headerCells.name.label)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -210,7 +216,7 @@ define(["module",
          return this.remote.findByCssSelector(selectors.headerCells.name.label)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -220,6 +226,49 @@ define(["module",
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
          .findDisplayedByCssSelector(selectors.headerCells.name.ascending);
+      }
+   });
+
+   defineSuite(module, {
+      name: "AlfDocumentList Sorting Tests (no hash, no infinite scroll)",
+      testPage: "/InfiniteScrollDocumentList?useHash=false&includeSortMenu=true",
+
+      "Sort on description, check menu is updated": function() {
+         return this.remote.findDisplayedByCssSelector(selectors.sortMenu.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Name");
+            })
+         .end()
+
+         .findByCssSelector(selectors.headerCells.description.label)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+         .findDisplayedByCssSelector(selectors.sortMenu.label)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Description");
+            });
+      },
+
+      "Change sort order via header, check toggle is updated": function() {
+         return this.remote.findDisplayedByCssSelector("#SORT_TOGGLE img.alf-sort-ascending-icon")
+         .end()
+
+         .findByCssSelector(selectors.headerCells.description.label)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
+         .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
+
+         .findDisplayedByCssSelector("#SORT_TOGGLE img.alf-sort-descending-icon");
       }
    });
 });

@@ -927,7 +927,7 @@ function getDocLibSortOptions(options, sortingConfigItems) {
                label: msg.get(sortLabel),
                value: valueTokens[0],
                group: "DOCUMENT_LIBRARY_SORT_FIELD",
-               publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
+               publishTopic: "ALF_DOCLIST_SORT",
                checked: options.docLibPreferences.sortField === valueTokens[0],
                publishPayload: {
                   label: msg.get(sortLabel),
