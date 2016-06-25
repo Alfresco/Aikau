@@ -98,6 +98,8 @@ define(["dojo/_base/declare",
             url: AlfConstants.PROXY_URI + "api/people",
             method: "GET",
             alfResponseTopic: topic,
+            alfSuccessTopic: payload.alfSuccessTopic,
+            alfFailureTopic: payload.alfFailureTopic,
             successCallback: this.onUsersSuccess,
             failureCallback: this.onUsersFailure,
             callbackScope: this
@@ -135,7 +137,7 @@ define(["dojo/_base/declare",
                }
             });
 
-            this.alfPublish(originalRequestConfig.alfResponseTopic, {
+            this.alfPublish(originalRequestConfig.alfSuccessTopic || originalRequestConfig.alfResponseTopic, {
                items: items
             });
          }

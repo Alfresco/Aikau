@@ -17,9 +17,6 @@ model.jsonModel = {
          name: "alfresco/lists/AlfSortablePaginatedList",
          config: {
             loadDataPublishTopic: "ALF_GET_USERS",
-            loadDataPublishPayload: {
-               alfResponseTopic: "ALF_GET_USERS_SUCCESS"
-            },
             widgets: [
                {
                   name: "alfresco/lists/views/HtmlListView",

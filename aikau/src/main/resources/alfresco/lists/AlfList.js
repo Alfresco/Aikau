@@ -219,6 +219,30 @@ define(["dojo/_base/declare",
       loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
 
       /**
+       * If not configured this will automatically be generated to be the 
+       * [loadDataPublishTopic]{@link module:alfresco/lists/AlfList#loadDataPublishTopic}
+       * appended with "_FAILURE".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.74
+       */
+      loadDataFailureTopic: null,
+
+      /**
+       * If not configured this will automatically be generated to be the 
+       * [loadDataPublishTopic]{@link module:alfresco/lists/AlfList#loadDataPublishTopic}
+       * appended with "_SUCCESS".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.74
+       */
+      loadDataSuccessTopic: null,
+
+      /**
        * The property in the data response that is a metadata attribute containing additional information
        * about the overall context of the list. This defaults to "metadata". If not attribute with the
        * defined name is provided then no data will be assigned.
@@ -445,6 +469,14 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_lists_AlfList__postMixInProperties() {
+         if (!this.loadDataFailureTopic)
+         {
+            this.loadDataFailureTopic = this.loadDataPublishTopic + "_FAILURE";
+         }
+         if (!this.loadDataSuccessTopic)
+         {
+            this.loadDataSuccessTopic = this.loadDataPublishTopic + "_SUCCESS";
+         }
          this.setupSubscriptions();
          this.setDisplayMessages();
       },
@@ -458,8 +490,8 @@ define(["dojo/_base/declare",
       setupSubscriptions: function alfresco_lists_AlfList__setupSubscriptions() {
          this.alfSubscribe(this.reloadDataTopic, lang.hitch(this, this.onReloadData));
          this.alfSubscribe(this.viewSelectionTopic, lang.hitch(this, this.onViewSelected));
-         this.alfSubscribe(this.loadDataPublishTopic + "_SUCCESS", lang.hitch(this, this.onDataLoadSuccess));
-         this.alfSubscribe(this.loadDataPublishTopic + "_FAILURE", lang.hitch(this, this.onDataLoadFailure));
+         this.alfSubscribe(this.loadDataSuccessTopic, lang.hitch(this, this.onDataLoadSuccess));
+         this.alfSubscribe(this.loadDataFailureTopic, lang.hitch(this, this.onDataLoadFailure));
          this.alfSubscribe(this.requestInProgressTopic, lang.hitch(this, this.onRequestInProgress));
          this.alfSubscribe(this.requestFinishedTopic, lang.hitch(this, this.onRequestFinished));
          if (this.useInfiniteScroll)
@@ -1151,7 +1183,10 @@ define(["dojo/_base/declare",
             }
             else
             {
-               payload = {};
+               payload = {
+                  alfSuccessTopic: this.pubSubScope + this.loadDataSuccessTopic,
+                  alfFailureTopic: this.pubSubScope + this.loadDataFailureTopic
+               };
             }
 
             if (!payload.alfResponseTopic)
@@ -1162,7 +1197,7 @@ define(["dojo/_base/declare",
             {
                payload.alfResponseTopic = this.pubSubScope + payload.alfResponseTopic;
             }
-
+            
             if (this.dataFilters)
             {
                payload.dataFilters = this.dataFilters;
