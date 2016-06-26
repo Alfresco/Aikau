@@ -14,9 +14,23 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/lists/AlfSortablePaginatedList",
+         name: "alfresco/lists/AlfFilteredList",
          config: {
             loadDataPublishTopic: "ALF_GET_USERS",
+            sortField: "fullName",
+            filteringTopics: ["_valueChangeOf_FILTER"],
+            widgetsForFilters: [
+               {
+                  id: "COMPOSITE_TEXTBOX",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     fieldId: "FILTER",
+                     name: "filter",
+                     placeHolder: "Filter by name",
+                     label: "Name filter"
+                  }
+               }
+            ],
             widgets: [
                {
                   name: "alfresco/lists/views/HtmlListView",

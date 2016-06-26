@@ -33,13 +33,14 @@ define(["dojo/_base/declare",
         "alfresco/services/_UserServiceTopicMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
         "alfresco/core/topics",
+        "alfresco/util/urlUtils",
         "dojo/request/xhr",
         "dojo/json",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default"],
         function(declare, BaseService, AlfXhr, NotificationUtils, 
-              _UserServiceTopicMixin, _PreferenceServiceTopicMixin, topics, xhr, JSON, lang, array, AlfConstants) {
+              _UserServiceTopicMixin, _PreferenceServiceTopicMixin, topics, urlUtils, xhr, JSON, lang, array, AlfConstants) {
    
    return declare([BaseService, AlfXhr, NotificationUtils, _UserServiceTopicMixin, _PreferenceServiceTopicMixin], {
       
@@ -93,9 +94,36 @@ define(["dojo/_base/declare",
          {
             topic = payload.responseTopic;
          }
+
+         var url = AlfConstants.PROXY_URI + "api/people";
+         if (payload.dataFilters)
+         {
+            url = urlUtils.addFilterQueryParameters(url, payload);
+         }
+         else if (payload.filter)
+         {
+            url = urlUtils.addQueryParameter(url, "filter", payload.filter);
+         }
+
+         if (payload.sortField)
+         {
+            url = urlUtils.addQueryParameter(url, "sortBy", payload.sortField);
+         }
+
+         url = urlUtils.addQueryParameter(url, "dir", (payload.sortAscending !== false) ? "asc" : "desc");
+         
+         if (payload.pageSize)
+         {
+            url = urlUtils.addQueryParameter(url, "pageSize", payload.pageSize);
+         }
+         if (payload.page && payload.pageSize)
+         {
+            var startIndex = (payload.page - 1) * payload.pageSize;
+            url = urlUtils.addQueryParameter(url, "startIndex", startIndex);
+         }
          
          this.serviceXhr({
-            url: AlfConstants.PROXY_URI + "api/people",
+            url: url,
             method: "GET",
             alfResponseTopic: topic,
             alfSuccessTopic: payload.alfSuccessTopic,

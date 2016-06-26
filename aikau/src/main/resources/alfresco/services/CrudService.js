@@ -174,9 +174,7 @@ define(["dojo/_base/declare",
          }
          if (payload.dataFilters)
          {
-            array.forEach(payload.dataFilters, function(filter) {
-               url = this.addQueryParameter(url, filter.name, filter.value);
-            }, this);
+            url = urlUtils.addFilterQueryParameters(url, payload);
          }
 
          var config = {
