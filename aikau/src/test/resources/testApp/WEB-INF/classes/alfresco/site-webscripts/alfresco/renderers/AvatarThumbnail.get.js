@@ -13,8 +13,8 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/renderers/AvatarThumbnail",
          id: "ADMIN_THUMBNAIL",
+         name: "alfresco/renderers/AvatarThumbnail",
          config: {
             currentItem: {
                userName: "silly%userid"
@@ -22,8 +22,8 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/renderers/AvatarThumbnail",
          id: "GUEST_THUMBNAIL",
+         name: "alfresco/renderers/AvatarThumbnail",
          config: {
             currentItem: {
                userName: "guest"
@@ -34,6 +34,18 @@ model.jsonModel = {
                message: "You clicked on the guest thumbnail"
             },
             publishGlobal: true
+         }
+      },
+      {
+         id: "GROUP_THUMBNAIL",
+         name: "alfresco/renderers/AvatarThumbnail",
+         config: {
+            currentItem: {
+               displayName: "Lincoln",
+               authorityType: "GROUP"
+            },
+            groupProperty: "authorityType",
+            groupValues: ["GROUP"]
          }
       },
       {
