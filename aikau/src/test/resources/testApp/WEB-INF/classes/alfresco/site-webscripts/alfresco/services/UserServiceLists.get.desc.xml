@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>UserService Lists</shortname>
+  <description>Lists rendered using the UserService</description>
+  <family>aikau-unit-tests</family>
+  <url>/UserServiceLists</url>
+</webscript>

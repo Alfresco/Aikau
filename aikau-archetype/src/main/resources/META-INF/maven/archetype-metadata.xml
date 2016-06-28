@@ -20,6 +20,9 @@
       <directory>src/main/webapp</directory>
       <includes>
         <include>**/*.js</include>
+        <include>**/*.html</include>
+        <include>**/*.css</include>
+        <include>**/*.properties</include>
         <include>**/*.ftl</include>
         <include>**/*.ico</include>
         <include>**/*.tld</include>
