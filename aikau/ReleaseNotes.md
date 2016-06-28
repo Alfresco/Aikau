@@ -1,4 +1,4 @@
-Aikau 1.0.73 Release Notes
+Aikau 1.0.74 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,10 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.74:
+* [AKU-1003](https://issues.alfresco.com/jira/browse/AKU-1003)     - Update UserService to work with lists
+* [AKU-1004](https://issues.alfresco.com/jira/browse/AKU-1004)     - Update UserService to support filtering, sort and pagination
+
 1.0.73:
 * [AKU-996](https://issues.alfresco.com/jira/browse/AKU-996)       - Improvements to menus handling sorting
 * [AKU-988](https://issues.alfresco.com/jira/browse/AKU-988)       - Support scoping in visibilityConfig
