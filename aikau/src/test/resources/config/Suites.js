@@ -296,6 +296,7 @@ define(function() {
 
       "alfresco/services/SiteServiceTest",
       "alfresco/services/UserServiceTest",
+      "alfresco/services/UserServiceListsTest",
 
       "alfresco/services/actions/ChangeTypeTest",
       "alfresco/services/actions/CopyMoveTest",
