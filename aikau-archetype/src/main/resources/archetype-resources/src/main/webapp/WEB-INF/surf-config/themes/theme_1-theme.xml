@@ -12,7 +12,9 @@
     </page-types>
     <css-tokens>
       <less-variables>
-         <!-- Override default LESS variables here -->
+         
+         @use-legacy-buttons: false;
+         
       </less-variables>
    </css-tokens>
 </theme>
