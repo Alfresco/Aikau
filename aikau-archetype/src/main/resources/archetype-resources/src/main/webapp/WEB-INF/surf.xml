@@ -111,6 +111,9 @@
                <loader-trace-enabled>false</loader-trace-enabled>
                <messages-object>Alfresco</messages-object>
                <packages>
+                   <!-- This is a sample package that can be deleted -->
+                   <package name="acme" location="js/acme"/>
+
                    <!-- Add custom packages here -->
                </packages>
             </dojo-pages>

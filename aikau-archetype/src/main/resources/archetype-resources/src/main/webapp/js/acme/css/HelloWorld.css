@@ -1,0 +1,4 @@
+.acme-HelloWorld {
+   // This is an example of using one of the LESS variables in a CSS selector
+   font-size: @large-font-size;
+}
