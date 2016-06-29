@@ -20,7 +20,8 @@
 /**
  *
  * @module alfresco/lists/AlfFilteredList
- * @extends module:alfresco/core/ProcessWidgets
+ * @extends module:alfresco/lists/AlfSortablePaginatedList
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
