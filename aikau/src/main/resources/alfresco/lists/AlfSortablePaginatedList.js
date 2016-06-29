@@ -448,7 +448,9 @@ define(["dojo/_base/declare",
          // NOTE: The use of the currentData.totalRecords and currentData.numberFound is only retained to support
          //       AlfSearchList and faceted search in Share - generic infinite scroll should be done via the
          //       totalRecords, startIndex and currentPageSize values...
-         if(this.useInfiniteScroll && 
+         // See AKU-1007 - we also want to prevent loading another page of data when a request is already in progress
+         if(!this.requestInProgress && 
+            this.useInfiniteScroll && 
             ((this.totalRecords > (this.startIndex + this.currentPageSize)) ||
             (this.currentData && (this.currentData.totalRecords < this.currentData.numberFound))))
          {
