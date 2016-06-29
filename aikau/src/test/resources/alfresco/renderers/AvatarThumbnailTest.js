@@ -44,6 +44,14 @@ define(["module",
             .then(function(payload) {
                assert.propertyVal(payload, "message", "You clicked on the guest thumbnail", "Did not publish correct payload");
             });
+      },
+
+      "Group item has correct URL": function() {
+         return this.remote.findByCssSelector("#GROUP_THUMBNAIL .alfresco-renderers-Thumbnail__image")
+            .getAttribute("src")
+            .then(function(src) {
+               assert.include(src, "/alfresco/renderers/css/images/group-64.png");
+            });
       }
    });
 });
