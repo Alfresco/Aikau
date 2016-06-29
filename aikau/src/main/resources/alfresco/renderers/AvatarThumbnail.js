@@ -165,7 +165,7 @@ define(["dojo/_base/declare",
          
          this.inherited(arguments);
 
-         if (this.groupProperty && this.groupValues)
+         if (this.groupProperty && this.groupValues && this.groupValues.length)
          {
             var groupPropertyValue = lang.getObject(this.groupProperty, false, this.currentItem);
             this.isGroup = array.some(this.groupValues, function(value) {
