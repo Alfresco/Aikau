@@ -40,10 +40,11 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @typedef {object} SortFieldOption
+       * @property {id} [propName=null] An to give the menu item for the option
        * @property {string} label The label to render for the option
        * @property {string} value The value of the option
-       * @property {boolean} selected Indicates whether or not the option should be initially selected
-       * @property {string} direction The direction to sort in when the option is used (either "ascending" or "descending").
+       * @property {boolean} [selected=false] Indicates whether or not the option should be initially selected
+       * @property {string} [direction=null] The direction to sort in when the option is used (either "ascending" or "descending").
        */
 
       /**
@@ -77,6 +78,7 @@ define(["dojo/_base/declare",
             {
                var label = this.message(option.label);
                sortFieldOptions.push({
+                  id: option.id || null,
                   name: "alfresco/menus/AlfCheckableMenuItem",
                   config: {
                      label: label,

@@ -69,8 +69,8 @@ model.jsonModel = {
                                     name: "alfresco/lists/SortFieldSelect",
                                     config: {
                                        sortFieldOptions: [
-                                          { label: "Display Name", value: "name" },
-                                          { label: "Index", value: "index", selected: true }
+                                          { id: "SORT_BY_NAME", label: "Display Name", value: "name" },
+                                          { id: "SORT_BY_INDEX", label: "Index", value: "index", selected: true }
                                        ]
                                     }
                                  },
