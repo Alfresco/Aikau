@@ -41,6 +41,34 @@
  * can also be derived from and set on the browser URL hash by configuring 
  * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} to be true.</p>
  *
+ * @example <caption>A list of users with an additinal text box for filtering the results.</caption>
+ * {
+ *   name: "alfresco/lists/AlfFilteredList",
+ *   config: {
+ *     loadDataPublishTopic: "ALF_GET_USERS",
+ *     filteringTopics: ["_valueChangeOf_FILTER"],
+ *     widgetsForFilters: [
+ *       {
+ *         name: "alfresco/forms/controls/TextBox",
+ *         config: {
+ *           fieldId: "FILTER",
+ *           name: "filter",
+ *           placeHolder: "Enter filter text...",
+ *           label: "Name"
+ *         }
+ *       }
+ *     ],
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView",
+ *         config: {
+ *           propertyToRender: "userName"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ *
  * @module alfresco/lists/AlfFilteredList
  * @extends module:alfresco/lists/AlfSortablePaginatedList
  * @mixes module:alfresco/core/ObjectProcessingMixin
