@@ -23,22 +23,162 @@
  * be configured to obtain alternative rendering.</p>
  * <p>By default the thumbnail size will be determined by the
  * available horizontal space for the configured number of 
- * [columns]{@link module:alfresco/documentlibrary/AlfGalleryView#columns} however it is possible to 
- * configure [resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+ * [columns]{@link module:alfresco/documentlibrary/views/AlfGalleryView#columns} however it is possible to 
+ * configure [resizeByColumnCount]{@link module:alfresco/documentlibrary/views/AlfGalleryView#resizeByColumnCount}
  * to be false such that the thumbnails will have a constant width defined by the configured
- * [thumbnailSize]{@link module:alfresco/documentlibrary/AlfGalleryView#thumbnailSize}.</p>
+ * [thumbnailSize]{@link module:alfresco/documentlibrary/views/AlfGalleryView#thumbnailSize}.</p>
  * <p>When used in a [list]{@link module:alfresco/lists/AlfList} that is configured for
  * [infinite scrolling]{@link module:alfresco/lists/AlfList#useInfiniteScroll} it is sensible to
- * configure [showNextLink]{@link module:alfresco/documentlibrary/AlfGalleryView#showNextLink} to be true
+ * configure [showNextLink]{@link module:alfresco/documentlibrary/views/AlfGalleryView#showNextLink} to be true
  * such that a link is provided when the scrolling is not available when the thumbnails are so small
  * that an entire page of data fits within the browser window.</p>
  * <p>If something other than [thumbnails]{@link module:alfresco/renderers/GalleryThumbnail} needs to be
  * displayed then it is possible to 
- * [enable highlighting]{@link module:alfresco/documentlibrary/AlfGalleryView#enableHighlighting} so that
+ * [enable highlighting]{@link module:alfresco/documentlibrary/views/AlfGalleryView#enableHighlighting} so that
  * it is clear what item is currently focused - this will help greatly with keyboard navigation.</p>
  * <p>If more information needs to be displayed for an individual cell then it is possible to configure
- * one or more [expandTopics]{@link module:alfresco/documentlibrary/AlfGalleryView#expandTopics} that 
+ * one or more [expandTopics]{@link module:alfresco/documentlibrary/views/AlfGalleryView#expandTopics} that 
  * when published will reveal a panel in which additional data can be rendered.</p>
+ *
+ * @example <caption>A document list (for a site with name "site1") containing the default gallery view (rendering thumbnails).
+ * The number of thumbnails rendered per row is determined by the "columns" attribute.</caption>
+ * {
+ *   name: "alfresco/documentlibrary/AlfDocumentList",
+ *   config: {
+ *     siteId: "site1",
+ *     containerId: "documentLibrary",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/documentlibrary/views/AlfGalleryView",
+ *         config: {
+ *           columns: 8
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>A document list (for a site with name "site1") containing the default gallery view (rendering thumbnails).
+ * Each thumbnail will be 200 pixels wide and as many as possible will be fit into each row depending upon the browser window
+ * size.</caption>
+ * {
+ *   name: "alfresco/documentlibrary/AlfDocumentList",
+ *   config: {
+ *     siteId: "site1",
+ *     containerId: "documentLibrary",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/documentlibrary/views/AlfGalleryView",
+ *         config: {
+ *           resizeByColumnCount: false,
+ *           thumbnailSize: 200
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ * 
+ * @example <caption>A document list (for a site with the name "site1") containing the default gallery view (rendering thumbnails). The slider will be
+ * displayed in the toolbar.</caption>
+ * {
+ *   id: "TOOLBAR",
+ *   name: "alfresco/documentlibrary/AlfToolbar"
+ * },
+ * {
+ *   name: "alfresco/documentlibrary/AlfDocumentList",
+ *   config: {
+ *     additionalControlsTarget: "TOOLBAR",
+ *     siteId: "site1",
+ *     containerId: "documentLibrary",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/documentlibrary/views/AlfGalleryView"
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>A document list (for a site with the name "site1") containing an alternative rendering to show the name
+ * of each document.</caption>
+ * {
+ *   name: "alfresco/documentlibrary/AlfDocumentList",
+ *   config: {
+ *     siteId: "site1",
+ *     containerId: "documentLibrary",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/documentlibrary/views/AlfGalleryView",
+ *         config: {
+ *           widgets: [
+ *             {
+ *               name: "alfresco/lists/views/layouts/CellContainer",
+ *               config: {
+ *                 widgets: [
+ *                   {
+ *                     name: "alfresco/renderers/Property",
+ *                     config: {
+ *                       propertyToRender: "displayName"
+ *                     }
+ *                   }
+ *                 ]
+ *               }
+ *             }
+ *           ]
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>A document list (for a site with the name "site1") containing an alternative rendering to show the name
+ * of each document. When the CellContainer is clicked it will reveal an expanded section showing a ClassicWindow with the
+ * name as it's title.</caption>
+ * {
+ *   name: "alfresco/documentlibrary/AlfDocumentList",
+ *   config: {
+ *     siteId: "site1",
+ *     containerId: "documentLibrary",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/documentlibrary/views/AlfGalleryView",
+ *         config: {
+ *           enableHighlighting: true,
+ *           itemKeyProperty: "nodeRef",
+ *           expandTopics: ["EXPAND"],
+ *           widgets: [
+ *             {
+ *               name: "alfresco/lists/views/layouts/CellContainer",
+ *               config: {
+ *                 publishTopic: "EXPAND",
+ *                 publishPayloadType: "PROCESS",
+ *                 publishPayloadModifiers: ["processCurrentItemTokens"],
+ *                 publishPayloadItemMixin: true,
+ *                 publishPayload: {
+ *                   widgets: [
+ *                     {
+ *                       name: "alfresco/layout/ClassicWindow",
+ *                       config: {
+ *                         title: "{displayName}"
+ *                       }
+ *                     }
+ *                   ]
+ *                 },
+ *                 widgets: [
+ *                   {
+ *                     name: "alfresco/renderers/Property",
+ *                     config: {
+ *                       propertyToRender: "displayName"
+ *                     }
+ *                   }
+ *                 ]
+ *               }
+ *             }
+ *           ]
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
  * 
  * @module alfresco/documentlibrary/views/AlfGalleryView
  * @extends module:alfresco/lists/views/AlfListView
@@ -234,16 +374,16 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * <p>If [resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+       * <p>If [resizeByColumnCount]{@link module:alfresco/documentlibrary/views/AlfGalleryView#resizeByColumnCount}
        * is configured to be true this will subscribe to the
        * [SET_COLUMNS]{@link module:alfresco/core/topics#SET_COLUMNS} topic and each time the column count
-       * is changed the [updateColumns]{@link module:alfresco/documentlibrary/AlfGalleryView#updateColumns}
+       * is changed the [updateColumns]{@link module:alfresco/documentlibrary/views/AlfGalleryView#updateColumns}
        * function will be called.</p>
-       * <p>If resizeByColumnCount]{@link module:alfresco/documentlibrary/AlfGalleryView#resizeByColumnCount}
+       * <p>If resizeByColumnCount]{@link module:alfresco/documentlibrary/views/AlfGalleryView#resizeByColumnCount}
        * is configured to be false this will subscribe to the
        * [SET_THUMBNAIL_SIZE]{@link module:alfresco/core/topics#SET_THUMBNAIL_SIZE} topic and each time the 
        * thumbnail size is changed the 
-       * [updateThumbnailSize]{@link module:alfresco/documentlibrary/AlfGalleryView#updateThumbnailSize} function 
+       * [updateThumbnailSize]{@link module:alfresco/documentlibrary/views/AlfGalleryView#updateThumbnailSize} function 
        * will be called.</p>
        * 
        * @instance
@@ -322,11 +462,11 @@ define(["dojo/_base/declare",
       },
       
       /**
-       * Overridden to return a new instance of "alfresco/documentlibrary/AlfGalleryViewSlider" to control the 
+       * Overridden to return a new instance of [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/AlfGalleryViewSlider} to control the 
        * number of columns that should be displayed in the gallery.
        * 
        * @instance
-       * @returns {object} A new slider control {@link module:alfresco/documentlibrary/AlfGalleryViewSlider}
+       * @returns {object} A new slider control [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/AlfGalleryViewSlider}
        */
       getAdditionalControls: function alfresco_documentlibrary_views_AlfGalleryView__getAdditionalControls() {
          if (this.resizeByColumnCount)
