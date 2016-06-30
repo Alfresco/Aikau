@@ -19,10 +19,14 @@
 
 /**
  * Extends the [LeftAndRight]{@link module:alfresco/layout/LeftAndRight} widget to ensure that specific CSS selectors
- * are included on the page. 
+ * are included on the page. This widget was created to support the 
+ * [AlfGalleryView]{@link module:alfresco/documentlibrary/views/AlfGalleryView} which publishes a request to 
+ * render an [AlfGalleryViewSlider]{@link module:alfresco/documentlibrary/AlfGalleryViewSlider} and this widget can be
+ * included on the page as a place for it to be displayed.
  * 
  * @module alfresco/documentlibrary/AlfToolbar
  * @extends module:alfresco/layout/LeftAndRight
+ * @mixes module:alfresco/core/DynamicWidgetProcessing
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

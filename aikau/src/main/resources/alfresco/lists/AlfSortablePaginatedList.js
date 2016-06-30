@@ -18,11 +18,39 @@
  */
 
 /**
- * <p>This extends the [hash list]{@link module:alfresco/lists/AlfHashList} to provide support
- * for common pagination and sorting behaviour.</p>
+ * <p>This extends the [AlfHashList]{@link module:alfresco/lists/AlfHashList} to provide support
+ * for common pagination and sorting behaviour. It does not render any interface for controlling
+ * the current page or sort preferences - the [Paginator]{@link module:alfresco/Paginator} widget
+ * can be used for changing page and the number of items shown per page. Sorting can be controlled
+ * through menus or buttons. It is important to understand that this widget does not perform
+ * any client-side sorting or pagination, it simply controls the payloads published to services -
+ * successful pagination and sorting are determined by the ability of the service and the
+ * REST API ultimately called to support it.</p>
  *
- * <p>It is possible to specify the [pageSizePreferenceName]{@link module:alfresco/lists/AlfSortablePaginatedList#pageSizePreferenceName}
- * to be used by this widget (or its descendants), by setting a new value for the property in the model config.</p>
+ * <p>It is possible to specify the 
+ * [pageSizePreferenceName]{@link module:alfresco/lists/AlfSortablePaginatedList#pageSizePreferenceName}
+ * to be used by this widget (or its descendants) when the 
+ * [PreferenceService]{@link module:alfresco/services/PreferenceService} is being used to set the intial
+ * page size. Alternatively it can be specified by the 
+ * [currentPageSize]{@link module:alfresco/lists/AlfSortablePaginatedList#currentPageSize}. Similarly 
+ * the initial page number can be configured with the 
+ * [currentPage]{@link module:alfresco/lists/AlfSortablePaginatedList#currentPage} attribute. Page
+ * and page size data can also be derived from browser URL hash parameters when
+ * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} is configured to be true.</p>
+ * 
+ * <p>Page navigation can also be performed with infinite scrolling when
+ * [useInfiniteScroll]{@link module:alfresco/lists/AlfSortablePaginatedList#useInfiniteScroll} is configured
+ * to be true and either the [InfiniteScrollService]{@link module:alfresco/services/InfiniteScrollService}
+ * is included in the page or the list is placed in an 
+ * [InfiniteScrollArea]{@link module:alfresco/layout/InfiniteScrollArea}.</p>
+ *
+ * <p>The initial field to sort on can be configured with the 
+ * [sortField]{@link module:alfresco/lists/AlfSortablePaginatedList#sortField} and the initial 
+ * sort direction can configured by setting
+ * [sortAscending]{@link module:alfresco/lists/AlfSortablePaginatedList#sortAscending} to true
+ * or false as appropriate. The sort field and direction can be changed by 
+ * widgets (such as menus or buttons) publishing on the
+ * ["ALF_DOCLIST_SORT"]{@link module:alfresco/core/topics~SORT_LIST} topic.</p>
  *
  * @module alfresco/lists/AlfSortablePaginatedList
  * @extends module:alfresco/lists/AlfHashList
