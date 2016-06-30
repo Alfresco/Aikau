@@ -18,7 +18,73 @@
  */
 
 /**
- * This is the root list module.
+ * <p>This is the simplest widget for rendering lists of data. The data is retrieved by publishing a
+ * [loadDataPublishTopic]{@link module:alfresco/lists/AlfList#loadDataPublishTopic} that will
+ * need to be subscribed to by a service included on the page. Depending upon the service handling
+ * the request it may be necessary to configure a
+ * [loadDataPublishPayload]{@link module:alfresco/lists/AlfList#loadDataPublishPayload} to provide
+ * additional information on the data that should be loaded.</p>
+ * <p>Lists should be configured with at least one [AlfListView]{@link module:alfresco/lists/views/AlfListView}
+ * (or a widget that extends it) to render the loaded data. The most basic view that can be used
+ * would be the [HtmlListView]{@link module:alfresco/lists/views/HtmlListView} that renders a basic
+ * bullet list of the data</p>
+ * <p>If the list is not rendered on the page when first loaded (for example it might be displayed
+ * in a [dialog]{@link module:alfresco/dialogs/AlfDialog} or an initially hidden tab in an
+ * [AlfTabContainer]{@link module:alfresco/layouts/AlfTabContainer}) then it will be necessary to configure
+ * the [waitForPageWidgets]{@link module:alfresco/lists/AlfList#waitForPageWidgets} to be false to
+ * avoid the list waiting for an event that will never be fired before attempting to load data).</p>
+ * <p>If you need to use a list with greater capabilities then consider using the
+ * [AlfHashList]{@link module:alfresco/lists/AlfHashList}, 
+ * [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} or
+ * [AlfFilteredList]{@link module:alfresco/lists/AlfFilteredList} as these incrementally provide
+ * additional capabilities for URL hashing, sorting and paginating and filtering respectively.</p>
+ * <p>Depending upon the payload of the data returned by the service it might be necessary to configure
+ * the [itemsProperty]{@link module:alfresco/lists/AlfList#itemsProperty} to identify the attribute 
+ * containing the array of items to be rendered.<p>
+ * <p>It is also possible to explicitly define the data to be listed by setting the 
+ * [currentData]{@link module:alfresco/lists/AlfList#currentData}. This should be configured to be an
+ * object containing an "items" attribute that is the data to be rendered.</p>
+ * 
+ * @example <caption>Basic list with hard-coded data</caption>
+ * {
+ *   name: "alfresco/lists/AlfList",
+ *   config: {
+ *     currentData: {
+ *       items: [
+ *         { value: "one"},
+ *         { value: "two"}
+ *       ]
+ *     },
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView",
+ *         config: {
+ *           propertyToRender: "value"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>Basic list loading users from the Repository via the CrudService</caption>
+ * {
+ *   name: "alfresco/lists/AlfList",
+ *   config: {
+ *     loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+ *     loadDataPublishPayload: {
+ *       url: "api/people"
+ *     },
+ *     itemsProperty: "people",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView",
+ *         config: {
+ *           propertyToRender: "userName"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
  *
  * @module alfresco/lists/AlfList
  * @extends external:dijit/_WidgetBase
@@ -210,13 +276,14 @@ define(["dojo/_base/declare",
 
       /**
        * This is the topic to publish to make requests to retrieve data to populate the list
-       * with. This can be overridden with alternative topics to obtain different data sets
+       * with. This can be overridden with alternative topics to obtain different data sets.
+       * Defaults to [GET_DOCUMENT_LIST]{@link module:alfresco/core/topics#GET_DOCUMENT_LIST}
        *
        * @instance
        * @type {string}
        * @default
        */
-      loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
+      loadDataPublishTopic: topics.GET_DOCUMENT_LIST,
 
       /**
        * If not configured this will automatically be generated to be the 
