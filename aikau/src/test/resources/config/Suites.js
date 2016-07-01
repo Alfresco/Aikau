@@ -86,6 +86,7 @@ define(function() {
 
       "alfresco/documentlibrary/AlfDocumentTest",
       "alfresco/documentlibrary/AlfDocumentFiltersTest",
+      "alfresco/documentlibrary/AlfDocumentListTest",
       "alfresco/documentlibrary/AlfGalleryViewSliderTest",
       "alfresco/documentlibrary/BreadcrumbTrailTest",
       "alfresco/documentlibrary/CreateContentTest",

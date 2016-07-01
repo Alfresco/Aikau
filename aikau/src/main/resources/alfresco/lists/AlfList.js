@@ -174,6 +174,18 @@ define(["dojo/_base/declare",
       currentData: null,
 
       /**
+       * An internally used attribute to hold a UUID for the any in-flight request. This allows the request to be
+       * cancelled if a subsequent request is issued before the in-flight request completes. This should not be
+       * configured.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.75
+       */
+      currentRequestId: null,
+
+      /**
        * This is the message to display when data cannot be loaded Message keys will be localized
        * where possible.
        *
@@ -348,6 +360,16 @@ define(["dojo/_base/declare",
        * @type {Boolean}
        */
       requestInProgress: false,
+
+      /**
+       * An internally used attribute used to indicate whether or not a request is pending to be performed
+       * as soon as the current request completes.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      pendingLoadRequest: false,
 
       /**
        * The property in the response that indicates the starting index of overall data to request.
@@ -1235,6 +1257,7 @@ define(["dojo/_base/declare",
        * function will be called.
        *
        * @instance
+       * @fires module:alfresco/core/topics#STOP_XHR_REQUEST
        */
       loadData: function alfresco_lists_AlfList__loadData() {
          if (!this.requestInProgress)
@@ -1256,6 +1279,12 @@ define(["dojo/_base/declare",
                };
             }
 
+            // Generate and set a requestId. If the service supports passing this in the XHR request
+            // (which is not guaranteed) then this allows for the opportunity to cancel the request
+            // if a second request is made before the first completes...
+            this.currentRequestId = this.generateUuid();
+            payload.requestId = this.currentRequestId;
+            
             if (!payload.alfResponseTopic)
             {
                payload.alfResponseTopic = this.pubSubScope + this.loadDataPublishTopic;
@@ -1276,8 +1305,13 @@ define(["dojo/_base/declare",
          }
          else
          {
-            // Let the user know that we're still waiting on the last data load?
-            this.alfLog("warn", "Waiting for previous data load request to complete", this);
+            this.pendingLoadRequest = true;
+            if (this.currentRequestId)
+            {
+                this.alfPublish(topics.STOP_XHR_REQUEST, {
+                   requestId: this.currentRequestId
+                }, true);
+            }
          }
       },
 
@@ -1307,6 +1341,7 @@ define(["dojo/_base/declare",
          if (this.pendingLoadRequest === true)
          {
             this.alfLog("log", "Found pending request, loading data...");
+            this.requestInProgress = false;
             this.pendingLoadRequest = false;
             this.loadData();
          }
@@ -1481,6 +1516,11 @@ define(["dojo/_base/declare",
        */
       onRequestFinished: function alfresco_lists_AlfList__onRequestFinished() {
          this.requestInProgress = false;
+         if (this.pendingLoadRequest)
+         {
+            this.pendingLoadRequest = false;
+            this.loadData();
+         }
       },
 
       /**
