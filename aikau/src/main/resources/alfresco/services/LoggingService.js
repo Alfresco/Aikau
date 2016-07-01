@@ -18,6 +18,59 @@
  */
 
 /**
+ * This service can be included on a page to handle log messages generated through calls to the
+ * [alfLog]{@link module:alfresco/core/Core#alfLog} function. It can either be configured (either
+ * through user preferences or directly) to filter the messages that displayed in the browser
+ * console.
+ *
+ * @example <caption>Example configuration to enable all logs</caption>
+ * {
+ *   name: "alfresco/services/LoggingService",
+ *   config: {
+ *     loggingPreferences: {
+ *       enabled: true,
+ *       all: true
+ *     }
+ *   }
+ * }
+ *
+ * @example <caption>Example configuration to show only warnings and errors</caption>
+ * {
+ *   name: "alfresco/services/LoggingService",
+ *   config: {
+ *     loggingPreferences: {
+ *       enabled: true,
+ *       all: false,
+ *       warn: true,
+ *       error: true
+ *     }
+ *   }
+ * }
+ *
+ * @example <caption>Example configuration to show only publication and subscription messages</caption>
+ * {
+ *   name: "alfresco/services/LoggingService",
+ *   config: {
+ *     loggingPreferences: {
+ *       enabled: true,
+ *       all: false,
+ *       pubSub: true
+ *     }
+ *   }
+ * }
+ *
+ * @example <caption>Example configuration to show all logs that match a custom Regular Expression filter</caption>
+ * {
+ *   name: "alfresco/services/LoggingService",
+ *   config: {
+ *     loggingPreferences: {
+ *       enabled: true,
+ *       all: true,
+ *       filter: "afresco/core/(.*)"
+ *     }
+ *   }
+ * }
+ * 
  * @module alfresco/services/LoggingService
  * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/services/_PreferenceServiceTopicMixin
