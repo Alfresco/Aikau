@@ -189,6 +189,7 @@ define(function() {
       "alfresco/lists/InfiniteScrollTest",
       "alfresco/lists/LocalStorageFallbackTest",
       "alfresco/lists/PaginatorVisibilityTest",
+      "alfresco/lists/SortControlsTest",
       "alfresco/lists/views/AddableViewTest",
       "alfresco/lists/views/AlfListViewTest",
       "alfresco/lists/views/ExpandableGalleryTest",
