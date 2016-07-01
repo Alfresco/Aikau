@@ -22,6 +22,11 @@
  * be used for changing the sort order of an
  * [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList}.
  *
+ * @example <caption>Simple example for sort order toggling - just include in the page model!</caption>
+ * {
+ *   name: "alfresco/lists/SortOrderToggle"
+ * }
+ * 
  * @module alfresco/lists/SortOrderToggle
  * @extends module:alfresco/menus/AlfMenuBarToggle
  * @author Dave Draper

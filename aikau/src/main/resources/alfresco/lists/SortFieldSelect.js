@@ -20,7 +20,24 @@
 /**
  * A specialization of the [AlfMenuBarSelect]{@link module:alfresco/menus/AlfMenuBarSelect} that should
  * be used for selecting the field on which an
-* [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} should be sorted.
+ * [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} should be sorted.
+ *
+ * @example <caption>Example showing the configuration of a couple of sort options</caption>
+ * {
+ *   name: "alfresco/lists/SortFieldSelect",
+ *   config: {
+ *     sortFieldOptions: [
+ *       { 
+ *         label: "Display Name", 
+ *         value: "fullName" 
+ *       },
+ *       {
+ *         label: "User Name", 
+ *         value: "userName"
+ *       }
+ *     ]
+ *   }
+ * }
  *
  * @module alfresco/lists/SortFieldSelect
  * @extends module:alfresco/menus/AlfMenuBarSelect
