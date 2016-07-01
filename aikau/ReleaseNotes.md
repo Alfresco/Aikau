@@ -1,4 +1,4 @@
-Aikau 1.0.74 Release Notes
+Aikau 1.0.75 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,9 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.75:
+* [AKU-1009](https://issues.alfresco.com/jira/browse/AKU-1003)     - Provide additional sort controls
+
 1.0.74:
 * [AKU-1003](https://issues.alfresco.com/jira/browse/AKU-1003)     - Update UserService to work with lists
 * [AKU-1004](https://issues.alfresco.com/jira/browse/AKU-1004)     - Update UserService to support filtering, sort and pagination
@@ -56,7 +59,16 @@ Resolved issues:
 * [AKU-996](https://issues.alfresco.com/jira/browse/AKU-996)       - Improvements to menus handling sorting
 * [AKU-988](https://issues.alfresco.com/jira/browse/AKU-988)       - Support scoping in visibilityConfig
 * [AKU-1000](https://issues.alfresco.com/jira/browse/AKU-1000)     - Support for removing document title prefix via alfresco/header/SetTitle
- 
+
+1.0.72.4:
+* [AKU-1010](https://issues.alfresco.com/jira/browse/AKU-1010)       - Ensure AlfList publishes pending load requests
+
+1.0.72.3:
+* [AKU-1007](https://issues.alfresco.com/jira/browse/AKU-1007)       - Block infinite scroll page load requests when a request is in progress
+
+1.0.72.2:
+* [AKU-1006](https://issues.alfresco.com/jira/browse/AKU-1006)       - Support for group images in AvatarThumbnail
+
 1.0.72.1:
 * [AKU-1002](https://issues.alfresco.com/jira/browse/AKU-1002)       - Trigger form control validation on disable state change
 
