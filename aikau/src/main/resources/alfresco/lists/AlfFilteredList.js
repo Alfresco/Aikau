@@ -18,9 +18,60 @@
  */
 
 /**
+ * <p>This extends the [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} 
+ * to provide support additional filtering of the displayed items. This widget does not perform
+ * any client side filtering, it simply controls the payloads published to services -
+ * successful filtering is determined by the ability of the service and the REST API ultimately called to 
+ * support it.</p>
+ * 
+ * <p>The widgets to control the filters should be defined in the
+ * [widgetsForFilters]{@link module:alfresco/lists/AlfFilteredList#widgetsForFilters} and these will
+ * be rendered above the list. The widgets will typically be 
+ * [form controls]{@link module:alfresco/forms/controls/BaseFormControl} (for example
+ * a [TextBox]{@link module:alfresco/forms/controls/TextBox} might be used to allow the user to 
+ * enter text that an item property must match to be displayed). As well as defining the widgets it
+ * is also necessary to configure the 
+ * [filteringTopics]{@link module:alfresco/lists/AlfFilteredList#filteringTopics} that they will
+ * publish. When one of these topics is published the list will make a new request for updated
+ * data based on the changed filter value.</p>
+ *
+ * <p>It is possible to also display a summary of the currently applied filtered by
+ * configuring [showFilterSummary]{@link module:alfresco/lists/AlfFilteredList#showFilterSummary}
+ * to be true. This will provide an at a glance display of all the filters currently in user. Filters
+ * can also be derived from and set on the browser URL hash by configuring 
+ * [useHash]{@link module:alfresco/lists/AlfHashList#useHash} to be true.</p>
+ *
+ * @example <caption>A list of users with an additinal text box for filtering the results.</caption>
+ * {
+ *   name: "alfresco/lists/AlfFilteredList",
+ *   config: {
+ *     loadDataPublishTopic: "ALF_GET_USERS",
+ *     filteringTopics: ["_valueChangeOf_FILTER"],
+ *     widgetsForFilters: [
+ *       {
+ *         name: "alfresco/forms/controls/TextBox",
+ *         config: {
+ *           fieldId: "FILTER",
+ *           name: "filter",
+ *           placeHolder: "Enter filter text...",
+ *           label: "Name"
+ *         }
+ *       }
+ *     ],
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView",
+ *         config: {
+ *           propertyToRender: "userName"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
  *
  * @module alfresco/lists/AlfFilteredList
- * @extends module:alfresco/core/ProcessWidgets
+ * @extends module:alfresco/lists/AlfSortablePaginatedList
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

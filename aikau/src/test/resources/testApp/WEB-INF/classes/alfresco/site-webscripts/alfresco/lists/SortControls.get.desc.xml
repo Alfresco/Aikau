@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Sort Controls</shortname>
+  <description>Shows an AlfSortablePaginatedList along with the controls that can be used for selecting sort field and sort order.</description>
+  <family>aikau-unit-tests</family>
+  <url>/SortControls</url>
+</webscript>

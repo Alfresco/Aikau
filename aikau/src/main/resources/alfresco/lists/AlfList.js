@@ -18,7 +18,73 @@
  */
 
 /**
- * This is the root list module.
+ * <p>This is the simplest widget for rendering lists of data. The data is retrieved by publishing a
+ * [loadDataPublishTopic]{@link module:alfresco/lists/AlfList#loadDataPublishTopic} that will
+ * need to be subscribed to by a service included on the page. Depending upon the service handling
+ * the request it may be necessary to configure a
+ * [loadDataPublishPayload]{@link module:alfresco/lists/AlfList#loadDataPublishPayload} to provide
+ * additional information on the data that should be loaded.</p>
+ * <p>Lists should be configured with at least one [AlfListView]{@link module:alfresco/lists/views/AlfListView}
+ * (or a widget that extends it) to render the loaded data. The most basic view that can be used
+ * would be the [HtmlListView]{@link module:alfresco/lists/views/HtmlListView} that renders a basic
+ * bullet list of the data</p>
+ * <p>If the list is not rendered on the page when first loaded (for example it might be displayed
+ * in a [dialog]{@link module:alfresco/dialogs/AlfDialog} or an initially hidden tab in an
+ * [AlfTabContainer]{@link module:alfresco/layouts/AlfTabContainer}) then it will be necessary to configure
+ * the [waitForPageWidgets]{@link module:alfresco/lists/AlfList#waitForPageWidgets} to be false to
+ * avoid the list waiting for an event that will never be fired before attempting to load data).</p>
+ * <p>If you need to use a list with greater capabilities then consider using the
+ * [AlfHashList]{@link module:alfresco/lists/AlfHashList}, 
+ * [AlfSortablePaginatedList]{@link module:alfresco/lists/AlfSortablePaginatedList} or
+ * [AlfFilteredList]{@link module:alfresco/lists/AlfFilteredList} as these incrementally provide
+ * additional capabilities for URL hashing, sorting and paginating and filtering respectively.</p>
+ * <p>Depending upon the payload of the data returned by the service it might be necessary to configure
+ * the [itemsProperty]{@link module:alfresco/lists/AlfList#itemsProperty} to identify the attribute 
+ * containing the array of items to be rendered.<p>
+ * <p>It is also possible to explicitly define the data to be listed by setting the 
+ * [currentData]{@link module:alfresco/lists/AlfList#currentData}. This should be configured to be an
+ * object containing an "items" attribute that is the data to be rendered.</p>
+ * 
+ * @example <caption>Basic list with hard-coded data</caption>
+ * {
+ *   name: "alfresco/lists/AlfList",
+ *   config: {
+ *     currentData: {
+ *       items: [
+ *         { value: "one"},
+ *         { value: "two"}
+ *       ]
+ *     },
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView",
+ *         config: {
+ *           propertyToRender: "value"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ *
+ * @example <caption>Basic list loading users from the Repository via the CrudService</caption>
+ * {
+ *   name: "alfresco/lists/AlfList",
+ *   config: {
+ *     loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+ *     loadDataPublishPayload: {
+ *       url: "api/people"
+ *     },
+ *     itemsProperty: "people",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView",
+ *         config: {
+ *           propertyToRender: "userName"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
  *
  * @module alfresco/lists/AlfList
  * @extends external:dijit/_WidgetBase
@@ -106,6 +172,18 @@ define(["dojo/_base/declare",
        * @default
        */
       currentData: null,
+
+      /**
+       * An internally used attribute to hold a UUID for the any in-flight request. This allows the request to be
+       * cancelled if a subsequent request is issued before the in-flight request completes. This should not be
+       * configured.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.75
+       */
+      currentRequestId: null,
 
       /**
        * This is the message to display when data cannot be loaded Message keys will be localized
@@ -210,13 +288,14 @@ define(["dojo/_base/declare",
 
       /**
        * This is the topic to publish to make requests to retrieve data to populate the list
-       * with. This can be overridden with alternative topics to obtain different data sets
+       * with. This can be overridden with alternative topics to obtain different data sets.
+       * Defaults to [GET_DOCUMENT_LIST]{@link module:alfresco/core/topics#GET_DOCUMENT_LIST}
        *
        * @instance
        * @type {string}
        * @default
        */
-      loadDataPublishTopic: "ALF_RETRIEVE_DOCUMENTS_REQUEST",
+      loadDataPublishTopic: topics.GET_DOCUMENT_LIST,
 
       /**
        * If not configured this will automatically be generated to be the 
@@ -281,6 +360,16 @@ define(["dojo/_base/declare",
        * @type {Boolean}
        */
       requestInProgress: false,
+
+      /**
+       * An internally used attribute used to indicate whether or not a request is pending to be performed
+       * as soon as the current request completes.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      pendingLoadRequest: false,
 
       /**
        * The property in the response that indicates the starting index of overall data to request.
@@ -1168,6 +1257,7 @@ define(["dojo/_base/declare",
        * function will be called.
        *
        * @instance
+       * @fires module:alfresco/core/topics#STOP_XHR_REQUEST
        */
       loadData: function alfresco_lists_AlfList__loadData() {
          if (!this.requestInProgress)
@@ -1189,6 +1279,12 @@ define(["dojo/_base/declare",
                };
             }
 
+            // Generate and set a requestId. If the service supports passing this in the XHR request
+            // (which is not guaranteed) then this allows for the opportunity to cancel the request
+            // if a second request is made before the first completes...
+            this.currentRequestId = this.generateUuid();
+            payload.requestId = this.currentRequestId;
+            
             if (!payload.alfResponseTopic)
             {
                payload.alfResponseTopic = this.pubSubScope + this.loadDataPublishTopic;
@@ -1209,8 +1305,13 @@ define(["dojo/_base/declare",
          }
          else
          {
-            // Let the user know that we're still waiting on the last data load?
-            this.alfLog("warn", "Waiting for previous data load request to complete", this);
+            this.pendingLoadRequest = true;
+            if (this.currentRequestId)
+            {
+                this.alfPublish(topics.STOP_XHR_REQUEST, {
+                   requestId: this.currentRequestId
+                }, true);
+            }
          }
       },
 
@@ -1240,6 +1341,7 @@ define(["dojo/_base/declare",
          if (this.pendingLoadRequest === true)
          {
             this.alfLog("log", "Found pending request, loading data...");
+            this.requestInProgress = false;
             this.pendingLoadRequest = false;
             this.loadData();
          }
@@ -1378,7 +1480,7 @@ define(["dojo/_base/declare",
        * @param {object} response The response object
        * @param {object} originalRequestConfig The configuration that was passed to the [serviceXhr]{@link module:alfresco/core/CoreXhr#serviceXhr} function
        */
-      onDataLoadFailure: function alfresco_lists_AlfList__onDataLoadSuccess(response, originalRequestConfig) {
+      onDataLoadFailure: function alfresco_lists_AlfList__onDataLoadFailure(response, originalRequestConfig) {
          this.alfLog("error", "Data Load Failed", response, originalRequestConfig);
          this.currentData = null;
          this.showDataLoadFailure();
@@ -1414,6 +1516,11 @@ define(["dojo/_base/declare",
        */
       onRequestFinished: function alfresco_lists_AlfList__onRequestFinished() {
          this.requestInProgress = false;
+         if (this.pendingLoadRequest)
+         {
+            this.pendingLoadRequest = false;
+            this.loadData();
+         }
       },
 
       /**

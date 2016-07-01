@@ -25,13 +25,6 @@ define(["module",
         "intern/chai!assert"],
         function(module, defineSuite, assert) {
 
-   var countResults = function(browser, expected) {
-      browser.findAllByCssSelector(".alfresco-search-AlfSearchResult")
-         .then(function(elements) {
-            assert(elements.length === expected, "Counting Result, expected: " + expected + ", found: " + elements.length);
-         })
-         .end();
-   };
    var scrollToBottom = function(browser) {
       browser.execute("return window.scrollTo(0,Math.max(document.documentElement.scrollHeight,document.body.scrollHeight,document.documentElement.clientHeight))")
          .sleep(2000)
@@ -54,12 +47,32 @@ define(["module",
                scrollToBottom(this.remote);
                scrollToTop(this.remote);
                scrollToBottom(this.remote);
+               scrollToTop(this.remote);
+            })
+            
+            .findAllByCssSelector(".alfresco-renderers-Property")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 50);
+               });
+      },
+
+      "Simulate requests in progress, trigger infinite scroll": function() {
+         return this.remote.sleep(1000).findByCssSelector("#SIMULATE_REQUEST_IN_PROGRESS_label")
+            .click()
+         .end()
+
+         .then(() => {
+               scrollToBottom(this.remote);
+               scrollToTop(this.remote);
+               scrollToBottom(this.remote);
+               scrollToTop(this.remote);
             })
 
-         // Count Results. there should be 50. (Request 2)
-         .then(() => {
-            countResults(this.remote, 50);
-         });
+            .findAllByCssSelector(".alfresco-renderers-Property")
+               .then(function(elements) {
+                  assert.lengthOf(elements, 50);
+               });
+
       }
    });
 });

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Document List with Breadcrumb</shortname>
+  <description>This page was created for verifying the loading behaviour with multiple breadcrumb navigation clicks.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfDocumentList</url>
+</webscript>

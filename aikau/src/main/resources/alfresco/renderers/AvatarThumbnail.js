@@ -59,8 +59,10 @@
 define(["dojo/_base/declare",
         "alfresco/renderers/Thumbnail",
         "dojo/dom-style",
-        "dojo/_base/event"], 
-        function(declare, Thumbnail, domStyle, event) {
+        "dojo/_base/array",
+        "dojo/_base/event",
+        "dojo/_base/lang"], 
+        function(declare, Thumbnail, domStyle, array, event, lang) {
 
    return declare([Thumbnail], {
       
@@ -82,6 +84,54 @@ define(["dojo/_base/declare",
        */
       customClasses: "alfresco-renderers-AvatarThumbnail",
       
+      /**
+       * The name of the group image to use. 
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.75
+       */
+      groupImage: "group-64.png",
+
+      /**
+       * A dot-notation property of the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}
+       * that can be used to determine whether or not it represents a group. This property is then matched against
+       * the values in the [groupValues]{@link module:alfresco/renderers/AvatarThumbnail#groupValues}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.75
+       */
+      groupProperty: null,
+
+      /**
+       * An array of the values that the [groupProperty]{@link module:alfresco/renderers/AvatarThumbnail#groupProperty}
+       * of the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} can match to indicate that
+       * it represents group (rather than a user).
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.75
+       */
+      groupValues: null,
+
+      /**
+       * A property indicating whether or not the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}
+       * represents a group or not. This can be determined by configuring the
+       * [groupProperty]{@link module:alfresco/renderers/AvatarThumbnail#groupProperty} and
+       * [groupValues]{@link module:alfresco/renderers/AvatarThumbnail#groupValues} attributes, but it can be set
+       * directly if required.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.75
+       */
+      isGroup: false,
+
       /**
        * Use the to set the attribute in the currentItem object that maps to the user name of the 
        * of the user that should have their avatar displayed. This is used in the generated
@@ -112,7 +162,20 @@ define(["dojo/_base/declare",
             this.currentItem[this.userNameProperty] = encodeURIComponent(this.currentItem[this.userNameProperty]);
             this.thumbnailUrlTemplate = "slingshot/profile/avatar/{" + this.userNameProperty + "}/thumbnail/avatar";
          }
+         
          this.inherited(arguments);
+
+         if (this.groupProperty && this.groupValues && this.groupValues.length)
+         {
+            var groupPropertyValue = lang.getObject(this.groupProperty, false, this.currentItem);
+            this.isGroup = array.some(this.groupValues, function(value) {
+               return value === groupPropertyValue;
+            });
+         }
+         if (this.isGroup)
+         {
+            this.thumbnailUrl = require.toUrl("alfresco/renderers/css/images/" + this.groupImage);
+         }
       },
 
       /**

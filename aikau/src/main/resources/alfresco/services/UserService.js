@@ -18,6 +18,15 @@
  */
 
 /**
+ * <p>This service has been provided for working with users. Currently it provides the capability to
+ * list users (either in an [AlfList]{@link module:alfresco/lists/AlfList} or as options in a
+ * [form control]{@link module:alfresco/forms/controls/BaseFormControl} that supports options, such
+ * as a [Select control]{@link module:alfresco/forms/controls/Select}). It also provides the ability
+ * to set the preferred home page of a user as well as their current status.<p>
+ * <p>It is likely that this service does not yet provide all user related capabilities that may be
+ * required - if a capability is missing then please raise a feature request as an issue on
+ * the [GitHub project]{@link https://github.com/Alfresco/Aikau/issues}</p>
+ * 
  * @module alfresco/services/UserService
  * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr

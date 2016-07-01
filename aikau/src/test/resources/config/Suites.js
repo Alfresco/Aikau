@@ -86,6 +86,7 @@ define(function() {
 
       "alfresco/documentlibrary/AlfDocumentTest",
       "alfresco/documentlibrary/AlfDocumentFiltersTest",
+      "alfresco/documentlibrary/AlfDocumentListTest",
       "alfresco/documentlibrary/AlfGalleryViewSliderTest",
       "alfresco/documentlibrary/BreadcrumbTrailTest",
       "alfresco/documentlibrary/CreateContentTest",
@@ -189,6 +190,7 @@ define(function() {
       "alfresco/lists/InfiniteScrollTest",
       "alfresco/lists/LocalStorageFallbackTest",
       "alfresco/lists/PaginatorVisibilityTest",
+      "alfresco/lists/SortControlsTest",
       "alfresco/lists/views/AddableViewTest",
       "alfresco/lists/views/AlfListViewTest",
       "alfresco/lists/views/ExpandableGalleryTest",
