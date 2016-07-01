@@ -556,7 +556,7 @@ define(["dojo/_base/declare",
        */
       updateLoadDataPayload: function alfresco_lists_AlfSortablePaginatedList__updateLoadDataPayload(payload) {
          this.inherited(arguments);
-         payload.sortAscending = this.sortAscending;
+         payload.sortAscending = (this.sortAscending === "true" || this.sortAscending === true);
          payload.sortField = this.sortField;
          if (this.usePagination || this.useInfiniteScroll)
          {
