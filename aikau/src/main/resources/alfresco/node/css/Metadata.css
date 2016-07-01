@@ -3,6 +3,7 @@
    > span {
       display: inline-block;
       vertical-align: top;
+      line-height: ceil(@normal-font-size/@standard-line-height) * @standard-line-height;
    }
 
    .alfresco-node-Metadata__label {
