@@ -332,6 +332,7 @@ define(["dojo/_base/declare",
             url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/doclist/" + params;
          }
          var config = {
+            requestId: payload.requestId,
             alfTopic: alfTopic,
             url: url,
             method: "GET",

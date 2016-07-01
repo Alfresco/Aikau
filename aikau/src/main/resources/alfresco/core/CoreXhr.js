@@ -26,6 +26,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
+        "alfresco/core/topics",
         "service/constants/Default",
         "webscripts/defaults",
         "dijit/registry",
@@ -38,7 +39,7 @@ define(["dojo/_base/declare",
         "dojo/json",
         "dojo/date/stamp",
         "dojo/cookie"],
-        function(declare, AlfConstants, webScriptDefaults, registry, pubSub, array, lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
+        function(declare, topics, AlfConstants, webScriptDefaults, registry, pubSub, array, lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
 
    return declare(null, {
 
@@ -67,11 +68,14 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} args The constructor arguments.
+       * @listens module:alfresco/core/topics#STOP_XHR_REQUEST
        */
       constructor: function(args){
          lang.mixin(this, args);
          this.csrfProperties = AlfConstants.CSRF_POLICY.properties || {};
          this.serviceRequests = {};
+
+         this.alfSubscribe(topics.STOP_XHR_REQUEST, lang.hitch(this, this.onStopRequest));
       },
 
       /**

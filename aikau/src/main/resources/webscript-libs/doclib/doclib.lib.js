@@ -1188,11 +1188,18 @@ function getDocLibToolbar(options) {
  * This creates the breadcrumb trail for the document list
  */
 function getDocLibBreadcrumbTrail(options) {
+   
+   var hideBreadcrumbTrail = false;
+   if (options.docLibPreferences)
+   {
+      hideBreadcrumbTrail = options.docLibPreferences.hideBreadcrumbTrail;
+   }
+
    var breadcrumbTrail = {
       id: (options.idPrefix || "") + "DOCLIB_BREADCRUMB_TRAIL",
       name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
       config: {
-         hide: options.docLibPreferences.hideBreadcrumbTrail,
+         hide: hideBreadcrumbTrail,
          rootLabel: options.rootLabel || "root.label",
          lastBreadcrumbIsCurrentNode: true,
          useHash: (options.useHash !== false),
