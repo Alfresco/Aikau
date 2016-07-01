@@ -202,6 +202,15 @@ define(["dojo/_base/declare",
    return declare([AlfListView, SelectedItemStateMixin], {
       
       /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/AlfGalleryView.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/AlfGalleryView.css"}],
+
+      /**
        * The HTML template to use for the widget.
        * @instance
        * @type {String}
