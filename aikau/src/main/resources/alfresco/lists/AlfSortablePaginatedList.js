@@ -20,9 +20,12 @@
 /**
  * <p>This extends the [AlfHashList]{@link module:alfresco/lists/AlfHashList} to provide support
  * for common pagination and sorting behaviour. It does not render any interface for controlling
- * the current page or sort preferences - the [Paginator]{@link module:alfresco/Paginator} widget
+ * the current page or sort preferences - the [Paginator]{@link module:alfresco/lists/Paginator} widget
  * can be used for changing page and the number of items shown per page. Sorting can be controlled
- * through menus or buttons. It is important to understand that this widget does not perform
+ * through the [SortFieldSelect]{@link module:alfresco/lists/SortFieldSelect} and
+ * [SortOrderToggle]{@link module:alfresco/lists/SortOrderToggle} widgets.</p>
+ * 
+ *  <p>It is important to understand that this widget does not perform
  * any client-side sorting or pagination, it simply controls the payloads published to services -
  * successful pagination and sorting are determined by the ability of the service and the
  * REST API ultimately called to support it.</p>
@@ -51,6 +54,41 @@
  * or false as appropriate. The sort field and direction can be changed by 
  * widgets (such as menus or buttons) publishing on the
  * ["ALF_DOCLIST_SORT"]{@link module:alfresco/core/topics~SORT_LIST} topic.</p>
+ *
+ * @example <caption>AlfSortablePaginatedList with associated sort and pagination widgets</caption>
+ * {
+ *   name: "alfresco/lists/Paginator",
+ *   config: {
+ *     pageSizes: [5,10,20],
+ *     widgetsAfter: [
+ *       {
+ *         name: "alfresco/lists/SortFieldSelect",
+ *         config: {
+ *           sortFieldOptions: [
+ *             { label: "Display Name", value: "fullName" },
+ *             { label: "User Name", value: "userName" }
+ *           ]
+ *         }
+ *       },
+ *       {
+ *         name: "alfresco/lists/SortOrderToggle"
+ *       }
+ *     ]
+ *   }
+ * },
+ * {
+ *   name: "alfresco/lists/AlfSortablePaginatedList",
+ *   config: {
+ *     loadDataPublishTopic: "ALF_GET_USERS",
+ *     currentPageSize: 10,
+ *     sortField: "fullName",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/lists/views/HtmlListView"
+ *       }
+ *     ]
+ *   }
+ * }
  *
  * @module alfresco/lists/AlfSortablePaginatedList
  * @extends module:alfresco/lists/AlfHashList
