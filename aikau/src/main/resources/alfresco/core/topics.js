@@ -1375,6 +1375,19 @@ define([],function() {
       STICKY_PANEL_SET_TITLE: "ALF_STICKY_PANEL_SET_TITLE",
 
       /**
+       * This topic can be used to stop an XHR request that is in progress.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.75
+       *
+       * @event
+       * @property {string} requestId The id of the request to be stopped
+       */
+      STOP_XHR_REQUEST: "ALF_STOP_XHR_REQUEST",
+
+      /**
        * This topic is published in order to make the actual request to sync a node or nodes
        * with the Cloud.
        * 
