@@ -1034,6 +1034,22 @@ define([],function() {
       REQUEST_FINISHED_TOPIC: "ALF_DOCLIST_REQUEST_FINISHED",
 
       /**
+       * This can be published to request a form model be retrieved from the forms runtime service.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.NEXT
+       *
+       * @event
+       * @property {string} itemKind The type of item for the form (e.g. "node")
+       * @property {string} itemId The unique identifier for the item for the form (e.g. a NodeRef)
+       * @property {string} [formId] The unique identifier of the form to be retrieved
+       * @property {string} mode The mode of form to retrieve (e.g. "view" or "edit")
+       */
+      REQUEST_FORM: "ALF_FORM_REQUEST",
+
+      /**
        * Retrieve the currently available tags
        *
        * @instance
