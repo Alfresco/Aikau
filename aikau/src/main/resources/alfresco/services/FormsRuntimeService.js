@@ -36,6 +36,15 @@ define(["dojo/_base/declare",
    return declare([BaseService, CoreXhr], {
       
       /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/FormsRuntimeService.properties"}]
+       */
+      i18nRequirements: [{i18nFile: "./i18n/FormsRuntimeService.properties"}],
+
+      /**
        * 
        * @instance
        * @type {object}
@@ -163,7 +172,7 @@ define(["dojo/_base/declare",
                      currentItem: response.data,
                      groups: [
                         {
-                           title: "TODO", // TODO: Need to figure out correct value here...
+                           title: this.message("formsruntimeservice.properties"), // TODO: Need to figure out correct value here...
                            widgets: properties
                         }
                      ]
@@ -190,8 +199,10 @@ define(["dojo/_base/declare",
                      showCancelButton: response.showCancelButton,
                      okButtonPublishTopic: response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE",
                      okButtonPublishPayload: {
-                        url: response.submissionUrl
+                        url: response.submissionUrl,
+                        urlType: "FULL"
                      },
+                     okButtonPublishGlobal: true,
                      value: response.data,
                      widgets: formControls
                   }

@@ -122,6 +122,10 @@ define(["dojo/_base/declare",
             {
                url = AlfConstants.URL_SERVICECONTEXT + url;
             }
+            else if (urlType === "FULL")
+            {
+               // No action, leave the URL as it is.
+            }
             else 
             {
                this.alfLog("warn", "An unknown URL type was requested, using provided URL", payload, this);
