@@ -21,7 +21,7 @@
  *
  * @module aikauTesting/CreateContentMockXhr
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.76
  */
 define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",

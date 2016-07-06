@@ -18,10 +18,16 @@
  */
 
 /**
+ * <b>IMPORTANT NOTE: This service is not fully complete yet and does not guarantee full support for the
+ * rendering all configured forms defined in XML for the forms runtime. It requires the 
+ * "aikau-forms-runtime-support" JAR file to be available in the "share/WEB-INF/lib" folder and it will
+ * only work on Share. This has been made available early to for the purposes of collaborative development
+ * with the Alfresco Community.</b>
+ * 
  * @module alfresco/services/FormsRuntimeService
  * @extends module:alfresco/services/BaseService
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.76
  */
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
@@ -104,6 +110,7 @@ define(["dojo/_base/declare",
        * 
        * 
        * @instance
+       * @listens module:alfresco/core/topics#REQUEST_FORM
        */
       registerSubscriptions: function alfresco_services_FormsRuntimeService__registerSubscriptions() {
          this.alfSubscribe(topics.REQUEST_FORM, lang.hitch(this, this.onFormRequest));

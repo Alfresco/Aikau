@@ -33,6 +33,15 @@
    </dependencies>
 
    <build>
+      <resources>
+         <resource>
+            <!-- Spring Bean overrides -->
+            <targetPath>./alfresco/web-extension/</targetPath>
+            <filtering>true</filtering>
+            <directory>${basedir}/src/main/resources/spring-context-config</directory>
+         </resource>
+      </resources>
+      
       <plugins>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>

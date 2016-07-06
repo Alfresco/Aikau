@@ -1039,7 +1039,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.NEXT
+       * @since 1.0.76
        *
        * @event
        * @property {string} itemKind The type of item for the form (e.g. "node")
