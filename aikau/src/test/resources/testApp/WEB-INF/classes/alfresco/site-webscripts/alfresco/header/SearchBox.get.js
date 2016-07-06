@@ -122,6 +122,17 @@ model.jsonModel = {
          }
       },
       {
+         id: "SB7",
+         name: "alfresco/header/SearchBox",
+         config: {
+            alignment: "left",
+            site: page.url.templateArgs.site,
+            liveSearchHeight: "100px",
+            documentLibraryPage: "custom-document-container",
+            documentPage: "custom-document-details"
+         }
+      },
+      {
          name: "aikauTesting/mockservices/SearchBoxMockXhr"
       },
       {

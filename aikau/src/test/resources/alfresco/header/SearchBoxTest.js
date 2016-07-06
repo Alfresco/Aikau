@@ -52,10 +52,12 @@ define(["module",
       "Check that live search pane is displayed on text entry": function() {
          return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
             .type("pdf")
-            .end()
-            .findAllByCssSelector(".alf-livesearch-item")
-            .end()
-            .findByCssSelector(".alf-livesearch")
+         .end()
+         
+         .findAllByCssSelector(".alf-livesearch-item")
+         .end()
+   
+         .findByCssSelector(".alf-livesearch")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The live search pane was not shown after typing search term");
@@ -90,14 +92,14 @@ define(["module",
             .then(function(attr) {
                assert.equal(attr, "Terms & Conditions.pdf", "Preview link title attribute not set correctly");
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alf-livesearch-thumbnail a img")
             .getAttribute("alt")
             .then(function(attr) {
                assert.equal(attr, "Terms & Conditions.pdf", "Preview image alt attribute not set correctly");
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alf-livesearch-item a")
             .getVisibleText()
@@ -121,8 +123,9 @@ define(["module",
       "Click the document link": function() {
          return this.remote.findByCssSelector(".alf-livesearch-item a")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "/aikau/page/site/swsdp/document-details?nodeRef=workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e");
             });
@@ -131,8 +134,9 @@ define(["module",
       "Click the document site meta link": function() {
          return this.remote.findByCssSelector(".alf-livesearch-item > span > a:nth-child(1)")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.include(payload.url, "/aikau/page/site/swsdp/documentlibrary", "Wrong URL");
             });
@@ -141,8 +145,9 @@ define(["module",
       "Click the document modifier meta link": function() {
          return this.remote.findByCssSelector(".alf-livesearch-item > span > a:nth-child(2)")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+      
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.include(payload.url, "/aikau/page/user/admin/profile", "Wrong URL");
             });
@@ -158,7 +163,20 @@ define(["module",
             .then(function(payload) {
                assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=pdf&scope=repo", "Did not find expected navigation publication request (check the search scope!)");
             });
+      },
+
+      "Results height is restricted": function() {
+         return this.remote.findByCssSelector("#SB7 input.alfresco-header-SearchBox-text")
+            .type("pdf")
+         .end()
+
+         .findDisplayedByCssSelector("#SB7 .alf-livesearch")
+            .getSize()
+            .then(function(size) {
+               assert.closeTo(size.height, 100, 5);
+            });
       }
+      
    });
 
    defineSuite(module, {
@@ -171,10 +189,19 @@ define(["module",
       "Count the documents": function() {
          return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
             .type("site")
-            .end()
-            .findAllByCssSelector(".alf-live-search-documents-list .alf-livesearch-item")
+         .end()
+         
+         .findAllByCssSelector(".alf-live-search-documents-list .alf-livesearch-item")
             .then(function(elements) {
                assert.lengthOf(elements, 5, "Unexpected number of documents found");
+            });
+      },
+
+      "Check overflow": function() {
+         return this.remote.findByCssSelector("#SB1 .alf-live-search-documents-list > div:nth-child(2) .alf-livesearch-item > a")
+            .getSize()
+            .then(function(size) {
+               assert.isBelow(size.width, 450);
             });
       },
 
@@ -195,9 +222,11 @@ define(["module",
       "Click the more results link": function() {
          return this.remote.findByCssSelector(".alf-livesearch-more span")
             .click()
-            .end()
-            .sleep(500) // Need a pause to wait for the data reload
-            .findAllByCssSelector(".alf-live-search-documents-list .alf-livesearch-item")
+         .end()
+         
+         .sleep(500) // Need a pause to wait for the data reload
+      
+         .findAllByCssSelector(".alf-live-search-documents-list .alf-livesearch-item")
             .then(function(elements) {
                assert.lengthOf(elements, 10, "Additional results weren't loaded");
             });
@@ -218,11 +247,13 @@ define(["module",
       "Enter and clear search terms": function() {
          return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
             .type("site")
-            .end()
-            .findByCssSelector(".alfresco-header-SearchBox-clear div")
+         .end()
+         
+         .findByCssSelector(".alfresco-header-SearchBox-clear div")
             .click()
-            .end()
-            .findByCssSelector(".alf-livesearch")
+         .end()
+      
+         .findByCssSelector(".alf-livesearch")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The live search pane was not hidden on clearing search terms");
@@ -258,8 +289,9 @@ define(["module",
             .clearLog()
             .type("site")
             .pressKeys(keys.RETURN)
-            .end()
-            .getAllPublishes("ALF_NAVIGATE_TO_PAGE")
+         .end()
+        
+         .getAllPublishes("ALF_NAVIGATE_TO_PAGE")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "The search request was not suppressed");
             });
@@ -292,12 +324,15 @@ define(["module",
       "Check that live search document results can be hidden": function() {
          return this.remote.findByCssSelector("#SB2 .alfresco-header-SearchBox-clear div")
             .click()
-            .end()
-            .findByCssSelector("#SB3 input.alfresco-header-SearchBox-text")
+         .end()
+         
+         .findByCssSelector("#SB3 input.alfresco-header-SearchBox-text")
             .type("site")
-            .end()
-            .sleep(500)
-            .findByCssSelector("#SB3 .alf-live-search-documents-list")
+         .end()
+      
+         .sleep(500)
+         
+         .findByCssSelector("#SB3 .alf-live-search-documents-list")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The live search sites results weren't hidden");
@@ -315,12 +350,15 @@ define(["module",
       "Check that live search people results can be hidden": function() {
          return this.remote.findByCssSelector("#SB3 .alfresco-header-SearchBox-clear div")
             .click()
-            .end()
-            .findByCssSelector("#SB4 input.alfresco-header-SearchBox-text")
+         .end()
+      
+         .findByCssSelector("#SB4 input.alfresco-header-SearchBox-text")
             .type("site")
-            .end()
-            .sleep(500)
-            .findByCssSelector("#SB4 .alf-live-search-people-list")
+         .end()
+         
+         .sleep(500)
+         
+         .findByCssSelector("#SB4 .alf-live-search-people-list")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The live search sites results weren't hidden");
@@ -330,12 +368,14 @@ define(["module",
       "Check that hidden search terms are included": function() {
          return this.remote.findByCssSelector("#SB4 .alfresco-header-SearchBox-clear div")
             .click()
-            .end()
-            .findByCssSelector("#SB5 input.alfresco-header-SearchBox-text")
+         .end()
+         
+         .findByCssSelector("#SB5 input.alfresco-header-SearchBox-text")
             .type("data%test")
             .pressKeys(keys.RETURN)
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+      
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "url", "dp/ws/faceted-search#searchTerm=(data%25test)%20secret%20squirrels&scope=repo");
             });
@@ -352,13 +392,16 @@ define(["module",
       "Click on result with custom result publication": function() {
          return this.remote.findByCssSelector("#SB4 input.alfresco-header-SearchBox-text")
             .type("site")
-            .end()
-            .findAllByCssSelector(".alf-livesearch-item")
-            .end()
-            .findByCssSelector(".alf-livesearch-item a")
+         .end()
+     
+         .findAllByCssSelector(".alf-livesearch-item")
+         .end()
+
+         .findByCssSelector(".alf-livesearch-item a")
             .click()
-            .end()
-            .getLastPublish("CUSTOM_TOPIC")
+         .end()
+
+         .getLastPublish("CUSTOM_TOPIC")
             .then(function(payload) {
                assert.propertyVal(payload, "name", "WebSiteReview.mp4", "Custom publication not made for result click");
             });
