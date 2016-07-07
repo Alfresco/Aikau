@@ -184,7 +184,8 @@ define(["dojo/_base/declare",
                   {
                      window.location = url;
                   }
-                  else if (url.indexOf("?a=true") !== -1)
+                  else if (url.indexOf("?a=true") !== -1 || 
+                           url.indexOf("&a=true") !== -1)
                   {
                      window.location = url;
                   }
