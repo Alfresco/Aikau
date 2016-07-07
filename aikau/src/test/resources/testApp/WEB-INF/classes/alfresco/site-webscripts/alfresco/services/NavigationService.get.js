@@ -150,6 +150,19 @@ model.jsonModel = {
          }
       },
       {
+         id: "ACTION_LINK_FOR_DOWNLOAD",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Simulate action download link",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayload: {
+               url: "tp/ws/NavigationService?a=true",
+               type: "PAGE_RELATIVE",
+               target: "CURRENT"
+            }
+         }
+      },
+      {
          id: "MENU_BAR",
          name: "alfresco/menus/AlfMenuBar",
          config: {
