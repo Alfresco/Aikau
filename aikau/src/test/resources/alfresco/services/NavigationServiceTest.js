@@ -257,6 +257,18 @@ define(["module",
             .then(function(payloads) {
                assert.lengthOf(payloads, 0);
             });
+      },
+
+      "Action download links don't show progress": function() {
+         return this.remote.findDisplayedById("ACTION_LINK_FOR_DOWNLOAD_label")
+            .clearLog()
+            .click()
+         .end()
+
+         .getAllPublishes("ALF_PROGRESS_INDICATOR_ADD_ACTIVITY")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0);
+            });
       }
    });
 });
