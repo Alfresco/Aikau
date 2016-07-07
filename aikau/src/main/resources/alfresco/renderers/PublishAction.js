@@ -37,9 +37,10 @@ define(["dojo/_base/declare",
         "alfresco/enums/urlTypes", 
         "alfresco/util/urlUtils",
         "alfresco/core/Core",
-        "dojo/dom-class"], 
+        "dojo/dom-class",
+        "dojo/_base/event"], 
         function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, 
-                 template, urlTypes, urlUtils, AlfCore, domClass) {
+                 template, urlTypes, urlUtils, AlfCore, domClass, event) {
 
    return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, AlfCore], {
       
@@ -184,9 +185,10 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event object
        */
       onClick: function alfresco_renderers_PublishAction__onClick(evt) {
+         evt && event.stop(evt);
+
          this.publishPayload = this.getGeneratedPayload();
          this.alfPublish(this.publishTopic, this.publishPayload, !!this.publishGlobal, !!this.publishToParent);
-         evt.stopPropagation();
       }
    });
 });
