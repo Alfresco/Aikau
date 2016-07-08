@@ -1,0 +1,273 @@
+{
+   "showCaption": false,
+   "structure": [{
+      "id": "",
+      "event": "form.default.set.label",
+      "children": [{
+         "id": "prop_cm_name",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_title",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_description",
+         "kind": "field"
+      }, {
+         "id": "prop_mimetype",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_author",
+         "kind": "field"
+      }, {
+         "id": "prop_size",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_creator",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_created",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_modifier",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_modified",
+         "kind": "field"
+      }],
+      "fieldId": "set"
+   }],
+   "data": {
+      "prop_cm_modifier": "admin",
+      "prop_cm_modified": "2016-06-02T14:00:28.308+01:00",
+      "prop_cm_creator": "admin",
+      "prop_cm_name": "ACE-5190.ogv",
+      "prop_mimetype": "video/ogg",
+      "prop_size": 7273422,
+      "prop_cm_created": "2016-06-02T14:00:28.308+01:00"
+   },
+   "constraints": [{
+      "message": "The value cannot be empty.",
+      "id": "MANDATORY",
+      "event": "keyup,change",
+      "params": {},
+      "fieldId": "prop_cm_name",
+      "validationHandler": "Alfresco.forms.validation.mandatory"
+   }, {
+      "message": "Value contains illegal characters.",
+      "id": "REGEX",
+      "event": "keyup",
+      "params": {},
+      "fieldId": "prop_cm_name",
+      "validationHandler": "Alfresco.forms.validation.fileName"
+   }, {
+      "message": "Value is not a number.",
+      "id": "NUMBER",
+      "event": "keyup",
+      "params": {},
+      "fieldId": "prop_size",
+      "validationHandler": "Alfresco.forms.validation.number"
+   }],
+   "showCancelButton": false,
+   "showSubmitButton": true,
+   "mode": "view",
+   "arguments": {
+      "itemId": "workspace://SpacesStore/7a215545-62d4-44dd-ad45-3dcedabeab04",
+      "formId": "null",
+      "itemKind": "node"
+   },
+   "submissionUrl": "/share/proxy/alfresco/api/node/workspace/SpacesStore/7a215545-62d4-44dd-ad45-3dcedabeab04/formprocessor",
+   "enctype": "multipart/form-data",
+   "method": "post",
+   "showResetButton": false,
+   "fields": {
+      "prop_cm_modifier": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {}
+         },
+         "configName": "cm:modifier",
+         "dataKeyName": "prop_cm_modifier",
+         "helpEncodeHtml": true,
+         "label": "Modifier",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_modifier",
+         "dataType": "text",
+         "endpointType": "text",
+         "description": "Who last modified this item",
+         "name": "prop_cm_modifier",
+         "value": "admin"
+      },
+      "prop_cm_modified": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/date.ftl",
+            "params": {
+               "showTime": "true"
+            }
+         },
+         "configName": "cm:modified",
+         "dataKeyName": "prop_cm_modified",
+         "helpEncodeHtml": true,
+         "label": "Modified Date",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_modified",
+         "dataType": "datetime",
+         "endpointType": "datetime",
+         "description": "When this item was last modified",
+         "name": "prop_cm_modified",
+         "value": "2016-06-02T14:00:28.308+01:00"
+      },
+      "prop_cm_description": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textarea.ftl",
+            "params": {
+               "activateLinks": "true"
+            }
+         },
+         "configName": "cm:description",
+         "dataKeyName": "prop_cm_description",
+         "helpEncodeHtml": true,
+         "label": "Description",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_description",
+         "dataType": "mltext",
+         "endpointType": "mltext",
+         "description": "Content Description",
+         "name": "prop_cm_description",
+         "value": ""
+      },
+      "prop_cm_creator": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {}
+         },
+         "configName": "cm:creator",
+         "dataKeyName": "prop_cm_creator",
+         "helpEncodeHtml": true,
+         "label": "Creator",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_creator",
+         "dataType": "text",
+         "endpointType": "text",
+         "description": "Who created this item",
+         "name": "prop_cm_creator",
+         "value": "admin"
+      },
+      "prop_size": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/size.ftl",
+            "params": {}
+         },
+         "configName": "size",
+         "dataKeyName": "prop_size",
+         "helpEncodeHtml": true,
+         "label": "Size",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_size",
+         "dataType": "long",
+         "help": "form.field.constraint.number",
+         "endpointType": "long",
+         "description": "Size of the content in bytes",
+         "name": "prop_size",
+         "value": 7273422
+      },
+      "prop_mimetype": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/mimetype.ftl",
+            "params": {}
+         },
+         "configName": "mimetype",
+         "dataKeyName": "prop_mimetype",
+         "helpEncodeHtml": true,
+         "label": "Mimetype",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_mimetype",
+         "dataType": "text",
+         "endpointType": "text",
+         "description": "Mimetype of the content",
+         "name": "prop_mimetype",
+         "value": "video/ogg"
+      },
+      "prop_cm_name": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {
+               "maxLength": "255"
+            }
+         },
+         "configName": "cm:name",
+         "dataKeyName": "prop_cm_name",
+         "helpEncodeHtml": true,
+         "label": "Name",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_name",
+         "dataType": "text",
+         "endpointType": "text",
+         "description": "Name",
+         "name": "prop_cm_name",
+         "value": "ACE-5190.ogv"
+      },
+      "prop_cm_title": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {}
+         },
+         "configName": "cm:title",
+         "dataKeyName": "prop_cm_title",
+         "helpEncodeHtml": true,
+         "label": "Title",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_title",
+         "dataType": "mltext",
+         "endpointType": "mltext",
+         "description": "Content Title",
+         "name": "prop_cm_title",
+         "value": ""
+      },
+      "prop_cm_created": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/date.ftl",
+            "params": {
+               "showTime": "true"
+            }
+         },
+         "configName": "cm:created",
+         "dataKeyName": "prop_cm_created",
+         "helpEncodeHtml": true,
+         "label": "Created Date",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_created",
+         "dataType": "datetime",
+         "endpointType": "datetime",
+         "description": "Created Date",
+         "name": "prop_cm_created",
+         "value": "2016-06-02T14:00:28.308+01:00"
+      },
+      "prop_cm_author": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {}
+         },
+         "configName": "cm:author",
+         "dataKeyName": "prop_cm_author",
+         "helpEncodeHtml": true,
+         "label": "Author",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_author",
+         "dataType": "text",
+         "endpointType": "text",
+         "description": "Author",
+         "name": "prop_cm_author",
+         "value": ""
+      }
+   }
+}

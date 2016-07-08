@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Forms Runtime Test Page</shortname>
+  <description>Provides a page for testing out the Aikau forms runtime support.</description>
+  <family>aikau-unit-tests</family>
+  <url>/${webscript.version}/FormsRuntimeTester</url>
+</webscript>

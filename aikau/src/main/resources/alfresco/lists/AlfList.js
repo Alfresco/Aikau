@@ -1483,7 +1483,13 @@ define(["dojo/_base/declare",
       onDataLoadFailure: function alfresco_lists_AlfList__onDataLoadFailure(response, originalRequestConfig) {
          this.alfLog("error", "Data Load Failed", response, originalRequestConfig);
          this.currentData = null;
-         this.showDataLoadFailure();
+
+         // Only show a failure if there is not another request pending...
+         if (!this.pendingLoadRequest)
+         {
+            this.showDataLoadFailure();
+         }
+         
          this.alfPublish(this.documentLoadFailedTopic, {});
          this.alfPublish(this.requestFinishedTopic, {});
       },

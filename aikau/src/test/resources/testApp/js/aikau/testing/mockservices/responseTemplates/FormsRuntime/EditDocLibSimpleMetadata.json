@@ -1,0 +1,138 @@
+{
+   "showCaption": true,
+   "structure": [{
+      "id": "",
+      "event": "form.default.set.label",
+      "children": [{
+         "id": "prop_cm_name",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_title",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_description",
+         "kind": "field"
+      }, {
+         "id": "prop_cm_taggable",
+         "kind": "field"
+      }],
+      "fieldId": "set"
+   }],
+   "constraints": [{
+      "message": "The value cannot be empty.",
+      "id": "MANDATORY",
+      "event": "keyup,change",
+      "params": {},
+      "fieldId": "prop_cm_name",
+      "validationHandler": "Alfresco.forms.validation.mandatory"
+   }, {
+      "message": "Value contains illegal characters.",
+      "id": "REGEX",
+      "event": "keyup",
+      "params": {},
+      "fieldId": "prop_cm_name",
+      "validationHandler": "Alfresco.forms.validation.fileName"
+   }],
+   "data": {
+      "prop_cm_name": "budget.xls",
+      "prop_cm_title": "Web Site Design - Budget",
+      "prop_cm_description": "Budget file for the web site redesign"
+   },
+   "showCancelButton": false,
+   "showSubmitButton": true,
+   "mode": "edit",
+   "arguments": {
+      "itemId": "workspace://SpacesStore/5fa74ad3-9b5b-461b-9df5-de407f1f4fe7",
+      "formId": "doclib-simple-metadata",
+      "itemKind": "node"
+   },
+   "submissionUrl": "/share/proxy/alfresco/api/node/workspace/SpacesStore/5fa74ad3-9b5b-461b-9df5-de407f1f4fe7/formprocessor",
+   "editTemplate": "../documentlibrary/forms/doclib-simple-metadata.ftl",
+   "enctype": "multipart/form-data",
+   "method": "post",
+   "showResetButton": false,
+   "fields": {
+      "prop_cm_description": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textarea.ftl",
+            "params": {
+               "activateLinks": "true"
+            }
+         },
+         "configName": "cm:description",
+         "dataKeyName": "prop_cm_description",
+         "helpEncodeHtml": true,
+         "label": "Description",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_description",
+         "dataType": "mltext",
+         "endpointType": "mltext",
+         "description": "Content Description",
+         "name": "prop_cm_description",
+         "value": "Budget file for the web site redesign"
+      },
+      "prop_cm_name": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {
+               "maxLength": "255"
+            }
+         },
+         "configName": "cm:name",
+         "dataKeyName": "prop_cm_name",
+         "helpEncodeHtml": true,
+         "label": "Name",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_name",
+         "dataType": "text",
+         "endpointType": "text",
+         "description": "Name",
+         "name": "prop_cm_name",
+         "value": "budget.xls"
+      },
+      "prop_cm_taggable": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/category.ftl",
+            "params": {
+               "createNewItemIcon": "tag",
+               "compactMode": "true",
+               "createNewItemUri": "/api/tag/workspace/SpacesStore",
+               "params": "aspect=cm:taggable"
+            }
+         },
+         "configName": "cm:taggable",
+         "dataKeyName": "prop_cm_taggable",
+         "helpEncodeHtml": true,
+         "label": "Tags",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_taggable",
+         "dataType": "category",
+         "endpointType": "category",
+         "indexTokenisationMode": "FALSE",
+         "description": "Tags",
+         "name": "prop_cm_taggable",
+         "value": ""
+      },
+      "prop_cm_title": {
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {}
+         },
+         "configName": "cm:title",
+         "dataKeyName": "prop_cm_title",
+         "helpEncodeHtml": true,
+         "label": "Title",
+         "type": "property",
+         "kind": "field",
+         "id": "prop_cm_title",
+         "dataType": "mltext",
+         "endpointType": "mltext",
+         "description": "Content Title",
+         "name": "prop_cm_title",
+         "value": "Web Site Design - Budget"
+      }
+   }
+}

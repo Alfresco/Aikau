@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Aikau Form Data</shortname>
+  <description>WebScript that retrieves form data for use by Aikau components</description>
+  <url>/aikau/${webscript.version}/form</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>
