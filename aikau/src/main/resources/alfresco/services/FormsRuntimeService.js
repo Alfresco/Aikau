@@ -393,7 +393,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      onFormLoadFailure: function alfresco_services_FormsRuntimeService__onFormLoadFailure(response, originalRequestConfig) {
+      onFormLoadFailure: function alfresco_services_FormsRuntimeService__onFormLoadFailure(/*jshint unused: false*/response, originalRequestConfig) {
          // TODO: Need to handle failures appropriately...
       }
    });
