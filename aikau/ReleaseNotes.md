@@ -1,4 +1,4 @@
-Aikau 1.0.75 Release Notes
+Aikau 1.0.76 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,14 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.76:
+* [AKU-1010](https://issues.alfresco.com/jira/browse/AKU-1010)     - Ensure failure message is not displayed for lists with pending request
+* [AKU-1011](https://issues.alfresco.com/jira/browse/AKU-1011)     - Handle long, unbroken names in SearchBox results
+* [AKU-1013](https://issues.alfresco.com/jira/browse/AKU-1013)     - Configurable results height for SearchBox
+* [AKU-1015](https://issues.alfresco.com/jira/browse/AKU-1015)     - Provide basic support for Share XML forms runtime
+* [AKU-1017](https://issues.alfresco.com/jira/browse/AKU-1017)     - Prevent progress notifications on download actions
+* [AKU-1018](https://issues.alfresco.com/jira/browse/AKU-1018)     - Fix Firefox specific handling of PublishAction clicks
+
 1.0.75:
 * [AKU-1009](https://issues.alfresco.com/jira/browse/AKU-1003)     - Provide additional sort controls
 
