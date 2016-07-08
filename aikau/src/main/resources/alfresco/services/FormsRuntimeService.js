@@ -35,9 +35,10 @@ define(["dojo/_base/declare",
         "alfresco/core/NodeUtils",
         "alfresco/core/topics",
         "service/constants/Default",
+        "webscripts/defaults",
         "dojo/_base/array",
         "dojo/_base/lang"],
-        function(declare, BaseService, CoreXhr, NodeUtils, topics, AlfConstants, array, lang) {
+        function(declare, BaseService, CoreXhr, NodeUtils, topics, AlfConstants, webScriptDefaults, array, lang) {
    
    return declare([BaseService, CoreXhr], {
       
@@ -133,7 +134,7 @@ define(["dojo/_base/declare",
                itemId = nodeData.uri;
             }
 
-            var url = AlfConstants.URL_SERVICECONTEXT + "aikau/form" +
+            var url = AlfConstants.URL_SERVICECONTEXT + "aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form" +
                       "?itemKind=" + payload.itemKind + 
                       "&itemId=" + itemId + 
                       "&formId=" + (payload.formId || "null") + 

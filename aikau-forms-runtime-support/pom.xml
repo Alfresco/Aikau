@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.77-SNAPSHOT</version>
+   <version>1.0.76-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -86,6 +86,13 @@
                   </configuration>
                </execution>
            </executions>
+         </plugin>
+
+         <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+               <configuration>
+                  <sourcepath>${project.build.directory}/generated-sources/java-templates</sourcepath>
+               </configuration>
          </plugin>
       </plugins>
    </build>
