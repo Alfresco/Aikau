@@ -17,7 +17,7 @@
       <dependency.surf.version>6.3</dependency.surf.version>
       <dependency.dojo.version>1.10.4</dependency.dojo.version>
       <dependency.jquery.version>1.11.1</dependency.jquery.version>
-      <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>      
+      <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>
    </properties>
 
    <repositories> 
@@ -133,6 +133,7 @@
       <module>aikau-archetype</module>
       <module>aikau-additional-languages</module>
       <module>aikau-sandpit-application</module>
+      <module>aikau-forms-runtime-support</module>
    </modules>
 
 </project>

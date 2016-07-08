@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FormsRuntimeService</shortname>
+  <description>Provides a mock testing environment for the FormsRuntimeService</description>
+  <family>aikau-unit-tests</family>
+  <url>/FormsRuntimeService</url>
+</webscript>
