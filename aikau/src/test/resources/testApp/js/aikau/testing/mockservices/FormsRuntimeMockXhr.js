@@ -25,10 +25,11 @@
  */
 define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
+        "webscripts/defaults",
         "dojo/_base/lang",
         "dojo/text!./responseTemplates/FormsRuntime/EditDocLibSimpleMetadata.json",
         "dojo/text!./responseTemplates/FormsRuntime/ViewNodeDefault.json"], 
-        function(declare, MockXhr, lang, EditDocLibSimpleMetadata, ViewNodeDefault) {
+        function(declare, MockXhr, webScriptDefaults, lang, EditDocLibSimpleMetadata, ViewNodeDefault) {
    
    return declare([MockXhr], {
 
@@ -41,13 +42,13 @@ define(["dojo/_base/declare",
          try
          {
             this.server.respondWith("GET",
-                                    "/aikau/service/aikau/form?itemKind=node&itemId=some/dummy/node&formId=doclib-simple-metadata&mode=edit",
+                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=node&itemId=some/dummy/node&formId=doclib-simple-metadata&mode=edit",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      EditDocLibSimpleMetadata]);
 
             this.server.respondWith("GET",
-                                    "/aikau/service/aikau/form?itemKind=node&itemId=some/dummy/node&formId=null&mode=view",
+                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=node&itemId=some/dummy/node&formId=null&mode=view",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      ViewNodeDefault]);
