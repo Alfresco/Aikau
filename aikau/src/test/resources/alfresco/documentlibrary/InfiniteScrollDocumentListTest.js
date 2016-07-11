@@ -114,6 +114,38 @@ define(["module",
       name: "AlfDocumentList Sorting Tests (sort via menu)",
       testPage: "/InfiniteScrollDocumentList?includeSortMenu=true",
 
+      // See AKU-1019
+      "Select and invert": function() {
+         // Select the first item...
+         return this.remote.findDisplayedByCssSelector("#TABLE_SELECTOR_ITEM_0")
+            .click()
+         .end()
+
+         // Check that the CSS matches the selected state...
+         .findByCssSelector("#TABLE_SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
+         .end()
+
+         // Open the selection drop-down...
+         .findByCssSelector("#ITEM_SELECTION .alfresco-menus-AlfMenuBarPopup__arrow")
+            .click()
+         .end()
+
+         // Select the "invert" menu item...
+         .findDisplayedByCssSelector("#ITEM_SELECTION_dropdown tr:nth-child(3) .dijitMenuItemLabel")
+            .click()
+         .end()
+
+         // Check the selected item is now deselected...
+         .findAllByCssSelector("#TABLE_SELECTOR_ITEM_0.alfresco-lists-ItemSelectionMixin--selected")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            })
+         .end()
+
+         // Check that one of the other items is now selected...
+         .findByCssSelector("#TABLE_SELECTOR_ITEM_1.alfresco-lists-ItemSelectionMixin--selected");
+      },
+
       "Sort via menu": function() {
          // Open the sort menu...
          return this.remote.findDisplayedByCssSelector(selectors.sortMenu.label)

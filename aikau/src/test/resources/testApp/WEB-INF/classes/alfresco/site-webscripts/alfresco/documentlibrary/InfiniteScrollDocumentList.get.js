@@ -81,6 +81,7 @@ if (includeSortMenu)
       config: {
          widgets: [
             {
+               id: "ITEM_SELECTION",
                name: "alfresco/documentlibrary/AlfSelectDocumentListItems"
             },
             {
