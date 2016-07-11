@@ -235,6 +235,40 @@ define(["dojo/_base/declare",
       widgetsForNoDataDisplay: null,
 
       /**
+       * This can be called to focus on a specific item in the view. The itemKey provided must match
+       * the value of the [itemKey property]{@link module:alfresco/lists/views/AlfListView#itemKey}
+       * of an item in the rendered data.
+       * 
+       * @instance
+       * @param {string} itemKey The key of the item to focus on.
+       * @since 1.0.77
+       */
+      focusOnItem: function alfresco_lists_views_AlfListView__focusOnItem(itemKey) {
+         if (this.docListRenderer && this.docListRenderer._renderedItemWidgets)
+         {
+            array.some(this.docListRenderer._renderedItemWidgets, function(widgets) {
+               return array.some(widgets, function(widget) {
+                  var found = false;
+                  if (widget && 
+                      widget.currentItem && 
+                      (widget.currentItem[this.itemKey] || widget.currentItem[this.itemKey] === 0) &&
+                      widget.currentItem[this.itemKey].toString() === itemKey)
+                  {
+                     if (widget.domNode)
+                     {
+                        widget.domNode.click();
+                     }
+                     found = true;
+                  }
+                  return found;
+               }, this);
+            }, this);
+         }
+         
+
+      },
+
+      /**
        * Implements the widget life-cycle method to add drag-and-drop upload capabilities to the root DOM node.
        * This allows files to be dragged and dropped from the operating system directly into the browser
        * and uploaded to the location represented by the document list.

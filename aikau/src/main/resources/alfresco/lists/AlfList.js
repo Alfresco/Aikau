@@ -530,6 +530,17 @@ define(["dojo/_base/declare",
       _filterDelay: 1000,
 
       /**
+       * The key of the item to attempt to focus on in the loaded results. This can be set via the
+       * payload handled by [onReloadData]{@link module:alfresco/lists/AlfList#onReloadData}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.77
+       */
+      _focusItemKey: null,
+
+      /**
        * This timeout pointer is used to ensure the loading message doesn't display forever
        *
        * @instance
@@ -780,6 +791,12 @@ define(["dojo/_base/declare",
                // Show the view...
                this.viewMap[this._currentlySelectedView] = newView;
                this.showView(newView);
+
+               // Attempt to focus a specific item if requested...
+               if (this._focusItemKey)
+               {
+                  newView.focusOnItem(this._focusItemKey);
+               }
             }
         }
       },
@@ -1242,11 +1259,20 @@ define(["dojo/_base/declare",
        * [loadData]{@link module:alfresco/lists/AlfList#loadData}.
        *
        * @instance
+       * @param {object} [payload] The payload supplied when making the reload request.
+       * @param {string} [payload.focusItemKey] An item to focus on if it is in the data that is reloaded
        */
-      onReloadData: function alfresco_lists_AlfList__onReloadData() {
+      onReloadData: function alfresco_lists_AlfList__onReloadData(payload) {
          this.hideChildren(this.domNode);
          this.clearViews();
-         this.loadData();
+
+         // See AKU-1020 - Support the ability to load data with an item to focus on...
+         var parameters = {};
+         if (payload && payload.focusItemKey)
+         {
+            parameters.focusItemKey = payload.focusItemKey;
+         }
+         this.loadData(parameters);
       },
 
       /**
@@ -1257,9 +1283,11 @@ define(["dojo/_base/declare",
        * function will be called.
        *
        * @instance
+       * @param {object} [parameters] An optional parameters object providing information about the data to load
+       * @param {string} [parameters.focusItemKey] An item to focus on if it is in the data that is reloaded
        * @fires module:alfresco/core/topics#STOP_XHR_REQUEST
        */
-      loadData: function alfresco_lists_AlfList__loadData() {
+      loadData: function alfresco_lists_AlfList__loadData(parameters) {
          if (!this.requestInProgress)
          {
             // Ensure any no data node is hidden...
@@ -1301,6 +1329,18 @@ define(["dojo/_base/declare",
 
             this.updateLoadDataPayload(payload);
             this.requestInProgress = true;
+
+            // Locally register an item key to find and focus on when the data is loaded (the 
+            // key may not match an item in the loaded data of course)...
+            if (parameters && parameters.focusItemKey)
+            {
+               this._focusItemKey = parameters.focusItemKey;
+            }
+            else
+            {
+               this._focusItemKey = null;
+            }
+            
             setTimeout(lang.hitch(this, this.alfPublish, this.loadDataPublishTopic, payload, true));
          }
          else
@@ -1416,6 +1456,12 @@ define(["dojo/_base/declare",
                this.currentData = view.getData();
                view.renderView(this.useInfiniteScroll);
                this.showView(view);
+
+               // Attempt to focus a specific item if requested...
+               if (this._focusItemKey)
+               {
+                  view.focusOnItem(this._focusItemKey);
+               }
             }
             else
             {
