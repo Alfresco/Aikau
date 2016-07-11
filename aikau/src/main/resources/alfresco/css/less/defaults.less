@@ -180,9 +180,9 @@
 @standard-button-line-height: @standard-button-font-size * 1.2;
 @standard-button-padding-vertical: (@standard-button-height - (@standard-button-border-width * 2) - @standard-button-line-height * 1.2) / 2;
 @standard-button-padding-horizontal: @standard-button-font-size;
-@standard-button-padding: @standard-button-padding-vertical @standard-button-padding-horizontal;
-@standard-button-margin: 0 @standard-column-width 0 0;
-@standard-button-text-padding: 0;
+@standard-button-padding: 0;
+@standard-button-margin: 0 (@standard-column-width * 0.5) 0 (@standard-column-width * 0.5);
+@standard-button-text-padding: @standard-button-padding-vertical @standard-button-padding-horizontal;
 @standard-button-text-margin: 0;
 
 // "Call-to-action" buttons capture the users attention
@@ -190,7 +190,7 @@
 @call-to-action-button-background-focus: @button-color-hover;
 @call-to-action-button-background-active: @button-color-active;
 @call-to-action-button-background-disabled: @button-color-disabled;
-@call-to-action-button-border-width: 0;
+@call-to-action-button-border-width: @standard-border-width;
 @call-to-action-button-border-style: solid;
 @call-to-action-button-border: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-default;
 @call-to-action-button-border-focus: @call-to-action-button-border-width @call-to-action-button-border-style @button-color-hover;
@@ -208,7 +208,7 @@
 @call-to-action-button-line-height: @standard-button-line-height;
 @call-to-action-button-padding-vertical: (@call-to-action-button-height - (@call-to-action-button-border-width * 2) - @call-to-action-button-line-height * 1.2) / 2;
 @call-to-action-button-padding-horizontal: @standard-button-padding-horizontal;
-@call-to-action-button-padding: @call-to-action-button-padding-vertical @call-to-action-button-padding-horizontal;
+@call-to-action-button-padding: @standard-button-padding;
 @call-to-action-button-margin: @standard-button-margin;
 @call-to-action-button-text-padding: @standard-button-text-padding;
 @call-to-action-button-text-margin: @standard-button-text-margin;
