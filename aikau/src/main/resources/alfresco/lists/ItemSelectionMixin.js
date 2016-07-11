@@ -182,6 +182,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The details of the selection request.
        */
       onItemSelection: function alfresco_lists_ItemSelectionMixin__onItemSelection(payload) {
+         // jshint maxcomplexity:false
          if (payload)
          {
             if (payload.value === "selectAll")
@@ -197,7 +198,14 @@ define(["dojo/_base/declare",
             else if (payload.value === "selectInvert")
             {
                // Invert the current status
-               this.onClick();
+               if (domClass.contains(this.domNode, this.selectedCssClass))
+               {
+                  this.deselect();
+               }
+               else
+               {
+                  this.select();
+               }
             }
             else if (payload.value === "selectFolders" && this.currentItem && this.currentItem.jsNode)
             {
