@@ -1235,6 +1235,11 @@ define(["dojo/_base/declare",
        * @overridable
        */
       processLiveSearchSite: function alfresco_header_SearchBox__processLiveSearchSite(item) {
+         var visibility = item.visibility;
+         if (visibility)
+         {
+            visibility = this.message("site.visibility.label." + visibility);
+         }
          return this.createLiveSearchSite({
             searchBox: this,
             cssClass: "alf-livesearch-icon",
@@ -1244,7 +1249,7 @@ define(["dojo/_base/declare",
             icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-48.png",
             alt: item.title,
             meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
-            meta2: "&nbsp;",
+            meta2: visibility ? visibility : "&nbsp;",
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
@@ -1310,7 +1315,8 @@ define(["dojo/_base/declare",
        */
       processLiveSearchPerson: function alfresco_header_SearchBox__processLiveSearchPerson(item) {
          var fullName = item.firstName + " " + item.lastName;
-         var meta = this.encodeHTML(item.jobtitle || "") + (item.location ? (", "+this.encodeHTML(item.location)) : "");
+         var meta = (item.jobtitle || "") + (item.organization ? ((item.jobtitle ? ", " : "") + item.organization) : "");
+         var meta2 = (item.email || "") + (item.location ? ((item.email ? ", " : "") + item.location) : "");
          return this.createLiveSearchPerson({
             searchBox: this,
             cssClass: "alf-livesearch-icon",
@@ -1319,8 +1325,8 @@ define(["dojo/_base/declare",
             link: urlUtils.convertUrl("user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE),
             icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar",
             alt: fullName,
-            meta: meta ? meta : "&nbsp;",
-            meta2: "&nbsp;",
+            meta: meta ? this.encodeHTML(meta) : "&nbsp;",
+            meta2: meta2 ? this.encodeHTML(meta2) : "&nbsp;",
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
