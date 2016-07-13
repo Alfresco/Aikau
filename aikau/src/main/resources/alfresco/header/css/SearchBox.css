@@ -152,9 +152,11 @@
          .alf-livesearch-item {
             margin-left: 56px;
             line-height: 1.2em;
-            span,
-            span a {
+            &>span {
                font-size: 93%;
+               color: @de-emphasized-font-color;
+            }
+            &>span a {
                color: @de-emphasized-font-color;
             }
          }
