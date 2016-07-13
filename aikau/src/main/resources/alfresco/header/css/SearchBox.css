@@ -131,7 +131,7 @@
 
          & > div {
             clear: both;
-            padding: 5px 8px 5px 8px;
+            padding: 6px 10px 8px 8px;
 
             &:hover {
                background-color: @list-hover-color;
@@ -140,9 +140,8 @@
 
          .alf-livesearch-thumbnail {
             float: left;
-            /*border: 1px solid #ccc;*/
-            /*box-shadow: 0px 1px 3px #ccc;*/
-            max-height: 32px;
+            box-shadow: 0px 1px 3px #ccc;
+            max-height: 48px;
             overflow: hidden;
          }
 
@@ -151,11 +150,11 @@
          }
 
          .alf-livesearch-item {
-            margin-left: 40px;
-            line-height: 1.3em;
-            font-size: 93%;
+            margin-left: 56px;
+            line-height: 1.2em;
             span,
             span a {
+               font-size: 93%;
                color: @de-emphasized-font-color;
             }
          }

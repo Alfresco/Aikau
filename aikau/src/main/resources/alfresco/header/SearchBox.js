@@ -1117,11 +1117,12 @@ define(["dojo/_base/declare",
          {
             info += "<a href='" + siteDocLibUrl + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
          }
-         var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
-         info += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
-         info += this.getRelativeTime(item.modifiedOn) + " | ";
          info += this.formatFileSize(item.size);
-
+         var info2 = "";
+         var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
+         info2 += this.getRelativeTime(item.modifiedOn) + " | ";
+         info2 += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a>";
+         
          var desc = item.title;
          if (item.description)
          {
@@ -1133,7 +1134,6 @@ define(["dojo/_base/declare",
          {
             case "wiki":
                link = this.wikiPage + "?title=" + encodeURIComponent(item.name);
-               
                break;
             case "blog":
                link = this.blogPage + "?postId=" + encodeURIComponent(item.name);
@@ -1153,6 +1153,7 @@ define(["dojo/_base/declare",
             icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
             alt: item.name,
             meta: info,
+            meta2: info2,
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
@@ -1240,9 +1241,10 @@ define(["dojo/_base/declare",
             title: item.description,
             label: item.title,
             link: urlUtils.convertUrl("site/" + item.shortName + "/" + this.sitePage, urlTypes.PAGE_RELATIVE),
-            icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
+            icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-48.png",
             alt: item.title,
             meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
+            meta2: "&nbsp;",
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
@@ -1315,9 +1317,10 @@ define(["dojo/_base/declare",
             title: item.jobtitle || "",
             label: fullName + " (" + item.userName + ")",
             link: urlUtils.convertUrl("user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE),
-            icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
+            icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar",
             alt: fullName,
             meta: meta ? meta : "&nbsp;",
+            meta2: "&nbsp;",
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
