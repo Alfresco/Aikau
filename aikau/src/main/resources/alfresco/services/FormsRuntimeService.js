@@ -37,8 +37,23 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "webscripts/defaults",
         "dojo/_base/array",
-        "dojo/_base/lang"],
-        function(declare, BaseService, CoreXhr, NodeUtils, topics, AlfConstants, webScriptDefaults, array, lang) {
+        "dojo/_base/lang",
+        "jquery",
+        // No call backs from here...
+        "alfresco/forms/Form",
+        "alfresco/forms/ControlRow",
+        "alfresco/renderers/Boolean",
+        "alfresco/forms/controls/CheckBox",
+        "alfresco/forms/controls/DateTextBox",
+        "alfresco/forms/controls/DocumentPicker",
+        "alfresco/forms/controls/NumberSpinner",
+        "alfresco/forms/controls/Select",
+        "alfresco/forms/controls/TextArea",
+        "alfresco/forms/controls/TextBox",
+        "alfresco/node/MetadataGroups",
+        "alfresco/renderers/Date",
+        "alfresco/renderers/Property"],
+        function(declare, BaseService, CoreXhr, NodeUtils, topics, AlfConstants, webScriptDefaults, array, lang, $) {
    
    return declare([BaseService, CoreXhr], {
       
@@ -56,56 +71,165 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object}
        */
-      defaultMappings: {
-         edit: {
-            "/org/alfresco/components/form/controls/textfield.ftl" : "alfresco/forms/controls/TextBox",
-            "/org/alfresco/components/form/controls/textarea.ftl"  : "alfresco/forms/controls/TextArea"
-         },
-         view: {
-            "/org/alfresco/components/form/controls/textfield.ftl" : "alfresco/renderers/Property",
-            "/org/alfresco/components/form/controls/textarea.ftl" : "alfresco/renderers/Property"
-         },
-         constraints: {
-            "Alfresco.forms.validation.fileName": {
-               pattern: "([\"\*\\\>\<\?\/\:\|]+)|([\.]?[\.]+$)|(^[ \t]+|[ \t]+$)",
-               match: false
-            },
-            "Alfresco.forms.validation.wikiTitle": {
-               pattern: "([#\\\?\/\|]+)|([\.]?[\.]+$)",
-               match: false
-            },
-            "Alfresco.forms.validation.nodeRef": {
-               pattern: "^[^\:^ ]+\:\/\/[^\:^ ]+\/[^ ]+$",
-               match: true
-            },
-            "Alfresco.forms.validation.phone": {
-               pattern: "^[0-9\(\)\[\]\-\+\*#\\:\/,; ]+$",
-               match: true
-            },
-            "Alfresco.forms.validation.time": {
-               pattern: "^([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$",
-               match: true
-            },
-            "Alfresco.forms.validation.url": {
-               pattern: "(ftp|http|https):\/\/[\w\-_]+(\.[\w\-_]+)*([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?",
-               match: true
-            }
-            // TODO: "Alfresco.forms.validation.email" not handled yet due to complexity
+      controlMappings: {
 
+         // To save duplication of data there will always be a fallback check on default
+         // control mappings, this allows there to be flexibility in configuration and mapping
+         // on "kind" (type) specific mapping...
+         "default": {
+            "/org/alfresco/components/form/controls/date.ftl": {
+               name: "alfresco/forms/controls/DateTextBox"
+            },
+            "/org/alfresco/components/form/controls/workflow/email-notification.ftl": {
+               name: "alfresco/forms/controls/CheckBox"
+            },
+            "/org/alfresco/components/form/controls/info.ftl": {
+               name: "alfresco/renderers/Property"
+            },
+            "/org/alfresco/components/form/controls/number.ftl": {
+               name: "alfresco/forms/controls/NumberSpinner",
+               config: {
+                  permittedDecimalPlaces: 10
+               }
+            },
+            "/org/alfresco/components/form/controls/workflow/packageitems.ftl": {
+               name: "alfresco/forms/controls/DocumentPicker"
+            },
+            "/org/alfresco/components/form/controls/percentage-approve.ftl": {
+               name: "alfresco/forms/controls/NumberSpinner",
+               config: {
+                  min: 0,
+                  max: 100
+               }
+            },
+            "/org/alfresco/components/form/controls/workflow/priority.ftl": {
+               name: "alfresco/forms/controls/Select",
+               config: {
+                  optionsConfig: {
+                     fixed: [
+                        {
+                           label: "priority.high", value: "1"
+                        },
+                        {
+                           label: "priority.medium", value: "2"
+                        },
+                        {
+                           label: "priority.low", value: "3"
+                        }
+                     ]
+                  }
+               }
+            },
+            "/org/alfresco/components/form/controls/readonly.ftl": {
+               name: "alfresco/forms/controls/TextBox",
+               config: {
+                  disablementConfig: {
+                     initialValue: true
+                  }
+               }
+            },
+            "/org/alfresco/components/form/controls/selectone.ftl": {
+               name: "alfresco/forms/controls/Select"
+            },
+            "/org/alfresco/components/form/controls/textarea.ftl": {
+               name: "alfresco/forms/controls/TextArea"
+            },
+            "/org/alfresco/components/form/controls/textfield.ftl": {
+               name: "alfresco/forms/controls/TextBox"
+            }
+         },
+
+         // The following mappings are "kind" (type) specific and within each
+         // "kind" are view mode specific mappings...
+         node: {
+            edit: {
+
+            },
+
+            // The "view" mode of the "node" kind is different in that it displays the
+            // data as renderers rather than form controls...
+            view: {
+               "/org/alfresco/components/form/controls/checkbox.ftl": {
+                  name: "alfresco/renderers/Boolean"
+               },
+               "/org/alfresco/components/form/controls/date.ftl": {
+                  name: "alfresco/renderers/Date",
+                  config: {
+                     simple: true
+                     // modifiedDateProperty: "prop_cm_modified",
+                     // modifiedByProperty: "prop_cm_modifier"
+                  }
+               },
+               "/org/alfresco/components/form/controls/number.ftl": {
+                  name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/readonly.ftl": {
+                  name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/textfield.ftl": {
+                  name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/textarea.ftl": {
+                  name: "alfresco/renderers/Property"
+               }
+            }
+         },
+
+         task: {
+            edit: {
+
+            },
+
+            view: {
+
+            }
+         },
+
+         workflow: {
+            create: {
+
+            }
          }
       },
 
-      widgetsForMappings: [
-         {
-            name: "alfresco/forms/controls/TextBox"
+      /**
+       * Maps the XML constraint configuration specifying YUI2 based Share functions to Regular expression
+       * configuration for form validation.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.78
+       */
+      constraintMappings: {
+         "Alfresco.forms.validation.fileName": {
+            pattern: "([\"\*\\\>\<\?\/\:\|]+)|([\.]?[\.]+$)|(^[ \t]+|[ \t]+$)",
+            match: false
          },
-         {
-            name: "alfresco/forms/controls/TextArea"
+         "Alfresco.forms.validation.wikiTitle": {
+            pattern: "([#\\\?\/\|]+)|([\.]?[\.]+$)",
+            match: false
          },
-         {
-            name: "alfresco/renderers/Property"
+         "Alfresco.forms.validation.nodeRef": {
+            pattern: "^[^\:^ ]+\:\/\/[^\:^ ]+\/[^ ]+$",
+            match: true
+         },
+         "Alfresco.forms.validation.phone": {
+            pattern: "^[0-9\(\)\[\]\-\+\*#\\:\/,; ]+$",
+            match: true
+         },
+         "Alfresco.forms.validation.time": {
+            pattern: "^([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$",
+            match: true
+         },
+         "Alfresco.forms.validation.url": {
+            pattern: "(ftp|http|https):\/\/[\w\-_]+(\.[\w\-_]+)*([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?",
+            match: true
          }
-      ],
+         // TODO: "Alfresco.forms.validation.email" not handled yet due to complexity
+
+      },
+
 
       /**
        * 
@@ -171,7 +295,7 @@ define(["dojo/_base/declare",
              response.constraints)
          {
             var widgets = [];
-            if (response.mode === "view")
+            if (response.itemKind === "node" && response.mode === "view")
             {
                var properties = [];
                var metadataGroup = {
@@ -220,9 +344,24 @@ define(["dojo/_base/declare",
                // that it contains...
                // TODO: Need to handle the different structures that are available...
                array.forEach(response.structure, function(structureElement) {
+                  var rowControls = [];
+                  var structureWidget = {
+                     name: "alfresco/forms/ControlRow",
+                     config: {
+                        title: structureElement.event,
+                        widgets: rowControls
+                     }
+                  };
+                  formControls.push(structureWidget);
+
+                  // Select the appropriate target for the form controls, at the moment this assumes
+                  // that if a "message" attribute is provided then all form controls go into the same
+                  // row - however, that needs to be validated, it might be necessary to iterate over the
+                  // controls to ensure that the appropriate number of controls are added per row.
+                  var targetForControls = structureElement.message ? rowControls : formControls;
                   if (structureElement.children)
                   {
-                     array.forEach(structureElement.children, lang.hitch(this, this.addField, formControls, response));
+                     array.forEach(structureElement.children, lang.hitch(this, this.addField, targetForControls, response));
                   }
                }, this);
 
@@ -248,13 +387,20 @@ define(["dojo/_base/declare",
        * @param {object} structureElement The current structural element defining a field to be rendered
        */
       addField: function alfresco_services_FormsRuntimeService__addField(widgets, formConfig, structureElement) {
-         if (structureElement && structureElement.id)
+         // if (structureElement && 
+         //     structureElement.id && 
+         //     typeof formConfig.data[structureElement.id] !== "undefined")
+         // NOTE: It's not clear how we should treat fields that have no associated data, in some cases this
+         //       prevents the form from being posted (on edit - last accessed), but in workflow not all fields
+         //       having matching data.
+         if (structureElement && 
+             structureElement.id)
          {
             // TODO: Do we need to consider "kind" attributes on the structureElement other than "field" ???
             
             // Look up the target field referenced in the structure element...
             var targetField = formConfig.fields[structureElement.id];
-            if (targetField)
+            if (targetField )
             {
                // We need to get the control template from the field configuration. This will be a Surf/YUI2 
                // reference which is fairly meaningless in the context of Aikau, however we can use this to 
@@ -263,9 +409,11 @@ define(["dojo/_base/declare",
                if (controlTemplate)
                {
                   var widget;
-                  if (formConfig.mode === "view")
+                  if (formConfig["arguments"].itemKind === "node" && formConfig.mode === "view")
                   {
-                     widget = this.getViewProperty(targetField, controlTemplate);
+                     // The "view" mode for the "node" kind is treated differently from all other
+                     // form renderings...
+                     widget = this.getViewProperty(targetField, controlTemplate, formConfig);
                   }
                   else
                   {
@@ -278,28 +426,54 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Called from [addField]{@link module:alfresco/services/FormsRuntimeService#addField} 
+       * and [getViewProperty]{@link module:alfresco/services/FormsRuntimeService#getViewProperty} to
+       * find the Aikau control widget that has been mapped to the supplied controlTemplate.
+       * 
+       * @instance
+       * @param {object} formConfig The full configuration for the form being rendered
+       * @param  {string} controlTemplate The name of the template to be mapped to a widget
+       * @return {object} The mapped control.
+       * @since 1.0.78
+       */
+      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, controlTemplate) {
+         var kind = formConfig["arguments"].itemKind;
+         var mode = formConfig.mode;
+
+         // TODO: Need to check as yet undeclared custom mappings...
+
+         var control = this.controlMappings[kind][mode][controlTemplate];
+         if (!control)
+         {
+            control = this.controlMappings["default"][controlTemplate];
+         }
+         return control;
+      },
+
+      /**
        * Called from [addField]{@link module:alfresco/services/FormsRuntimeService#addField} to create
        * a "view" mode widget for the field supplied.
        * 
        * @instance
        * @param  {object} targetField The configuration for the field to render.
        * @param  {string} controlTemplate The name of the template to be mapped to a widget
+       * @param {object} formConfig The full configuration for the form being rendered
        * @return {object} A model for the widget to be used to render the property.
        */
-      getViewProperty: function alfresco_services_FormsRuntimeService__getViewProperty(targetField, controlTemplate) {
+      getViewProperty: function alfresco_services_FormsRuntimeService__getViewProperty(targetField, controlTemplate, formConfig) {
          var widget;
-         var formControl = this.defaultMappings.view[controlTemplate];
+         var formControl = this.getMappedControl(formConfig, controlTemplate);
          if (formControl)
          {
-            widget = {
+            widget = lang.clone(formControl);
+            var data = {
                id: targetField.name.toUpperCase(),
                label: targetField.label,
-               name: formControl,
                config: {
                   propertyToRender: targetField.dataKeyName
                }
             };
-            
+            $.extend(true, widget, data);
          }
          else
          {
@@ -320,12 +494,13 @@ define(["dojo/_base/declare",
        */
       getEditFormControl: function alfresco_services_FormsRuntimeService__addFormControl(targetField, controlTemplate, formConfig) {
          var widget;
-         var formControl = this.defaultMappings.edit[controlTemplate];
+         
+         var formControl = this.getMappedControl(formConfig, controlTemplate);
          if (formControl)
          {
-            widget = {
+            widget = lang.clone(formControl);
+            var data = {
                id: targetField.name.toUpperCase(),
-               name: formControl,
                config: {
                   fieldId: targetField.name.toUpperCase(),
                   name: targetField.name,
@@ -333,6 +508,7 @@ define(["dojo/_base/declare",
                   description: targetField.description
                }
             };
+            $.extend(true, widget, data);
 
             if (formConfig.constraints)
             {
@@ -343,6 +519,9 @@ define(["dojo/_base/declare",
                   }
                }, this);
             }
+
+            // Add any option configuration that may be present...
+            this.addOptions(widget, targetField);
             
          }
          else
@@ -367,7 +546,7 @@ define(["dojo/_base/declare",
          }
          else if (constraint.id === "REGEX")
          {
-            var regex = this.defaultMappings.constraints[constraint.validationHandler];
+            var regex = this.constraintMappings[constraint.validationHandler];
             if (regex)
             {
                if (!widget.config.validationConfig)
@@ -387,6 +566,39 @@ define(["dojo/_base/declare",
          else if (constraint.id === "MINMAX") {}
          else if (constraint.id === "LIST") {}
          else if (constraint.id === "LENGTH") {}
+      },
+
+      /**
+       * Adds options to the supplied widget. The options are derived from the "options" and
+       * "optionSeparator" attributes of the "params" configuration for the control of the
+       * supplied targetField.
+       * 
+       * @instance
+       * @param {object} widget The widget to add option to
+       * @param {object} targetField The data for the field to check for options data
+       * @since 1.0.78
+       */
+      addOptions: function alfresco_services_FormsRuntimeService__addOptions(widget, targetField) {
+         if (!widget.config.optionsConfig)
+         {
+            var options = lang.getObject("control.params.options", false, targetField);
+            var optionSeparator = lang.getObject("control.params.optionSeparator", false, targetField);
+            if (options && optionSeparator)
+            {
+               var optionsConfig = {
+                  fixed: []
+               };
+               var optionsArray = options.split(optionSeparator);
+               array.forEach(optionsArray, function(option) {
+                  var optionComponents = option.split("|");
+                  optionsConfig.fixed.push({
+                     value: optionComponents[0],
+                     label: optionComponents[optionComponents.length - 1]
+                  });
+               }, this);
+               widget.config.optionsConfig = optionsConfig;
+            }
+         }
       },
 
       /**
