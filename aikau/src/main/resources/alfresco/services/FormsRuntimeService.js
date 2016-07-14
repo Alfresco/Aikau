@@ -80,6 +80,22 @@ define(["dojo/_base/declare",
          // control mappings, this allows there to be flexibility in configuration and mapping
          // on "kind" (type) specific mapping...
          "default": {
+            "/org/alfresco/components/form/controls/authority.ftl": {
+               name: "alfresco/forms/controls/MultiSelectInput",
+               config: {
+                  width: "400px",
+                  optionsConfig: {
+                     labelAttribute: "displayName",
+                     queryAttribute: "displayName",
+                     valueAttribute: "userName",
+                     publishTopic: "ALF_GET_USERS",
+                     publishPayload: {
+                        resultsProperty: "items"
+                     }
+                  }
+               }
+            },
+
             "/org/alfresco/components/form/controls/category.ftl": {
                name: "alfresco/forms/controls/MultiSelectInput",
                config: {
