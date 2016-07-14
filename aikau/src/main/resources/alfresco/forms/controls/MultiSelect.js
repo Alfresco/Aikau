@@ -442,7 +442,15 @@ define([
           * @returns {string[]} The value(s) of the control
           */
          getValue: function alfresco_forms_controls_MultiSelect__getValue() {
-            return this.value;
+            var value = this.value;
+            if (value && this.valueDelimiter && ObjectTypeUtils.isArray(value))
+            {
+               var itemValues = array.map(value, function(valueItem) {
+                  return valueItem[this.store.valueAttribute];
+               }, this);
+               value = itemValues.join(this.valueDelimiter);
+            }
+            return value;
          },
 
          /**
