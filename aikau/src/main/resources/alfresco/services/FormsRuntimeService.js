@@ -47,13 +47,15 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/CheckBox",
         "alfresco/forms/controls/DateTextBox",
         "alfresco/forms/controls/DocumentPicker",
+        "alfresco/forms/controls/MultiSelectInput",
         "alfresco/forms/controls/NumberSpinner",
         "alfresco/forms/controls/Select",
         "alfresco/forms/controls/TextArea",
         "alfresco/forms/controls/TextBox",
         "alfresco/node/MetadataGroups",
         "alfresco/renderers/Date",
-        "alfresco/renderers/Property"],
+        "alfresco/renderers/Property",
+        "alfresco/renderers/Size"],
         function(declare, BaseService, CoreXhr, NodeUtils, topics, AlfConstants, webScriptDefaults, array, lang, $) {
    
    return declare([BaseService, CoreXhr], {
@@ -78,6 +80,23 @@ define(["dojo/_base/declare",
          // control mappings, this allows there to be flexibility in configuration and mapping
          // on "kind" (type) specific mapping...
          "default": {
+            "/org/alfresco/components/form/controls/category.ftl": {
+               name: "alfresco/forms/controls/MultiSelectInput",
+               config: {
+                  name: "tags",
+                  width: "400px",
+                  valueDelimiter: ",",
+                  optionsConfig: {
+                     queryAttribute: "name",
+                     valueAttribute: "nodeRef",
+                     labelAttribute: "name",
+                     publishTopic: "ALF_RETRIEVE_CURRENT_TAGS",
+                     publishPayload: {
+                        resultsProperty: "response.data.items"
+                     }
+                  }
+               }
+            },
             "/org/alfresco/components/form/controls/checkbox.ftl": {
                name: "alfresco/forms/controls/CheckBox"
             },

@@ -202,6 +202,17 @@ define([
          value: null,
 
          /**
+          * An optional token that can be provided for splitting the supplied value. This should be configured
+          * when the value is provided as a string that needs to be converted into an array.
+          * 
+          * @instance
+          * @type {string}
+          * @default
+          * @since 1.0.77
+          */
+         valueDelimiter: null,
+
+         /**
           * The width of the control, specified as a CSS value (optional)
           *
           * @instance
@@ -536,7 +547,11 @@ define([
 
             // Setup helper vars
             var newValuesArray = newValueParam;
-            if (!ObjectTypeUtils.isArray(newValuesArray)) {
+            if (this.valueDelimiter)
+            {
+               newValuesArray = newValueParam.split(this.valueDelimiter);
+            }
+            else if (!ObjectTypeUtils.isArray(newValuesArray)) {
                newValuesArray = (newValueParam && [newValueParam]) || [];
             }
 
