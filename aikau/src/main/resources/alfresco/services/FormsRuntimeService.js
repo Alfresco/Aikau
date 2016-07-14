@@ -218,7 +218,19 @@ define(["dojo/_base/declare",
             },
 
             view: {
+               prop_bpm_dueDate: {
+                  name: "alfresco/renderers/Date",
+                  config: {
+                     simple: true
+                  }
+               },
 
+               "/org/alfresco/components/form/controls/info.ftl": {
+                  name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/workflow/priority.ftl": {
+                  name: "alfresco/renderers/Property"
+               }
             }
          },
 
@@ -555,17 +567,34 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} formConfig The full configuration for the form being rendered
+       * @param  {object} targetField The configuration for the field to render.
        * @param  {string} controlTemplate The name of the template to be mapped to a widget
        * @return {object} The mapped control.
        * @since 1.0.77
        */
-      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, controlTemplate) {
+      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, targetField, controlTemplate) {
          var kind = formConfig["arguments"].itemKind;
          var mode = formConfig.mode;
 
          // TODO: Need to check as yet undeclared custom mappings...
-
-         var control = this.controlMappings[kind][mode][controlTemplate];
+         var control;
+         var kindMapping = this.controlMappings[kind];
+         if (kindMapping)
+         {
+            var modeMapping = kindMapping[mode];
+            if (modeMapping)
+            {
+               control = modeMapping[targetField.dataKeyName];
+               if (!control)
+               {
+                  control = modeMapping[controlTemplate];
+               }
+            }
+            if (!control)
+            {
+               control = kindMapping[controlTemplate];
+            }
+         }
          if (!control)
          {
             control = this.controlMappings["default"][controlTemplate];
@@ -585,7 +614,7 @@ define(["dojo/_base/declare",
        */
       getViewProperty: function alfresco_services_FormsRuntimeService__getViewProperty(targetField, controlTemplate, formConfig) {
          var widget;
-         var formControl = this.getMappedControl(formConfig, controlTemplate);
+         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate);
          if (formControl)
          {
             widget = lang.clone(formControl);
@@ -618,14 +647,16 @@ define(["dojo/_base/declare",
       getEditFormControl: function alfresco_services_FormsRuntimeService__addFormControl(targetField, controlTemplate, formConfig) {
          var widget;
          
-         var formControl = this.getMappedControl(formConfig, controlTemplate);
+         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate);
          if (formControl)
          {
             widget = lang.clone(formControl);
             var data = {
                id: targetField.name.toUpperCase(),
                config: {
+                  currentItem: formConfig.data,
                   fieldId: targetField.name.toUpperCase(),
+                  propertyToRender: targetField.name, // NOTE: Hedging bets for renderers
                   name: targetField.name,
                   label: targetField.label,
                   description: targetField.description
