@@ -26,6 +26,7 @@
  * 
  * @module alfresco/services/FormsRuntimeService
  * @extends module:alfresco/services/BaseService
+ * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  * @since 1.0.76
  */
@@ -77,6 +78,9 @@ define(["dojo/_base/declare",
          // control mappings, this allows there to be flexibility in configuration and mapping
          // on "kind" (type) specific mapping...
          "default": {
+            "/org/alfresco/components/form/controls/checkbox.ftl": {
+               name: "alfresco/forms/controls/CheckBox"
+            },
             "/org/alfresco/components/form/controls/date.ftl": {
                name: "alfresco/forms/controls/DateTextBox"
             },
@@ -85,6 +89,14 @@ define(["dojo/_base/declare",
             },
             "/org/alfresco/components/form/controls/info.ftl": {
                name: "alfresco/renderers/Property"
+            },
+            "/org/alfresco/components/form/controls/mimetype.ftl": {
+               name: "alfresco/forms/controls/Select",
+               config: {
+                  optionsConfig: {
+                     publishTopic: topics.GET_FORMS_FORMS_RUNTIME_MIMETYPES
+                  }
+               }
             },
             "/org/alfresco/components/form/controls/number.ftl": {
                name: "alfresco/forms/controls/NumberSpinner",
@@ -160,11 +172,17 @@ define(["dojo/_base/declare",
                      // modifiedByProperty: "prop_cm_modifier"
                   }
                },
+               "/org/alfresco/components/form/controls/mimetype.ftl": {
+                  name: "alfresco/renderers/Property"
+               },
                "/org/alfresco/components/form/controls/number.ftl": {
                   name: "alfresco/renderers/Property"
                },
                "/org/alfresco/components/form/controls/readonly.ftl": {
                   name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/size.ftl": {
+                  name: "alfresco/renderers/Size"
                },
                "/org/alfresco/components/form/controls/textfield.ftl": {
                   name: "alfresco/renderers/Property"
@@ -230,15 +248,107 @@ define(["dojo/_base/declare",
 
       },
 
+      /**
+       * This will be populated with MIME type options the first time the 
+       * "/org/alfresco/components/form/controls/mimetype.ftl" is mapped to a
+       * formcontrol and used. It prevents multiple XHR for data that is unlikely to
+       * change unnecessary.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.78
+       */
+      _loadedMimeTypes: null,
 
       /**
        * 
        * 
        * @instance
        * @listens module:alfresco/core/topics#REQUEST_FORM
+       * @listens module:alfresco/core/topics#GET_FORMS_FORMS_RUNTIME_MIMETYPES
        */
       registerSubscriptions: function alfresco_services_FormsRuntimeService__registerSubscriptions() {
          this.alfSubscribe(topics.REQUEST_FORM, lang.hitch(this, this.onFormRequest));
+         this.alfSubscribe(topics.GET_FORMS_FORMS_RUNTIME_MIMETYPES, lang.hitch(this, this.onMimeTypesRequest));
+      },
+
+      /**
+       * Handles requests to load the available MIME types to display as 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options. If the
+       * MIME types have already been loaded the previously loaded values will be returned
+       * by called [publishMimeTypeOptions]{@link module:alfresco/services/FormsRuntimeService#publishMimeTypeOptions}.
+       * 
+       * @instance
+       * @param {object} payload The details for the options request.
+       * @since 1.0.78
+       */
+      onMimeTypesRequest: function alfresco_services_FormsRuntimeService__onMimeTypesRequest(payload) {
+         if (!this._loadedMimeTypes)
+         {
+            this.serviceXhr({
+               url : AlfConstants.URL_SERVICECONTEXT + "utils/mimetypemap",
+               data: payload,
+               method: "GET",
+               successCallback: this.onMimeTypesLoaded,
+               failureCallback: function() { /* No action required */ },
+               progressCallback: function() { /* No action required */ },
+               callbackScope: this
+            });
+         }
+         else
+         {
+            this.publishMimeTypeOptions(payload);
+         }
+      },
+
+      /**
+       * Handles successful requests for available MIME types, converts the response into a
+       * structure that is appropriate for [form controls]{@link module:alfresco/forms/controls/BaseFormControls},
+       * stores the data in [_loadedMimeTypes]{@link module:alfresco/services/FormsRuntimeService#_loadedMimeTypes}
+       * and calls [publishMimeTypeOptions]{@link module:alfresco/services/FormsRuntimeService#publishMimeTypeOptions}
+       * to publish the available options.
+       * 
+       * @instance
+       * @param {object} response
+       * @param {object} originalRequestConfig
+       * @since 1.0.78
+       */
+      onMimeTypesLoaded: function alfresco_services_FormsRuntimeService__onMimeTypesLoaded(response, originalRequestConfig) {
+         if (response && response.mimetypes)
+         {
+            var mimetypes = response.mimetypes;
+            this._loadedMimeTypes = [];
+            array.forEach(Object.keys(mimetypes), function(value) {
+               this._loadedMimeTypes.push({
+                  label: mimetypes[value],
+                  value: value
+               });
+            }, this);
+            this.publishMimeTypeOptions(originalRequestConfig.data);
+         }
+      },
+
+      /**
+       * Publishes the [available MIME type options]{@link module:alfresco/services/FormsRuntimeService#_loadedMimeTypes}.
+       * 
+       * @instance
+       * @param {object} payload The details for the options request.
+       * @since 1.0.78
+       */
+      publishMimeTypeOptions: function(data) {
+         var topic;
+         if (data.alfResponseTopic)
+         {
+            topic = (data.alfResponseScope || "") + data.alfResponseTopic;
+         }
+         else
+         {
+            topic = data.responseTopic;
+         }
+         this.alfPublish(topic, {
+            options: this._loadedMimeTypes
+         });
       },
       
       /**
@@ -252,12 +362,6 @@ define(["dojo/_base/declare",
              payload.mode)
          {
             var itemId = payload.itemId;
-            if (payload.itemKind === "node")
-            {
-               var nodeData = NodeUtils.processNodeRef(payload.itemId);
-               itemId = nodeData.uri;
-            }
-
             var url = AlfConstants.URL_SERVICECONTEXT + "aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form" +
                       "?itemKind=" + payload.itemKind + 
                       "&itemId=" + itemId + 
@@ -295,7 +399,7 @@ define(["dojo/_base/declare",
              response.constraints)
          {
             var widgets = [];
-            if (response.itemKind === "node" && response.mode === "view")
+            if (response["arguments"].itemKind === "node" && response.mode === "view")
             {
                var properties = [];
                var metadataGroup = {
@@ -348,7 +452,7 @@ define(["dojo/_base/declare",
                   var structureWidget = {
                      name: "alfresco/forms/ControlRow",
                      config: {
-                        title: structureElement.event,
+                        title: structureElement.params === "title" ? structureElement.event : null,
                         widgets: rowControls
                      }
                   };

@@ -638,6 +638,20 @@ define([],function() {
       GET_DOCUMENT_LIST_SUCCESS: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
+       * This topic is used by the [FormsRuntimeService]{@link module:alfresco/services/FormsRuntimeServce}
+       * as a simple way of providing the MIME type data for mapped Share Forms Runtime controls. Specifically
+       * the "/org/alfresco/components/form/controls/mimetype.ftl" control.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       *
+       * @event
+       */
+      GET_FORMS_FORMS_RUNTIME_MIMETYPES: "ALF_GET_FORMS_RUNTIME_MIMETYPE",
+
+      /**
        * Get the node ref for the current node's parent.
        *
        * @instance
