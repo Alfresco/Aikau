@@ -547,7 +547,7 @@ define([
 
             // Setup helper vars
             var newValuesArray = newValueParam;
-            if (this.valueDelimiter)
+            if (newValueParam && this.valueDelimiter)
             {
                newValuesArray = newValueParam.split(this.valueDelimiter);
             }
