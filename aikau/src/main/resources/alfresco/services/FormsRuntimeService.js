@@ -217,7 +217,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default
-       * @since 1.0.78
+       * @since 1.0.77
        */
       constraintMappings: {
          "Alfresco.forms.validation.fileName": {
@@ -257,7 +257,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default
-       * @since 1.0.78
+       * @since 1.0.77
        */
       _loadedMimeTypes: null,
 
@@ -281,7 +281,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload The details for the options request.
-       * @since 1.0.78
+       * @since 1.0.77
        */
       onMimeTypesRequest: function alfresco_services_FormsRuntimeService__onMimeTypesRequest(payload) {
          if (!this._loadedMimeTypes)
@@ -312,7 +312,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} response
        * @param {object} originalRequestConfig
-       * @since 1.0.78
+       * @since 1.0.77
        */
       onMimeTypesLoaded: function alfresco_services_FormsRuntimeService__onMimeTypesLoaded(response, originalRequestConfig) {
          if (response && response.mimetypes)
@@ -334,7 +334,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload The details for the options request.
-       * @since 1.0.78
+       * @since 1.0.77
        */
       publishMimeTypeOptions: function(data) {
          var topic;
@@ -538,7 +538,7 @@ define(["dojo/_base/declare",
        * @param {object} formConfig The full configuration for the form being rendered
        * @param  {string} controlTemplate The name of the template to be mapped to a widget
        * @return {object} The mapped control.
-       * @since 1.0.78
+       * @since 1.0.77
        */
       getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, controlTemplate) {
          var kind = formConfig["arguments"].itemKind;
@@ -680,7 +680,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} widget The widget to add option to
        * @param {object} targetField The data for the field to check for options data
-       * @since 1.0.78
+       * @since 1.0.77
        */
       addOptions: function alfresco_services_FormsRuntimeService__addOptions(widget, targetField) {
          if (!widget.config.optionsConfig)

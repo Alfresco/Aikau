@@ -645,7 +645,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.78
+       * @since 1.0.77
        *
        * @event
        */
