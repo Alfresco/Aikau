@@ -118,7 +118,6 @@
 @standard-form-border: @standard-border-width @standard-border-style @standard-form-border-color;
 @standard-border-radius: 6px;
 @hover-border-color: #d3d3d3;
-@focused-border-color: #8dc63f;
 @thick-border-width: 3px;
 @upload-highlight-border: 3px dashed #6ba969;
 
@@ -134,6 +133,8 @@
 @legacy-button-color: #ccc;
 @legacy-button-color-text: @general-font-color;
 @legacy-action-button-color: #8dc63f;
+
+@focused-border-color: @button-color-default;
 
 // Push buttons
 @push-button-min-width: 90px;
@@ -240,6 +241,8 @@
    @call-to-action-button-background-focus: @legacy-action-button-color;
    @call-to-action-button-background-active: @legacy-action-button-color;
    @call-to-action-button-background-disabled: @legacy-action-button-color;
+
+   @focused-border-color: #8dc63f;
 }
 
 // Shadows
