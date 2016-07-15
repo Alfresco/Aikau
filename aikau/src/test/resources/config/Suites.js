@@ -188,6 +188,7 @@ define(function() {
       "alfresco/lists/FilteredListTest",
       "alfresco/lists/FilteredListUseCaseTest",
       "alfresco/lists/InfiniteScrollTest",
+      "alfresco/lists/ListItemFocusTest",
       "alfresco/lists/LocalStorageFallbackTest",
       "alfresco/lists/PaginatorVisibilityTest",
       "alfresco/lists/SortControlsTest",
