@@ -49,6 +49,17 @@ define([
           */
          getPubSubOptionsImmediately: false,
 
+          /**
+          * An optional token that can be provided for splitting the supplied value. This should be configured
+          * when the value is provided as a string that needs to be converted into an array.
+          * 
+          * @instance
+          * @type {string}
+          * @default
+          * @since 1.0.77
+          */
+         valueDelimiter: null,
+
          /**
           * @override
           * @instance
@@ -62,7 +73,8 @@ define([
                width: this.width,
                choiceCanWrap: this.optionsConfig.choiceCanWrap,
                choiceMaxWidth: this.optionsConfig.choiceMaxWidth,
-               labelFormat: this.optionsConfig.labelFormat
+               labelFormat: this.optionsConfig.labelFormat,
+               valueDelimiter: this.valueDelimiter
 
                // NOTE: This is not currently enabled, as it would create inconsistencies between
                // controls' abilities, however the intention is at some point to use this control

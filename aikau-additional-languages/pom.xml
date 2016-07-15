@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.77-SNAPSHOT</version>
+      <version>1.0.78-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
    <artifactId>aikau-additional-languages</artifactId>
@@ -12,9 +12,7 @@
    <build>
       <plugins>
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.9</version>
             <executions>
                <execution>
                   <id>unpack-dependencies</id>
@@ -27,7 +25,7 @@
                         <artifactItem>
                            <groupId>org.alfresco</groupId>
                            <artifactId>aikau</artifactId>
-                           <version>${version}</version>
+                           <version>${project.version}</version>
                            <type>jar</type>
                            <overWrite>true</overWrite>
                            <excludes>**/*_de.properties,**/*_en.properties,**/*_es.properties,**/*_fr.properties,**/*_it.properties,**/*_ja.properties,**/*_nb.properties,**/*_nl.properties,**/*_pt_BR.properties,**/*_ru.properties,**/*_zh_CN.properties</excludes>

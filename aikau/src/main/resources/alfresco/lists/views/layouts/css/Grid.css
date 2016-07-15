@@ -7,7 +7,8 @@
    &--enableHighlighting {
       
       .alfresco-lists-views-layouts-Grid__cell {
-         border: @standard-border;
+         margin-top: @standard-line-height;
+         border: @thick-border-width solid transparent;
          border-radius: @standard-border-radius;
          
          &--focused {
@@ -44,13 +45,21 @@
                margin-left: -14px;
             }
          }
+
+         &--expanded {
+            >div {
+               border-bottom: none;
+            }
+         }
       }
    }
 }
 
 .alfresco-lists-views-layouts-Grid__expandedPanel {
+
    .alfresco-lists-views-layouts-Grid__cell--focused {
       border: none;
+      margin-bottom: @standard-line-height;
    }
 }
 

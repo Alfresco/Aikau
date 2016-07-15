@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfList (item focus on load)</shortname>
+  <description>Demonstrates how an item can be focused on load</description>
+  <family>aikau-unit-tests</family>
+  <url>/ListItemFocus</url>
+</webscript>

@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.77-SNAPSHOT</version>
+      <version>1.0.78-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -25,7 +25,6 @@
                     <plugin>
                         <groupId>org.apache.tomcat.maven</groupId>
                         <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
                         <executions>
                             <execution>
                                 <id>run-embedded-tomcat</id>
@@ -64,7 +63,6 @@
                     <plugin>
                         <groupId>org.apache.tomcat.maven</groupId>
                         <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
                         <executions>
                             <execution>
                                 <id>run-embedded-tomcat</id>
@@ -97,7 +95,6 @@
                     </plugin>
                     <plugin>
                       <artifactId>maven-antrun-plugin</artifactId>
-                      <version>1.8</version>
                       <executions>
                         <execution>
                           <id>run-unit-tests</id>
@@ -236,7 +233,6 @@
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>
-            <version>1.10</version>
             <executions>
                <execution>
                   <id>regex-property</id>
@@ -280,7 +276,6 @@
 
          <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.8</version>
             <executions>
                <execution>
                   <id>duplicate-english-messages</id>
@@ -341,9 +336,7 @@
         </plugin>
 
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.9</version>
             <executions>
                <execution>
                   <id>unpack-dependencies</id>
@@ -369,23 +362,7 @@
          </plugin>
 
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
-            <version>2.6</version>
-            <executions>
-               <execution>
-                  <id>build-jar</id>
-                  <goals>
-                     <goal>jar</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.6</version>
             <executions>
                <execution>
                   <id>build-tests</id>
