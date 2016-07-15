@@ -40,13 +40,13 @@ define(["dojo/_base/declare",
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
-       /**
+      /**
        * An array of the i18n files to use with this widget.
        *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/HeaderCell.properties"}]
-       * @since 1.0.41
+       * @since 1.0.77
        */
       i18nRequirements: [{i18nFile: "./i18n/HeaderCell.properties"}],
 
