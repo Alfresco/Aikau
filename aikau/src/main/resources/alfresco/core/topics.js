@@ -960,6 +960,9 @@ define([],function() {
        * @type {string}
        * @default
        * @since 1.0.34
+       *
+       * @event
+       * @property {string} [focusItemKey=null] An item to focus on if it is in the data that is reloaded
        */
       RELOAD_DATA_TOPIC: "ALF_DOCLIST_RELOAD_DATA",
 
