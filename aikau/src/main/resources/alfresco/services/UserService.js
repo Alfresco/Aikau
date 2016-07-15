@@ -77,6 +77,7 @@ define(["dojo/_base/declare",
        * @instance 
        * @since 1.0.32
        * @listens module:alfresco/core/topics#GET_USERS
+       * @listens module:alfresco/core/topics#GET_AUTHORITIES
        */
       registerSubscriptions: function alfresco_services_UserService__registerSubscriptions() {
          this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, this.updateUserStatus));
@@ -84,6 +85,46 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.setUserHomePageSuccessTopic, lang.hitch(this, this.onSetUserHomePageSuccess));
          this.alfSubscribe(this.setUserHomePageFailureTopic, lang.hitch(this, this.onSetUserHomePageFailure));
          this.alfSubscribe(topics.GET_USERS, lang.hitch(this, this.onGetUsers));
+         this.alfSubscribe(topics.GET_AUTHORITIES, lang.hitch(this, this.onGetAuthorities));
+      },
+
+      /**
+       * Handles requests to retrieve authorities (users or groups).
+       * 
+       * @instance
+       * @param {object} payload The request details
+       * @since 1.0.77
+       */
+      onGetAuthorities: function alfresco_services_UserService__onGetAuthorities(payload) {
+         var topic;
+         if (payload.alfResponseTopic)
+         {
+            topic = (payload.alfResponseScope || "") + payload.alfResponseTopic;
+         }
+         else
+         {
+            topic = payload.responseTopic;
+         }
+
+         var url = AlfConstants.PROXY_URI + "api/forms/picker/authority/children";
+         
+         var searchTerm = payload.query || "";
+         url = urlUtils.addQueryParameter(url, "searchTerm", searchTerm);
+
+         var selectableType = payload.selectableType || "cm:person";
+         url = urlUtils.addQueryParameter(url, "selectableType", selectableType);
+
+         var size = payload.size || 1000;
+         url = urlUtils.addQueryParameter(url, "size", size);
+         
+         this.serviceXhr({
+            url: url,
+            method: "GET",
+            alfTopic: topic,
+            alfResponseTopic: topic,
+            alfSuccessTopic: payload.alfSuccessTopic,
+            alfFailureTopic: payload.alfFailureTopic
+         });
       },
 
       /**

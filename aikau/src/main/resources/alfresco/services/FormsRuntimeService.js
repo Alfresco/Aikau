@@ -84,13 +84,14 @@ define(["dojo/_base/declare",
                name: "alfresco/forms/controls/MultiSelectInput",
                config: {
                   width: "400px",
+                  valueDelimiter: ",",
                   optionsConfig: {
-                     labelAttribute: "displayName",
-                     queryAttribute: "displayName",
-                     valueAttribute: "userName",
-                     publishTopic: "ALF_GET_USERS",
+                     labelAttribute: "name",
+                     queryAttribute: "name",
+                     valueAttribute: "nodeRef",
+                     publishTopic: topics.GET_AUTHORITIES,
                      publishPayload: {
-                        resultsProperty: "items"
+                        resultsProperty: "response.data.items"
                      }
                   }
                }

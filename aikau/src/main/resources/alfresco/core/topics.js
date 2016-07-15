@@ -572,6 +572,22 @@ define([],function() {
       ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
 
       /**
+       * This topic can be published to request a list of authorities to be returned (e.g. users
+       * or groups).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       *
+       * @event
+       * @param {string} [selectableType="cm:person"] The type of authority to retrieve
+       * @param {string} [query=""] The search query to provide
+       * @param {number} [size=1000] The maximum number of results to return
+       */
+      GET_AUTHORITIES: "ALF_GET_AUTHORITIES",
+
+      /**
        * This topic can be used to request Cloud specific paths to use in an
        * [Tree form control]{@link module:alfresco/forms/controls/Tree}.
        *
