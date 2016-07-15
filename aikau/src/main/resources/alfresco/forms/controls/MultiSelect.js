@@ -202,6 +202,17 @@ define([
          value: null,
 
          /**
+          * An optional token that can be provided for splitting the supplied value. This should be configured
+          * when the value is provided as a string that needs to be converted into an array.
+          * 
+          * @instance
+          * @type {string}
+          * @default
+          * @since 1.0.77
+          */
+         valueDelimiter: null,
+
+         /**
           * The width of the control, specified as a CSS value (optional)
           *
           * @instance
@@ -431,7 +442,15 @@ define([
           * @returns {string[]} The value(s) of the control
           */
          getValue: function alfresco_forms_controls_MultiSelect__getValue() {
-            return this.value;
+            var value = this.value;
+            if (value && this.valueDelimiter && ObjectTypeUtils.isArray(value))
+            {
+               var itemValues = array.map(value, function(valueItem) {
+                  return valueItem[this.store.valueAttribute];
+               }, this);
+               value = itemValues.join(this.valueDelimiter);
+            }
+            return value;
          },
 
          /**
@@ -536,7 +555,11 @@ define([
 
             // Setup helper vars
             var newValuesArray = newValueParam;
-            if (!ObjectTypeUtils.isArray(newValuesArray)) {
+            if (newValueParam && this.valueDelimiter)
+            {
+               newValuesArray = newValueParam.split(this.valueDelimiter);
+            }
+            else if (!ObjectTypeUtils.isArray(newValuesArray)) {
                newValuesArray = (newValueParam && [newValueParam]) || [];
             }
 

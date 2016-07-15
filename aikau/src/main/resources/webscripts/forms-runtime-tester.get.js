@@ -11,7 +11,12 @@ model.jsonModel = {
       },
       "alfresco/services/FormsRuntimeService",
       "alfresco/services/CrudService",
-      "alfresco/services/NotificationService"
+      "alfresco/services/NotificationService",
+      "alfresco/services/DocumentService",
+      "alfresco/services/SiteService",
+      "alfresco/services/DialogService",
+      "alfresco/services/TagService",
+      "alfresco/services/UserService"
    ],
    widgets: [
       {
@@ -57,6 +62,12 @@ model.jsonModel = {
                                                    fixed: [
                                                       {
                                                          label: "Node", value: "node"
+                                                      },
+                                                      {
+                                                         label: "Workflow", value: "workflow"
+                                                      },
+                                                      {
+                                                         label: "Task", value: "task"
                                                       }
                                                    ]
                                                 }
@@ -74,6 +85,9 @@ model.jsonModel = {
                                                       },
                                                       {
                                                          label: "View", value: "view"
+                                                      },
+                                                      {
+                                                         label: "Create", value: "create" // Is this workflow only?
                                                       }
                                                    ]
                                                 }
@@ -85,8 +99,7 @@ model.jsonModel = {
                                                 name: "formId",
                                                 label: "Form ID"
                                              }
-                                          },
-                                          
+                                          }
                                        ]
                                     }
                                  }

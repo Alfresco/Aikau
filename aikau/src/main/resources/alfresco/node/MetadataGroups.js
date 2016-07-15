@@ -136,7 +136,7 @@ define(["dojo/_base/declare",
        * @type {number}
        * @default
        */
-      width: null,
+      width: "initial",
 
       /**
        * Constructs a new [metadata item]{@link module:alfresco/node/Metadata} for the metadata configuration
