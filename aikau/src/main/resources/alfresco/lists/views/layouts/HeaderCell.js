@@ -40,6 +40,16 @@ define(["dojo/_base/declare",
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
+       /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {object[]}
+       * @default [{i18nFile: "./i18n/HeaderCell.properties"}]
+       * @since 1.0.41
+       */
+      i18nRequirements: [{i18nFile: "./i18n/HeaderCell.properties"}],
+
       /**
        * An array of the CSS files to use with this widget.
        * 
@@ -76,7 +86,8 @@ define(["dojo/_base/declare",
       sortable: false,
 
       /**
-       * Optional alt text for the sort ascending icon
+       * Optional alt text for the sort ascending icon. An optional {0} token can be provided to
+       * insert the [label]{@link module:alfresco/lists/views/layouts/HeaderCell#label}
        *
        * @instance
        * @type {string}
@@ -85,7 +96,8 @@ define(["dojo/_base/declare",
       sortAscAlt: null,
 
       /**
-       * Optional alt text for the sort descending icon
+       * Optional alt text for the sort descending icon. An optional {0} token can be provided to
+       * insert the [label]{@link module:alfresco/lists/views/layouts/HeaderCell#label}.
        *
        * @instance
        * @type {string}
@@ -123,6 +135,16 @@ define(["dojo/_base/declare",
       toolTipMsg: null,
 
       /**
+       * A transparent image to use (this will allow the background image to show through).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.77
+       */
+      transparentImageUrl: null,
+
+      /**
        * Indicate whether or not this cell is currently being used as the sort field.
        *
        * @instance
@@ -151,6 +173,19 @@ define(["dojo/_base/declare",
             this.label = this.message(this.label);
          }
          this.currentItem = {};
+         this.transparentImageUrl = require.toUrl("alfresco/menus/css/images/transparent-20.png");
+
+         // Set up the alt text for the sort icons...
+         if (!this.sortAscAlt)
+         {
+            this.sortAscAlt = this.label ? "header.cell.sort.ascending.alt.text" : "header.cell.sort.ascending.alt.text.nolabel";
+         }
+         if (!this.sortDescAlt)
+         {
+            this.sortDescAlt = this.label ? "header.cell.sort.descending.alt.text" : "header.cell.sort.descending.alt.text.nolabel";  
+         }
+         this.sortAscAlt = this.message(this.sortAscAlt, {"0": this.label});
+         this.sortDescAlt = this.message(this.sortDescAlt, {"0": this.label});
       },
 
       /**
