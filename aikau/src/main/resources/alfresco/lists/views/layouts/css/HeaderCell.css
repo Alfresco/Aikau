@@ -17,7 +17,7 @@ th.alfresco-lists-views-layouts-HeaderCell:last-of-type {
 .alfresco-lists-views-layouts-HeaderCell img {
    width: 16px;
    height: 16px;
-   float: right;
+   vertical-align: bottom;
 }
 
 .alfresco-lists-views-layouts-HeaderCell img.hidden {
