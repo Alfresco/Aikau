@@ -11,6 +11,7 @@ if (page.url.templateArgs.site)
       name: "alfresco/header/SearchBox",
       config: {
          site: page.url.templateArgs.site,
+         enableContextLiveSearch: true,
          alignment: "right",
          width: "500",
          documentLibraryPage: "custom-document-container",

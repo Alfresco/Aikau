@@ -160,7 +160,7 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_header_LiveSearch__postCreate() {
          var site = this.searchBox.site;
-         if (!site) {
+         if (this.searchBox.enableContextLiveSearch === false || !site) {
             domStyle.set(this.contextNode, "display", "none"); 
          }
          
@@ -462,6 +462,16 @@ define(["dojo/_base/declare",
        * @default
        */
       documentsTitle: "search.documents",
+
+      /**
+       * Eanble the context switching feature of live search.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.78
+       */
+      enableContextLiveSearch: false,
 
       /**
        * An optional height that can be configured for the live search results. Without this being set 
