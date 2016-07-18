@@ -32,6 +32,11 @@ define(["module",
       name: "Dashlet Tests",
       testPage: "/Dashlet",
 
+      // See AKU-1037
+      "Title bar actions shown": function() {
+         return this.remote.findDisplayedById("TITLE_BAR_ACTION");
+      },
+
       "Toolbars and body display when widgets provided": function() {
          return this.remote.findByCssSelector("#NO_ID_DASHLET .alfresco-dashlets-Dashlet__toolbar")
             .isDisplayed()
