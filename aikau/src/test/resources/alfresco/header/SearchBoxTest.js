@@ -63,6 +63,14 @@ define(["module",
                assert.isTrue(displayed, "The live search pane was not shown after typing search term");
             });
       },
+      
+      "Check the Repository and Site toggle is not present": function() {
+         return this.remote.findByCssSelector("#SB1 .alf-livesearch-context")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed, "There should be no repository site toggle displayed");
+            });
+      },
 
       "Count the documents": function() {
          return this.remote.findAllByCssSelector(".alf-live-search-documents-list .alf-livesearch-item")
@@ -231,6 +239,14 @@ define(["module",
                assert.lengthOf(elements, 10, "Additional results weren't loaded");
             });
       },
+      
+      "Check the Repository and Site toggle is present": function() {
+         return this.remote.findByCssSelector("#SB1 .alf-livesearch-context")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "There should be a repository site toggle displayed");
+            });
+      },
 
       "Submit the search request": function() {
          return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
@@ -266,6 +282,45 @@ define(["module",
             .then(function(value) {
                assert.equal(value, "", "The previous search terms weren't cleared");
             });
+      },
+      
+      "Check the Site toggle functions": function() {
+         return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
+            .type("site")
+         .end()
+         
+         .sleep(500) // Need a pause to wait for the data reload
+         
+         .findAllByCssSelector("#SB1 .alf-live-search-documents-list .alf-livesearch-item")
+            .then(function(elements) {
+               assert.lengthOf(elements, 5, "Expected list of documents was not present.");
+            })
+         .end()
+         
+         .findByCssSelector("#SB1 .alf-livesearch-context .alf-livesearch-context__repo.alf-livesearch-context--active")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Repository search context should be active by default.");
+            })
+         .end()
+         
+         .findByCssSelector("#SB1 .alf-livesearch-context .alf-livesearch-context__site")
+            .click()
+         .end()
+         
+         .sleep(500) // Need a pause to wait for the data reload
+         
+         .findAllByCssSelector("#SB1 .alf-live-search-documents-list .alf-livesearch-item")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "Empty list of documents was not present.");
+            })
+         
+         .findByCssSelector("#SB1 .alf-livesearch-context .alf-livesearch-context__site.alf-livesearch-context--active")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Site search context should be active.");
+            })
+         .end();
       }
    });
 

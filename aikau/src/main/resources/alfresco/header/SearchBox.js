@@ -146,6 +146,11 @@ define(["dojo/_base/declare",
          this.label.sites = this.message(this.searchBox.sitesTitle);
          this.label.people = this.message(this.searchBox.peopleTitle);
          this.label.more = this.message(this.searchBox.moreTitle);
+         this.label.contextRespository = this.message(this.searchBox.contextRepositoryLabel);
+         var site = this.searchBox.site;
+         this.label.contextSite = this.message(this.searchBox.contextSiteLabel, site);
+         this.label.repositoryTooltip = this.message(this.searchBox.repositoryTitle);
+         this.label.siteTooltip = this.message(this.searchBox.siteTitle);
       },
 
       /**
@@ -154,8 +159,12 @@ define(["dojo/_base/declare",
        * @default 1.0.76
        */
       postCreate: function alfresco_header_LiveSearch__postCreate() {
-         if (this.height)
-         {
+         var site = this.searchBox.site;
+         if (!site) {
+            domStyle.set(this.contextNode, "display", "none"); 
+         }
+         
+         if (this.height) {
             domStyle.set(this.domNode, {
                maxHeight: this.height,
                overflowX: "hidden",
@@ -393,6 +402,24 @@ define(["dojo/_base/declare",
        * @default
        */
       blogPage: "blog-postview",
+
+      /**
+       * The label to display for selection of searching in Repository context in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      contextRepositoryLabel: "search.in-repository",
+
+      /**
+       * The label to display for selection of searching in Site context in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      contextSiteLabel: "search.in-site",
 
       /**
        * The default scope to use when requesting a search.
@@ -648,6 +675,15 @@ define(["dojo/_base/declare",
       resultsCounts: null,
 
       /**
+       * The title to use on the repository search toggle.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      repositoryTitle: "search.in-repository.tooltip",
+
+      /**
        * The search results page to use. If this is left as the default of null then it is assumed that
        * the widget is being used within Alfresco Share and the standard search page or faceted search
        * page will be used (depending upon the configuration of 
@@ -668,6 +704,15 @@ define(["dojo/_base/declare",
       site: null,
 
       /**
+       * True if the current site ID context should be passed to the document search API
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       */
+      siteContext: false,
+
+      /**
        * This is the page to navigate to for site home links. It defaults to 
        * "dashboard" (as this is the standard dashboard page in 
        * Alfresco Share) but it can be configured to go to a custom page. The page
@@ -678,6 +723,15 @@ define(["dojo/_base/declare",
        * @default
        */
       sitePage: "dashboard",
+
+      /**
+       * The title to use on the site search toggle.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      siteTitle: "search.in-site.tooltip",
 
       /**
        * Indicates whether or not document results should be displayed in the live search pane.
@@ -790,8 +844,6 @@ define(["dojo/_base/declare",
          // construct the optional advanced search menu
          if (this.advancedSearch)
          {
-            var currSite = lang.getObject("Alfresco.constants.SITE");
-
             this._searchMenu = new AlfMenuBar({
                widgets: [
                   {
@@ -809,7 +861,7 @@ define(["dojo/_base/declare",
                                  id: this.id + "_ADVANCED_SEARCH",
                                  i18nScope: "org.alfresco.SearchBox",
                                  label: "search.advanced",
-                                 targetUrl: (currSite ? "site/" + currSite + "/" : "") + "advsearch"
+                                 targetUrl: (this.site ? "site/" + this.site + "/" : "") + "advsearch"
                               }
                            }
                         ]
@@ -843,6 +895,24 @@ define(["dojo/_base/declare",
             }
 
             this._LiveSearch.placeAt(this._searchLiveNode);
+            
+            // event handlers to change the search context
+            on(this._LiveSearch.contextRepositoryNode, "click", lang.hitch(this, function(evt) {
+               // change context to repository
+               domClass.add(this._LiveSearch.contextRepositoryNode, "alf-livesearch-context--active");
+               domClass.remove(this._LiveSearch.contextSiteNode, "alf-livesearch-context--active");
+               this.siteContext = false;
+               this.lastSearchText = "";
+               this.onSearchBoxKeyUp(evt);
+            }));
+            on(this._LiveSearch.contextSiteNode, "click", lang.hitch(this, function(evt) {
+               // change context to site
+               domClass.add(this._LiveSearch.contextSiteNode, "alf-livesearch-context--active");
+               domClass.remove(this._LiveSearch.contextRepositoryNode, "alf-livesearch-context--active");
+               this.siteContext = true;
+               this.lastSearchText = "";
+               this.onSearchBoxKeyUp(evt);
+            }));
 
             // event handlers to hide/show the panel
             on(window, "click", lang.hitch(this, function() {
@@ -891,7 +961,7 @@ define(["dojo/_base/declare",
        */
       generateSearchPageLink: function alfresco_header_SearchBox__generateSearchPageLink(terms) {
          var url;
-         var scope = this.defaultSearchScope;
+         var scope = (this.siteContext === true && this.site) ? this.site : this.defaultSearchScope;
          if (this.searchResultsPage)
          {
             // Generate custom search page link...
@@ -1171,9 +1241,14 @@ define(["dojo/_base/declare",
        * @param {number} startIndex
        */
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
+         var url = AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) +
+                   "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex;
+         if (this.siteContext === true && this.site) {
+            url += "&s=" + encodeURIComponent(this.site);
+         }
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
+               url: url,
                method: "GET",
                successCallback: function(response) {
                   
