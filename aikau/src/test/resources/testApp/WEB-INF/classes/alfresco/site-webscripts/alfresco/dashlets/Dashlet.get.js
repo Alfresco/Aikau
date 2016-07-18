@@ -66,6 +66,7 @@ model.jsonModel = {
                      bodyHeight: 500,
                      widgetsForTitleBarActions: [
                         {
+                           id: "TITLE_BAR_ACTION",
                            name: "alfresco/html/Label",
                            config: {
                               label: "Title-bar actions"

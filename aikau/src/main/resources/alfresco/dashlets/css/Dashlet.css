@@ -82,7 +82,6 @@
    }
    &__title-bar-actions {
       height: 16px;
-      opacity: 0;
       position: absolute;
       right: 4px;
       top: 1px;
