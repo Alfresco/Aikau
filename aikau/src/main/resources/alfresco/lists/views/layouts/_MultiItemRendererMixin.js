@@ -204,6 +204,8 @@ define(["dojo/_base/declare",
       renderData: function alfresco_lists_views_layout___MultiItemRendererMixin__renderData() {
          /*jshint eqnull:true*/
          
+         this._renderedItemWidgets = [];
+
          // Ensure that an array is created to hold the root widget subscriptions...
          if (!this.rootWidgetSubscriptions)
          {
