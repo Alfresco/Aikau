@@ -409,6 +409,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.78
        */
       contextRepositoryLabel: "search.in-repository",
 
@@ -418,6 +419,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.78
        */
       contextSiteLabel: "search.in-site",
 
@@ -680,6 +682,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.78
        */
       repositoryTitle: "search.in-repository.tooltip",
 
@@ -709,6 +712,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {boolean}
        * @default false
+       * @since 1.0.78
        */
       siteContext: false,
 
@@ -730,6 +734,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.78
        */
       siteTitle: "search.in-site.tooltip",
 
