@@ -1,4 +1,8 @@
 <div class="alf-livesearch" data-dojo-attach-point="containerNode">
+   <div class="alf-livesearch-context" data-dojo-attach-point="contextNode">
+      <div data-dojo-attach-point="contextRepositoryNode" class="alf-livesearch-context__repo alf-livesearch-context--active" title="${label.repositoryTooltip}"><a href="#">${label.contextRespository}</a></div>
+      <div data-dojo-attach-point="contextSiteNode" class="alf-livesearch-context__site" title="${label.siteTooltip}"><a href="#">${label.contextSite}</a></div>
+   </div>
    <div class="alf-livesearch-title alf-live-search-documents-title" data-dojo-attach-point="titleNodeDocs">${label.documents}</div>
    <div class="alf-livesearch-list alf-live-search-documents-list" data-dojo-attach-point="containerNodeDocs"></div>
    <div class="alf-livesearch-more" data-dojo-attach-point="nodeDocsMore">
