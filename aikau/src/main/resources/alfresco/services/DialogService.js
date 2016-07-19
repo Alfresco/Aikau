@@ -132,6 +132,8 @@
  * @property {number} [duration=0] - The duration of the fade effect when showing or hiding the dialog
  * @property {string} formSubmissionTopic - The topic to publish when the confirmation button is used (the published payload will be the form value)
  * @property {Object} formSubmissionPayloadMixin - An additional object to "mixin" to the form value before it is published
+ * @property {boolean} [formSubmissionGlobal=true] - Whether or not to publish the form submission topic globally
+ * @property {string} [formSubmissionScope=null] - A custom scope to be used when publishing the form submission topic
  * @property {Object} [formValue={}] - The initial value to apply to the form when created. This should be an object with attributes mapping to the "name" attribute of each form control.
  * @property {string} [dialogId=null] The ID of the dialog to display. Only one dialog with no dialogId can exist on a page at a time, therefore it is sensible to always include an id for your dialogs to allow stacking.
  * @property {boolean} [dialogRepeats=false] Indicates that an additional button the publishes the current form and then recreates the dialog again
