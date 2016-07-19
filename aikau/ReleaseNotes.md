@@ -1,4 +1,4 @@
-Aikau 1.0.76 Release Notes
+Aikau 1.0.78 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,25 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.78:
+* [AKU-1037](https://issues.alfresco.com/jira/browse/AKU-1037)     - Improve Dashlet CSS defaults
+
+1.0.77.1:
+* [AKU-1020](https://issues.alfresco.com/jira/browse/AKU-1020)     - Support for item focus on AlfList load
+* [AKU-1023](https://issues.alfresco.com/jira/browse/AKU-1023)     - Set minimum height for dialogs
+* [AKU-1026](https://issues.alfresco.com/jira/browse/AKU-1026)     - Update selection/focus colours for PushButtons
+
+1.0.77:
+* [AKU-1019](https://issues.alfresco.com/jira/browse/AKU-1019)     - Ensure invertion action works for item selection
+* [AKU-1021](https://issues.alfresco.com/jira/browse/AKU-1021)     - Improve focus highlighting on CellContainer
+* [AKU-1024](https://issues.alfresco.com/jira/browse/AKU-1024)     - Update form control focus colours
+* [AKU-1025](https://issues.alfresco.com/jira/browse/AKU-1025)     - Reduce spacing between buttons in inline forms
+* [AKU-1027](https://issues.alfresco.com/jira/browse/AKU-1027)     - Update HeaderCell sort icon display
+* [AKU-1029](https://issues.alfresco.com/jira/browse/AKU-1029)     - FormsRuntime - initial workflow and task support
+* [AKU-1030](https://issues.alfresco.com/jira/browse/AKU-1030)     - FormsRuntime - improve structure handling
+* [AKU-1032](https://issues.alfresco.com/jira/browse/AKU-1032)     - FormsRuntime - "info.ftl" mapping
+* [AKU-1034](https://issues.alfresco.com/jira/browse/AKU-1034)     - FormsRuntime - improve MultiSelectInput array value handling
+
 1.0.76:
 * [AKU-1010](https://issues.alfresco.com/jira/browse/AKU-1010)     - Ensure failure message is not displayed for lists with pending request
 * [AKU-1011](https://issues.alfresco.com/jira/browse/AKU-1011)     - Handle long, unbroken names in SearchBox results
