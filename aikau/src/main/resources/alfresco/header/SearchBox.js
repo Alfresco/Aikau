@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
          this.label.people = this.message(this.searchBox.peopleTitle);
          this.label.more = this.message(this.searchBox.moreTitle);
          this.label.contextRespository = this.message(this.searchBox.contextRepositoryLabel);
-         var site = this.searchBox.site;
+         var site = this.searchBox.siteName ? this.searchBox.siteName : this.searchBox.site;
          this.label.contextSite = this.message(this.searchBox.contextSiteLabel, site);
          this.label.repositoryTooltip = this.message(this.searchBox.repositoryTitle);
          this.label.siteTooltip = this.message(this.searchBox.siteTitle);
@@ -737,6 +737,16 @@ define(["dojo/_base/declare",
        * @default
        */
       sitePage: "dashboard",
+
+      /**
+       * The optional display name label for the current site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       */
+      siteName: null,
 
       /**
        * The title to use on the site search toggle.
@@ -1501,6 +1511,14 @@ define(["dojo/_base/declare",
          {
             domStyle.set(this._LiveSearch.titleNodePeople, "display", "none");
             domStyle.set(this._LiveSearch.containerNodePeople, "display", "none");
+         }
+
+         // Site Search options are displyed if a site local context search was last performed - this is to ensure
+         // the user can select the 'Repository' option even if no results are present from the local site search
+         var terms = lang.trim(this._searchTextNode.value);
+         if (this.enableContextLiveSearch === true && this.siteContext === true && terms.length >= this._minimumSearchLength)
+         {
+            anyResults = true;
          }
 
          // Results pane

@@ -320,6 +320,37 @@ define(["module",
             .then(function(displayed) {
                assert.isTrue(displayed, "Site search context should be active.");
             })
+         .end()
+         
+         // ensure the site/repository options are still displayed  - even if no results returned for site local search
+         .findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
+            .type("pdf")
+         .end()
+         
+         .sleep(500) // Need a pause to wait for the data reload
+         
+         .findByCssSelector("#SB1 .alf-livesearch-context")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isTrue(displayed, "Site context options should be visible.");
+            })
+         .end();
+      },
+      
+      "Check the Site toggle display label": function() {
+         return this.remote.findByCssSelector("#SB1 input.alfresco-header-SearchBox-text")
+            .type("site")
+         .end()
+         
+         .sleep(500) // Need a pause to wait for the data reload
+         
+         .findByCssSelector("#SB1 .alf-livesearch-context .alf-livesearch-context__site")
+            .findAllByTagName("a")
+               .getVisibleText()
+               .then(function(text) {
+                  assert.equal(text, "Search 'SiteLabel'", "Site display label was not displayed");
+               })
+            .end()
          .end();
       }
    });
