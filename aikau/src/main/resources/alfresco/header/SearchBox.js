@@ -146,6 +146,11 @@ define(["dojo/_base/declare",
          this.label.sites = this.message(this.searchBox.sitesTitle);
          this.label.people = this.message(this.searchBox.peopleTitle);
          this.label.more = this.message(this.searchBox.moreTitle);
+         this.label.contextRespository = this.message(this.searchBox.contextRepositoryLabel);
+         var site = this.searchBox.siteName ? this.searchBox.siteName : this.searchBox.site;
+         this.label.contextSite = this.message(this.searchBox.contextSiteLabel, site);
+         this.label.repositoryTooltip = this.message(this.searchBox.repositoryTitle);
+         this.label.siteTooltip = this.message(this.searchBox.siteTitle);
       },
 
       /**
@@ -154,8 +159,12 @@ define(["dojo/_base/declare",
        * @default 1.0.76
        */
       postCreate: function alfresco_header_LiveSearch__postCreate() {
-         if (this.height)
-         {
+         var site = this.searchBox.site;
+         if (this.searchBox.enableContextLiveSearch === false || !site) {
+            domStyle.set(this.contextNode, "display", "none"); 
+         }
+         
+         if (this.height) {
             domStyle.set(this.domNode, {
                maxHeight: this.height,
                overflowX: "hidden",
@@ -395,6 +404,26 @@ define(["dojo/_base/declare",
       blogPage: "blog-postview",
 
       /**
+       * The label to display for selection of searching in Repository context in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       */
+      contextRepositoryLabel: "search.in-repository",
+
+      /**
+       * The label to display for selection of searching in Site context in the live search results panel.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       */
+      contextSiteLabel: "search.in-site",
+
+      /**
        * The default scope to use when requesting a search.
        *
        * @instance
@@ -433,6 +462,16 @@ define(["dojo/_base/declare",
        * @default
        */
       documentsTitle: "search.documents",
+
+      /**
+       * Eanble the context switching feature of live search.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.78
+       */
+      enableContextLiveSearch: false,
 
       /**
        * An optional height that can be configured for the live search results. Without this being set 
@@ -648,6 +687,16 @@ define(["dojo/_base/declare",
       resultsCounts: null,
 
       /**
+       * The title to use on the repository search toggle.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       */
+      repositoryTitle: "search.in-repository.tooltip",
+
+      /**
        * The search results page to use. If this is left as the default of null then it is assumed that
        * the widget is being used within Alfresco Share and the standard search page or faceted search
        * page will be used (depending upon the configuration of 
@@ -668,6 +717,16 @@ define(["dojo/_base/declare",
       site: null,
 
       /**
+       * True if the current site ID context should be passed to the document search API
+       * 
+       * @instance
+       * @type {boolean}
+       * @default false
+       * @since 1.0.78
+       */
+      siteContext: false,
+
+      /**
        * This is the page to navigate to for site home links. It defaults to 
        * "dashboard" (as this is the standard dashboard page in 
        * Alfresco Share) but it can be configured to go to a custom page. The page
@@ -678,6 +737,26 @@ define(["dojo/_base/declare",
        * @default
        */
       sitePage: "dashboard",
+
+      /**
+       * The optional display name label for the current site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       */
+      siteName: null,
+
+      /**
+       * The title to use on the site search toggle.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.78
+       */
+      siteTitle: "search.in-site.tooltip",
 
       /**
        * Indicates whether or not document results should be displayed in the live search pane.
@@ -790,8 +869,6 @@ define(["dojo/_base/declare",
          // construct the optional advanced search menu
          if (this.advancedSearch)
          {
-            var currSite = lang.getObject("Alfresco.constants.SITE");
-
             this._searchMenu = new AlfMenuBar({
                widgets: [
                   {
@@ -809,7 +886,7 @@ define(["dojo/_base/declare",
                                  id: this.id + "_ADVANCED_SEARCH",
                                  i18nScope: "org.alfresco.SearchBox",
                                  label: "search.advanced",
-                                 targetUrl: (currSite ? "site/" + currSite + "/" : "") + "advsearch"
+                                 targetUrl: (this.site ? "site/" + this.site + "/" : "") + "advsearch"
                               }
                            }
                         ]
@@ -843,6 +920,24 @@ define(["dojo/_base/declare",
             }
 
             this._LiveSearch.placeAt(this._searchLiveNode);
+            
+            // event handlers to change the search context
+            on(this._LiveSearch.contextRepositoryNode, "click", lang.hitch(this, function(evt) {
+               // change context to repository
+               domClass.add(this._LiveSearch.contextRepositoryNode, "alf-livesearch-context--active");
+               domClass.remove(this._LiveSearch.contextSiteNode, "alf-livesearch-context--active");
+               this.siteContext = false;
+               this.lastSearchText = "";
+               this.onSearchBoxKeyUp(evt);
+            }));
+            on(this._LiveSearch.contextSiteNode, "click", lang.hitch(this, function(evt) {
+               // change context to site
+               domClass.add(this._LiveSearch.contextSiteNode, "alf-livesearch-context--active");
+               domClass.remove(this._LiveSearch.contextRepositoryNode, "alf-livesearch-context--active");
+               this.siteContext = true;
+               this.lastSearchText = "";
+               this.onSearchBoxKeyUp(evt);
+            }));
 
             // event handlers to hide/show the panel
             on(window, "click", lang.hitch(this, function() {
@@ -891,7 +986,7 @@ define(["dojo/_base/declare",
        */
       generateSearchPageLink: function alfresco_header_SearchBox__generateSearchPageLink(terms) {
          var url;
-         var scope = this.defaultSearchScope;
+         var scope = (this.siteContext === true && this.site) ? this.site : this.defaultSearchScope;
          if (this.searchResultsPage)
          {
             // Generate custom search page link...
@@ -1117,11 +1212,12 @@ define(["dojo/_base/declare",
          {
             info += "<a href='" + siteDocLibUrl + "'>" + this.encodeHTML(item.site.title) + "</a> | ";
          }
-         var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
-         info += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a> | ";
-         info += this.getRelativeTime(item.modifiedOn) + " | ";
          info += this.formatFileSize(item.size);
-
+         var info2 = "";
+         var modifiedUserUrl = urlUtils.convertUrl("user/" + this.encodeHTML(item.modifiedBy) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE);
+         info2 += this.getRelativeTime(item.modifiedOn) + " | ";
+         info2 += "<a href='" + modifiedUserUrl + "'>" + this.encodeHTML(item.modifiedBy) + "</a>";
+         
          var desc = item.title;
          if (item.description)
          {
@@ -1133,7 +1229,6 @@ define(["dojo/_base/declare",
          {
             case "wiki":
                link = this.wikiPage + "?title=" + encodeURIComponent(item.name);
-               
                break;
             case "blog":
                link = this.blogPage + "?postId=" + encodeURIComponent(item.name);
@@ -1153,6 +1248,7 @@ define(["dojo/_base/declare",
             icon: AlfConstants.PROXY_URI + "api/node/" + item.nodeRef.replace(":/", "") + "/content/thumbnails/doclib?c=queue&ph=true&lastModified=" + lastModified,
             alt: item.name,
             meta: info,
+            meta2: info2,
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
@@ -1170,9 +1266,14 @@ define(["dojo/_base/declare",
        * @param {number} startIndex
        */
       liveSearchDocuments: function alfresco_header_SearchBox__liveSearchDocuments(terms, startIndex) {
+         var url = AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) +
+                   "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex;
+         if (this.siteContext === true && this.site) {
+            url += "&s=" + encodeURIComponent(this.site);
+         }
          this._requests.push(
             this.serviceXhr({
-               url: AlfConstants.PROXY_URI + this.liveSearchDocumentsUri + "?t=" + this.generateSearchTerm(terms) + "&maxResults=" + this._resultPageSize + "&startIndex=" + startIndex,
+               url: url,
                method: "GET",
                successCallback: function(response) {
                   
@@ -1234,15 +1335,21 @@ define(["dojo/_base/declare",
        * @overridable
        */
       processLiveSearchSite: function alfresco_header_SearchBox__processLiveSearchSite(item) {
+         var visibility = item.visibility;
+         if (visibility)
+         {
+            visibility = this.message("site.visibility.label." + visibility);
+         }
          return this.createLiveSearchSite({
             searchBox: this,
             cssClass: "alf-livesearch-icon",
             title: item.description,
             label: item.title,
             link: urlUtils.convertUrl("site/" + item.shortName + "/" + this.sitePage, urlTypes.PAGE_RELATIVE),
-            icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-32.png",
+            icon: AlfConstants.URL_RESCONTEXT + "components/images/filetypes/generic-site-48.png",
             alt: item.title,
             meta: item.description ? this.encodeHTML(item.description) : "&nbsp;",
+            meta2: visibility ? visibility : "&nbsp;",
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
@@ -1308,16 +1415,18 @@ define(["dojo/_base/declare",
        */
       processLiveSearchPerson: function alfresco_header_SearchBox__processLiveSearchPerson(item) {
          var fullName = item.firstName + " " + item.lastName;
-         var meta = this.encodeHTML(item.jobtitle || "") + (item.location ? (", "+this.encodeHTML(item.location)) : "");
+         var meta = (item.jobtitle || "") + (item.organization ? ((item.jobtitle ? ", " : "") + item.organization) : "");
+         var meta2 = (item.email || "") + (item.location ? ((item.email ? ", " : "") + item.location) : "");
          return this.createLiveSearchPerson({
             searchBox: this,
             cssClass: "alf-livesearch-icon",
             title: item.jobtitle || "",
             label: fullName + " (" + item.userName + ")",
             link: urlUtils.convertUrl("user/" + encodeURIComponent(item.userName) + "/" + this.peoplePage, urlTypes.PAGE_RELATIVE),
-            icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar32",
+            icon: AlfConstants.PROXY_URI + "slingshot/profile/avatar/" + encodeURIComponent(item.userName) + "/thumbnail/avatar",
             alt: fullName,
-            meta: meta ? meta : "&nbsp;",
+            meta: meta ? this.encodeHTML(meta) : "&nbsp;",
+            meta2: meta2 ? this.encodeHTML(meta2) : "&nbsp;",
             currentItem: lang.clone(item),
             publishTopic: this.publishTopic,
             publishPayload: this.publishPayload,
@@ -1402,6 +1511,14 @@ define(["dojo/_base/declare",
          {
             domStyle.set(this._LiveSearch.titleNodePeople, "display", "none");
             domStyle.set(this._LiveSearch.containerNodePeople, "display", "none");
+         }
+
+         // Site Search options are displyed if a site local context search was last performed - this is to ensure
+         // the user can select the 'Repository' option even if no results are present from the local site search
+         var terms = lang.trim(this._searchTextNode.value);
+         if (this.enableContextLiveSearch === true && this.siteContext === true && terms.length >= this._minimumSearchLength)
+         {
+            anyResults = true;
          }
 
          // Results pane
