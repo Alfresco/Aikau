@@ -192,19 +192,19 @@ define(["dojo/_base/declare",
          if (this.mergeActions === true)
          {
             // Add the actions on the currentItem and then add additional custom actions...
-            this.currentItem.actions && array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
-            this.customActions && array.forEach(this.customActions, lang.hitch(this, this.addAction));
+            lang.isArray(this.currentItem.actions) && array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
+            lang.isArray(this.customActions) && array.forEach(this.customActions, lang.hitch(this, this.addAction));
             this.processWidgetsForActions();
          }
-         else if (this.customActions && this.customActions.length > 0)
+         else if (lang.isArray(this.customActions))
          {
             array.forEach(this.customActions, lang.hitch(this, this.addAction));
          }
-         else if (this.currentItem.actions && this.currentItem.actions.length > 0)
+         else if (lang.isArray(this.currentItem.actions))
          {
             array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
          }
-         else if (this.widgetsForActions)
+         else if (lang.isArray(this.widgetsForActions))
          {
             // Provide default actions based on sensible defaults evaluated based on the 
             // current item to be actioned...
