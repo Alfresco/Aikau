@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
             // View mode and No-cache
             var params = "?view=";
             params += encodeURIComponent(payload.view || "browse");
-    		params += "&noCache=" + new Date().getTime() + "&includeThumbnails=true";
+            params += "&noCache=" + new Date().getTime() + "&includeThumbnails=true";
 
             var alfTopic = payload.alfResponseTopic || topics.GET_DOCUMENT;
             var url;
