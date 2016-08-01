@@ -75,7 +75,7 @@ model.jsonModel = {
                files: [
                   {
                      size: 987654351,
-                     name: "This is a really long filename that should definitely cause display problems on any sensible display resolution.xls"
+                     name: "This is a (really) long filename that [should] definitely cause display problems on any {sensible} display (resolution).xls"
                   }
                ],
                targetData: {
