@@ -82,8 +82,10 @@ define(["alfresco/layout/AlfTabContainer",
         "alfresco/forms/LayoutMixin",
         "dojo/_base/declare",
         "dojo/_base/lang",
-        "dojo/_base/array"], 
-        function(AlfTabContainer, LayoutMixin, declare, lang, array) {
+        "dojo/_base/array",
+        "dojo/Deferred",
+        "dojo/when"], 
+        function(AlfTabContainer, LayoutMixin, declare, lang, array, Deferred, when) {
    
    return declare([AlfTabContainer, LayoutMixin], {
       
@@ -106,13 +108,14 @@ define(["alfresco/layout/AlfTabContainer",
        * @return {object[]} An array of the form controls to iterate over.
        */
       getFormLayoutChildren: function alfresco_forms_TabbedControls__getFormLayoutChildren() {
-         var _tabbedFormControls = [];
-         if (this.tabContainerWidget)
-         {
-            array.forEach(this.tabContainerWidget.getChildren(), lang.hitch(this, function(contentPane) {
-               _tabbedFormControls = _tabbedFormControls.concat(contentPane.getChildren());
+         var _tabbedFormControls = new Deferred();
+         when(this.getTabContainerChildren(), lang.hitch(this, function(children) {
+            var promisedControls = [];
+            array.forEach(children, lang.hitch(this, function(child) {
+               promisedControls = promisedControls.concat(child.getChildren());
             }));
-         }
+            _tabbedFormControls.resolve(promisedControls);
+         }));
          return _tabbedFormControls;
       }
    });
