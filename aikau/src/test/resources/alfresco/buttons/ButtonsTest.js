@@ -22,8 +22,16 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert"],
-        function(module, defineSuite, assert) {
+        "intern/chai!assert",
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
+
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var selectors = {
+      buttons: {
+         generatedPayload: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DEFAULT_BUTTON"])
+      }
+   };
 
    defineSuite(module, {
       name: "Buttons Tests",
@@ -34,6 +42,17 @@ define(["module",
             .getAttribute("title")
             .then(function(title) {
                assert.equal(title, "Custom title");
+            });
+      },
+
+      "Payloads can be generated": function() {
+         return this.remote.findByCssSelector(selectors.buttons.generatedPayload)
+            .click()
+         .end()
+
+         .getLastPublish("BUTTON_TOPIC_1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "data", "prefix:mixinValue4:postfix");
             });
       }
    });

@@ -21,14 +21,19 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           name: "alfresco/buttons/AlfButton",
                            id: "DEFAULT_BUTTON",
+                           name: "alfresco/buttons/AlfButton",
                            config: {
+                              currentItem: {
+                                 mixinData4: "mixinValue4"
+                              },
                               label: "Default",
                               title: "Custom title",
-                              publishTopic: "BUTTON_TOPIC",
+                              publishTopic: "BUTTON_TOPIC_1",
+                              publishPayloadType: "PROCESS",
+                              publishPayloadModifiers: ["processCurrentItemTokens"],
                               publishPayload: {
-                                 foo: "bar"
+                                 data: "prefix:{mixinData4}:postfix"
                               }
                            }
                         },
