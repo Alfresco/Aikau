@@ -241,6 +241,17 @@ define(["dojo/_base/declare",
       doLayout: false,
 
       /**
+       * This can be configured to give all tabs some padding around their content. The amount of
+       * padding is controlled by the LESS variable "tab-padding"
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.79
+       */
+      padded: false,
+
+      /**
        * This array is used to store widgets for delayed processing
        * 
        * @type {array}
@@ -393,6 +404,10 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_layout_AlfTabContainer__postCreate() {
          this.createTabContainer();
          this.alfSetupResizeSubscriptions(this.onResize, this);
+         if (this.padded)
+         {
+            domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--padded");
+         }
       },
 
       /**
