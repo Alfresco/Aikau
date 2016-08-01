@@ -132,22 +132,23 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_header_Title__postMixInProperties() {
+         if (this.browserTitlePrefix)
+         {
+            this.browserTitlePrefix = this.message(this.browserTitlePrefix);
+         }
+
          if (this.label)
          {
             var label = this.label ? this.label : "";
             if (this.setBrowserTitle === true)
             {
-               document.title = this.browserTitlePrefix + " \u00bb " + this.label; // Set the browser title
+               document.title = this.browserTitlePrefix + " \u00bb " + this.message(this.label); // Set the browser title
             }
          
             // Preserve a copy of the original label for resetting the title (in the case where 
             // only a new prefix or a request to hide the prefix is made)...
             this._originalLabel = this.label;
             this.label = this.encodeHTML(this.message(label));
-         }
-         if (this.browserTitlePrefix)
-         {
-            this.browserTitlePrefix = this.encodeHTML(this.message(this.browserTitlePrefix));
          }
       },
       
