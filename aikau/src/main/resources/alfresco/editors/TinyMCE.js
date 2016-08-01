@@ -242,7 +242,7 @@ define(["dojo/_base/declare",
                }
             }
             
-            config.language = locale || bestGeneralizedLocale || 'en';
+            config.language = locale || bestGeneralizedLocale || "en";
          }
 
          tinymce.baseURL = AlfConstants.URL_RESCONTEXT + "js/lib/tinymce";
