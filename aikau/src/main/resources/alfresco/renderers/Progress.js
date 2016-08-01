@@ -347,7 +347,7 @@ define(["dojo/_base/declare",
          // 0 is a legal numeric value (e.g. initial "start" progress)
          // can't use simple truthy vs non-truthy check
          if (isNaN(total) || total < 0 || isNaN(done) || done < 0 ||
-                 isNaN(filesAdded) || filesAddded < 0 || isNaN(totalFiles) || totalFiles < 0)
+                 isNaN(filesAdded) || filesAdded < 0 || isNaN(totalFiles) || totalFiles < 0)
          {
             this.alfLog("error", "Missing required data for progress: done=" + done + 
                ", total=" + total + 
