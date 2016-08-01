@@ -32,18 +32,20 @@
  * @module alfresco/buttons/AlfButton
  * @extends module:dijit/form/Button
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/form/Button",
         "alfresco/core/Core",
+        "alfresco/renderers/_PublishPayloadMixin",
         "dojo/dom-class",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/_base/event"],
-        function(declare, Button, AlfCore, domClass, array, lang, event) {
+        function(declare, Button, AlfCore, _PublishPayloadMixin, domClass, array, lang, event) {
 
-   return declare([Button, AlfCore], {
+   return declare([Button, AlfCore, _PublishPayloadMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -230,9 +232,12 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onClick: function alfresco_buttons_AlfButton__onClick(evt) {
+         var payload;
          if (this.publishTopic)
          {
-            this.alfPublish(this.publishTopic, this.publishPayload, (this.publishGlobal !== undefined && this.publishGlobal === true));
+            payload = this.generatePayload(this.publishPayload || {}, this.currentItem, null, this.publishPayloadType,
+                    this.publishPayloadItemMixin, this.publishPayloadModifiers);
+            this.alfPublish(this.publishTopic, payload, (this.publishGlobal !== undefined && this.publishGlobal === true));
          }
          else
          {
