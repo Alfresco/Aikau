@@ -41,9 +41,10 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "service/constants/Default",
         "alfresco/core/ArrayUtils",
-        "alfresco/core/JsNode"],
+        "alfresco/core/JsNode",
+        "alfresco/core/ObjectTypeUtils"],
         function(declare, AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, 
-                 _AlfPopupCloseMixin, AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode) {
+                 _AlfPopupCloseMixin, AlfMenuItem, array, lang, AlfConstants, AlfArray, JsNode, ObjectTypeUtils) {
 
    return declare([AlfCore, CoreWidgetProcessing, _AlfDocumentListTopicMixin, _PublishPayloadMixin, ObjectProcessingMixin, _AlfPopupCloseMixin], {
 
@@ -192,19 +193,19 @@ define(["dojo/_base/declare",
          if (this.mergeActions === true)
          {
             // Add the actions on the currentItem and then add additional custom actions...
-            lang.isArray(this.currentItem.actions) && array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
-            lang.isArray(this.customActions) && array.forEach(this.customActions, lang.hitch(this, this.addAction));
+            ObjectTypeUtils.isArray(this.currentItem.actions) && array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
+            ObjectTypeUtils.isArray(this.customActions) && array.forEach(this.customActions, lang.hitch(this, this.addAction));
             this.processWidgetsForActions();
          }
-         else if (lang.isArray(this.customActions))
+         else if (ObjectTypeUtils.isArray(this.customActions))
          {
             array.forEach(this.customActions, lang.hitch(this, this.addAction));
          }
-         else if (lang.isArray(this.currentItem.actions))
+         else if (ObjectTypeUtils.isArray(this.currentItem.actions))
          {
             array.forEach(this.currentItem.actions, lang.hitch(this, this.addAction));
          }
-         else if (lang.isArray(this.widgetsForActions))
+         else if (ObjectTypeUtils.isArray(this.widgetsForActions))
          {
             // Provide default actions based on sensible defaults evaluated based on the 
             // current item to be actioned...
