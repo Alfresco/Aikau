@@ -48,7 +48,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.?
+       * @since 1.0.79
        */
       filterMimeType: "",
 
