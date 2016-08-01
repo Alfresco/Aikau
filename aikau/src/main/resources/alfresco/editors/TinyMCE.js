@@ -208,6 +208,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_editors_TinyMCE__postCreate() {
+         // jshint maxcomplexity:false
          // Mix the custom editor config overrides into the default editor config...
          var config = lang.clone(this.defaultEditorConfig);
 
