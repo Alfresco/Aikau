@@ -44,7 +44,10 @@ define(["alfresco/forms/controls/BaseFormControl",
 
       /**
        * The accept attribute to specify the types of files to accept (that can be submitted through a file upload).
-       * By default accept all file types. Possible values: ".gif, .jpg, .png, .doc" or other file extensions, "application/vnd.openxmlformats-officedocument.wordprocessingml.document, .application/msword" and other MIME-types, "audio/*, video/*, image/*".
+       * By default accept all file types. Possible values: ".gif, .jpg, .png, .doc" or other file extensions, 
+       * "application/vnd.openxmlformats-officedocument.wordprocessingml.document, .application/msword" and other MIME-types, 
+       * "audio/*, video/*, image/*".
+       * 
        * @instance
        * @type {string}
        * @default
