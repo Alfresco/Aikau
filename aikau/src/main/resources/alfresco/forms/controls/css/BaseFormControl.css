@@ -151,6 +151,9 @@
                   margin-top: 2px;
                   text-align: right;
                   width: @dialog-label-section - 4;
+                  > .label {
+                     word-break: break-word
+                  }
                   > label:after {
                      content: ":";
                   }
