@@ -41,7 +41,7 @@ define(["dojo/_base/declare",
          try
          {
             this.server.respondWith("GET",
-                                    /\/aikau\/service\/components\/documentlibrary\/data\/doclist\/all\/site\/site1\/documentlibrary\?filter=path(.*)/,
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/site\/site1\/doclist\/all\/site\/site1\/documentlibrary\?filter=path(.*)/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      documents]);
@@ -57,7 +57,7 @@ define(["dojo/_base/declare",
                                      tree]);
 
             this.server.respondWith("GET",
-                                    /\/aikau\/service\/components\/documentlibrary\/data\/doclist\/all\/site\/site1\/documentlibrary\?filter=favourites(.*)/,
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/site\/site1\/doclist\/all\/site\/site1\/documentlibrary\?filter=favourites(.*)/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      favourites]);
