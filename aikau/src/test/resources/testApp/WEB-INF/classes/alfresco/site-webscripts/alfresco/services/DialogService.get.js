@@ -62,7 +62,7 @@ model.jsonModel = {
                      name: "alfresco/forms/controls/TextBox",
                      config: {
                         name: "text",
-                        label: "Enter some text",
+                        label: "Classificatieopheffingsgebeurtenis",
                         value: "This is some sample text"
                      }
                   }
