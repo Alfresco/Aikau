@@ -309,6 +309,14 @@ define(["module",
                assert.isBelow(forcedWidth, normalWidth);
             })
             .pressKeys(keys.ESCAPE);
+      },
+
+      "Width configuration is honoured": function() {
+         return this.remote.findByCssSelector("#LONG_OPTIONS_FORCEWIDTH_CONTROL .dijitSelectLabel")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.width, "200");
+            });
       }
    });
 });

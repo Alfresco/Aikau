@@ -291,11 +291,12 @@ model.jsonModel = {
                            config: {
                               name: "longOptionsForceWidth",
                               forceWidth: true,
+                              width: "200px",
                               label: "Long options (forceWidth)",
                               description: "This select field is has some long options values in it and has been set to constrain its with",
                               optionsConfig: {
                                  fixed: [{
-                                    label: "Krill sardonically clung outside and",
+                                    label: "Krill sardonically clung outside and (quick bit of extra text)",
                                     value: "1"
                                  }, {
                                     label: "Forgot folded owing gosh matter-of-factly so hello less bleak gosh contrary precise",
@@ -321,6 +322,7 @@ model.jsonModel = {
                            id: "LONG_OPTIONS_FORCEWIDTH_TRUNCATE",
                            config: {
                               name: "longOptionsForceWidthTruncate",
+                              width: "200px",
                               forceWidth: true,
                               truncate: true,
                               label: "Long options (forceWidth,truncate)",
