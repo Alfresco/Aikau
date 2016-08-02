@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
                url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/";
                if (payload.site)
                {
-                   url += 'site/' + encodeURIComponent(payload.site) + '/';
+                   url += "site/" + encodeURIComponent(payload.site) + "/";
                }
                url += "node/" + targetNodeUri + params;
             }
@@ -328,7 +328,7 @@ define(["dojo/_base/declare",
             url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/";
             if (payload.site)
             {
-                url += 'site/' + encodeURIComponent(payload.site) + '/';
+                url += "site/" + encodeURIComponent(payload.site) + "/";
             }
             url += "doclist/" + params;
          }

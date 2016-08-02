@@ -54,8 +54,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
-       * @since 1.0.8x
+       * @since 1.0.79
        */
       currentItemSiteShortNameKey : null,
       
@@ -65,8 +64,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {string}
-       * @default null
-       * @since 1.0.8x
+       * @since 1.0.79
        */
       actionView : null,
 
