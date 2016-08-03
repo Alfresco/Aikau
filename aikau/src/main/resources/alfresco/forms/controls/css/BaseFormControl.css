@@ -10,6 +10,11 @@
 
 // Main CSS
 .alfresco-forms-controls-BaseFormControl {
+
+   &--disabled {
+      opacity: @disabled-form-field-opacity;
+   }
+
    margin-bottom: @standard-line-height;
    // BEM CSS
    &__validation-error {

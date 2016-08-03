@@ -1,4 +1,4 @@
-Aikau 1.0.79 Release Notes
+Aikau 1.0.80 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,13 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.80:
+* [AKU-1047](https://issues.alfresco.com/jira/browse/AKU-1047)       - Ensure PushButtons respect disabled state
+* [AKU-1048](https://issues.alfresco.com/jira/browse/AKU-1048)       - Set themeable opacity on disabled form controls
+* [AKU-1049](https://issues.alfresco.com/jira/browse/AKU-1049)       - Ensure late registered form controls process rules
+* [AKU-1050](https://issues.alfresco.com/jira/browse/AKU-1050)       - Ensure PreferenceService uses correct URL
+* [AKU-1051](https://issues.alfresco.com/jira/browse/AKU-1051)       - Support for optional no buttons label on PushButtons
+
 1.0.79:
 * [AKU-945](https://issues.alfresco.com/jira/browse/AKU-945)       - Break word on long form control labels in form dialogs
 * [AKU-1039](https://issues.alfresco.com/jira/browse/AKU-1039)     - Re-instate border around tabs

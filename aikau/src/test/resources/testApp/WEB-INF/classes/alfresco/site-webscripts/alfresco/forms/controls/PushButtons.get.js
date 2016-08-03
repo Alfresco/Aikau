@@ -294,6 +294,69 @@ model.jsonModel = {
                                           ]
                                        }
                                     }
+                                 },
+                                 {
+                                    id: "TOGGLE_DISABLE_STATE",
+                                    name: "alfresco/forms/controls/CheckBox",
+                                    config: {
+                                       fieldId: "TOGGLE_DISABLED",
+                                       label: "Disabled?",
+                                       description: "Use this control to toggle the disable state of the PushButtons below",
+                                       value: true
+                                    }
+                                 },
+                                 {
+                                    id: "DISABLED",
+                                    name: "alfresco/forms/controls/PushButtons",
+                                    config: {
+                                       fieldId: "DISABLED",
+                                       name: "disabled",
+                                       label: "Disabled Display",
+                                       description: "What PushButtons look like disabled",
+                                       maxLineLength: 3,
+                                       noWrap: true,
+                                       simpleLayout: true,
+                                       multiMode:true,
+                                       optionsConfig: {
+                                          fixed: [
+                                             {
+                                                label: "This label gets truncated because it's really quite long",
+                                                value: "1"
+                                             },
+                                             {
+                                                label: "Short Mark",
+                                                value: "2"
+                                             }
+                                          ]
+                                       },
+                                       disablementConfig: {
+                                          initialValue: true,
+                                          rules: [
+                                             {
+                                                targetId: "TOGGLE_DISABLED",
+                                                is: [true]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "NO_OPTIONS",
+                                    name: "alfresco/forms/controls/PushButtons",
+                                    config: {
+                                       fieldId: "NO_OPTIONS",
+                                       name: "nooptions",
+                                       label: "Option-less",
+                                       description: "What PushButtons look like with no options",
+                                       maxLineLength: 3,
+                                       noWrap: true,
+                                       simpleLayout: true,
+                                       multiMode:true,
+                                       noButtonsLabel: "No buttons available",
+                                       optionsConfig: {
+                                          fixed: []
+                                       }
+                                    }
                                  }
                               ]
                            }

@@ -117,9 +117,11 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "dojo/Deferred",
         "dojo/dom-construct",
-        "dojo/dom-class"], 
+        "dojo/dom-class",
+        "dojo/_base/event",
+        "dojo/on"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
-                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass) {
+                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass, Event, on) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
@@ -389,6 +391,23 @@ define(["dojo/_base/declare",
             // Create the buttons for the form...
             this.createButtons();
          }
+
+         // See AKU-1049 - check for any "late" registered fields. This triggers republication
+         // of values, but only occurs if the fields are added to the DOM after form setup 
+         // has completed. This addresses the case where wrappers - in particular TabbedControls
+         // - are used in a form
+         on(this.domNode, "ALF_FIELD_ADDED_TO_FORM", lang.hitch(this, function(evt) {
+            evt && Event.stop(evt);
+            if (this._formSetupComplete)
+            {
+               array.forEach(this._form.getChildren(), function(entry) {
+                  if (typeof entry.publishValue === "function")
+                  {
+                     entry.publishValue();
+                  }
+               });
+            }
+         }));
 
          // Add the widgets to the form...
          // The widgets should automatically inherit the pubSubScope from the form to scope communication

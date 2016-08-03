@@ -23,10 +23,8 @@
 define(["module",
         "alfresco/defineSuite",
         "intern/chai!expect",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, expect, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, expect, assert) {
 
    var toggleSelector = function(id, status) {
       return "#" + id + "_ITEM_0 ." + status;
@@ -78,12 +76,11 @@ define(["module",
 
       "Like the document": function() {
          return this.remote.findByCssSelector("#LIKES_ITEM_0")
+            .clearLog()
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_ADD", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Add rating request not published");
-            });
+         .end()
+
+         .getLastPublish("ALF_RATING_ADD");
       },
 
       "Check ON image is toggled": function() {
@@ -112,12 +109,11 @@ define(["module",
 
       "Unlike the document": function() {
          return this.remote.findByCssSelector("#LIKES_ITEM_0")
+            .clearLog()
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_RATING_REMOVE", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Remove rating request not published");
-            });
+         .end()
+         
+         .getLastPublish("ALF_RATING_REMOVE");
       },
 
       "Check ON image is toggled (on unlike)": function() {
@@ -184,11 +180,13 @@ define(["module",
       "Favourite a document": function() {
          return this.remote.findByCssSelector("#FAVOURITES_ITEM_0")
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Add favourite request not published");
-            });
+         .end()
+
+         .getLastPublish("ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE");
+      },
+
+      "Check retrieval URL": function() {
+         return this.remote.getLastXhr("aikau/proxy/alfresco/api/people/guest/preferences?pf=org.alfresco.share.documents.favourites");
       },
 
       "Check ON image toggled (add favourite)": function() {
@@ -210,11 +208,9 @@ define(["module",
       "Remove favourite": function() {
          return this.remote.findByCssSelector("#FAVOURITES_ITEM_0")
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.topicSelector("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE", "publish", "any"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Remove favourite request not published");
-            });
+         .end()
+
+         .getLastPublish("ALF_PREFERENCE_REMOVE_DOCUMENT_FAVOURITE");
       },
 
       "Check ON image toggled (remove favourite)": function() {
