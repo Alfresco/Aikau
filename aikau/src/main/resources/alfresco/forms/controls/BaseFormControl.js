@@ -418,6 +418,18 @@ define(["dojo/_base/declare",
          {
             this.wrappedWidget.set("disabled", status);
          }
+         if (this.domNode)
+         {
+            if (status)
+            {
+               domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--disabled");
+            }
+            else
+            {
+               domClass.remove(this.domNode, "alfresco-forms-controls-BaseFormControl--disabled");
+            }
+         }
+         
          this.validate();
       },
 

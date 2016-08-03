@@ -34,10 +34,12 @@
 define(["alfresco/core/CoreWidgetProcessing",
         "alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
+        "dojo/_base/array",
         "dojo/_base/lang",
+        "dojo/dom-attr",
         "dojo/dom-class",
         "alfresco/forms/controls/PushButtonsControl"],
-       function(CoreWidgetProcessing, BaseFormControl, declare, lang, domClass) {
+       function(CoreWidgetProcessing, BaseFormControl, declare, array, lang, domAttr, domClass) {
 
    return declare([BaseFormControl, CoreWidgetProcessing], {
 
@@ -52,6 +54,28 @@ define(["alfresco/core/CoreWidgetProcessing",
        * @since 1.0.65
        */
       firstValueIsDefault: false,
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#alfDisabled}
+       * to ensure that the [control]{@link module:alfresco/forms/controls/PushButtonControl} is disabled.
+       * 
+       * @instance
+       * @param  {boolean} status Whether or not the control should be disabled
+       * @since 1.0.80
+       */
+      alfDisabled: function alfresco_forms_controls_BaseFormControl__alfDisabled(status) {
+         this.inherited(arguments);
+
+         if (this.wrappedWidget && this.wrappedWidget.opts)
+         {
+            array.forEach(this.wrappedWidget.opts, function(option) {
+               if (option.inputNode)
+               {
+                  status ? domAttr.set(option.inputNode, "disabled", true) : domAttr.remove(option.inputNode, "disabled");
+               }
+            }, this);
+         }
+      },
 
       /**
        * Run after widget created.
