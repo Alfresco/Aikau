@@ -186,6 +186,14 @@ define(["module",
             .then(function(payloads) {
                assert.lengthOf(payloads, 1);
             });
+      },
+
+      "No buttons label displayed": function() {
+         return this.remote.findByCssSelector("#NO_OPTIONS_CONTROL .alfresco-forms-controls-PushButtons__noOptionsLabel")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "No buttons available");
+            });
       }
    });
 });
