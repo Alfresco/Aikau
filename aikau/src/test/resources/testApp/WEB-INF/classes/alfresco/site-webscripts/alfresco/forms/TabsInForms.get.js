@@ -28,6 +28,17 @@ model.jsonModel = {
             },
             widgets: [
                {
+                  id: "TOGGLE_DISABILITY",
+                  name: "alfresco/forms/controls/CheckBox",
+                  config: {
+                     fieldId: "TOGGLE_DISABILITY",
+                     name: "toggle",
+                     label: "Toggle Disability",
+                     description: "Use this checkbox to toggle disability of fields in the tabs",
+                     value: false
+                  }
+               },
+               {
                   name: "alfresco/forms/CollapsibleSection",
                   config: {
                      label: "Stuff",
@@ -36,6 +47,7 @@ model.jsonModel = {
                            id: "TC1",
                            name: "alfresco/forms/TabbedControls",
                            config: {
+                              padded: true,
                               widgets: [
                                  {
                                     name: "alfresco/forms/ControlColumn",
@@ -49,7 +61,15 @@ model.jsonModel = {
                                                 fieldId: "TB1",
                                                 name: "tb1",
                                                 label: "First text box",
-                                                description: "Setting this field value to 'break' will make the text box in tab 3 required"
+                                                description: "Setting this field value to 'break' will make the text box in tab 3 required",
+                                                disablementConfig: {
+                                                   rules: [
+                                                      {
+                                                         targetId: "TOGGLE_DISABILITY",
+                                                         is: [true]
+                                                      }
+                                                   ]
+                                                }
                                              }
                                           }
                                        ]
@@ -117,6 +137,7 @@ model.jsonModel = {
                   id: "TC2",
                   name: "alfresco/forms/TabbedControls",
                   config: {
+                     padded: true,
                      widgets: [
                         {
                            name: "alfresco/forms/ControlColumn",
@@ -129,7 +150,15 @@ model.jsonModel = {
                                     config: {
                                        fieldId: "TB4",
                                        name: "tb4",
-                                       label: "Text box"
+                                       label: "Text box",
+                                       disablementConfig: {
+                                          rules: [
+                                             {
+                                                targetId: "TOGGLE_DISABILITY",
+                                                is: [true]
+                                             }
+                                          ]
+                                       }
                                     }
                                  }
                               ]

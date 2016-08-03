@@ -1318,6 +1318,13 @@ define(["dojo/_base/declare",
                   evt.preventFocusTheft = true;
                }
             }));
+
+            // See AKU-1049 - emit a custom event to be captured by the form to let it know to re-publish
+            // all the field values. This will allow "late" created fields to process rules...
+            on.emit(this.domNode, "ALF_FIELD_ADDED_TO_FORM", {
+               bubbles: true,
+               cancelable: true
+            });
          }
          else
          {

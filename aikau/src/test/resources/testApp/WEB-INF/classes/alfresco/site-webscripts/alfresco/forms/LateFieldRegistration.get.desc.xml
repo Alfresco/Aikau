@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Late form field registration</shortname>
+  <description>This test page was provided to specifically target a bug where form fields that register late can process rules.</description>
+  <family>aikau-unit-tests</family>
+  <url>/LateFieldRegistration</url>
+</webscript>
