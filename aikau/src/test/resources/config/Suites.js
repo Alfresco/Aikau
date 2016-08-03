@@ -31,7 +31,7 @@ define(function() {
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/renderers/SocialRenderersTest"
+      "alfresco/upload/UploadMonitorTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -292,7 +292,6 @@ define(function() {
       "alfresco/services/NavigationServiceTest",
       "alfresco/services/NodePreviewServiceTest",
       "alfresco/services/NotificationServiceTest",
-      "alfresco/services/OptionsServiceTest",
       "alfresco/services/OptionsServiceTest",
       "alfresco/services/SearchServiceTest",
       "alfresco/services/ServiceFilteringTest",
