@@ -131,7 +131,7 @@ define(["module",
          .findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "Update1_4", "Updated label not set correctly by pub/sub");
+               assert.equal(resultText, "Update1_6", "Updated label not set correctly by pub/sub");
             });
       },
 
@@ -234,7 +234,7 @@ define(["module",
          .findByCssSelector("#HAS_CHANGES_TO_CONTROL_dropdown table tr:nth-child(1) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "Update1_6", "Updated label not set correctly by pub/sub");
+               assert.equal(resultText, "Update1_8", "Updated label not set correctly by pub/sub");
             });
       },
 
