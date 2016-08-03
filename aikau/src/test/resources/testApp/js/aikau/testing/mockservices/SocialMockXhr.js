@@ -51,6 +51,11 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      "{}"]);
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/api/people/guest/preferences?pf=org.alfresco.share.documents.favourites",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     "{}"]);
             this.server.respondWith("POST",
                                     "/aikau/proxy/alfresco/api/people/guest/preferences",
                                     [200,
