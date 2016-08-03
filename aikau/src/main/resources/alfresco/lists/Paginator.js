@@ -509,67 +509,6 @@ define(["dojo/_base/declare",
                   
                   domClass.remove(this.pageMarker.domNode, "dijitDisabled dijitMenuItemDisabled");
                }
-               
-               // Delete the previous page selector group contents...
-               if (this.pageSelectorGroup !== null)
-               {
-                  var _this = this;
-                  array.forEach(this.pageSelectorGroup.getChildren(), function(widget) {
-                     _this.pageSelectorGroup.removeChild(widget);
-                     widget.destroy();
-                  });
-               }
-               
-               // Create the page labels, which for English will be along the lines of 1-25
-               if (this.compactMode === false && this.showPageSelector)
-               {
-                  var pageLabels = [];
-                  var pageStart = 1;
-                  for (var i=0; i<this.totalPages; i++)
-                  {
-                     // Comments below assume 25 docs per page...
-                     var pageEnd;
-                     if (i+1 !== this.totalPages)
-                     {
-                        // If we're not getting the labels for the last page...
-                        pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
-                     }
-                     else
-                     {
-                        // ...for the last page just count up to the last document
-                        pageEnd = this.totalRecords;
-                     }
-                     
-                     var label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
-                     var menuItem = new AlfCheckableMenuItem({
-                        label: label,
-                        value: i+1,
-                        group: "PAGE_SELECTION_GROUP",
-                        checked: this.currentPage === i+1,
-                        publishTopic: this.pubSubScope + this.pageSelectionTopic,
-                        publishPayload: {
-                           label: label,
-                           value: i+1
-                        }
-                     });
-
-                     if (this.pageSelectorGroup !== null)
-                     {
-                        this.pageSelectorGroup.addChild(menuItem);
-                     }
-                     else
-                     {
-                        if (this.__initialPageSelectorItems === null)
-                        {
-                           this.__initialPageSelectorItems = [];
-                        }
-                        this.__initialPageSelectorItems.push(menuItem);
-                     }
-                     
-                     pageLabels.push();
-                     pageStart = pageEnd + 1; // Add the 1 back on because the next page starts at 26
-                  }
-               }
             }
          }
       },
@@ -730,6 +669,8 @@ define(["dojo/_base/declare",
             this.pageSelector = registry.byId(this.id + "_PAGE_SELECTOR");
             var popupChildren = this.pageSelector.popup.getChildren();
             this.pageSelectorGroup = popupChildren[popupChildren.length-1];
+            
+            this.pageSelector.popup.onOpen = lang.hitch(this, this.checkAndUpdatePageSelectionMenu);
          }
          
          this.pageBack = registry.byId(this.id + "_PAGE_BACK");
@@ -755,6 +696,93 @@ define(["dojo/_base/declare",
          }
          delete this.__deferredLoadedDocumentData;
          this._controlsLoaded.resolve();
+      },
+      
+      /**
+       *  Handles initialization and necessary updates of the page selection menu items when the popup is opened.
+       * 
+       *  @instance
+       */
+      checkAndUpdatePageSelectionMenu : function alfresco_lists_Paginator__checkAndUpdatePageSelectionMenu() {
+          var firstPage, pageStart, pageEnd, i, label, menuItem;
+
+          // only need to act if not initialized yet or change occurred
+          if (this._pageSelectionDocsPerPage === undefined
+                  || this._pageSelectionDocsPerPage !== this.documentsPerPage
+                  || this._pageSelectionTotalRecords === undefined
+                  || this._pageSelectionTotalRecords !== this.totalRecords)
+          {
+              firstPage = 0;
+              
+              // Delete the (obsolete) previous page selector group contents...
+              array.forEach(this.pageSelectorGroup.getChildren(), function(widget, index, arr) {
+                  var virtPageEnd;
+                  
+                  // need to destroy every existing menu item if documentsPerPage has changed
+                  // or state hasn't been fully initialized yet
+                  if (this._pageSelectionDocsPerPage === undefined
+                          || this._pageSelectionDocsPerPage !== this.documentsPerPage
+                          || this._pageSelectionTotalRecords === undefined)
+                  {
+                      this.pageSelectorGroup.removeChild(widget);
+                      widget.destroy();
+                  }
+                  // otherwise if totalRecords changed we need to destroy last page and any obsolete page before
+                  // calculate pageEnd for existing page and compare
+                  else
+                  {
+                      virtPageEnd = (index + 1) * parseInt(this.documentsPerPage, 10);
+                      if (index === arr.length - 1 || virtPageEnd > this.totalRecords)
+                      {
+                          this.pageSelectorGroup.removeChild(widget);
+                          widget.destroy();
+                          
+                          // mark the first page that needs re-creation
+                          if (firstPage === 0)
+                          {
+                             firstPage = index; 
+                          }
+                      }
+                  }
+               }, this);
+    
+              // Create the page labels, which for English will be along the lines of 1-25
+              pageStart = firstPage * parseInt(this.documentsPerPage, 10) + 1;
+              for (i = firstPage; i < this.totalPages; i++)
+              {
+                 // Comments below assume 25 docs per page...
+                 if (i+1 !== this.totalPages)
+                 {
+                    // If we're not getting the labels for the last page...
+                    pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
+                 }
+                 else
+                 {
+                    // ...for the last page just count up to the last document
+                    pageEnd = this.totalRecords;
+                 }
+    
+                 label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
+                 menuItem = new AlfCheckableMenuItem({
+                    label: label,
+                    value: i+1,
+                    group: "PAGE_SELECTION_GROUP",
+                    checked: this.currentPage === i+1,
+                    publishTopic: this.pubSubScope + this.pageSelectionTopic,
+                    publishPayload: {
+                       label: label,
+                       value: i+1
+                    }
+                 });
+                 
+                 this.pageSelectorGroup.addChild(menuItem);
+    
+                 pageStart = pageEnd + 1; // Add the 1 back on because the next page starts at 26
+              }
+              
+              this._pageSelectionDocsPerPage = this.documentsPerPage;
+              this._pageSelectionTotalRecords = this.totalRecords;
+          }
       }
    });
 });
