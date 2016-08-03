@@ -41,7 +41,7 @@ define(["dojo/_base/declare",
          try
          {
             this.server.respondWith("GET",
-                                    /\/aikau\/service\/components\/documentlibrary\/data\/doclist\/all\/site\/swsdp\/documentlibrary\?filter=path(.*)/,
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/site\/swsdp\/doclist\/all\/site\/swsdp\/documentlibrary\?filter=path(.*)/,
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      doclib]);

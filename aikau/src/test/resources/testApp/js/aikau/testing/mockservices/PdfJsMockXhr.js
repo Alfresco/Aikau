@@ -52,6 +52,12 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      PdfNode]);
 
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/site\/normalResult\/node\/workspace\/SpacesStore\/f8394454-0651-48a5-b583-d067c7d03339(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     PdfNode]);
+
             // PDF with outline
             this.server.respondWith("GET",
                                     /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/4ac29928-4ce3-4526-a5ca-3be256220663(.*)/,
