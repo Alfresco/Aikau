@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.80</version>
+      <version>1.0.81-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
