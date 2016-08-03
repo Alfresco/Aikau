@@ -268,7 +268,7 @@ define(["dojo/_base/declare",
       update: function alfresco_services_PreferenceService__update(payload, add) {
          if (payload.name && payload.value)
          {
-            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences" + (name ? "?pf=" + name : "");
+            var url = AlfConstants.PROXY_URI + "api/people/" + encodeURIComponent(AlfConstants.USERNAME) + "/preferences" + (payload.name ? "?pf=" + payload.name : "");
             this.serviceXhr({
                url: url,
                method: "GET",

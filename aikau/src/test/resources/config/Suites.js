@@ -27,11 +27,11 @@ define(function() {
 
    // Whether to run all tests or just a few
    var runAllTests = true;
-   // runAllTests = false; // Comment/uncomment this line to toggle
+   runAllTests = false; // Comment/uncomment this line to toggle
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/upload/UploadMonitorTest"
+      "alfresco/services/PreferenceServiceTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -291,6 +291,7 @@ define(function() {
       "alfresco/services/NodePreviewServiceTest",
       "alfresco/services/NotificationServiceTest",
       "alfresco/services/OptionsServiceTest",
+      "alfresco/services/PreferenceServiceTest",
       "alfresco/services/SearchServiceTest",
       "alfresco/services/ServiceFilteringTest",
       "alfresco/services/ServiceRegistryTest",
