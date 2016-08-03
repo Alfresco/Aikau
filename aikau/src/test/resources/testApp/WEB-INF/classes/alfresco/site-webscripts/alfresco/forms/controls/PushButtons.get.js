@@ -306,8 +306,8 @@ model.jsonModel = {
                                     }
                                  },
                                  {
-                                    name: "alfresco/forms/controls/PushButtons",
                                     id: "DISABLED",
+                                    name: "alfresco/forms/controls/PushButtons",
                                     config: {
                                        fieldId: "DISABLED",
                                        name: "disabled",
@@ -337,6 +337,24 @@ model.jsonModel = {
                                                 is: [true]
                                              }
                                           ]
+                                       }
+                                    }
+                                 },
+                                 {
+                                    id: "NO_OPTIONS",
+                                    name: "alfresco/forms/controls/PushButtons",
+                                    config: {
+                                       fieldId: "NO_OPTIONS",
+                                       name: "nooptions",
+                                       label: "Option-less",
+                                       description: "What PushButtons look like with no options",
+                                       maxLineLength: 3,
+                                       noWrap: true,
+                                       simpleLayout: true,
+                                       multiMode:true,
+                                       noButtonsLabel: "No buttons available",
+                                       optionsConfig: {
+                                          fixed: []
                                        }
                                     }
                                  }

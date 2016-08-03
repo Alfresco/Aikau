@@ -38,8 +38,9 @@ define(["alfresco/core/CoreWidgetProcessing",
         "dojo/_base/lang",
         "dojo/dom-attr",
         "dojo/dom-class",
+        "dojo/dom-construct",
         "alfresco/forms/controls/PushButtonsControl"],
-       function(CoreWidgetProcessing, BaseFormControl, declare, array, lang, domAttr, domClass) {
+       function(CoreWidgetProcessing, BaseFormControl, declare, array, lang, domAttr, domClass, domConstruct) {
 
    return declare([BaseFormControl, CoreWidgetProcessing], {
 
@@ -54,6 +55,16 @@ define(["alfresco/core/CoreWidgetProcessing",
        * @since 1.0.65
        */
       firstValueIsDefault: false,
+
+      /**
+       * An optional message to display when there are no buttons available for display.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.80
+       */
+      noButtonsLabel: null,
 
       /**
        * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#alfDisabled}
@@ -144,6 +155,30 @@ define(["alfresco/core/CoreWidgetProcessing",
             name: "alfresco/forms/controls/PushButtonsControl",
             config: config
          });
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#setOptions}
+       * to make use of any configured [noButtonsLabel]{@link module:alfresco/forms/controls/PushButtons#noButtonsLabel}
+       * when an empty options array is provided.
+       * 
+       * @instance
+       * @param {object[]} options An array of the options to be added.
+       * @since 1.0.80
+       */
+      setOptions: function alfresco_forms_controls_BaseFormControl__setOptions(options) {
+         this.inherited(arguments);
+
+         if (options && 
+             options.length === 0 && 
+             this.noButtonsLabel && 
+             this.wrappedWidget)
+         {
+            var span = domConstruct.create("span", {
+               "class": "alfresco-forms-controls-PushButtons__noOptionsLabel"
+            }, this.wrappedWidget.domNode);
+            span.appendChild(document.createTextNode(this.message(this.noButtonsLabel)));
+         }
       }
    });
 });
