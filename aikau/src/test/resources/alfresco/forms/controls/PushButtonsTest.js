@@ -27,6 +27,15 @@ define(["module",
         "intern/dojo/node!leadfoot/keys"],
         function(module, defineSuite, assert, TestCommon, keys) {
 
+   var checkBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/CheckBox");
+   var selectors = {
+      checkBoxes: {
+         toggleDisableState: {
+            checkBox: TestCommon.getTestSelector(checkBoxSelectors, "checkbox", ["TOGGLE_DISABLE_STATE"])
+         }
+      }
+   };
+
    defineSuite(module, {
       name: "PushButtons Tests",
       testPage: "/PushButtons",
@@ -35,7 +44,7 @@ define(["module",
          return this.remote.findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -50,20 +59,20 @@ define(["module",
       "Value can be updated by publish": function() {
          return this.remote.findById("CANT_BUILD_VALUE")
             .click()
-            .end()
+         .end()
 
          .findById("RUGBY_UNION_VALUE")
             .click()
-            .end()
+         .end()
 
          .findById("VB_VALUE")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -77,25 +86,25 @@ define(["module",
       "Keyboard navigation and selection is supported on single-value controls": function() {
          return this.remote.findById("VB_VALUE") // Focus on last button at top
             .click()
-            .end()
+         .end()
 
          .pressKeys(keys.TAB) // Tab to "canbuild" control
             .pressKeys(keys.ARROW_LEFT)
             .pressKeys(keys.SPACE)
-            .end()
+         .end()
 
          .pressKeys(keys.TAB) // Tab to "properfootball" control, first value
             .pressKeys(keys.SPACE)
-            .end()
+         .end()
 
          .pressKeys(keys.TAB) // Tab to "properfootball" control, second value
             .pressKeys(keys.SPACE)
-            .end()
+         .end()
 
          .findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -108,12 +117,12 @@ define(["module",
       "Can select push button with mouse": function() {
          return this.remote.findByCssSelector("#BEST_LANGUAGE_CONTROL label:nth-of-type(2)")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#LEFT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -125,7 +134,7 @@ define(["module",
          return this.remote.findByCssSelector("#RIGHT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -134,20 +143,48 @@ define(["module",
 
          .findByCssSelector("#ONE_DESELECTABLE_CHOICE_CONTROL label:nth-of-type(1)")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ONE_DESELECTABLE_CHOICE_CONTROL label:nth-of-type(2)")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#RIGHT_FORM .confirmationButton .dijitButtonNode")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
                assert.sameMembers(payload.onedeselectable, ["two"], "Modified state of radio-checkbox invalid");
+            });
+      },
+
+      "Disabled control cannot be used": function() {
+         return this.remote.findByCssSelector("#DISABLED_CONTROL label:nth-of-type(1)")
+            .clearLog()
+            .click()
+         .end()
+
+         .getAllPublishes("SCOPED__valueChangeOf_DISABLED")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 0);
+            });
+      },
+
+      "Enabled control cannot be used": function() {
+         return this.remote.findByCssSelector(selectors.checkBoxes.toggleDisableState.checkBox)
+            .click()
+         .end()
+
+         .findByCssSelector("#DISABLED_CONTROL label:nth-of-type(1)")
+            .clearLog()
+            .click()
+         .end()
+
+         .getAllPublishes("SCOPED__valueChangeOf_DISABLED")
+            .then(function(payloads) {
+               assert.lengthOf(payloads, 1);
             });
       }
    });
