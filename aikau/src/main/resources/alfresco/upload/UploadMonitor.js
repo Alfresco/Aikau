@@ -106,6 +106,16 @@ define(["alfresco/core/FileSizeMixin",
       maxUploadNameLength: 50,
 
       /**
+       * The characters which should swap when the text is reversed.
+       *
+       * @instance
+       * @type {String[]}
+       * @default ["[]", "{}", "<>", "()"]
+       * @since 1.0.79
+       */
+      reverseChars: ["[]", "{}", "<>", "()"],
+
+      /**
        * If set to true, this will override the [maxUploadNameLength property]{@see module:alfresco/upload/UploadMonitor#maxUploadNameLength}
        * and any long filenames will instead be truncated instead by the available space, with an ellipsis used at the end of the string to
        * denote any missing characters.
@@ -209,6 +219,7 @@ define(["alfresco/core/FileSizeMixin",
        */
       constructor: function alfesco_upload_UploadMonitor__constructor() {
          this._uploads = {};
+         this.setupReverseChars();
       },
 
       /**
@@ -401,7 +412,7 @@ define(["alfresco/core/FileSizeMixin",
          if (doNotModify) {
             // Leave it unchanged
          } else if (this.useEllipsisForLongFilenames) {
-            uploadName = uploadName.split("").reverse().join("");
+            uploadName = uploadName.split("").reverse().map(this.reverseDirectionalChars, this).join("");
          } else if (uploadName.length > this.maxUploadNameLength) {
 
             // Calculate how long name can be
@@ -556,6 +567,36 @@ define(["alfresco/core/FileSizeMixin",
          domConstruct.empty(this.inProgressItemsNode);
          domConstruct.empty(this.successfulItemsNode);
          domConstruct.empty(this.unsuccessfulItemsNode);
+      },
+
+      /**
+       * Reverse any directional characters (e.g. brackets)
+       *
+       * @instance
+       * @param {String} nextChar The next character to be checked
+       * @returns {String} The replaced or original character
+       * @since 1.0.79
+       */
+      reverseDirectionalChars: function alfresco_upload_AlfUploadDisplay__reverseDirectionalChars(nextChar) {
+         var code = nextChar.charCodeAt(0),
+            reverseCode = this.reverseChars[code];
+         return reverseCode ? String.fromCharCode(reverseCode) : nextChar;
+      },
+
+      /**
+       * Setup the reverse-chars code lookup array (one-time run)
+       *
+       * @instance
+       * @since 1.0.79
+       */
+      setupReverseChars: function alfresco_upload_AlfUploadDisplay__setupReverseChars() {
+         this.reverseChars = this.reverseChars.reduce(function(arr, nextChars) {
+            var fromCode = nextChars.charCodeAt(0),
+              toCode = nextChars.charCodeAt(1);
+            arr[fromCode] = toCode;
+            arr[toCode] = fromCode;
+            return arr;
+         }, []);
       },
 
       /**

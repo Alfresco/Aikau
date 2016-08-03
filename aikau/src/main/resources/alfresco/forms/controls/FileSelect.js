@@ -25,16 +25,16 @@
 define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
         "alfresco/html/FileInput",
-        "dojo/_base/lang"], 
+        "dojo/_base/lang"],
         function(BaseFormControl, declare, FileInput, lang) {
-   
+
    return declare([BaseFormControl], {
-      
+
       /**
        * Configuring this attribute to be true will result in the wrapped [FileInput]{@link module:alfresco/html/FileInput}
        * widget being recreated each time that file or files are selected. This option was added to support a specific
        * use case, see https://issues.alfresco.com/jira/browse/AKU-834 for details.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -43,16 +43,30 @@ define(["alfresco/forms/controls/BaseFormControl",
       recreateControlOnSelect: false,
 
       /**
+       * The accept attribute to specify the types of files to accept (that can be submitted through a file upload).
+       * By default accept all file types. Possible values: ".gif, .jpg, .png, .doc" or other file extensions, 
+       * "application/vnd.openxmlformats-officedocument.wordprocessingml.document, .application/msword" and other MIME-types, 
+       * "audio/*, video/*, image/*".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.79
+       */
+      filterMimeType: "",
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_FileSelect__getWidgetConfig() {
          // Return the configuration for the widget
          return {
             id : this.generateUuid(),
-            name: this.name
+            name: this.name,
+            filterMimeType: this.filterMimeType
          };
       },
-      
+
       /**
        * @instance
        */
@@ -69,19 +83,20 @@ define(["alfresco/forms/controls/BaseFormControl",
       recreateControl: function alfresco_forms_controls_FileSelect__recreateControl() {
          var config = {
             id: this.wrappedWidget.id,
-            name: this.name
+            name: this.name,
+            filterMimeType: this.filterMimeType
          };
          this.wrappedWidget.destroy();
          this.wrappedWidget = this.createFormControl(config);
          this.wrappedWidget.placeAt(this._controlNode);
          this.setupChangeEvents();
       },
-      
+
       /**
        * Overrides the default change events to use blur events on the text box. This is done so that we can validate
        * on every single keypress. However, we need to keep track of old values as this information is not readily
        * available from the text box itself.
-       * 
+       *
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_FileSelect__setupChangeEvents() {

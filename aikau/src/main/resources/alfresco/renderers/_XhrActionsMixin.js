@@ -46,6 +46,27 @@ define(["dojo/_base/declare",
        * @since 1.0.46
        */
       i18nRequirements: [{i18nFile: "./i18n/_XhrActionsMixin.properties"}],
+      
+      /**
+       * The lookup key into current item to retrieve the short name of the site in which the current item is
+       * located. This may be relevant to correctly obtain all item actions if evaluation of these actions is
+       * dependant on the site scope.
+       * 
+       * @instance
+       * @type {string}
+       * @since 1.0.79
+       */
+      currentItemSiteShortNameKey : null,
+      
+      /**
+       * The name of the view for which to load actions. Depending on the backend loading actions this may
+       * allow a differentiation between various scopes that actions have been associated with.
+       * 
+       * @instance
+       * @type {string}
+       * @since 1.0.79
+       */
+      actionView : null,
 
       /**
        * Overrides the [inherited function]{@link module:alfresco/renderers/_ActionsMixin#createDropDownMenu}
@@ -99,13 +120,28 @@ define(["dojo/_base/declare",
          var nodeRef = lang.getObject("nodeRef", false, this.currentItem);
          if (nodeRef)
          {
+            // depending on how item was loaded site can be coded in different ways
+            var site;
+            if (this.currentItemSiteShortNameKey)
+            {
+                site = lang.getObject(this.currentItemSiteShortNameKey, false, this.currentItem);
+            }
+            else
+            {
+                // default fallbacks for search and doclib data web scripts (JsNode vs. bare)
+                site = site || lang.getObject("site.shortName", false, this.currentItem);
+                site = site || lang.getObject("node.location.site.name", false, this.currentItem);
+                site = site || lang.getObject("location.site.name", false, this.currentItem);
+            }
             // Generate a UUID for the response to the publication to ensure that only this widget
             // handles to the XHR data...
             var responseTopic = this.generateUuid();
             this._xhrDataRequestHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onXhrData, callback), true);
             this.alfPublish(topics.GET_DOCUMENT, {
                alfResponseTopic: responseTopic,
-               nodeRef: nodeRef
+               nodeRef: nodeRef,
+               site : site,
+               view : this.actionView
             }, true);
          }
          else

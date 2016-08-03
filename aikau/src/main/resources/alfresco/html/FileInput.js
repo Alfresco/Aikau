@@ -21,7 +21,7 @@
  * This widget represents an input HTML element of type "file". It is used for selecting files
  * from the operating system, typically for the purpose of uploading. It is wrapped by the
  * [FileSelect]{@link module:alfresco/forms/controls/FileSelect} form control.
- * 
+ *
  * @module alfresco/html/FileInput
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -29,32 +29,32 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/FileInput.html",
-        "alfresco/core/Core"], 
+        "alfresco/core/Core"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore) {
-   
+
    return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
 
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Label.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/FileInput.properties"}],
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance cssRequirements {Array}
        * @type {object[]}
        * @default [{cssFile:"./css/Label.css"}]
        */
       cssRequirements: [{cssFile:"./css/FileInput.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
        * @instance
@@ -64,12 +64,25 @@ define(["dojo/_base/declare",
 
       /**
        * The label to display.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
        */
       label: "",
+
+      /**
+       * The accept attribute to specify the types of files to accept (that can be submitted through a file upload).
+       * By default accept all file types. Possible values: ".gif, .jpg, .png, .doc" or other file extensions, 
+       * "application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword" and other MIME-types, 
+       * "audio/*, video/*, image/*".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.79
+       */
+      filterMimeType: "",
 
       /**
        * This returns the files attribute of the input element

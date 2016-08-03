@@ -208,6 +208,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_editors_TinyMCE__postCreate() {
+         // jshint maxcomplexity:false
          // Mix the custom editor config overrides into the default editor config...
          var config = lang.clone(this.defaultEditorConfig);
 
@@ -226,14 +227,23 @@ define(["dojo/_base/declare",
          // Check that the language requested is supported...
          if (config.language) {
             var locales = this.supportedLocales.split(",");
-            var locale = "en";
+            var locale, bestGeneralizedLocale;
             for (var i = 0, j = locales.length; i < j; i++) {
                if (locales[i] === config.language) {
                   locale = config.language;
                   break;
                }
+               
+               if (config.language.indexOf(locales[i]) === 0)
+               {
+                   if (bestGeneralizedLocale === undefined || locales[i].length > bestGeneralizedLocale.length)
+                   {
+                       bestGeneralizedLocale = locales[i];
+                   }
+               }
             }
-            config.language = locale;
+            
+            config.language = locale || bestGeneralizedLocale || "en";
          }
 
          tinymce.baseURL = AlfConstants.URL_RESCONTEXT + "js/lib/tinymce";

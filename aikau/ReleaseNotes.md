@@ -1,4 +1,4 @@
-Aikau 1.0.78 Release Notes
+Aikau 1.0.79 Release Notes
 ===
 
 Current deprecations:
@@ -48,8 +48,25 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.79:
+* [AKU-945](https://issues.alfresco.com/jira/browse/AKU-945)       - Break word on long form control labels in form dialogs
+* [AKU-1039](https://issues.alfresco.com/jira/browse/AKU-1039)     - Re-instate border around tabs
+* [AKU-1040](https://issues.alfresco.com/jira/browse/AKU-1040)     - Support fixed width on Select form control
+* [AKU-1041](https://issues.alfresco.com/jira/browse/AKU-1041)     - Increase gap betwen filter widgets
+* [AKU-1042](https://issues.alfresco.com/jira/browse/AKU-1042)     - Brackets in upload file name display fix
+* [AKU-1043](https://issues.alfresco.com/jira/browse/AKU-1043)     - Ensure values are set in TabbedControls
+* [AKU-1045](https://issues.alfresco.com/jira/browse/AKU-1045)     - Support for generated payloads in AlfButton
+* [#1169](https://github.com/Alfresco/Aikau/pull/1169)              - Use site for XHR loading actions and client specific view
+* [#1172](https://github.com/Alfresco/Aikau/pull/1172)              - PropertyLink CSS typo fix
+* [#1173](https://github.com/Alfresco/Aikau/pull/1173)              - Support for 0-value in Progress
+* [#1175](https://github.com/Alfresco/Aikau/pull/1175)              - Page title prefix encoding correction
+* [#1176](https://github.com/Alfresco/Aikau/pull/1176)              - TinyMCE locale generalization
+* [#1181](https://github.com/Alfresco/Aikau/pull/1181)              - FileSelect updated to filter on MIME type
+* [#1182](https://github.com/Alfresco/Aikau/pull/1182)              - Support for empty array in XHR actions
+
 1.0.78:
 * [AKU-1037](https://issues.alfresco.com/jira/browse/AKU-1037)     - Improve Dashlet CSS defaults
+* [AKU-1038](https://issues.alfresco.com/jira/browse/AKU-1038)     - Revert AKU-945 (form dialog layout changes)
 
 1.0.77.1:
 * [AKU-1020](https://issues.alfresco.com/jira/browse/AKU-1020)     - Support for item focus on AlfList load

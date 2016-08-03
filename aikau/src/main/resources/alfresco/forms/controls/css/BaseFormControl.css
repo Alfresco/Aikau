@@ -54,7 +54,7 @@
    }
    > .control-row > .control {
       display: inline-block;
-      margin-right: 5px;
+      margin-right: 10px;
    }
    > .title-row {
       display: block;
@@ -151,6 +151,9 @@
                   margin-top: 2px;
                   text-align: right;
                   width: @dialog-label-section - 4;
+                  > .label {
+                     word-break: break-word
+                  }
                   > label:after {
                      content: ":";
                   }

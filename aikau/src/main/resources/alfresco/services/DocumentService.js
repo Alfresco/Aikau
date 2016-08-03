@@ -184,21 +184,10 @@ define(["dojo/_base/declare",
             var nodeRef = NodeUtils.processNodeRef(payload.nodeRef),
             targetNodeUri = nodeRef.uri;
 
-            // Construct the URI for the request...
-            var uriPart = payload.site ? "{type}/site/{site}/{container}" : "{type}/node/" + targetNodeUri;
-            if (payload.filter && payload.filter.filterId === "path")
-            {
-               // If a path has been provided in the filter then it is necessary to perform some special
-               // encoding. We need to ensure that the data is URI encoded, but we want to preserve the
-               // forward slashes. We also need to "double encode" all % characters because FireFox has
-               // a nasty habit of decoding them *before* they've actually been posted back... this
-               // guarantees that the user will be able to bookmark valid URLs...
-               var encodedPath = encodeURIComponent(payload.filter.filterData).replace(/%2F/g, "/").replace(/%25/g,"%2525");
-               uriPart += this.combinePaths("/", encodedPath) + "/";
-            }
-
             // View mode and No-cache
-            var params = "?view=browse&noCache=" + new Date().getTime() + "&includeThumbnails=true";
+            var params = "?view=";
+            params += encodeURIComponent(payload.view || "browse");
+            params += "&noCache=" + new Date().getTime() + "&includeThumbnails=true";
 
             var alfTopic = payload.alfResponseTopic || topics.GET_DOCUMENT;
             var url;
@@ -208,7 +197,12 @@ define(["dojo/_base/declare",
             }
             else
             {
-               url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/node/" + targetNodeUri + params;
+               url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/";
+               if (payload.site)
+               {
+                   url += "site/" + encodeURIComponent(payload.site) + "/";
+               }
+               url += "node/" + targetNodeUri + params;
             }
             var config = {
                alfTopic: alfTopic,
@@ -318,7 +312,9 @@ define(["dojo/_base/declare",
          }
 
          // View mode and No-cache
-         params += "&view=browse&noCache=" + new Date().getTime();
+         params += "&view=";
+         params += encodeURIComponent(payload.view || "browse");
+         params += "&noCache=" + new Date().getTime();
 
          var alfTopic = payload.alfResponseTopic || topics.GET_DOCUMENT_LIST;
 
@@ -329,7 +325,12 @@ define(["dojo/_base/declare",
          }
          else
          {
-            url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/doclist/" + params;
+            url = AlfConstants.URL_SERVICECONTEXT + "components/documentlibrary/data/";
+            if (payload.site)
+            {
+                url += "site/" + encodeURIComponent(payload.site) + "/";
+            }
+            url += "doclist/" + params;
          }
          var config = {
             requestId: payload.requestId,

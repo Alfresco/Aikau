@@ -24,6 +24,7 @@ model.jsonModel = {
                            id: "TC",
                            name: "alfresco/layout/AlfTabContainer",
                            config: {
+                              padded: true,
                               tabSelectionTopic: "TABCONTAINER_SELECT_TAB_TOPIC",
                               tabDisablementTopic: "TABCONTAINER_DISABLE_TAB_TOPIC",
                               tabAdditionTopic: "TABCONTAINER_ADD_TAB_TOPIC",

@@ -48,6 +48,19 @@ model.jsonModel = {
                                  initialValue: true
                               }
                            }
+                        },
+                        {
+                           id: "FILE_SELECT",
+                           name: "alfresco/forms/controls/FileSelect",
+                           config: {
+                              label: "File(s) selector (filtered to accept only doc/docx documents)",
+                              name: "files_field",
+                              value: "",
+                              requirementConfig: {
+                                 initialValue: true
+                              },
+                              filterMimeType: ".doc, .docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document, .application/msword"
+                           }
                         }
                      ]
                   }

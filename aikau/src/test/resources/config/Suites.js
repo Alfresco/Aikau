@@ -50,6 +50,7 @@ define(function() {
       "alfresco/accessibility/AccessibilityMenuTest",
       "alfresco/accessibility/SemanticWrapperMixinTest",
 
+      "alfresco/buttons/ButtonsTest",
       "alfresco/buttons/DropDownButtonTest",
       "alfresco/buttons/DynamicPayloadButtonTest",
 
@@ -127,7 +128,6 @@ define(function() {
       "alfresco/forms/controls/AsyncFormControlLoadingTest",
       "alfresco/forms/controls/AutoSetTest",
       "alfresco/forms/controls/BaseFormTest",
-      "alfresco/forms/controls/ButtonsTest",
       "alfresco/forms/controls/CheckBoxTest",
       "alfresco/forms/controls/CodeMirrorTest",
       "alfresco/forms/controls/ComboBoxTest",
