@@ -23,10 +23,8 @@
 define(["module",
         "alfresco/defineSuite",
         "intern/chai!expect",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, expect, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, expect, assert) {
 
    var toggleSelector = function(id, status) {
       return "#" + id + "_ITEM_0 ." + status;
