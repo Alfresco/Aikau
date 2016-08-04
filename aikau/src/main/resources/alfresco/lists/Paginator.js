@@ -731,7 +731,7 @@ define(["dojo/_base/declare",
               }
               // otherwise if totalRecords changed we need to destroy last page and any obsolete page before
               // calculate pageEnd for existing page and compare
-              else
+              else if (this._pageSelectionTotalRecords !== this.totalRecords)
               {
                   virtPageEnd = (index + 1) * parseInt(this.documentsPerPage, 10);
                   if (index === arr.length - 1 || virtPageEnd > this.totalRecords)
@@ -749,6 +749,10 @@ define(["dojo/_base/declare",
                   {
                       lastPreloadedPage = index;
                   }
+              }
+              else
+              {
+                  lastPreloadedPage = index;
               }
            }, this);
 
