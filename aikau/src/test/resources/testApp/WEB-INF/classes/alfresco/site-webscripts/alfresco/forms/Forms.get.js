@@ -192,6 +192,18 @@ model.jsonModel = {
                               label: "Additional 2",
                               publishTopic: "AddButton2"
                            }
+                        },
+                        {
+                           name:"alfresco/buttons/AlfButton",
+                           id: "ADD_BUTTON_3",
+                           config: {
+                              updatePayload: false,
+                              label: "Additional 3 (no form values)",
+                              publishTopic: "AddButton3",
+                              publishPayload: {
+                                 original: "only"
+                              }
+                           }
                         }
                      ]
                   }

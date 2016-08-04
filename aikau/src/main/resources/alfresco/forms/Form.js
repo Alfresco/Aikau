@@ -61,10 +61,10 @@
  *                   initialValue: true
  *                }
  *             }
- *           }
- *        ]
- *     }
- *  }
+ *          }
+ *       ]
+ *    }
+ * }
  *
  * @example <caption>Example configuration for form that does not show validation errors on initial display:</caption>
  * {
@@ -83,10 +83,55 @@
  *                   initialValue: true
  *                }
  *             }
- *           }
- *        ]
- *     }
- *  }
+ *          }
+ *       ]
+ *    }
+ * }
+ *
+ * @example <caption>Example configuration for form with additional buttons:</caption>
+ * {
+ *    name: "alfresco/forms/Form",
+ *    config: {
+ *       okButtonPublishTopic: "SAVE_FORM",
+ *       okButtonLabel: "Save",
+ *       showValidationErrorsImmediately: false,
+ *       widgets: [
+ *          {
+ *             name: "alfresco/forms/controls/TextBox",
+ *             config: {
+ *                name: "control",
+ *                label: "Name",
+ *                requirementConfig: {
+ *                   initialValue: true
+ *                }
+ *             }
+ *          }
+ *       ],
+ *       widgetsAdditionalButtons: [
+ *          {
+ *             name: "alfresco/buttons/AlfButton",
+ *             config: {
+ *                label: "Button 1 (includes form values)",
+ *                publishTopic: "CUSTOM_TOPIC_1",
+ *                publishPayload: {
+ *                   additional: "data"
+ *                } 
+ *             }
+ *          },
+ *          {
+ *             name: "alfresco/buttons/AlfButton",
+ *             config: {
+ *                updatePayload: false,
+ *                label: "Button 1 (does not include form values)",
+ *                publishTopic: "CUSTOM_TOPIC_2",
+ *                publishPayload: {
+ *                   only: "data"
+ *                } 
+ *             }
+ *          }
+ *       ]
+ *    }
+ * }
  * 
  * @module alfresco/forms/Form
  * @extends external:dijit/_WidgetBase
@@ -591,7 +636,11 @@ define(["dojo/_base/declare",
          // it will provide the current form data...
          var formValue = this.getValue();
          array.forEach(this.additionalButtons, function(button) {
-            if (button._alfOriginalButtonPayload)
+            if (!button.updatePayload)
+            {
+               // No action required, leave the payload as is
+            }
+            else if (button._alfOriginalButtonPayload)
             {
                var newPayload = {};
                lang.mixin(newPayload, button._alfOriginalButtonPayload, formValue);
@@ -1012,7 +1061,7 @@ define(["dojo/_base/declare",
          // (e.g. a field has become disabled since the last payload update and is configured to not have its value
          // included when it is hidden, therefore we need to ensure its previous value is NOT included in the payload)
          array.forEach(this.additionalButtons, function(button) {
-            if (button.publishPayload)
+            if (button.publishPayload && button.updatePayload)
             {
                button._alfOriginalButtonPayload = lang.clone(button.publishPayload);
             }
@@ -1123,7 +1172,11 @@ define(["dojo/_base/declare",
        */
       updateButtonPayloads: function alfresco_forms_Form__updateButtonPayloads(values) {
          array.forEach(this.additionalButtons, function(button) {
-            if (button._alfOriginalButtonPayload)
+            if (!button.updatePayload)
+            {
+               // No action required. Leave the payload as is.
+            }
+            else if (button._alfOriginalButtonPayload)
             {
                var payload = {};
                lang.mixin(payload, button._alfOriginalButtonPayload, values);

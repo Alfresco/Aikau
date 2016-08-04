@@ -210,6 +210,19 @@ define(["module",
             });
       },
 
+      "Additional button can omit form values": function() {
+         return this.remote.findByCssSelector("#ADD_BUTTON_3")
+            .click()
+         .end()
+
+         .getLastPublish("CUSTOM_SCOPE_AddButton3")
+            .then(function(payload) {
+               assert.notProperty(payload, "field5");
+               assert.notProperty(payload, "field6");
+               assert.propertyVal(payload, "original", "only");
+            });
+      },
+
       "Test global scope set correctly": function() {
          return this.remote.getLastPublish("SET_HASH");
       },

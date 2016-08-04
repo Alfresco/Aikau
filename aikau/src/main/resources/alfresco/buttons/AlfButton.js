@@ -132,6 +132,20 @@ define(["dojo/_base/declare",
       title: null,
 
       /**
+       * This attribute has been provided primarily for use when configuring 
+       * [widgetsAdditionalButtons]{@link module:alfresco/forms/Form#widgetsAdditionalButtons} in
+       * a [form]{@link module:alfresco/forms/Form}. It is a simple marker indicating whether
+       * or not the configured payload should be updated with additional data (such as the
+       * form value) or if it should be left with the original data.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.81
+       */
+      updatePayload: true,
+
+      /**
        * The topic to listen to to determine when the button should be enabled
        *
        * @instance
