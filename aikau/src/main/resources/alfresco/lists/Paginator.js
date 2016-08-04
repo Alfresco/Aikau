@@ -387,7 +387,7 @@ define(["dojo/_base/declare",
              
              pageStart = (this.currentPage - 1) * parseInt(this.documentsPerPage, 10) + 1;
              pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
-             label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords})
+             label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
              
              this.alfPublish(this.pageSelectionTopic, {
                 label: label,
@@ -423,7 +423,7 @@ define(["dojo/_base/declare",
              {
                  pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
              }
-             label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords})
+             label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
              
              this.alfPublish(this.pageSelectionTopic, {
                 label: label,
