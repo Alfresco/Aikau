@@ -225,6 +225,57 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/layout/ClassicWindow",
+         config: {
+            pubSubScope: "NON_TRUTHY_",
+            title: "Non-truthy values",
+            widgets: [
+               {
+                  id: "DYNAMIC_WITH_NON_TRUTHY",
+                  name: "alfresco/buttons/AlfDynamicPayloadButton",
+                  config: {
+                     label: "Execute",
+                     publishTopic: "EXECUTE_JS",
+                     publishPayload: {},
+                     publishPayloadSubscriptions: [ 
+                        {
+                           topic: "UPDATE_JS_SOURCE",
+                           dataMapping: {
+                              content: "javaScriptSource",
+                              selectedContent: "selectedJavaScriptSource"
+                           }
+                        }
+                     ]
+                  }
+               }, 
+               {
+                  id: "SET_TRUTHY",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "setSource (with selected code)",
+                     publishTopic: "UPDATE_JS_SOURCE",
+                     publishPayload: {
+                        content: "print(10);",
+                        selectedContent: "print(10);"
+                     }
+                  }
+               },
+               {
+                  id: "SET_NON_TRUTHY",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: "removeCodeSelection",
+                     publishTopic: "UPDATE_JS_SOURCE",
+                     publishPayload : {
+                        content: "print(10);",
+                        selectedContent: null
+                     }
+                  }
+               }
+            ]
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]
