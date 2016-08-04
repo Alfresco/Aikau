@@ -510,7 +510,7 @@ define(["dojo/_base/declare",
                   domClass.remove(this.pageMarker.domNode, "dijitDisabled dijitMenuItemDisabled");
                }
                
-               this.checkAndUpdatePageSelectionMenu(this.currentPage);
+               this.checkAndUpdatePageSelectionMenu(null, this.currentPage);
             }
          }
       },
@@ -704,11 +704,12 @@ define(["dojo/_base/declare",
        *  Handles initialization and necessary updates of the page selection menu items when the popup is opened.
        * 
        *  @instance
+       *  @param {object} position the position of the selection menu popup when opened
        *  @param {number} ensurePage The page number that must be ensured to exist. This parameter allows for pre-
        *        initialization during processDocumentsLoaded while still offloading performance hit until selector
        *        is opened.
        */
-      checkAndUpdatePageSelectionMenu : function alfresco_lists_Paginator__checkAndUpdatePageSelectionMenu(ensurePage) {
+      checkAndUpdatePageSelectionMenu : function alfresco_lists_Paginator__checkAndUpdatePageSelectionMenu(position, ensurePage) {
           var firstPage, lastPreloadedPage, pageStart, pageEnd, i, label, menuItem;
 
           // only need to act if not initialized yet or change occurred
