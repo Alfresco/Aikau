@@ -23,8 +23,18 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert"],
-        function(module, defineSuite, assert) {
+        "intern/chai!assert",
+        "alfresco/TestCommon"],
+        function(module, defineSuite, assert, TestCommon) {
+
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+   var selectors = {
+      buttons: {
+         dynamicWithNonTruthy: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DYNAMIC_WITH_NON_TRUTHY"]),
+         setTruthy: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_TRUTHY"]),
+         setNonTruthy: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SET_NON_TRUTHY"])
+      }
+   };
 
    defineSuite(module, {
       name: "Dynamic Payload Button Tests",
@@ -204,6 +214,36 @@ define(["module",
          .getLastPublish("SCOPE_DYNAMIC_BUTTON_TOPIC_3")
             .then(function(payload) {
                assert.deepPropertyVal(payload, "data.default", "default");
+            });
+      },
+
+      "Non-truthy values can be set": function() {
+         return this.remote.findByCssSelector(selectors.buttons.setTruthy)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.buttons.dynamicWithNonTruthy)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("NON_TRUTHY_EXECUTE_JS")
+            .then(function(payload) {
+               assert.propertyVal(payload, "selectedJavaScriptSource", "print(10);");
+            })
+
+         .findByCssSelector(selectors.buttons.setNonTruthy)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.buttons.dynamicWithNonTruthy)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("NON_TRUTHY_EXECUTE_JS")
+            .then(function(payload) {
+               assert.propertyVal(payload, "selectedJavaScriptSource", null);
             });
       }
    });
