@@ -391,7 +391,8 @@ define(["dojo/_base/declare",
              
              this.alfPublish(this.pageSelectionTopic, {
                 label: label,
-                value: this.currentPage
+                value: this.currentPage,
+                selected : true
              });
          }
       },
@@ -427,7 +428,8 @@ define(["dojo/_base/declare",
              
              this.alfPublish(this.pageSelectionTopic, {
                 label: label,
-                value: this.currentPage
+                value: this.currentPage,
+                selected : true
              });
          }
       },
