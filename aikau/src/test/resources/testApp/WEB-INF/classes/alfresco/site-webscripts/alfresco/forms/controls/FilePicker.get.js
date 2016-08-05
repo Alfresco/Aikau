@@ -30,8 +30,8 @@ model.jsonModel = {
                   config: {
                      fieldId: "SINGLE_FILE",
                      name: "singleFile",
-                     label: "Pick a file, any file",
-                     description: "This is an exmample file picker"
+                     label: "Pick a file, any file...",
+                     description: "This is an example file picker (single item mode, no initial value)"
                   }
                }
             ]

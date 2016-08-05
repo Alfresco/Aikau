@@ -515,7 +515,7 @@ define(["dojo/_base/declare",
          // TODO: Defensive coding, global/parent scope arg handling...
          if (publication.publishTopic)
          {
-            this.alfPublish(publication.publishTopic, publication.publishPayload);
+            this.alfPublish(publication.publishTopic, publication.publishPayload, !!publication.publishGlobal);
          }
          else
          {

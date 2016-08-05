@@ -40,6 +40,14 @@ define(["dojo/_base/declare",
    return declare([BaseFormControl, CoreWidgetProcessing], {
 
       /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {Array}
+       */
+      i18nRequirements: [{i18nFile: "./i18n/FilePicker.properties"}],
+
+      /**
        * This is the property that is used to uniquely identify each 
        * [item]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} that is picked. Ultimately this
        * will be the data that is used as the value of the form control.
@@ -80,6 +88,15 @@ define(["dojo/_base/declare",
        * @default
        */
       recentSites: null,
+
+      /**
+       * The root node at which to start repository browsing.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      repositoryRootNode: "alfresco://company/home",
 
       /**
        * Used to track the files that have been selected.
@@ -130,11 +147,11 @@ define(["dojo/_base/declare",
                      id: this.id + "_SHOW_FILE_PICKER_DIALOG",
                      name: "alfresco/buttons/AlfButton",
                      config: {
-                        label: "Choose a file", // Localization
+                        label: "filepicker.dialog.title",
                         publishTopic: topics.CREATE_DIALOG,
                         publishPayload: {
                            dialogId: this._dialogId,
-                           dialogTitle: "Choose a file", 
+                           dialogTitle: "filepicker.dialog.title", 
                            widgetsContent: widgets,
                            contentWidth: "800px",
                            contentHeight: "700px",
@@ -143,7 +160,7 @@ define(["dojo/_base/declare",
                                  id: this.id + "_CONFIRMATION_BUTTON",
                                  name: "alfresco/buttons/AlfButton",
                                  config: {
-                                    label: "Files Selected", // TODO: Translation
+                                    label: "filepicker.dialog.confirmation.label",
                                     publishTopic: this.confirmFileSelectionTopic,
                                     additionalCssClasses: "call-to-action"
                                  }
@@ -152,9 +169,15 @@ define(["dojo/_base/declare",
                                  id: this.id + "_CANCELLATION_BUTTON",
                                  name: "alfresco/buttons/AlfButton",
                                  config: {
-                                    label: "Cancel", // TODO: Translation
+                                    label: "filepicker.dialog.cancellation.label",
                                     publishTopic: this.cancelFileSelectionTopic
                                  }
+                              }
+                           ],
+                           publishOnShow: [
+                              {
+                                 publishTopic: this.addPreviouslySelectedFilesTopic,
+                                 publishGlobal: true
                               }
                            ]
                         },
@@ -200,6 +223,11 @@ define(["dojo/_base/declare",
 
          this.updateSelectedFilesTopic = this.generateUuid();
 
+         // Generate and subscribe to a topic for populating the dialog with the previously selected
+         // files when it is first displayed...
+         this.addPreviouslySelectedFilesTopic = this.generateUuid();
+         this.alfSubscribe(this.addPreviouslySelectedFilesTopic, lang.hitch(this, this.addPreviouslySelectedFiles), true);
+
          // Generate a topic for confirming the file selection...
          this.confirmFileSelectionTopic = this.generateUuid();
          this.alfSubscribe(this.confirmFileSelectionTopic, lang.hitch(this, this.onFileSelectionConfirmed), true);
@@ -212,6 +240,18 @@ define(["dojo/_base/declare",
          // Set up subscription to valueChangeOf generated Select control fieldIds for recent and favourite sites
          this.alfSubscribe(this.recentSitesTabScope + "_valueChangeOf_RECENT_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showRecentSiteBrowserTopic), true);
          this.alfSubscribe(this.favouriteSitesTabScope + "_valueChangeOf_FAVOURITE_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showFavouriteSiteBrowserTopic), true);
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#getValue}
+       * to return the current value that has been generated.
+       *
+       * @instance
+       * @extendable
+       * @returns {object} The current value of the field.
+       */
+      getValue: function alfresco_forms_controls_FilePicker__getValue() {
+         return this.value;
       },
 
       /**
@@ -241,6 +281,17 @@ define(["dojo/_base/declare",
          this.alfServicePublish(requestTopic, {
             alfResponseTopic: sitesTopic
          });
+      },
+
+      /**
+       * This function is called when the dialog is opened. It calls 
+       * [updateSelectedFiles]{@link module:alfresco/forms/controls/FilePicker#updateSelectedFiles}
+       * to ensure that the previously selected files are shown in the dialog.
+       * 
+       * @instance
+       */
+      addPreviouslySelectedFiles: function alfresco_forms_controls_FilePicker__addPreviouslySelectedFiles() {
+         this.updateSelectedFiles(this.updateSelectedFilesTopic);
       },
 
       /**
@@ -376,17 +427,18 @@ define(["dojo/_base/declare",
        */
       onRecentSitesOptionsRequest: function alfresco_forms_controls_FilePicker__onRecentSitesOptionsRequest(payload) {
          var optionsTopic = payload.responseTopic;
-         if (!this.recentSites)
-         {
+         // NOTE: Commented code to ensure a recent site can be viewed without changing option...
+         // if (!this.recentSites)
+         // {
             this.recentSites = [];
             this.getSiteOptions(topics.GET_RECENT_SITES, this.recentSites, optionsTopic);
-         }
-         else
-         {
-            this.alfPublish(optionsTopic, {
-               options: this.recentSites
-            }, true);
-         }
+         // }
+         // else
+         // {
+         //    this.alfPublish(optionsTopic, {
+         //       options: this.recentSites
+         //    }, true);
+         // }
       },
 
       /**
@@ -396,17 +448,18 @@ define(["dojo/_base/declare",
        */
       onFavouriteSitesOptionsRequest: function alfresco_forms_controls_FilePicker__onFavouriteSitesOptionsRequest(payload) {
          var optionsTopic = payload.responseTopic;
-         if (!this.favouriteSites)
-         {
+         // NOTE: Commented code to ensure a favourite site can be viewed without changing option...
+         // if (!this.favouriteSites)
+         // {
             this.favouriteSites = [];
             this.getSiteOptions(topics.GET_FAVOURITE_SITES, this.favouriteSites, optionsTopic);
-         }
-         else
-         {
-            this.alfPublish(optionsTopic, {
-               options: this.favouriteSites
-            }, true);
-         }
+         // }
+         // else
+         // {
+         //    this.alfPublish(optionsTopic, {
+         //       options: this.favouriteSites
+         //    }, true);
+         // }
       },
 
       /**
@@ -433,7 +486,7 @@ define(["dojo/_base/declare",
                               containerId: "documentLibrary",
                               rootNode: null,
                               showRoot: true,
-                              rootLabel: "Files", // TODO: Localization (...and correct folder name?)
+                              rootLabel: "filepicker.sites.tree.root.label", // TODO: correct folder name?
                               useHash: false
                            }
                         },
@@ -470,6 +523,7 @@ define(["dojo/_base/declare",
             id: "{id}_SELECTED_FILES_VIEW",
             name: "alfresco/lists/views/AlfListView",
             config: {
+               noItemsMessage: "filepicker.noitems.message",
                currentData: {
                   items: "{selectedFiles}"
                },
@@ -542,7 +596,7 @@ define(["dojo/_base/declare",
                                        config: {
                                           propertyToRender: "site.title",
                                           renderSize: "small",
-                                          label: "Site", // TODO: Localization
+                                          label: "filepicker.item.site.prefix",
                                           renderOnNewLine: true
                                        }
                                     },
@@ -552,7 +606,7 @@ define(["dojo/_base/declare",
                                        config: {
                                           propertyToRender: "path",
                                           renderSize: "small",
-                                          label: "In Folder", // TODO: Localization
+                                          label: "filepicker.item.folder.prefix",
                                           renderOnNewLine: true
                                        }
                                     }
@@ -772,7 +826,7 @@ define(["dojo/_base/declare",
                                        config: {
                                           propertyToRender: "site.title",
                                           renderSize: "small",
-                                          label: "Site", // TODO: Localization
+                                          label: "filepicker.item.site.prefix",
                                           renderOnNewLine: true
                                        }
                                     },
@@ -782,7 +836,7 @@ define(["dojo/_base/declare",
                                        config: {
                                           propertyToRender: "path",
                                           renderSize: "small",
-                                          label: "In Folder", // TODO: Localization
+                                          label: "filepicker.item.folder.prefix",
                                           renderOnNewLine: true
                                        }
                                     }
@@ -851,7 +905,7 @@ define(["dojo/_base/declare",
                         widgets: [
                            {
                               id: "{id}_SEARCH_TAB",
-                              title: "Search", // TODO: Localization
+                              title: "filepicker.search.tab.label",
                               name: "alfresco/layout/VerticalWidgets",
                               config: {
                                  pubSubScope: "{searchTabScope}",
@@ -862,7 +916,7 @@ define(["dojo/_base/declare",
                                        name: "alfresco/forms/SingleComboBoxForm",
                                        config: {
                                           useHash: true,
-                                          okButtonLabel: "Search", // TODO: Localization
+                                          okButtonLabel: "filepicker.search.button.label",
                                           okButtonPublishTopic : "ALF_SET_SEARCH_TERM",
                                           okButtonPublishGlobal: false,
                                           okButtonIconClass: "alf-white-search-icon",
@@ -870,7 +924,6 @@ define(["dojo/_base/declare",
                                           textFieldName: "searchTerm",
                                           textBoxIconClass: "alf-search-icon",
                                           textBoxCssClasses: "long hiddenlabel",
-                                          textBoxLabel: "Search label", // TODO: Localization
                                           queryAttribute: "term",
                                           optionsPublishTopic: "ALF_AUTO_SUGGEST_SEARCH",
                                           optionsPublishPayload: {
@@ -882,7 +935,7 @@ define(["dojo/_base/declare",
                                        id: "{id}_SEARCH_RESULTS",
                                        name: "alfresco/documentlibrary/AlfSearchList",
                                        config: {
-                                          _resetVars: ["facetFilters"],  // NOTE: Stops query being reset...
+                                          _resetVars: ["facetFilters"], // NOTE: Stops query being reset...
                                           query: {
                                              datatype: "cm:content" // NOTE: Restricts search to files!
                                           },
@@ -902,7 +955,7 @@ define(["dojo/_base/declare",
                            },
                            {
                               id: "{id}_RECENT_SITES_TAB",
-                              title: "Recent Sites", // TODO: Localization
+                              title: "filepicker.recent.tab.label",
                               name: "alfresco/layout/VerticalWidgets",
                               config: {
                                  pubSubScope: "{recentSitesTabScope}",
@@ -912,8 +965,8 @@ define(["dojo/_base/declare",
                                        id: "{id}_SELECT_RECENT_SITE",
                                        name: "alfresco/forms/controls/Select",
                                        config: {
-                                          fieldId: "RECENT_SITE_SELECTION", // TODO: Generate unique field Id and use here...
-                                          label: "Choose a recent site to browse", // TODO: Localization
+                                          fieldId: "RECENT_SITE_SELECTION",
+                                          label: "filepicker.recent.site.selection.label",
                                           name: "recentSite",
                                           optionsConfig: {
                                              publishTopic: "{recentSitesRequestTopic}"
@@ -933,7 +986,7 @@ define(["dojo/_base/declare",
                            },
                            {
                               id: "{id}_FAVOURITE_SITES_TAB",
-                              title: "Favourite Sites", // TODO: Localization
+                              title: "filepicker.favourite.tab.label",
                               name: "alfresco/layout/VerticalWidgets",
                               config: {
                                  pubSubScope: "{favouriteSitesTabScope}",
@@ -943,8 +996,8 @@ define(["dojo/_base/declare",
                                        id: "{id}_SELECT_FAVOURITE_SITE",
                                        name: "alfresco/forms/controls/Select",
                                        config: {
-                                          fieldId: "FAVOURITE_SITE_SELECTION", // TODO: Generate unique field Id and use here...
-                                          label: "Choose a favourite site to browse", // TODO: Localization
+                                          fieldId: "FAVOURITE_SITE_SELECTION",
+                                          label: "filepicker.favourite.site.selection.label",
                                           name: "favouriteSite",
                                           optionsConfig: {
                                              publishTopic: "{favouriteSitesRequestTopic}"
@@ -965,7 +1018,7 @@ define(["dojo/_base/declare",
                            },
                            {
                               id: "{id}_REPOSITORY_TAB",
-                              title: "Repository", // TODO: Localization
+                              title: "filepicker.repository.tab.label",
                               name: "alfresco/layout/VerticalWidgets",
                               config: {
                                  pubSubScope: "{repositoryTabScope}",
@@ -980,8 +1033,8 @@ define(["dojo/_base/declare",
                                                 config: {
                                                    siteId: null,
                                                    containerId: null,
-                                                   rootNode: "alfresco://company/home", // TODO: Required for this widget
-                                                   rootLabel: "Repository", // TODO: Localization
+                                                   rootNode: "{repositoryRootNode}",
+                                                   rootLabel: "filepicker.repository.tree.root.label",
                                                    useHash: false
                                                 }
                                              },

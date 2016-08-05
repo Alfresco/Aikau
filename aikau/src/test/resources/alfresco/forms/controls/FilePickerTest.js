@@ -30,6 +30,7 @@ define(["module",
 
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var DialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
+   var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    
    var selectors = {
       buttons: {
@@ -42,6 +43,11 @@ define(["module",
          singlePicker: {
             displayed: TestCommon.getTestSelector(DialogSelectors, "visible.dialog", ["SINGLE_ITEM_FILE_PICKER_FILE_PICKER_DIALOG"]),
             hidden: TestCommon.getTestSelector(DialogSelectors, "hidden.dialog", ["SINGLE_ITEM_FILE_PICKER_FILE_PICKER_DIALOG"]),
+         }
+      },
+      forms: {
+         main: {
+            confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["FORM"])
          }
       }
    };
@@ -56,6 +62,14 @@ define(["module",
          .end()
 
          .findDisplayedByCssSelector(selectors.dialogs.singlePicker.displayed);
+      },
+
+      "No files are initially selected": function() {
+         return this.remote.findByCssSelector("#SINGLE_ITEM_FILE_PICKER_SELECTED_FILES_VIEW .alfresco-lists-views-AlfListView__no-data")
+            .getVisibleText()
+            .then(function(noDataMessage) {
+               assert.equal(noDataMessage, "No files have been selected");
+            });
       },
 
       // This test checks that we are including the datatype query parameter in the search XHR request
@@ -169,6 +183,44 @@ define(["module",
             .then(function(payload) {
                assert.include(payload.value, "workspace://SpacesStore/89366ee4-824d-4d3a-859a-d81a25d9bff3");
             });
+      },
+
+      "Save form": function() {
+         return this.remote.findByCssSelector(selectors.forms.main.confirmationButton)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("FORM_SCOPE_SAVE")
+            .then(function(payload) {
+               assert.include(payload.singleFile, "workspace://SpacesStore/89366ee4-824d-4d3a-859a-d81a25d9bff3");
+            });
+      },
+
+      "Re-open picker dialog and find previously selected files": function() {
+          return this.remote.findByCssSelector(selectors.buttons.singlePicker.openDialog)
+            .click()
+         .end()
+
+         .findAllByCssSelector(selectors.dialogs.singlePicker.displayed + " #SINGLE_ITEM_FILE_PICKER_SELECTED_FILES_VIEW_ITEMS tr")
+            .then(function(selectedFiles) {
+               assert.lengthOf(selectedFiles, 1);
+            });
+      },
+
+      // Check that a recent site is immediately shown for browsing...
+      "Select recent sites tab and browse sites": function() {
+         return this.remote.findByCssSelector("#SINGLE_ITEM_FILE_PICKER_TABCONTAINER_TABCONTAINER_tablist_SINGLE_ITEM_FILE_PICKER_TABCONTAINER_SINGLE_ITEM_FILE_PICKER_RECENT_SITES_TAB")
+            .clearXhrLog()
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#SINGLE_ITEM_FILE_PICKER_SELECT_RECENT_SITE")
+         .end()
+
+         .getLastXhr("aikau/proxy/alfresco/api/people/guest/sites/recent")
+
+         .findDisplayedByCssSelector("#SINGLE_ITEM_FILE_PICKER_BROWSE_NAME_ITEM_0");
       }
    });
 });
