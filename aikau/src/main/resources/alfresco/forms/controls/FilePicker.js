@@ -122,7 +122,8 @@ define(["dojo/_base/declare",
                      id: this.id + "_SELECTED_FILES",
                      name: "alfresco/layout/DynamicWidgets",
                      config: {
-                        subscriptionTopic: this.showSelectedFilesTopic
+                        subscriptionTopic: this.showSelectedFilesTopic,
+                        subscribeGlobal: true
                      }
                   },
                   {
@@ -139,6 +140,7 @@ define(["dojo/_base/declare",
                            contentHeight: "700px",
                            widgetsButtons: [
                               {
+                                 id: this.id + "_CONFIRMATION_BUTTON",
                                  name: "alfresco/buttons/AlfButton",
                                  config: {
                                     label: "Files Selected", // TODO: Translation
@@ -147,6 +149,7 @@ define(["dojo/_base/declare",
                                  }
                               },
                               {
+                                 id: this.id + "_CANCELLATION_BUTTON",
                                  name: "alfresco/buttons/AlfButton",
                                  config: {
                                     label: "Cancel", // TODO: Translation
@@ -199,16 +202,16 @@ define(["dojo/_base/declare",
 
          // Generate a topic for confirming the file selection...
          this.confirmFileSelectionTopic = this.generateUuid();
-         this.alfSubscribe(this.confirmFileSelectionTopic, lang.hitch(this, this.onFileSelectionConfirmed));
+         this.alfSubscribe(this.confirmFileSelectionTopic, lang.hitch(this, this.onFileSelectionConfirmed), true);
          this.cancelFileSelectionTopic = this.generateUuid();
 
          // Set up the subscriptions to handle publication of the generated topics...
-         this.alfSubscribe(this.recentSitesRequestTopic, lang.hitch(this, this.onRecentSitesOptionsRequest));
-         this.alfSubscribe(this.favouriteSitesRequestTopic, lang.hitch(this, this.onFavouriteSitesOptionsRequest));
+         this.alfSubscribe(this.recentSitesRequestTopic, lang.hitch(this, this.onRecentSitesOptionsRequest), true);
+         this.alfSubscribe(this.favouriteSitesRequestTopic, lang.hitch(this, this.onFavouriteSitesOptionsRequest), true);
          
          // Set up subscription to valueChangeOf generated Select control fieldIds for recent and favourite sites
-         this.alfSubscribe(this.recentSitesTabScope + "_valueChangeOf_RECENT_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.recentSitesTabScope + this.showRecentSiteBrowserTopic));
-         this.alfSubscribe(this.favouriteSitesTabScope + "_valueChangeOf_FAVOURITE_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.favouriteSitesTabScope + this.showFavouriteSiteBrowserTopic));
+         this.alfSubscribe(this.recentSitesTabScope + "_valueChangeOf_RECENT_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showRecentSiteBrowserTopic), true);
+         this.alfSubscribe(this.favouriteSitesTabScope + "_valueChangeOf_FAVOURITE_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showFavouriteSiteBrowserTopic), true);
       },
 
       /**
@@ -339,7 +342,7 @@ define(["dojo/_base/declare",
          this.processObject(["processInstanceTokens"], widgetsForSelectedFilesView);
          this.alfPublish(topic, {
             widgets: widgetsForSelectedFilesView
-         });
+         }, true);
       },
 
       /**
@@ -454,7 +457,7 @@ define(["dojo/_base/declare",
                   }
                }
             ]
-         });
+         }, true);
       },
 
       /**
@@ -464,6 +467,7 @@ define(["dojo/_base/declare",
        */
       widgetsForSelectedFilesView: [
          {
+            id: "{id}_SELECTED_FILES_VIEW",
             name: "alfresco/lists/views/AlfListView",
             config: {
                currentData: {
@@ -480,6 +484,7 @@ define(["dojo/_base/declare",
                                  width: "40px",
                                  widgets: [
                                     {
+                                       id: "{id}_SELECTED_FILES_THUMBNAIL",
                                        name: "alfresco/search/SearchThumbnail",
                                        config: {
                                           width: "32px",
@@ -494,6 +499,7 @@ define(["dojo/_base/declare",
                               config: {
                                  widgets: [
                                     {
+                                       id: "{id}_SELECTED_FILES_NAME",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "displayName",
@@ -501,6 +507,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SELECTED_FILES_TITLE",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "title",
@@ -510,6 +517,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SELECTED_FILES_DATE",
                                        name: "alfresco/renderers/Date",
                                        config: {
                                           renderSize: "small",
@@ -520,6 +528,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SELECTED_FILES_DESCRIPTION",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "description",
@@ -528,6 +537,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SELECTED_FILES_SITE",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "site.title",
@@ -537,6 +547,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SELECTED_FILES_PATH",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "path",
@@ -554,6 +565,7 @@ define(["dojo/_base/declare",
                                  width: "20px",
                                  widgets: [
                                     {
+                                       id: "{id}_SELECTED_FILES_REMOVE",
                                        name: "alfresco/renderers/PublishAction",
                                        config: {
                                           iconClass: "delete-16",
@@ -582,6 +594,7 @@ define(["dojo/_base/declare",
        */
       widgetsForBrowseView: [
          {
+            id: "{id}_BROWSE_VIEW",
             name: "alfresco/lists/views/AlfListView",
             config: {
                widgets: [
@@ -594,6 +607,7 @@ define(["dojo/_base/declare",
                               config: {
                                  widgets: [
                                     {
+                                       id: "{id}_BROWSE_THUMBNAIL",
                                        name: "alfresco/renderers/Thumbnail",
                                        config: {
                                           width: "32px",
@@ -608,6 +622,7 @@ define(["dojo/_base/declare",
                               config: {
                                  widgets: [
                                     {
+                                       id: "{id}_BROWSE_NAME",
                                        name: "alfresco/renderers/InlineEditPropertyLink",
                                        config: {
                                           propertyToRender: "node.properties.cm:name",
@@ -616,6 +631,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_BROWSE_TITLE",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "node.properties.cm:title",
@@ -625,6 +641,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_BROWSE_DATE",
                                        name: "alfresco/renderers/Date",
                                        config: {
                                           propertyToRender: "node.properties.cm:title",
@@ -634,6 +651,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_BROWSE_DESCRIPTION",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "node.properties.cm:description",
@@ -650,6 +668,7 @@ define(["dojo/_base/declare",
                                  width: "20px",
                                  widgets: [
                                     {
+                                       id: "{id}_BROWSE_ADD",
                                        name: "alfresco/renderers/PublishAction",
                                        config: {
                                           publishTopic: "{addFileTopic}",
@@ -682,6 +701,7 @@ define(["dojo/_base/declare",
        */
       widgetsForSearchView: [
          {
+            id: "{id}_SEARCH_VIEW",
             name: "alfresco/lists/views/AlfListView",
             config: {
                widgets: [
@@ -694,6 +714,7 @@ define(["dojo/_base/declare",
                               config: {
                                  widgets: [
                                     {
+                                       id: "{id}_SEARCH_THUMBNAIL",
                                        name: "alfresco/search/SearchThumbnail",
                                        config: {
                                           width: "32px",
@@ -708,6 +729,7 @@ define(["dojo/_base/declare",
                               config: {
                                  widgets: [
                                     {
+                                       id: "{id}_SEARCH_NAME",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "displayName",
@@ -715,6 +737,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SEARCH_TITLE",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "title",
@@ -724,6 +747,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SEARCH_DATE",
                                        name: "alfresco/renderers/Date",
                                        config: {
                                           renderSize: "small",
@@ -734,6 +758,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SEARCH_DESCRIPTION",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "description",
@@ -742,6 +767,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SEARCH_SITE",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "site.title",
@@ -751,6 +777,7 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_SEARCH_PATH",
                                        name: "alfresco/renderers/Property",
                                        config: {
                                           propertyToRender: "path",
@@ -768,6 +795,7 @@ define(["dojo/_base/declare",
                                  width: "20px",
                                  widgets: [
                                     {
+                                       id: "{id}_SEARCH_ADD",
                                        name: "alfresco/renderers/PublishAction",
                                        config: {
                                           publishTopic: "{addFileTopic}",
@@ -806,7 +834,8 @@ define(["dojo/_base/declare",
                            {
                               name: "alfresco/layout/DynamicWidgets",
                               config: {
-                                 subscriptionTopic: "{updateSelectedFilesTopic}"
+                                 subscriptionTopic: "{updateSelectedFilesTopic}",
+                                 subscribeGlobal: true
                               }
                            }
                         ]
@@ -880,6 +909,7 @@ define(["dojo/_base/declare",
                                  widgetMarginTop: 10,
                                  widgets: [
                                     {
+                                       id: "{id}_SELECT_RECENT_SITE",
                                        name: "alfresco/forms/controls/Select",
                                        config: {
                                           fieldId: "RECENT_SITE_SELECTION", // TODO: Generate unique field Id and use here...
@@ -891,9 +921,11 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_RECENT_SITES",
                                        name: "alfresco/layout/DynamicWidgets",
                                        config: {
-                                          subscriptionTopic: "{showRecentSiteBrowserTopic}" // TODO: Needs topic published by widget
+                                          subscriptionTopic: "{showRecentSiteBrowserTopic}",
+                                          subscribeGlobal: true
                                        }
                                     }
                                  ]
@@ -908,6 +940,7 @@ define(["dojo/_base/declare",
                                  widgetMarginTop: 10,
                                  widgets: [
                                     {
+                                       id: "{id}_SELECT_FAVOURITE_SITE",
                                        name: "alfresco/forms/controls/Select",
                                        config: {
                                           fieldId: "FAVOURITE_SITE_SELECTION", // TODO: Generate unique field Id and use here...
@@ -919,9 +952,11 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       id: "{id}_FAVOURITE_SITES",
                                        name: "alfresco/layout/DynamicWidgets",
                                        config: {
-                                          subscriptionTopic: "{showFavouriteSiteBrowserTopic}" // TODO: Needs topic published by widget
+                                          subscriptionTopic: "{showFavouriteSiteBrowserTopic}",
+                                          subscribeGlobal: true
                                        }
                                     }
                                  ]

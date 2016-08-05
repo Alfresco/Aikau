@@ -12,12 +12,11 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
-      "aikauTesting/mockservices/DocumentPickerTestService",
-      "alfresco/services/ErrorReporter"
+      "aikauTesting/mockservices/DocumentPickerTestService"
    ],
    widgets:[
       {
-         name: "alfresco/forms/controls/FilePicker",
+         name: "alfresco/forms/controls/DocumentPicker",
          config: {
             id: "DOCUMENT_PICKER",
             label: "Items"

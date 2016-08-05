@@ -55,6 +55,16 @@ define(["alfresco/core/ProcessWidgets",
       subscriptionTopic: null,
 
       /**
+       * Indicates whether the [subscriptionTopic]{@link module:alfresco/layout/DynamicWidgets#subscriptionTopic}
+       * should be subscribed to globally.
+       * 
+       * @since 1.0.NEXT
+       * @type {boolean}
+       * @default
+       */
+      subscribeGlobal: false,
+
+      /**
        * This is an extension point for handling the completion of calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        *
        * @instance
@@ -69,7 +79,7 @@ define(["alfresco/core/ProcessWidgets",
        * @instance postCreate
        */
       postCreate: function alfresco_layout_DynamicWidgets__postCreate() {
-         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.render));
+         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.render), this.subscribeGlobal);
       },
 
       /**

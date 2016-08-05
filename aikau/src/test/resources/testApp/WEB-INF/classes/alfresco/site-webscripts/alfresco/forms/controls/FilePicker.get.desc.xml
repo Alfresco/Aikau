@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>FilePicker</shortname>
+  <description>Various configurations of the FilePicker form control</description>
+  <family>aikau-unit-tests</family>
+  <url>/FilePicker</url>
+</webscript>
