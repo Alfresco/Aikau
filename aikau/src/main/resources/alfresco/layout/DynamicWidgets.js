@@ -84,7 +84,7 @@ define(["alfresco/core/ProcessWidgets",
          if (payload && payload.widgets)
          {
             array.forEach(this._previouslyCreatedWidgets, function(target) {
-               target.destroy();
+               target.destroyRecursive();
             });
             domConstruct.empty(this.domNode);
             this.processWidgets(payload.widgets, this.domNode);

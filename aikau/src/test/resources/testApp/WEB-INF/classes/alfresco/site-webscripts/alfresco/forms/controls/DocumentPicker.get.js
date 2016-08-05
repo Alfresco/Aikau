@@ -17,7 +17,7 @@ model.jsonModel = {
    ],
    widgets:[
       {
-         name: "alfresco/forms/controls/DocumentPicker",
+         name: "alfresco/forms/controls/FilePicker",
          config: {
             id: "DOCUMENT_PICKER",
             label: "Items"

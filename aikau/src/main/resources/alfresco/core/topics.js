@@ -689,6 +689,20 @@ define([],function() {
       GET_DOCUMENT: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
       /**
+       * This topic can be published to retrieve a list of the sites that have marked as a favourite
+       * of the current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.NEXT
+       *
+       * @event
+       */
+      GET_FAVOURITE_SITES: "ALF_GET_FAVOURITE_SITES",
+
+      /**
        * This topic can be published by a [form control]{@link module:alfresco/forms/controls/BaseFormControl}
        * when it needs to retrieve options that can only be determined from other values containined within the
        * form. This allows options to be dynamically requested that change as other form values are updated.
@@ -702,6 +716,20 @@ define([],function() {
        * @property {string} publishTopic The topic publish the payload once augmented with the form value.
        */
       GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
+
+      /**
+       * This topic can be published to retrieve a list of the sites that have recently been visited
+       * by the current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.NEXT
+       *
+       * @event
+       */
+      GET_RECENT_SITES: "ALF_GET_RECENT_SITES",
 
       /**
        * This topic can be published to request a user preference be returned. It is typically handled by 
