@@ -486,6 +486,8 @@ define(["dojo/_base/declare",
          // jshint maxcomplexity:false,unused:false,maxstatements:false
          var totalRecords = lang.getObject(this.totalResultsProperty, false, payload);
          var startIndex = lang.getObject(this.startIndexProperty, false, payload);
+         var oldCurrentPage = this.currentPage;
+         
          if (payload && 
              (totalRecords || totalRecords === 0) && 
              (startIndex || startIndex === 0))
@@ -546,7 +548,29 @@ define(["dojo/_base/declare",
                   domClass.remove(this.pageMarker.domNode, "dijitDisabled dijitMenuItemDisabled");
                }
                
-               this.checkAndUpdatePageSelectionMenu(null, this.currentPage);
+               // in case load of different page was triggered externally (i.e. hash update) we must ensure any
+               // page menu items already initialised are (un)checked according to current state
+               if (this.compactMode === false && this.showPageSelector && oldCurrentPage !== this.currentPage)
+               {
+                   var pageStart = (this.currentPage - 1) * parseInt(this.documentsPerPage, 10) + 1;
+                   var pageEnd;
+                   if (this.currentPage === this.totalPages)
+                   {
+                       // ...for the last page just count up to the last document
+                       pageEnd = this.totalRecords;
+                   }
+                   else
+                   {
+                       pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
+                   }
+                   var label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
+                   
+                   this.alfPublish(this.pageSelectionTopic, {
+                      label: label,
+                      value: this.currentPage,
+                      selected : true
+                   });
+               }
             }
          }
       },
@@ -741,11 +765,8 @@ define(["dojo/_base/declare",
        * 
        *  @instance
        *  @param {object} position the position of the selection menu popup when opened
-       *  @param {number} ensurePage The page number that must be ensured to exist. This parameter allows for pre-
-       *        initialization during processDocumentsLoaded while still offloading performance hit until selector
-       *        is opened.
        */
-      checkAndUpdatePageSelectionMenu : function alfresco_lists_Paginator__checkAndUpdatePageSelectionMenu(position, ensurePage) {
+      checkAndUpdatePageSelectionMenu : function alfresco_lists_Paginator__checkAndUpdatePageSelectionMenu() {
           var firstPage, lastPreloadedPage, pageStart, pageEnd, i, label, menuItem;
 
           // only need to act if not initialized yet or change occurred
@@ -795,7 +816,7 @@ define(["dojo/_base/declare",
           // Create the page labels, which for English will be along the lines of 1-25
           firstPage = firstPage || (lastPreloadedPage + 1);
           pageStart = firstPage * parseInt(this.documentsPerPage, 10) + 1;
-          for (i = firstPage; i < Math.min(this.totalPages, ensurePage || this.totalPages); i++)
+          for (i = firstPage; i < this.totalPages; i++)
           {
              // Comments below assume 25 docs per page...
              if (i+1 !== this.totalPages)
