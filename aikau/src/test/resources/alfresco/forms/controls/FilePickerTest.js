@@ -221,6 +221,21 @@ define(["module",
          .getLastXhr("aikau/proxy/alfresco/api/people/guest/sites/recent")
 
          .findDisplayedByCssSelector("#SINGLE_ITEM_FILE_PICKER_BROWSE_NAME_ITEM_0");
+      },
+
+      "Preset values are rendered when form first displayed": function() {
+         return this.remote.findAllByCssSelector("#MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SELECTED_FILES_VIEW_ITEMS tr")
+            .then(function(preselectedFiles) {
+               assert.lengthOf(preselectedFiles, 2);
+            })
+         .end()
+
+         // Check the name for good measure...
+         .findByCssSelector("#MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SELECTED_FILES_NAME_ITEM_1")
+            .getVisibleText()
+            .then(function(fileName) {
+               assert.equal(fileName, "Video Test Binary.mp4");
+            });
       }
    });
 });

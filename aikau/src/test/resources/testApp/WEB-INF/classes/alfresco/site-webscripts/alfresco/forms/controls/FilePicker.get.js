@@ -33,6 +33,19 @@ model.jsonModel = {
                      label: "Pick a file, any file...",
                      description: "This is an example file picker (single item mode, no initial value)"
                   }
+               },
+               {
+                  id: "MULTI_ITEM_FILE_PICKER_PRE_SELECTED",
+                  name: "alfresco/forms/controls/FilePicker",
+                  config: {
+                     fieldId: "MULTI_FILE",
+                     name: "multiFile",
+                     label: "Pick more than one file...",
+                     description: "This is a multi-item file picker that is preset with a value",
+                     value: [
+                        { nodeRef:"workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4"}, 
+                        { nodeRef: "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5"}]
+                  }
                }
             ]
          }

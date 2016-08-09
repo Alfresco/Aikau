@@ -34,9 +34,11 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/SearchService/suggestions.json",
         "dojo/text!./responseTemplates/FilePicker/RecentSites.json",
         "dojo/text!./responseTemplates/FilePicker/FavouriteSites.json",
-        "dojo/text!./responseTemplates/FilePicker/Documents.json"], 
+        "dojo/text!./responseTemplates/FilePicker/Documents.json",
+        "dojo/text!./responseTemplates/previews/Image.json",
+        "dojo/text!./responseTemplates/previews/Video.json"], 
         function(declare, MockXhr, lang, ioQuery, alternative, original, base, xhrSearchResponse, suggestions, 
-                 RecentSites, FavouriteSites, Documents) {
+                 RecentSites, FavouriteSites, Documents, Image, Video) {
    
    return declare([MockXhr], {
 
@@ -72,6 +74,19 @@ define(["dojo/_base/declare",
             this.server.respondWith("GET",
                                     /(.*)proxy\/alfresco\/slingshot\/auto-suggest(.*)/,
                                     lang.hitch(this, this.onAutoSuggest));
+
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":7962},
+                                     Image]);
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/a4fc4392-27f6-49fd-8b6e-20b953c59ff5\?(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":5520127},
+                                     Video]);
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY");
          }
          catch(e)

@@ -31,11 +31,12 @@
 define(["dojo/_base/declare",
         "alfresco/forms/controls/BaseFormControl",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/ObjectTypeUtils",
         "alfresco/core/topics",
         "dijit/registry",
         "dojo/_base/array",
         "dojo/_base/lang"],
-        function(declare, BaseFormControl, CoreWidgetProcessing, topics, registry, array, lang) {
+        function(declare, BaseFormControl, CoreWidgetProcessing, ObjectTypeUtils, topics, registry, array, lang) {
 
    return declare([BaseFormControl, CoreWidgetProcessing], {
 
@@ -200,38 +201,38 @@ define(["dojo/_base/declare",
       setupPubSubData: function alfresco_forms_controls_FilePicker__setupPubSubData() {
          // This topic is used for publishing to the DynamicWidgets that will show the selected
          // files in the main form control (i.e. NOT in the dialog)...
-         this.showSelectedFilesTopic = this.generateUuid();
+         this.showSelectedFilesTopic = "SSF_" + this.generateUuid();
 
          // Scoping of tabs is required...
-         this.searchTabScope = this.generateUuid();
-         this.recentSitesTabScope = this.generateUuid();
-         this.favouriteSitesTabScope = this.generateUuid();
-         this.repositoryTabScope = this.generateUuid();
+         this.searchTabScope = "STS_" + this.generateUuid();
+         this.recentSitesTabScope = "RSTB_" + this.generateUuid();
+         this.favouriteSitesTabScope = "FSTS_" + this.generateUuid();
+         this.repositoryTabScope = "RTS_" + this.generateUuid();
 
          // Generate some unique topics for this form control to avoid any cross-contamination
          // of other instances of the widget within the same scope...
-         this.recentSitesRequestTopic = this.generateUuid();
-         this.favouriteSitesRequestTopic = this.generateUuid();
-         this.showRecentSiteBrowserTopic = this.generateUuid();
-         this.showFavouriteSiteBrowserTopic = this.generateUuid();
+         this.recentSitesRequestTopic = "RSRT_" + this.generateUuid();
+         this.favouriteSitesRequestTopic = "FSRT_" + this.generateUuid();
+         this.showRecentSiteBrowserTopic = "SRSBT_" + this.generateUuid();
+         this.showFavouriteSiteBrowserTopic = "SFSBT_" + this.generateUuid();
 
          // Generate topics for selecting and removing items...
-         this.addFileTopic = this.generateUuid();
+         this.addFileTopic = "AFT_" + this.generateUuid();
          this.alfSubscribe(this.addFileTopic, lang.hitch(this, this.onFileSelected), true);
-         this.removeFileTopic = this.generateUuid();
+         this.removeFileTopic = "RFT_" + this.generateUuid();
          this.alfSubscribe(this.removeFileTopic, lang.hitch(this, this.onFileRemoved), true);
 
-         this.updateSelectedFilesTopic = this.generateUuid();
+         this.updateSelectedFilesTopic = "USFT_" + this.generateUuid();
 
          // Generate and subscribe to a topic for populating the dialog with the previously selected
          // files when it is first displayed...
-         this.addPreviouslySelectedFilesTopic = this.generateUuid();
+         this.addPreviouslySelectedFilesTopic = "APSFT_" + this.generateUuid();
          this.alfSubscribe(this.addPreviouslySelectedFilesTopic, lang.hitch(this, this.addPreviouslySelectedFiles), true);
 
          // Generate a topic for confirming the file selection...
-         this.confirmFileSelectionTopic = this.generateUuid();
+         this.confirmFileSelectionTopic = "ConFST_" + this.generateUuid();
          this.alfSubscribe(this.confirmFileSelectionTopic, lang.hitch(this, this.onFileSelectionConfirmed), true);
-         this.cancelFileSelectionTopic = this.generateUuid();
+         this.cancelFileSelectionTopic = "CanFST_" + this.generateUuid();
 
          // Set up the subscriptions to handle publication of the generated topics...
          this.alfSubscribe(this.recentSitesRequestTopic, lang.hitch(this, this.onRecentSitesOptionsRequest), true);
@@ -252,6 +253,65 @@ define(["dojo/_base/declare",
        */
       getValue: function alfresco_forms_controls_FilePicker__getValue() {
          return this.value;
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#setValue}
+       * to make sure that all Node details are retrieved for the values being set. This allows only a 
+       * NodeRef to be set as a file value but for the metadata to be retrieved and displayed.
+       * 
+       * @instance
+       * @param {object} value The value to set
+       */
+      setValue: function alfresco_forms_controls_FilePicker__setValue(value) {
+         if (value && ObjectTypeUtils.isArray(value))
+         {
+            this.selectedFiles = [];
+            this.value = [];
+
+            // This is possibly not the optimal way of achiving this, but it is expected that only 
+            // a small number of files will be pre-selected at a time (and there is no other REST 
+            // API available for retrieving the metadata in bulk). Ideally we would make a request
+            // for the metadata for the supplied list of NodeRefs.
+            array.forEach(value, function(file) {
+               this.normaliseFile(file);
+
+               if (!file.displayName && file.nodeRef)
+               {
+                  // Set up a one-time subscription for retrieving the metadata for the node, this
+                  // will be done when no "displayName" attribute is provided (expected when the
+                  // file is normalised) but a "nodeRef" is available. 
+                  var responseTopic = this.generateUuid();
+                  var handle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, function(payload) {
+                     this.alfUnsubscribe(handle);
+
+                     // Get the node data and normalise it (so that it will work with the view),
+                     // then update both the value and the selected files array and publish the request
+                     // to update selected files... the result should be that the value is rendered correctly...
+                     var updatedFile = payload.response.item;
+                     this.normaliseFile(updatedFile);
+                     this.value.push(updatedFile);
+                     this.selectedFiles.push(updatedFile);
+                     this.updateSelectedFiles(this.showSelectedFilesTopic);
+
+                  }), true);
+
+                  this.alfServicePublish(topics.GET_DOCUMENT, {
+                     alfResponseTopic: responseTopic,
+                     nodeRef: file.nodeRef 
+                  });
+               }
+               else
+               {
+                  this.value.push(file);
+                  this.selectedFiles.push(file);
+               }
+            }, this);
+         }
+         else
+         {
+            this.alfLog("warn", "Non-array value tried to be set for FilePicker", value, this);
+         }
       },
 
       /**
@@ -309,7 +369,7 @@ define(["dojo/_base/declare",
          !!!file.nodeRef && (file.nodeRef = lang.getObject("node.nodeRef", false, file) || "");
          !!!file.modifiedOn && (file.modifiedOn = lang.getObject("node.properties.cm:modified.iso8601", false, file) || "");
          !!!file.modifiedBy && (file.modifiedBy = lang.getObject("node.properties.cm:modifier.displayName", false, file) || "");
-         !!!file.site && (file.site = lang.getObject("location.site", false, file) || "");
+         !!!file.site && (file.site = lang.getObject("location.site", false, file) || {});
          !!!file.site.shortName && (file.site.shortName = lang.getObject("location.site.name", false, file) || "");
          !!!file.path && (file.path = lang.getObject("location.path", false, file) || "");
       },
