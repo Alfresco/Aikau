@@ -718,20 +718,6 @@ define([],function() {
       GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
 
       /**
-       * This topic can be published to retrieve a list of the sites that have recently been visited
-       * by the current user. Unfortunately at the present time this cannot be used for requesting 
-       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       * @since 1.0.NEXT
-       *
-       * @event
-       */
-      GET_RECENT_SITES: "ALF_GET_RECENT_SITES",
-
-      /**
        * This topic can be published to request a user preference be returned. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *
@@ -746,6 +732,34 @@ define([],function() {
        * @property {object} callbackScope The scope with which to execute the callback
        */
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
+
+      /**
+       * This topic can be published to retrieve a list of the sites that have recently been visited
+       * by the current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.NEXT
+       *
+       * @event
+       */
+      GET_RECENT_SITES: "ALF_GET_RECENT_SITES",
+
+      /**
+       * This topic can be published to retrieve a list of all the sites that are accessible to the
+       * current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.NEXT
+       *
+       * @event
+       */
+      GET_SITES: "ALF_GET_SITES",
 
       /**
        * This topic can be published to request a list of all available users in the Alfresco Repository.

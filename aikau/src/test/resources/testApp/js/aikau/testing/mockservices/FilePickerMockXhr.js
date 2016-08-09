@@ -32,13 +32,14 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/SearchService/default.json",
         "dojo/text!./responseTemplates/SearchTest/XhrSearchResponse.json",
         "dojo/text!./responseTemplates/SearchService/suggestions.json",
+        "dojo/text!./responseTemplates/FilePicker/AllSites.json",
         "dojo/text!./responseTemplates/FilePicker/RecentSites.json",
         "dojo/text!./responseTemplates/FilePicker/FavouriteSites.json",
         "dojo/text!./responseTemplates/FilePicker/Documents.json",
         "dojo/text!./responseTemplates/previews/Image.json",
         "dojo/text!./responseTemplates/previews/Video.json"], 
         function(declare, MockXhr, lang, ioQuery, alternative, original, base, xhrSearchResponse, suggestions, 
-                 RecentSites, FavouriteSites, Documents, Image, Video) {
+                 AllSites, RecentSites, FavouriteSites, Documents, Image, Video) {
    
    return declare([MockXhr], {
 
@@ -50,6 +51,11 @@ define(["dojo/_base/declare",
       setupServer: function alfresco_testing_FilePickerMockXhr__setupServer() {
          try
          {
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/api/sites",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     AllSites]);
             this.server.respondWith("GET",
                                     "/aikau/proxy/alfresco/api/people/guest/sites/recent",
                                     [200,

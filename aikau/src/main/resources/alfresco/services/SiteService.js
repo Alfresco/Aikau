@@ -110,10 +110,11 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#EDIT_SITE
        * @listens module:alfresco/core/topics#GET_FAVOURITE_SITES
        * @listens module:alfresco/core/topics#GET_RECENT_SITES
+       * @listens module:alfresco/core/topics#GET_SITES
        * @listens module:alfresco/core/topics#SITE_CREATION_REQUEST
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
-         this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));
+         this.alfSubscribe(topics.GET_SITES, lang.hitch(this, this.getSites));
          this.alfSubscribe("ALF_GET_SITES_ADMIN", lang.hitch(this, this.getAdminSites));
          this.alfSubscribe("ALF_GET_SITE_MEMBERSHIPS", lang.hitch(this, this.getSiteMemberships));
          this.alfSubscribe("ALF_GET_SITE_DETAILS", lang.hitch(this, this.getSiteDetails));

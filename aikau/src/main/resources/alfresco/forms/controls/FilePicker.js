@@ -59,6 +59,17 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/FilePicker.properties"}],
 
       /**
+       * An array of sites available the current user. This will be generated the first time that 
+       * [onRecentSitesOptionsRequest]{@link module:alfresco/forms/controls/FilePicker#onAllSitesOptionsRequest}
+       * is called.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       */
+      allSites: null,
+
+      /**
        * This is the property that is used to uniquely identify each 
        * [item]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} that is picked. Ultimately this
        * will be the data that is used as the value of the form control.
@@ -226,6 +237,7 @@ define(["dojo/_base/declare",
          this.searchTabScope = "STS_" + this.generateUuid();
          this.recentSitesTabScope = "RSTB_" + this.generateUuid();
          this.favouriteSitesTabScope = "FSTS_" + this.generateUuid();
+         this.allSitesTabScope = "ASTS_" + this.generateUuid();
          this.repositoryTabScope = "RTS_" + this.generateUuid();
 
          // Generate some unique topics for this form control to avoid any cross-contamination
@@ -234,6 +246,8 @@ define(["dojo/_base/declare",
          this.favouriteSitesRequestTopic = "FSRT_" + this.generateUuid();
          this.showRecentSiteBrowserTopic = "SRSBT_" + this.generateUuid();
          this.showFavouriteSiteBrowserTopic = "SFSBT_" + this.generateUuid();
+         this.allSitesRequestTopic = "ASRT_" + this.generateUuid();
+         this.showSiteBrowserTopic = "SASBT_" + this.generateUuid();
 
          // Generate topics for selecting and removing items...
          this.addFileTopic = "AFT_" + this.generateUuid();
@@ -256,10 +270,12 @@ define(["dojo/_base/declare",
          // Set up the subscriptions to handle publication of the generated topics...
          this.alfSubscribe(this.recentSitesRequestTopic, lang.hitch(this, this.onRecentSitesOptionsRequest), true);
          this.alfSubscribe(this.favouriteSitesRequestTopic, lang.hitch(this, this.onFavouriteSitesOptionsRequest), true);
+         this.alfSubscribe(this.allSitesRequestTopic, lang.hitch(this, this.onAllSitesOptionsRequest), true);
          
          // Set up subscription to valueChangeOf generated Select control fieldIds for recent and favourite sites
          this.alfSubscribe(this.recentSitesTabScope + "_valueChangeOf_RECENT_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showRecentSiteBrowserTopic), true);
          this.alfSubscribe(this.favouriteSitesTabScope + "_valueChangeOf_FAVOURITE_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showFavouriteSiteBrowserTopic), true);
+         this.alfSubscribe(this.allSitesTabScope + "_valueChangeOf_SITE_SELECTION", lang.hitch(this, this.onShowSiteBrowser, this.showSiteBrowserTopic), true);
       },
 
       /**
@@ -527,6 +543,27 @@ define(["dojo/_base/declare",
          var oldValue = this.value;
          this.value = updatedValue;
          this.onValueChangeEvent(this.name, oldValue, updatedValue);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {object} payload The request for sites. This contains the responseTopic to publish the options on.
+       */
+      onAllSitesOptionsRequest: function alfresco_forms_controls_FilePicker__onAllSitesOptionsRequest(payload) {
+         var optionsTopic = payload.responseTopic;
+         // NOTE: Commented code to ensure a recent site can be viewed without changing option...
+         // if (!this.recentSites)
+         // {
+            this.allSites = [];
+            this.getSiteOptions(topics.GET_SITES, this.allSites, optionsTopic);
+         // }
+         // else
+         // {
+         //    this.alfPublish(optionsTopic, {
+         //       options: this.recentSites
+         //    }, true);
+         // }
       },
 
       /**
@@ -1118,6 +1155,38 @@ define(["dojo/_base/declare",
                                        name: "alfresco/layout/DynamicWidgets",
                                        config: {
                                           subscriptionTopic: "{showFavouriteSiteBrowserTopic}",
+                                          subscribeGlobal: true
+                                       }
+                                    }
+                                 ]
+                                 
+                              }
+                           },
+                           {
+                              id: "{id}_ALL_SITES_TAB",
+                              title: "filepicker.allsites.tab.label",
+                              name: "alfresco/layout/VerticalWidgets",
+                              config: {
+                                 pubSubScope: "{allSitesTabScope}",
+                                 widgetMarginTop: 10,
+                                 widgets: [
+                                    {
+                                       id: "{id}_SELECT_SITE",
+                                       name: "alfresco/forms/controls/Select",
+                                       config: {
+                                          fieldId: "SITE_SELECTION",
+                                          label: "filepicker.site.selection.label",
+                                          name: "site",
+                                          optionsConfig: {
+                                             publishTopic: "{allSitesRequestTopic}"
+                                          }
+                                       }
+                                    },
+                                    {
+                                       id: "{id}_FAVOURITE_SITES",
+                                       name: "alfresco/layout/DynamicWidgets",
+                                       config: {
+                                          subscriptionTopic: "{showSiteBrowserTopic}",
                                           subscribeGlobal: true
                                        }
                                     }
