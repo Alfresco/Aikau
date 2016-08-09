@@ -119,6 +119,16 @@ define(["dojo/_base/declare",
       selectedFiles: null,
 
       /**
+       * An optional token that can be provided for splitting the supplied value. This should be configured
+       * when the value is provided as a string that needs to be converted into an array.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      valueDelimiter: null,
+
+         /**
        * 
        * 
        * @instance
@@ -261,7 +271,20 @@ define(["dojo/_base/declare",
        * @returns {object} The current value of the field.
        */
       getValue: function alfresco_forms_controls_FilePicker__getValue() {
-         return this.value;
+         var value = this.value;
+         if (value && this.valueDelimiter && ObjectTypeUtils.isArray(value))
+         {
+            value = value.join(this.valueDelimiter);
+         }
+         else if (!value && !this.valueDelimiter)
+         {
+            // When we don't have a value and we're not using the valueDelimiter we want to always
+            // ensure that the default value is an empty array and NOT an empty string. This needs
+            // to be done for the purposes of ensuring that form rules configured for FilePicker
+            // widgets behave as expected as they will be written for arrays and not strings!
+            value = [];
+         }
+         return value;
       },
 
       /**
@@ -273,19 +296,33 @@ define(["dojo/_base/declare",
        * @param {object} value The value to set
        */
       setValue: function alfresco_forms_controls_FilePicker__setValue(value) {
+         if (value && this.valueDelimiter)
+         {
+            value = value.split(this.valueDelimiter);
+            value = array.map(value, function(valueItem) {
+               var v = {};
+               v[this.itemKeyProperty] = valueItem;
+               return v;
+            }, this);
+         }
+
          if (value && ObjectTypeUtils.isArray(value))
          {
-            this.selectedFiles = [];
-            this.value = [];
+            // Because it might be necessary to retrieve the metadata for the files we need to keep
+            // track of the all the values that will be handled. We can't set this.value and
+            // this.selectedFiles until all metadata has been asynchronously retrieved (otherwise the
+            // form value will be set with calls to getValue because the data has been retrieved). 
+            // Tracking the metadata retrieval and using tmp values ensures the form value is correct
+            // on load...
+            var valueCount = value.length;
+            var tmpValue = [], tmpSelectedFiles = [];
 
             // This is possibly not the optimal way of achiving this, but it is expected that only 
             // a small number of files will be pre-selected at a time (and there is no other REST 
             // API available for retrieving the metadata in bulk). Ideally we would make a request
             // for the metadata for the supplied list of NodeRefs.
             array.forEach(value, function(file) {
-               this.normaliseFile(file);
-
-               if (!file.displayName && file.nodeRef)
+               if (lang.getObject(this.itemKeyProperty, false, file))
                {
                   // Set up a one-time subscription for retrieving the metadata for the node, this
                   // will be done when no "displayName" attribute is provided (expected when the
@@ -299,21 +336,24 @@ define(["dojo/_base/declare",
                      // to update selected files... the result should be that the value is rendered correctly...
                      var updatedFile = payload.response.item;
                      this.normaliseFile(updatedFile);
-                     this.value.push(updatedFile);
-                     this.selectedFiles.push(updatedFile);
-                     this.updateSelectedFiles(this.showSelectedFilesTopic);
+                     
+                     tmpValue.push(lang.getObject(this.itemKeyProperty, false, updatedFile));
+                     tmpSelectedFiles.push(updatedFile);
 
+                     valueCount--;
+
+                     if (valueCount === 0)
+                     {
+                        this.selectedFiles = tmpSelectedFiles;
+                        this.value = tmpValue;
+                        this.updateSelectedFiles(this.showSelectedFilesTopic);
+                     }
                   }), true);
 
                   this.alfServicePublish(topics.GET_DOCUMENT, {
                      alfResponseTopic: responseTopic,
-                     nodeRef: file.nodeRef 
+                     nodeRef: lang.getObject(this.itemKeyProperty, false, file) 
                   });
-               }
-               else
-               {
-                  this.value.push(file);
-                  this.selectedFiles.push(file);
                }
             }, this);
          }

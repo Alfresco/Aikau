@@ -47,6 +47,19 @@ model.jsonModel = {
                         { nodeRef: "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5"}],
                      multipleItemSelection: true
                   }
+               },
+               {
+                  id: "MULTI_ITEM_DELIMITED_VALUE",
+                  name: "alfresco/forms/controls/FilePicker",
+                  config: {
+                     fieldId: "DELIMITED_VALUE",
+                     name: "delimitedValue",
+                     label: "Pick more than one file...",
+                     description: "This is a multi-item file picker that is preset with a delimited value",
+                     value: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4,workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5",
+                     multipleItemSelection: true,
+                     valueDelimiter: ","
+                  }
                }
             ]
          }
