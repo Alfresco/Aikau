@@ -44,7 +44,8 @@ model.jsonModel = {
                      description: "This is a multi-item file picker that is preset with a value",
                      value: [
                         { nodeRef:"workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4"}, 
-                        { nodeRef: "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5"}]
+                        { nodeRef: "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5"}],
+                     multipleItemSelection: true
                   }
                }
             ]

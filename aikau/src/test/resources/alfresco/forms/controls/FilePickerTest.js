@@ -35,14 +35,23 @@ define(["module",
    var selectors = {
       buttons: {
          singlePicker: {
-            openDialog: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SINGLE_ITEM_FILE_PICKER_SHOW_FILE_PICKER_DIALOG"]),
-            confirmation: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SINGLE_ITEM_FILE_PICKER_CONFIRMATION_BUTTON"])
-         }
+            openDialog: TestCommon.getTestSelector(buttonSelectors, "button.label",   ["SINGLE_ITEM_FILE_PICKER_SHOW_FILE_PICKER_DIALOG"]),
+            confirmation: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SINGLE_ITEM_FILE_PICKER_CONFIRMATION_BUTTON"]),
+            cancellation: TestCommon.getTestSelector(buttonSelectors, "button.label", ["SINGLE_ITEM_FILE_PICKER_CANCELLATION_BUTTON"])
+         },
+         multiPicker: {
+            openDialog: TestCommon.getTestSelector(buttonSelectors, "button.label",   ["MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SHOW_FILE_PICKER_DIALOG"]),
+            confirmation: TestCommon.getTestSelector(buttonSelectors, "button.label", ["MULTI_ITEM_FILE_PICKER_PRE_SELECTED_CONFIRMATION_BUTTON"])
+         },
       },
       dialogs: {
          singlePicker: {
             displayed: TestCommon.getTestSelector(DialogSelectors, "visible.dialog", ["SINGLE_ITEM_FILE_PICKER_FILE_PICKER_DIALOG"]),
             hidden: TestCommon.getTestSelector(DialogSelectors, "hidden.dialog", ["SINGLE_ITEM_FILE_PICKER_FILE_PICKER_DIALOG"]),
+         },
+         multiPicker: {
+            displayed: TestCommon.getTestSelector(DialogSelectors, "visible.dialog", ["MULTI_ITEM_FILE_PICKER_PRE_SELECTED_FILE_PICKER_DIALOG"]),
+            hidden: TestCommon.getTestSelector(DialogSelectors, "hidden.dialog", ["MULTI_ITEM_FILE_PICKER_PRE_SELECTED_FILE_PICKER_DIALOG"]),
          }
       },
       forms: {
@@ -223,6 +232,15 @@ define(["module",
          .findDisplayedByCssSelector("#SINGLE_ITEM_FILE_PICKER_BROWSE_NAME_ITEM_0");
       },
 
+      "Close single picker dialog": function() {
+         return this.remote.findByCssSelector(selectors.buttons.singlePicker.cancellation)
+            .clearLog()
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.singlePicker.hidden);
+      },
+
       "Preset values are rendered when form first displayed": function() {
          return this.remote.findAllByCssSelector("#MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SELECTED_FILES_VIEW_ITEMS tr")
             .then(function(preselectedFiles) {
@@ -235,6 +253,37 @@ define(["module",
             .getVisibleText()
             .then(function(fileName) {
                assert.equal(fileName, "Video Test Binary.mp4");
+            });
+      },
+
+      "Preset values are shown when opening the dialog": function() {
+         return this.remote.findByCssSelector(selectors.buttons.multiPicker.openDialog)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.dialogs.multiPicker.displayed)
+         .end()
+
+         .findAllByCssSelector(selectors.dialogs.multiPicker.displayed + " #MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SELECTED_FILES_VIEW tr")
+            .then(function(selectedFiles) {
+               assert.lengthOf(selectedFiles, 2);
+            });
+      },
+
+      "Can add to preset values": function() {
+         return this.remote.findDisplayedByCssSelector("#MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SEARCH_FIELD .dijitInputContainer input")
+            .clearValue()
+            .type("search")
+            .pressKeys(keys.RETURN)
+         .end()
+
+         .findDisplayedByCssSelector("#MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SEARCH_ADD_ITEM_0")
+            .click()
+         .end()
+
+         .findAllByCssSelector(selectors.dialogs.multiPicker.displayed + " #MULTI_ITEM_FILE_PICKER_PRE_SELECTED_SELECTED_FILES_VIEW tr")
+            .then(function(selectedFiles) {
+               assert.lengthOf(selectedFiles, 3);
             });
       }
    });

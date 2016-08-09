@@ -18,9 +18,19 @@
  */
 
 /**
- * Services required:
- * - SearchService, SiteService, DocumentService
- * 
+ * <p>This widget is intended to ultimately to replace the 
+ * [DocumentPicker]{@link module:alfresco/forms/controls/DocumentPicker} but at the moment it is still
+ * in development and not ready for production use. However it is currently included in Aikau releases 
+ * for feedback and community collaboration. See https://issues.alfresco.com/jira/browse/AKU-1033 for the
+ * complete of tasks remaining to complete the first cut of the widget. It is however currently functional
+ * in that it can be used to select files.</p>
+ *
+ * <p>A number of services (or customized equivalents) need to be included on a page for this picker to be 
+ * functional, these are:
+ * <ul><li>alfresco/services/SearchService</li>
+ * <li>alfresco/services/SiteService</li>
+ * <li>alfresco/services/DialogService</li>
+ * <li>alfresco/services/DocumentService</li></ul></p>
  * 
  * @module alfresco/forms/controls/FilePicker
  * @extends module:alfresco/forms/controls/BaseFormControl
@@ -112,9 +122,8 @@ define(["dojo/_base/declare",
        * 
        * 
        * @instance
-       * @param {object} config The configuration for creating the file picker
        */
-      createFormControl: function alfresco_forms_controls_FilePicker__createFormControl(config) {
+      createFormControl: function alfresco_forms_controls_FilePicker__createFormControl() {
          this.setupPubSubData();
 
          // We need to process the widgets for the search view to ensure the generated topics are available...
