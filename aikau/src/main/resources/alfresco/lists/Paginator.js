@@ -773,6 +773,7 @@ define(["dojo/_base/declare",
        *  Handles initialization and necessary updates of the page selection menu items when the popup is opened.
        * 
        *  @instance
+       *  @since 1.0.82
        *  @param {object} position the position of the selection menu popup when opened
        */
       checkAndUpdatePageSelectionMenu : function alfresco_lists_Paginator__checkAndUpdatePageSelectionMenu() {
@@ -788,9 +789,9 @@ define(["dojo/_base/declare",
               
               // need to destroy every existing menu item if documentsPerPage has changed
               // or state hasn't been fully initialized yet
-              if (this._pageSelectionDocsPerPage === undefined
-                      || this._pageSelectionDocsPerPage !== this.documentsPerPage
-                      || this._pageSelectionTotalRecords === undefined)
+              if (this._pageSelectionDocsPerPage === undefined ||
+                      this._pageSelectionDocsPerPage !== this.documentsPerPage ||
+                      this._pageSelectionTotalRecords === undefined)
               {
                   this.pageSelectorGroup.removeChild(widget);
                   widget.destroy();
