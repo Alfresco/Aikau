@@ -124,34 +124,35 @@ define(["dojo/_base/declare",
          }
          else
          {
-         // Close the popup if it's open...
-         this.closePopupMenu();
-         if (this._itemsSelected === this._NONE)
-         {
-            // Select all...
-            this.renderAllSelected();
-            this.alfPublish(this.notificationTopic, { value: "selectAll" });
+            // Close the popup if it's open...
+            this.closePopupMenu();
+            if (this._itemsSelected === this._NONE)
+            {
+               // Select all...
+               this.renderAllSelected();
+               this.alfPublish(this.notificationTopic, { value: "selectAll" });
+            }
+            else if (this._itemsSelected === this._SOME)
+            {
+               // Select all...
+               this.renderAllSelected();
+               this.alfPublish(this.notificationTopic, { value: "selectAll" });
+            }
+            else if (this._itemsSelected === this._ALL)
+            {
+               // Select none...
+               this.renderNoneSelected();
+               this.alfPublish(this.notificationTopic, { value: "selectNone" });
+            }
+            else
+            {
+               // Select none...
+               this.renderNoneSelected();
+               this.alfPublish(this.notificationTopic, { value: "selectNone" });
+            }
+            event.stop(evt); // Prevent the click event from going any further...
+            domClass.remove(this.domNode, "dijitMenuItemSelected"); // Ensure that the menu bar item isn't marked as selected
          }
-         else if (this._itemsSelected === this._SOME)
-         {
-            // Select all...
-            this.renderAllSelected();
-            this.alfPublish(this.notificationTopic, { value: "selectAll" });
-         }
-         else if (this._itemsSelected === this._ALL)
-         {
-            // Select none...
-            this.renderNoneSelected();
-            this.alfPublish(this.notificationTopic, { value: "selectNone" });
-         }
-         else
-         {
-            // Select none...
-            this.renderNoneSelected();
-            this.alfPublish(this.notificationTopic, { value: "selectNone" });
-         }
-         event.stop(evt); // Prevent the click event from going any further...
-         domClass.remove(this.domNode, "dijitMenuItemSelected"); // Ensure that the menu bar item isn't marked as selected
       },
       
       /**
