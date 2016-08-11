@@ -130,6 +130,51 @@ define(["dojo/_base/declare",
       selectedFiles: null,
 
       /**
+       * Indicates whether or not the "All Sites" tab in the picker dialog should be displayed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showAllSites: true,
+
+      /**
+       * Indicates whether or not the "Favourite Sites" tab in the picker dialog should be displayed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showFavouriteSites: true,
+
+      /**
+       * Indicates whether or not the "Recent Sites" tab in the picker dialog should be displayed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showRecentSites: true,
+
+      /**
+       * Indicates whether or not the "Search" tab in the picker dialog should be displayed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showSearch: true,
+
+      /**
+       * Indicates whether or not the "Repository" tab in the picker dialog should be displayed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       */
+      showRepository: true,
+
+      /**
        * An optional token that can be provided for splitting the supplied value. This should be configured
        * when the value is provided as a string that needs to be converted into an array.
        * 
@@ -1048,6 +1093,13 @@ define(["dojo/_base/declare",
                      name: "alfresco/layout/AlfTabContainer",
                      config: {
                         padded: true,
+                        currentItem: {
+                           showSearch: "{showSearch}",
+                           showRepository: "{showRepository}",
+                           showAllSites: "{showAllSites}",
+                           showFavouriteSites: "{showFavouriteSites}",
+                           showRecentSites: "{showRecentSites}"
+                        },
                         widgets: [
                            {
                               id: "{id}_SEARCH_TAB",
@@ -1096,6 +1148,12 @@ define(["dojo/_base/declare",
                                           widgets: "{widgetsForSearchView}"
                                        }
                                     }
+                                 ],
+                                 renderFilter: [
+                                    {
+                                       property: "showSearch",
+                                       values: [true]
+                                    }
                                  ]
                               }
                            },
@@ -1126,6 +1184,12 @@ define(["dojo/_base/declare",
                                           subscriptionTopic: "{showRecentSiteBrowserTopic}",
                                           subscribeGlobal: true
                                        }
+                                    }
+                                 ],
+                                 renderFilter: [
+                                    {
+                                       property: "showRecentSites",
+                                       values: [true]
                                     }
                                  ]
                               }
@@ -1158,8 +1222,13 @@ define(["dojo/_base/declare",
                                           subscribeGlobal: true
                                        }
                                     }
+                                 ],
+                                 renderFilter: [
+                                    {
+                                       property: "showFavouriteSites",
+                                       values: [true]
+                                    }
                                  ]
-                                 
                               }
                            },
                            {
@@ -1190,8 +1259,13 @@ define(["dojo/_base/declare",
                                           subscribeGlobal: true
                                        }
                                     }
+                                 ],
+                                 renderFilter: [
+                                    {
+                                       property: "showAllSites",
+                                       values: [true]
+                                    }
                                  ]
-                                 
                               }
                            },
                            {
@@ -1234,6 +1308,12 @@ define(["dojo/_base/declare",
                                              }
                                           ]
                                        }
+                                    }
+                                 ],
+                                 renderFilter: [
+                                    {
+                                       property: "showRepository",
+                                       values: [true]
                                     }
                                  ]
                               }

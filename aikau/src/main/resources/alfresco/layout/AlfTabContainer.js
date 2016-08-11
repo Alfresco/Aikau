@@ -341,6 +341,10 @@ define(["dojo/_base/declare",
                // Setup child widgets and startup()
                if (this.widgets)
                {
+                  this.widgets = array.filter(this.widgets, function(widget) {
+                     return this.processAllFilters(widget.config);
+                  }, this);
+
                   // By default we want to ensure that we don't unnecessarily process widgets for 
                   // tabs that are not immediately visible. Therefore unless specifically requested 
                   // in the configuration to be the selected tab or the to render immediately then

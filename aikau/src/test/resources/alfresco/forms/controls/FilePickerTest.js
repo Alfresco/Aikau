@@ -106,6 +106,13 @@ define(["module",
             });
       },
 
+      "Repository tab is hidden (for single item picker)": function() {
+         return this.remote.findAllByCssSelector("#SINGLE_ITEM_FILE_PICKER_TABCONTAINER_TABCONTAINER_tablist_SINGLE_ITEM_FILE_PICKER_TABCONTAINER_SINGLE_ITEM_FILE_PICKER_REPOSITORY_TAB")
+            .then(function(repoTabs) {
+               assert.lengthOf(repoTabs, 0);
+            });
+      },
+
       // This test checks that we are including the datatype query parameter in the search XHR request
       // that will ensure that only files are returned...
       "Search for file (check query parameter)": function() {
