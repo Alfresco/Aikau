@@ -557,10 +557,9 @@ define(["dojo/_base/declare",
                   domClass.remove(this.pageMarker.domNode, "dijitDisabled dijitMenuItemDisabled");
                }
                
-               // in case load of different page was triggered externally (i.e. hash update) we must ensure any
+               // in case load was triggered externally (i.e. hash update) we must ensure any
                // page menu items already initialised are (un)checked according to current state
-               // special case for change of documentsPerPage while on the first page - we can't compare old documentsPerPage with new here
-               if (this.compactMode === false && this.showPageSelector && (oldCurrentPage !== this.currentPage || oldCurrentPage === 1))
+               if (this.compactMode === false && this.showPageSelector)
                {
                    var pageStart = (this.currentPage - 1) * parseInt(this.documentsPerPage, 10) + 1;
                    var pageEnd;
