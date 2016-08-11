@@ -365,6 +365,15 @@ define(["dojo/_base/declare",
                preference: this.pageSizePreferenceName,
                value: this.documentsPerPage
             });
+            
+            // need to clear any page selector menu items
+            if (this.compactMode === false && this.showPageSelector)
+            {
+                array.forEach(this.pageSelectorGroup.getChildren(), function(widget, index, arr) {
+                    this.pageSelectorGroup.removeChild(widget);
+                    widget.destroy();
+                }, this);
+            }
          }
       },
       
@@ -550,7 +559,8 @@ define(["dojo/_base/declare",
                
                // in case load of different page was triggered externally (i.e. hash update) we must ensure any
                // page menu items already initialised are (un)checked according to current state
-               if (this.compactMode === false && this.showPageSelector && oldCurrentPage !== this.currentPage)
+               // special case for change of documentsPerPage while on the first page - we can't compare old documentsPerPage with new here
+               if (this.compactMode === false && this.showPageSelector && (oldCurrentPage !== this.currentPage || oldCurrentPage === 1))
                {
                    var pageStart = (this.currentPage - 1) * parseInt(this.documentsPerPage, 10) + 1;
                    var pageEnd;
