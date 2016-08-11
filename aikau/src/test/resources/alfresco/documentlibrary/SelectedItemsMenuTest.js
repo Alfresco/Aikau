@@ -159,4 +159,14 @@ define(["module",
             });
       }
    });
+
+   defineSuite(module, {
+         name: "Selected Items Menu Test (Passive)",
+         testPage: "/SelectedItemsMenu?passive=true",
+
+         "Test Menu Initially Disabled": function() {
+            return this.remote.findByCssSelector("#SELECTED_ITEMS.dijitDisabled");
+         }
+   });
+
 });
