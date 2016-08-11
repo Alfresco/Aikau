@@ -682,19 +682,36 @@ define(["dojo/_base/declare",
                            }
                         },
                         {
-                           name: "alfresco/documentlibrary/AlfDocumentList",
+                           name: "alfresco/layout/VerticalWidgets",
                            config: {
-                              waitForPageWidgets: false,
-                              rawData: false,
-                              useHash: false,
-                              siteId: payload.value,
-                              containerId: "documentLibrary",
-                              rootNode: null,
-                              usePagination: true,
-                              showFolders: true,
-                              sortAscending: true,
-                              sortField: "cm:name", // TODO: Check this
-                              widgets: this.widgetsForBrowseView
+                              widgets: [
+                                 {
+                                    name: "alfresco/lists/Paginator",
+                                    config: {
+                                       pageSizePreferenceName: "org.alfresco.share.filepicker.documentsPerPage",
+                                       documentsPerPage: 10,
+                                       pageSizes: [5,10,20]
+                                    }
+                                 },
+                                 {
+                                    name: "alfresco/documentlibrary/AlfDocumentList",
+                                    config: {
+                                       pageSizePreferenceName: "org.alfresco.share.filepicker.documentsPerPage",
+                                       currentPageSize: 10,
+                                       waitForPageWidgets: false,
+                                       rawData: false,
+                                       useHash: false,
+                                       siteId: payload.value,
+                                       containerId: "documentLibrary",
+                                       rootNode: null,
+                                       usePagination: true,
+                                       showFolders: true,
+                                       sortAscending: true,
+                                       sortField: "cm:name", // TODO: Check this
+                                       widgets: this.widgetsForBrowseView
+                                    }
+                                 }
+                              ]
                            }
                         }
                      ]
@@ -1130,6 +1147,14 @@ define(["dojo/_base/declare",
                                        }
                                     },
                                     {
+                                       name: "alfresco/lists/Paginator",
+                                       config: {
+                                          pageSizePreferenceName: "org.alfresco.share.filepicker.documentsPerPage",
+                                          documentsPerPage: 10,
+                                          pageSizes: [5,10,20]
+                                       }
+                                    },
+                                    {
                                        id: "{id}_SEARCH_RESULTS",
                                        name: "alfresco/documentlibrary/AlfSearchList",
                                        config: {
@@ -1137,11 +1162,13 @@ define(["dojo/_base/declare",
                                           query: {
                                              datatype: "cm:content" // NOTE: Restricts search to files!
                                           },
+                                          pageSizePreferenceName: "org.alfresco.share.filepicker.documentsPerPage",
+                                          currentPageSize: 10,
                                           waitForPageWidgets: false,
                                           loadDataImmediately: false,
                                           useHash: false,
                                           selectedScope: "repo",
-                                          useInfiniteScroll: true,
+                                          useInfiniteScroll: false,
                                           siteId: null,
                                           rootNode: null, 
                                           repo: true,
@@ -1291,19 +1318,36 @@ define(["dojo/_base/declare",
                                                 }
                                              },
                                              {
-                                                name: "alfresco/documentlibrary/AlfDocumentList",
+                                                name: "alfresco/layout/VerticalWidgets",
                                                 config: {
-                                                   waitForPageWidgets: false,
-                                                   rawData: false,
-                                                   useHash: false,
-                                                   siteId: null,
-                                                   containerId: null,
-                                                   rootNode: null,
-                                                   usePagination: true,
-                                                   showFolders: true,
-                                                   sortAscending: true,
-                                                   sortField: "cm:name", // TODO: Check this
-                                                   widgets: "{widgetsForBrowseView}"
+                                                   widgets: [
+                                                      {
+                                                         name: "alfresco/lists/Paginator",
+                                                         config: {
+                                                            pageSizePreferenceName: "org.alfresco.share.filepicker.documentsPerPage",
+                                                            documentsPerPage: 10,
+                                                            pageSizes: [5,10,20]
+                                                         }
+                                                      },
+                                                      {
+                                                         name: "alfresco/documentlibrary/AlfDocumentList",
+                                                         config: {
+                                                            pageSizePreferenceName: "org.alfresco.share.filepicker.documentsPerPage",
+                                                            currentPageSize: 10,
+                                                            waitForPageWidgets: false,
+                                                            rawData: false,
+                                                            useHash: false,
+                                                            siteId: null,
+                                                            containerId: null,
+                                                            rootNode: null,
+                                                            usePagination: true,
+                                                            showFolders: true,
+                                                            sortAscending: true,
+                                                            sortField: "cm:name", // TODO: Check this
+                                                            widgets: "{widgetsForBrowseView}"
+                                                         }
+                                                      }
+                                                   ]
                                                 }
                                              }
                                           ]
