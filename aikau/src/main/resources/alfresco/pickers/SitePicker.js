@@ -23,8 +23,9 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/pickers/Picker"],
-        function(declare, Picker) {
+        "alfresco/pickers/Picker",
+        "alfresco/core/topics"],
+        function(declare, Picker, topics) {
 
    var sitesView = {
       name: "alfresco/lists/views/AlfListView",
@@ -174,7 +175,7 @@ define(["dojo/_base/declare",
                                     noDataMessage: "sitePicker.list.noSitesFound",
                                     dataFailureMessage: "sitePicker.list.errorLoadingSites",
                                     itemsProperty: "",
-                                    loadDataPublishTopic: "ALF_GET_RECENT_SITES",
+                                    loadDataPublishTopic: topics.GET_RECENT_SITES,
                                     waitForPageWidgets: false,
                                     widgets: [sitesView]
                                  }
@@ -198,7 +199,7 @@ define(["dojo/_base/declare",
                                     noDataMessage: "sitePicker.list.noSitesFound",
                                     dataFailureMessage: "sitePicker.list.errorLoadingSites",
                                     itemsProperty: "",
-                                    loadDataPublishTopic: "ALF_GET_FAVOURITE_SITES",
+                                    loadDataPublishTopic: topics.GET_FAVOURITE_SITES,
                                     waitForPageWidgets: false,
                                     widgets: [sitesView]
                                  }

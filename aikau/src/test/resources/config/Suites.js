@@ -31,7 +31,7 @@ define(function() {
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/upload/UploadMonitorTest"
+      "alfresco/forms/controls/FilePickerTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -137,6 +137,7 @@ define(function() {
       "alfresco/forms/controls/DisablingSubmitFormTest",
       "alfresco/forms/controls/DocumentPickerTest",
       "alfresco/forms/controls/DocumentPickerSingleItemTest",
+      "alfresco/forms/controls/FilePickerTest",
       "alfresco/forms/controls/FilteringSelectTest",
       "alfresco/forms/controls/FormButtonDialogTest",
       "alfresco/forms/controls/MultipleEntryFormControlTest",

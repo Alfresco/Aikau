@@ -377,10 +377,24 @@ define(["dojo/_base/declare",
        */
       onPageBack: function alfresco_lists_Paginator__onPageBack(payload) {
          // jshint unused:false
-         this.currentPage--;
-         this.alfPublish(this.pageSelectionTopic, {
-            value: this.currentPage
-         });
+         var label, pageStart, pageEnd;
+         
+         // pageBack is only disabled in processLoadedDocuments so user could trigger it again during load
+         // prevent passing first page
+         if (this.currentPage > 1)
+         {
+             this.currentPage--;
+             
+             pageStart = (this.currentPage - 1) * parseInt(this.documentsPerPage, 10) + 1;
+             pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
+             label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
+             
+             this.alfPublish(this.pageSelectionTopic, {
+                label: label,
+                value: this.currentPage,
+                selected : true
+             });
+         }
       },
       
       /**
@@ -392,10 +406,32 @@ define(["dojo/_base/declare",
        */
       onPageForward: function alfresco_lists_Paginator__onPageForward(payload) {
          // jshint unused:false
-         this.currentPage++;
-         this.alfPublish(this.pageSelectionTopic, {
-            value: this.currentPage
-         });
+         var label, pageStart, pageEnd;
+         
+         // pageForward is only disabled in processLoadedDocuments so user could trigger it again during load
+         // prevent passing last page
+         if (this.currentPage !== this.totalPages)
+         {
+             this.currentPage++;
+             
+             pageStart = (this.currentPage - 1) * parseInt(this.documentsPerPage, 10) + 1;
+             if (this.currentPage === this.totalPages)
+             {
+                 // ...for the last page just count up to the last document
+                 pageEnd = this.totalRecords;
+             }
+             else
+             {
+                 pageEnd = pageStart + parseInt(this.documentsPerPage, 10) - 1; // Deduct 1 because it's 1 - 25 (not 1 - 26!)
+             }
+             label = this.message("list.paginator.page.label", {0: pageStart, 1: pageEnd, 2: this.totalRecords});
+             
+             this.alfPublish(this.pageSelectionTopic, {
+                label: label,
+                value: this.currentPage,
+                selected : true
+             });
+         }
       },
       
       /**

@@ -1,4 +1,4 @@
-Aikau 1.0.80 Release Notes
+Aikau 1.0.81 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.81:
+* [AKU-1033](https://issues.alfresco.com/jira/browse/AKU-1033)       - Initial drop of alfresco/forms/controls/FilePicker
+* [AKU-1044](https://issues.alfresco.com/jira/browse/AKU-1044)       - Support for excluding form value from additional button payloads
+* [AKU-1048](https://issues.alfresco.com/jira/browse/AKU-1048)       - Further update to changes in 1.0.80 to reduce opacity of disabled form fields
+* [AKU-1052](https://issues.alfresco.com/jira/browse/AKU-1052)       - Support for mapping of non-truthy values in DynamicPayload
+
 1.0.80:
 * [AKU-1047](https://issues.alfresco.com/jira/browse/AKU-1047)       - Ensure PushButtons respect disabled state
 * [AKU-1048](https://issues.alfresco.com/jira/browse/AKU-1048)       - Set themeable opacity on disabled form controls

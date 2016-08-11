@@ -1,0 +1,28 @@
+[{
+      "url": "\/alfresco\/s\/api\/sites\/my-first-site",
+      "sitePreset": "site-dashboard",
+      "shortName": "my-first-site",
+      "title": "My First Site",
+      "description": "",
+      "node": "\/alfresco\/s\/api\/node\/workspace\/SpacesStore\/0c45c0a3-25cd-4f35-8709-549f51fdd170",
+      "tagScope": "\/alfresco\/s\/api\/tagscopes\/workspace\/SpacesStore\/0c45c0a3-25cd-4f35-8709-549f51fdd170",
+      "siteManagers": [
+         "admin"
+      ],
+      "isPublic": true,
+      "visibility": "PUBLIC"
+   }, {
+      "url": "\/alfresco\/s\/api\/sites\/site2",
+      "sitePreset": "site-dashboard",
+      "shortName": "site2",
+      "title": "Another Site",
+      "description": "",
+      "node": "\/alfresco\/s\/api\/node\/workspace\/SpacesStore\/c6e145b7-6498-47fb-89ff-1757997db377",
+      "tagScope": "\/alfresco\/s\/api\/tagscopes\/workspace\/SpacesStore\/c6e145b7-6498-47fb-89ff-1757997db377",
+      "siteManagers": [
+         "admin"
+      ],
+      "isPublic": true,
+      "visibility": "PUBLIC"
+   }
+]

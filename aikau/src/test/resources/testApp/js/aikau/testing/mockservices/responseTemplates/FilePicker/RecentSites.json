@@ -1,0 +1,29 @@
+[{
+      "url": "\/alfresco\/s\/api\/sites\/my-first-site",
+      "sitePreset": "site-dashboard",
+      "shortName": "my-first-site",
+      "title": "My First Site",
+      "description": "",
+      "node": "\/alfresco\/s\/api\/node\/workspace\/SpacesStore\/0c45c0a3-25cd-4f35-8709-549f51fdd170",
+      "tagScope": "\/alfresco\/s\/api\/tagscopes\/workspace\/SpacesStore\/0c45c0a3-25cd-4f35-8709-549f51fdd170",
+      "siteManagers": [
+         "admin"
+      ],
+      "isPublic": true,
+      "visibility": "PUBLIC"
+   }, {
+      "url": "\/alfresco\/s\/api\/sites\/swsdp",
+      "sitePreset": "site-dashboard",
+      "shortName": "swsdp",
+      "title": "Sample: Web Site Design Project",
+      "description": "This is a Sample Alfresco Team site.",
+      "node": "\/alfresco\/s\/api\/node\/workspace\/SpacesStore\/b4cff62a-664d-4d45-9302-98723eac1319",
+      "tagScope": "\/alfresco\/s\/api\/tagscopes\/workspace\/SpacesStore\/b4cff62a-664d-4d45-9302-98723eac1319",
+      "siteManagers": [
+         "admin",
+         "mjackson"
+      ],
+      "isPublic": true,
+      "visibility": "PUBLIC"
+   }
+]

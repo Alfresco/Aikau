@@ -108,10 +108,13 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#CREATE_SITE
        * @listens module:alfresco/core/topics#DELETE_SITE
        * @listens module:alfresco/core/topics#EDIT_SITE
+       * @listens module:alfresco/core/topics#GET_FAVOURITE_SITES
+       * @listens module:alfresco/core/topics#GET_RECENT_SITES
+       * @listens module:alfresco/core/topics#GET_SITES
        * @listens module:alfresco/core/topics#SITE_CREATION_REQUEST
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
-         this.alfSubscribe("ALF_GET_SITES", lang.hitch(this, this.getSites));
+         this.alfSubscribe(topics.GET_SITES, lang.hitch(this, this.getSites));
          this.alfSubscribe("ALF_GET_SITES_ADMIN", lang.hitch(this, this.getAdminSites));
          this.alfSubscribe("ALF_GET_SITE_MEMBERSHIPS", lang.hitch(this, this.getSiteMemberships));
          this.alfSubscribe("ALF_GET_SITE_DETAILS", lang.hitch(this, this.getSiteDetails));
@@ -128,8 +131,8 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.DELETE_SITE, lang.hitch(this, this.onActionDeleteSite));
          this.alfSubscribe("ALF_ADD_FAVOURITE_SITE", lang.hitch(this, this.addSiteAsFavourite));
          this.alfSubscribe("ALF_REMOVE_FAVOURITE_SITE", lang.hitch(this, this.removeSiteFromFavourites));
-         this.alfSubscribe("ALF_GET_RECENT_SITES", lang.hitch(this, this.getRecentSites));
-         this.alfSubscribe("ALF_GET_FAVOURITE_SITES", lang.hitch(this, this.getFavouriteSites));
+         this.alfSubscribe(topics.GET_RECENT_SITES, lang.hitch(this, this.getRecentSites));
+         this.alfSubscribe(topics.GET_FAVOURITE_SITES, lang.hitch(this, this.getFavouriteSites));
          this.alfSubscribe(topics.CANCEL_JOIN_SITE_REQUEST, lang.hitch(this, this.cancelJoinSiteRequest));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
@@ -1125,7 +1128,7 @@ define(["dojo/_base/declare",
          {
             url = url + "/site/" + this.currentSite;
          }
-         var alfTopic = payload.alfResponseTopic || "ALF_GET_RECENT_SITES";
+         var alfTopic = payload.alfResponseTopic || topics.GET_RECENT_SITES;
          var config = {
             alfTopic: alfTopic,
             url: url,
@@ -1147,7 +1150,7 @@ define(["dojo/_base/declare",
          {
             url = url + "/site/" + this.currentSite;
          }
-         var alfTopic = payload.alfResponseTopic || "ALF_GET_FAVOURITE_SITES";
+         var alfTopic = payload.alfResponseTopic || topics.GET_FAVOURITE_SITES;
          var config = {
             alfTopic: alfTopic,
             url: url,
