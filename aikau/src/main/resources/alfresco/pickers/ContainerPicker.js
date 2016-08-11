@@ -24,8 +24,9 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/pickers/Picker"],
-        function(declare, Picker) {
+        "alfresco/pickers/Picker",
+        "alfresco/core/topics"],
+        function(declare, Picker, topics) {
 
    return declare([Picker], {
 
@@ -141,7 +142,7 @@ define(["dojo/_base/declare",
                                           }
                                        }
                                     ],
-                                    requestItemsTopic: "ALF_GET_RECENT_SITES"
+                                    requestItemsTopic: topics.GET_RECENT_SITES
                                  }
                               }
                            ]
@@ -172,7 +173,7 @@ define(["dojo/_base/declare",
                                           }
                                        }
                                     ],
-                                    requestItemsTopic: "ALF_GET_FAVOURITE_SITES"
+                                    requestItemsTopic: topics.GET_FAVOURITE_SITES
                                  }
                               }
                            ]

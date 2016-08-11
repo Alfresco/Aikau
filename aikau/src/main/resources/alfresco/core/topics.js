@@ -689,6 +689,20 @@ define([],function() {
       GET_DOCUMENT: "ALF_RETRIEVE_SINGLE_DOCUMENT_REQUEST",
 
       /**
+       * This topic can be published to retrieve a list of the sites that have marked as a favourite
+       * of the current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.81
+       *
+       * @event
+       */
+      GET_FAVOURITE_SITES: "ALF_GET_FAVOURITE_SITES",
+
+      /**
        * This topic can be published by a [form control]{@link module:alfresco/forms/controls/BaseFormControl}
        * when it needs to retrieve options that can only be determined from other values containined within the
        * form. This allows options to be dynamically requested that change as other form values are updated.
@@ -718,6 +732,34 @@ define([],function() {
        * @property {object} callbackScope The scope with which to execute the callback
        */
       GET_PREFERENCE: "ALF_PREFERENCE_GET",
+
+      /**
+       * This topic can be published to retrieve a list of the sites that have recently been visited
+       * by the current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.81
+       *
+       * @event
+       */
+      GET_RECENT_SITES: "ALF_GET_RECENT_SITES",
+
+      /**
+       * This topic can be published to retrieve a list of all the sites that are accessible to the
+       * current user. Unfortunately at the present time this cannot be used for requesting 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} options.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.81
+       *
+       * @event
+       */
+      GET_SITES: "ALF_GET_SITES",
 
       /**
        * This topic can be published to request a list of all available users in the Alfresco Repository.

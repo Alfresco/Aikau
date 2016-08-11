@@ -12,8 +12,7 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
-      "aikauTesting/mockservices/DocumentPickerTestService",
-      "alfresco/services/ErrorReporter"
+      "aikauTesting/mockservices/DocumentPickerTestService"
    ],
    widgets:[
       {
