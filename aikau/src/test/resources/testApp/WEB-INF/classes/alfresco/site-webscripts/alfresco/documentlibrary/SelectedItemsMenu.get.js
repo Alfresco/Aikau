@@ -74,6 +74,15 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
+                           id: "UPDATE_SELECTED_ITEMS",
+                           name: "alfresco/documentlibrary/AlfSelectDocumentListItems",
+                           config: {
+                              widgets: [
+                                 
+                              ]
+                           }
+                        },
+                        {
                            id: "SELECTED_ITEMS",
                            name: "alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup",
                            config: {

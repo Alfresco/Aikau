@@ -166,6 +166,10 @@ define(["module",
 
          "Test Menu Initially Disabled": function() {
             return this.remote.findByCssSelector("#SELECTED_ITEMS.dijitDisabled");
+         },
+
+         "Select items menu initially disabled": function() {
+            return this.remote.findByCssSelector("#UPDATE_SELECTED_ITEMS.dijitDisabled");
          }
    });
 
