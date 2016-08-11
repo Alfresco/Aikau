@@ -34,6 +34,17 @@ define(["dojo/_base/declare",
    return declare([GalleryThumbnail, SearchThumbnailMixin], {
 
       /**
+       * Overrides the [default]{@link module:alfresco/renderers/Thumbnail#itemKey} to
+       * set a value suitable search results.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.82
+       */
+      itemKey: "nodeRef",
+
+      /**
        * Overrides the inherited value to reference the property provided by the search API
        *
        * @instance
