@@ -36,7 +36,7 @@
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.81
  */
 define(["dojo/_base/declare",
         "alfresco/forms/controls/BaseFormControl",

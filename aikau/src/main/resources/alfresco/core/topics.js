@@ -696,7 +696,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.NEXT
+       * @since 1.0.81
        *
        * @event
        */
@@ -741,7 +741,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.NEXT
+       * @since 1.0.81
        *
        * @event
        */
@@ -755,7 +755,7 @@ define([],function() {
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.NEXT
+       * @since 1.0.81
        *
        * @event
        */

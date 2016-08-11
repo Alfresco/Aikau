@@ -19,7 +19,7 @@
 
 /**
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.81
  */
 define(["module",
         "alfresco/defineSuite",

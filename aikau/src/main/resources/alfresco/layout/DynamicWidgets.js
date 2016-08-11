@@ -58,7 +58,7 @@ define(["alfresco/core/ProcessWidgets",
        * Indicates whether the [subscriptionTopic]{@link module:alfresco/layout/DynamicWidgets#subscriptionTopic}
        * should be subscribed to globally.
        * 
-       * @since 1.0.NEXT
+       * @since 1.0.81
        * @type {boolean}
        * @default
        */
