@@ -241,14 +241,31 @@ define(["dojo/_base/declare",
        * @param {object} payload
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
-      onActionSuccess: function alfresco_services_ActionService__onActionSuccess(payload) {
+      onActionSuccess: function alfresco_services_actions_CopyMoveService__onActionSuccess(payload) {
          // jshint unused:false
          var subscriptionHandles = lang.getObject("requestConfig.subscriptionHandles", false, payload);
          if (subscriptionHandles)
          {
             this.alfUnsubscribeSaveHandles(subscriptionHandles);
          }
-         if (payload.response.overallSuccess === true)
+         if (payload.response.successCount === 0)
+         {
+            // See AKU-1068 - total failure returned as success...
+            var failureMessage;
+            if (payload.requestConfig.copy)
+            {
+               failureMessage = payload.response.totalResults === 1 ? "copyMoveService.copy.failure" : "copyMoveService.copy.multiple.failure";
+            }
+            else
+            {
+               failureMessage = payload.response.totalResults === 1 ? "copyMoveService.move.failure" : "copyMoveService.move.multiple.failure";
+            }
+            
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
+               message: this.message(failureMessage)
+            });
+         }
+         else if (payload.response.overallSuccess === true)
          {
             this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
                message: payload.requestConfig.copy ? this.message("copyMoveService.copy.completeSuccess") : this.message("copyMoveService.move.completeSuccess")
@@ -268,9 +285,7 @@ define(["dojo/_base/declare",
                failures = failures.substring(0, failures.length - 2);
             }
             var messageKey = payload.requestConfig.copy ? "copyMoveService.copy.partialSuccess" : "copyMoveService.move.partialSuccess";
-            var message = this.message(messageKey, {
-               0: failures
-            });
+            var message = this.message(messageKey);
             this.alfPublish("ALF_DISPLAY_PROMPT", {
                message: message
             });
@@ -285,7 +300,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
-      onActionFailure: function alfresco_services_ActionService__onActionFailure(payload) {
+      onActionFailure: function alfresco_services_actions_CopyMoveService__onActionFailure(payload) {
          // jshint unused:false
          // TODO: Not all success is success. Need to check response.overallSuccess rather than just response status.
          var subscriptionHandles = lang.getObject("requestConfig.subscriptionHandles", false, payload);
