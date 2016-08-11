@@ -83,7 +83,6 @@ define(["dojo/_base/declare",
          // Subscribe to topics for detecting individual changes...
          this.alfSubscribe(this.documentSelectionTopic, lang.hitch(this, this.onDocumentSelected));
          this.alfSubscribe(this.documentDeselectionTopic, lang.hitch(this, this.onDocumentDeselected));
-         this.alfSubscribe(this.selectedDocumentsChangeTopic, lang.hitch(this, this.onFilesSelected));
       },
       
       /**
@@ -126,19 +125,6 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Called when [selectedDocumentsChangeTopic]{@link module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#selectedDocumentsChangeTopic} is
-       * published on and disables the menu if no files have been selected. 
-       * 
-       * @instance
-       * @param {object} payload The details of the selected files.
-       * @since 1.0.82
-       */
-      onFilesSelected: function alfresco_documentlibrary_AlfSelectDocumentListItems__onFilesSelected(payload) {
-         this.set("disabled", (payload && payload.selectedItems && payload.selectedItems.length === 0));
-         this.selectedItems = payload.selectedItems;
-      },
-
-      /**
        * Handles the deselection of an individual document
        *
        * @instance
@@ -169,6 +155,7 @@ define(["dojo/_base/declare",
          {
             this.documentsAvailable = payload.documents.length;
          }
+         this.set("disabled", (payload && payload.totalRecords === 0));
       },
       
       /**
