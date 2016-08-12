@@ -85,7 +85,11 @@ define(["dojo/_base/declare",
          // Defaulting to show
          var hide = false,
              i, ii;
-         if (payload && payload.userAccess && payload.commonAspects && payload.allAspects)
+         if (payload && 
+             payload.userAccess && 
+             payload.commonAspects && 
+             payload.allAspects &&
+             payload.fileTypes)
          {
             if (this.permission)
             {
@@ -130,16 +134,24 @@ define(["dojo/_base/declare",
                   }
                }
             }
-         }
-         
-         // Hide the menu item if disabled and 
-         if (hide)
-         {
-            this.hide();
-         }
-         else
-         {
-            this.show();
+
+            if (!hide && this.asset)
+            {
+               array.some(payload.fileTypes, function(type) {
+                  hide = this.asset !== type;
+                  return hide;
+               }, this);
+            }
+            
+            // Hide the menu item if disabled and 
+            if (hide)
+            {
+               this.hide();
+            }
+            else
+            {
+               this.show();
+            }
          }
       }
    });

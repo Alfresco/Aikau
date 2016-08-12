@@ -31,7 +31,7 @@ define(function() {
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/forms/controls/FilePickerTest"
+      "alfresco/documentlibrary/AlfDocumentActionMenuItemTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -85,6 +85,7 @@ define(function() {
       "alfresco/dnd/NestedConfigurationTest",
       "alfresco/dnd/NestedReorderTest",
 
+      "alfresco/documentlibrary/AlfDocumentActionMenuItemTest",
       "alfresco/documentlibrary/AlfDocumentTest",
       "alfresco/documentlibrary/AlfDocumentFiltersTest",
       "alfresco/documentlibrary/AlfDocumentListTest",
