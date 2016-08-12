@@ -63,6 +63,21 @@ model.jsonModel = {
                      valueDelimiter: ",",
                      showSearch: false
                   }
+               },
+               {
+                  id: "DELIMITED_ADDED_REMOVED_VALUES",
+                  name: "alfresco/forms/controls/FilePicker",
+                  config: {
+                     fieldId: "DELIMITED_ADDED_REMOVED_VALUES",
+                     name: "delimited",
+                     label: "Pick more than one file...",
+                     description: "This is a mult-item picker that returns values for both added and removed items",
+                     value: "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4,workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5",
+                     multipleItemSelection: true,
+                     valueDelimiter: ",",
+                     showSearch: false,
+                     addedAndRemovedValues: true
+                  }
                }
             ]
          }

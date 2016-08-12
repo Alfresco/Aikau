@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
         "alfresco/renderers/Boolean",
         "alfresco/forms/controls/CheckBox",
         "alfresco/forms/controls/DateTextBox",
-        "alfresco/forms/controls/DocumentPicker",
+        "alfresco/forms/controls/FilePicker",
         "alfresco/forms/controls/MultiSelectInput",
         "alfresco/forms/controls/NumberSpinner",
         "alfresco/forms/controls/Select",
@@ -85,6 +85,7 @@ define(["dojo/_base/declare",
                config: {
                   width: "400px",
                   valueDelimiter: ",",
+                  addedAndRemovedValues: true,
                   optionsConfig: {
                      labelAttribute: "name",
                      queryAttribute: "name",
@@ -141,7 +142,11 @@ define(["dojo/_base/declare",
                }
             },
             "/org/alfresco/components/form/controls/workflow/packageitems.ftl": {
-               name: "alfresco/forms/controls/DocumentPicker"
+               name: "alfresco/forms/controls/FilePicker",
+               config: {
+                  valueDelimiter: ",",
+                  addedAndRemovedValues: true
+               }
             },
             "/org/alfresco/components/form/controls/percentage-approve.ftl": {
                name: "alfresco/forms/controls/NumberSpinner",
