@@ -46,6 +46,10 @@ define(["module",
          delimitedValuePicker: {
             openDialog: TestCommon.getTestSelector(buttonSelectors, "button.label",   ["MULTI_ITEM_DELIMITED_VALUE_SHOW_FILE_PICKER_DIALOG"]),
             confirmation: TestCommon.getTestSelector(buttonSelectors, "button.label", ["MULTI_ITEM_DELIMITED_VALUE_SHOW_FILE_PICKER_CONFIRMATION_BUTTON"])
+         },
+         addedAndRemovedValuesPicker: {
+            openDialog: TestCommon.getTestSelector(buttonSelectors, "button.label",   ["DELIMITED_ADDED_REMOVED_VALUES_SHOW_FILE_PICKER_DIALOG"]),
+            confirmation: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DELIMITED_ADDED_REMOVED_VALUES_CONFIRMATION_BUTTON"])
          }
       },
       dialogs: {
@@ -60,6 +64,10 @@ define(["module",
          delimitedValuePicker: {
             displayed: TestCommon.getTestSelector(DialogSelectors, "visible.dialog", ["MULTI_ITEM_DELIMITED_VALUE_SHOW_FILE_PICKER_DIALOG"]),
             hidden: TestCommon.getTestSelector(DialogSelectors, "hidden.dialog", ["MULTI_ITEM_DELIMITED_VALUE_SHOW_FILE_PICKER_DIALOG"]),
+         },
+         addedAndRemovedValuesPicker: {
+            displayed: TestCommon.getTestSelector(DialogSelectors, "visible.dialog", ["DELIMITED_ADDED_REMOVED_VALUES_FILE_PICKER_DIALOG"]),
+            hidden: TestCommon.getTestSelector(DialogSelectors, "hidden.dialog", ["DELIMITED_ADDED_REMOVED_VALUES_FILE_PICKER_DIALOG"]),
          }
       },
       forms: {
@@ -87,6 +95,8 @@ define(["module",
                assert.include(payload.multiFile, {nodeRef :"workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4" });
                assert.include(payload.multiFile, {nodeRef :"workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5" });
                assert.equal(payload.delimitedValue, "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4,workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5");
+               assert.equal(payload.delimited_added, "");
+               assert.equal(payload.delimited_removed, "");
             });
       },
 
@@ -349,6 +359,60 @@ define(["module",
          .getLastPublish("FORM_SCOPE_SAVE")
             .then(function(payload) {
                assert.equal(payload.delimitedValue, "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4");
+            });
+      },
+
+      "Remove file and save to see just the removed files in the payload": function() {
+         return this.remote.findByCssSelector("#DELIMITED_ADDED_REMOVED_VALUES_SELECTED_FILES_REMOVE_ITEM_1 .alfresco-renderers-PublishAction__image")
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.forms.main.confirmationButton)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("FORM_SCOPE_SAVE")
+            .then(function(payload) {
+               assert.equal(payload.delimited_added, "");
+               assert.equal(payload.delimited_removed, "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5");
+            }); 
+      },
+
+      "Add a file and save to see added and removed files in the payload": function() {
+         // Open dialog...
+         return this.remote.findByCssSelector(selectors.buttons.addedAndRemovedValuesPicker.openDialog)
+            .click()
+         .end()
+
+         // Wait for dialog to be displayed...
+         .findByCssSelector(selectors.dialogs.addedAndRemovedValuesPicker.displayed)
+         .end()
+
+         // The recent sites tab will be initially displayed because search is hidden, click to add the document...
+         .findDisplayedByCssSelector("#DELIMITED_ADDED_REMOVED_VALUES_BROWSE_ADD_ITEM_4 .alfresco-renderers-PublishAction__image")
+            .click()
+         .end()
+
+         // Confirm selection...
+         .findByCssSelector(selectors.buttons.addedAndRemovedValuesPicker.confirmation)
+            .click()
+         .end()
+
+         // Wait for the dialog to be hidden...
+         .findByCssSelector(selectors.dialogs.addedAndRemovedValuesPicker.hidden)
+         .end()
+
+         // Save the form...
+         .findByCssSelector(selectors.forms.main.confirmationButton)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("FORM_SCOPE_SAVE")
+            .then(function(payload) {
+               assert.equal(payload.delimited_added, "workspace://SpacesStore/89366ee4-824d-4d3a-859a-d81a25d9bff3");
+               assert.equal(payload.delimited_removed, "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5");
             });
       }
    });
