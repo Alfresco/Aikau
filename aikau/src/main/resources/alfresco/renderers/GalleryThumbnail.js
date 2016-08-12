@@ -164,7 +164,10 @@ define(["dojo/_base/declare",
       widgetsForSelectBar: [
          {
             name: "alfresco/renderers/Selector",
-            align: "left"
+            align: "left",
+            config: {
+               updateOnSelection: true
+            }
          },
          {
             name: "alfresco/renderers/MoreInfo",
