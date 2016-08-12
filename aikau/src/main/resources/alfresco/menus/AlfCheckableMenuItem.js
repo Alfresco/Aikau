@@ -210,6 +210,13 @@ define(["dojo/_base/declare",
 
          if (this.checked)
          {
+            if (this.group)
+            {
+                // publish an event to indicate that all other members of the group must be deselected
+                this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {
+                    value : this.value
+                });
+            }
             this.publishSelection();
          }
 
@@ -244,8 +251,7 @@ define(["dojo/_base/declare",
                   // Clear all group settings if the payload value matches the value represented by the
                   // widget. We need to ensure that only one item in the group is selected...
                   this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {
-                     value: this.value,
-                     selected: false
+                     value: this.value
                   });
                   this.checked = true;
                }
@@ -296,7 +302,9 @@ define(["dojo/_base/declare",
             {
                // If this is currently NOT checked, then allow selection to occur but publish
                // an event to indicate that all other members of the group must be deselected
-               this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {});
+               this.alfPublish("ALF_CHECKABLE_MENU_ITEM__" + this.group, {
+                   value : this.value
+               });
                this.checked = true;
                this.render();
                this.publishSelection();
