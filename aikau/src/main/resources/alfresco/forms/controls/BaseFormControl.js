@@ -1905,7 +1905,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} values The object to update with the current value of the control
        * @since 1.0.82
-       * @overidable
+       * @overridable
        */
       setFormControlValue: function alfresco_forms_controls_BaseFormControl__setFormControlValue(values) {
          if (this.addedAndRemovedValues)
