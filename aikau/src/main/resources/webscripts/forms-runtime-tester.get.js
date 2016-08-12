@@ -9,6 +9,7 @@ model.jsonModel = {
                }
             }
       },
+      "alfresco/services/SearchService",
       "alfresco/services/FormsRuntimeService",
       "alfresco/services/CrudService",
       "alfresco/services/NotificationService",
