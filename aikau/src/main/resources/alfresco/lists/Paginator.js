@@ -369,7 +369,7 @@ define(["dojo/_base/declare",
             // need to clear any page selector menu items
             if (this.compactMode === false && this.showPageSelector)
             {
-                array.forEach(this.pageSelectorGroup.getChildren(), function(widget, index, arr) {
+                array.forEach(this.pageSelectorGroup.getChildren(), function(widget) {
                     this.pageSelectorGroup.removeChild(widget);
                     widget.destroy();
                 }, this);
