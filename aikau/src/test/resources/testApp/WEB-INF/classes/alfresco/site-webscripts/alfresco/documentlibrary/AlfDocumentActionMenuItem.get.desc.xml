@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfDocumentActionMenuItem</shortname>
+  <description>Tests the filtering of document library actions based on selected items.</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfDocumentActionMenuItem</url>
+</webscript>
