@@ -155,6 +155,7 @@ define(["dojo/_base/declare",
          {
             this.documentsAvailable = payload.documents.length;
          }
+         this.set("disabled", (payload && payload.totalRecords === 0));
       },
       
       /**

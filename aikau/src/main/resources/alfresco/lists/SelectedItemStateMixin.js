@@ -266,10 +266,10 @@ define(["dojo/_base/declare",
        */
       publishSelectedItems: function alfresco_lists_SelectedItemStateMixin__publishSelectedItems() {
          this.alfPublish(this.selectedDocumentsChangeTopic, {
-            selectedItems: this.selectedItems
+            selectedItems: this.selectedItems || []
          });
          this.alfPublish(this.documentSelectionTopic, {
-            selectedItems: this.selectedItems
+            selectedItems: this.selectedItems || []
          });
       },
 
