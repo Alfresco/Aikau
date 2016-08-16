@@ -175,21 +175,14 @@ define(["dojo/_base/declare",
       showRepository: true,
 
       /**
-       * An optional token that can be provided for splitting the supplied value. This should be configured
-       * when the value is provided as a string that needs to be converted into an array.
-       * 
-       * @instance
-       * @type {string}
-       * @default
-       */
-      valueDelimiter: null,
-
-         /**
        * 
        * 
        * @instance
        */
       createFormControl: function alfresco_forms_controls_FilePicker__createFormControl() {
+         
+         this.initialFileSelection = this.initialValue;
+
          this.setupPubSubData();
 
          // We need to process the widgets for the search view to ensure the generated topics are available...

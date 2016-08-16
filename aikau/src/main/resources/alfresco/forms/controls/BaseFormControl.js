@@ -246,15 +246,6 @@ define(["dojo/_base/declare",
       name: "",
 
       /**
-       * The value to submit as the value of the field when the form is submitted.
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      value: "",
-
-      /**
        * The list of static options (TODO: We need to provide support for dynamic options via XHR or callback).
        *
        * @instance
@@ -262,6 +253,15 @@ define(["dojo/_base/declare",
        * @default
        */
       options: null,
+
+      /**
+       * The value to submit as the value of the field when the form is submitted.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      value: "",
 
       /**
        * By default if a field is hidden or disabled then it's value should not be posted. This allows multiple controls
@@ -324,6 +324,54 @@ define(["dojo/_base/declare",
        * @since 1.0.65
        */
       supportsMultiValue: false,
+
+      /**
+       * Indicates whether values should be set as separate properties for the files added and removed 
+       * (from the initial state) rather than just a single value representing the files selected.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.82
+       */
+      addedAndRemovedValues: false,
+
+      /**
+       * The suffix added to the form control [name]{@link module:alfresco/forms/controls/BaseFormControl#name}
+       * when [addedAndRemovedValues]{@link module:alfresco/forms/controls/FilePicker#addedAndRemovedValues}
+       * is configured to be true. The concatenated value is then used as the property for the files
+       * that have been added to the form controls initial value.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.82
+       */
+      addedNameSuffix: "_added",
+
+      /**
+       * The suffix added to the form control [name]{@link module:alfresco/forms/controls/BaseFormControl#name}
+       * when [addedAndRemovedValues]{@link module:alfresco/forms/controls/FilePicker#addedAndRemovedValues}
+       * is configured to be true. The concatenated value is then used as the property for the files
+       * that have been removed from the form controls initial value.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.82
+       */
+      removedNameSuffix: "_removed",
+
+      /**
+       * An optional token that can be provided for splitting the supplied value. This should be configured
+       * when the value is provided as a string that needs to be converted into an array.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.82
+       */
+      valueDelimiter: null,
 
       /**
        * The default visibility status is always true (this can be overridden by extending controls).
@@ -1846,7 +1894,86 @@ define(["dojo/_base/declare",
          }
          else
          {
-            // Process dot-notation property names...
+            this.setFormControlValue(values);
+         }
+      },
+
+      /**
+       * This is called from [addFormControlValue]{@link module:alfresco/forms/controls/BaseFormControl#addFormControlValue}
+       * when evaluation of the field configuration and state confirms the value can be set.
+       * 
+       * @instance
+       * @param {object} values The object to update with the current value of the control
+       * @since 1.0.82
+       * @overridable
+       */
+      setFormControlValue: function alfresco_forms_controls_BaseFormControl__setFormControlValue(values) {
+         if (this.addedAndRemovedValues)
+         {
+            var addedName = this.name + this.addedNameSuffix;
+            var removedName = this.name + this.removedNameSuffix;
+
+            if (this.initialFileSelection)
+            {
+               var initialPick = this.initialFileSelection;
+               var currentPick = this.getValue();
+               if (this.valueDelimiter)
+               {
+                  initialPick = this.initialFileSelection.split(this.valueDelimiter);
+                  currentPick = currentPick.split(this.valueDelimiter);
+               }
+               
+               var added = [];
+               var removed = [];
+
+               array.forEach(currentPick, function(currFile) {
+                  // If the current picked file was in the inital selection it has not been added...
+                  // ... BUT if the current pick was NOT in the inital selection it HAS been added
+                  if (array.some(initialPick, function(initialFile) {
+                     return currFile === initialFile;
+                  })) {
+                     // No action required, the current pick was also in the initial pick...
+                  }
+                  else
+                  {
+                     // The current pick was not an initial pick so has been added...
+                     added.push(currFile);
+                  }
+               }, this);
+
+               array.forEach(initialPick, function(initialFile) {
+                  // If the initially picked file is in the current selection it has not been removed...
+                  // ... BUT if the initially picked file is NOT in the current selection it HAS been removed
+                  if (array.some(currentPick, function(currFile) {
+                     return currFile === initialFile;
+                  })) {
+                     // No action required, the current pick was also in the initial pick...
+                  }
+                  else
+                  {
+                     // The initial pick is not a current pick so has been removed...
+                     removed.push(initialFile);
+                  }
+               }, this);
+
+               if (this.valueDelimiter)
+               {
+                  added = added.join(this.valueDelimiter);
+                  removed = removed.join(this.valueDelimiter);
+               }
+
+               lang.setObject(addedName, added, values);
+               lang.setObject(removedName, removed, values);
+            }
+            else
+            {
+               // Nothing removed, everything added...
+               lang.setObject(addedName, this.getValue(), values);
+               lang.setObject(removedName, (this.valueDelimiter ? "": []), values);
+            }
+         }
+         else
+         {
             lang.setObject(this.get("name"), this.getValue(), values);
          }
       },

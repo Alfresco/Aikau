@@ -23,10 +23,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, require, TestCommon) {
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "Copy/Move tests",
@@ -35,10 +33,12 @@ define(["module",
       "Test dialog title of copy via ActionService": function() {
          return this.remote.findByCssSelector("#COPY1_label")
             .click()
-            .end()
-            .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
-            .end()
-            .findByCssSelector(".dijitDialogTitle")
+         .end()
+         
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
+         .end()
+         
+         .findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Copy File 1 to...", "Copy dialog title not set correctly");
@@ -48,13 +48,15 @@ define(["module",
       "Test Shared Files location shows root node": function() {
          return this.remote.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(4)")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The Shared Files sub-picker was not shown");
             })
-            .end()
-            .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Only one tree node was expected");
             })
@@ -71,33 +73,33 @@ define(["module",
             .then(function(text) {
                assert.equal(text, "Copy", "The confirmation button on the copy dialog was incorrect");
             })
-            .click()
-            .end();
+            .clearLog()
+            .click();
       },
 
       "Test that a notification of complete success is displayed": function() {
-         return this.remote.findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_NOTIFICATION", "message", "Copy completed successfully"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The copy success message was not found");
+         return this.remote.getLastPublish("ALF_DISPLAY_NOTIFICATION")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "Copy completed successfully");
             });
       },
 
       "Test that the copy request was successful": function() {
-         return this.remote.findAllByCssSelector(TestCommon.topicSelector("ALF_DOCLIST_RELOAD_DATA", "publish", "last"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "Only expected one reload publication to indicate success");
-            });
+         return this.remote.getLastPublish("ALF_DOCLIST_RELOAD_DATA");
       },
 
       "Test dialog title of move via ActionService": function() {
          return this.remote.findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-            .end()
-            .findByCssSelector("#MOVE1_label")
+         .end()
+         
+         .findByCssSelector("#MOVE1_label")
             .click()
-            .end()
-            .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
-            .end()
-            .findByCssSelector(".dijitDialogTitle")
+         .end()
+         
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
+         .end()
+         
+         .findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Move File 1 to...", "Move dialog title not set correctly");
@@ -107,13 +109,15 @@ define(["module",
       "Test My Files location shows root node": function() {
          return this.remote.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(6)")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
+         .end()
+   
+         .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The My Files sub-picker was not shown");
             })
-            .end()
-            .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
+         .end()
+   
+         .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Only one tree node was expected");
             })
@@ -131,10 +135,11 @@ define(["module",
                assert.equal(text, "Move", "The confirmation button on the move dialog was incorrect");
             })
             .click()
-            .end()
-            .findAllByCssSelector(TestCommon.pubDataCssSelector("ALF_DISPLAY_PROMPT", "message", "Move partially successful, the following files or folders couldn't be moved: File2, File3"))
-            .then(function(elements) {
-               assert.lengthOf(elements, 1, "The copy success message was not found");
+         .end()
+         
+         .getLastPublish("ALF_DISPLAY_PROMPT")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "Move partially successful, but not all of the files or folders could be moved");
             });
       }
    });
@@ -146,16 +151,19 @@ define(["module",
       "Test Repository location shows root node": function() {
          return this.remote.findByCssSelector("#COPY1_label")
             .click()
-            .end()
-            .findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
+         .end()
+         
+         .findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "The Repository sub-picker was not shown");
             })
-            .end()
-            .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Only one tree node was expected");
             })
@@ -164,8 +172,9 @@ define(["module",
                assert.equal(text, "Repository", "The tree node did not have the expected label");
             })
             .click()
-            .end()
-            .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+         .end()
+         
+         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
             .click();
       },
 

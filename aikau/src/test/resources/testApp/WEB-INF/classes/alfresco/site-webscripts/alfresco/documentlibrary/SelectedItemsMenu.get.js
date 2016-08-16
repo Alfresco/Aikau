@@ -1,3 +1,11 @@
+/* global page */
+/* jshint sub:true */
+var passive = false;
+if (page.url.args["passive"])
+{
+   passive = page.url.args["passive"] === "true";
+}
+
 model.jsonModel = {
    services: [
       {
@@ -66,11 +74,20 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
+                           id: "UPDATE_SELECTED_ITEMS",
+                           name: "alfresco/documentlibrary/AlfSelectDocumentListItems",
+                           config: {
+                              widgets: [
+                                 
+                              ]
+                           }
+                        },
+                        {
                            id: "SELECTED_ITEMS",
                            name: "alfresco/documentlibrary/AlfSelectedItemsMenuBarPopup",
                            config: {
                               debounceTime: 0, // Remove debounce time to aid testing
-                              passive: false,
+                              passive: passive,
                               itemKeyProperty: "itemKey",
                               label: "Selected items...",
                               widgets: [
@@ -101,6 +118,19 @@ model.jsonModel = {
                                  }
                               ]
                            }
+                        }
+                     ]
+                  }
+               },
+               {
+                  name: "alfresco/lists/AlfList",
+                  config: {
+                     currentData: {
+                        items: []
+                     },
+                     widgets: [
+                        {
+                           name: "alfresco/lists/views/HtmlListView"
                         }
                      ]
                   }

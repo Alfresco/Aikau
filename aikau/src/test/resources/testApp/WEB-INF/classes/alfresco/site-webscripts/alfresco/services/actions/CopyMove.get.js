@@ -1,4 +1,5 @@
 // jshint undef:false
+// jshint sub:true
 model.jsonModel = {
    services: [
       {
@@ -69,7 +70,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/CopyMoveServiceMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

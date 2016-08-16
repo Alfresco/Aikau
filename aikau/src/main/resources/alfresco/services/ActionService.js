@@ -453,7 +453,8 @@ define(["dojo/_base/declare",
             selectedItems: files,
             userAccess: userAccess,
             commonAspects: commonAspects,
-            allAspects: allAspects
+            allAspects: allAspects,
+            fileTypes: fileTypes
          });
       },
 
