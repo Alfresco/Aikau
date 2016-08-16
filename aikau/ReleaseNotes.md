@@ -1,4 +1,4 @@
-Aikau 1.0.81 Release Notes
+Aikau 1.0.82 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,14 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.82:
+* [AKU-1061](https://issues.alfresco.com/jira/browse/AKU-1061)       - Update bulk action filtering to include file type
+* [AKU-1063](https://issues.alfresco.com/jira/browse/AKU-1063)       - Ensure that SelectedItemStateMixin publishes empty array for zero-item selection
+* [AKU-1064](https://issues.alfresco.com/jira/browse/AKU-1064)       - Disable AlfSelectDocumentListItems when no list items are available
+* [AKU-1067](https://issues.alfresco.com/jira/browse/AKU-1067)       - Update GalleryThumbnail to support selection and inverting selection
+* [AKU-1068](https://issues.alfresco.com/jira/browse/AKU-1068)       - Update copy/move action messages
+* [AKU-1070](https://issues.alfresco.com/jira/browse/AKU-1070)       - Support added/removed values for form controls
+
 1.0.81:
 * [AKU-1033](https://issues.alfresco.com/jira/browse/AKU-1033)       - Initial drop of alfresco/forms/controls/FilePicker
 * [AKU-1044](https://issues.alfresco.com/jira/browse/AKU-1044)       - Support for excluding form value from additional button payloads
