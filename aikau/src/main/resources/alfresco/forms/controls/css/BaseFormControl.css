@@ -189,6 +189,9 @@
                      }
                   }
                }
+               > .control-row {
+                  width: ~"calc(100% -" @dialog-label-section ~"- 10px)";
+               }
             }
          }
       }

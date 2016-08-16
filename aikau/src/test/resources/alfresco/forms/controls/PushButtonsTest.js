@@ -27,11 +27,23 @@ define(["module",
         "intern/dojo/node!leadfoot/keys"],
         function(module, defineSuite, assert, TestCommon, keys) {
 
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var checkBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/CheckBox");
+   var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
    var selectors = {
+      buttons: {
+         openDialog: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CREATE_DIALOG"])
+      },
       checkBoxes: {
          toggleDisableState: {
             checkBox: TestCommon.getTestSelector(checkBoxSelectors, "checkbox", ["TOGGLE_DISABLE_STATE"])
+         }
+      },
+      dialogs: {
+         form: {
+            confirmationButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.confirmation.button", ["PUSH_BUTTONS_DIALOG"]),
+            displayed: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["PUSH_BUTTONS_DIALOG"]),
+            hidden: TestCommon.getTestSelector(dialogSelectors, "hidden.dialog", ["PUSH_BUTTONS_DIALOG"]),
          }
       }
    };
@@ -193,6 +205,21 @@ define(["module",
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "No buttons available");
+            });
+      },
+
+      "Check control width in dialog": function() {
+         return this.remote.findByCssSelector(selectors.buttons.openDialog)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.form.displayed)
+         .end()
+
+         .findDisplayedByCssSelector("#DPB_2 .control-row")
+            .getSize()
+            .then(function(size) {
+               assert.closeTo(size.width, 606, 5);
             });
       }
    });
