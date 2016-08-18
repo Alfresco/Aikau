@@ -1,0 +1,254 @@
+{
+   "metadata": {
+      "repositoryId": "b1cca06d-c198-4d37-bd05-f7d6be067d6e",
+      "custom": {
+         "vtiServer": null
+      },
+      "onlineEditing": false,
+      "workingCopyLabel": " (Working Copy)",
+      "shareURL": "http:\/\/dave-Precision-5510:8080\/share",
+      "serverURL": "http:\/\/localhost:8080",
+      "parent": {
+         "permissions": {
+            "user": {},
+            "roles": []
+         }
+      }
+   },
+   "item": {
+      "thumbnailDefinitions": [],
+      "node": {
+         "isLink": false,
+         "nodeRef": "workspace:\/\/SpacesStore\/900c59d8-f59b-46d0-a5d8-cd123ad629c7",
+         "permissions": {
+            "inherited": true,
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;INHERITED"],
+            "user": {
+               "Delete": true,
+               "Write": true,
+               "CancelCheckOut": false,
+               "ChangePermissions": true,
+               "CreateChildren": true,
+               "Unlock": false
+            }
+         },
+         "isLocked": false,
+         "aspects": ["cm:titled", "cm:auditable", "sys:referenceable", "sys:localized"],
+         "isContainer": true,
+         "type": "cm:folder",
+         "properties": {
+            "cm:title": "",
+            "cm:creator": {
+               "firstName": "Administrator",
+               "lastName": "",
+               "displayName": "Administrator",
+               "userName": "admin"
+            },
+            "cm:modifier": {
+               "firstName": "Administrator",
+               "lastName": "",
+               "displayName": "Administrator",
+               "userName": "admin"
+            },
+            "cm:created": {
+               "iso8601": "2016-08-19T07:57:48.446Z",
+               "value": "Fri Aug 19 08:57:48 BST 2016"
+            },
+            "cm:name": "UpdatedFolderName",
+            "sys:store-protocol": null,
+            "sys:node-dbid": null,
+            "sys:store-identifier": null,
+            "sys:locale": null,
+            "cm:modified": {
+               "iso8601": "2016-08-19T07:57:48.446Z",
+               "value": "Fri Aug 19 08:57:48 BST 2016"
+            },
+            "cm:description": "",
+            "sys:node-uuid": null
+         }
+      },
+      "parent": {
+         "isLink": false,
+         "nodeRef": "workspace:\/\/SpacesStore\/fe724c3d-e069-4cbd-85fc-1e795a94a247",
+         "permissions": {
+            "inherited": false,
+            "roles": ["ALLOWED;GROUP_EVERYONE;Contributor;DIRECT"],
+            "user": {
+               "Delete": true,
+               "Write": true,
+               "CancelCheckOut": false,
+               "ChangePermissions": true,
+               "CreateChildren": true,
+               "Unlock": false
+            }
+         },
+         "isLocked": false,
+         "aspects": ["cm:titled", "cm:auditable", "sys:referenceable", "sys:localized", "app:uifacets"],
+         "isContainer": true,
+         "type": "cm:folder",
+         "properties": {
+            "cm:title": "Shared Folder",
+            "cm:creator": {
+               "firstName": "System",
+               "lastName": "User",
+               "displayName": "System User",
+               "userName": "System"
+            },
+            "cm:modifier": {
+               "firstName": "Administrator",
+               "lastName": "",
+               "displayName": "Administrator",
+               "userName": "admin"
+            },
+            "cm:created": {
+               "iso8601": "2016-08-18T09:53:10.235Z",
+               "value": "Thu Aug 18 10:53:10 BST 2016"
+            },
+            "sys:store-protocol": null,
+            "sys:store-identifier": null,
+            "cm:description": "Folder to store shared stuff ",
+            "sys:node-uuid": null,
+            "cm:name": "Shared",
+            "sys:node-dbid": null,
+            "sys:locale": null,
+            "cm:modified": {
+               "iso8601": "2016-08-19T07:57:48.503Z",
+               "value": "Fri Aug 19 08:57:48 BST 2016"
+            },
+            "app:icon": "space-icon-default"
+         }
+      },
+      "version": "1.0",
+      "webdavUrl": "\/webdav\/Shared\/UpdatedFolderName",
+      "isFavourite": false,
+      "likes": {
+         "isLiked": false,
+         "totalLikes": 0
+      },
+      "location": {
+         "repositoryId": "b1cca06d-c198-4d37-bd05-f7d6be067d6e",
+         "path": "\/Shared",
+         "repoPath": "\/Shared",
+         "file": "UpdatedFolderName",
+         "parent": {}
+      },
+      "nodeRef": "workspace:\/\/SpacesStore\/900c59d8-f59b-46d0-a5d8-cd123ad629c7",
+      "fileName": "UpdatedFolderName",
+      "displayName": "UpdatedFolderName",
+      "actionGroupId": "folder-browse",
+      "actions": [{
+         "id": "folder-download",
+         "icon": "document-download",
+         "type": "javascript",
+         "label": "actions.folder.download",
+         "params": {
+            "function": "onActionFolderDownload"
+         },
+         "index": 99100.0,
+         "subgroup": 99.0
+      }, {
+         "id": "folder-view-details",
+         "icon": "folder-view-details",
+         "type": "pagelink",
+         "label": "actions.folder.view-details",
+         "params": {
+            "page": "folder-details?nodeRef={node.nodeRef}"
+         },
+         "index": 99105.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-edit-properties",
+         "icon": "folder-edit-properties",
+         "type": "javascript",
+         "label": "actions.folder.edit-metadata",
+         "params": {
+            "function": "onActionDetails"
+         },
+         "index": 99110.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-copy-to",
+         "icon": "folder-copy-to",
+         "type": "javascript",
+         "label": "actions.folder.copy-to",
+         "params": {
+            "function": "onActionCopyTo"
+         },
+         "index": 99150.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-move-to",
+         "icon": "folder-move-to",
+         "type": "javascript",
+         "label": "actions.folder.move-to",
+         "params": {
+            "function": "onActionMoveTo"
+         },
+         "index": 99160.0,
+         "subgroup": 99.0
+      }, {
+         "id": "folder-manage-rules",
+         "icon": "folder-manage-rules",
+         "type": "pagelink",
+         "label": "actions.folder.rules",
+         "params": {
+            "page": "folder-rules?nodeRef={node.nodeRef}"
+         },
+         "index": 99170.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-delete",
+         "icon": "folder-delete",
+         "type": "javascript",
+         "label": "actions.folder.delete",
+         "params": {
+            "function": "onActionDelete"
+         },
+         "index": 99180.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-manage-repo-permissions",
+         "icon": "folder-manage-permissions",
+         "type": "link",
+         "label": "actions.folder.manage-permissions",
+         "params": {
+            "href": "{managePermissionsUrl}"
+         },
+         "index": 99200.0,
+         "subgroup": 99.0
+      }, {
+         "id": "document-manage-aspects",
+         "icon": "document-manage-aspects",
+         "type": "javascript",
+         "label": "actions.folder.manage-aspects",
+         "params": {
+            "function": "onActionManageAspects"
+         },
+         "index": 99210.0,
+         "subgroup": 99.0
+      }],
+      "indicators": [],
+      "metadataTemplate": {
+         "id": "default",
+         "title": null,
+         "banners": [],
+         "lines": [{
+            "index": "10",
+            "template": "{date}{size}",
+            "view": ""
+         }, {
+            "index": "20",
+            "template": "{description}",
+            "view": "detailed"
+         }, {
+            "index": "30",
+            "template": "{tags}",
+            "view": "detailed"
+         }, {
+            "index": "50",
+            "template": "{social}",
+            "view": "detailed"
+         }]
+      }
+   }
+}

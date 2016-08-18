@@ -56,7 +56,9 @@ define(["module",
             editIcon: TestCommon.getTestSelector(inlineEditSelectors, "edit.icon", ["INLINE_EDIT_3_ITEM_0"]),
             editSave: TestCommon.getTestSelector(inlineEditSelectors, "edit.save", ["INLINE_EDIT_3_ITEM_0"]),
             editCancel: TestCommon.getTestSelector(inlineEditSelectors, "edit.cancel", ["INLINE_EDIT_3_ITEM_0"]),
-            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_3_ITEM_0"])
+            editInput: TestCommon.getTestSelector(inlineEditSelectors, "edit.input", ["INLINE_EDIT_3_ITEM_0"]),
+            progressIndicator: TestCommon.getTestSelector(inlineEditSelectors, "edit.progress", ["INLINE_EDIT_3_ITEM_0"])
+            
          },
          fourth: {
             readValue: TestCommon.getTestSelector(inlineEditSelectors, "readonly.value", ["INLINE_EDIT_4_ITEM_0"]),
@@ -135,7 +137,7 @@ define(["module",
       "Icon appears on mouseover": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .moveMouseTo()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .isDisplayed()
@@ -160,7 +162,7 @@ define(["module",
       "Edit widgets are created on edit": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editForm);
       },
@@ -183,7 +185,7 @@ define(["module",
       "Escape key cancels editing": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .pressKeys([keys.ESCAPE])
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
       },
@@ -191,7 +193,7 @@ define(["module",
       "Clicking on property fires topic": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("TEST_PROPERTY_LINK_CLICK", "Property link topic not published on click");
       },
@@ -211,18 +213,18 @@ define(["module",
                return this.remote.end()
                   .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
                   .click()
-                  .end()
+               .end()
 
                .findByCssSelector(selectors.inlineEditProperties.first.readValue)
                   .isDisplayed()
                   .then(function(result) {
                      assert.isFalse(result, "Edit mode not entered when clicking on icon");
                   })
-                  .end()
+               .end()
 
                .findByCssSelector(selectors.inlineEditProperties.first.editCancel)
                   .click()
-                  .end()
+               .end()
 
                .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
             });
@@ -232,7 +234,7 @@ define(["module",
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .isDisplayed()
@@ -245,11 +247,11 @@ define(["module",
          return this.remote.findDisplayedByCssSelector(selectors.inlineEditProperties.first.editInput)
             .clearValue()
             .type("New")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editSave)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_CRUD_UPDATE", true, "Property update not requested")
             .then(function(payload) {
@@ -270,16 +272,16 @@ define(["module",
       "Scoped property link update has response scoped": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.second.editIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.second.editInput)
             .type("New2")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.second.editSave)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_CRUD_UPDATE", true, "Property update not requested")
             .then(function(payload) {
@@ -291,29 +293,29 @@ define(["module",
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("TEST_PROPERTY_LINK_CLICK", true, "'Test item (topic, no scope)' did not publish correct topic")
             .then(function(payload) {
                assert.propertyVal(payload, "alfResponseScope", "", "'Test item (topic, no scope)' generated incorrect alfResponseScope");
             })
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.second.readValue)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_TEST_PROPERTY_LINK_CLICK", true, "'Test item (topic, scoped)' did not publish correct topic")
             .then(function(payload) {
                assert.propertyVal(payload, "alfResponseScope", "SCOPED_", "'Test item (topic, scoped)' generated incorrect alfResponseScope");
             })
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.third.readValue)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_ALF_NAVIGATE_TO_PAGE", true, "'Test item (no topic, scoped)' did not publish correct topic")
             .then(function(payload) {
@@ -342,12 +344,12 @@ define(["module",
          // Move the mouse over the hidden edit icon...
          return this.remote.findByCssSelector(selectors.inlineEditProperties.fifth.editIcon)
             .moveMouseTo()
-            .end()
+         .end()
 
          // Wait for it to appear and clikc it...
          .findDisplayedByCssSelector(selectors.inlineEditProperties.fifth.editIcon)
             .click()
-            .end()
+         .end()
 
          // Check that the edit value isn't encoded...
          .findDisplayedByCssSelector(selectors.inlineEditProperties.fifth.editInput)
@@ -360,20 +362,75 @@ define(["module",
       "Save value and check XSS is not injected": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.fifth.editSave)
             .click()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.fifth.readValue)
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "<img src=\"1\" onerror=\"window.hackedProperty=true\">");
             })
-            .end()
+         .end()
 
          .execute(function() {
                return !!window.hackedProperty;
             })
             .then(function(isHacked) {
                assert.isFalse(isHacked);
+            });
+      },
+
+      "Update progress indicators are not initially displayed": function() {
+         return this.remote.findByCssSelector(".alfresco-renderers-InlineEditProperty__progress")
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            });
+      },
+
+      "Alt text on progress image contains item label": function() {
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.third.progressIndicator)
+            .getAttribute("alt")
+            .then(function(alt) {
+               assert.equal(alt, "Getting the latest values for Item");
+            });
+      },
+
+      "Edit item with async refresh": function() {
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.third.readValue)
+            .moveMouseTo()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.third.editIcon)
+            .click()
+         .end()
+
+         // No need to update field, new data will be returned by mock service...
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.third.editSave)
+            .click()
+         .end()
+
+         // The progress indicator should be displayued to indicate that new data is being retrieved...
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.third.progressIndicator)
+         .end()
+
+         .sleep(2000) // Matching the async delay on the mock response
+
+         .findDisplayedByCssSelector(selectors.inlineEditProperties.third.readValue)
+            .getVisibleText()
+            .then(function(readValue) {
+               assert.equal(readValue, "UpdatedFolderName");
+            });
+      },
+
+      "Link path is updated with name": function() {
+         return this.remote.findByCssSelector(selectors.inlineEditProperties.third.readValue)
+            .clearLog()
+            .click()
+         .end()
+
+         .getLastPublish("SCOPED_ALF_DOCUMENTLIST_PATH_CHANGED")
+            .then(function(payload) {
+               assert.propertyVal(payload, "path", "/Shared/UpdatedFolderName");
             });
       }
    });
