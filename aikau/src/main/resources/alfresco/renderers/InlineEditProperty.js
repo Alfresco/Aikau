@@ -44,6 +44,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/InlineEditProperty.html",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/Deferred",
         "dojo/on",
         "dojo/dom-class",
         "dojo/html",
@@ -56,7 +57,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 template, lang, array, on, domClass, html, domAttr, keys, event, query) {
+                 template, lang, array, on, Deferred, domClass, html, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
@@ -215,6 +216,52 @@ define(["dojo/_base/declare",
       showOkCancelActions: true,
 
       /**
+       * The source file for the image to use to display when an item is being updated. This will
+       * typically only be displayed when an XHR request is made to retrieve the latest data for
+       * the item being edited.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.83
+       */
+      updateInProgressImgSrc: null,
+
+      /**
+       * The alt text label to use for the update in progress indicator.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.83
+       */
+      updateInProgressAltText: "inline-edit.update-in-progress.altText",
+
+      /**
+       * The alt text label to use for the update in progress indicator when the 
+       * [updateInProgressItemLabelProperty]{@link module:alfresco/renderers/InlineEditProperty#updateInProgressItemLabelProperty}
+       * does not match a value in the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.83
+       */
+      updateInProgressNoLabelAltText: "inline-edit.update-in-progress.no-label.altText",
+
+      /**
+       * The property to to retrieve from the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}
+       * to insert into the [updateInProgressAltText]{@link module:alfresco/renderers/InlineEditProperty#updateInProgressAltText}
+       * that identifies the overall item being updated (rather than just the individual property that is being changed).
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.83
+       */
+      updateInProgressItemLabelProperty: "displayName",
+
+      /**
        * The topic to publish when a property edit should be persisted. For convenience it is assumed that document
        * or folder properties are being edited so this function is called whenever a 'publishTopic' attribute
        * has not been set. The defaults are to publish on the "ALF_CRUD_CREATE" topic which will publish a payload
@@ -247,6 +294,24 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_renderers_InlineEditProperty__postMixInProperties() {
          this.inherited(arguments);
          
+         // NOTE: We're just re-using the same progress indicator as used for forms validation here,
+         //       although this could be updated in the future to be something else...
+         if (!this.updateInProgressImgSrc)
+         {
+            this.updateInProgressImgSrc = require.toUrl("alfresco/forms/controls/css/images/ajax_anim.gif");
+         }
+         var itemLabel = lang.getObject(this.updateInProgressItemLabelProperty, false, this.currentItem);
+         if (itemLabel)
+         {
+            this.updateInProgressAltText = this.message(this.updateInProgressAltText, {
+               0: itemLabel
+            });
+         }
+         else
+         {
+            this.updateInProgressAltText = this.message(this.updateInProgressNoLabelAltText);
+         }
+
          // If no topic has been provided then assume the default behaviour of editing document/folder properties
          if (!this.publishTopic)
          {
@@ -476,6 +541,8 @@ define(["dojo/_base/declare",
        */
       onSave: function alfresco_renderers_InlineEditProperty__onSave(formPayload) {
          /*jshint unused:false*/
+         domClass.add(this.domNode, "alfresco-renderers-InlineEditProperty--updating");
+
          var responseTopic = this.generateUuid();
          var payload = lang.clone(this.getGeneratedPayload(false, null));
          payload.alfResponseTopic = responseTopic;
@@ -515,15 +582,50 @@ define(["dojo/_base/declare",
          // form, etc)
          if (this.refreshCurrentItem === true)
          {
-            lang.setObject(this.propertyToRender, this.originalRenderedValue, this.currentItem);
+            this.updateCurrentItem(payload).then(lang.hitch(this, this.reRenderProperty));
          }
-         
+         else
+         {
+            this.reRenderProperty();
+         }
+      },
+
+      /**
+       * This function is called from [onSaveSuccess]{@link module:alfresco/renderers/InlineEditProperty#onSaveSuccess}
+       * to re-render the property after an edit has successfully been saved.
+       * 
+       * @instance
+       * @param {object} payload The success payload
+       * @since 1.0.83
+       */
+      reRenderProperty: function alfresco_renderers_InlineEditProperty__reRenderProperty() {
          this.renderedValue = this.generateRendering(this.renderedValue);
          html.set(this.renderedValueNode, this.renderedValue);
          domClass.remove(this.renderedValueNode, "hidden");
          domClass.add(this.editNode, "hidden");
          this.updateCssClasses();
          this.renderedValueNode.focus();
+
+         domClass.remove(this.domNode, "alfresco-renderers-InlineEditProperty--updating");
+      },
+
+      /**
+       * This function is called from [onSaveSuccess]{@link module:alfresco/renderers/InlineEditProperty#onSaveSuccess}
+       * when [refreshCurrentItem]{@link module:alfresco/renderers/InlineEditProperty#refreshCurrentItem} is true
+       * and allows the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} to be updated
+       * with the latest data following the update.
+       * 
+       * @instance
+       * @param {object} payload The success payload
+       * @returns {object} A promise of the udpate that by default is immediately resolved.
+       * @since 1.0.83
+       * @overridable
+       */
+      updateCurrentItem: function alfresco_renderers_InlineEditProperty__updateCurrentItem(/*jshint unused:false*/ payload) {
+         var d = new Deferred();
+         lang.setObject(this.propertyToRender, this.originalRenderedValue, this.currentItem);
+         d.resolve();
+         return d;
       },
 
       /**
