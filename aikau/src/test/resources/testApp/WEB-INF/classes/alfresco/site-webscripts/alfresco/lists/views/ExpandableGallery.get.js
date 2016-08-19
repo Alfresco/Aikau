@@ -1,3 +1,11 @@
+/* global page */
+/* jshint sub:true */
+var resizeByColumnCount = true;
+if (page.url.args["resizeByColumnCount"])
+{
+   resizeByColumnCount = page.url.args["resizeByColumnCount"] === "true";
+}
+
 model.jsonModel = {
    services: [
       {
@@ -29,7 +37,8 @@ model.jsonModel = {
                {
                   name: "alfresco/documentlibrary/views/AlfGalleryView",
                   config: {
-                     columns: 10,
+                     resizeByColumnCount: resizeByColumnCount,
+                     columns: 5,
                      enableHighlighting: true,
                      itemKeyProperty: "nodeRef",
                      expandTopics: ["EXPAND"],
