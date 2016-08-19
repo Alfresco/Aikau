@@ -1,4 +1,4 @@
-Aikau 1.0.82 Release Notes
+Aikau 1.0.83 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.83:
+* [AKU-1053](https://issues.alfresco.com/jira/browse/AKU-1053)       - Support for grouped form rules
+* [AKU-1054](https://issues.alfresco.com/jira/browse/AKU-1054)       - Ensure expanded panels remain expanded on grid resize
+* [AKU-1069](https://issues.alfresco.com/jira/browse/AKU-1069)       - Full metadata refresh on InlineEditPropertyLink
+* [AKU-1071](https://issues.alfresco.com/jira/browse/AKU-1071)       - PushButton in form dialog layout fix
+
 1.0.82:
 * [AKU-1061](https://issues.alfresco.com/jira/browse/AKU-1061)       - Update bulk action filtering to include file type
 * [AKU-1063](https://issues.alfresco.com/jira/browse/AKU-1063)       - Ensure that SelectedItemStateMixin publishes empty array for zero-item selection
