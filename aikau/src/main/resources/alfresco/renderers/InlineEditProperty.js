@@ -617,6 +617,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} payload The success payload
+       * @returns {object} A promise of the udpate that by default is immediately resolved.
        * @since 1.0.83
        * @overridable
        */

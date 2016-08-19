@@ -66,6 +66,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @since 1.0.83
+       * @fires module:alfresco/core/topics#GET_DOCUMENT
        */
       updateCurrentItem: function alfresco_renderers__ItemLinkMixin__updateCurrentItem() {
          var d = new Deferred();
