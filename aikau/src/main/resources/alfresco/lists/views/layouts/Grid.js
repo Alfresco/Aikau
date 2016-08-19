@@ -226,6 +226,31 @@ define(["dojo/_base/declare",
       thumbnailSize: null,
 
       /**
+       * Keeps tracks of the last set [expandedItemKey]{@link module:alfresco/lists/views/Grid#expandedItemKey}
+       * in order to allow the [expandedPanel]{@link module:alfresco/lists/views/Grid#expandedPanel} to be 
+       * re-expanded following a resize events that re-renders the data.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.83
+       */
+      _lastExpandedItemKey: null,
+
+      /**
+       * Logs the last requested widgets model provided in a call to 
+       * [expandedPanel]{@link module:alfresco/lists/views/Grid#expandedPanel} in order to be able to recreate
+       * the last [expandedPanel]{@link module:alfresco/lists/views/Grid#expandedPanel} following resize
+       * events.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.83
+       */
+      _lastExpandedWidgets: null,
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        *
        * @instance postCreate
@@ -352,6 +377,8 @@ define(["dojo/_base/declare",
 
                if (payload.widgets)
                {
+                  this._lastExpandedWidgets = payload.widgets;
+
                   var wc = new WidgetsCreator({ 
                      widgets: payload.widgets,
 
@@ -394,7 +421,7 @@ define(["dojo/_base/declare",
          {
             focusedChild.blur();
          }
-         domClass.remove(focusedChild.domNode.parentNode, "alfresco-lists-views-layouts-Grid__cell--focused");
+         (focusedChild.domNode && focusedChild.domNode.parentNode) && domClass.remove(focusedChild.domNode.parentNode, "alfresco-lists-views-layouts-Grid__cell--focused");
       },
 
       /**
@@ -566,6 +593,9 @@ define(["dojo/_base/declare",
                      });
                      domConstruct.empty(this.containerNode);
                      
+                     this._lastExpandedItemKey = this.expandedItemKey;
+                     this.collapsePanel();
+
                      // Re-render the data for the new columns...
                      this.renderData();
                   }
@@ -737,6 +767,17 @@ define(["dojo/_base/declare",
          if (lastColumn !== 0)
          {
             this.completeRow(lastColumn);
+         }
+
+         // If a panel was previously expanded before the data was re-rendered then we want to ensure that
+         // it is expanded again (see AKU-1054)
+         if (this._lastExpandedItemKey)
+         {
+            var payload = {
+               widgets: this._lastExpandedWidgets
+            };
+            payload[this.itemKeyProperty] = this._lastExpandedItemKey;
+            this.expandPanel(payload);
          }
          
          if(this.showNextLink &&
