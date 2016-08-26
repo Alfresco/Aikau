@@ -34,6 +34,7 @@ define(["module",
 
       "Drag form onto target": function() {
          return this.remote.dragOnto("#dojoUnique2 .title", ".alfresco-dnd-DragAndDropTarget > div")
+         
          .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The dropped item was found");
@@ -42,16 +43,22 @@ define(["module",
 
       "Add two controls to form": function() {
          // Select form control
-         return this.remote.pressKeys(keys.TAB)
+         return this.remote.clearLog()
+            .tabToElement({
+               selector: "#DRAG_PALETTE .alfresco-dnd-DragAndDropItem",
+               index: 0,
+               maxTabs: 50
+            })
             .sleep(pause)
             .pressKeys(keys.ENTER)
 
          // Add to form (select the preview panel with the mouse and use enter to add the selected item)...
-         .findByCssSelector(".alfresco-dnd-DragAndDropTarget .alfresco-dnd-DragAndDropTarget .previewPanel")
+         .findDisplayedByCssSelector(".alfresco-dnd-DragAndDropTarget .alfresco-dnd-DragAndDropTarget .previewPanel")
             .click()
-            .end()
-            .pressKeys(keys.ENTER)
-            .pressKeys(keys.ENTER)
+         .end()
+            
+         .pressKeys(keys.ENTER)
+         .pressKeys(keys.ENTER)
 
          .findAllByCssSelector("#ROOT_DROPPED_ITEMS1 .alfresco-dnd-DragAndDropTarget .alfresco-dnd-DragAndDropTarget > div.previewPanel > .alfresco-dnd-DroppedItemWrapper")
             .then(function(elements) {
@@ -63,14 +70,16 @@ define(["module",
          // Click to edit the form control...
          return this.remote.findByCssSelector(".alfresco-dnd-DragAndDropTarget .alfresco-dnd-DragAndDropTarget .previewPanel .action.edit img")
             .click()
-            .end()
-            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #FIELD_ID .dijitInputContainer input")
+         .end()
+         
+         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #FIELD_ID .dijitInputContainer input")
             .clearValue()
             .type("field1")
-            .end()
-            .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .confirmationButton > span")
+         .end()
+   
+         .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .confirmationButton > span")
             .click()
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".dialogDisplayed");
       },
@@ -79,17 +88,17 @@ define(["module",
          // We want to make sure that editing the form won't hide the nested form control...
          return this.remote.findByCssSelector(".alfresco-dnd-DragAndDropTarget .previewPanel .action.edit img")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogDisplayed")
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .confirmationButton > span")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-dnd-DragAndDropTarget .alfresco-dnd-DragAndDropTarget .previewPanel .action.edit img")
             .then(function(elements) {
@@ -101,23 +110,23 @@ define(["module",
          // Edit the second control...
          return this.remote.findByCssSelector(".alfresco-dnd-DroppedItemWrapper:nth-child(2) .action.edit img")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogDisplayed")
-            .end()
+         .end()
 
          // Reveal the dynamic visibility controls...
          .findById("TABS_TABCONTAINER_tablist_TABS_DYNAMIC")
             .click()
-            .end()
+         .end()
 
          // Add a new visibility rule...
          .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.TAB)
-            .sleep(pause)
-            .pressKeys(keys.SPACE)
-            .sleep(pause)
+         .sleep(pause)
+         .pressKeys(keys.TAB)
+         .sleep(pause)
+         .pressKeys(keys.SPACE)
+         .sleep(pause)
 
          // Count the numnber of fields that can be referenced...
          .findAllByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG #DYNAMIC_VISIBILITY_RULES .alfresco-forms-controls-Select tr")
@@ -129,14 +138,14 @@ define(["module",
       "Preview the form": function() {
          return this.remote.findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG .cancellationButton > span")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_DROPPED_ITEM_CONFIGURATION_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .findByCssSelector("#FORM1 .buttons > span:nth-child(2) > span")
             .click()
-            .end()
+         .end()
 
          .sleep(5000) // Give the preview time to render
 
