@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Form Layout Rule Processing</shortname>
+  <description>This page is used to test that form layout widgets can be configured with dynamic rules that are applied to all their child form controls.</description>
+  <family>aikau-unit-tests</family>
+  <url>/LayoutRules</url>
+</webscript>

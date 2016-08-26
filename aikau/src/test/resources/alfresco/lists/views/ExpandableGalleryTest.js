@@ -210,4 +210,26 @@ define(["module",
             });
       }
    });
+
+   defineSuite(module, {
+      name: "Expandable Gallery View Tests (resizeByColumnCount=false)",
+      testPage: "/ExandableGallery?resizeByColumnCount=false",
+
+      "Select an item, check the expanded panel is shown": function() {
+         return this.remote.findDisplayedById("CELL_CONTAINER_ITEM_0")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
+      },
+
+      "Resize window to make sure expanded cell remains the same size": function() {
+         return this.remote.findByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel td")
+         .end()
+
+         .setWindowSize(null, 1500, 768)
+
+         .findDisplayedByCssSelector(".alfresco-lists-views-layouts-Grid__expandedPanel");
+      }
+   });
 });

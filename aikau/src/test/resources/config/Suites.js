@@ -31,7 +31,7 @@ define(function() {
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/documentlibrary/AlfDocumentActionMenuItemTest"
+      "alfresco/renderers/InlineEditPropertyLinkTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -124,6 +124,7 @@ define(function() {
       "alfresco/forms/FormValidationTest",
       "alfresco/forms/HashFormTest",
       "alfresco/forms/LateFieldRegistrationTest",
+      "alfresco/forms/LayoutRulesTest",
       "alfresco/forms/SingleTextFieldFormTest",
       "alfresco/forms/TabsInFormsTest",
 

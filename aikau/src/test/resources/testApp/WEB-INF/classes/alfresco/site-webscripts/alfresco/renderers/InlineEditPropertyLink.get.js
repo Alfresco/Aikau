@@ -42,7 +42,7 @@ function getPropertyLinkWidgets(id) {
    ];
 }
 
-function getPropertyLinkWidgetsNoTopic(id) {
+function getPropertyLinkWidgetsNoTopic(id, propertyToRender) {
    return [
       {
          name: "alfresco/lists/views/layouts/Row",
@@ -57,7 +57,7 @@ function getPropertyLinkWidgetsNoTopic(id) {
                            name: "alfresco/renderers/InlineEditPropertyLink",
                            config: {
                               permissionProperty: null,
-                              propertyToRender: "name",
+                              propertyToRender: propertyToRender,
                               publishTopic: "ALF_CRUD_UPDATE",
                               publishPayloadType: "PROCESS",
                               publishPayloadModifiers: ["processCurrentItemTokens"],
@@ -65,6 +65,7 @@ function getPropertyLinkWidgetsNoTopic(id) {
                               publishPayload: {
                                  url: "api/solr/facet-config/{name}"
                               },
+                              refreshCurrentItem: true,
                               hiddenDataRules: [
                                  {
                                     name: "hiddenData",
@@ -96,6 +97,7 @@ model.jsonModel = {
          }
       },
       "aikauTesting/mockservices/MockCrudService",
+      "alfresco/services/DocumentService",
       "alfresco/services/ErrorReporter"
    ],
    widgets:[
@@ -136,11 +138,18 @@ model.jsonModel = {
             currentData: {
                items: [
                   {
-                     name: "Test item (no topic, scoped)"
+                     displayName: "Item",
+                     nodeRef: "workspace://SpacesStore/900c59d8-f59b-46d0-a5d8-cd123ad629c7",
+                     node: {
+                        nodeRef: "workspace://SpacesStore/900c59d8-f59b-46d0-a5d8-cd123ad629c7",
+                        properties: {
+                           "cm:name": "Test item (no topic, scoped)"
+                        }
+                     }
                   }
                ]
             },
-            widgets: getPropertyLinkWidgetsNoTopic("INLINE_EDIT_3")
+            widgets: getPropertyLinkWidgetsNoTopic("INLINE_EDIT_3", "node.properties.cm:name")
          }
       },
       {
@@ -169,6 +178,12 @@ model.jsonModel = {
                ]
             },
             widgets: getPropertyLinkWidgets("INLINE_EDIT_5")
+         }
+      },
+      {
+         name: "aikauTesting/mockservices/FolderNodeMockXhr",
+         config: {
+            respondAfter: 2000
          }
       },
       {

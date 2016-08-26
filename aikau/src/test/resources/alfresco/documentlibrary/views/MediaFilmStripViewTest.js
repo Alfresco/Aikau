@@ -72,9 +72,9 @@ define(["module",
       },
 
       "Go back to the video preview, check the audio stops": function() {
-         return this.remote.findByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev img")
+         return this.remote.findDisplayedByCssSelector("#FILMSTRIP_VIEW_PREVIEWS .prev img")
             .click()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector("audio")
             .execute("return document.querySelector('audio').paused")

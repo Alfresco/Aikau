@@ -29,8 +29,9 @@ define(["dojo/_base/declare",
         "alfresco/core/UrlUtilsMixin",
         "alfresco/core/topics",
         "dojo/_base/lang",
-        "dojo/_base/event"], 
-        function(declare, AlfConstants, UrlUtilsMixin, topics, lang, event) {
+        "dojo/_base/event",
+        "dojo/Deferred"], 
+        function(declare, AlfConstants, UrlUtilsMixin, topics, lang, event, Deferred) {
    
    return declare([UrlUtilsMixin], {
 
@@ -57,6 +58,34 @@ define(["dojo/_base/declare",
          event.stop(evt);
          this.alfLog("log", "Item link clicked: ", payload, this);
          this.alfPublish(this.linkClickTopic, payload);
+      },
+
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/renderers/InlineEditProperty#updateCurrentItem}
+       * to reload the metadata for the item.
+       * 
+       * @instance
+       * @since 1.0.83
+       * @fires module:alfresco/core/topics#GET_DOCUMENT
+       */
+      updateCurrentItem: function alfresco_renderers__ItemLinkMixin__updateCurrentItem() {
+         var d = new Deferred();
+         
+         var responseTopic = this.generateUuid();
+         var handle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, function(payload) {
+            this.alfUnsubscribe(handle);
+            this.currentItem = payload.response.item;
+            this.originalRenderedValue = this.getRenderedProperty(lang.getObject(this.propertyToRender, false, this.currentItem));
+            this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
+            d.resolve();
+         }), true);
+
+         this.alfServicePublish(topics.GET_DOCUMENT, {
+            alfResponseTopic: responseTopic,
+            nodeRef: this.currentItem.nodeRef
+         });
+
+         return d;
       },
 
       /**
