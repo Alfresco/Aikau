@@ -155,6 +155,7 @@
  * @property {boolean} [showValidationErrorsImmediately=true] Indicates whether or not to display form errors immediately
  * @property {object} [customFormConfig=null] Any additional configuration that can be applied to a [Form]{@link module:alfresco/forms/Form} (please note that the following form configuration
  * attributes will always be overridden by specific form dialog configuration: "additionalCssClasses", "displayButtons", "widgets", "value", "warnings" and "warningsPosition")
+ * @property {boolean} [noMinWidth=false] Indicates whether the minimum width restriction should be lifted
  */
 
 /**
@@ -175,6 +176,7 @@
  * @property {Array} [publishOnShow=null] - An array of publications objects to make when the dialog is displayed
  * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
  * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
+ * @property {boolean} [noMinWidth=false] Indicates whether the minimum width restriction should be lifted
  */
 
 define(["dojo/_base/declare",
@@ -479,7 +481,8 @@ define(["dojo/_base/declare",
             contentWidth: payload.contentWidth ? payload.contentWidth : null,
             contentHeight: payload.contentHeight ? payload.contentHeight : null,
             handleOverflow: handleOverflow,
-            fixedWidth: fixedWidth
+            fixedWidth: fixedWidth,
+            noMinWidth: payload.noMinWidth || false
          };
 
          // Ensure that text content is center aligned (see AKU-368)...
@@ -723,6 +726,7 @@ define(["dojo/_base/declare",
             duration: config.duration || 0,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
+            noMinWidth: config.noMinWidth || false,
             fullScreenMode: config.fullScreenMode || false,
             fullScreenPadding: !isNaN(config.fullScreenPadding) ? config.fullScreenPadding : 10,
             parentPubSubScope: config.parentPubSubScope,

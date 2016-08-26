@@ -169,6 +169,64 @@ model.jsonModel = {
                            }
                         ]
                      }
+                  },
+                  {
+                     id: "VALIDATION_HIDDEN_TEXTBOX",
+                     name: "alfresco/forms/controls/TextBox",
+                     config: {
+                        label: null, // PLEASE NOTE: Label left intentionally blank for testing purposes (AKU-951)
+                        description: "Required (but requirement and validation hidden)",
+                        name: "name",
+                        value: "",
+                        requirementConfig: {
+                           initialValue: true
+                        },
+                        hideValidation: true
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
+         id: "SHOW_PICKER_IN_DIALOG",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Show picker with hidden validation in dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "VALIDATION_DIALOG_2",
+               dialogTitle: "SimplePicker",
+               formSubmissionTopic: "POST_DIALOG_FORM",
+               formSubmissionGlobal: true,
+               noMinWidth: true,
+               widgets: [
+                  {
+                     id: "SIMPLE_PICKER",
+                     name: "alfresco/forms/controls/SimplePicker",
+                     config: {
+                        label: null,
+                        description: "SimplePicker in form, without label, required but with hidden validation",
+                        name: "picker1",
+                        reorderable: true,
+                        currentData: {
+                           items: [
+                              {
+                                 name: "One"
+                              },
+                              {
+                                 name: "Two"
+                              },
+                              {
+                                 name: "Three"
+                              }
+                           ]
+                        },
+                        requirementConfig: {
+                           initialValue: true
+                        },
+                        hideValidation: true
+                    }
                   }
                ]
             }
