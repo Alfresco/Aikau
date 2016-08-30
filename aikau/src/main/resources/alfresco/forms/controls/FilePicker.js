@@ -351,18 +351,32 @@ define(["dojo/_base/declare",
        * @param {object} value The value to set
        */
       setValue: function alfresco_forms_controls_FilePicker__setValue(value) {
-         if (value && this.valueDelimiter)
+         if (ObjectTypeUtils.isString(value))
          {
-            value = value.split(this.valueDelimiter);
+            if (this.valueDelimiter)
+            {
+                value = value.split(this.valueDelimiter);
+            }
+            else
+            {
+                value = [value];
+            }
+            
             value = array.map(value, function(valueItem) {
-               var v = {};
-               v[this.itemKeyProperty] = valueItem;
-               return v;
+                var v = {};
+                v[this.itemKeyProperty] = valueItem;
+                return v;
             }, this);
          }
 
          if (value && ObjectTypeUtils.isArray(value))
          {
+            if (!this.multipleItemSelection && value.length > 1)
+            {
+                this.alfLog("warn", "More than one element in value array set for single-selection FilePicker - only using first element", value, this);
+                value = [value[0]];
+            }
+             
             // Because it might be necessary to retrieve the metadata for the files we need to keep
             // track of the all the values that will be handled. We can't set this.value and
             // this.selectedFiles until all metadata has been asynchronously retrieved (otherwise the
@@ -370,7 +384,9 @@ define(["dojo/_base/declare",
             // Tracking the metadata retrieval and using tmp values ensures the form value is correct
             // on load...
             var valueCount = value.length;
-            var tmpValue = [], tmpSelectedFiles = [];
+            var tmpValue, tmpSelectedFiles = [];
+            
+            tmpValue = this.multipleItemSelection ? [] : null;
 
             // This is possibly not the optimal way of achiving this, but it is expected that only 
             // a small number of files will be pre-selected at a time (and there is no other REST 
@@ -392,7 +408,15 @@ define(["dojo/_base/declare",
                      var updatedFile = payload.response.item;
                      this.normaliseFile(updatedFile);
                      
-                     tmpValue.push(lang.getObject(this.itemKeyProperty, false, updatedFile));
+                     var itemKey = lang.getObject(this.itemKeyProperty, false, updatedFile);
+                     if (this.multipleItemSelection)
+                     {
+                         tmpValue.push(itemKey);
+                     }
+                     else
+                     {
+                         tmpValue = itemKey;
+                     }
                      tmpSelectedFiles.push(updatedFile);
 
                      valueCount--;
@@ -566,14 +590,22 @@ define(["dojo/_base/declare",
        * @instance
        */
       onFileSelectionConfirmed: function alfresco_forms_controls_FilePicker__onFileSelectionConfirmed() {
-         var updatedValue = [];
+         var updatedValue = this.multipleItemSelection ? [] : null;
+         
          if (this.selectedFiles)
          {
             array.forEach(this.selectedFiles, function(file) {
                var itemKey = lang.getObject(this.itemKeyProperty, false, file);
                if (itemKey)
                {
-                  updatedValue.push(itemKey);
+                  if (this.multipleItemSelection)
+                  {
+                      updatedValue.push(itemKey);
+                  }
+                  else
+                  {
+                      updatedValue = itemKey;
+                  }
                }
             }, this);
          }
