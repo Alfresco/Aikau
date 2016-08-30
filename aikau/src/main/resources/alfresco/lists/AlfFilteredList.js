@@ -210,6 +210,29 @@ define(["dojo/_base/declare",
       summaryWidgetsMappingId: "FILTER_SUMMARY",
 
       /**
+       * This is an optional map of filter values to labels. The map should have filter name attributes that are 
+       * mapped to a sub-map of values to labels, e.g. 
+       *
+       * @example
+       * filterSummaryLabelMapping: {
+       *   name: {
+       *     ted: "Edward",
+       *     bob: "Robert"
+       *   },
+       *   age: {
+       *     10: "Ten",
+       *     20: "Twenty"
+       *   }
+       * }
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.84
+       */
+      filterSummaryLabelMapping: null,
+
+      /**
        * The filter widgets
        *
        * @instance
@@ -512,7 +535,10 @@ define(["dojo/_base/declare",
       widgetsForFilterSummary: [
          {
             id: "{id}_FILTER_SUMMARY",
-            name: "alfresco/lists/utilities/FilterSummary"
+            name: "alfresco/lists/utilities/FilterSummary",
+            config: {
+               labelMap: "{filterSummaryLabelMapping}"
+            }
          }
       ]
    });

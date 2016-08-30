@@ -91,6 +91,12 @@ model.jsonModel = {
                               useHash: true,
                               filteringTopics: ["_valueChangeOf_FILTER"],
                               showFilterSummary: true,
+                              filterSummaryLabelMapping: {
+                                 description: {
+                                    moo: "A cow Goes",
+                                    woof: "A dog says"
+                                 }
+                              },
                               widgetsForFilters: [
                                  {
                                     id: "COMPOSITE_TEXTBOX",
