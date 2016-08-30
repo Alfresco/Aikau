@@ -250,7 +250,7 @@ define(["dojo/_base/declare",
          var simplePanelHeight = null;
          if (this.contentHeight)
          {
-            simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
+            simplePanelHeight = (Math.min(maxHeight, parseInt(this.contentHeight, 10)) - paddingAdjustment) + "px";
          }
          
          calculatedHeights.documentHeight = docHeight;
@@ -361,7 +361,7 @@ define(["dojo/_base/declare",
                assignTo: "_dialogPanel",
                config: {
                   handleOverflow: this.handleOverflow,
-                  height: calculatedHeights.simplePanelHeight,
+                  height: !this.handleOverflow && this.contentHeight ? "100%" : calculatedHeights.simplePanelHeight,
                   widgets: this.widgetsContent
                }
             }];

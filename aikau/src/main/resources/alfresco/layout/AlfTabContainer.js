@@ -437,6 +437,7 @@ define(["dojo/_base/declare",
          this._tabContainerChildrenPromise = new Deferred();
          this.createTabContainer();
          this.alfSetupResizeSubscriptions(this.onResize, this);
+         this.addResizeListener(this.domNode);
          if (this.padded)
          {
             domClass.add(this.domNode, "alfresco-layout-AlfTabContainer--padded");

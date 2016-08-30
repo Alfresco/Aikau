@@ -224,6 +224,7 @@ define(["dojo/_base/declare",
                            widgetsContent: widgets,
                            contentWidth: "800px",
                            contentHeight: "700px",
+                           handleOverflow : false,
                            widgetsButtons: [
                               {
                                  id: this.id + "_CONFIRMATION_BUTTON",
