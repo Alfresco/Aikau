@@ -374,6 +374,18 @@ define(["dojo/_base/declare",
       valueDelimiter: null,
 
       /**
+       * This indicates whether or not the validation elements are hidden (for example the invalid
+       * field indicator and any validation messages). This would typically be used for form dialogs
+       * where the fields have no label.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.84
+       */
+      hideValidation: false,
+
+      /**
        * The default visibility status is always true (this can be overridden by extending controls).
        *
        * @instance
@@ -1191,6 +1203,11 @@ define(["dojo/_base/declare",
          if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
+         }
+
+         if (this.hideValidation)
+         {
+            domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--validation-hidden");
          }
 
          if (this.inlineHelp)

@@ -166,6 +166,17 @@ define(["dojo/_base/declare",
       handleOverflow: true,
 
       /**
+       * Indicates the the default minimum width rules for the dialog (controlled through LESS
+       * variables) can be ignored.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.84
+       */
+      noMinWidth: false,
+
+      /**
        * A placeholder for the resize-listener that's enabled while the dialog is visible. This
        * value is set automatically.
        *
@@ -306,6 +317,10 @@ define(["dojo/_base/declare",
          if (this.additionalCssClasses)
          {
             domClass.add(this.domNode, this.additionalCssClasses);
+         }
+         if (this.noMinWidth)
+         {
+            domClass.add(this.domNode, "alfresco-dialog-AlfDialog--no-min-width");
          }
 
          // Set a width for the dialog
