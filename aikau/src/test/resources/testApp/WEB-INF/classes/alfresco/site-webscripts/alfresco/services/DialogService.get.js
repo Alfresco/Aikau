@@ -731,6 +731,38 @@ model.jsonModel = {
          }
       },
       {
+         id: "CLONED_MODEL",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Verify Model Cloned",
+            publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+            publishPayload: {
+               dialogId: "VERIFY_CLONED_MODEL_DIALOG",
+               dialogTitle: "Check Auto Save Topic",
+               hideTopic: "ALF_CRUD_CREATE",
+               widgetsContent: [
+                  {
+                     name: "alfresco/forms/Form",
+                     config: {
+                        autoSavePublishTopic: "AUTO_SAVE_TOPIC",
+                        autoSavePublishGlobal: true,
+                        widgets: [
+                           {
+                              id: "TB6",
+                              name: "alfresco/forms/controls/TextBox",
+                              config: {
+                                 label: "Change is published",
+                                 name: "detectChange"
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]
