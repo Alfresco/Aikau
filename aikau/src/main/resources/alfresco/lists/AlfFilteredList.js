@@ -466,6 +466,8 @@ define(["dojo/_base/declare",
       setupFilteringTopics: function alfresco_lists_AlfFilteredList__setupFilteringTopics(filter) {
          if (filter && filter.config && filter.config.fieldId)
          {
+            // See AKU-1076 - ensure filteringTopics do not require explicit configuration
+            !!!this.filteringTopics && (this.filteringTopics = []);
             this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
             if (this.mapHashVarsToPayload) 
             {
