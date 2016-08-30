@@ -109,6 +109,14 @@ define(["alfresco/core/topics",
          if (this.wrappedWidget)
          {
             this.wrappedWidget.on("keyup", lang.hitch(this, this.handleKeyUp));
+            // Paste event is called before the pasted value is applied to the source element - we use a setTimeout
+            // to catch the value on the next time around the browser event loop. This is a little messy but works
+            // consistently on all supported browsers.
+            this.wrappedWidget.on("paste", lang.hitch(this, function() {
+               setTimeout(lang.hitch(this, function() {
+                  this.handleKeyUp({keyCode:0});
+               }), 0);
+            }));
             if (typeof this.wrappedWidget.watch === "function")
             {
                this.own(this.wrappedWidget.watch("value", lang.hitch(this, this.fireChangeEvent)));
