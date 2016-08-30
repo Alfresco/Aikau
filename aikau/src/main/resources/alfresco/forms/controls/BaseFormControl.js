@@ -1917,64 +1917,9 @@ define(["dojo/_base/declare",
             var addedName = this.name + this.addedNameSuffix;
             var removedName = this.name + this.removedNameSuffix;
 
-            if (this.initialFileSelection)
-            {
-               var initialPick = this.initialFileSelection;
-               var currentPick = this.getValue();
-               if (this.valueDelimiter)
-               {
-                  initialPick = this.initialFileSelection.split(this.valueDelimiter);
-                  currentPick = currentPick.split(this.valueDelimiter);
-               }
-               
-               var added = [];
-               var removed = [];
-
-               array.forEach(currentPick, function(currFile) {
-                  // If the current picked file was in the inital selection it has not been added...
-                  // ... BUT if the current pick was NOT in the inital selection it HAS been added
-                  if (array.some(initialPick, function(initialFile) {
-                     return currFile === initialFile;
-                  })) {
-                     // No action required, the current pick was also in the initial pick...
-                  }
-                  else
-                  {
-                     // The current pick was not an initial pick so has been added...
-                     added.push(currFile);
-                  }
-               }, this);
-
-               array.forEach(initialPick, function(initialFile) {
-                  // If the initially picked file is in the current selection it has not been removed...
-                  // ... BUT if the initially picked file is NOT in the current selection it HAS been removed
-                  if (array.some(currentPick, function(currFile) {
-                     return currFile === initialFile;
-                  })) {
-                     // No action required, the current pick was also in the initial pick...
-                  }
-                  else
-                  {
-                     // The initial pick is not a current pick so has been removed...
-                     removed.push(initialFile);
-                  }
-               }, this);
-
-               if (this.valueDelimiter)
-               {
-                  added = added.join(this.valueDelimiter);
-                  removed = removed.join(this.valueDelimiter);
-               }
-
-               lang.setObject(addedName, added, values);
-               lang.setObject(removedName, removed, values);
-            }
-            else
-            {
-               // Nothing removed, everything added...
-               lang.setObject(addedName, this.getValue(), values);
-               lang.setObject(removedName, (this.valueDelimiter ? "": []), values);
-            }
+            // special form controls may store initial value but by default we consider everything as "added"
+            lang.setObject(addedName, this.getValue(), values);
+            lang.setObject(removedName, (this.valueDelimiter ? "": []), values);
          }
          else
          {
