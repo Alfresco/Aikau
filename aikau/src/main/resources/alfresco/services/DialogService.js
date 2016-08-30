@@ -482,7 +482,7 @@ define(["dojo/_base/declare",
             contentHeight: payload.contentHeight ? payload.contentHeight : null,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
-            noMinWidth: payload.noMinWidth || false
+            noMinWidth: !!payload.noMinWidth
          };
 
          // Ensure that text content is center aligned (see AKU-368)...
@@ -726,7 +726,7 @@ define(["dojo/_base/declare",
             duration: config.duration || 0,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
-            noMinWidth: config.noMinWidth || false,
+            noMinWidth:  !!config.noMinWidth,
             fullScreenMode: config.fullScreenMode || false,
             fullScreenPadding: !isNaN(config.fullScreenPadding) ? config.fullScreenPadding : 10,
             parentPubSubScope: config.parentPubSubScope,
