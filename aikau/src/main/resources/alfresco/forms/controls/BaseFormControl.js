@@ -1656,11 +1656,15 @@ define(["dojo/_base/declare",
                });
             }
          }
-         else
+         else if (!this.___addedToDocument)
          {
             // If passed a deferred object then save it for resolving once the widget is added to
             // the document...
             this.deferredValuePublication = deferred;
+         }
+         else
+         {
+            deferred.resolve();
          }
       },
 
