@@ -19,3 +19,4 @@
 /src/test/resources/testApp/js/aikau/testing/RequireEverything.js
 /src/test/vagrant/.vagrant/
 alfresco.log.*
+/bin/
