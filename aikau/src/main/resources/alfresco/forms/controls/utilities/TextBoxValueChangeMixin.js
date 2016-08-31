@@ -67,7 +67,7 @@ define(["alfresco/core/topics",
        * @param {object} evt Dojo-normalised event object
        * @since 1.0.49
        */
-      handleKeyUp: function alfresco_forms_controls_TextBox__handleKeyUp(evt) {
+      handleKeyUp: function alfresco_forms_controls_utilities_TextBoxValueChangeMixin__handleKeyUp(evt) {
          if (this.publishTopicOnEnter && evt.keyCode === keys.ENTER) {
             this.alfPublish(this.publishTopicOnEnter, {
                fieldId: this.id
@@ -92,7 +92,7 @@ define(["alfresco/core/topics",
        * @param {*} newValue The new value
        * @since 1.0.49
        */
-      fireChangeEvent: function alfresco_forms_controls_TextBox__fireChangeEvent(name, oldValue, newValue) {
+      fireChangeEvent: function alfresco_forms_controls_utilities_TextBoxValueChangeMixin__fireChangeEvent(name, oldValue, newValue) {
          if (oldValue !== newValue) {
             this.onValueChangeEvent(name, oldValue, newValue);
          }
@@ -105,7 +105,7 @@ define(["alfresco/core/topics",
        * 
        * @instance
        */
-      setupChangeEvents: function alfresco_forms_controls_TextBox__setupChangeEvents() {
+      setupChangeEvents: function alfresco_forms_controls_utilities_TextBoxValueChangeMixin__setupChangeEvents() {
          if (this.wrappedWidget)
          {
             this.wrappedWidget.on("keyup", lang.hitch(this, this.handleKeyUp));

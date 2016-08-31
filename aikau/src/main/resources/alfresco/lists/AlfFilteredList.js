@@ -378,7 +378,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.54
        */
-      onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
+      onFiltersUpdated: function alfresco_lists_AlfFilteredList__onFiltersUpdated() {
          this.inherited(arguments);
          this.alfPublish(topics.FILTERS_APPLIED, this.dataFilters);
       },
