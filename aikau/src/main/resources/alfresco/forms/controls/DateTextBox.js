@@ -48,6 +48,16 @@ define(["dojo/_base/declare",
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
 
       /**
+       * The selector to use for formatting a date. An alternative might be "datetime".
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.84
+       */
+      valueFormatSelector: "date",
+
+      /**
        * An array of the CSS files to use with this widget.
        * 
        * @instance
@@ -125,7 +135,7 @@ define(["dojo/_base/declare",
        */
       getValue: function alfresco_forms_controls_DateTextBox__getValue() {
          var value = this.inherited(arguments);
-         return value && stamp.toISOString(value, { selector: "date" });
+         return value && stamp.toISOString(value, { selector: this.valueFormatSelector });
       },
 
       /**
@@ -142,6 +152,24 @@ define(["dojo/_base/declare",
             return true;
          });
          return dateTextBox;
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#formControlValueChange}
+       * to format the new date value correctly.
+       *
+       * @instance
+       * @param {string} attributeName
+       * @param {object} oldValue
+       * @param {object} value
+       * @since 1.0.84
+       */
+      formControlValueChange: function alfresco_forms_controls_DateTextBox__formControlValueChange(attributeName, oldValue, value) {
+         if (value) 
+         {
+            value = stamp.toISOString(value, { selector: this.valueFormatSelector });
+         }
+         this.inherited(arguments, [attributeName, oldValue, value]);
       }
    });
 });

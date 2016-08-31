@@ -17,15 +17,17 @@ model.jsonModel = {
          config: {
             widgets: [
                {
-                  name: "alfresco/forms/Form",
                   id: "VALID_DATES_FORM",
+                  name: "alfresco/forms/Form",
                   config: {
+                     pubSubScope: "FORM1_",
                      okButtonPublishTopic: "VALID_DATES_FORM_SUBMIT",
                      widgets: [
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "VALID_DATE_VALUE_1",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
+                              fieldId: "VALID1",
                               name: "validDate1",
                               value: "2012-12-25",
                               label: "Valid date",
@@ -33,8 +35,8 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "VALID_DATE_VALUE_2",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "validDate2",
                               value: "2015-10-31",
@@ -46,8 +48,8 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "TODAYS_DATE",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "todaysDate",
                               value: "TODAY",
@@ -59,14 +61,14 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/forms/Form",
                   id: "OTHER_DATES_FORM",
+                  name: "alfresco/forms/Form",
                   config: {
                      okButtonPublishTopic: "OTHER_DATES_FORM_SUBMIT",
                      widgets: [
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "DATE_WITH_PLACEHOLDER",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "dateWithPlaceholder",
                               label: "Date with placeholder",
@@ -109,14 +111,14 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/forms/Form",
                   id: "INVALID_DATES_FORM",
+                  name: "alfresco/forms/Form",
                   config: {
                      okButtonPublishTopic: "INVALID_DATES_FORM_SUBMIT",
                      widgets: [
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "LETTERS_DATE_VALUE",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "lettersDate",
                               value: "letters",
@@ -128,8 +130,8 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "EMPTY_DATE_VALUE",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "emptyDate",
                               value: "",
@@ -138,8 +140,8 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "NULL_DATE_VALUE",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "nullDate",
                               value: null,
@@ -148,8 +150,8 @@ model.jsonModel = {
                            }
                         },
                         {
-                           name: "alfresco/forms/controls/DateTextBox",
                            id: "UNDEFINED_DATE_VALUE",
+                           name: "alfresco/forms/controls/DateTextBox",
                            config: {
                               name: "undefinedDate",
                               value: undefined,
