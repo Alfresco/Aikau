@@ -80,7 +80,19 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @returns {Object} An appropriate menu item
        */
       _getMenuItemForOption: function alfresco_forms_controls_Select_CustomSelect___getMenuItemForOption(option) {
-         var menuItem = this.inherited(arguments);
+         var menuItem;
+         if(option.value === "") 
+         {
+            // See AKU-1083
+            // Create a MenuItem with a temporary value and then swap in the requested value
+            menuItem = this.inherited(arguments, [{label: option.label, value: "TMP"}]);
+            menuItem.set("value", option.value);
+         }
+         else
+         {
+            menuItem = this.inherited(arguments);
+         }
+         
          if (this.truncate && this.forceWidth && option.label) {
             menuItem.domNode.title = option.label;
          }
@@ -150,23 +162,6 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @since 1.0.79
        */
       width: null,
-
-      /**
-       * Adds a new option to the wrapped widget.
-       *
-       * @instance
-       * @override
-       * @param {object} option The option to add
-       * @param {number} index The index of the option to add
-       */
-      addOption: function alfresco_forms_controls_Select__addOption(option, /*jshint unused:false*/ index) {
-         // Dijit Select widget does not support empty values! https://bugs.dojotoolkit.org/ticket/9973
-         if (option.value === "") {
-            this.alfLog("error", "Attempted to add option with empty value", option);
-         } else {
-            this.inherited(arguments);
-         }
-      },
 
       /**
        * @instance

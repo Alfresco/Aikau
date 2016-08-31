@@ -68,7 +68,7 @@ define(["module",
 
          .findAllByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown .dijitMenuItemLabel")
             .then(function(elements) {
-               assert.lengthOf(elements, 3, "Incorrect number of fixed options found");
+               assert.lengthOf(elements, 4, "Incorrect number of fixed options found");
             });
       },
 
@@ -81,7 +81,7 @@ define(["module",
       },
 
       "Test fixed option label set from value": function() {
-         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(3) td.dijitMenuItemLabel")
+         return this.remote.findByCssSelector("#FIXED_INVALID_CHANGES_TO_CONTROL_dropdown table tr:nth-child(4) td.dijitMenuItemLabel")
             .getVisibleText()
             .then(function(resultText) {
                assert.equal(resultText, "NO LABEL", "Fixed label not set correctly from value");
