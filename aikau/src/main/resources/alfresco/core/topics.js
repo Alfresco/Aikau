@@ -1121,6 +1121,9 @@ define([],function() {
        * @property {string} itemId The unique identifier for the item for the form (e.g. a NodeRef)
        * @property {string} [formId] The unique identifier of the form to be retrieved
        * @property {string} mode The mode of form to retrieve (e.g. "view" or "edit")
+       * @property {object} [formConfig=null] Some optional configuration for the form
+       * @property {string} [formConfig.formId=null] The ID to give to the rendered form
+       * @property {object} [formConfig.formSubmissionPayloadMixin] Some additional data to include in the form submission
        */
       REQUEST_FORM: "ALF_FORM_REQUEST",
 

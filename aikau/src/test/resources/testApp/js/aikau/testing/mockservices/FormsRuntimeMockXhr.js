@@ -27,9 +27,13 @@ define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
         "webscripts/defaults",
         "dojo/_base/lang",
+        "dojo/text!./responseTemplates/FormsRuntime/Authorities.json",
         "dojo/text!./responseTemplates/FormsRuntime/EditDocLibSimpleMetadata.json",
-        "dojo/text!./responseTemplates/FormsRuntime/ViewNodeDefault.json"], 
-        function(declare, MockXhr, webScriptDefaults, lang, EditDocLibSimpleMetadata, ViewNodeDefault) {
+        "dojo/text!./responseTemplates/FormsRuntime/ViewNodeDefault.json",
+        "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflow.json",
+        "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflowSuccess.json"], 
+        function(declare, MockXhr, webScriptDefaults, lang, Authorities, EditDocLibSimpleMetadata, ViewNodeDefault, 
+                 CreateWorkflow, CreateWorkflowSuccess) {
    
    return declare([MockXhr], {
 
@@ -42,16 +46,34 @@ define(["dojo/_base/declare",
          try
          {
             this.server.respondWith("GET",
-                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=node&itemId=some/dummy/node&formId=doclib-simple-metadata&mode=edit",
+                                    "/aikau/proxy/alfresco/api/forms/picker/authority/children?searchTerm=&selectableType=cm:person&size=1000",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     Authorities]);
+
+            this.server.respondWith("GET",
+                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=node&itemId=some://dummy/node&formId=doclib-simple-metadata&mode=edit",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      EditDocLibSimpleMetadata]);
 
             this.server.respondWith("GET",
-                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=node&itemId=some/dummy/node&formId=null&mode=view",
+                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=node&itemId=some://dummy/node&formId=null&mode=view",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      ViewNodeDefault]);
+
+            this.server.respondWith("GET",
+                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=workflow&itemId=activiti%24activitiAdhoc&formId=null&mode=create",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     CreateWorkflow]);
+
+            this.server.respondWith("POST",
+                                    "/share/proxy/alfresco/api/workflow/activiti%24activitiAdhoc/formprocessor",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     CreateWorkflowSuccess]);
          }
          catch(e)
          {
