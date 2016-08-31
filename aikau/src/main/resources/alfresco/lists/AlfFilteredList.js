@@ -467,7 +467,7 @@ define(["dojo/_base/declare",
          if (filter && filter.config && filter.config.fieldId)
          {
             // See AKU-1076 - ensure filteringTopics do not require explicit configuration
-            !!!this.filteringTopics && (this.filteringTopics = []);
+            this.filteringTopics = this.filteringTopics || [];
             this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
             if (this.mapHashVarsToPayload) 
             {
