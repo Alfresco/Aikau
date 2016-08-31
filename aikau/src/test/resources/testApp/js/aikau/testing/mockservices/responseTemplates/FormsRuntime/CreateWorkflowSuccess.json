@@ -1,0 +1,4 @@
+{
+   "persistedObject": "WorkflowInstance[id=activiti$601,active=true,def=WorkflowDefinition[id=activiti$activitiAdhoc:1:4,name=activiti$activitiAdhoc,version=1,title=New Task,startTask=WorkflowTaskDefinition[id=wf:submitAdhocTask,metadata=ClassDef[name={http://www.alfresco.org/model/workflow/1.0}submitAdhocTask]]]]",
+   "message": "Successfully persisted form for item [workflow]activiti$activitiAdhoc"
+}

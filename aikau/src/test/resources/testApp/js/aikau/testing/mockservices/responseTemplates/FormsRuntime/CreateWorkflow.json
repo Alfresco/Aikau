@@ -1,0 +1,233 @@
+{
+   "enctype": "multipart/form-data",
+   "method": "post",
+   "data": {
+      "assoc_bpm_assignee": "",
+      "prop_bpm_packageActionGroup": "add_package_item_actions",
+      "assoc_packageItems": "",
+      "prop_bpm_workflowPriority": 2,
+      "prop_bpm_packageItemActionGroup": "start_package_item_actions",
+      "prop_bpm_sendEMailNotifications": false
+   },
+   "constraints": [{
+      "validationHandler": "Alfresco.forms.validation.length",
+      "id": "LENGTH",
+      "event": "keyup",
+      "message": "Value has incorrect number of characters.",
+      "params": {
+         "minLength": 0,
+         "maxLength": 250,
+         "crop": true
+      },
+      "fieldId": "prop_bpm_workflowDescription"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.inList",
+      "id": "LIST",
+      "event": "blur",
+      "message": "Value is not in list.",
+      "params": {
+         "allowedValues": ["1|High", "2|Medium", "3|Low"],
+         "sorted": false,
+         "caseSensitive": true
+      },
+      "fieldId": "prop_bpm_workflowPriority"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.number",
+      "id": "NUMBER",
+      "event": "keyup",
+      "message": "Value is not a number.",
+      "params": {},
+      "fieldId": "prop_bpm_workflowPriority"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.mandatory",
+      "id": "MANDATORY",
+      "event": "keyup,change",
+      "message": "The value cannot be empty.",
+      "params": {},
+      "fieldId": "assoc_bpm_assignee"
+   }],
+   "structure": [{
+      "children": [{
+         "kind": "field",
+         "id": "prop_bpm_workflowDescription"
+      }],
+      "id": "",
+      "event": "General",
+      "params": "title",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "prop_bpm_workflowDueDate"
+      }, {
+         "kind": "field",
+         "id": "prop_bpm_workflowPriority"
+      }],
+      "id": "info",
+      "event": "info",
+      "message": "/org/alfresco/components/form/2-column-set.ftl",
+      "params": "",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "assoc_bpm_assignee"
+      }],
+      "id": "assignee",
+      "event": "Assignee",
+      "params": "title",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "assoc_packageItems"
+      }],
+      "id": "items",
+      "event": "Items",
+      "params": "title",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "prop_bpm_sendEMailNotifications"
+      }],
+      "id": "other",
+      "event": "Other Options",
+      "params": "title",
+      "fieldId": "set"
+   }],
+   "showCancelButton": false,
+   "mode": "create",
+   "showResetButton": false,
+   "showSubmitButton": true,
+   "arguments": {
+      "itemKind": "workflow",
+      "formId": "null",
+      "itemId": "activiti$activitiAdhoc"
+   },
+   "showCaption": true,
+   "submissionUrl": "/share/proxy/alfresco/api/workflow/activiti%24activitiAdhoc/formprocessor",
+   "fields": {
+      "prop_bpm_sendEMailNotifications": {
+         "configName": "bpm:sendEMailNotifications",
+         "endpointType": "boolean",
+         "kind": "field",
+         "dataType": "boolean",
+         "description": "Send Email Notifications",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/email-notification.ftl",
+            "params": {}
+         },
+         "label": "Send Email Notifications",
+         "type": "property",
+         "dataKeyName": "prop_bpm_sendEMailNotifications",
+         "name": "prop_bpm_sendEMailNotifications",
+         "id": "prop_bpm_sendEMailNotifications",
+         "value": false,
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_workflowDueDate": {
+         "configName": "bpm:workflowDueDate",
+         "endpointType": "date",
+         "kind": "field",
+         "dataType": "date",
+         "description": "Workflow Due Date",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/date.ftl",
+            "params": {
+               "submitTime": "false",
+               "showTime": "false"
+            }
+         },
+         "label": "Due",
+         "type": "property",
+         "dataKeyName": "prop_bpm_workflowDueDate",
+         "name": "prop_bpm_workflowDueDate",
+         "id": "prop_bpm_workflowDueDate",
+         "value": "",
+         "helpEncodeHtml": true
+      },
+      "assoc_bpm_assignee": {
+         "configName": "bpm:assignee",
+         "endpointType": "cm:person",
+         "kind": "field",
+         "dataType": "cm:person",
+         "description": "Workflow Assignee",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/authority.ftl",
+            "params": {}
+         },
+         "label": "Assign To",
+         "type": "association",
+         "endpointDirection": "TARGET",
+         "dataKeyName": "assoc_bpm_assignee",
+         "name": "assoc_bpm_assignee",
+         "id": "assoc_bpm_assignee",
+         "value": "",
+         "helpEncodeHtml": true
+      },
+      "assoc_packageItems": {
+         "configName": "packageItems",
+         "endpointType": "packageItems",
+         "kind": "field",
+         "dataType": "packageItems",
+         "description": "Items that are part of the workflow",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/packageitems.ftl",
+            "params": {}
+         },
+         "label": "Items",
+         "type": "association",
+         "endpointDirection": "TARGET",
+         "dataKeyName": "assoc_packageItems",
+         "name": "assoc_packageItems",
+         "id": "assoc_packageItems",
+         "value": "",
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_workflowPriority": {
+         "configName": "bpm:workflowPriority",
+         "endpointType": "int",
+         "kind": "field",
+         "dataType": "int",
+         "description": "Workflow Priority",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/priority.ftl",
+            "params": {
+               "options": "1|High#alf#2|Medium#alf#3|Low",
+               "optionSeparator": "#alf#"
+            }
+         },
+         "label": "Priority",
+         "type": "property",
+         "help": "form.field.constraint.number",
+         "dataKeyName": "prop_bpm_workflowPriority",
+         "name": "prop_bpm_workflowPriority",
+         "id": "prop_bpm_workflowPriority",
+         "value": 2,
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_workflowDescription": {
+         "configName": "bpm:workflowDescription",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "description": "Description",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textarea.ftl",
+            "params": {
+               "style": "width: 95%",
+               "maxLength": "250"
+            }
+         },
+         "label": "Message",
+         "type": "property",
+         "help": "form.field.constraint.length",
+         "dataKeyName": "prop_bpm_workflowDescription",
+         "name": "prop_bpm_workflowDescription",
+         "id": "prop_bpm_workflowDescription",
+         "value": "",
+         "helpEncodeHtml": true
+      }
+   }
+}

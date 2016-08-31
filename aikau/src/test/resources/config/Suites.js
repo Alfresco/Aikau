@@ -291,6 +291,7 @@ define(function() {
       "alfresco/services/DialogServiceTest",
       "alfresco/services/DocumentServiceTest",
       "alfresco/services/FileUploadServiceTest",
+      "alfresco/services/FormsRuntimeServiceTest",
       "alfresco/services/FullScreenDialogTest",
       "alfresco/services/LoggingServiceTest",
       "alfresco/services/NavigationServiceTest",

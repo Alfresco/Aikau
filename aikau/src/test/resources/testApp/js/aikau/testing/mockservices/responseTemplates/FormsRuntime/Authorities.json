@@ -1,0 +1,45 @@
+{
+   "data": {
+      "items": [{
+         "type": "cm:person",
+         "parentType": "",
+         "isContainer": false,
+         "name": "Alice Beecher (abeecher)",
+         "title": "",
+         "description": "",
+         "displayPath": "\/3ed718b5-262c-4b6d-b156-bbfad96e5a9e\/63589dd0-af64-47a9-b660-24be4d5362ae",
+         "nodeRef": "workspace:\/\/SpacesStore\/dc103838-645f-43c1-8a2a-bc187e13c343",
+         "selectable": false
+      }, {
+         "type": "cm:person",
+         "parentType": "",
+         "isContainer": false,
+         "name": "Administrator  (admin)",
+         "title": "",
+         "description": "",
+         "displayPath": "\/3ed718b5-262c-4b6d-b156-bbfad96e5a9e\/63589dd0-af64-47a9-b660-24be4d5362ae",
+         "nodeRef": "workspace:\/\/SpacesStore\/3920bddc-fb2b-4b8c-bf80-5dcc83fa6955",
+         "selectable": true
+      }, {
+         "type": "cm:person",
+         "parentType": "",
+         "isContainer": false,
+         "name": "Guest  (guest)",
+         "title": "",
+         "description": "",
+         "displayPath": "\/3ed718b5-262c-4b6d-b156-bbfad96e5a9e\/63589dd0-af64-47a9-b660-24be4d5362ae",
+         "nodeRef": "workspace:\/\/SpacesStore\/2474cdab-872f-4393-a282-44fbacee769d",
+         "selectable": false
+      }, {
+         "type": "cm:person",
+         "parentType": "",
+         "isContainer": false,
+         "name": "Mike Jackson (mjackson)",
+         "title": "",
+         "description": "",
+         "displayPath": "\/3ed718b5-262c-4b6d-b156-bbfad96e5a9e\/63589dd0-af64-47a9-b660-24be4d5362ae",
+         "nodeRef": "workspace:\/\/SpacesStore\/b6d80d49-21cc-4f04-9c92-e7063037543f",
+         "selectable": false
+      }]
+   }
+}

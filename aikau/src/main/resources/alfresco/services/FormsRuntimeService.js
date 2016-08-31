@@ -427,6 +427,7 @@ define(["dojo/_base/declare",
 
             this.serviceXhr({url : url,
                              method: "GET",
+                             formConfig: payload.formConfig,
                              alfSuccessTopic: successTopic,
                              successCallback: this.onFormLoaded,
                              failureCallback: this.onFormLoadFailure,
@@ -479,18 +480,26 @@ define(["dojo/_base/declare",
             }
             else
             {
+               // Check for an optional ID for the form...
+               var formId = lang.getObject("formConfig.formId", false, originalRequestConfig);
+
+               // Mixin in any additional data to include in the payload...
+               var formSubmissionPayloadMixin = lang.getObject("formConfig.formSubmissionPayloadMixin", false, originalRequestConfig);
+               var okButtonPublishPayload = {
+                  url: response.submissionUrl,
+                  urlType: "FULL"
+               };
+               formSubmissionPayloadMixin && lang.mixin(okButtonPublishPayload, formSubmissionPayloadMixin);
+
                var formControls = [];
                var formConfig = {
-
+                  id: formId,
                   name: "alfresco/forms/Form",
                   config: {
                      showOkButton: response.showSubmitButton,
                      showCancelButton: response.showCancelButton,
                      okButtonPublishTopic: response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE",
-                     okButtonPublishPayload: {
-                        url: response.submissionUrl,
-                        urlType: "FULL"
-                     },
+                     okButtonPublishPayload: okButtonPublishPayload,
                      okButtonPublishGlobal: true,
                      value: response.data,
                      widgets: formControls
