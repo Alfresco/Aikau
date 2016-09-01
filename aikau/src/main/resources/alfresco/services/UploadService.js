@@ -254,6 +254,7 @@ define(["dojo/_base/declare",
             publishOnShow: [{
                publishTopic: dialogDisplayedTopic
             }],
+            cloneModels: false,
             widgetsContent: widgetsForUploadDisplay,
             widgetsButtons: this.widgetsButtons
          });
