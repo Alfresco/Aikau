@@ -466,6 +466,17 @@ define(["dojo/_base/declare",
             fixedWidth = true;
          }
 
+         // In general we want to clone the models in payloads to ensure that model data cannot
+         // be updated and then re-used, however we need to support a specific instance for the
+         // UploadService where non-cloning is relied upon...
+         var widgetsContent = payload.widgetsContent;
+         var widgetsButtons = payload.widgetsButtons;
+         if (typeof payload.cloneModels === "undefined" || payload.cloneModels)
+         {
+            widgetsContent = lang.clone(payload.widgetsContent);
+            widgetsButtons = lang.clone(payload.widgetsButtons);
+         }
+
          // TODO: Update this and other function with scroll setting...
          var dialogConfig = {
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
@@ -474,8 +485,8 @@ define(["dojo/_base/declare",
             duration: payload.duration || 0,
             fullScreenMode: payload.fullScreenMode || false,
             fullScreenPadding: !isNaN(payload.fullScreenPadding) ? payload.fullScreenPadding : 10,
-            widgetsContent: lang.clone(payload.widgetsContent),
-            widgetsButtons: lang.clone(payload.widgetsButtons),
+            widgetsContent: widgetsContent,
+            widgetsButtons: widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
             dialogWidth: payload.dialogWidth || null,
             contentWidth: payload.contentWidth ? payload.contentWidth : null,
