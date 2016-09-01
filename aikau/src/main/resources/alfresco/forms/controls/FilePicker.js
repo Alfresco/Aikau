@@ -453,101 +453,102 @@ define(["dojo/_base/declare",
        * @overridable
        */
       setFormControlValue: function alfresco_forms_controls_FilePicker__setFormControlValue(values) {
-          var addedName, removedName, initialPick, currentPick, added, removed;
+         // jshint maxcomplexity:false
+         var addedName, removedName, initialPick, currentPick, added, removed;
           
-          if (this.addedAndRemovedValues)
-          {
-              addedName = this.name + this.addedNameSuffix;
-              removedName = this.name + this.removedNameSuffix;
+         if (this.addedAndRemovedValues)
+         {
+            addedName = this.name + this.addedNameSuffix;
+            removedName = this.name + this.removedNameSuffix;
               
-              if (this.initialFileSelection)
-              {
-                  initialPick = this.initialFileSelection;
-                  currentPick = this.getValue() || [];
-                  
-                  if (this.valueDelimiter)
+           if (this.initialFileSelection)
+           {
+               initialPick = this.initialFileSelection;
+               currentPick = this.getValue() || [];
+               
+               if (this.valueDelimiter)
+               {
+                  if (ObjectTypeUtils.isString(initialPick))
                   {
-                     if (ObjectTypeUtils.isString(initialPick))
-                     {
-                         initialPick = initialPick.split(this.valueDelimiter);
-                     }
-                     if (ObjectTypeUtils.isString(currentPick))
-                     {
-                         currentPick = currentPick.split(this.valueDelimiter);
-                     }
+                     initialPick = initialPick.split(this.valueDelimiter);
                   }
-                  else if (!this.multipleItemSelection && ObjectTypeUtils.isString(currentPick))
+                  if (ObjectTypeUtils.isString(currentPick))
                   {
-                      currentPick = [currentPick];
+                     currentPick = currentPick.split(this.valueDelimiter);
                   }
-                  
-                  added = [];
-                  removed = [];
-                  
-                  array.forEach(currentPick, function(currFile) {
-                      // If the current picked file was in the inital selection it has not been added...
-                      // ... BUT if the current pick was NOT in the inital selection it HAS been added
-                      if (array.some(initialPick, function(initialFile) {
-                         return currFile === initialFile;
-                      })) {
-                         // No action required, the current pick was also in the initial pick...
-                      }
-                      else
-                      {
-                         // The current pick was not an initial pick so has been added...
-                         added.push(currFile);
-                      }
-                   }, this);
+               }
+               else if (!this.multipleItemSelection && ObjectTypeUtils.isString(currentPick))
+               {
+                  currentPick = [currentPick];
+               }
+               
+               added = [];
+               removed = [];
+               
+               array.forEach(currentPick, function(currFile) {
+                  // If the current picked file was in the inital selection it has not been added...
+                  // ... BUT if the current pick was NOT in the inital selection it HAS been added
+                  if (array.some(initialPick, function(initialFile) {
+                     return currFile === initialFile;
+                  })) {
+                     // No action required, the current pick was also in the initial pick...
+                  }
+                  else
+                  {
+                     // The current pick was not an initial pick so has been added...
+                     added.push(currFile);
+                  }
+               }, this);
 
-                   array.forEach(initialPick, function(initialFile) {
-                      // If the initially picked file is in the current selection it has not been removed...
-                      // ... BUT if the initially picked file is NOT in the current selection it HAS been removed
-                      if (array.some(currentPick, function(currFile) {
-                         return currFile === initialFile;
-                      })) {
-                         // No action required, the current pick was also in the initial pick...
-                      }
-                      else
-                      {
-                         // The initial pick is not a current pick so has been removed...
-                         removed.push(initialFile);
-                      }
-                   }, this);
-                   
-                   if (this.valueDelimiter)
-                   {
-                      added = added.join(this.valueDelimiter);
-                      removed = removed.join(this.valueDelimiter);
-                   }
-                   else if (!this.multipleItemSelection)
-                   {
-                       added = added[0] || null;
-                       removed = removed[0] || null;
-                   }
-
-                   lang.setObject(addedName, added, values);
-                   lang.setObject(removedName, removed, values);
-              }
-              else
-              {
-                  this.inherited(arguments);
-                  
-                  // BaseFormControl#setFormControlValue adds empty array as "removed" value
-                  // (only has valueDelimiter and not multipleItemSelection to go on)
-                  if (this.valueDelimiter && !this.multipleItemSelection)
-                  {
-                      removed = lang.getObject(removedName, false, values);
-                      if (ObjectTypeUtils.isArray(removed))
-                      {
-                          lang.setObject(removedName, null, values);
-                      }
+               array.forEach(initialPick, function(initialFile) {
+                  // If the initially picked file is in the current selection it has not been removed...
+                  // ... BUT if the initially picked file is NOT in the current selection it HAS been removed
+                  if (array.some(currentPick, function(currFile) {
+                     return currFile === initialFile;
+                  })) {
+                     // No action required, the current pick was also in the initial pick...
                   }
-              }
-          }
-          else
-          {
-              this.inherited(arguments);
-          }
+                  else
+                  {
+                     // The initial pick is not a current pick so has been removed...
+                     removed.push(initialFile);
+                  }
+               }, this);
+                
+               if (this.valueDelimiter)
+               {
+                  added = added.join(this.valueDelimiter);
+                  removed = removed.join(this.valueDelimiter);
+               }
+               else if (!this.multipleItemSelection)
+               {
+                  added = added[0] || null;
+                  removed = removed[0] || null;
+               }
+
+               lang.setObject(addedName, added, values);
+               lang.setObject(removedName, removed, values);
+            }
+            else
+            {
+               this.inherited(arguments);
+               
+               // BaseFormControl#setFormControlValue adds empty array as "removed" value
+               // (only has valueDelimiter and not multipleItemSelection to go on)
+               if (this.valueDelimiter && !this.multipleItemSelection)
+               {
+                  removed = lang.getObject(removedName, false, values);
+                  if (ObjectTypeUtils.isArray(removed))
+                  {
+                    lang.setObject(removedName, null, values);
+                  }
+               }
+            }
+         }
+         else
+         {
+            this.inherited(arguments);
+         }
       },
 
       /**
