@@ -351,18 +351,32 @@ define(["dojo/_base/declare",
        * @param {object} value The value to set
        */
       setValue: function alfresco_forms_controls_FilePicker__setValue(value) {
-         if (value && this.valueDelimiter)
+         if (ObjectTypeUtils.isString(value))
          {
-            value = value.split(this.valueDelimiter);
+            if (this.valueDelimiter)
+            {
+                value = value.split(this.valueDelimiter);
+            }
+            else
+            {
+                value = [value];
+            }
+            
             value = array.map(value, function(valueItem) {
-               var v = {};
-               v[this.itemKeyProperty] = valueItem;
-               return v;
+                var v = {};
+                v[this.itemKeyProperty] = valueItem;
+                return v;
             }, this);
          }
 
          if (value && ObjectTypeUtils.isArray(value))
          {
+            if (!this.multipleItemSelection && value.length > 1)
+            {
+                this.alfLog("warn", "More than one element in value array set for single-selection FilePicker - only using first element", value, this);
+                value = [value[0]];
+            }
+             
             // Because it might be necessary to retrieve the metadata for the files we need to keep
             // track of the all the values that will be handled. We can't set this.value and
             // this.selectedFiles until all metadata has been asynchronously retrieved (otherwise the
@@ -370,7 +384,9 @@ define(["dojo/_base/declare",
             // Tracking the metadata retrieval and using tmp values ensures the form value is correct
             // on load...
             var valueCount = value.length;
-            var tmpValue = [], tmpSelectedFiles = [];
+            var tmpValue, tmpSelectedFiles = [];
+            
+            tmpValue = this.multipleItemSelection ? [] : null;
 
             // This is possibly not the optimal way of achiving this, but it is expected that only 
             // a small number of files will be pre-selected at a time (and there is no other REST 
@@ -392,7 +408,15 @@ define(["dojo/_base/declare",
                      var updatedFile = payload.response.item;
                      this.normaliseFile(updatedFile);
                      
-                     tmpValue.push(lang.getObject(this.itemKeyProperty, false, updatedFile));
+                     var itemKey = lang.getObject(this.itemKeyProperty, false, updatedFile);
+                     if (this.multipleItemSelection)
+                     {
+                         tmpValue.push(itemKey);
+                     }
+                     else
+                     {
+                         tmpValue = itemKey;
+                     }
                      tmpSelectedFiles.push(updatedFile);
 
                      valueCount--;
@@ -416,6 +440,114 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "Non-array value tried to be set for FilePicker", value, this);
          }
+      },
+      
+      /**
+       * This is called from [addFormControlValue]{@link module:alfresco/forms/controls/BaseFormControl#addFormControlValue}
+       * when evaluation of the field configuration and state confirms the value can be set. This override adds handling
+       * related to the stored initialFileSelection.
+       * 
+       * @instance
+       * @param {object} values The object to update with the current value of the control
+       * @since 1.0.84
+       * @overridable
+       */
+      setFormControlValue: function alfresco_forms_controls_FilePicker__setFormControlValue(values) {
+          var addedName, removedName, initialPick, currentPick, added, removed;
+          
+          if (this.addedAndRemovedValues)
+          {
+              addedName = this.name + this.addedNameSuffix;
+              removedName = this.name + this.removedNameSuffix;
+              
+              if (this.initialFileSelection)
+              {
+                  initialPick = this.initialFileSelection;
+                  currentPick = this.getValue() || [];
+                  
+                  if (this.valueDelimiter)
+                  {
+                     if (ObjectTypeUtils.isString(initialPick))
+                     {
+                         initialPick = initialPick.split(this.valueDelimiter);
+                     }
+                     if (ObjectTypeUtils.isString(currentPick))
+                     {
+                         currentPick = currentPick.split(this.valueDelimiter);
+                     }
+                  }
+                  else if (!this.multipleItemSelection && ObjectTypeUtils.isString(currentPick))
+                  {
+                      currentPick = [currentPick];
+                  }
+                  
+                  added = [];
+                  removed = [];
+                  
+                  array.forEach(currentPick, function(currFile) {
+                      // If the current picked file was in the inital selection it has not been added...
+                      // ... BUT if the current pick was NOT in the inital selection it HAS been added
+                      if (array.some(initialPick, function(initialFile) {
+                         return currFile === initialFile;
+                      })) {
+                         // No action required, the current pick was also in the initial pick...
+                      }
+                      else
+                      {
+                         // The current pick was not an initial pick so has been added...
+                         added.push(currFile);
+                      }
+                   }, this);
+
+                   array.forEach(initialPick, function(initialFile) {
+                      // If the initially picked file is in the current selection it has not been removed...
+                      // ... BUT if the initially picked file is NOT in the current selection it HAS been removed
+                      if (array.some(currentPick, function(currFile) {
+                         return currFile === initialFile;
+                      })) {
+                         // No action required, the current pick was also in the initial pick...
+                      }
+                      else
+                      {
+                         // The initial pick is not a current pick so has been removed...
+                         removed.push(initialFile);
+                      }
+                   }, this);
+                   
+                   if (this.valueDelimiter)
+                   {
+                      added = added.join(this.valueDelimiter);
+                      removed = removed.join(this.valueDelimiter);
+                   }
+                   else if (!this.multipleItemSelection)
+                   {
+                       added = added[0] || null;
+                       removed = removed[0] || null;
+                   }
+
+                   lang.setObject(addedName, added, values);
+                   lang.setObject(removedName, removed, values);
+              }
+              else
+              {
+                  this.inherited(arguments);
+                  
+                  // BaseFormControl#setFormControlValue adds empty array as "removed" value
+                  // (only has valueDelimiter and not multipleItemSelection to go on)
+                  if (this.valueDelimiter && !this.multipleItemSelection)
+                  {
+                      removed = lang.getObject(removedName, false, values);
+                      if (ObjectTypeUtils.isArray(removed))
+                      {
+                          lang.setObject(removedName, null, values);
+                      }
+                  }
+              }
+          }
+          else
+          {
+              this.inherited(arguments);
+          }
       },
 
       /**
@@ -566,14 +698,22 @@ define(["dojo/_base/declare",
        * @instance
        */
       onFileSelectionConfirmed: function alfresco_forms_controls_FilePicker__onFileSelectionConfirmed() {
-         var updatedValue = [];
+         var updatedValue = this.multipleItemSelection ? [] : null;
+         
          if (this.selectedFiles)
          {
             array.forEach(this.selectedFiles, function(file) {
                var itemKey = lang.getObject(this.itemKeyProperty, false, file);
                if (itemKey)
                {
-                  updatedValue.push(itemKey);
+                  if (this.multipleItemSelection)
+                  {
+                      updatedValue.push(itemKey);
+                  }
+                  else
+                  {
+                      updatedValue = itemKey;
+                  }
                }
             }, this);
          }
