@@ -1,4 +1,4 @@
-Aikau 1.0.83 Release Notes
+Aikau 1.0.84 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,15 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.84:
+* [AKU-1072](https://issues.alfresco.com/jira/browse/AKU-1072)       - Support hiding form control validation indicators
+* [AKU-1076](https://issues.alfresco.com/jira/browse/AKU-1076)       - Ensure filteringTopics does not need to be configured on AlfFilteredList
+* [AKU-1077](https://issues.alfresco.com/jira/browse/AKU-1077)       - Support label maps on AlfFilteredList summary
+* [AKU-1079](https://issues.alfresco.com/jira/browse/AKU-1079)       - Support copy/paste value update trigger in form controls
+* [AKU-1080](https://issues.alfresco.com/jira/browse/AKU-1080)       - Clone models for dialogs
+* [AKU-1081](https://issues.alfresco.com/jira/browse/AKU-1081)       - Ensure DateTextBox value change publication is correct
+* [AKU-1083](https://issues.alfresco.com/jira/browse/AKU-1083)       - Support empty value options for Select form control
+
 1.0.83:
 * [AKU-1053](https://issues.alfresco.com/jira/browse/AKU-1053)       - Support for grouped form rules
 * [AKU-1054](https://issues.alfresco.com/jira/browse/AKU-1054)       - Ensure expanded panels remain expanded on grid resize
