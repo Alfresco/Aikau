@@ -574,13 +574,14 @@ define(["dojo/_base/declare",
                this.currentItem.displayName = jsNode.properties["cm:name"];
             }
          }
-         else if (this.currentItem && this.currentItem.nodeRef)
+         else if (this.currentItem && lang.getObject(this.itemKey || "nodeRef", false, this.currentItem))
          {
-            this.imageIdProperty = "nodeRef";
+            var nodeRefData = lang.getObject(this.itemKey || "nodeRef", false, this.currentItem);
+            this.imageIdProperty = this.itemKey || "nodeRef";
 
             // Fallback to just having a nodeRef available... this has been added to handle rendering of 
             // thumbnails in search results where full node information may not be available...
-            var nodeRef = NodeUtils.processNodeRef(this.currentItem.nodeRef);
+            var nodeRef = NodeUtils.processNodeRef(nodeRefData);
             if (this.currentItem.type === "folder")
             {
                this.thumbnailUrl = require.toUrl("alfresco/renderers/css/images/" + this.folderImage);
@@ -967,7 +968,7 @@ define(["dojo/_base/declare",
                      // ...if we don't have a MIME type we can still safely delegate, but we should just
                      // pass the nodeRef and allow the NodePreviewService to get the full metadata
                      this.alfServicePublish(topics.SHOW_NODE_PREVIEW, {
-                        nodeRef: nodeRef
+                        nodeRef: lang.getObject(this.itemKey || "nodeRef", false, this.currentItem)
                      });
                   }
                }

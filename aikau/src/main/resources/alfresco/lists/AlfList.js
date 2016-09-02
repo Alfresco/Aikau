@@ -716,6 +716,14 @@ define(["dojo/_base/declare",
       onPageWidgetsReady: function alfresco_lists_AlfList__onPageWidgetsReady(/* jshint unused:false*/ payload) {
          this.alfUnsubscribe(this.pageWidgetsReadySubcription);
          this._readyToLoad = true;
+         
+         if (this.currentItemPropertyForDataItems && this.currentItem)
+         {
+            this.currentData = {
+               items: lang.getObject(this.currentItemPropertyForDataItems, false, this.currentItem) || []
+            };
+         }
+         
          if (this.currentData)
          {
             this.processLoadedData(this.currentData);
