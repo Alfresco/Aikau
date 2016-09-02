@@ -419,6 +419,70 @@ function getFollowersTab() {
    };
 }
 
+function getUserProfileNotificationsTab() {
+   return {
+      name: "alfresco/layout/VerticalWidgets",
+      title: "Notifications",
+      config: {
+         widgets: [
+            {
+               name: "alfresco/forms/Form",
+               config: {
+                  okButtonPublishTopic: "ALF_CRUD_CREATE",
+                  okButtonPublishLabel: "OK",
+                  okButtonPublishGlobal: true,
+                  okButtonPublishPayload: {
+                     url: "components/profile/user-notifications",
+                     urlType: "SHARE"
+                  },
+                  showCancelButton: false,
+                  // This form might seem strange at first glance!...
+                  // The displayed checkbox shows the actual property which represents
+                  // *disabled* and NOT enabled... so the on/off values are inverted...
+                  // ...The REST API requires entirely different values to be set
+                  // so to work around this problem we have a hidden field that auto-sets
+                  // its value based on the changing state of the visible checkbox
+                  widgets: [
+                     {
+                        name: "alfresco/forms/controls/CheckBox",
+                        config: {
+                           fieldId: "DISPLAYED_CHECKBOX",
+                           label: "E-mail notification feed",
+                           value: "{emailFeedDisabled}",
+                           onValue: false,
+                           offValue: true
+                        }
+                     },
+                     {
+                        name: "alfresco/forms/controls/TextBox",
+                        config: {
+                           fieldId: "HIDDEN_CHECKBOX",
+                           name: "user-notifications-email",
+                           autoSetConfig: [
+                              {
+                                 rulePassValue: "on",
+                                 ruleFailValue: "off",
+                                 rules: [
+                                    {
+                                       targetId: "DISPLAYED_CHECKBOX",
+                                       is: [true]
+                                    }
+                                 ]
+                              }
+                           ],
+                           visibilityConfig: {
+                              initialValue: false
+                           }
+                        }
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   };
+}
+
 function getUserProfileCell() {
    return {
       name: "alfresco/lists/views/layouts/CellContainer",
@@ -445,7 +509,8 @@ function getUserProfileCell() {
                                  getUserProfileRecentlyAddedTab(),
                                  getUserProfileRecentlyModifiedTab(),
                                  getFollowingTab(),
-                                 getFollowersTab()
+                                 getFollowersTab(),
+                                 getUserProfileNotificationsTab()
                               ]
                            }
                         }
