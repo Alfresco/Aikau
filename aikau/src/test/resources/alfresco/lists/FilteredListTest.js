@@ -39,13 +39,13 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 8, "The wrong number of results were displayed");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert.lengthOf(elements, 5, "Did not load first page of results");
             })
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE .alfresco-lists-Paginator__page-selector [id$=PAGE_SELECTOR_text]")
             .getVisibleText()
@@ -58,11 +58,11 @@ define(["module",
          return this.remote.findByCssSelector("#TEXTBOX .dijitInputContainer input")
             .clearLog()
             .type("one")
-            .end()
+         .end()
 
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
-            .end()
+         .end()
 
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
@@ -75,10 +75,10 @@ define(["module",
             .clearLog()
             .type(keys.BACKSPACE)
             .type(keys.BACKSPACE)
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
-            .end()
+         .end()
 
          .findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
@@ -108,11 +108,11 @@ define(["module",
          return this.remote.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
             .clearLog()
             .type("t")
-            .end()
+         .end()
 
          // Use the implicit wait for the loading data to return to ensure that the filtered results have returned
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
-            .end()
+         .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
@@ -141,7 +141,7 @@ define(["module",
             .clearLog()
             .get(updatedUrl)
             .getLastPublish("COMPOSITE_ALF_DOCLIST_REQUEST_FINISHED")
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-AlfListView table")
             .getVisibleText()
@@ -165,19 +165,19 @@ define(["module",
          return this.remote.findByCssSelector("body")
             .clearLog()
             .get(updatedUrl)
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Didn't reload list after hash change")
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
             .clearLog()
             .clearValue()
             .pressKeys(keys.TAB)
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED", 1500, "Didn't reload list after filter removal")
-            .end()
+         .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
@@ -188,7 +188,7 @@ define(["module",
       "Going to next page displays second page of results (useHash=true)": function() {
          return this.remote.findByCssSelector("#COMPOSITE .alfresco-lists-Paginator__page-forward")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500, "Going to next page did not reload list")
 
@@ -202,23 +202,23 @@ define(["module",
          return this.remote.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
             .clearLog()
             .type("five and")
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", 1500)
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputInner")
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "five and", "Incorrect filter field value");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "One result should be displayed for filter 'five and'");
             })
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-layouts-Cell:nth-child(2) .alfresco-renderers-Property .value")
             .getVisibleText()
@@ -232,15 +232,15 @@ define(["module",
             returnUrl = TestCommon.generateWebscriptUrl("/FilteredList#description=woof");
          return this.remote.findByCssSelector("body")
             .clearLog()
-            .end()
+         .end()
 
          .get(anotherPageUrl)
             .findByCssSelector("body")
-            .end()
+         .end()
 
          .get(returnUrl)
             .findByCssSelector("body")
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE .alfresco-lists-views-AlfListView table")
             .getVisibleText()
@@ -266,7 +266,7 @@ define(["module",
          return this.remote.findByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "woof");
+               assert.equal(text, "A dog says");
             });
       },
 
@@ -282,7 +282,7 @@ define(["module",
          return this.remote.findByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice__close-button")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST");
       },
@@ -306,7 +306,7 @@ define(["module",
          return this.remote.findByCssSelector("#COMPOSITE_TEXTBOX .dijitInputContainer input")
             .clearLog()
             .type("e")
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice__content")
             .getVisibleText()
@@ -319,14 +319,14 @@ define(["module",
          return this.remote.findByCssSelector("#COMPOSITE_DROPDOWN .dijitArrowButtonInner")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#COMPOSITE_DROPDOWN_CONTROL_popup1")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("COMPOSITE_ALF_DOCLIST_REQUEST_FINISHED")
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-forms-controls-utilities-ChoiceMixin__choice")
             .then(function(elements) {
@@ -338,7 +338,7 @@ define(["module",
          return this.remote.findByCssSelector(".alfresco-lists-utilities-FilterSummary__choices .alfresco-renderers-PropertyLink")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .end()

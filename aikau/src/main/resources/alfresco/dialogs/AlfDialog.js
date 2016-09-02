@@ -166,6 +166,17 @@ define(["dojo/_base/declare",
       handleOverflow: true,
 
       /**
+       * Indicates the the default minimum width rules for the dialog (controlled through LESS
+       * variables) can be ignored.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.84
+       */
+      noMinWidth: false,
+
+      /**
        * A placeholder for the resize-listener that's enabled while the dialog is visible. This
        * value is set automatically.
        *
@@ -250,7 +261,7 @@ define(["dojo/_base/declare",
          var simplePanelHeight = null;
          if (this.contentHeight)
          {
-            simplePanelHeight = (parseInt(this.contentHeight, 10) - paddingAdjustment) + "px";
+            simplePanelHeight = (Math.min(maxHeight, parseInt(this.contentHeight, 10)) - paddingAdjustment) + "px";
          }
          
          calculatedHeights.documentHeight = docHeight;
@@ -307,6 +318,10 @@ define(["dojo/_base/declare",
          {
             domClass.add(this.domNode, this.additionalCssClasses);
          }
+         if (this.noMinWidth)
+         {
+            domClass.add(this.domNode, "alfresco-dialog-AlfDialog--no-min-width");
+         }
 
          // Set a width for the dialog
          if (this.dialogWidth)
@@ -361,7 +376,7 @@ define(["dojo/_base/declare",
                assignTo: "_dialogPanel",
                config: {
                   handleOverflow: this.handleOverflow,
-                  height: calculatedHeights.simplePanelHeight,
+                  height: !this.handleOverflow && this.contentHeight ? "100%" : calculatedHeights.simplePanelHeight,
                   widgets: this.widgetsContent
                }
             }];

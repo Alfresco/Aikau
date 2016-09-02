@@ -25,10 +25,8 @@
 define(["module",
         "alfresco/defineSuite",
         "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-        function(module, defineSuite, assert, require, TestCommon, keys) {
+        function(module, defineSuite, assert, keys) {
 
    defineSuite(module, {
       name: "DateTextBox Tests",
@@ -60,21 +58,21 @@ define(["module",
             .then(function(value) {
                assert.equal(value, "", "Initial value of letters should present empty date box");
             })
-            .end()
+         .end()
 
          .findById("EMPTY_DATE_VALUE_CONTROL")
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "", "Initial value of empty should present empty date box");
             })
-            .end()
+         .end()
 
          .findById("NULL_DATE_VALUE_CONTROL")
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "", "Initial value of null should present empty date box");
             })
-            .end()
+         .end()
 
          .findById("UNDEFINED_DATE_VALUE_CONTROL")
             .getProperty("value")
@@ -91,11 +89,11 @@ define(["module",
          return this.remote.findByCssSelector("#VALID_DATE_VALUE_2 .dijitArrowButton") // Click down arrow
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#VALID_DATE_VALUE_2_CONTROL_popup tr:nth-child(3) td:nth-child(3)") // Choose third date on third row
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#VALID_DATES_FORM .confirmationButton .dijitButtonNode") // Submit the form
             .click()
@@ -106,11 +104,30 @@ define(["module",
             });
       },
 
+      "Value change publications contain correct value": function() {
+         // Open the first date pop-up...
+         return this.remote.findByCssSelector("#VALID_DATE_VALUE_1 .dijitArrowButtonInner")
+            .click()
+         .end()
+
+         .clearLog()
+
+         // Select a date...
+         .findDisplayedByCssSelector("#VALID_DATE_VALUE_1_CONTROL_popup .dijitCalendarDateLabel")
+            .click()
+         .end()
+
+         .getLastPublish("FORM1__valueChangeOf_VALID1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "2012-11-25");
+            });
+      },
+
       "Entering invalid date produces correct error": function() {
          return this.remote.findById("VALID_DATE_VALUE_1_CONTROL")
             .clearValue()
             .type("foo")
-            .end()
+         .end()
 
          .findByCssSelector("#VALID_DATE_VALUE_1 .validation-message")
             .isDisplayed()
@@ -135,8 +152,9 @@ define(["module",
          return this.remote.findById("RULES_CHECKER_CONTROL")
             .click()
             .type("05/05/1946")
-            .end()
-            .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+         .end()
+            
+         .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "The requirement indicator should be displayed on date entry via keyboard");
@@ -148,8 +166,9 @@ define(["module",
             .clearValue() // Clear the value, makes it less to delete via backspace...
             .type("1") // ...add a single character to be deleted with backspace...
             .pressKeys(keys.BACKSPACE) // ...and delete
-            .end()
-            .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
+         .end()
+         
+         .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The requirement indicator should be hidden when the date field is cleared");

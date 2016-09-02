@@ -110,6 +110,18 @@
    &.long > .control-row > div.control > div {
       width: 472px;
    }
+
+   &--validation-hidden {
+      > .title-row {
+         .alfresco-forms-controls-BaseFormControl__validation-error,
+         .requirementIndicator.required,
+         .validation-message,
+         .validationInProgress {
+            display: none;
+         }
+      }
+   }
+
    div.control {
       div.dijitComboBox.dijitTextBoxHover, .dijitTextBoxHover, .dijitTextAreaHover, .dijitTextBoxFocused, .dijitTextAreaFocused, .dijitTextBoxActive, .dijitTextAreaActive {
          background-color: inherit;
@@ -169,6 +181,10 @@
                &--no-label {
                   > .title-row {
                      display: none;
+
+                     > label:after {
+                        content: "";
+                     }
                   }
                   > .description-row {
                      > .description {
@@ -189,8 +205,39 @@
                      }
                   }
                }
+               &--validation-hidden {
+                  > .title-row {
+                     span.validation-message {
+                        display: none;
+                     }
+                  }
+               }
+               &--validation-hidden.alfresco-forms-controls-BaseFormControl--no-label {
+                  > .title-row {
+                     display: none;
+                  }
+                  > .control-row {
+                     width: initial;
+                  }
+                  > .description-row {
+                     > .description {
+                        margin: 0;
+                     }
+                  }
+               }
                > .control-row {
                   width: ~"calc(100% -" @dialog-label-section ~"- 10px)";
+               }
+            }
+         }
+      }
+   }
+   &--no-min-width {
+      .dialog-body {
+         .alfresco-forms-Form.root-dialog-form {
+            > form {
+               > .alfresco-forms-controls-BaseFormControl {
+                  min-width: 0
                }
             }
          }

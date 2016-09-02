@@ -85,6 +85,29 @@ define(["dojo/_base/declare",
       label: "filter-summary.label",
 
       /**
+       * This is an optional map of filter values to labels. The map should have filter name attributes that are 
+       * mapped to a sub-map of values to labels, e.g. 
+       *
+       * @example
+       * labelMapping: {
+       *   name: {
+       *     ted: "Edward",
+       *     bob: "Robert"
+       *   },
+       *   age: {
+       *     10: "Ten",
+       *     20: "Twenty"
+       *   }
+       * }
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.84
+       */
+      labelMapping: null,
+
+      /**
        * Processes the [label]{@link module:alfresco/lists/utilities/Label} to ensure that it is localized.
        * 
        * @instance
@@ -208,10 +231,22 @@ define(["dojo/_base/declare",
        * @param    {item} item The filter whose "name" attribute should be returned as the label
        * @returns {object} An object representing the filter name.
        */
-      _getLabel: function alfresco_forms_controls_MultiSelect___getLabel(item) {
+      _getLabel: function alfresco_lists_utilities_FilterSummary__getLabel(item) {
+
+         var labels, label;
+         if (this.labelMap)
+         {
+            labels = lang.getObject(item.name, false, this.labelMap);
+            if (labels)
+            {
+               label = lang.getObject(item.value, false, labels);
+            }
+         }
+
+         var choice = (label || item.value);
          return {
-            choice: item.value,
-            full: item.value
+            choice: choice,
+            full: choice
          };
       },
 
@@ -224,7 +259,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#FILTER_REMOVED
        * @fires module:alfresco/core/topics#FILTER_VALUE_CHANGE
        */
-      _removeChoice: function alfresco_forms_controls_MultiSelect___removeChoice(choiceToRemove) {
+      _removeChoice: function alfresco_lists_utilities_FilterSummary__removeChoice(choiceToRemove) {
          this.inherited(arguments);
 
          // Publish information indicating that the filter has been removed and that the value of the filter has changed...

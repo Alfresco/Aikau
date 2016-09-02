@@ -162,10 +162,14 @@ define(["alfresco/forms/controls/BaseFormControl",
        */
       getValue: function alfresco_forms_controls_Picker__getValue() {
          var processedItems = [];
-         var items = this.getPickedItemsWidget().currentData.items;
-         array.forEach(items, function(item) {
-            processedItems.push(item[this.itemKey]);
-         }, this);
+         var pickedItemsWidget = this.getPickedItemsWidget();
+         if (pickedItemsWidget)
+         {
+             var items = pickedItemsWidget.currentData.items;
+             array.forEach(items, function(item) {
+                processedItems.push(item[this.itemKey]);
+             }, this);
+         }
          return processedItems;
       },
       

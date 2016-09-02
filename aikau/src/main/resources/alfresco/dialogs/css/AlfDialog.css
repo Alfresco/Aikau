@@ -10,7 +10,7 @@
       box-shadow: 0 3px 8px rgba(0,0,0,.1);
       font-family: @standard-font;
       font-size: @normal-font-size;
-      min-width: 580px;
+      min-width: @dialog-min-width;
       &.tinymce-dialog {
          min-width: 540px;
          .control {
@@ -42,6 +42,14 @@
          font-weight: normal;
       }
    }
+   &--no-min-width {
+      &.dijitDialog {
+         min-width: 0;
+         .dialog-body {
+            min-width: 0;
+         }
+      }
+   }
    &.iefooter {
       .dialog-body {
          height: auto;
@@ -70,7 +78,7 @@
    }
    .dialog-body {
       margin-bottom: 40px; // NOTE: If this is changed, the associated margin adjustment in the JS needs updating
-      min-width: 580px;
+      min-width: @dialog-min-width;
       overflow: auto;
       padding: 12px; // NOTE: If this is changed, the associated paddingAdjustment in the JS needs updating
       min-height: 76px; // See AKU-1023, compensated for title

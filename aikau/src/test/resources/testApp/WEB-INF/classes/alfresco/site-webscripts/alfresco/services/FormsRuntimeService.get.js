@@ -10,10 +10,13 @@ model.jsonModel = {
             }
       },
       "alfresco/services/FormsRuntimeService",
-      "alfresco/services/DialogService"
+      "alfresco/services/DialogService",
+      "alfresco/services/UserService",
+      "alfresco/services/CrudService"
    ],
    widgets: [
       {
+         id: "EDIT_NODE",
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Show Edit Simple DocLib Node",
@@ -27,6 +30,7 @@ model.jsonModel = {
          }
       },
       {
+         id: "VIEW_NODE",
          name: "alfresco/buttons/AlfButton",
          config: {
             label: "Show View Default Node",
@@ -35,6 +39,25 @@ model.jsonModel = {
                itemKind: "node",
                itemId: "some://dummy/node",
                mode: "view"
+            }
+         }
+      },
+      {
+         id: "CREATE_WORKFLOW",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Create workflow",
+            publishTopic: "ALF_FORM_REQUEST",
+            publishPayload: {
+               itemKind: "workflow",
+               itemId: "activiti%24activitiAdhoc",
+               mode: "create",
+               formConfig: {
+                  formId: "CREATE_WORKFLOW_FORM",
+                  formSubmissionPayloadMixin: {
+                     alfResponseScope: "CREATE_WORKFLOW_SCOPE_"
+                  }
+               }
             }
          }
       },

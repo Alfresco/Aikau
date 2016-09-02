@@ -584,11 +584,11 @@ define(["module",
       "Can publish form with custom scope information": function() {
          return this.remote.findByCssSelector(".alfresco-buttons-AlfButton[widgetid=\"CREATE_FORM_DIALOG_CUSTOM_SCOPE\"] .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#SCOPED_FORM.dialogDisplayed .confirmationButton .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("CUSTOM_FORM_SCOPE_CUSTOM_FORM_TOPIC", true, "Did not publish correctly scoped topic")
             .then(function(payload) {
@@ -596,6 +596,54 @@ define(["module",
             })
 
          .findByCssSelector("#SCOPED_FORM.dialogHidden");
+      },
+
+      // See AKU-1080 - this test verifies that payloads are cloned...
+      "Dialog service clones payloads": function() {
+         return this.remote.findByCssSelector("#CLONED_MODEL")
+            .click()
+         .end()
+
+         .clearLog()
+
+         .findDisplayedByCssSelector("#TB6 .dijitInputContainer input")
+            .type("autosave")
+         .end()
+
+         .getLastPublish("AUTO_SAVE_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "detectChange", "autosave");
+            })
+
+         .findByCssSelector("#VERIFY_CLONED_MODEL_DIALOG .dijitDialogCloseIcon")
+            .click()
+         .end()
+
+         .findByCssSelector("#VERIFY_CLONED_MODEL_DIALOG.dialogHidden")
+         .end()
+
+         .findByCssSelector("#CLONED_MODEL")
+            .click()
+         .end()
+
+         .clearLog()
+
+         .findDisplayedByCssSelector("#TB6 .dijitInputContainer input")
+            .type("evasotua")
+         .end()
+
+         .getLastPublish("AUTO_SAVE_TOPIC")
+            .then(function(payload) {
+               assert.propertyVal(payload, "detectChange", "evasotua");
+            })
+         .end()
+
+         .findByCssSelector("#VERIFY_CLONED_MODEL_DIALOG .dijitDialogCloseIcon")
+            .click()
+         .end()
+
+         .findByCssSelector("#VERIFY_CLONED_MODEL_DIALOG.dialogHidden")
+         .end();
       },
 
       "Dialog recentres after its size changes": function() {

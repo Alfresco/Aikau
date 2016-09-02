@@ -210,6 +210,29 @@ define(["dojo/_base/declare",
       summaryWidgetsMappingId: "FILTER_SUMMARY",
 
       /**
+       * This is an optional map of filter values to labels. The map should have filter name attributes that are 
+       * mapped to a sub-map of values to labels, e.g. 
+       *
+       * @example
+       * filterSummaryLabelMapping: {
+       *   name: {
+       *     ted: "Edward",
+       *     bob: "Robert"
+       *   },
+       *   age: {
+       *     10: "Ten",
+       *     20: "Twenty"
+       *   }
+       * }
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.84
+       */
+      filterSummaryLabelMapping: null,
+
+      /**
        * The filter widgets
        *
        * @instance
@@ -355,7 +378,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.54
        */
-      onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
+      onFiltersUpdated: function alfresco_lists_AlfFilteredList__onFiltersUpdated() {
          this.inherited(arguments);
          this.alfPublish(topics.FILTERS_APPLIED, this.dataFilters);
       },
@@ -466,6 +489,8 @@ define(["dojo/_base/declare",
       setupFilteringTopics: function alfresco_lists_AlfFilteredList__setupFilteringTopics(filter) {
          if (filter && filter.config && filter.config.fieldId)
          {
+            // See AKU-1076 - ensure filteringTopics do not require explicit configuration
+            this.filteringTopics = this.filteringTopics || [];
             this.filteringTopics.push("_valueChangeOf_" + filter.config.fieldId);
             if (this.mapHashVarsToPayload) 
             {
@@ -512,7 +537,10 @@ define(["dojo/_base/declare",
       widgetsForFilterSummary: [
          {
             id: "{id}_FILTER_SUMMARY",
-            name: "alfresco/lists/utilities/FilterSummary"
+            name: "alfresco/lists/utilities/FilterSummary",
+            config: {
+               labelMap: "{filterSummaryLabelMapping}"
+            }
          }
       ]
    });

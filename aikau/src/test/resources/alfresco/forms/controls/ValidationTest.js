@@ -63,7 +63,10 @@ define(["module",
          dialogTextBox: {
             validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["DIALOG_FORM_TEXTBOX"])
          },
-         
+         hiddenValidation: {
+            requirementIndicator: TestCommon.getTestSelector(formControlSelectors, "requirement.indicator", ["VALIDATION_HIDDEN_TEXTBOX"]),
+            invalidIndicator: TestCommon.getTestSelector(formControlSelectors, "invalid.indicator", ["VALIDATION_HIDDEN_TEXTBOX"])
+         }
       },
       buttons: {
          blockResponse: TestCommon.getTestSelector(buttonSelectors, "button.label", ["BLOCK_RESPONSE"]),
@@ -76,6 +79,14 @@ define(["module",
             disabledConfirmationButton: TestCommon.getTestSelector(dialogSelectors, "disabled.form.dialog.confirmation.button", ["VALIDATION_DIALOG"]),
             displayed: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["VALIDATION_DIALOG"]),
             hidden: TestCommon.getTestSelector(dialogSelectors, "hidden.dialog", ["VALIDATION_DIALOG"]),
+            cancelButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.cancellation.button", ["VALIDATION_DIALOG"])
+         },
+         hiddenValidation: {
+            confirmationButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.confirmation.button", ["VALIDATION_DIALOG_2"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(dialogSelectors, "disabled.form.dialog.confirmation.button", ["VALIDATION_DIALOG_2"]),
+            displayed: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["VALIDATION_DIALOG_2"]),
+            hidden: TestCommon.getTestSelector(dialogSelectors, "hidden.dialog", ["VALIDATION_DIALOG_2"]),
+            cancelButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.cancellation.button", ["VALIDATION_DIALOG_2"])
          }
       }
    };
@@ -333,7 +344,30 @@ define(["module",
          .findByCssSelector(selectors.dialogs.checkMessage.displayed)
          .end()
 
-         .findDisplayedByCssSelector(selectors.textBoxes.dialogTextBox.validationMessage);
+         .findDisplayedByCssSelector(selectors.textBoxes.dialogTextBox.validationMessage)
+         .end();
+      },
+
+      "Validation indicators can be hidden on request": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.hiddenValidation.requirementIndicator)
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            })
+         .end()
+
+         .findByCssSelector(selectors.textBoxes.hiddenValidation.invalidIndicator)
+            .isDisplayed()
+            .then(function(displayed) {
+               assert.isFalse(displayed);
+            })
+         .end()
+
+         .findByCssSelector(selectors.dialogs.checkMessage.cancelButton)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.checkMessage.hidden);
       }
    });
 });

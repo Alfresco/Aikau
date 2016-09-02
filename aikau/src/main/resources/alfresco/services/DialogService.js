@@ -155,6 +155,7 @@
  * @property {boolean} [showValidationErrorsImmediately=true] Indicates whether or not to display form errors immediately
  * @property {object} [customFormConfig=null] Any additional configuration that can be applied to a [Form]{@link module:alfresco/forms/Form} (please note that the following form configuration
  * attributes will always be overridden by specific form dialog configuration: "additionalCssClasses", "displayButtons", "widgets", "value", "warnings" and "warningsPosition")
+ * @property {boolean} [noMinWidth=false] Indicates whether the minimum width restriction should be lifted
  */
 
 /**
@@ -175,6 +176,7 @@
  * @property {Array} [publishOnShow=null] - An array of publications objects to make when the dialog is displayed
  * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
  * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
+ * @property {boolean} [noMinWidth=false] Indicates whether the minimum width restriction should be lifted
  */
 
 define(["dojo/_base/declare",
@@ -464,6 +466,17 @@ define(["dojo/_base/declare",
             fixedWidth = true;
          }
 
+         // In general we want to clone the models in payloads to ensure that model data cannot
+         // be updated and then re-used, however we need to support a specific instance for the
+         // UploadService where non-cloning is relied upon...
+         var widgetsContent = payload.widgetsContent;
+         var widgetsButtons = payload.widgetsButtons;
+         if (typeof payload.cloneModels === "undefined" || payload.cloneModels)
+         {
+            widgetsContent = lang.clone(payload.widgetsContent);
+            widgetsButtons = lang.clone(payload.widgetsButtons);
+         }
+
          // TODO: Update this and other function with scroll setting...
          var dialogConfig = {
             id: payload.dialogId ? payload.dialogId : this.generateUuid(),
@@ -472,14 +485,15 @@ define(["dojo/_base/declare",
             duration: payload.duration || 0,
             fullScreenMode: payload.fullScreenMode || false,
             fullScreenPadding: !isNaN(payload.fullScreenPadding) ? payload.fullScreenPadding : 10,
-            widgetsContent: payload.widgetsContent,
-            widgetsButtons: payload.widgetsButtons,
+            widgetsContent: widgetsContent,
+            widgetsButtons: widgetsButtons,
             additionalCssClasses: payload.additionalCssClasses ? payload.additionalCssClasses : "",
             dialogWidth: payload.dialogWidth || null,
             contentWidth: payload.contentWidth ? payload.contentWidth : null,
             contentHeight: payload.contentHeight ? payload.contentHeight : null,
             handleOverflow: handleOverflow,
-            fixedWidth: fixedWidth
+            fixedWidth: fixedWidth,
+            noMinWidth: !!payload.noMinWidth
          };
 
          // Ensure that text content is center aligned (see AKU-368)...
@@ -723,6 +737,7 @@ define(["dojo/_base/declare",
             duration: config.duration || 0,
             handleOverflow: handleOverflow,
             fixedWidth: fixedWidth,
+            noMinWidth:  !!config.noMinWidth,
             fullScreenMode: config.fullScreenMode || false,
             fullScreenPadding: !isNaN(config.fullScreenPadding) ? config.fullScreenPadding : 10,
             parentPubSubScope: config.parentPubSubScope,
