@@ -9,8 +9,7 @@ model.jsonModel = {
                all: true
             }
          }
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets:[
       {
@@ -29,7 +28,8 @@ model.jsonModel = {
                                     id: "MENUBARITEM",
                                     name: "alfresco/menus/AlfMenuBarItem",
                                     config: {
-                                       label: "Something"
+                                       label: "Something",
+                                       targetUrl: "people-finder"
                                     }
                                  },
                                  {
