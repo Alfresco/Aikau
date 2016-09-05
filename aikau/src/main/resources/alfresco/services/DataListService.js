@@ -61,7 +61,13 @@ define(["dojo/_base/declare",
        * @default
        */
       defaultDataTypeMappings: {
-         "datetime" : {
+         "datetime": {
+            name: "alfresco/renderers/Date",
+            config: {
+               simple: true
+            }
+         },
+         "date": {
             name: "alfresco/renderers/Date",
             config: {
                simple: true
@@ -79,7 +85,11 @@ define(["dojo/_base/declare",
          "dl:attachments": {
             name: "alfresco/lists/AlfList",
             config: {
+               style: {
+                  overflow: "hidden"
+               },
                waitForPageWidgets: false,
+               noDataMessage: " ",
                widgets: [
                   {
                      name: "alfresco/lists/views/AlfListView",
@@ -101,6 +111,120 @@ define(["dojo/_base/declare",
                                                    assumeRendition: true,
                                                    showDocumentPreview: true,
                                                    usePreviewService: true
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/Property",
+                                                config: {
+                                                   propertyToRender: "displayValue"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         },
+         "cm:attachments": {
+            name: "alfresco/lists/AlfList",
+            config: {
+               style: {
+                  overflow: "hidden"
+               },
+               waitForPageWidgets: false,
+               noDataMessage: " ",
+               widgets: [
+                  {
+                     name: "alfresco/lists/views/AlfListView",
+                     config: {
+                        widgets: [
+                           {
+                              name: "alfresco/lists/views/layouts/Row",
+                              config: {
+                                 widgets: [
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          width: "50px",
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/SmallThumbnail",
+                                                config: {
+                                                   itemKey: "value",
+                                                   assumeRendition: true,
+                                                   showDocumentPreview: true,
+                                                   usePreviewService: true
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/Property",
+                                                config: {
+                                                   propertyToRender: "displayValue"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         },
+         "dl:issueAssignedTo": {
+            name: "alfresco/lists/AlfList",
+            config: {
+               style: {
+                  overflow: "hidden"
+               },
+               waitForPageWidgets: false,
+               noDataMessage: " ",
+               widgets: [
+                  {
+                     name: "alfresco/lists/views/AlfListView",
+                     config: {
+                        widgets: [
+                           {
+                              name: "alfresco/lists/views/layouts/Row",
+                              config: {
+                                 widgets: [
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          width: "40px",
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/AvatarThumbnail",
+                                                config: {
+                                                   userNameProperty: "metadata",
+                                                   dimensions: {
+                                                      w: "32px",
+                                                      h: "32px",
+                                                      margins: "5px"
+                                                   }
                                                 }
                                              }
                                           ]
@@ -337,6 +461,78 @@ define(["dojo/_base/declare",
                   }
                });
             }, this);
+
+            widgetsForHeader.push({
+               name: "alfresco/lists/views/layouts/HeaderCell",
+               config: {
+                  label: "Actions",
+                  sortable: false
+               }
+            });
+
+            rowWidgets.push({
+               name: "alfresco/lists/views/layouts/Cell",
+               config: {
+                  additionalCssClasses: "mediumpad",
+                  widgets: [
+                     {
+                        name: "alfresco/renderers/PublishAction",
+                        config: {
+                           iconClass: "delete-16",
+                           publishTopic: "ALF_CRUD_CREATE",
+                           publishPayloadType: "PROCESS",
+                           publishPayloadModifiers: ["processCurrentItemTokens"],
+                           publishPayload: {
+                              url: "slingshot/datalists/action/items?alf_method=delete",
+                              nodeRefs: ["{nodeRef}"]
+                           },
+                           publishGlobal: true
+                        }
+                     },
+                     {
+                        name: "alfresco/renderers/PublishAction",
+                        config: {
+                           iconClass: "edit-16",
+                           publishPayloadType: "PROCESS",
+                           publishPayloadModifiers: ["processCurrentItemTokens"],
+                           publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                           publishPayload: {
+                              dialogId: "EDIT_DATA_LIST_ITEM_DIALOG",
+                              dialogTitle: "Edit Data Item",
+                              hideTopic: "ALF_CRUD_CREATE",
+                              widgetsContent: [
+                                 {
+                                    name: "alfresco/layout/DynamicWidgets",
+                                    config: {
+                                       subscribeGlobal: true,
+                                       subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED"
+                                    }
+                                 }
+                              ],
+                              publishOnShow: [
+                                 {
+                                    publishTopic: "ALF_FORM_REQUEST",
+                                    publishPayload: {
+                                       itemId: "{nodeRef}",
+                                       itemKind: "node",
+                                       mode: "edit",
+                                       alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED",
+                                       formConfig: {
+                                          formSubmissionPayloadMixin: {
+                                             alfResponseScope: "ALF_DATA_LIST_"
+                                          }
+                                       }
+                                    },
+                                    publishGlobal: true
+                                 }
+                              ]
+                           },
+                           publishGlobal: true
+                        }
+                     }
+                  ]
+               }
+            });
 
             this.alfPublish(originalRequestConfig.data.alfResponseTopic || originalRequestConfig.data.alfTopic + "_SUCCESS" , {
                widgets: widgets

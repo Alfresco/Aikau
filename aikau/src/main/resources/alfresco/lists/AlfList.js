@@ -174,6 +174,17 @@ define(["dojo/_base/declare",
       currentData: null,
 
       /**
+       * A property from the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} that should be
+       * used as the list of items to be displayed. This is useful when rendering a list within a list.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       */
+      currentItemPropertyForDataItems: null,
+
+      /**
        * An internally used attribute to hold a UUID for the any in-flight request. This allows the request to be
        * cancelled if a subsequent request is issued before the in-flight request completes. This should not be
        * configured.
