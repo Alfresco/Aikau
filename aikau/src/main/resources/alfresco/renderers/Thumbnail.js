@@ -576,8 +576,8 @@ define(["dojo/_base/declare",
          }
          else if (this.currentItem && lang.getObject(this.itemKey || "nodeRef", false, this.currentItem))
          {
-            var nodeRefData = lang.getObject(this.itemKey || "nodeRef", false, this.currentItem);
-            this.imageIdProperty = this.itemKey || "nodeRef";
+            var nodeRefData = lang.getObject(this.itemKey || "node.nodeRef", false, this.currentItem);
+            this.imageIdProperty = this.itemKey || "node.nodeRef";
 
             // Fallback to just having a nodeRef available... this has been added to handle rendering of 
             // thumbnails in search results where full node information may not be available...
@@ -968,7 +968,7 @@ define(["dojo/_base/declare",
                      // ...if we don't have a MIME type we can still safely delegate, but we should just
                      // pass the nodeRef and allow the NodePreviewService to get the full metadata
                      this.alfServicePublish(topics.SHOW_NODE_PREVIEW, {
-                        nodeRef: lang.getObject(this.itemKey || "nodeRef", false, this.currentItem)
+                        nodeRef: lang.getObject(this.itemKey || "node.nodeRef", false, this.currentItem)
                      });
                   }
                }
