@@ -630,6 +630,22 @@ define([],function() {
       GET_CLOUD_TENANTS: "ALF_GET_CLOUD_TENANTS",
 
       /**
+       * This topic can be used to handle requests to build a widget model for displaying a list
+       * showing the items in a specific Data List
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to display
+       * @property {string} itemType The type of Data List to display
+       * @property {string} [alfResponseTopic] An optional topic to publish the widget model on.
+       */
+      GET_DATA_LIST_WIDGETS: "ALF_GET_DATA_LIST_WIDGETS",
+
+      /**
        * This topic can be published to request the data for a list of documents at the location
        * provided in the payload. It is typically handled by the 
        * [DocumentService]{@link module:alfresco/services/DocumentService}.

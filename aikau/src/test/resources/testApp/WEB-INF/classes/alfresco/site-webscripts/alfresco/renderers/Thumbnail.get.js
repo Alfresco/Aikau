@@ -199,6 +199,7 @@ model.jsonModel = {
                                                    {
                                                       name: "alfresco/renderers/Thumbnail",
                                                       config: {
+                                                         itemKey: "nodeRef",
                                                          assumeRendition: true,
                                                          showDocumentPreview: true,
                                                          usePreviewService: usePreviewService
@@ -279,6 +280,7 @@ model.jsonModel = {
                         nodeRef: "workspace://SpacesStore/26ae500c-91a9-496f-aca6-14101f985c28",
                         displayName: "Test PDF"
                      },
+                     itemKey: "nodeRef",
                      showDocumentPreview: true,
                      usePreviewService: usePreviewService
                   }

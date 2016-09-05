@@ -65,16 +65,16 @@ define(["module",
 
       "Standard document link": function() {
          return this.remote.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
-            .click()
-            .end();
+            .click();
          // TODO: Link is currently not created properly outside of Share, raised https://issues.alfresco.com/jira/browse/AKU-240
       },
 
       "Standard container link": function() {
          return this.remote.findByCssSelector("#DOCLIB_RENDITIONS tr:nth-child(1) .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
             .click()
-            .end()
-            .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
+         .end()
+         
+         .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
             .then(function(payload) {
                assert.propertyVal(payload, "path", "/Budget Files/Invoices/Folder", "Could not find standard container link publication");
             });
@@ -83,7 +83,7 @@ define(["module",
       "Custom thumbnail link": function() {
          return this.remote.findByCssSelector("#IMGPREVIEW_RENDITIONS tr:nth-child(2) .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("CUSTOM_SCOPE_CUSTOM_CLICK_TOPIC", "Topic was not published at the correct scope")
             .then(function(payload) {
@@ -94,8 +94,9 @@ define(["module",
       "Lightbox preview": function() {
          return this.remote.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
             .click()
-            .end()
-            .findDisplayedById("aikauLightbox");
+         .end()
+         
+         .findDisplayedById("aikauLightbox");
       },
 
       "Escape closes lightbox preview": function() {
@@ -110,8 +111,9 @@ define(["module",
       "PDFjs Preview": function() {
          return this.remote.findByCssSelector("#HARDCODED .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-preview-PdfJs")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-dialog-AlfDialog .alfresco-preview-PdfJs")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "PDFjs preview not displayed");
             });
@@ -125,10 +127,10 @@ define(["module",
       "Lightbox preview": function() {
          return this.remote.findByCssSelector("#TASKS1 .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
             .click()
-            .end()
+         .end()
 
          .findDisplayedById("aikauLightbox")
-            .end()
+         .end()
 
          .findDisplayedById("aikauCloseButton")
             .click();
@@ -137,10 +139,10 @@ define(["module",
       "PDFjs Preview": function() {
          return this.remote.findByCssSelector("#HARDCODED .alfresco-renderers-Thumbnail .alfresco-renderers-Thumbnail__image")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.dialogs.preview.visible)
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(".alfresco-preview-PdfJs");
       }
