@@ -544,6 +544,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Thumbnail__postMixInProperties() {
+         // jshint maxcomplexity:false
          this.imgId = "";
          this.thumbnailUrl = "";
          this.imgAltText = "";
