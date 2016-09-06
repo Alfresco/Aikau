@@ -144,7 +144,22 @@ define(["module",
             .then(function(payload) {
                assert.propertyVal(payload, "message", "Move partially successful, but not all of the files or folders could be moved");
             });
-      }
+      },
+
+      "Dialog title for single item in multiple item request is correct": function() {
+         return this.remote.findByCssSelector("#COPY2_label")
+            .click()
+         .end()
+         
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
+         .end()
+
+         .findByCssSelector(".dijitDialogTitle")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Copy files to...");
+            });
+      },
    });
 
    defineSuite(module, {
