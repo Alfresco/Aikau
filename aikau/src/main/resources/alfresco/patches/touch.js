@@ -1,6 +1,5 @@
 define("dojo/touch", ["dojo/_base/kernel", "dojo/aspect", "dojo/dom", "dojo/dom-class", "dojo/_base/lang", "dojo/on", "dojo/has", "dojo/mouse", "dojo/domReady", "dojo/_base/window"],
 function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
-
    // module:
    //    dojo/touch
 
@@ -9,8 +8,8 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
    // Detect if platform supports Pointer Events, and if so, the names of the events (pointerdown vs. MSPointerDown).
    var hasPointer = has("pointer-events") || has("MSPointer"),
       pointer = (function () {
-         var pointer = {};
-         for (var type in { down: 1, move: 1, up: 1, cancel: 1, over: 1, out: 1 }) {
+         var pointer = {}; // jshint ignore:line
+         for (var type in { down: 1, move: 1, up: 1, cancel: 1, over: 1, out: 1 }) { // jshint ignore:line
             pointer[type] = has("MSPointer") ?
                "MSPointer" + type.charAt(0).toUpperCase() + type.slice(1) :
                "pointer" + type;
@@ -35,7 +34,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
          // so just use that regardless of hasTouch.
          return function(node, listener){
             return on(node, pointerType, listener);
-         }
+         };
       }else if(hasTouch){
          return function(node, listener){
             var handle1 = on(node, touchType, function(evt){
@@ -62,7 +61,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
          // Avoid creating listeners for touch events on performance sensitive older browsers like IE6
          return function(node, listener){
             return on(node, mouseType, listener);
-         }
+         };
       }
    }
 
@@ -71,10 +70,10 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
       // Returns marked ancestor.
       do{
          if(node.dojoClick !== undefined){ return node; }
-      }while(node = node.parentNode);
+      }while(node = node.parentNode); // jshint ignore:line
    }
    
-   function doClicks(e, moveType, endType){
+   function doClicks(e, moveType, endType){ // jshint ignore:line
       // summary:
       //    Setup touch listeners to generate synthetic clicks immediately (rather than waiting for the browser
       //    to generate clicks after the double-tap delay) and consistently (regardless of whether event.preventDefault()
@@ -90,7 +89,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
       var markedNode = marked(e.target);
       clickTracker  = !e.target.disabled && markedNode && markedNode.dojoClick; // click threshold = true, number, x/y object, or "useTarget"
       if(clickTracker){
-         useTarget = (clickTracker == "useTarget");
+         useTarget = (clickTracker == "useTarget"); // jshint ignore:line
          clickTarget = (useTarget?markedNode:e.target);
          if(useTarget){
             // We expect a click, so prevent any other 
@@ -99,15 +98,15 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
          }
          clickX = e.changedTouches ? e.changedTouches[0].pageX - win.global.pageXOffset : e.clientX;
          clickY = e.changedTouches ? e.changedTouches[0].pageY - win.global.pageYOffset : e.clientY;
-         clickDx = (typeof clickTracker == "object" ? clickTracker.x : (typeof clickTracker == "number" ? clickTracker : 0)) || 4;
-         clickDy = (typeof clickTracker == "object" ? clickTracker.y : (typeof clickTracker == "number" ? clickTracker : 0)) || 4;
+         clickDx = (typeof clickTracker == "object" ? clickTracker.x : (typeof clickTracker == "number" ? clickTracker : 0)) || 4; // jshint ignore:line
+         clickDy = (typeof clickTracker == "object" ? clickTracker.y : (typeof clickTracker == "number" ? clickTracker : 0)) || 4; // jshint ignore:line
 
          // add move/end handlers only the first time a node with dojoClick is seen,
          // so we don't add too much overhead when dojoClick is never set.
          if(!clicksInited){
             clicksInited = true;
 
-            function updateClickTracker(e){
+            function updateClickTracker(e){ // jshint ignore:line
                if(useTarget){
                   clickTracker = dom.isDescendant(
                      win.doc.elementFromPoint(
@@ -116,13 +115,13 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
                      clickTarget);
                }else{
                   clickTracker = clickTracker &&
-                     (e.changedTouches ? e.changedTouches[0].target : e.target) == clickTarget &&
+                     (e.changedTouches ? e.changedTouches[0].target : e.target) == clickTarget && // jshint ignore:line
                      Math.abs((e.changedTouches ? e.changedTouches[0].pageX - win.global.pageXOffset : e.clientX) - clickX) <= clickDx &&
                      Math.abs((e.changedTouches ? e.changedTouches[0].pageY - win.global.pageYOffset : e.clientY) - clickY) <= clickDy;
                }
             }
 
-            win.doc.addEventListener(moveType, function(e){
+            win.doc.addEventListener(moveType, function(e){ // jshint ignore:line
                if(mouse.isRight(e) || mouse.isMiddle(e)){
                   return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
                }
@@ -134,7 +133,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
                }
             }, true);
 
-            win.doc.addEventListener(endType, function(e){
+            win.doc.addEventListener(endType, function(e){ // jshint ignore:line
                if(mouse.isRight(e) || mouse.isMiddle(e)){
                   return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
                }
@@ -178,8 +177,8 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
                }
             }, true);
 
-            function stopNativeEvents(type){
-               win.doc.addEventListener(type, function(e){
+            function stopNativeEvents(type){ // jshint ignore:line
+               win.doc.addEventListener(type, function(e){ // jshint ignore:line
                   // Stop native events when we emitted our own click event.  Note that the native click may occur
                   // on a different node than the synthetic click event was generated on.  For example,
                   // click on a menu item, causing the menu to disappear, and then (~300ms later) the browser
@@ -189,11 +188,11 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
                   // we call click() explicitly, we don't want to stop this event.
                      if(!e._dojo_click &&
                         (new Date()).getTime() <= clickTime + 1000 &&
-                        !(e.target.tagName == "INPUT" && domClass.contains(e.target, "dijitOffScreen"))){
+                        !(e.target.tagName == "INPUT" && domClass.contains(e.target, "dijitOffScreen"))){ // jshint ignore:line
                      e.stopPropagation();
                      e.stopImmediatePropagation && e.stopImmediatePropagation();
-                     if(type == "click" && (e.target.tagName != "INPUT" || e.target.type == "radio" || e.target.type == "checkbox")
-                        && e.target.tagName != "TEXTAREA" && e.target.tagName != "AUDIO" && e.target.tagName != "VIDEO"){
+                     if(type == "click" && (e.target.tagName != "INPUT" || e.target.type == "radio" || e.target.type == "checkbox") // jshint ignore:line
+                        && e.target.tagName != "TEXTAREA" && e.target.tagName != "AUDIO" && e.target.tagName != "VIDEO"){ // jshint ignore:line
                          // preventDefault() breaks textual <input>s on android, keyboard doesn't popup,
                          // but it is still needed for checkboxes and radio buttons, otherwise in some cases
                          // the checked state becomes inconsistent with the widget's state
