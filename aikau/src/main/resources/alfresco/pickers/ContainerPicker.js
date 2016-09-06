@@ -28,7 +28,46 @@ define(["dojo/_base/declare",
         "alfresco/core/topics"],
         function(declare, Picker, topics) {
 
+   var recentSitesPayload = {
+      currentPickerDepth: 0,
+      pickerLabel: "Sites",
+      picker: [
+         {
+            name: "alfresco/pickers/SingleItemPicker",
+            config: {
+               currentPickerDepth: 1,
+               widgetsForSubPicker: [
+                  {
+                     name: "alfresco/navigation/PathTree",
+                     config: {
+                        showRoot: false,
+                        rootNode: "{siteNodeRef}",
+                        filterPaths: ["^/documentLibrary/(.*)$"],
+                        publishTopic: "ALF_ITEM_SELECTED"
+                     }
+                  }
+               ],
+               requestItemsTopic: topics.GET_RECENT_SITES
+            }
+         }
+      ]
+   };
+
    return declare([Picker], {
+
+      /**
+       * An array of publications that will be published when the picker is ready. By default there
+       * are none specified.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.85
+       */
+      publishOnReady: [{
+         publishTopic: "ALF_ADD_PICKER",
+         publishPayload: recentSitesPayload
+      }],
 
       /**
        *
@@ -123,30 +162,7 @@ define(["dojo/_base/declare",
                      config: {
                         label: "picker.recentSites.label",
                         publishTopic: "ALF_ADD_PICKER",
-                        publishPayload: {
-                           currentPickerDepth: 0,
-                           pickerLabel: "Sites",
-                           picker: [
-                              {
-                                 name: "alfresco/pickers/SingleItemPicker",
-                                 config: {
-                                    currentPickerDepth: 1,
-                                    widgetsForSubPicker: [
-                                       {
-                                          name: "alfresco/navigation/PathTree",
-                                          config: {
-                                             showRoot: false,
-                                             rootNode: "{siteNodeRef}",
-                                             filterPaths: ["^/documentLibrary/(.*)$"],
-                                             publishTopic: "ALF_ITEM_SELECTED"
-                                          }
-                                       }
-                                    ],
-                                    requestItemsTopic: topics.GET_RECENT_SITES
-                                 }
-                              }
-                           ]
-                        }
+                        publishPayload: recentSitesPayload
                      }
                   },
                   {
