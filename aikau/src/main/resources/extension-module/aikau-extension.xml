@@ -33,6 +33,12 @@
                </web-framework>
             </config>
          </configurations>
+         <customizations>
+            <customization>
+               <targetPackageRoot>dojo</targetPackageRoot>
+               <sourcePackageRoot>aikau-patches/${webscript.version}</sourcePackageRoot>
+            </customization>
+         </customizations>
       </module>
    </modules>
 </extension>

@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-   <version>1.0.58</version>
+      <version>1.0.58.1-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -12,7 +12,9 @@
    <name>Aikau</name>
    <description>Aikau is a meta-framework for Alfresco specific UI development</description>
 
-
+   <properties>
+      <underscore>_</underscore>
+   </properties>
 
     <!-- Run profile that invokes the tomcat plugin -->
     <profiles>
@@ -23,7 +25,6 @@
                     <plugin>
                         <groupId>org.apache.tomcat.maven</groupId>
                         <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
                         <executions>
                             <execution>
                                 <id>run-embedded-tomcat</id>
@@ -62,7 +63,6 @@
                     <plugin>
                         <groupId>org.apache.tomcat.maven</groupId>
                         <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
                         <executions>
                             <execution>
                                 <id>run-embedded-tomcat</id>
@@ -95,7 +95,6 @@
                     </plugin>
                     <plugin>
                       <artifactId>maven-antrun-plugin</artifactId>
-                      <version>1.8</version>
                       <executions>
                         <execution>
                           <id>run-unit-tests</id>
@@ -164,21 +163,35 @@
          <resource>
             <!-- Spring Bean overrides -->
             <targetPath>./alfresco/web-extension/</targetPath>
-            <filtering>false</filtering>
+            <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/spring-context-config</directory>
          </resource>
 
          <resource>
             <!-- WebScript library files go straight into a package -->
-            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/webscript/libs</targetPath>
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/${project.version}/libs</targetPath>
             <filtering>false</filtering>
             <directory>${basedir}/src/main/resources/webscript-libs</directory>
          </resource>
 
          <resource>
+            <!-- Extension WebScripts can't use a version with dots, so an Ant plugin renames the target folder later -->
+             <targetPath>./alfresco/site-webscripts/customizations/${project.version}</targetPath>
+            <filtering>true</filtering>
+            <directory>${basedir}/src/main/resources/extension-webscripts</directory>
+         </resource>
+
+         <resource>
+            <!-- Extension WebScripts can't use a version with dots, so an Ant plugin renames the target folder later -->
+            <targetPath>./alfresco/site-webscripts/aikau-patches/${project.version}</targetPath>
+            <filtering>true</filtering>
+            <directory>${basedir}/src/main/resources/patches</directory>
+         </resource>
+
+         <resource>
             <!-- WebScripts go into their own package -->
-            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau</targetPath>
-            <filtering>false</filtering>
+            <targetPath>./alfresco/site-webscripts/org/alfresco/aikau/${project.version}/webscripts</targetPath>
+            <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/webscripts</directory>
          </resource>
 
@@ -204,6 +217,7 @@
             <filtering>true</filtering>
             <includes>
                <include>testApp/WEB-INF/surf.xml</include>
+               <include>testApp/WEB-INF/config/web-application-config.xml</include>
             </includes>
          </testResource>
          <testResource>
@@ -211,15 +225,64 @@
             <filtering>false</filtering>
             <excludes>
                <exclude>testApp/WEB-INF/surf.xml</exclude>
+               <exclude>testApp/WEB-INF/config/web-application-config.xml</exclude>
             </excludes>
          </testResource>
       </testResources>
 
       <plugins>
 
+         <!-- See AKU-845 - This plugin has been brought in to create a property that is the project
+              version with all "." characters replaced with "-" characters. The reason that this is 
+              required is that we want to defined version specific WebScript URLs, but for some reason
+              (most likely in Surf) the RequestDispatcher fails to map URLs containing more than
+              one "." character - this means that the Aikau version cannot be used without modification -->
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>regex-property</id>
+                  <goals>
+                     <goal>regex-property</goal>
+                  </goals>
+                  <configuration>
+                     <name>webscript.version</name>
+                     <value>${project.version}</value>
+                     <regex>[\.\-]</regex>
+                     <replacement>_</replacement>
+                     <failIfNoMatch>false</failIfNoMatch>
+                  </configuration>
+             </execution>
+           </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>templating-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+               <execution>
+                  <id>filter-src</id>
+                  <goals>
+                     <goal>filter-sources</goal>
+                  </goals>
+                  <configuration>
+                     <!-- 
+                       Note the two following parameters are the default one. 
+                       These are specified here just as a reminder. 
+                       But as the Maven philosophy is strongly about conventions, 
+                       it's better to just not specify them.
+                     -->
+                     <sourceDirectory>${basedir}/src/main/java-templates</sourceDirectory>
+                     <outputDirectory>${project.build.directory}/generated-sources/java-templates</outputDirectory>
+                  </configuration>
+               </execution>
+           </executions>
+         </plugin>
+
          <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.8</version>
             <executions>
                <execution>
                   <id>duplicate-english-messages</id>
@@ -250,13 +313,38 @@
                       </target>
                   </configuration>
                 </execution>
+                <execution>
+                  <id>rename-extensions-folder</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <echo>Renaming folders</echo>
+                        <move file="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${webscript.version}" />
+                        <move file="${project.build.outputDirectory}/alfresco/site-webscripts/aikau-patches/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/aikau-patches/${webscript.version}" />
+                      </target>
+                  </configuration>
+                </execution>
+                <!-- <execution>
+                  <id>rename-java-folder</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <echo>Renaming folder</echo>
+                        <move file="${project.build.outputDirectory}/org/alfresco/aikau" tofile="${project.build.outputDirectory}/org/alfresco/aikau/${project.version}" />
+                      </target>
+                  </configuration>
+                </execution> -->
             </executions>
         </plugin>
 
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.9</version>
             <executions>
                <execution>
                   <id>unpack-dependencies</id>
@@ -282,23 +370,7 @@
          </plugin>
 
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
-            <version>2.6</version>
-            <executions>
-               <execution>
-                  <id>build-jar</id>
-                  <goals>
-                     <goal>jar</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.6</version>
             <executions>
                <execution>
                   <id>build-tests</id>
