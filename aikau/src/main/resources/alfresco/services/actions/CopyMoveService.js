@@ -125,7 +125,8 @@ define(["dojo/_base/declare",
                responseScope: payload.alfResponseScope
             };
 
-         var fileName = (nodes.length === 1)? documents[0].fileName : this.message("services.ActionService.copyMoveTo.multipleFiles");
+         var firstFileName = documents.length ? documents[0].fileName : null;
+         var fileName = (nodes.length === 1 && firstFileName) ? firstFileName : this.message("services.ActionService.copyMoveTo.multipleFiles");
          this._actionHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onCopyMoveLocationSelected, urlPrefix, payload.copy), true);
          this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
             dialogId: "ALF_COPY_MOVE_DIALOG",
