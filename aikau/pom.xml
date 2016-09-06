@@ -176,13 +176,6 @@
 
          <resource>
             <!-- Extension WebScripts can't use a version with dots, so an Ant plugin renames the target folder later -->
-             <targetPath>./alfresco/site-webscripts/customizations/${project.version}</targetPath>
-            <filtering>true</filtering>
-            <directory>${basedir}/src/main/resources/extension-webscripts</directory>
-         </resource>
-
-         <resource>
-            <!-- Extension WebScripts can't use a version with dots, so an Ant plugin renames the target folder later -->
             <targetPath>./alfresco/site-webscripts/aikau-patches/${project.version}</targetPath>
             <filtering>true</filtering>
             <directory>${basedir}/src/main/resources/patches</directory>
@@ -322,7 +315,6 @@
                   <configuration>
                      <target>
                         <echo>Renaming folders</echo>
-                        <move file="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${webscript.version}" />
                         <move file="${project.build.outputDirectory}/alfresco/site-webscripts/aikau-patches/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/aikau-patches/${webscript.version}" />
                       </target>
                   </configuration>
