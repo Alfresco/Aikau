@@ -83,7 +83,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
       //      dojoClick property set to truthy, you can disable synthetic clicks on this node by setting its own dojoClick property
       //      to falsy.
 
-      if(mouse.isRight(e)){
+      if(mouse.isRight(e) || mouse.isMiddle(e)){
          return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
       }
 
@@ -123,7 +123,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
             }
 
             win.doc.addEventListener(moveType, function(e){
-               if(mouse.isRight(e)){
+               if(mouse.isRight(e) || mouse.isMiddle(e)){
                   return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
                }
                updateClickTracker(e);
@@ -135,7 +135,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
             }, true);
 
             win.doc.addEventListener(endType, function(e){
-               if(mouse.isRight(e)){
+               if(mouse.isRight(e) || mouse.isMiddle(e)){
                   return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
                }
                updateClickTracker(e);
