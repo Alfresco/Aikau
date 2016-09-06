@@ -1,4 +1,4 @@
-define("dojo/touch", ["./_base/kernel", "./aspect", "./dom", "./dom-class", "./_base/lang", "./on", "./has", "./mouse", "./domReady", "./_base/window"],
+define("dojo/touch", ["dojo/_base/kernel", "dojo/aspect", "dojo/dom", "dojo/dom-class", "dojo/_base/lang", "dojo/on", "dojo/has", "dojo/mouse", "dojo/domReady", "dojo/_base/window"],
 function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
 
    // module:
@@ -82,7 +82,11 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
       //    its dojoClick property set to truthy. If a node receives synthetic clicks because one of its ancestors has its
       //      dojoClick property set to truthy, you can disable synthetic clicks on this node by setting its own dojoClick property
       //      to falsy.
-      
+
+      if(mouse.isRight(e)){
+         return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
+      }
+
       var markedNode = marked(e.target);
       clickTracker  = !e.target.disabled && markedNode && markedNode.dojoClick; // click threshold = true, number, x/y object, or "useTarget"
       if(clickTracker){
@@ -119,6 +123,9 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
             }
 
             win.doc.addEventListener(moveType, function(e){
+               if(mouse.isRight(e)){
+                  return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
+               }
                updateClickTracker(e);
                if(useTarget){
                   // prevent native scroll event and ensure touchend is
@@ -128,6 +135,9 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
             }, true);
 
             win.doc.addEventListener(endType, function(e){
+               if(mouse.isRight(e)){
+                  return;     // avoid spurious dojoclick event on IE10+; right click is just for context menu
+               }
                updateClickTracker(e);
                if(clickTracker){
                   clickTime = (new Date()).getTime();
