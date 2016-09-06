@@ -280,10 +280,18 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onClick: function alfresco_menus__AlfMenuItemMixin__onClick(evt) {
+         // jshint maxcomplexity:false
          var targetUrlLocation = this.targetUrlLocation;
-         if (has("mac") && evt.metaKey)
+         var middleButton = evt.button === 1;
+         var leftButton = evt.button === 0;
+         var ctrlKey = has("mac") ? evt.metaKey : evt.ctrlKey;
+         if (middleButton || (leftButton && ctrlKey))
          {
             targetUrlLocation = "NEW";
+         }
+         else if (this.publishPayload && leftButton && this.publishPayload.target !== this.currentTarget)
+         {
+            this.publishPayload.target = this.defaultNavigationTarget || this.currentTarget;
          }
 
          // Emit the event to close popups in the stack...
