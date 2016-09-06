@@ -37,6 +37,9 @@ define(["module",
          
          .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
          .end()
+
+         .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker")
+         .end()
          
          .findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
