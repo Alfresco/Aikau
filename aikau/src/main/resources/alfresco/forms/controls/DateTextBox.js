@@ -48,6 +48,17 @@ define(["dojo/_base/declare",
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
 
       /**
+       * The value to return when no date has been selected. By default this will return null, however some 
+       * REST APIs may require an alternative value such as the empty string.
+       * 
+       * @instance
+       * @type {object|string|null}
+       * @default
+       * @since 1.0.85
+       */
+      unsetReturnValue: null,
+
+      /**
        * The selector to use for formatting a date. An alternative might be "datetime".
        * 
        * @instance
@@ -134,8 +145,12 @@ define(["dojo/_base/declare",
        * @returns {object} The current value of the field
        */
       getValue: function alfresco_forms_controls_DateTextBox__getValue() {
-         var value = this.inherited(arguments);
-         return value && stamp.toISOString(value, { selector: this.valueFormatSelector });
+         var value = this.inherited(arguments) || this.unsetReturnValue;
+         if (value)
+         {
+            value = stamp.toISOString(value, { selector: this.valueFormatSelector });
+         }
+         return value;
       },
 
       /**
@@ -169,7 +184,7 @@ define(["dojo/_base/declare",
          {
             value = stamp.toISOString(value, { selector: this.valueFormatSelector });
          }
-         this.inherited(arguments, [attributeName, oldValue, value]);
+         this.inherited(arguments, [attributeName, oldValue, value || this.unsetReturnValue]);
       }
    });
 });

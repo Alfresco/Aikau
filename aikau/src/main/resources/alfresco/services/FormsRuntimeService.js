@@ -119,7 +119,10 @@ define(["dojo/_base/declare",
                name: "alfresco/forms/controls/CheckBox"
             },
             "/org/alfresco/components/form/controls/date.ftl": {
-               name: "alfresco/forms/controls/DateTextBox"
+               name: "alfresco/forms/controls/DateTextBox",
+               config: {
+                  unsetReturnValue: ""
+               }
             },
             "/org/alfresco/components/form/controls/workflow/email-notification.ftl": {
                name: "alfresco/forms/controls/CheckBox"

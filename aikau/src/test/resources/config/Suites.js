@@ -123,6 +123,7 @@ define(function() {
       "alfresco/forms/FormsTest",
       "alfresco/forms/FormValidationTest",
       "alfresco/forms/HashFormTest",
+      "alfresco/forms/InitialValuesTest",
       "alfresco/forms/LateFieldRegistrationTest",
       "alfresco/forms/LayoutRulesTest",
       "alfresco/forms/SingleTextFieldFormTest",
