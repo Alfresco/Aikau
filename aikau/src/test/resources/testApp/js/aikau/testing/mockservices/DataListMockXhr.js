@@ -57,6 +57,10 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      ToDoListData]);
+
+            this.server.respondWith("DELETE", /\/aikau\/proxy\/alfresco\/(.*)/, [200, {}, ""]);
+            this.server.respondWith("POST", /\/aikau\/proxy\/alfresco\/api\/node\/workspace\/SpacesStore\/(.*)/, [200, {}, ""]);
+
          }
          catch(e)
          {

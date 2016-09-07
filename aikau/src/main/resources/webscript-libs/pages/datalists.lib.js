@@ -67,6 +67,7 @@ function getDataListsList(config) {
                               {
                                  name: "alfresco/lists/views/layouts/Cell",
                                  config: {
+                                    additionalCssClasses: "mediumpad",
                                     widgets: [
                                        {
                                           name: "alfresco/renderers/PropertyLink",
@@ -77,9 +78,79 @@ function getDataListsList(config) {
                                              publishPayloadType: "PROCESS",
                                              publishPayloadModifiers: ["processCurrentItemTokens"],
                                              publishPayload: {
-                                                nodeRef: "{nodeRef}",
-                                                itemType: "{itemType}",
                                                 alfResponseTopic: "SHOW_DATA_LIST"
+                                             },
+                                             publishPayloadItemMixin: true,
+                                             publishGlobal: true
+                                          }
+                                       }
+                                    ]
+                                 }
+                              },
+                              {
+                                 name: "alfresco/lists/views/layouts/Cell",
+                                 config: {
+                                    widgets: [
+                                       {
+                                          name: "alfresco/renderers/PublishAction",
+                                          config: {
+                                             iconClass: "edit-16",
+                                             propertyToRender: "title",
+                                             altText: "Click to edit {0}",
+                                             onlyShowOnHover: true,
+                                             publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+                                             publishPayloadType: "PROCESS",
+                                             publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                             publishPayload: {
+                                                dialogId: "ALF_DATA_LIST_EDIT_DIALOG",
+                                                dialogTitle: "Edit {title}",
+                                                formSubmissionTopic: "ALF_CRUD_CREATE",
+                                                formSubmissionGlobal: true,
+                                                formSubmissionPayloadMixin: {
+                                                   url: "api/node/workspace/SpacesStore/fc50d8a0-1bac-430e-b13d-3ac271c6578e/formprocessor"
+                                                },
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/forms/controls/TextBox",
+                                                      config: {
+                                                         label: "Title",
+                                                         value: "{title}",
+                                                         name: "prop_cm_title",
+                                                         requirementConfig: {
+                                                            initialValue: true
+                                                         }
+                                                      }
+                                                   },
+                                                   {
+                                                      name: "alfresco/forms/controls/TextArea",
+                                                      config: {
+                                                         label: "Description",
+                                                         value: "{description}",
+                                                         name: "prop_cm_description"
+                                                      }
+                                                   }
+                                                ]
+                                             },
+                                             publishGlobal: true
+                                          }
+                                       },
+                                       {
+                                          name: "alfresco/renderers/PublishAction",
+                                          config: {
+                                             iconClass: "delete-16",
+                                             propertyToRender: "title",
+                                             altText: "Click to delete {0}",
+                                             onlyShowOnHover: true,
+                                             publishTopic: "ALF_CRUD_DELETE",
+                                             publishPayloadType: "PROCESS",
+                                             publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                             publishPayload: {
+                                                url: "slingshot/datalists/list/node/{nodeRef}",
+                                                requiresConfirmation: true,
+                                                confirmationTitle: "Delete {title}?",
+                                                confirmationPrompt: "Are you sure you want to delete {title}?",
+                                                successMessage: "Successfully deleted {title}",
+                                                failureMessage: "It was not possible to delete {title}"
                                              },
                                              publishGlobal: true
                                           }

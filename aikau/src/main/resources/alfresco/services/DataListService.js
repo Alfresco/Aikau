@@ -34,6 +34,7 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "jquery",
         // No call backs from here...
+        "alfresco/layout/TitleDescriptionAndContent",
         "alfresco/lists/AlfList",
         "alfresco/lists/views/AlfListView",
         "alfresco/lists/views/layouts/Row",
@@ -353,6 +354,9 @@ define(["dojo/_base/declare",
                {
                   name: "alfresco/buttons/AlfButton",
                   config: {
+                     style: {
+                        marginBottom: "5px"
+                     },
                      label: "New Item",
                      additionalCssClasses: "call-to-action",
                      publishTopic: "ALF_CREATE_DIALOG_REQUEST",
@@ -558,6 +562,20 @@ define(["dojo/_base/declare",
                   ]
                }
             });
+
+            if (originalRequestConfig.data.title)
+            {
+               widgets = [
+                  {
+                     name: "alfresco/layout/TitleDescriptionAndContent",
+                     config: {
+                        title: originalRequestConfig.data.title,
+                        description: originalRequestConfig.data.description,
+                        widgets: widgets
+                     }
+                  }
+               ];
+            }
 
             this.alfPublish(originalRequestConfig.data.alfResponseTopic || originalRequestConfig.data.alfTopic + "_SUCCESS" , {
                widgets: widgets
