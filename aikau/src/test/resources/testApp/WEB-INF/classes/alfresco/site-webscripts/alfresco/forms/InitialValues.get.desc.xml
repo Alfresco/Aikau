@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Initial form value handling</shortname>
+  <description>This page shows is used to ensure that initial form values are processed correctly.</description>
+  <family>aikau-unit-tests</family>
+  <url>/InitialFormValues</url>
+</webscript>

@@ -178,10 +178,11 @@ define(["alfresco/core/Core",
        * 
        * @instance
        * @param {object} values The object to set the each form control value from
+       * @param {boolean} initialization Indicates whether this call is part of the initialization of the containing form
        */
-      updateFormControlValue: function alfresco_forms_LayoutMixin__addFormControlValue(values) {
+      updateFormControlValue: function alfresco_forms_LayoutMixin__addFormControlValue(values, initialization) {
          when(this.getFormLayoutChildren(), lang.hitch(this, function(children) {
-            array.forEach(children, lang.hitch(this, this.updateChildFormControlValue, values));
+            array.forEach(children, lang.hitch(this, this.updateChildFormControlValue, values, initialization));
          }));
       },
 
@@ -189,13 +190,14 @@ define(["alfresco/core/Core",
        * 
        * @instance
        * @param {object} values The object to set with the value of the supplied widget
+       * @param {boolean} initialization Indicates whether this call is part of the initialization of the containing form
        * @param {object} widget The widget to get the value from
        * @param {number} index The index of the widget
        */
-      updateChildFormControlValue: function alfresco_forms_LayoutMixin__updateChildFormControlValue(values, widget, /*jshint unused:false*/ index) {
+      updateChildFormControlValue: function alfresco_forms_LayoutMixin__updateChildFormControlValue(values, initialization, widget, /*jshint unused:false*/ index) {
          if (typeof widget.addFormControlValue === "function")
          {
-            widget.updateFormControlValue(values);
+            widget.updateFormControlValue(values, initialization);
          }
       },
 

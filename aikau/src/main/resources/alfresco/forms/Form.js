@@ -166,7 +166,8 @@ define(["dojo/_base/declare",
         "dojo/_base/event",
         "dojo/on"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
-                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass, Event, on) {
+                 template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass, 
+                 Event, on) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
@@ -1102,11 +1103,11 @@ define(["dojo/_base/declare",
                var currHash = hashUtils.getHash();
                var updatedFormValue = {};
                this.doHashVarUpdate(currHash, true, updatedFormValue);
-               this.setValue(updatedFormValue);
+               this.setValue(updatedFormValue, true);
             }
             else
             {
-               this.setValue(this.value || {});
+               this.setValue(this.value || {}, true);
             }
             
             // Create an object that we're going to use to check off all the form controls as they report their
@@ -1228,8 +1229,9 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @param {object} values The values to set
+       * @param {boolean} initialization Indicates whether this call is part of the initialization of the containing form
        */
-      setValue: function alfresco_forms_Form__setValue(values) {
+      setValue: function alfresco_forms_Form__setValue(values, initialization) {
          this.alfLog("log", "Setting form values: ", values);
          if (values && values instanceof Object)
          {
@@ -1238,7 +1240,7 @@ define(["dojo/_base/declare",
                array.forEach(this._form.getChildren(), function(entry) {
                   if (typeof entry.updateFormControlValue === "function")
                   {
-                     entry.updateFormControlValue(values);
+                     entry.updateFormControlValue(values, initialization);
                   }
                   if (typeof entry.publishValue === "function")
                   {
@@ -1247,6 +1249,7 @@ define(["dojo/_base/declare",
                });
             }
             this.validate();
+
             this.updateButtonPayloads(this.getValue());
          }
       },

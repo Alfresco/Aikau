@@ -505,7 +505,7 @@ define(["dojo/_base/declare",
                                     name: "alfresco/layout/DynamicWidgets",
                                     config: {
                                        subscribeGlobal: true,
-                                       subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED"
+                                       subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED_x"
                                     }
                                  }
                               ],
@@ -516,7 +516,7 @@ define(["dojo/_base/declare",
                                        itemId: "{nodeRef}",
                                        itemKind: "node",
                                        mode: "edit",
-                                       alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED",
+                                       alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED_x",
                                        formConfig: {
                                           formSubmissionPayloadMixin: {
                                              alfResponseScope: "ALF_DATA_LIST_"
