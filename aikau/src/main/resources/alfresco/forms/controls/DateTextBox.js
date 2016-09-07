@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.85
        */
-      unsetReturnValue: null,
+      unsetReturnValue: undefined,
 
       /**
        * The selector to use for formatting a date. An alternative might be "datetime".
@@ -145,12 +145,13 @@ define(["dojo/_base/declare",
        * @returns {object} The current value of the field
        */
       getValue: function alfresco_forms_controls_DateTextBox__getValue() {
-         var value = this.inherited(arguments) || this.unsetReturnValue;
-         if (value)
+         var value = this.inherited(arguments);
+         var returnValue = value && stamp.toISOString(value, { selector: this.valueFormatSelector });
+         if (!returnValue && typeof this.unsetReturnValue !== "undefined")
          {
-            value = stamp.toISOString(value, { selector: this.valueFormatSelector });
+            returnValue = this.unsetReturnValue;
          }
-         return value;
+         return returnValue;
       },
 
       /**
@@ -184,7 +185,14 @@ define(["dojo/_base/declare",
          {
             value = stamp.toISOString(value, { selector: this.valueFormatSelector });
          }
-         this.inherited(arguments, [attributeName, oldValue, value || this.unsetReturnValue]);
+         if (!value && typeof this.unsetReturnValue !== "undefined")
+         {
+            this.inherited(arguments, [attributeName, oldValue, this.unsetReturnValue]);
+         }
+         else
+         {
+            this.inherited(arguments, [attributeName, oldValue, value]);
+         }
       }
    });
 });
