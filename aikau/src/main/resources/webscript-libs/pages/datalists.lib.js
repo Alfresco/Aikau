@@ -100,14 +100,15 @@ function getDataListsList(config) {
                                              onlyShowOnHover: true,
                                              publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
                                              publishPayloadType: "PROCESS",
-                                             publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                             publishPayloadModifiers: ["processCurrentItemTokens"],
                                              publishPayload: {
                                                 dialogId: "ALF_DATA_LIST_EDIT_DIALOG",
                                                 dialogTitle: "Edit {title}",
-                                                formSubmissionTopic: "ALF_CRUD_CREATE",
+                                                formSubmissionTopic: "ALF_UPDATE_DATA_LIST",
                                                 formSubmissionGlobal: true,
                                                 formSubmissionPayloadMixin: {
-                                                   url: "api/node/workspace/SpacesStore/fc50d8a0-1bac-430e-b13d-3ac271c6578e/formprocessor"
+                                                   nodeRef: "{nodeRef}",
+                                                   siteId: config.siteId
                                                 },
                                                 widgets: [
                                                    {
@@ -115,7 +116,7 @@ function getDataListsList(config) {
                                                       config: {
                                                          label: "Title",
                                                          value: "{title}",
-                                                         name: "prop_cm_title",
+                                                         name: "title",
                                                          requirementConfig: {
                                                             initialValue: true
                                                          }
@@ -126,7 +127,7 @@ function getDataListsList(config) {
                                                       config: {
                                                          label: "Description",
                                                          value: "{description}",
-                                                         name: "prop_cm_description"
+                                                         name: "description"
                                                       }
                                                    }
                                                 ]

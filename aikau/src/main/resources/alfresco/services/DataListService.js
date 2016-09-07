@@ -261,10 +261,12 @@ define(["dojo/_base/declare",
        * @instance
        * @listens module:alfresco/core/topics#GET_DATA_LISTS
        * @listens module:alfresco/core/topics#GET_DATA_LIST_WIDGETS
+       * @listens module:alfresco/core/topics#UPDATE_DATA_LIST
        */
       registerSubscriptions: function alfresco_services_DataListService__registerSubscriptions() {
          this.alfSubscribe(topics.GET_DATA_LISTS, lang.hitch(this, this.getDataLists));
          this.alfSubscribe(topics.GET_DATA_LIST_WIDGETS, lang.hitch(this, this.getDataListWidgets));
+         this.alfSubscribe(topics.UPDATE_DATA_LIST, lang.hitch(this, this.updateDataList));
       },
 
       /**
@@ -571,6 +573,12 @@ define(["dojo/_base/declare",
                      config: {
                         title: originalRequestConfig.data.title,
                         description: originalRequestConfig.data.description,
+                        itemKeyProperty: "nodeRef",
+                        subscriptionTopic: topics.DATA_LIST_UPDATED,
+                        subscribeGlobal: true,
+                        currentItem: {
+                           nodeRef: originalRequestConfig.data.nodeRef
+                        },
                         widgets: widgets
                      }
                   }
@@ -581,6 +589,71 @@ define(["dojo/_base/declare",
                widgets: widgets
             });
          }
+      },
+
+      /**
+       * Handles requests to update the title and description of a Data List
+       * 
+       * @instance
+       * @param {object} payload The details of the Data List to update.
+       */
+      updateDataList: function alfresco_services_DataListService__updateDataList(payload) {
+         if (payload.nodeRef && payload.title)
+         {
+            var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
+            var url = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/formprocessor";
+            var config = {
+               url: url,
+               method: "POST",
+               nodeRef: payload.nodeRef,
+               data: {
+                  prop_cm_title: payload.title,
+                  prop_cm_description: payload.description
+               },
+               successCallback: this.updateDataListSuccess,
+               failureCallback: this.updateDataListFailure,
+               callbackScope: this
+            };
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to update a Data List but either a 'nodeRef' or 'title' attribute was missing from the supplied payload", payload, this);
+         }
+      },
+
+      /**
+       * This handles successfully completed requests to update a Data List
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       *
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
+       * @fires module:alfresco/core/topics#DATA_LIST_UPDATED
+       */
+      updateDataListSuccess: function alfresco_services_DataListService__updateDataListSuccess(response, originalRequestConfig) {
+         this.alfPublish(topics.RELOAD_DATA_TOPIC);
+         this.alfPublish(topics.DATA_LIST_UPDATED, {
+            nodeRef: originalRequestConfig.nodeRef,
+            title: originalRequestConfig.data.prop_cm_title,
+            description: originalRequestConfig.data.prop_cm_description
+         });
+      },
+
+      /**
+       * This handles failed requests to update a Data List
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       */
+      updateDataListFailure: function alfresco_services_DataListService__updateDataListFailure(response, originalRequestConfig) {
+         this.alfLog("error", "Could not update Data List", response, originalRequestConfig);
+         this.alfServicePublish(topics.DISPLAY_PROMPT, {
+            title: "Update Failure",
+            message: "It was not possible to update the Data List"
+         });
       }
    });
 });

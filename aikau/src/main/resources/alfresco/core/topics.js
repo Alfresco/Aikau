@@ -313,6 +313,22 @@ define([],function() {
       CREATE_SITE: "ALF_CREATE_SITE",
 
       /**
+       * This topic is published from the [DataListService]{@link module:alfresco/services/DataListService}
+       * when a Data List has had it's title and/or description updated.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List that has been updated
+       * @property {title} title The new title of the Data List
+       * @property {description} description The new description of the Data List
+       */
+      DATA_LIST_UPDATED: "ALF_DATA_LIST_UPDATED",
+
+      /**
        * Delete the archive created for downloading.
        *
        * @instance
@@ -1587,6 +1603,21 @@ define([],function() {
        * @event
        */
       TOGGLE_ON: "ALF_TOGGLE_ON",
+
+      /**
+       * This topic can be published to update the title and description of a Data List.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the the Data List to update
+       * @property {string} title The new title of the Data List
+       * @property {string} description The new description of the Data List
+       */
+      UPDATE_DATA_LIST: "ALF_UPDATE_DATA_LIST",
 
       /**
        * This can be published to change the current field being used to sort lists.
