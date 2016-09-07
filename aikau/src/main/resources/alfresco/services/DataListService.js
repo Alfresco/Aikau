@@ -258,12 +258,37 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LoginService
        * 
        * @instance
+       * @listens module:alfresco/core/topics#GET_DATA_LISTS
        * @listens module:alfresco/core/topics#GET_DATA_LIST_WIDGETS
        */
       registerSubscriptions: function alfresco_services_DataListService__registerSubscriptions() {
+         this.alfSubscribe(topics.GET_DATA_LISTS, lang.hitch(this, this.getDataLists));
          this.alfSubscribe(topics.GET_DATA_LIST_WIDGETS, lang.hitch(this, this.getDataListWidgets));
       },
-      
+
+      /**
+       * Handles requests to retrieve Data Lists for the supplied site.
+       * 
+       * @instance
+       * @param  {object} payload The payload containing the details of the site to retrieve the Data Lists for
+       */
+      getDataLists: function alfresco_services_DataListService__getDataLists(payload) {
+         if (payload.siteId)
+         {
+            var url = AlfConstants.PROXY_URI + "slingshot/datalists/lists/site/" + payload.siteId + "/dataLists";
+            var config = {
+               url: url,
+               method: "GET"
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to retrive Data Lists but no 'siteId' attribute was provided", payload, this);
+         }
+      },
+
       /**
        * Handles requests to retrieve a model for displaying the requests Data List. In order to render
        * the Data List it is necessary to request the columns details for it. This function makes and

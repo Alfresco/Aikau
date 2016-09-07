@@ -1,0 +1,39 @@
+{
+   "columns": [{
+      "type": "property",
+      "name": "dl:todoTitle",
+      "formsName": "prop_dl_todoTitle",
+      "label": "Title",
+      "dataType": "text"
+   }, {
+      "type": "property",
+      "name": "dl:todoDueDate",
+      "formsName": "prop_dl_todoDueDate",
+      "label": "Due Date",
+      "dataType": "datetime"
+   }, {
+      "type": "property",
+      "name": "dl:todoPriority",
+      "formsName": "prop_dl_todoPriority",
+      "label": "Priority",
+      "dataType": "int"
+   }, {
+      "type": "property",
+      "name": "dl:todoStatus",
+      "formsName": "prop_dl_todoStatus",
+      "label": "Status",
+      "dataType": "text"
+   }, {
+      "type": "association",
+      "name": "dl:assignee",
+      "formsName": "assoc_dl_assignee",
+      "label": "Assignee",
+      "dataType": "cm:person"
+   }, {
+      "type": "association",
+      "name": "dl:attachments",
+      "formsName": "assoc_dl_attachments",
+      "label": "Attachments",
+      "dataType": "cm:cmobject"
+   }]
+}

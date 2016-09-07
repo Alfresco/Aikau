@@ -1,0 +1,39 @@
+{
+   "container": "workspace:\/\/SpacesStore\/64f69e69-f61e-42a3-8697-95eea1f2bda2",
+   "permissions": {
+      "create": true
+   },
+   "datalists": [{
+         "name": "aea88103-517e-4aa0-a3be-de258d0e6465",
+         "title": "To-Do",
+         "description": "Project to do list",
+         "nodeRef": "workspace://SpacesStore/fc50d8a0-1bac-430e-b13d-3ac271c6578e",
+         "itemType": "dl:todoList",
+         "permissions": {
+            "edit": true,
+            "delete": true
+         }
+      }, {
+         "name": "e3233285-0344-4168-88a0-4918fd3680fd",
+         "title": "Event List",
+         "description": "This an event list",
+         "nodeRef": "workspace://SpacesStore/d7a6d972-fefb-4cf7-be53-6aeb91ff6c2c",
+         "itemType": "dl:event",
+         "permissions": {
+            "edit": true,
+            "delete": true
+         }
+      }, {
+         "name": "1a4c7c51-8ae0-4ac1-affe-d5f68793f2ff",
+         "title": "My issues",
+         "description": "Testing",
+         "nodeRef": "workspace://SpacesStore/ac201da8-3e91-4d4c-b3ef-32564cad590d",
+         "itemType": "dl:issue",
+         "permissions": {
+            "edit": true,
+            "delete": true
+         }
+      }
+
+   ]
+}

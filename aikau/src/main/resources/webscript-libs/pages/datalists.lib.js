@@ -45,15 +45,14 @@ function getDataListServices() {
    ];
 }
 
-function getDataListsList() {
+function getDataListsList(config) {
    return {
       name: "alfresco/lists/AlfList",
       align: "sidebar",
       config: {
-         pubSubScope: "LIST_OF_LISTS_",
-         loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+         loadDataPublishTopic: "ALF_GET_DATA_LISTS",
          loadDataPublishPayload: {
-            url: "slingshot/datalists/lists/site/swsdp/dataLists" // TODO: Hard-coded to site
+            siteId: config.siteId
          },
          itemsProperty: "datalists",
          widgets: [
@@ -200,17 +199,17 @@ function getNewDataListButton() {
          },
          publishGlobal: true
       }
-   }
+   };
 }
 
 
-function getDataListWidgets() {
+function getDataListWidgets(config) {
    return {
       name: "alfresco/layout/AlfSideBarContainer",
       config: {
          widgets: [
             getNewDataListButton(),
-            getDataListsList(),
+            getDataListsList(config),
             getDataListDisplay()
          ]
       }

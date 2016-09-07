@@ -630,6 +630,19 @@ define([],function() {
       GET_CLOUD_TENANTS: "ALF_GET_CLOUD_TENANTS",
 
       /**
+       * This topic can be used to request the Data Lists for the supplied site
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} siteId The id of the site to get the Data Lists for
+       */
+      GET_DATA_LISTS: "ALF_GET_DATA_LISTS",
+
+      /**
        * This topic can be used to handle requests to build a widget model for displaying a list
        * showing the items in a specific Data List
        * 

@@ -76,6 +76,35 @@ define(["dojo/_base/declare",
       initService: function alfresco_services_BaseService__initService() {
          // No action required
       },
+
+      /**
+       * This function can be called before making an XHR call in order to ensure publication relevant topics
+       * such as 
+       * 
+       * @instance
+       * @param {object} requestPayload The payload published making the request on the service
+       * @param {object} xhrPayload The payload to be published to make the XHR request
+       * @since 1.0.85
+       */
+      mergeTopicsIntoXhrPayload: function alfresco_services_BaseService__mergeTopicsIntoXhrPayload(requestPayload, xhrPayload) {
+         if (requestPayload && xhrPayload)
+         {
+            var topic;
+            if (requestPayload.alfResponseTopic)
+            {
+               topic = (requestPayload.alfResponseScope || "") + requestPayload.alfResponseTopic;
+            }
+            else
+            {
+               topic = requestPayload.responseTopic;
+            }
+
+            xhrPayload.alfTopic = topic;
+            xhrPayload.alfResponseTopic = topic;
+            xhrPayload.alfSuccessTopic = requestPayload.alfSuccessTopic;
+            xhrPayload.alfFailureTopic = requestPayload.alfFailureTopic;
+         }
+      },
       
       /**
        * This function should be overridden by extending services to register their subscriptions.
