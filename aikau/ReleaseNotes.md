@@ -1,4 +1,4 @@
-Aikau 1.0.84 Release Notes
+Aikau 1.0.85 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.85:
+* [AKU-1075](https://issues.alfresco.com/jira/browse/AKU-1075)       - Improve dialog title handling on copy/move action
+* [AKU-1084](https://issues.alfresco.com/jira/browse/AKU-1084)       - Ensure ContainerPicker selects recent sites on display
+* [AKU-1085](https://issues.alfresco.com/jira/browse/AKU-1085)       - Fix IE10/11 & Edge middle click, right click handling
+* [AKU-1086](https://issues.alfresco.com/jira/browse/AKU-1086)       - Support middle click, ctrl click open in new tab on menu items
+
 1.0.84:
 * [AKU-1072](https://issues.alfresco.com/jira/browse/AKU-1072)       - Support hiding form control validation indicators
 * [AKU-1076](https://issues.alfresco.com/jira/browse/AKU-1076)       - Ensure filteringTopics does not need to be configured on AlfFilteredList

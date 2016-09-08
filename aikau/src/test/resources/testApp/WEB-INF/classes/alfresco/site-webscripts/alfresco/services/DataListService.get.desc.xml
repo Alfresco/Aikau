@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Data Lists</shortname>
+  <description>A test page for all things Data Lists</description>
+  <family>aikau-unit-tests</family>
+  <url>/DataListService</url>
+</webscript>

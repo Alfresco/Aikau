@@ -1304,7 +1304,6 @@ define(["dojo/_base/declare",
             }
 
             this.setValue(this.initialValue);
-            delete this.initialValue;
 
             // Iterate over all the deferred value assignments, arguably we could just process the last deferred
             // value, however it may be necessary to ensure that the intended flow of processing is maintained
@@ -1655,7 +1654,7 @@ define(["dojo/_base/declare",
             // yet complete. It will be removed when initialization completes and from that moment on
             // we can rely on the value returned by the "getValue" function.
             var value;
-            if (typeof this.initialValue === "undefined")
+            if (this.___addedToDocument)
             {
                value = this.getValue();
             }
@@ -1934,9 +1933,64 @@ define(["dojo/_base/declare",
             var addedName = this.name + this.addedNameSuffix;
             var removedName = this.name + this.removedNameSuffix;
 
-            // special form controls may store initial value but by default we consider everything as "added"
-            lang.setObject(addedName, this.getValue(), values);
-            lang.setObject(removedName, (this.valueDelimiter ? "": []), values);
+            if (this.initialValue)
+            {
+               var initialPick = this.initialValue;
+               var currentPick = this.getValue();
+               if (this.valueDelimiter)
+               {
+                  initialPick = this.initialValue.split(this.valueDelimiter);
+                  currentPick = currentPick.split(this.valueDelimiter);
+               }
+               
+               var added = [];
+               var removed = [];
+
+               array.forEach(currentPick, function(currItem) {
+                  // If the current picked item was in the inital selection it has not been added...
+                  // ... BUT if the current pick was NOT in the inital selection it HAS been added
+                  if (array.some(initialPick, function(intialItem) {
+                     return currItem === intialItem;
+                  })) {
+                     // No action required, the current pick was also in the initial pick...
+                  }
+                  else
+                  {
+                     // The current pick was not an initial pick so has been added...
+                     added.push(currItem);
+                  }
+               }, this);
+
+               array.forEach(initialPick, function(intialItem) {
+                  // If the initially picked item is in the current selection it has not been removed...
+                  // ... BUT if the initially picked item is NOT in the current selection it HAS been removed
+                  if (array.some(currentPick, function(currItem) {
+                     return currItem === intialItem;
+                  })) {
+                     // No action required, the current pick was also in the initial pick...
+                  }
+                  else
+                  {
+                     // The initial pick is not a current pick so has been removed...
+                     removed.push(intialItem);
+                  }
+               }, this);
+
+               if (this.valueDelimiter)
+               {
+                  added = added.join(this.valueDelimiter);
+                  removed = removed.join(this.valueDelimiter);
+               }
+
+               lang.setObject(addedName, added, values);
+               lang.setObject(removedName, removed, values);
+            }
+            else
+            {
+               // Nothing removed, everything added...
+               lang.setObject(addedName, this.getValue(), values);
+               lang.setObject(removedName, (this.valueDelimiter ? "": []), values);
+            }
          }
          else
          {
@@ -1950,8 +2004,9 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} values The object to set the each form control value from
+       * @param {boolean} initialization Indicates whether this call is part of the initialization of the containing form
        */
-      updateFormControlValue: function alfresco_forms_controls_BaseFormControl__updateFormControlValue(values) {
+      updateFormControlValue: function alfresco_forms_controls_BaseFormControl__updateFormControlValue(values, initialization) {
          var hidden = this._visible !== undefined && this._visible === false;
          var disabled = this._disabled !== undefined && this._disabled === true;
          var noUpdateWhenHiddenOrDisabled = this.noValueUpdateWhenHiddenOrDisabled !== undefined && this.noValueUpdateWhenHiddenOrDisabled === true;
@@ -1969,6 +2024,11 @@ define(["dojo/_base/declare",
                var v = lang.getObject(this.get("name"), false, values);
                if (typeof v !== "undefined")
                {
+                  if (initialization)
+                  {
+                     // If this is set during initalization, then set the initial value...
+                     this.initialValue = v;
+                  }
                   this.setValue(v);
                }
             }

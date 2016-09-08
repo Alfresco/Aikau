@@ -67,6 +67,25 @@ model.jsonModel = {
          }
       },
       {
+         id: "COPY2",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Multiple Copy (via ActionService)",
+            publishTopic: "ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST",
+            publishPayload: {
+               action: "onActionCopyTo",
+               documents: [
+                  {
+                     displayName: "Node 1",
+                     node: {
+                        nodeRef: "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e"
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          name: "aikauTesting/mockservices/CopyMoveServiceMockXhr"
       },
       {

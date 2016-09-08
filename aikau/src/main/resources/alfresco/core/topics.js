@@ -313,6 +313,22 @@ define([],function() {
       CREATE_SITE: "ALF_CREATE_SITE",
 
       /**
+       * This topic is published from the [DataListService]{@link module:alfresco/services/DataListService}
+       * when a Data List has had it's title and/or description updated.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List that has been updated
+       * @property {string} title The new title of the Data List
+       * @property {string} description The new description of the Data List
+       */
+      DATA_LIST_UPDATED: "ALF_DATA_LIST_UPDATED",
+
+      /**
        * Delete the archive created for downloading.
        *
        * @instance
@@ -331,6 +347,45 @@ define([],function() {
        * @since 1.0.34
        */
       DELETE_CONTENT: "ALF_DELETE_CONTENT_REQUEST",
+
+      /**
+       * This topic is published to request the deletion of a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST: "ALF_DELETE_DATA_LIST_REQUEST",
+
+      /**
+       * This topic is published when the user confirms that they wish to delete a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST_CONFIRMATION: "ALF_DELETE_DATA_LIST_CONFIRMATION",
+
+      /**
+       * This topic is published when a Data List has been successfully deleted.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST_SUCCESS: "ALF_DELETE_DATA_LIST_SUCCESS",
 
       /**
        * This topic is published to request the deletion of a site.
@@ -628,6 +683,35 @@ define([],function() {
        * @event
        */
       GET_CLOUD_TENANTS: "ALF_GET_CLOUD_TENANTS",
+
+      /**
+       * This topic can be used to request the Data Lists for the supplied site
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} siteId The id of the site to get the Data Lists for
+       */
+      GET_DATA_LISTS: "ALF_GET_DATA_LISTS",
+
+      /**
+       * This topic can be used to handle requests to build a widget model for displaying a list
+       * showing the items in a specific Data List
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to display
+       * @property {string} itemType The type of Data List to display
+       * @property {string} [alfResponseTopic] An optional topic to publish the widget model on.
+       */
+      GET_DATA_LIST_WIDGETS: "ALF_GET_DATA_LIST_WIDGETS",
 
       /**
        * This topic can be published to request the data for a list of documents at the location
@@ -1083,6 +1167,34 @@ define([],function() {
        * @since 1.0.33
        */
       REQUEST_ARCHIVE_PROGRESS: "ALF_ARCHIVE_PROGRESS_REQUEST",
+
+      /**
+       * This can be published to request the user to confirm an action.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       * 
+       * @event
+       * @property {string} [confirmationTitle="Please confirm"] The title to show in the dialog
+       * @property {string} [confirmationPrompt="Are you sure?"] The prompt message to display in the dialog
+       * @property {string} [confirmationButtonLabel="Yes"] The label for the confirmation button
+       * @property {string} [cancellationButtonLabel="No"] The label for the cancellation button
+       * @property {object} [confirmationPublication] The publication to make on confirmation
+       * @property {string} [confirmationPublication.publishTopic] The topic to publish confirmation on
+       * @property {object} [confirmationPublication.publishPayload] The payload to publish on confirmation
+       * @property {boolean} [confirmationPublication.publishGlobal] Whether to publish confirmation globally
+       * @property {boolean} [confirmationPublication.publishToParent] Whether to publish confirmation on the parent scope
+       * @property {string} [confirmationPublication.publishScope] A custom scope to publish confirmation on
+       * @property {object} [cancellationPublication] The publication to make on cancellation
+       * @property {string} [cancellationPublication.publishTopic] The topic to publish cancellation on
+       * @property {object} [cancellationPublication.publishPayload] The payload to publish on cancellation
+       * @property {boolean} [cancellationPublication.publishGlobal] Whether to publish cancellation globally
+       * @property {boolean} [cancellationPublication.publishToParent] Whether to publish cancellation on the parent scope
+       * @property {string} [cancellationPublication.publishScope] A custom scope to publish cancellation on
+       */
+      REQUEST_CONFIRMATION_PROMPT: "ALF_REQUEST_CONFIRMATION_PROMPT",
 
       /**
        * Called to trigger a delayed request to check progress
@@ -1558,6 +1670,21 @@ define([],function() {
        * @event
        */
       TOGGLE_ON: "ALF_TOGGLE_ON",
+
+      /**
+       * This topic can be published to update the title and description of a Data List.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the the Data List to update
+       * @property {string} title The new title of the Data List
+       * @property {string} description The new description of the Data List
+       */
+      UPDATE_DATA_LIST: "ALF_UPDATE_DATA_LIST",
 
       /**
        * This can be published to change the current field being used to sort lists.
