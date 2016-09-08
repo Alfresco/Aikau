@@ -34,6 +34,7 @@ define(["dojo/_base/declare",
         "service/constants/Default",
         "jquery",
         // No call backs from here...
+        "alfresco/layout/TitleDescriptionAndContent",
         "alfresco/lists/AlfList",
         "alfresco/lists/views/AlfListView",
         "alfresco/lists/views/layouts/Row",
@@ -258,12 +259,43 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LoginService
        * 
        * @instance
+       * @listens module:alfresco/core/topics#DELETE_DATA_LIST
+       * @listens module:alfresco/core/topics#DELETE_DATA_LIST_CONFIRMATION
+       * @listens module:alfresco/core/topics#GET_DATA_LISTS
        * @listens module:alfresco/core/topics#GET_DATA_LIST_WIDGETS
+       * @listens module:alfresco/core/topics#UPDATE_DATA_LIST
        */
       registerSubscriptions: function alfresco_services_DataListService__registerSubscriptions() {
+         this.alfSubscribe(topics.DELETE_DATA_LIST, lang.hitch(this, this.onDeleteDataListRequest));
+         this.alfSubscribe(topics.DELETE_DATA_LIST_CONFIRMATION, lang.hitch(this, this.onDeleteDataListConfirmation));
+         this.alfSubscribe(topics.GET_DATA_LISTS, lang.hitch(this, this.getDataLists));
          this.alfSubscribe(topics.GET_DATA_LIST_WIDGETS, lang.hitch(this, this.getDataListWidgets));
+         this.alfSubscribe(topics.UPDATE_DATA_LIST, lang.hitch(this, this.updateDataList));
       },
-      
+
+      /**
+       * Handles requests to retrieve Data Lists for the supplied site.
+       * 
+       * @instance
+       * @param  {object} payload The payload containing the details of the site to retrieve the Data Lists for
+       */
+      getDataLists: function alfresco_services_DataListService__getDataLists(payload) {
+         if (payload.siteId)
+         {
+            var url = AlfConstants.PROXY_URI + "slingshot/datalists/lists/site/" + payload.siteId + "/dataLists";
+            var config = {
+               url: url,
+               method: "GET"
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to retrive Data Lists but no 'siteId' attribute was provided", payload, this);
+         }
+      },
+
       /**
        * Handles requests to retrieve a model for displaying the requests Data List. In order to render
        * the Data List it is necessary to request the columns details for it. This function makes and
@@ -328,6 +360,9 @@ define(["dojo/_base/declare",
                {
                   name: "alfresco/buttons/AlfButton",
                   config: {
+                     style: {
+                        marginBottom: "5px"
+                     },
                      label: "New Item",
                      additionalCssClasses: "call-to-action",
                      publishTopic: "ALF_CREATE_DIALOG_REQUEST",
@@ -534,10 +569,187 @@ define(["dojo/_base/declare",
                }
             });
 
+            if (originalRequestConfig.data.title)
+            {
+               widgets = [
+                  {
+                     name: "alfresco/layout/TitleDescriptionAndContent",
+                     config: {
+                        title: originalRequestConfig.data.title,
+                        description: originalRequestConfig.data.description,
+                        itemKeyProperty: "nodeRef",
+                        subscriptionTopic: topics.DATA_LIST_UPDATED,
+                        subscribeGlobal: true,
+                        currentItem: {
+                           nodeRef: originalRequestConfig.data.nodeRef
+                        },
+                        widgets: widgets,
+                        invisibilityConfig: {
+                           initialValue: false,
+                           rules: [
+                              {
+                                 topic: topics.DELETE_DATA_LIST_SUCCESS,
+                                 attribute: "nodeRef",
+                                 is: [originalRequestConfig.data.nodeRef],
+                                 subscribeGlobal: true
+                              }
+                           ]
+                        }
+                     }
+                  }
+               ];
+            }
+
+
+
             this.alfPublish(originalRequestConfig.data.alfResponseTopic || originalRequestConfig.data.alfTopic + "_SUCCESS" , {
                widgets: widgets
             });
          }
+      },
+
+
+      /**
+       * Handles requests to delete a Data List. Generates a confirmation prompt to the user.
+       *
+       * @instance
+       * @param  {object} payload The payload containing the NodeRef of the Data List to delete
+       * @fires module:alfresco/core/topics#REQUEST_CONFIRMATION_PROMPT
+       */
+      onDeleteDataListRequest: function alfresco_services_DataListService__onDeleteDataListRequest(payload) {
+         if (payload.nodeRef)
+         {
+            this.alfServicePublish(topics.REQUEST_CONFIRMATION_PROMPT, {
+               confirmationTitle: "Delete " + payload.title,
+               confirmationPrompt: "Are you sure you want to delete " + payload.title +" ?",
+               confirmationButtonLabel: "Yes",
+               cancellationButtonLabel: "No",
+               confirmationPublication: {
+                  publishTopic: topics.DELETE_DATA_LIST_CONFIRMATION,
+                  publishPayload: {
+                     nodeRef: payload.nodeRef
+                  },
+                  publishGlobal: true
+               }
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to delete a Data List but no 'nodeRef' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * Handles the confrmation of a request to delete a Data List.
+       *
+       * @instance
+       * @param  {object} payload The payload containing the NodeRef of the Data List to delete
+       */
+      onDeleteDataListConfirmation: function alfresco_services_DataListService__onDeleteDataListConfirmation(payload) {
+         var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "slingshot/datalists/list/node/" + nodeRef.uri,
+            method: "DELETE",
+            nodeRef: payload.nodeRef,
+            successCallback: this.onDeleteDataListSuccess,
+            failureCallback: this.onDeleteDataListFailure,
+            callbackScope: this
+         });
+      },
+
+      /**
+       * @instance
+       * @param {object} response The response from the original XHR request.
+       * @param {object} originalRequestConfig The configuration passed to the original XHR request.
+       *
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
+       * @fires module:alfresco/core/topic#DELETE_DATA_LIST_SUCCESS
+       */
+      onDeleteDataListSuccess: function alfresco_services_DataListService__onDeleteDataListSuccess(response, originalRequestConfig) {
+         // TODO: May need a more specific scoped publication
+         this.alfPublish(topics.RELOAD_DATA_TOPIC);
+
+         // Publish a success topic... 
+         // this is done so that if the Data List items are currently being displayed they can be hidden...
+         this.alfPublish(topics.DELETE_DATA_LIST_SUCCESS, {
+            nodeRef: originalRequestConfig.nodeRef
+         }); 
+      },
+
+      /**
+       * Handles failed attempts to delete a Data List
+       * 
+       * @instance
+       * @param {object} response The response from the original XHR request.
+       * @param {object} originalRequestConfig The configuration passed to the original XHR request.
+       */
+      onDeleteDataListFailure: function alfresco_services_DataListService__onDeleteDataListFailure(response, originalRequestConfig) {
+         this.alfLog("error", "It was not possible to delete a Data List", response, originalRequestConfig, this);
+      },
+
+      /**
+       * Handles requests to update the title and description of a Data List
+       * 
+       * @instance
+       * @param {object} payload The details of the Data List to update.
+       */
+      updateDataList: function alfresco_services_DataListService__updateDataList(payload) {
+         if (payload.nodeRef && payload.title)
+         {
+            var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
+            var url = AlfConstants.PROXY_URI + "api/node/" + nodeRef.uri + "/formprocessor";
+            var config = {
+               url: url,
+               method: "POST",
+               nodeRef: payload.nodeRef,
+               data: {
+                  prop_cm_title: payload.title,
+                  prop_cm_description: payload.description
+               },
+               successCallback: this.updateDataListSuccess,
+               failureCallback: this.updateDataListFailure,
+               callbackScope: this
+            };
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to update a Data List but either a 'nodeRef' or 'title' attribute was missing from the supplied payload", payload, this);
+         }
+      },
+
+      /**
+       * This handles successfully completed requests to update a Data List
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       *
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
+       * @fires module:alfresco/core/topics#DATA_LIST_UPDATED
+       */
+      updateDataListSuccess: function alfresco_services_DataListService__updateDataListSuccess(response, originalRequestConfig) {
+         this.alfPublish(topics.RELOAD_DATA_TOPIC);
+         this.alfPublish(topics.DATA_LIST_UPDATED, {
+            nodeRef: originalRequestConfig.nodeRef,
+            title: originalRequestConfig.data.prop_cm_title,
+            description: originalRequestConfig.data.prop_cm_description
+         });
+      },
+
+      /**
+       * This handles failed requests to update a Data List
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       */
+      updateDataListFailure: function alfresco_services_DataListService__updateDataListFailure(response, originalRequestConfig) {
+         this.alfLog("error", "Could not update Data List", response, originalRequestConfig);
+         this.alfServicePublish(topics.DISPLAY_PROMPT, {
+            title: "Update Failure",
+            message: "It was not possible to update the Data List"
+         });
       }
    });
 });

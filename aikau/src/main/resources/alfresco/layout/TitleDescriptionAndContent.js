@@ -33,8 +33,9 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/TitleDescriptionAndContent.html",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing) {
+        "alfresco/core/CoreWidgetProcessing",
+        "dojo/_base/lang"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, lang) {
    
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
       
@@ -73,6 +74,40 @@ define(["dojo/_base/declare",
       description: "",
 
       /**
+       * This is the property that is used to uniquely identify the item that this widget is being used
+       * to provide a title for. It is used to ensure that the any publications made on the
+       * [subscriptionTopic]{@link module:alfresco/layout/TitleDescriptionAndContent#subscriptionTopic}
+       * relate to the current instance.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       */
+      itemKeyProperty: "nodeRef",
+
+      /**
+       * A topic to subscribe to that when published can update the title and description shown.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       */
+      subscriptionTopic: null,
+
+      /**
+       * Indicates whether the [subscriptionTopic]{@link module:alfresco/layout/TitleDescriptionAndContent#subscriptionTopic}
+       * should be subscribed to globally.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.85
+       */
+      subscribeGlobal: false,
+
+      /**
        * Ensures that the title and description are converted from key to localised message.
        * 
        * @instance
@@ -95,9 +130,50 @@ define(["dojo/_base/declare",
        */
       postCreate: function alfresco_layout_TitleDescriptionAndContent__postCreate() {
          /*jshint eqnull:true*/
+         this.alfSubscribe(this.subscriptionTopic, lang.hitch(this, this.update), this.subscribeGlobal);
          if (this.widgets != null)
          {
             this.processWidgets(this.widgets, this.contentNode);
+         }
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {object} payload The payload containing the details to update
+       */
+      update: function alfresco_layout_TitleDescriptionAndContent__update(payload) {
+         if (this.itemKeyProperty && this.currentItem)
+         {
+            var itemKey = lang.getObject(this.itemKeyProperty, false, this.currentItem);
+            var payloadKey = lang.getObject(this.itemKeyProperty, false, payload);
+            if (itemKey && itemKey === payloadKey)
+            {
+               this.setTitleAndDescription(payload.title, payload.description);
+            }
+         }
+         else
+         {
+            this.setTitleAndDescription(payload.title, payload.description);
+         }
+      },
+
+      /**
+       * Updates the title and description
+       * 
+       * @instance
+       * @param {string} title The title to set
+       * @param {string} description The description to set
+       * @since 1.0.85
+       */
+      setTitleAndDescription: function alfresco_layout_TitleDescriptionAndContent__setTitleAndDescription(title, description) {
+         if (title)
+         {
+            this.titleNode.textContent = title;
+         }
+         if (description)
+         {
+            this.descriptionNode.textContent = description;
          }
       }
    });

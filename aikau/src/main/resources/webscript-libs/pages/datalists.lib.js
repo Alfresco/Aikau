@@ -45,15 +45,14 @@ function getDataListServices() {
    ];
 }
 
-function getDataListsList() {
+function getDataListsList(config) {
    return {
       name: "alfresco/lists/AlfList",
       align: "sidebar",
       config: {
-         pubSubScope: "LIST_OF_LISTS_",
-         loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+         loadDataPublishTopic: "ALF_GET_DATA_LISTS",
          loadDataPublishPayload: {
-            url: "slingshot/datalists/lists/site/swsdp/dataLists" // TODO: Hard-coded to site
+            siteId: config.siteId
          },
          itemsProperty: "datalists",
          widgets: [
@@ -68,6 +67,7 @@ function getDataListsList() {
                               {
                                  name: "alfresco/lists/views/layouts/Cell",
                                  config: {
+                                    additionalCssClasses: "mediumpad",
                                     widgets: [
                                        {
                                           name: "alfresco/renderers/PropertyLink",
@@ -78,10 +78,72 @@ function getDataListsList() {
                                              publishPayloadType: "PROCESS",
                                              publishPayloadModifiers: ["processCurrentItemTokens"],
                                              publishPayload: {
-                                                nodeRef: "{nodeRef}",
-                                                itemType: "{itemType}",
                                                 alfResponseTopic: "SHOW_DATA_LIST"
                                              },
+                                             publishPayloadItemMixin: true,
+                                             publishGlobal: true
+                                          }
+                                       }
+                                    ]
+                                 }
+                              },
+                              {
+                                 name: "alfresco/lists/views/layouts/Cell",
+                                 config: {
+                                    widgets: [
+                                       {
+                                          name: "alfresco/renderers/PublishAction",
+                                          config: {
+                                             iconClass: "edit-16",
+                                             propertyToRender: "title",
+                                             altText: "Click to edit {0}",
+                                             onlyShowOnHover: true,
+                                             publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+                                             publishPayloadType: "PROCESS",
+                                             publishPayloadModifiers: ["processCurrentItemTokens"],
+                                             publishPayload: {
+                                                dialogId: "ALF_DATA_LIST_EDIT_DIALOG",
+                                                dialogTitle: "Edit {title}",
+                                                formSubmissionTopic: "ALF_UPDATE_DATA_LIST",
+                                                formSubmissionGlobal: true,
+                                                formSubmissionPayloadMixin: {
+                                                   nodeRef: "{nodeRef}",
+                                                   siteId: config.siteId
+                                                },
+                                                widgets: [
+                                                   {
+                                                      name: "alfresco/forms/controls/TextBox",
+                                                      config: {
+                                                         label: "Title",
+                                                         value: "{title}",
+                                                         name: "title",
+                                                         requirementConfig: {
+                                                            initialValue: true
+                                                         }
+                                                      }
+                                                   },
+                                                   {
+                                                      name: "alfresco/forms/controls/TextArea",
+                                                      config: {
+                                                         label: "Description",
+                                                         value: "{description}",
+                                                         name: "description"
+                                                      }
+                                                   }
+                                                ]
+                                             },
+                                             publishGlobal: true
+                                          }
+                                       },
+                                       {
+                                          name: "alfresco/renderers/PublishAction",
+                                          config: {
+                                             iconClass: "delete-16",
+                                             propertyToRender: "title",
+                                             altText: "Click to delete {0}",
+                                             onlyShowOnHover: true,
+                                             publishTopic: "ALF_DELETE_DATA_LIST_REQUEST",
+                                             publishPayloadType: "CURRENT_ITEM",
                                              publishGlobal: true
                                           }
                                        }
@@ -167,7 +229,6 @@ function getNewDataListButton() {
             formSubmissionTopic: "ALF_CRUD_CREATE",
             formSubmissionGlobal: false,
             formSubmissionPayloadMixin: {
-               responseScope: "LIST_OF_LISTS_",
                alf_destination: getContainer(),
                url: "api/type/dl%3AdataList/formprocessor"
             },
@@ -200,17 +261,17 @@ function getNewDataListButton() {
          },
          publishGlobal: true
       }
-   }
+   };
 }
 
 
-function getDataListWidgets() {
+function getDataListWidgets(config) {
    return {
       name: "alfresco/layout/AlfSideBarContainer",
       config: {
          widgets: [
             getNewDataListButton(),
-            getDataListsList(),
+            getDataListsList(config),
             getDataListDisplay()
          ]
       }

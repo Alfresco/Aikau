@@ -110,6 +110,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.displayNotificationTopic, lang.hitch(this, this.onDisplayNotification));
          this.alfSubscribe(this.displayPromptTopic, lang.hitch(this, this.onDisplayPrompt));
          this.alfSubscribe(topics.DISPLAY_STICKY_PANEL, lang.hitch(this, this.onDisplayStickyPanel));
+         this.alfSubscribe(topics.REQUEST_CONFIRMATION_PROMPT, lang.hitch(this, this.onConfirmationPromptRequest));
 
          if (this.showProgressIndicator)
          {
@@ -303,6 +304,96 @@ define(["dojo/_base/declare",
                theProgressIndicator = null;
             });
             numProgressActivities = 0;
+         }
+      },
+
+
+      /**
+       * This is a generic 
+       *
+       * @instance
+       * @param {object} payload
+       * @since 1.0.85
+       */
+      onConfirmationPromptRequest: function alfresco_services_NotificationService__onConfirmationPromptRequest(payload) {
+         var confirmationTopic = this.generateUuid();
+         var cancellationTopic = this.generateUuid();
+         var confirmationHandle = this.alfSubscribe(confirmationTopic, lang.hitch(this, this.onConfirmationPromptConfirmation), true);
+         var cancellationHandle = this.alfSubscribe(cancellationTopic, lang.hitch(this, this.onConfirmationPromptCancellation), true);
+
+         var title = payload.confirmationTitle || "notification.confirmation.prompt.title";
+         var prompt = payload.confirmationPrompt || "notification.confirmation.prompt.prompt";
+         var confirmButtonLabel = payload.confirmationButtonLabel || "notification.confirmation.prompt.confirmationButtonLabel";
+         var cancelButtonLabel = payload.cancellationButtonLabel || "notification.confirmation.prompt.cancellationButtonLabel";
+
+         this.alfServicePublish(topics.CREATE_DIALOG, {
+            dialogId: "ALF_GENERIC_CONFIRMATION_DIALOG",
+            dialogTitle: this.message(title),
+            textContent: this.message(prompt),
+            widgetsButtons: [
+               {
+                  id: "ALF_GENERIC_CONFIRMATION_DIALOG_CONFIRM",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: this.message(confirmButtonLabel),
+                     publishTopic: confirmationTopic,
+                     publishPayload: {
+                        alfSubscriptionHandles: [confirmationHandle, cancellationHandle],
+                        confirmationPublication: payload.confirmationPublication
+                     }
+                  }
+               },
+               {
+                  id: "ALF_GENERIC_CONFIRMATION_DIALOG_CANCEL",
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: this.message(cancelButtonLabel),
+                     publishTopic: cancellationTopic,
+                     publishPayload: {
+                        alfSubscriptionHandles: [confirmationHandle, cancellationHandle],
+                        cancellationPublication: payload.cancellationPublication
+                     }
+                  }
+               }
+            ]
+         });
+      },
+
+      /**
+       * 
+       *
+       * @instance
+       * @param {object} payload An object containing the deletion details.
+       * @since 1.0.85
+       */
+      onConfirmationPromptConfirmation: function alfresco_services_NotificationService__onConfirmationPromptConfirmation(payload) {
+         payload.alfSubscriptionHandles && this.alfUnsubscribeSaveHandles(payload.alfSubscriptionHandles);
+         if (payload.confirmationPublication)
+         {
+            this.alfPublish(payload.confirmationPublication.publishTopic,
+                            payload.confirmationPublication.publishPayload,
+                            payload.confirmationPublication.publishGlobal,
+                            payload.confirmationPublication.publishToParent,
+                            payload.confirmationPublication.publishScope);
+         }
+      },
+
+      /**
+       * 
+       *
+       * @instance
+       * @param {object} payload An object containing the deletion details.
+       * @since 1.0.85
+       */
+      onConfirmationPromptCancellation: function alfresco_services_NotificationService__onConfirmationPromptCancellation(payload) {
+         payload.alfSubscriptionHandles && this.alfUnsubscribeSaveHandles(payload.alfSubscriptionHandles);
+         if (payload.cancellationPublication)
+         {
+            this.alfPublish(payload.cancellationPublication.publishTopic,
+                            payload.cancellationPublication.publishPayload,
+                            payload.cancellationPublication.publishGlobal,
+                            payload.cancellationPublication.publishToParent,
+                            payload.cancellationPublication.publishScope);
          }
       }
    });
