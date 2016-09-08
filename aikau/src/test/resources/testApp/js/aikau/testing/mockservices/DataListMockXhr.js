@@ -27,8 +27,9 @@ define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/DataLists/DataLists.json",
         "dojo/text!./responseTemplates/DataLists/ToDoList.json",
-        "dojo/text!./responseTemplates/DataLists/ToDoListData.json"], 
-        function(declare, MockXhr, DataLists, ToDoList, ToDoListData) {
+        "dojo/text!./responseTemplates/DataLists/ToDoListData.json",
+        "dojo/text!./responseTemplates/DataLists/ToDoListNewForm.json"], 
+        function(declare, MockXhr, DataLists, ToDoList, ToDoListData, ToDoListNewForm) {
    
    return declare([MockXhr], {
 
@@ -58,8 +59,15 @@ define(["dojo/_base/declare",
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      ToDoListData]);
 
+            this.server.respondWith("GET",
+                                    "/aikau/service/aikau/1_0_86_SNAPSHOT/form?itemKind=type&itemId=dl:todoList&formId=null&mode=create",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     ToDoListNewForm]);
+
             this.server.respondWith("DELETE", /\/aikau\/proxy\/alfresco\/(.*)/, [200, {}, ""]);
             this.server.respondWith("POST", /\/aikau\/proxy\/alfresco\/api\/node\/workspace\/SpacesStore\/(.*)/, [200, {}, ""]);
+            this.server.respondWith("POST", "/share/proxy/alfresco/api/type/dl%3AtodoList/formprocessor", [200, {}, ""]);
 
          }
          catch(e)
