@@ -365,38 +365,20 @@ define(["dojo/_base/declare",
                      },
                      label: "New Item",
                      additionalCssClasses: "call-to-action",
-                     publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                     publishTopic: topics.REQUEST_FORM,
                      publishPayload: {
-                        dialogId: "NEW_DATA_LIST_ITEM_DIALOG",
-                        dialogTitle: "Create New Item",
-                        hideTopic: "ALF_CRUD_CREATE",
-                        widgetsContent: [
-                           {
-                              name: "alfresco/layout/DynamicWidgets",
-                              config: {
-                                 subscribeGlobal: true,
-                                 subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED"
-                              }
+                        formConfig: {
+                           useDialog: true,
+                           formId: "NEW_DATA_LIST_ITEM_DIALOG",
+                           dialogTitle: "Create New Item",
+                           formSubmissionPayloadMixin: {
+                              responseScope: "ALF_DATA_LIST_"
                            }
-                        ],
-                        publishOnShow: [
-                           {
-                              publishTopic: "ALF_FORM_REQUEST",
-                              publishPayload: {
-                                 itemId: originalRequestConfig.data.itemType,
-                                 itemKind: "type",
-                                 mode: "create",
-                                 alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED",
-                                 formConfig: {
-                                    formSubmissionPayloadMixin: {
-                                       alf_destination: originalRequestConfig.data.nodeRef,
-                                       alfResponseScope: "ALF_DATA_LIST_"
-                                    }
-                                 }
-                              },
-                              publishGlobal: true
-                           }
-                        ]
+                        },
+                        alfDestination: originalRequestConfig.data.nodeRef,
+                        itemId: originalRequestConfig.data.itemType,
+                        itemKind: "type",
+                        mode: "create"
                      }
                   }
                },
@@ -514,6 +496,7 @@ define(["dojo/_base/declare",
                         name: "alfresco/renderers/PublishAction",
                         config: {
                            iconClass: "delete-16",
+                           onlyShowOnHover: true,
                            publishTopic: "ALF_CRUD_CREATE",
                            publishPayloadType: "PROCESS",
                            publishPayloadModifiers: ["processCurrentItemTokens"],
@@ -528,39 +511,22 @@ define(["dojo/_base/declare",
                         name: "alfresco/renderers/PublishAction",
                         config: {
                            iconClass: "edit-16",
+                           onlyShowOnHover: true,
+                           publishTopic: topics.REQUEST_FORM,
                            publishPayloadType: "PROCESS",
                            publishPayloadModifiers: ["processCurrentItemTokens"],
-                           publishTopic: "ALF_CREATE_DIALOG_REQUEST",
                            publishPayload: {
-                              dialogId: "EDIT_DATA_LIST_ITEM_DIALOG",
-                              dialogTitle: "Edit Data Item",
-                              hideTopic: "ALF_CRUD_CREATE",
-                              widgetsContent: [
-                                 {
-                                    name: "alfresco/layout/DynamicWidgets",
-                                    config: {
-                                       subscribeGlobal: true,
-                                       subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED_x"
-                                    }
+                              formConfig: {
+                                 useDialog: true,
+                                 formId: "EDIT_DATA_LIST_ITEM_DIALOG",
+                                 dialogTitle: "Edit Data Item",
+                                 formSubmissionPayloadMixin: {
+                                    responseScope: "ALF_DATA_LIST_"
                                  }
-                              ],
-                              publishOnShow: [
-                                 {
-                                    publishTopic: "ALF_FORM_REQUEST",
-                                    publishPayload: {
-                                       itemId: "{nodeRef}",
-                                       itemKind: "node",
-                                       mode: "edit",
-                                       alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED_x",
-                                       formConfig: {
-                                          formSubmissionPayloadMixin: {
-                                             alfResponseScope: "ALF_DATA_LIST_"
-                                          }
-                                       }
-                                    },
-                                    publishGlobal: true
-                                 }
-                              ]
+                              },
+                              itemId: "{nodeRef}",
+                              itemKind: "node",
+                              mode: "edit"
                            },
                            publishGlobal: true
                         }

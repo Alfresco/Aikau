@@ -1231,11 +1231,14 @@ define([],function() {
        * @event
        * @property {string} itemKind The type of item for the form (e.g. "node")
        * @property {string} itemId The unique identifier for the item for the form (e.g. a NodeRef)
-       * @property {string} [formId] The unique identifier of the form to be retrieved
+       * @property {string} [formId=null] The unique identifier of the form to be retrieved
+       * @property {string} [alfDestination=null] A target NodeRef for the for data provided by the form
        * @property {string} mode The mode of form to retrieve (e.g. "view" or "edit")
        * @property {object} [formConfig=null] Some optional configuration for the form
        * @property {string} [formConfig.formId=null] The ID to give to the rendered form
        * @property {object} [formConfig.formSubmissionPayloadMixin] Some additional data to include in the form submission
+       * @property {object} [formConfig.useDialog=null] Indicates whether or not the form should be displayed as a dialog
+       * @property {object} [formConfig.dialogTitle=null] The title for the dialog when a dialog is being used
        */
       REQUEST_FORM: "ALF_FORM_REQUEST",
 

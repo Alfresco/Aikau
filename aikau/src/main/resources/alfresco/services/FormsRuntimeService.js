@@ -80,6 +80,14 @@ define(["dojo/_base/declare",
          // control mappings, this allows there to be flexibility in configuration and mapping
          // on "kind" (type) specific mapping...
          "default": {
+            "/org/alfresco/components/form/controls/association.ftl": {
+               name: "alfresco/forms/controls/FilePicker",
+               config: {
+                  valueDelimiter: ",",
+                  addedAndRemovedValues: true
+               }
+            },
+
             "/org/alfresco/components/form/controls/authority.ftl": {
                name: "alfresco/forms/controls/MultiSelectInput",
                config: {
@@ -431,6 +439,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url : url,
                              method: "GET",
                              formConfig: payload.formConfig,
+                             alfDestination: payload.alfDestination,
                              alfSuccessTopic: successTopic,
                              successCallback: this.onFormLoaded,
                              failureCallback: this.onFormLoadFailure,
@@ -490,7 +499,8 @@ define(["dojo/_base/declare",
                var formSubmissionPayloadMixin = lang.getObject("formConfig.formSubmissionPayloadMixin", false, originalRequestConfig);
                var okButtonPublishPayload = {
                   url: response.submissionUrl,
-                  urlType: "FULL"
+                  urlType: "FULL",
+                  alf_destination: originalRequestConfig.alfDestination
                };
                formSubmissionPayloadMixin && lang.mixin(okButtonPublishPayload, formSubmissionPayloadMixin);
 
@@ -537,12 +547,27 @@ define(["dojo/_base/declare",
                widgets.push(formConfig);
             }
             
-            this.alfPublish(originalRequestConfig.alfSuccessTopic, {
-               widgets: widgets
-            });
+            var useDialog = lang.getObject("formConfig.useDialog", false, originalRequestConfig);
+            if (useDialog)
+            {
+               var dialogTitle = lang.getObject("formConfig.dialogTitle", false, originalRequestConfig);
+               this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
+                  dialogId: formConfig.config.id,
+                  dialogTitle: dialogTitle,
+                  formSubmissionTopic: formConfig.config.okButtonPublishTopic,
+                  formSubmissionGlobal: true,
+                  formSubmissionPayloadMixin: formConfig.config.okButtonPublishPayload,
+                  formValue: formConfig.config.value,
+                  widgets: formConfig.config.widgets
+               });
+            }
+            else
+            {
+               this.alfPublish(originalRequestConfig.alfSuccessTopic, {
+                  widgets: widgets
+               });
+            }
          }
-
-         
       },
 
       /**
