@@ -36,8 +36,9 @@
 define(["dojo/_base/declare",
         "alfresco/services/serviceRegistry",
         "alfresco/core/Core",
+        "alfresco/core/topics",
         "dojo/_base/lang"],
-        function(declare, serviceRegistry, AlfCore, lang) {
+        function(declare, serviceRegistry, AlfCore, topics, lang) {
    
    return declare([AlfCore], {
       

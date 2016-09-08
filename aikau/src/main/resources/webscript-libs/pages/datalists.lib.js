@@ -142,17 +142,8 @@ function getDataListsList(config) {
                                              propertyToRender: "title",
                                              altText: "Click to delete {0}",
                                              onlyShowOnHover: true,
-                                             publishTopic: "ALF_CRUD_DELETE",
-                                             publishPayloadType: "PROCESS",
-                                             publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
-                                             publishPayload: {
-                                                url: "slingshot/datalists/list/node/{nodeRef}",
-                                                requiresConfirmation: true,
-                                                confirmationTitle: "Delete {title}?",
-                                                confirmationPrompt: "Are you sure you want to delete {title}?",
-                                                successMessage: "Successfully deleted {title}",
-                                                failureMessage: "It was not possible to delete {title}"
-                                             },
+                                             publishTopic: "ALF_DELETE_DATA_LIST_REQUEST",
+                                             publishPayloadType: "CURRENT_ITEM",
                                              publishGlobal: true
                                           }
                                        }
@@ -238,7 +229,6 @@ function getNewDataListButton() {
             formSubmissionTopic: "ALF_CRUD_CREATE",
             formSubmissionGlobal: false,
             formSubmissionPayloadMixin: {
-               responseScope: "LIST_OF_LISTS_",
                alf_destination: getContainer(),
                url: "api/type/dl%3AdataList/formprocessor"
             },

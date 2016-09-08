@@ -349,6 +349,45 @@ define([],function() {
       DELETE_CONTENT: "ALF_DELETE_CONTENT_REQUEST",
 
       /**
+       * This topic is published to request the deletion of a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST: "ALF_DELETE_DATA_LIST_REQUEST",
+
+      /**
+       * This topic is published when the user confirms that they wish to delete a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST_CONFIRMATION: "ALF_DELETE_DATA_LIST_CONFIRMATION",
+
+      /**
+       * This topic is published when a Data List has been successfully deleted.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST_SUCCESS: "ALF_DELETE_DATA_LIST_SUCCESS",
+
+      /**
        * This topic is published to request the deletion of a site.
        *
        * @instance
@@ -1128,6 +1167,34 @@ define([],function() {
        * @since 1.0.33
        */
       REQUEST_ARCHIVE_PROGRESS: "ALF_ARCHIVE_PROGRESS_REQUEST",
+
+      /**
+       * This can be published to request the user to confirm an action.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.85
+       * 
+       * @event
+       * @property {string} [confirmationTitle] The title to show in the dialog
+       * @property {string} [confirmationPrompt] The prompt message to display in the dialog
+       * @property {string} [confirmationButtonLabel] The label for the confirmation button
+       * @property {string} [cancellationButtonLabel] The label for the cancellation button
+       * @property {object} [confirmationPublication] The publication to make on confirmation
+       * @property {string} [confirmationPublication.publishTopic] The topic to publish confirmation on
+       * @property {object} [confirmationPublication.publishPayload] The payload to publish on confirmation
+       * @property {boolean} [confirmationPublication.publishGlobal] Whether to publish confirmation globally
+       * @property {boolean} [confirmationPublication.publishToParent] Whether to publish confirmation on the parent scope
+       * @property {string} [confirmationPublication.publishScope] A custom scope to publish confirmation on
+       * @property {object} [cancellationPublication] The publication to make on cancellation
+       * @property {string} [cancellationPublication.publishTopic] The topic to publish cancellation on
+       * @property {object} [cancellationPublication.publishPayload] The payload to publish on cancellation
+       * @property {boolean} [cancellationPublication.publishGlobal] Whether to publish cancellation globally
+       * @property {boolean} [cancellationPublication.publishToParent] Whether to publish cancellation on the parent scope
+       * @property {string} [cancellationPublication.publishScope] A custom scope to publish cancellation on
+       */
+      REQUEST_CONFIRMATION_PROMPT: "ALF_REQUEST_CONFIRMATION_PROMPT",
 
       /**
        * Called to trigger a delayed request to check progress

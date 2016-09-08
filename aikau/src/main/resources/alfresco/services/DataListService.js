@@ -259,11 +259,15 @@ define(["dojo/_base/declare",
        * Sets up the subscriptions for the LoginService
        * 
        * @instance
+       * @listens module:alfresco/core/topics#DELETE_DATA_LIST
+       * @listens module:alfresco/core/topics#DELETE_DATA_LIST_CONFIRMATION
        * @listens module:alfresco/core/topics#GET_DATA_LISTS
        * @listens module:alfresco/core/topics#GET_DATA_LIST_WIDGETS
        * @listens module:alfresco/core/topics#UPDATE_DATA_LIST
        */
       registerSubscriptions: function alfresco_services_DataListService__registerSubscriptions() {
+         this.alfSubscribe(topics.DELETE_DATA_LIST, lang.hitch(this, this.onDeleteDataListRequest));
+         this.alfSubscribe(topics.DELETE_DATA_LIST_CONFIRMATION, lang.hitch(this, this.onDeleteDataListConfirmation));
          this.alfSubscribe(topics.GET_DATA_LISTS, lang.hitch(this, this.getDataLists));
          this.alfSubscribe(topics.GET_DATA_LIST_WIDGETS, lang.hitch(this, this.getDataListWidgets));
          this.alfSubscribe(topics.UPDATE_DATA_LIST, lang.hitch(this, this.updateDataList));
@@ -579,16 +583,108 @@ define(["dojo/_base/declare",
                         currentItem: {
                            nodeRef: originalRequestConfig.data.nodeRef
                         },
-                        widgets: widgets
+                        widgets: widgets,
+                        invisibilityConfig: {
+                           initialValue: false,
+                           rules: [
+                              {
+                                 topic: topics.DELETE_DATA_LIST_SUCCESS,
+                                 attribute: "nodeRef",
+                                 is: [originalRequestConfig.data.nodeRef],
+                                 subscribeGlobal: true
+                              }
+                           ]
+                        }
                      }
                   }
                ];
             }
 
+
+
             this.alfPublish(originalRequestConfig.data.alfResponseTopic || originalRequestConfig.data.alfTopic + "_SUCCESS" , {
                widgets: widgets
             });
          }
+      },
+
+
+      /**
+       * Handles requests to delete a Data List. Generates a confirmation prompt to the user.
+       *
+       * @instance
+       * @param  {object} payload The payload containing the NodeRef of the Data List to delete
+       * @fires module:alfresco/core/topics#REQUEST_CONFIRMATION_PROMPT
+       */
+      onDeleteDataListRequest: function alfresco_services_DataListService__onDeleteDataListRequest(payload) {
+         if (payload.nodeRef)
+         {
+            this.alfServicePublish(topics.REQUEST_CONFIRMATION_PROMPT, {
+               confirmationTitle: "Delete " + payload.title,
+               confirmationPrompt: "Are you sure you want to delete " + payload.title +" ?",
+               confirmationButtonLabel: "Yes",
+               cancellationButtonLabel: "No",
+               confirmationPublication: {
+                  publishTopic: topics.DELETE_DATA_LIST_CONFIRMATION,
+                  publishPayload: {
+                     nodeRef: payload.nodeRef
+                  },
+                  publishGlobal: true
+               }
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to delete a Data List but no 'nodeRef' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * Handles the confrmation of a request to delete a Data List.
+       *
+       * @instance
+       * @param  {object} payload The payload containing the NodeRef of the Data List to delete
+       */
+      onDeleteDataListConfirmation: function alfresco_services_DataListService__onDeleteDataListConfirmation(payload) {
+         var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "slingshot/datalists/list/node/" + nodeRef.uri,
+            method: "DELETE",
+            nodeRef: payload.nodeRef,
+            successCallback: this.onDeleteDataListSuccess,
+            failureCallback: this.onDeleteDataListFailure,
+            callbackScope: this
+         });
+      },
+
+      /**
+       * @instance
+       * @param {object} response The response from the original XHR request.
+       * @param {object} originalRequestConfig The configuration passed to the original XHR request.
+       *
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
+       * @fires module:alfresco/core/topic#DELETE_DATA_LIST_SUCCESS
+       */
+      onDeleteDataListSuccess: function alfresco_services_DataListService__onDeleteDataListSuccess(response, originalRequestConfig) {
+         // TODO: May need a more specific scoped publication
+         this.alfPublish(topics.RELOAD_DATA_TOPIC);
+
+         // Publish a success topic... 
+         // this is done so that if the Data List items are currently being displayed they can be hidden...
+         this.alfPublish(topics.DELETE_DATA_LIST_SUCCESS, {
+            nodeRef: originalRequestConfig.nodeRef
+         }); 
+      },
+
+      /**
+       * Handles failed attempts to delete a Data List
+       * 
+       * @instance
+       * @param {object} response The response from the original XHR request.
+       * @param {object} originalRequestConfig The configuration passed to the original XHR request.
+       */
+      onDeleteDataListFailure: function alfresco_services_DataListService__onDeleteDataListFailure(response, originalRequestConfig) {
+         this.alfLog("error", "It was not possible to delete a Data List", response, originalRequestConfig, this);
       },
 
       /**
