@@ -82,6 +82,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.85
        */
       itemKeyProperty: "nodeRef",
 
@@ -98,10 +99,11 @@ define(["dojo/_base/declare",
       /**
        * Indicates whether the [subscriptionTopic]{@link module:alfresco/layout/TitleDescriptionAndContent#subscriptionTopic}
        * should be subscribed to globally.
-       * 
-       * @since 1.0.85
+       *
+       * @instance
        * @type {boolean}
        * @default
+       * @since 1.0.85
        */
       subscribeGlobal: false,
 
@@ -147,26 +149,31 @@ define(["dojo/_base/declare",
             var payloadKey = lang.getObject(this.itemKeyProperty, false, payload);
             if (itemKey && itemKey === payloadKey)
             {
-               if (payload.title)
-               {
-                  this.titleNode.textContent = payload.title;
-               }
-               if (payload.description)
-               {
-                  this.descriptionNode.textContent = payload.description;
-               }
+               this.setTitleAndDescription(payload.title, payload.description);
             }
          }
          else
          {
-            if (payload.title)
-            {
-               this.titleNode.textContent = payload.title;
-            }
-            if (payload.description)
-            {
-               this.descriptionNode.textContent = payload.description;
-            }
+            this.setTitleAndDescription(payload.title, payload.description);
+         }
+      },
+
+      /**
+       * Updates the title and description
+       * 
+       * @instance
+       * @param {string} title The title to set
+       * @param {string} description The description to set
+       * @since 1.0.85
+       */
+      setTitleAndDescription: function alfresco_layout_TitleDescriptionAndContent__setTitleAndDescription(title, description) {
+         if (title)
+         {
+            this.titleNode.textContent = title;
+         }
+         if (description)
+         {
+            this.descriptionNode.textContent = description;
          }
       }
    });

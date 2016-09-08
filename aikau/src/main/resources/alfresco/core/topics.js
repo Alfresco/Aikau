@@ -323,8 +323,8 @@ define([],function() {
        *
        * @event
        * @property {string} nodeRef The NodeRef of the Data List that has been updated
-       * @property {title} title The new title of the Data List
-       * @property {description} description The new description of the Data List
+       * @property {string} title The new title of the Data List
+       * @property {string} description The new description of the Data List
        */
       DATA_LIST_UPDATED: "ALF_DATA_LIST_UPDATED",
 
@@ -1177,10 +1177,10 @@ define([],function() {
        * @since 1.0.85
        * 
        * @event
-       * @property {string} [confirmationTitle] The title to show in the dialog
-       * @property {string} [confirmationPrompt] The prompt message to display in the dialog
-       * @property {string} [confirmationButtonLabel] The label for the confirmation button
-       * @property {string} [cancellationButtonLabel] The label for the cancellation button
+       * @property {string} [confirmationTitle="Please confirm"] The title to show in the dialog
+       * @property {string} [confirmationPrompt="Are you sure?"] The prompt message to display in the dialog
+       * @property {string} [confirmationButtonLabel="Yes"] The label for the confirmation button
+       * @property {string} [cancellationButtonLabel="No"] The label for the cancellation button
        * @property {object} [confirmationPublication] The publication to make on confirmation
        * @property {string} [confirmationPublication.publishTopic] The topic to publish confirmation on
        * @property {object} [confirmationPublication.publishPayload] The payload to publish on confirmation
