@@ -388,6 +388,32 @@ define([],function() {
       DELETE_DATA_LIST_SUCCESS: "ALF_DELETE_DATA_LIST_SUCCESS",
 
       /**
+       * This topic is published to request the deletion of a itemS from a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string[]} nodeRefs The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST_ITEMS: "ALF_DELETE_DATA_LIST_ITEMS_REQUEST",
+
+      /**
+       * This topic is published when the user confirms that they wish to delete items from a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string} nodeRefs The NodeRefs of the items to delete
+       */
+      DELETE_DATA_LIST_ITEMS_CONFIRMATION: "ALF_DELETE_DATA_LIST_ITEMS_CONFIRMATION",
+
+      /**
        * This topic is published to request the deletion of a site.
        *
        * @instance
@@ -696,6 +722,19 @@ define([],function() {
        * @property {string} siteId The id of the site to get the Data Lists for
        */
       GET_DATA_LISTS: "ALF_GET_DATA_LISTS",
+
+      /**
+       * This topic can be used to request items for a particular Data Lists
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to get items for
+       */
+      GET_DATA_LIST_ITEMS: "ALF_GET_DATA_LIST_ITEMS",
 
       /**
        * This topic can be used to handle requests to build a widget model for displaying a list
