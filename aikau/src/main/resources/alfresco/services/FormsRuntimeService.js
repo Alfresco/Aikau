@@ -152,6 +152,14 @@ define(["dojo/_base/declare",
                   permittedDecimalPlaces: 10
                }
             },
+
+            "/org/alfresco/components/form/controls/workflow/taskowner.ftl": {
+               name: "alfresco/renderers/User",
+               config: {
+
+               }
+            },
+
             "/org/alfresco/components/form/controls/workflow/packageitems.ftl": {
                name: "alfresco/forms/controls/FilePicker",
                config: {

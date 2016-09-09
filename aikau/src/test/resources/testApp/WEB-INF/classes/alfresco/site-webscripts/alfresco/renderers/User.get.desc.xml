@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>User Renderer</shortname>
+  <description>Shows examples rendering a clikable user name.</description>
+  <family>aikau-unit-tests</family>
+  <url>/User</url>
+</webscript>

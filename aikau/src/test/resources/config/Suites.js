@@ -269,6 +269,7 @@ define(function() {
       "alfresco/renderers/ThumbnailTest",
       "alfresco/renderers/ThumbnailAspectAndSizeTest",
       "alfresco/renderers/ToggleStateActionsTest",
+      "alfresco/renderers/UserTest",
       "alfresco/renderers/XhrActionsTest",
 
       "alfresco/renderers/actions/CopyToActionTest",
