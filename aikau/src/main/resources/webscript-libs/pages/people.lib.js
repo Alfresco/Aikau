@@ -502,6 +502,7 @@ function getUserProfileCell() {
                         {
                            name: "alfresco/layout/AlfTabContainer",
                            config: {
+                              padded: true,
                               currentItem: "___AlfCurrentItem",
                               widgets: [
                                  getUserProfileInfoTab(),
