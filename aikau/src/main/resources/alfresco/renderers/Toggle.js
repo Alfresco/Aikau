@@ -33,12 +33,14 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Toggle.html",
         "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
+        "alfresco/renderers/_PublishPayloadMixin",
         "dijit/_OnDijitClickMixin",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, template, AlfCore, _ItemLinkMixin, _OnDijitClickMixin, lang, domClass) {
+        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, template, AlfCore, _ItemLinkMixin, _PublishPayloadMixin,
+                 _OnDijitClickMixin, lang, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _JsNodeMixin, AlfCore, _ItemLinkMixin, _OnDijitClickMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _JsNodeMixin, AlfCore, _ItemLinkMixin, _PublishPayloadMixin, _OnDijitClickMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -98,6 +100,17 @@ define(["dojo/_base/declare",
       offTooltip: "toggle.off.tooltip",
       
       /**
+       * The property of the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} to 
+       * use as the identifier in the tooltips.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      tooltipIdProperty: null,
+
+      /**
        * The CSS class to apply for the on display
        * @instance
        * @type {string} 
@@ -151,13 +164,162 @@ define(["dojo/_base/declare",
       
       /**
        * The topic to subscribe to for failure toggle "off" events
+       * 
        * @instance
        * @type {string} 
        * @default
        * @event
        */
       toggleOffFailureTopic: null,
-      
+
+      /**
+       * The payload to publish when toggling to the on state.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishPayload: null,
+
+      /**
+       * The type of payload being published when toggling to the on state.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishPayloadType: null,
+
+      /**
+       * Whether or not to publish globally when toggling to the on state.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishGlobal: false,
+
+      /**
+       * Whether or not to publish on the global scope when toggling to the on state.
+       *
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishToParent: false,
+
+      /**
+       * A custom scope to publish on when toggling to the on state.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishScope: null,
+
+      /**
+       * The modifiers to apply to the payload published when toggling to the on state (on applies when
+       * the [toggleOnPublishPayloadType]{@link module:alfresco/renderers/Toggle#toggleOnPublishPayloadType}
+       * is configured to be "PROCESS").
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishPayloadModifiers: false,
+
+      /**
+       * Indicates whether or not the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}
+       * should be mixed into the payload published when toggling to the on state.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOnPublishPayloadItemMixin: false,
+
+      /**
+       * The payload to publish when toggling to the off state.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishPayload: null,
+
+      /**
+       * The type of payload being published when toggling to the off state.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishPayloadType: null,
+
+      /**
+       * Whether or not to publish globally when toggling to the off state.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishGlobal: false,
+
+      /**
+       * Whether or not to publish on the global scope when toggling to the off state.
+       *
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishToParent: false,
+
+      /**
+       * A custom scope to publish on when toggling to the off state.
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishScope: null,
+
+      /**
+       * The modifiers to apply to the payload published when toggling to the off state (on applies when
+       * the [toggleOffPublishPayloadType]{@link module:alfresco/renderers/Toggle#toggleOffPublishPayloadType}
+       * is configured to be "PROCESS").
+       * 
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishPayloadModifiers: false,
+
+      /**
+       * Indicates whether or not the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}
+       * should be mixed into the payload published when toggling to the off state.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.86
+       */
+      toggleOffPublishPayloadItemMixin: false,
+
       /**
        * Set up the attributes to be used when rendering the template.
        * 
@@ -166,8 +328,18 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_renderers_Toggle__postMixInProperties() {
          this.onLabel = this.message(this.onLabel);
          this.offLabel = this.message(this.offLabel);
-         this.onTooltip = this.message(this.onTooltip);
-         this.offTooltip = this.message(this.offTooltip);
+
+         var tooltipId = "";
+         if (this.tooltipIdProperty)
+         {
+            tooltipId = lang.getObject(this.tooltipIdProperty, false, this.currentItem);
+         }
+         this.onTooltip = this.message(this.onTooltip, {
+            0: tooltipId || ""
+         });
+         this.offTooltip = this.message(this.offTooltip, {
+            0: tooltipId || ""
+         });
          
          /* Check to see if topics are set for toggling on and off. If there is toggle topic
           * for publishing events but not for subscriptions (e.g. to check success or failures)
@@ -297,10 +469,24 @@ define(["dojo/_base/declare",
          var responseTopic = this.pubSubScope + this.generateUuid();
          this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOnSuccess), true);
          this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOnFailure), true);
-         this.alfPublish(this.toggleOnTopic, {
-            alfResponseTopic: responseTopic,
-            node: this.currentItem
-         }, true);
+         if (this.toggleOnPublishPayload)
+         {
+            var publishPayload = this.generatePayload(this.toggleOnPublishPayload, 
+                                                      this.currentItem, 
+                                                      null, 
+                                                      this.toggleOnPublishPayloadType, 
+                                                      this.toggleOnPublishPayloadItemMixin, 
+                                                      this.toggleOnPublishPayloadModifiers);
+            publishPayload.alfResponseTopic = responseTopic;
+            this.alfPublish(this.toggleOnTopic, publishPayload, this.toggleOnPublishGlobal, this.toggleOnPublishToParent, this.toggleOnPublishScope);
+         }
+         else
+         {
+            this.alfPublish(this.toggleOnTopic, {
+               alfResponseTopic: responseTopic,
+               node: this.currentItem
+            }, true);
+         }
       },
       
       /**
@@ -313,10 +499,24 @@ define(["dojo/_base/declare",
          var responseTopic = this.pubSubScope + this.generateUuid();
          this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOffSuccess), true);
          this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOffFailure), true);
-         this.alfPublish(this.toggleOffTopic, {
-            alfResponseTopic: responseTopic,
-            node: this.currentItem
-         }, true);
+         if (this.toggleOffPublishPayload)
+         {
+            var publishPayload = this.generatePayload(this.toggleOffPublishPayload, 
+                                                      this.currentItem, 
+                                                      null, 
+                                                      this.toggleOffPublishPayloadType, 
+                                                      this.toggleOffPublishPayloadItemMixin, 
+                                                      this.toggleOffPublishPayloadModifiers);
+            publishPayload.alfResponseTopic = responseTopic;
+            this.alfPublish(this.toggleOffTopic, publishPayload, this.toggleOffPublishGlobal, this.toggleOffPublishToParent, this.toggleOffPublishScope);
+         }
+         else
+         {
+            this.alfPublish(this.toggleOffTopic, {
+               alfResponseTopic: responseTopic,
+               node: this.currentItem
+            }, true);
+         }
       },
       
       /**

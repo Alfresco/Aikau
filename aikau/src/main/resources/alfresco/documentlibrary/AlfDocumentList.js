@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
        * @override
        * @since 1.0.48
        */
-      postCreate: function alfrescdo_documentlibrary_AlfDocumentList__postCreate() {
+      postCreate: function alfresco_documentlibrary_AlfDocumentList__postCreate() {
          this.inherited(arguments);
          domClass.add(this.domNode, "alfresco-documentlibrary-AlfDocumentList");
       },
@@ -194,7 +194,7 @@ define(["dojo/_base/declare",
        * @listens documentSelectionTopic
        * @listens parentNavTopic
        */
-      setupSubscriptions: function alfrescdo_documentlibrary_AlfDocumentList__setupSubscriptions() {
+      setupSubscriptions: function alfresco_documentlibrary_AlfDocumentList__setupSubscriptions() {
          this.inherited(arguments);
          this.alfSubscribe(topics.PATH_CHANGED, lang.hitch(this, this.onPathChanged));
          this.alfSubscribe("ALF_DOCUMENTLIST_CATEGORY_CHANGED", lang.hitch(this, this.onCategoryChanged));

@@ -24,8 +24,9 @@
  */
 define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
-        "dojo/text!./responseTemplates/User/Users.json"], 
-        function(declare, MockXhr, users) {
+        "dojo/text!./responseTemplates/User/Users.json",
+        "dojo/text!./responseTemplates/User/Following.json"], 
+        function(declare, MockXhr, users, Following) {
 
    return declare([MockXhr], {
 
@@ -50,6 +51,15 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      users]);
+
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/api/subscriptions/guest/following",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     Following]);
+
+            this.server.respondWith("POST", "/aikau/proxy/alfresco/api/subscriptions/guest/follow", [200, {}, ""]);
+            this.server.respondWith("POST", "/aikau/proxy/alfresco/api/subscriptions/guest/unfollow", [200, {}, ""]);
          }
          catch(e)
          {

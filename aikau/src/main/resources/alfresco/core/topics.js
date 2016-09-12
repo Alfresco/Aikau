@@ -653,6 +653,19 @@ define([],function() {
       ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
 
       /**
+       * This topic can be published to request that the current user follow the users provided.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since  1.0.86
+       *
+       * @event
+       * @property {string[]} userNames An array of the userNames of the users to follow.
+       */
+      FOLLOW_USERS: "ALF_FOLLOW_USERS",
+
+      /**
        * This topic can be published to request a list of authorities to be returned (e.g. users
        * or groups).
        * 
@@ -824,6 +837,30 @@ define([],function() {
        * @event
        */
       GET_FAVOURITE_SITES: "ALF_GET_FAVOURITE_SITES",
+
+      /**
+       * This can be published to request the list of users that the current user is following.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       *
+       * @since 1.0.86
+       * @event
+       */
+      GET_FOLLOWED_USERS: "ALF_GET_FOLLOWED_USERS",
+
+      /**
+       * This can be published to request the list of users that are following the current user.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       *
+       * @since 1.0.86
+       * @event
+       */
+      GET_FOLLOWING_USERS: "ALF_GET_FOLLOWING_USERS",
 
       /**
        * This topic can be published by a [form control]{@link module:alfresco/forms/controls/BaseFormControl}
@@ -1712,6 +1749,19 @@ define([],function() {
        * @event
        */
       TOGGLE_ON: "ALF_TOGGLE_ON",
+
+      /**
+       * This topic can be published to request that the current user unfollow the users provided.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since  1.0.86
+       *
+       * @event
+       * @property {string[]} userNames An array of the userNames of the users to unfollow.
+       */
+      UNFOLLOW_USERS: "ALF_UNFOLLOW_USERS",
 
       /**
        * This topic can be published to update the title and description of a Data List.

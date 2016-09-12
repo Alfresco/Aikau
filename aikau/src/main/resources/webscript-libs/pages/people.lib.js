@@ -1,4 +1,4 @@
-function getTaskListServices() {
+function getUserProfileServices() {
    return [
       {
          id: "CRUD_SERVICE",
@@ -521,9 +521,9 @@ function getUserProfileCell() {
          },
          widgets: [
             {
-               name: "alfresco/layout/HorizontalWidgets",
+               name: "alfresco/layout/LeftAndRight",
                config: {
-                  widgets: [
+                  widgetsLeft: [
                      {
                         widthPx: 120,
                         name: "alfresco/renderers/AvatarThumbnail"
@@ -564,6 +564,34 @@ function getUserProfileCell() {
                            ]
                         }
                      }
+                  ],
+                  widgetsRight: [
+                     { 
+                        name: "alfresco/renderers/Toggle",
+                        config: {
+                           propertyToRender: "following",
+                           checkedValue: true,
+                           onLabel: "Following",
+                           offLabel: "Follow",
+                           onTooltip: "Stop following {0}",
+                           offTooltip: "Start following {0}",
+                           tooltipIdProperty: "displayName",
+                           toggleOnTopic: "ALF_FOLLOW_USERS",
+                           toggleOnPublishPayload: {
+                              userNames: ["{userName}"]
+                           },
+                           toggleOnPublishGlobal: true,
+                           toggleOnPublishPayloadType: "PROCESS",
+                           toggleOnPublishPayloadModifiers: ["processCurrentItemTokens"],
+                           toggleOffTopic: "ALF_UNFOLLOW_USERS",
+                           toggleOffPublishPayload: {
+                              userNames: ["{userName}"]
+                           },
+                           toggleOffPublishGlobal: true,
+                           toggleOffPublishPayloadType: "PROCESS",
+                           toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"]
+                        }
+                     }
                   ]
                }
             },
@@ -581,10 +609,9 @@ function getUserProfileCell() {
 
 function getUserProfilesList() {
    return {
-      name: "alfresco/lists/AlfFilteredList",
+      name: "alfresco/lists/UserList",
       config: {
          useHash: true,
-         loadDataPublishTopic: "ALF_GET_USERS",
          filteringTopics: ["_valueChangeOf_FILTER"],
          widgetsForFilters: [{
            name: "alfresco/forms/controls/TextBox",
@@ -612,7 +639,7 @@ function getUserProfilesList() {
    };
 }
 
-function getUserProfileWidgets() {
+function getUserProfilesWidgets() {
    return {
       name: "alfresco/layout/VerticalWidgets",
       config: {
