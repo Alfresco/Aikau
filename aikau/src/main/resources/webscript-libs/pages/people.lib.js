@@ -1,3 +1,4 @@
+/* global user */
 function getUserProfileServices() {
    return [
       {
@@ -56,6 +57,7 @@ function getUserProfileInfoTab() {
             {
                name: "alfresco/node/MetadataGroups",
                config: {
+                  width: "500px",
                   groups: [
                      {
                         title: "Contact Information",
@@ -374,7 +376,7 @@ function getFollowUserListView() {
 function getFollowingTab() {
    return {
       name: "alfresco/layout/VerticalWidgets",
-      title: "I'm following",
+      title: "Following",
       config: {
          widgets: [
             {
@@ -400,8 +402,14 @@ function getFollowingTab() {
 function getFollowersTab() {
    return {
       name: "alfresco/layout/VerticalWidgets",
-      title: "Following Me",
+      title: "Followers",
       config: {
+         renderFilter: [
+            {
+               property: "userName",
+               values: [user.name]
+            }
+         ],
          widgets: [
             {
                name: "alfresco/lists/AlfList",
@@ -428,6 +436,12 @@ function getUserProfileNotificationsTab() {
       name: "alfresco/layout/VerticalWidgets",
       title: "Notifications",
       config: {
+         renderFilter: [
+            {
+               property: "userName",
+               values: [user.name]
+            }
+         ],
          widgets: [
             {
                name: "alfresco/forms/Form",
@@ -492,6 +506,12 @@ function getUserProfileTrashcan() {
       name: "alfresco/layout/VerticalWidgets",
       title: "Trashcan",
       config: {
+         renderFilter: [
+            {
+               property: "userName",
+               values: [user.name]
+            }
+         ],
          widgets: [
             {
                name: "alfresco/lists/AlfFilteredList",
@@ -610,7 +630,7 @@ function getUserProfileCell() {
    return {
       name: "alfresco/lists/views/layouts/CellContainer",
       config: {
-         minHeight: 125,
+         minHeight: 140,
          publishTopic: "EXPAND",
          publishPayloadType: "PROCESS",
          publishPayloadModifiers: ["processCurrentItemTokens", "setCurrentItem"],
@@ -714,7 +734,14 @@ function getUserProfileCell() {
                            },
                            toggleOffPublishGlobal: true,
                            toggleOffPublishPayloadType: "PROCESS",
-                           toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"]
+                           toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"],
+                           renderFilter: [
+                              {
+                                 property: "userName",
+                                 values: [user.name],
+                                 negate: true
+                              }
+                           ]
                         }
                      }
                   ]
