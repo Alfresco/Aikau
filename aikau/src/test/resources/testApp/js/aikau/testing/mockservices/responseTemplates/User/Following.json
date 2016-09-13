@@ -1,0 +1,27 @@
+{
+   "hasMoreItems": false,
+   "totalCount": 2,
+   "people": [{
+      "firstName": "Alice",
+      "lastName": "Beecher",
+      "userStatus": "Helping to design the look and feel of the new web site",
+      "jobtitle": "Graphic Designer",
+      "organization": "Moresby, Garland and Wedge",
+      "userStatusTime": {
+         "iso8601": "2011-02-15T20:20:13.432Z"
+      },
+      "avatar": "workspace:\/\/SpacesStore\/d65a4795-578e-4780-9f27-96ce43bde700",
+      "userName": "abeecher"
+   }, {
+      "firstName": "Mike",
+      "lastName": "Jackson",
+      "userStatus": "Working on a new web design for the corporate site",
+      "jobtitle": "Web Site Manager",
+      "organization": "Green Energy",
+      "userStatusTime": {
+         "iso8601": "2011-02-15T20:13:09.649Z"
+      },
+      "avatar": "workspace:\/\/SpacesStore\/42881f63-38cf-479d-a303-52e7ff99cb75",
+      "userName": "mjackson"
+   }]
+}

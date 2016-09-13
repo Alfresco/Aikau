@@ -3,6 +3,7 @@
    padding: @standard-column-spacing;
    outline: none;
    border: @standard-border;
+   box-sizing: border-box;
 
    &__widgets {
       overflow: hidden;

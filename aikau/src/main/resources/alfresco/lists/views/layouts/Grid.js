@@ -567,7 +567,7 @@ define(["dojo/_base/declare",
             var marginBox = domGeom.getContentBox(node); // NOTE: Get the parent node for the size because the table will grow outside of its allotted area
             if (this.fixedColumns === true)
             {
-               var widthToSet = (Math.floor(marginBox.w / this.columns) - 4) + "px";
+               var widthToSet = (Math.floor(marginBox.w / this.columns) - 10) + "px";
                query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
             }
             else
@@ -645,12 +645,15 @@ define(["dojo/_base/declare",
          var widget = registry.byNode(widgetNode);
          if (widget && typeof widget.resize === "function")
          {
-            widget.resize(dimensions);
+            widget.resize({
+               w: dimensions.w + 6,
+               h: null
+            });
          }
          else
          {
             // See AKU-689 - resize the widgets DOM node and publish an event to indicate that it has been resized...
-            domStyle.set(widget.domNode, "width", dimensions.w);
+            domStyle.set(widget.domNode, "width", dimensions.w + 6);
             this.alfPublishResizeEvent(widget.domNode);
          }
       },

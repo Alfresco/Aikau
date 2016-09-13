@@ -78,6 +78,10 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        * @listens module:alfresco/core/topics#GET_USERS
        * @listens module:alfresco/core/topics#GET_AUTHORITIES
+       * @listens module:alfresco/core/topics#GET_FOLLOWED_USERS
+       * @listens module:alfresco/core/topics#GET_FOLLOWING_USERS
+       * @listens module:alfresco/core/topics#FOLLOW_USERS
+       * @listens module:alfresco/core/topics#UNFOLLOW_USERS
        */
       registerSubscriptions: function alfresco_services_UserService__registerSubscriptions() {
          this.alfSubscribe(this.updateUserStatusTopic, lang.hitch(this, this.updateUserStatus));
@@ -86,6 +90,60 @@ define(["dojo/_base/declare",
          this.alfSubscribe(this.setUserHomePageFailureTopic, lang.hitch(this, this.onSetUserHomePageFailure));
          this.alfSubscribe(topics.GET_USERS, lang.hitch(this, this.onGetUsers));
          this.alfSubscribe(topics.GET_AUTHORITIES, lang.hitch(this, this.onGetAuthorities));
+         this.alfSubscribe(topics.GET_FOLLOWED_USERS, lang.hitch(this, this.onGetFollowedUsers));
+         this.alfSubscribe(topics.GET_FOLLOWING_USERS, lang.hitch(this, this.onGetFollowingUsers));
+         this.alfSubscribe(topics.FOLLOW_USERS, lang.hitch(this, this.onFollowUsers));
+         this.alfSubscribe(topics.UNFOLLOW_USERS, lang.hitch(this, this.onUnfollowUsers));
+      },
+
+      /**
+       * Handles requests to follow users.
+       * 
+       * @instance
+       * @param {object} payload The details of the users to follow
+       * @since 1.0.86
+       */
+      onFollowUsers: function alfresco_services_UserService__onFollowUsers(payload) {
+         if (payload.userNames)
+         {
+            var url = AlfConstants.PROXY_URI + "api/subscriptions/" + AlfConstants.USERNAME + "/follow";
+            var config = {
+               url: url,
+               data: payload.userNames,
+               method: "POST"
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to follow users, but no 'userName' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * Handles requests to unfollow users.
+       * 
+       * @instance
+       * @param {object} payload The details of the users to follow
+       * @since 1.0.86
+       */
+      onUnfollowUsers: function alfresco_services_UserService__onUnfollowUsers(payload) {
+         if (payload.userNames)
+         {
+            var url = AlfConstants.PROXY_URI + "api/subscriptions/" + AlfConstants.USERNAME + "/unfollow";
+            var config = {
+               url: url,
+               data: payload.userNames,
+               method: "POST"
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to unfollow users, but no 'userName' attribute was provided in the payload", payload, this);
+         }
       },
 
       /**
@@ -125,6 +183,38 @@ define(["dojo/_base/declare",
             alfSuccessTopic: payload.alfSuccessTopic,
             alfFailureTopic: payload.alfFailureTopic
          });
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {object} payload Additional details for the request.
+       * @since 1.0.86
+       */
+      onGetFollowedUsers: function alfresco_services_UserService__onGetFollowedUsers(payload) {
+         var url = AlfConstants.PROXY_URI + "api/subscriptions/" + AlfConstants.USERNAME + "/following";
+         var config = {
+            url: url,
+            method: "GET"
+         };
+         this.mergeTopicsIntoXhrPayload(payload, config);
+         this.serviceXhr(config);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {object} payload Additional details for the request.
+       * @since 1.0.86
+       */
+      onGetFollowingUsers: function alfresco_services_UserService__onGetFollowingUsers(payload) {
+         var url = AlfConstants.PROXY_URI + "api/subscriptions/" + AlfConstants.USERNAME + "/followers";
+         var config = {
+            url: url,
+            method: "GET"
+         };
+         this.mergeTopicsIntoXhrPayload(payload, config);
+         this.serviceXhr(config);
       },
 
       /**

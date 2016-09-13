@@ -339,6 +339,12 @@ define(["dojo/_base/declare",
                response: response
             }, false, false, requestConfig.data.alfResponseScope);
          }
+         else if (requestConfig.alfSuccessTopic) {
+            this.alfPublish(requestConfig.alfSuccessTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.alfResponseScope);
+         }
          else
          {
             this.alfLog("warn", "[DEFAULT CALLBACK] Default success callback has been called but no requestConfig.alfTopic has been set.");

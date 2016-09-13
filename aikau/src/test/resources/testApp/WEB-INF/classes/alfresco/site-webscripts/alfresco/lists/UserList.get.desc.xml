@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>User List</shortname>
+  <description>Shows an example User List.</description>
+  <family>aikau-unit-tests</family>
+  <url>/UserList</url>
+</webscript>
