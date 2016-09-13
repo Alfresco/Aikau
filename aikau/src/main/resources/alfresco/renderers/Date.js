@@ -143,6 +143,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Date__postMixInProperties() {
+         // jshint maxcomplexity:false
          if (this.label)
          {
             this.label = this.message(this.label) + ": ";
