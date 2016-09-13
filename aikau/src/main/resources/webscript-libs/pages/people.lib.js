@@ -5,6 +5,10 @@ function getUserProfileServices() {
          name: "alfresco/services/CrudService"
       },
       {
+         id: "DIALOG_SERVICE",
+         name: "alfresco/services/DialogService"
+      },
+      {
          id: "DOCUMENT_SERVICE",
          name: "alfresco/services/DocumentService"
       },
@@ -483,6 +487,125 @@ function getUserProfileNotificationsTab() {
    };
 }
 
+function getUserProfileTrashcan() {
+   return {
+      name: "alfresco/layout/VerticalWidgets",
+      title: "Trashcan",
+      config: {
+         widgets: [
+            {
+               name: "alfresco/lists/AlfFilteredList",
+               config: {
+                  pubSubScope: "TRASHCAN_",
+                  useHash: false,
+                  loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                  loadDataPublishPayload: {
+                     url: "api/archive/workspace/SpacesStore?maxItems=51"
+                  },
+                  itemsProperty: "data.deletedNodes",
+                  filteringTopics: ["_valueChangeOf_FILTER"],
+                  widgetsForFilters: [{
+                    name: "alfresco/forms/controls/TextBox",
+                    config: {
+                      fieldId: "FILTER",
+                      name: "nf",
+                      placeHolder: "Enter search text...",
+                      label: "Search"
+                    }
+                  }],
+                  widgets: [
+                     {
+                        name: "alfresco/lists/views/AlfListView",
+                        config: {
+                           widgets: [
+                              {
+                                 name: "alfresco/lists/views/layouts/Row",
+                                 config: {
+                                    widgets: [
+                                       {
+                                          name: "alfresco/lists/views/layouts/Cell",
+                                          config: {
+                                             widgets: [
+                                                {
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "name",
+                                                      renderSize: "large",
+                                                      renderOnNewLine: true
+                                                   }
+                                                },
+                                                {
+                                                   name: "alfresco/renderers/Date",
+                                                   config: {
+                                                      propertyToRender: "name",
+                                                      modifiedDateProperty: "archivedDate",
+                                                      modifiedByProperty: "firstName",
+                                                      modifiedByLastNameProperty: "lastName",
+                                                      modifiedByMessage:  "Deleted {0} by {1} {2}",
+                                                      renderOnNewLine: true
+                                                   }
+                                                },
+                                                {
+                                                   name: "alfresco/renderers/Property",
+                                                   config: {
+                                                      propertyToRender: "displayPath",
+                                                      deemphasized: true,
+                                                      renderOnNewLine: true
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       },
+                                       {
+                                          name: "alfresco/lists/views/layouts/Cell",
+                                          config: {
+                                             widgets: [
+                                                {
+                                                   name: "alfresco/buttons/AlfButton",
+                                                   config: {
+                                                      label: "Recover",
+                                                      publishTopic: "ALF_CRUD_UPDATE",
+                                                      publishPayloadType: "PROCESS",
+                                                      publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                                      publishPayload: {
+                                                         url: "api/archive/{nodeRef}"
+                                                      }
+                                                   }
+                                                },
+                                                {
+                                                   name: "alfresco/buttons/AlfButton",
+                                                   config: {
+                                                      label: "Delete",
+                                                      publishTopic: "ALF_CRUD_DELETE",
+                                                      publishPayloadType: "PROCESS",
+                                                      publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                                      publishPayload: {
+                                                         url: "api/archive/{nodeRef}",
+                                                         requiresConfirmation: true,
+                                                         confirmationTitle: "Delete",
+                                                         confirmationPrompt: "This will permanently delete the item(s). Are you sure?",
+                                                         confirmationButtonLabel: "Yes",
+                                                         cancellationButtonLabel: "No"
+                                                      }
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       }
+                                    ]
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   };
+}
+
 function getUserProfileCell() {
    return {
       name: "alfresco/lists/views/layouts/CellContainer",
@@ -511,7 +634,8 @@ function getUserProfileCell() {
                                  getUserProfileRecentlyModifiedTab(),
                                  getFollowingTab(),
                                  getFollowersTab(),
-                                 getUserProfileNotificationsTab()
+                                 getUserProfileNotificationsTab(),
+                                 getUserProfileTrashcan()
                               ]
                            }
                         }

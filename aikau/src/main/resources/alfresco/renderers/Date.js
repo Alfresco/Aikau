@@ -91,6 +91,44 @@ define(["dojo/_base/declare",
       modifiedByProperty: null,
 
       /**
+       * An optional property to complement 
+       * [modifiedByProperty]{@link module:alfresco/renderers/Date#modifiedByProperty} for the cases
+       * when only "firstName" and "lastName" attributes are available (rather than "displayName").
+       * In order to use this the [modifiedByMessage]{@link module:alfresco/renderers/Date#modifiedByMessage}
+       * will need to be overridden with a message that accepts a third token.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      modifiedByLastNameProperty: null,
+
+      /**
+       * The message to display. This takes the form "Modified <some time> ago by <user>" and is
+       * used when a [modifiedByProperty]{@link module:alfresco/renderers/Date#modifiedByProperty} 
+       * is available.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      modifiedByMessage: "details.modified-by",
+
+      /**
+       * The message to display. This takes the form "Modified <some time> ago" and is
+       * used when a [modifiedByProperty]{@link module:alfresco/renderers/Date#modifiedByProperty} 
+       * is NOT available.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      modifiedMessage: "details.modified-by.missing-user",
+
+      /**
        * Indicates whether to simply display the date without rendering it within a specific message.
        *
        * @instance
@@ -143,17 +181,23 @@ define(["dojo/_base/declare",
             {
                this.modifiedByProperty = "jsNode.properties.modifier.displayName";
             }
+            var lastName = "";
+            if (this.modifiedByLastNameProperty)
+            {
+               lastName = lang.getObject(this.modifiedByLastNameProperty, false, this.currentItem);
+            }
             var modifiedBy = lang.getObject(this.modifiedByProperty, false, this.currentItem);
             if (modifiedBy)
             {
-               this.renderedValue = this.message("details.modified-by", {
+               this.renderedValue = this.message(this.modifiedByMessage || "details.modified-by", {
                   0: this.getRelativeTime(modifiedDate),
-                  1: this.encodeHTML(modifiedBy)
+                  1: this.encodeHTML(modifiedBy),
+                  2: this.encodeHTML(lastName || "")
                });
             }
             else
             {
-               this.renderedValue = this.message("details.modified-by.missing-user", {
+               this.renderedValue = this.message(this.modifiedMessage || "details.modified-by.missing-user", {
                   0: this.getRelativeTime(modifiedDate)
                });
             }

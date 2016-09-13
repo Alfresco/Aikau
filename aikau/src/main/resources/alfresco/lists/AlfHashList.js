@@ -380,27 +380,33 @@ define(["dojo/_base/declare",
       onFiltersUpdated: function alfresco_lists_AlfHashList__onFiltersUpdated() {
          // Reset the filtersRemoved count
          this.___filtersRemoved = 0;
-         if (this.useHash) {
-            var filterValues = {};
-            array.forEach(this.dataFilters, function(dataFilter) {
-               var filterValue = dataFilter.value;
-               if(filterValue !== null && typeof filterValue !== "undefined") 
+
+         var filterValues = {};
+         this.dataFilters = array.filter(this.dataFilters, function(dataFilter) {
+            var filterValue = dataFilter.value;
+            if(filterValue !== null && typeof filterValue !== "undefined") 
+            {
+               if(typeof filterValue === "string") 
                {
-                  if(typeof filterValue === "string") 
+                  filterValue = lang.trim(filterValue);
+                  if(!filterValue.length) 
                   {
-                     filterValue = lang.trim(filterValue);
-                     if(!filterValue.length) 
-                     {
-                        // Remove empty strings from hash and update the count of filters removed
-                        filterValue = null; 
-                        this.___filtersRemoved++;
-                     }
+                     // Remove empty strings from hash and update the count of filters removed
+                     filterValue = null; 
+                     this.___filtersRemoved++;
                   }
                }
-               filterValues[dataFilter.name] = filterValue;
-            }, this);
+            }
+            filterValues[dataFilter.name] = filterValue;
+            return !!filterValue;
+         }, this);
+
+         if (this.useHash)
+         {
             hashUtils.updateHash(filterValues);
-         } else {
+         }
+         else 
+         {
             this.clearViews();
             this.loadData();
          }

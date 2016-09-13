@@ -1,0 +1,50 @@
+{
+   "data": {
+      "deletedNodes": [{
+         "nodeRef": "archive://SpacesStore/b5f9ac3d-23f7-4cb3-9347-294f6f322d0a",
+         "archivedBy": "admin",
+         "archivedDate": "2016-09-13T08:06:16.464+01:00",
+         "name": "Project Overview.ppt",
+         "title": "Project Overview.ppt",
+         "description": "",
+         "displayPath": "\/company_home\/shared",
+         "firstName": "Administrator",
+         "lastName": "",
+         "nodeType": "cm:content",
+         "isContentType": true
+      }, {
+         "nodeRef": "archive://SpacesStore/fc50d8a0-1bac-430e-b13d-3ac271c6578e",
+         "archivedBy": "admin",
+         "archivedDate": "2016-09-09T11:36:05.667+01:00",
+         "name": "aea88103-517e-4aa0-a3be-de258d0e6465",
+         "title": "To-Do List",
+         "description": "Project of todos",
+         "displayPath": "\/company_home\/sites\/swsdp\/dataLists",
+         "firstName": "Administrator",
+         "lastName": "",
+         "nodeType": "dl:dataList",
+         "isContentType": false
+      }, {
+         "nodeRef": "archive://SpacesStore/9c684129-901f-44ac-b340-e4fd4771ee53",
+         "archivedBy": "admin",
+         "archivedDate": "2016-09-09T11:35:45.737+01:00",
+         "name": "63afd449-1e3d-438d-ad82-cb1023eb7e47",
+         "title": "Something",
+         "description": "",
+         "displayPath": "\/company_home\/sites\/swsdp\/dataLists\/71824d77-9cd8-44c3-b3e4-dbca7e17dc49",
+         "firstName": "Administrator",
+         "lastName": "",
+         "nodeType": "dl:issue",
+         "isContentType": true
+      }]
+   }
+
+   ,
+   "paging": {
+      "maxItems": 51,
+      "skipCount": 0,
+      "totalItems": 3,
+      "totalItemsRangeEnd": null,
+      "confidence": "exact"
+   }
+}
