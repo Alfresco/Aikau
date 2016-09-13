@@ -626,6 +626,111 @@ function getUserProfileTrashcan() {
    };
 }
 
+function getUserProfileInfo() {
+   return {
+      name: "alfresco/layout/LeftAndRight",
+      config: {
+         widgetsLeft: [
+            {
+               widthPx: 120,
+               name: "alfresco/renderers/AvatarThumbnail"
+            },
+            {
+               name: "alfresco/layout/VerticalWidgets",
+               config: {
+                  widgets: [
+                     {
+                        name: "alfresco/renderers/Property",
+                        config: {
+                           propertyToRender: "displayName",
+                           renderSize: "large",
+                           renderOnNewLine: true
+                        }
+                     },
+                     {
+                        name: "alfresco/renderers/Property",
+                        config: {
+                           propertyToRender: "jobtitle",
+                           renderOnNewLine: true
+                        }
+                     },
+                     {
+                        name: "alfresco/renderers/Property",
+                        config: {
+                           propertyToRender: "organization",
+                           renderOnNewLine: true
+                        }
+                     },
+                     {
+                        name: "alfresco/renderers/Property",
+                        config: {
+                           propertyToRender: "location",
+                           renderOnNewLine: true
+                        }
+                     }
+                  ]
+               }
+            }
+         ],
+         widgetsRight: [
+            { 
+               name: "alfresco/renderers/Toggle",
+               config: {
+                  propertyToRender: "following",
+                  checkedValue: true,
+                  onLabel: "Following",
+                  offLabel: "Follow",
+                  onTooltip: "Stop following {0}",
+                  offTooltip: "Start following {0}",
+                  tooltipIdProperty: "displayName",
+                  toggleOnTopic: "ALF_FOLLOW_USERS",
+                  toggleOnPublishPayload: {
+                     userNames: ["{userName}"]
+                  },
+                  toggleOnPublishGlobal: true,
+                  toggleOnPublishPayloadType: "PROCESS",
+                  toggleOnPublishPayloadModifiers: ["processCurrentItemTokens"],
+                  toggleOffTopic: "ALF_UNFOLLOW_USERS",
+                  toggleOffPublishPayload: {
+                     userNames: ["{userName}"]
+                  },
+                  toggleOffPublishGlobal: true,
+                  toggleOffPublishPayloadType: "PROCESS",
+                  toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"],
+                  renderFilter: [
+                     {
+                        property: "userName",
+                        values: [user.name],
+                        negate: true
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   };
+}
+
+function getUserProfileTabContainer() {
+   return {
+      name: "alfresco/layout/AlfTabContainer",
+      config: {
+         padded: true,
+         currentItem: "___AlfCurrentItem",
+         widgets: [
+            getUserProfileInfoTab(),
+            getUserProfileSitesTab(),
+            getUserProfileRecentlyAddedTab(),
+            getUserProfileRecentlyModifiedTab(),
+            getFollowingTab(),
+            getFollowersTab(),
+            getUserProfileNotificationsTab(),
+            getUserProfileTrashcan()
+         ]
+      }
+   };
+}
+
 function getUserProfileCell() {
    return {
       name: "alfresco/lists/views/layouts/CellContainer",
@@ -642,111 +747,14 @@ function getUserProfileCell() {
                   config: {
                      title: "{displayName}",
                      widgets: [
-                        {
-                           name: "alfresco/layout/AlfTabContainer",
-                           config: {
-                              padded: true,
-                              currentItem: "___AlfCurrentItem",
-                              widgets: [
-                                 getUserProfileInfoTab(),
-                                 getUserProfileSitesTab(),
-                                 getUserProfileRecentlyAddedTab(),
-                                 getUserProfileRecentlyModifiedTab(),
-                                 getFollowingTab(),
-                                 getFollowersTab(),
-                                 getUserProfileNotificationsTab(),
-                                 getUserProfileTrashcan()
-                              ]
-                           }
-                        }
+                        getUserProfileTabContainer()
                      ]
                   }
                }
             ]
          },
          widgets: [
-            {
-               name: "alfresco/layout/LeftAndRight",
-               config: {
-                  widgetsLeft: [
-                     {
-                        widthPx: 120,
-                        name: "alfresco/renderers/AvatarThumbnail"
-                     },
-                     {
-                        name: "alfresco/layout/VerticalWidgets",
-                        config: {
-                           widgets: [
-                              {
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "displayName",
-                                    renderSize: "large",
-                                    renderOnNewLine: true
-                                 }
-                              },
-                              {
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "jobtitle",
-                                    renderOnNewLine: true
-                                 }
-                              },
-                              {
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "organization",
-                                    renderOnNewLine: true
-                                 }
-                              },
-                              {
-                                 name: "alfresco/renderers/Property",
-                                 config: {
-                                    propertyToRender: "location",
-                                    renderOnNewLine: true
-                                 }
-                              }
-                           ]
-                        }
-                     }
-                  ],
-                  widgetsRight: [
-                     { 
-                        name: "alfresco/renderers/Toggle",
-                        config: {
-                           propertyToRender: "following",
-                           checkedValue: true,
-                           onLabel: "Following",
-                           offLabel: "Follow",
-                           onTooltip: "Stop following {0}",
-                           offTooltip: "Start following {0}",
-                           tooltipIdProperty: "displayName",
-                           toggleOnTopic: "ALF_FOLLOW_USERS",
-                           toggleOnPublishPayload: {
-                              userNames: ["{userName}"]
-                           },
-                           toggleOnPublishGlobal: true,
-                           toggleOnPublishPayloadType: "PROCESS",
-                           toggleOnPublishPayloadModifiers: ["processCurrentItemTokens"],
-                           toggleOffTopic: "ALF_UNFOLLOW_USERS",
-                           toggleOffPublishPayload: {
-                              userNames: ["{userName}"]
-                           },
-                           toggleOffPublishGlobal: true,
-                           toggleOffPublishPayloadType: "PROCESS",
-                           toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"],
-                           renderFilter: [
-                              {
-                                 property: "userName",
-                                 values: [user.name],
-                                 negate: true
-                              }
-                           ]
-                        }
-                     }
-                  ]
-               }
-            },
+            getUserProfileInfo(),
             {
                name: "alfresco/renderers/Property",
                config: {
@@ -805,3 +813,30 @@ function getUserProfilesWidgets() {
       }
    };
 }
+
+function getUserProfileWidgets(data) {
+   return {
+      name: "alfresco/renderers/Item",
+      config: {
+         style: {
+            padding: "10px"
+         },
+         loadItemPublishTopic: "ALF_GET_USER",
+         loadItemPublishPayload: {
+            userName: data.userName
+         },
+         itemProperty: "user",
+         widgets: [
+            getUserProfileInfo(),
+            {
+               name: "alfresco/renderers/Property",
+               config: {
+                  propertyToRender: "persondescription"
+               }
+            },
+            getUserProfileTabContainer()
+         ]
+      }
+   };
+}
+

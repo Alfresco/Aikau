@@ -878,6 +878,19 @@ define([],function() {
       GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
 
       /**
+       * This topic can be published to retrieve the details of a single user.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string} userName The userName of the user to retrieve
+       */
+      GET_USER: "ALF_GET_USER",
+
+      /**
        * This topic can be published to request a user preference be returned. It is typically handled by 
        * the [PreferenceService]{@link module:alfresco/services/PreferenceService}.
        *
