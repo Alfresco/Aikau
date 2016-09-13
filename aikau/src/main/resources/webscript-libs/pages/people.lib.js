@@ -589,7 +589,8 @@ function getUserProfileTrashcan() {
                                                       publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
                                                       publishPayload: {
                                                          url: "api/archive/{nodeRef}"
-                                                      }
+                                                      },
+                                                      publishGlobal: true
                                                    }
                                                 },
                                                 {
@@ -606,7 +607,8 @@ function getUserProfileTrashcan() {
                                                          confirmationPrompt: "This will permanently delete the item(s). Are you sure?",
                                                          confirmationButtonLabel: "Yes",
                                                          cancellationButtonLabel: "No"
-                                                      }
+                                                      },
+                                                      publishGlobal: true
                                                    }
                                                 }
                                              ]

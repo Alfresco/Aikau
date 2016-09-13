@@ -321,6 +321,15 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Custom control mappings to check before the default control mappings.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      customControlMappings: null,
+
+      /**
        * This will be populated with MIME type options the first time the 
        * "/org/alfresco/components/form/controls/mimetype.ftl" is mapped to a
        * formcontrol and used. It prevents multiple XHR for data that is unlikely to
@@ -559,8 +568,9 @@ define(["dojo/_base/declare",
             if (useDialog)
             {
                var dialogTitle = lang.getObject("formConfig.dialogTitle", false, originalRequestConfig);
+               var dialogId = lang.getObject("formConfig.formId", false, originalRequestConfig);
                this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
-                  dialogId: formConfig.config.id,
+                  dialogId: dialogId,
                   dialogTitle: dialogTitle,
                   formSubmissionTopic: formConfig.config.okButtonPublishTopic,
                   formSubmissionGlobal: true,
@@ -634,37 +644,39 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} formConfig The full configuration for the form being rendered
-       * @param  {object} targetField The configuration for the field to render.
-       * @param  {string} controlTemplate The name of the template to be mapped to a widget
+       * @param {object} targetField The configuration for the field to render.
+       * @param {string} controlTemplate The name of the template to be mapped to a widget
+       * @param {object} mappings The mappings configuration object to explore
        * @return {object} The mapped control.
        * @since 1.0.77
        */
-      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, targetField, controlTemplate) {
+      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, targetField, controlTemplate, mappings) {
          var kind = formConfig["arguments"].itemKind;
          var mode = formConfig.mode;
-
-         // TODO: Need to check as yet undeclared custom mappings...
          var control;
-         var kindMapping = this.controlMappings[kind];
-         if (kindMapping)
+         if (mappings)
          {
-            var modeMapping = kindMapping[mode];
-            if (modeMapping)
+            var kindMapping = mappings[kind];
+            if (kindMapping)
             {
-               control = modeMapping[targetField.dataKeyName];
+               var modeMapping = kindMapping[mode];
+               if (modeMapping)
+               {
+                  control = modeMapping[targetField.dataKeyName];
+                  if (!control)
+                  {
+                     control = modeMapping[controlTemplate];
+                  }
+               }
                if (!control)
                {
-                  control = modeMapping[controlTemplate];
+                  control = kindMapping[controlTemplate];
                }
             }
             if (!control)
             {
-               control = kindMapping[controlTemplate];
+               control = mappings["default"][controlTemplate];
             }
-         }
-         if (!control)
-         {
-            control = this.controlMappings["default"][controlTemplate];
          }
          return control;
       },
@@ -681,7 +693,8 @@ define(["dojo/_base/declare",
        */
       getViewProperty: function alfresco_services_FormsRuntimeService__getViewProperty(targetField, controlTemplate, formConfig) {
          var widget;
-         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate);
+         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate, this.customControlMappings) ||
+                           this.getMappedControl(formConfig, targetField, controlTemplate, this.controlMappings);
          if (formControl)
          {
             widget = lang.clone(formControl);
@@ -714,7 +727,8 @@ define(["dojo/_base/declare",
       getEditFormControl: function alfresco_services_FormsRuntimeService__addFormControl(targetField, controlTemplate, formConfig) {
          var widget;
          
-         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate);
+         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate, this.customControlMappings) ||
+                           this.getMappedControl(formConfig, targetField, controlTemplate, this.controlMappings);
          if (formControl)
          {
             widget = lang.clone(formControl);
