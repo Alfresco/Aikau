@@ -132,6 +132,17 @@ define(["dojo/_base/declare",
       title: null,
 
       /**
+       * An optional topic that can be provided that when published will call 
+       * [onClick]{@link module:alfresco/buttons/AlfButton#onClick}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      triggerTopic: null,
+
+      /**
        * This attribute has been provided primarily for use when configuring 
        * [widgetsAdditionalButtons]{@link module:alfresco/forms/Form#widgetsAdditionalButtons} in
        * a [form]{@link module:alfresco/forms/Form}. It is a simple marker indicating whether
@@ -192,6 +203,11 @@ define(["dojo/_base/declare",
 
          if (this.title) {
             this.focusNode.setAttribute("title", this.message(this.title));
+         }
+
+         if (this.triggerTopic)
+         {
+            this.alfSubscribe(this.triggerTopic, lang.hitch(this, this.onClick));
          }
       },
 
@@ -257,7 +273,7 @@ define(["dojo/_base/declare",
          {
             this.alfLog("warn", "A widget was clicked but did not provide any information on how to handle the event", this);
          }
-         if (evt)
+         if (evt && typeof evt.preventDefault === "function")
          {
             event.stop(evt);
          }

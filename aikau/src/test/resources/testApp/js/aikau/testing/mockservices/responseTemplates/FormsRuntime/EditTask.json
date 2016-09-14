@@ -1,0 +1,320 @@
+{
+   "enctype": "multipart/form-data",
+   "method": "post",
+   "data": {
+      "prop_bpm_dueDate": "2016-09-15T00:00:00.000+01:00",
+      "prop_transitions": "Next|Task Done",
+      "prop_bpm_priority": 2,
+      "prop_bpm_packageItemActionGroup": "edit_package_item_actions",
+      "prop_bpm_comment": "Blah",
+      "prop_message": "This is a sample task",
+      "prop_bpm_packageActionGroup": "add_package_item_actions",
+      "prop_bpm_taskId": "79",
+      "assoc_packageItems": "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8",
+      "prop_bpm_status": "On Hold",
+      "prop_taskOwner": "admin|Administrator|"
+   },
+   "constraints": [{
+      "validationHandler": "Alfresco.forms.validation.inList",
+      "id": "LIST",
+      "event": "blur",
+      "message": "Value is not in list.",
+      "params": {
+         "allowedValues": ["1|High", "2|Medium", "3|Low"],
+         "sorted": false,
+         "caseSensitive": true
+      },
+      "fieldId": "prop_bpm_priority"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.number",
+      "id": "NUMBER",
+      "event": "keyup",
+      "message": "Value is not a number.",
+      "params": {},
+      "fieldId": "prop_bpm_priority"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.number",
+      "id": "NUMBER",
+      "event": "keyup",
+      "message": "Value is not a number.",
+      "params": {},
+      "fieldId": "prop_bpm_taskId"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.mandatory",
+      "id": "MANDATORY",
+      "event": "keyup,change",
+      "message": "The value cannot be empty.",
+      "params": {},
+      "fieldId": "prop_bpm_status"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.inList",
+      "id": "LIST",
+      "event": "blur",
+      "message": "Value is not in list.",
+      "params": {
+         "allowedValues": ["Not Yet Started|Not Yet Started", "In Progress|In Progress", "On Hold|On Hold", "Cancelled|Cancelled", "Completed|Completed"],
+         "sorted": false,
+         "caseSensitive": true
+      },
+      "fieldId": "prop_bpm_status"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.length",
+      "id": "LENGTH",
+      "event": "keyup",
+      "message": "Value has incorrect number of characters.",
+      "params": {
+         "minLength": 0,
+         "maxLength": 4000,
+         "crop": true
+      },
+      "fieldId": "prop_bpm_comment"
+   }],
+   "structure": [{
+      "children": [{
+         "kind": "field",
+         "id": "prop_message"
+      }],
+      "id": "",
+      "event": "Info",
+      "params": "title",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "prop_taskOwner"
+      }, {
+         "kind": "field",
+         "id": "prop_bpm_priority"
+      }, {
+         "kind": "field",
+         "id": "prop_bpm_dueDate"
+      }, {
+         "kind": "field",
+         "id": "prop_bpm_taskId"
+      }],
+      "id": "info",
+      "event": "info",
+      "message": "/org/alfresco/components/form/3-column-set.ftl",
+      "params": "",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "prop_bpm_status"
+      }],
+      "id": "progress",
+      "event": "Progress",
+      "params": "title",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "assoc_packageItems"
+      }],
+      "id": "items",
+      "event": "Items",
+      "params": "title",
+      "fieldId": "set"
+   }, {
+      "children": [{
+         "kind": "field",
+         "id": "prop_bpm_comment"
+      }, {
+         "kind": "field",
+         "id": "prop_transitions"
+      }],
+      "id": "response",
+      "event": "Response",
+      "params": "title",
+      "fieldId": "set"
+   }],
+   "showCancelButton": false,
+   "mode": "edit",
+   "showResetButton": false,
+   "showSubmitButton": true,
+   "arguments": {
+      "itemKind": "task",
+      "formId": "null",
+      "itemId": "activiti$79"
+   },
+   "showCaption": false,
+   "submissionUrl": "/share/proxy/alfresco/api/task/activiti%2479/formprocessor",
+   "fields": {
+      "prop_bpm_dueDate": {
+         "configName": "bpm:dueDate",
+         "endpointType": "date",
+         "kind": "field",
+         "dataType": "date",
+         "description": "Due Date",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/info.ftl",
+            "params": {
+               "submitTime": "false"
+            }
+         },
+         "label": "Due",
+         "type": "property",
+         "dataKeyName": "prop_bpm_dueDate",
+         "name": "prop_bpm_dueDate",
+         "id": "prop_bpm_dueDate",
+         "value": "2016-09-15T00:00:00.000+01:00",
+         "helpEncodeHtml": true
+      },
+      "prop_transitions": {
+         "configName": "transitions",
+         "endpointType": "transitions",
+         "kind": "field",
+         "dataType": "transitions",
+         "description": "The transitions available for the task",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/transitions.ftl",
+            "params": {}
+         },
+         "label": "Transitions",
+         "type": "property",
+         "dataKeyName": "prop_transitions",
+         "name": "prop_transitions",
+         "id": "prop_transitions",
+         "value": "Next|Task Done",
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_priority": {
+         "configName": "bpm:priority",
+         "endpointType": "int",
+         "kind": "field",
+         "dataType": "int",
+         "description": "Priority",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/priority.ftl",
+            "params": {
+               "options": "1|High#alf#2|Medium#alf#3|Low",
+               "optionSeparator": "#alf#"
+            }
+         },
+         "label": "Priority",
+         "type": "property",
+         "help": "form.field.constraint.number",
+         "dataKeyName": "prop_bpm_priority",
+         "name": "prop_bpm_priority",
+         "id": "prop_bpm_priority",
+         "value": 2,
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_comment": {
+         "configName": "bpm:comment",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "description": "Comment",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textarea.ftl",
+            "params": {
+               "maxLength": "4000"
+            }
+         },
+         "label": "Comment",
+         "type": "property",
+         "help": "form.field.constraint.length",
+         "dataKeyName": "prop_bpm_comment",
+         "name": "prop_bpm_comment",
+         "id": "prop_bpm_comment",
+         "value": "Blah",
+         "helpEncodeHtml": true
+      },
+      "prop_message": {
+         "configName": "message",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "description": "Message the user entered when starting the workflow",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/info.ftl",
+            "params": {}
+         },
+         "label": "Message",
+         "type": "property",
+         "dataKeyName": "prop_message",
+         "name": "prop_message",
+         "id": "prop_message",
+         "value": "This is a sample task",
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_taskId": {
+         "configName": "bpm:taskId",
+         "endpointType": "long",
+         "kind": "field",
+         "dataType": "long",
+         "description": "Identifier",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/info.ftl",
+            "params": {}
+         },
+         "label": "Identifier",
+         "type": "property",
+         "help": "form.field.constraint.number",
+         "dataKeyName": "prop_bpm_taskId",
+         "name": "prop_bpm_taskId",
+         "id": "prop_bpm_taskId",
+         "value": "79",
+         "helpEncodeHtml": true
+      },
+      "assoc_packageItems": {
+         "configName": "packageItems",
+         "endpointType": "packageItems",
+         "kind": "field",
+         "dataType": "packageItems",
+         "description": "Items that are part of the workflow",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/packageitems.ftl",
+            "params": {}
+         },
+         "label": "Items",
+         "type": "association",
+         "endpointDirection": "TARGET",
+         "dataKeyName": "assoc_packageItems",
+         "name": "assoc_packageItems",
+         "id": "assoc_packageItems",
+         "value": "workspace://SpacesStore/7bb7bfa8-997e-4c55-8bd9-2e5029653bc8",
+         "helpEncodeHtml": true
+      },
+      "prop_bpm_status": {
+         "configName": "bpm:status",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "description": "Status",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/selectone.ftl",
+            "params": {
+               "options": "Not Yet Started|Not Yet Started#alf#In Progress|In Progress#alf#On Hold|On Hold#alf#Cancelled|Cancelled#alf#Completed|Completed",
+               "optionSeparator": "#alf#"
+            }
+         },
+         "label": "Status",
+         "type": "property",
+         "dataKeyName": "prop_bpm_status",
+         "name": "prop_bpm_status",
+         "id": "prop_bpm_status",
+         "value": "On Hold",
+         "helpEncodeHtml": true
+      },
+      "prop_taskOwner": {
+         "configName": "taskOwner",
+         "endpointType": "taskOwner",
+         "kind": "field",
+         "dataType": "taskOwner",
+         "description": "The user that owns the task",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/workflow/taskowner.ftl",
+            "params": {}
+         },
+         "label": "Owner",
+         "type": "property",
+         "dataKeyName": "prop_taskOwner",
+         "name": "prop_taskOwner",
+         "id": "prop_taskOwner",
+         "value": "admin|Administrator|",
+         "helpEncodeHtml": true
+      }
+   }
+}

@@ -372,6 +372,19 @@ define(["dojo/_base/declare",
       warningsPosition: "top",
 
       /**
+       * This is an optional topic that can be provided to allow other widgets to trigger the submission of 
+       * the form. This was added to support requirements of the
+       * [FormsRuntimeService]{@link module:alfresco/services/FormsRuntimeService} and in particular the
+       * [Transitions]{@link module:alfresco/forms/controls/Transitions} control.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       */
+      formSubmissionTriggerTopic: null,
+
+      /**
        * @instance
        */
       postCreate: function alfresco_forms_Form__postCreate() {
@@ -479,6 +492,13 @@ define(["dojo/_base/declare",
             array.forEach(this.okButtonEnablementTopics, function(topic) {
                this.setupOkButtonEnablementSubscription(topic);
             }, this);
+         }
+
+         if (this.formSubmissionTriggerTopic && this.okButton)
+         {
+            this.alfSubscribe(this.formSubmissionTriggerTopic, lang.hitch(this, function() {
+               this.okButton.onClick();
+            }));
          }
       },
 

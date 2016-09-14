@@ -31,9 +31,10 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/FormsRuntime/EditDocLibSimpleMetadata.json",
         "dojo/text!./responseTemplates/FormsRuntime/ViewNodeDefault.json",
         "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflow.json",
-        "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflowSuccess.json"], 
+        "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflowSuccess.json",
+        "dojo/text!./responseTemplates/FormsRuntime/EditTask.json"], 
         function(declare, MockXhr, webScriptDefaults, lang, Authorities, EditDocLibSimpleMetadata, ViewNodeDefault, 
-                 CreateWorkflow, CreateWorkflowSuccess) {
+                 CreateWorkflow, CreateWorkflowSuccess, EditTask) {
    
    return declare([MockXhr], {
 
@@ -74,6 +75,12 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      CreateWorkflowSuccess]);
+
+            this.server.respondWith("GET",
+                                    "/aikau/service/aikau/" + webScriptDefaults.WEBSCRIPT_VERSION + "/form?itemKind=task&itemId=activiti$79&formId=null&mode=edit",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     EditTask]);
          }
          catch(e)
          {
