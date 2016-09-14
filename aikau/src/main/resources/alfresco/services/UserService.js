@@ -94,6 +94,125 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.GET_FOLLOWING_USERS, lang.hitch(this, this.onGetFollowingUsers));
          this.alfSubscribe(topics.FOLLOW_USERS, lang.hitch(this, this.onFollowUsers));
          this.alfSubscribe(topics.UNFOLLOW_USERS, lang.hitch(this, this.onUnfollowUsers));
+         this.alfSubscribe(topics.GET_USER, lang.hitch(this, this.onGetUser));
+      },
+
+      /**
+       * Handles requests to retrieve a single user.
+       * 
+       * @instance
+       * @param {object} payload The published payload with the userName of the user to retrieve
+       * @since 1.0.86
+       */
+      onGetUser: function alfresco_services_UserService__onGetUser(payload) {
+         if (payload.userName)
+         {
+            var url = AlfConstants.PROXY_URI + "api/people?filter=" + payload.userName;
+            var config = {
+               userName: payload.userName,
+               url: url,
+               method: "GET",
+               successCallback: this.onUserSuccess,
+               failureCallback: this.onUserFailure,
+               callbackScope: this
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to retrieve the details for a user, but no 'userName' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * Handles successful requests to get users filtered by the supplied user name. Makes an additional
+       * XHR request to determine whether or not the user is being followed by the current user.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.86
+       */
+      onUserSuccess: function alfresco_services_UserService__onUserSuccess(response, originalRequestConfig) {
+         var items = lang.getObject("people", false, response);
+         if (items)
+         {
+            var targetUser;
+            array.some(items, function(item) {
+               if (item.userName === originalRequestConfig.userName)
+               {
+                  targetUser = item;
+                  if (item.firstName && item.lastName)
+                  {
+                     targetUser.displayName = item.firstName + " " + item.lastName;
+                  }
+                  else if (item.firstName)
+                  {
+                     targetUser.displayName = item.firstName;
+                  }
+                  else if (item.lastName)
+                  {
+                     targetUser.displayName = item.lastName;
+                  }
+                  else
+                  {
+                     targetUser.displayName = "";
+                  }
+
+                  var url = AlfConstants.PROXY_URI + "api/subscriptions/" + AlfConstants.USERNAME + "/follows";
+                  var config = {
+                     url: url,
+                     userData: targetUser,
+                     initialRequestConfig: originalRequestConfig,
+                     data: [targetUser.userName],
+                     method: "POST",
+                     successCallback: this.publishUser,
+                     failureCallback: this.onUserFailure,
+                     callbackScope: this
+                  };
+                  this.serviceXhr(config);
+               }
+               return targetUser;
+            }, this);
+         }
+      },
+
+      /**
+       * This is the success callback for the [onGetUser]{@link module:alfresco/services/UserService#onGetUser} function.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.86
+       */
+      publishUser: function alfresco_services_UserService__publishUser(response, originalRequestConfig) {
+         var user = originalRequestConfig.userData;
+         user.following = (response && response.length && response[0][user.userName]) || false;
+
+         var topic = lang.getObject("initialRequestConfig.alfSuccessTopic", false, originalRequestConfig);
+         if (!topic)
+         {
+            topic = lang.getObject("initialRequestConfig.alfResponseTopic", false, originalRequestConfig);
+         }
+         if (topic)
+         {
+            this.alfPublish(topic, {
+               user: user
+            });
+         }
+      },
+
+      /**
+       * This is the failure callback for the [onGetUser]{@link module:alfresco/services/UserService#onGetUser} function.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.86
+       */
+      onUserFailure: function alfresco_services_UserService__onUserFailure(response, originalRequestConfig) {
+         this.alfLog("error", "It was not possible to retrieve the user", response, originalRequestConfig, this);
       },
 
       /**

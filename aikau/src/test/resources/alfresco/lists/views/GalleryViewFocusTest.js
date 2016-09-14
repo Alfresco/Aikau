@@ -52,7 +52,7 @@ define(["module",
          return this.remote.findDisplayedByCssSelector("#VERTICAL_ITEM_5 .alfresco-layout-HorizontalWidgets")
             .getSize()
             .then(function(size) {
-               assert.equal(size.width, 200, "Width not set correctly");
+               assert.closeTo(size.width, 200, 5, "Width not set correctly");
             });
       }
    });

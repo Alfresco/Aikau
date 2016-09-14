@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>User Service</shortname>
+  <description>This is the test page for the alfresco/services/UserService</description>
+  <family>aikau-unit-tests</family>
+  <url>/UserService</url>
+</webscript>
