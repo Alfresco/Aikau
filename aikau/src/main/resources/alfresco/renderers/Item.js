@@ -18,6 +18,46 @@
  */
 
 /**
+ * <p>This widget provides a way in which data can be asynchronously loaded by configuring a
+ * [loadItemPublishTopic]{@link module:alfresco/renderers/Item#loadItemPublishTopic} to publish
+ * when created. There is full support for the standard payload construction options provided
+ * by the [_PublishPayloadMixin]{@link module:alfresco/renderers/_PublishPayloadMixin} when
+ * requesting the data through the configuration of:
+ * <ul>
+ * <li>[loadItemPublishTopic]{@link module:alfresco/renderers/Item#loadItemPublishTopic}</li>
+ * <li>[loadItemPublishPayload]{@link module:alfresco/renderers/Item#loadItemPublishPayload}</li>
+ * <li>[loadItemPublishPayloadType]{@link module:alfresco/renderers/Item#loadItemPublishPayloadType}</li>
+ * <li>[loadItemPublishGlobal]{@link module:alfresco/renderers/Item#loadItemPublishGlobal}</li>
+ * <li>[loadItemPublishToParent]{@link module:alfresco/renderers/Item#loadItemPublishToParent}</li>
+ * <li>[loadItemPublishScope]{@link module:alfresco/renderers/Item#loadItemPublishScope}</li>
+ * <li>[loadItemPublishPayloadModifiers]{@link module:alfresco/renderers/Item#loadItemPublishPayloadModifiers}</li>
+ * <li>[loadItemPublishPayloadItemMixin]{@link module:alfresco/renderers/Item#loadItemPublishPayloadItemMixin}</li>
+ * </ul>
+ * A [widgets]{@link module:alfresco/renderers/Item#widgets} model should be configured to render the loaded
+ * data, this model can be processed by configuring the 
+ * [widgetModelModifiers]{@link module:alfresco/renderers/Item#widgetModelModifiers} that are applied.
+ * </p>
+ *
+ * @example <caption>Sample configuration to load an render a user</caption>
+ * {
+ *   name: "alfresco/renderers/Item",
+ *   config: {
+ *     loadItemPublishTopic: "ALF_GET_USER",
+ *     loadItemPublishPayload: {
+ *       userName: "admin"
+ *     },
+ *     itemProperty: "user",
+ *     widgets: [
+ *       {
+ *         name: "alfresco/renderers/Property",
+ *         config: {
+ *           propertyToRender: "displayName"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
+ * 
  * @module alfresco/renderers/Item
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -151,16 +191,6 @@ define(["dojo/_base/declare",
        * @default
        */
       widgets: null,
-
-      /**
-       * Used to indicate whether or not to force an XHR request to retrieve the full node data. Defaults
-       * to false assuming that all the data required is currently available in "currentItem".
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       */
-      xhrRequired: false,
 
       /**
        * Subscribes to the document load topic
