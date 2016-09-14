@@ -167,7 +167,14 @@ function getUserProfileContentList(data) {
                                                 {
                                                    name: "alfresco/renderers/Thumbnail",
                                                    config: {
-                                                      
+                                                      dimensions: {
+                                                         w: "64px",
+                                                         h: "64px",
+                                                         margin: "3px"
+                                                      },
+                                                      itemKey: "nodeRef",
+                                                      hasShadow: true,
+                                                      showDocumentPreview: true
                                                    }
                                                 }
                                              ]
@@ -201,6 +208,72 @@ function getUserProfileContentList(data) {
                                                       modifiedDateProperty: "modifiedOn",
                                                       modifiedByProperty: "modifiedBy",
                                                       deemphasized: true
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       },
+                                       {
+                                          name: "alfresco/lists/views/layouts/Cell",
+                                          config: {
+                                             width: "70px",
+                                             additionalCssClasses: "mediumpad",
+                                             widgets: [
+                                                {
+                                                   name: "alfresco/renderers/XhrActions",
+                                                   config: {
+                                                      renderFilter: [
+                                                         {
+                                                            property: "type",
+                                                            values: ["document","folder"]
+                                                         }
+                                                      ],
+                                                      onlyShowOnHover: true,
+                                                      filterActions: true,
+                                                      allowedActions: [
+                                                         "document-download",
+                                                         "document-view-content",
+                                                         "document-view-details",
+                                                         "folder-view-details",
+                                                         "document-edit-metadata",
+                                                         "document-inline-edit",
+                                                         "document-manage-granular-permissions",
+                                                         "document-manage-repo-permissions",
+                                                         "document-view-original",
+                                                         "document-view-working-copy",
+                                                         "folder-manage-rules",
+                                                         "document-view-googlemaps",
+                                                         "document-view-in-source-repository",
+                                                         "document-view-in-cloud",
+                                                         "document-delete",
+                                                         "document-edit-offline",
+                                                         "folder-download",
+                                                         "document-copy-to",
+                                                         "document-move-to",
+                                                         "document-locate",
+                                                         "document-assign-workflow",
+                                                         "document-cancel-editing",
+                                                         "document-approve",
+                                                         "document-reject",
+                                                         "document-manage-aspects"
+                                                      ]
+                                                   }
+                                                },
+                                                {
+                                                   name: "alfresco/renderers/XhrActions",
+                                                   config: {
+                                                      renderFilter: [
+                                                         {
+                                                            property: "type",
+                                                            values: ["document","folder"],
+                                                            negate: true
+                                                         }
+                                                      ],
+                                                      onlyShowOnHover: true,
+                                                      filterActions: true,
+                                                      allowedActions: [
+                                                         "document-delete"
+                                                      ]
                                                    }
                                                 }
                                              ]
@@ -327,10 +400,17 @@ function getFollowUserListView() {
                         name: "alfresco/lists/views/layouts/Cell",
                         config: {
                            additionalCssClasses: "mediumpad",
-                           width: "64px",
+                           width: "48px",
                            widgets: [
                               {
-                                 name: "alfresco/renderers/AvatarThumbnail"
+                                 name: "alfresco/renderers/AvatarThumbnail",
+                                 config: {
+                                    dimensions: {
+                                       w: "48px",
+                                       h: "48px",
+                                       margin: "2px"
+                                    }
+                                 }
                               }
                            ]
                         }
@@ -360,6 +440,20 @@ function getFollowUserListView() {
                                     propertyToRender: "userName",
                                     renderedValuePrefix: "(",
                                     renderedValueSuffix: ")"
+                                 }
+                              },
+                              {
+                                 name: "alfresco/renderers/Property",
+                                 config: {
+                                    propertyToRender: "jobtitle",
+                                    renderOnNewLine: true
+                                 }
+                              },
+                              {
+                                 name: "alfresco/renderers/Property",
+                                 config: {
+                                    propertyToRender: "organization",
+                                    renderOnNewLine: true
                                  }
                               }
                            ]
@@ -579,36 +673,45 @@ function getUserProfileTrashcan() {
                                        {
                                           name: "alfresco/lists/views/layouts/Cell",
                                           config: {
+                                             width: "70px",
                                              widgets: [
                                                 {
-                                                   name: "alfresco/buttons/AlfButton",
+                                                   name: "alfresco/renderers/Actions",
                                                    config: {
-                                                      label: "Recover",
-                                                      publishTopic: "ALF_CRUD_UPDATE",
-                                                      publishPayloadType: "PROCESS",
-                                                      publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
-                                                      publishPayload: {
-                                                         url: "api/archive/{nodeRef}"
-                                                      },
-                                                      publishGlobal: true
-                                                   }
-                                                },
-                                                {
-                                                   name: "alfresco/buttons/AlfButton",
-                                                   config: {
-                                                      label: "Delete",
-                                                      publishTopic: "ALF_CRUD_DELETE",
-                                                      publishPayloadType: "PROCESS",
-                                                      publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
-                                                      publishPayload: {
-                                                         url: "api/archive/{nodeRef}",
-                                                         requiresConfirmation: true,
-                                                         confirmationTitle: "Delete",
-                                                         confirmationPrompt: "This will permanently delete the item(s). Are you sure?",
-                                                         confirmationButtonLabel: "Yes",
-                                                         cancellationButtonLabel: "No"
-                                                      },
-                                                      publishGlobal: true
+                                                     customActions: [
+                                                         {
+                                                            label: "Recover",
+                                                            publishTopic: "ALF_CRUD_UPDATE",
+                                                            publishPayloadType: "PROCESS",
+                                                            publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                                            publishPayload: {
+                                                               url: "api/archive/{nodeRef}"
+                                                            },
+                                                            publishGlobal: true,
+                                                            icon: "document-cloud-sync",
+                                                            index: "10",
+                                                            type: "javascript"
+
+                                                         },
+                                                         {
+                                                            label: "Delete",
+                                                            publishTopic: "ALF_CRUD_DELETE",
+                                                            publishPayloadType: "PROCESS",
+                                                            publishPayloadModifiers: ["processCurrentItemTokens","convertNodeRefToUrl"],
+                                                            publishPayload: {
+                                                               url: "api/archive/{nodeRef}",
+                                                               requiresConfirmation: true,
+                                                               confirmationTitle: "Delete",
+                                                               confirmationPrompt: "This will permanently delete the item(s). Are you sure?",
+                                                               confirmationButtonLabel: "Yes",
+                                                               cancellationButtonLabel: "No"
+                                                            },
+                                                            publishGlobal: true,
+                                                            icon: "document-delete",
+                                                            index: "20",
+                                                            type: "javascript"
+                                                         }
+                                                      ]
                                                    }
                                                 }
                                              ]

@@ -568,7 +568,7 @@ define(["dojo/_base/declare",
             if (this.fixedColumns === true)
             {
                var widthToSet = (Math.floor(marginBox.w / this.columns) - 10) + "px";
-               query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
+               query(".alfresco-lists-views-layouts-Grid > tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
             }
             else
             {
