@@ -546,7 +546,7 @@ define(["dojo/_base/declare",
        * @param {module:alfresco/services/DialogService~event:ALF_CREATE_FORM_DIALOG_REQUEST} payload The payload published on the request topic.
        */
       onCreateFormDialogRequest: function alfresco_services_DialogService__onCreateFormDialogRequest(payload) {
-         // jshint maxstatements:false
+         // jshint maxstatements:false, maxcomplexity:false
          this.cleanUpAnyPreviousDialog(payload);
          if (!payload.widgets)
          {
@@ -605,6 +605,11 @@ define(["dojo/_base/declare",
                {
                   var enableHandle = this.alfSubscribe(config.dialogEnableTopic, lang.hitch(this, this.onFailedSubmission, dialog));
                   this.mapRequestedIdToHandle(payload, "dialog.enable", enableHandle);
+               }
+               if (payload.formSubmissionTriggerTopic)
+               {
+                  var triggerSubmissionHandle = this.alfSubscribe(pubSubScope + payload.formSubmissionTriggerTopic, lang.hitch(this, this.onCloseDialog, dialog));
+                  this.mapRequestedIdToHandle(payload, "dialog.trigger", triggerSubmissionHandle);
                }
 
                if (payload.dialogRepeats)
@@ -763,7 +768,8 @@ define(["dojo/_base/declare",
                            formSubmissionScope: config.formSubmissionScope,
                            responseScope: config.alfResponseScope,
                            dialogEnableTopic: config.dialogEnableTopic
-                        }
+                        },
+                        triggerTopic: config.formSubmissionTriggerTopic
                      }
                   },
                   {

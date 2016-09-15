@@ -62,6 +62,27 @@ model.jsonModel = {
          }
       },
       {
+         id: "EDIT_TASK",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Edit task",
+            publishTopic: "ALF_FORM_REQUEST",
+            publishPayload: {
+               itemKind: "task",
+               itemId: "activiti$79",
+               mode: "edit",
+               formConfig: {
+                  useDialog: true,
+                  formId: "EDIT_TASK_FORM",
+                  dialogTitle: "Edit Task",
+                  formSubmissionPayloadMixin: {
+                     alfResponseScope: "EDIT_TASK_SCOPE_"
+                  }
+               }
+            }
+         }
+      },
+      {
          name: "alfresco/layout/DynamicWidgets",
          config: {
             subscriptionTopic: "ALF_FORM_REQUEST_SUCCESS"

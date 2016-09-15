@@ -1764,6 +1764,20 @@ define([],function() {
       TOGGLE_ON: "ALF_TOGGLE_ON",
 
       /**
+       * This topic is used by the [FormsRuntimeService]{@link module:alfresco/services/FormsRuntimeService}
+       * as a way of allowing other form controls (notably [Transitions]{@link module:alfresco/forms/controls/Transitions})
+       * to request that the form be published.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.86
+       *
+       * @event
+       */
+      TRIGGER_FORM_SUBMISSION: "ALF_TRIGGER_FORM_SUBMISSION",
+
+      /**
        * This topic can be published to request that the current user unfollow the users provided.
        * 
        * @instance

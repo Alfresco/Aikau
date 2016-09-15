@@ -52,6 +52,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/Select",
         "alfresco/forms/controls/TextArea",
         "alfresco/forms/controls/TextBox",
+        "alfresco/forms/controls/Transitions",
         "alfresco/node/MetadataGroups",
         "alfresco/renderers/Date",
         "alfresco/renderers/Property",
@@ -256,6 +257,9 @@ define(["dojo/_base/declare",
          task: {
             edit: {
 
+               "/org/alfresco/components/form/controls/workflow/transitions.ftl": {
+                  name: "alfresco/forms/controls/Transitions"
+               }
             },
 
             view: {
@@ -532,7 +536,8 @@ define(["dojo/_base/declare",
                      okButtonPublishPayload: okButtonPublishPayload,
                      okButtonPublishGlobal: true,
                      value: response.data,
-                     widgets: formControls
+                     widgets: formControls,
+                     formSubmissionTriggerTopic: topics.TRIGGER_FORM_SUBMISSION
                   }
                };
 
@@ -576,7 +581,8 @@ define(["dojo/_base/declare",
                   formSubmissionGlobal: true,
                   formSubmissionPayloadMixin: formConfig.config.okButtonPublishPayload,
                   formValue: formConfig.config.value,
-                  widgets: formConfig.config.widgets
+                  widgets: formConfig.config.widgets,
+                  formSubmissionTriggerTopic: topics.TRIGGER_FORM_SUBMISSION
                });
             }
             else
