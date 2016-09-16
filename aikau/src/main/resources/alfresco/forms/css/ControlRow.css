@@ -1,4 +1,6 @@
 .alfresco-forms-ControlRow {
+   margin-bottom: @standard-line-height;
+
    > div {
       &.title {
          font-family: @bold-font;

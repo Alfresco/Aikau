@@ -473,6 +473,40 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Returns the number of columns that should be used for the 
+       * [ControlRow]{@link module:alfresco/forms/ControlRow} for the supplied structure. The
+       * "message" attribute in the structure contains the name of a template that can
+       * be mapped to a number of controls.
+       * 
+       * @instance
+       * @return {number|null} The number of columns or null if they can't be determined
+       * @since 1.0.86
+       */
+      getColumnsForControlRow: function alfresco_services_FormsRuntimeService__getColumnsForControlRow(structureElement) {
+         var columns = null;
+         if (structureElement.message)
+         {
+            switch (structureElement.message) {
+               case "/org/alfresco/components/form/2-column-set.ftl":
+                  columns = 2;
+                  break;
+
+               case "/org/alfresco/components/form/2-column-wide-left-set.ftl":
+                  columns = 2;
+                  break;
+
+               case "/org/alfresco/components/form/3-column-set.ftl":
+                  columns = 3;
+                  break;
+
+               default:
+                  this.alfLog("warn", "Could not find a layout structure for ", structureElement.message, this);
+            }
+         }
+         return columns;
+      },
+
+      /**
        * The form data is returned as a JSON object that needs to be parsed and the data mapped to Aikau
        * configuration.
        * 
@@ -554,16 +588,43 @@ define(["dojo/_base/declare",
                      }
                   };
                   formControls.push(structureWidget);
-
-                  // Select the appropriate target for the form controls, at the moment this assumes
-                  // that if a "message" attribute is provided then all form controls go into the same
-                  // row - however, that needs to be validated, it might be necessary to iterate over the
-                  // controls to ensure that the appropriate number of controls are added per row.
-                  var targetForControls = structureElement.message ? rowControls : formControls;
-                  if (structureElement.children)
+                  
+                  var columns = this.getColumnsForControlRow(structureElement);
+                  if (columns)
                   {
-                     array.forEach(structureElement.children, lang.hitch(this, this.addField, targetForControls, response));
+                     while (structureElement.children.length)
+                     {
+                        var childrenToAdd = structureElement.children.splice(0, columns);
+                        if (childrenToAdd)
+                        {
+                           array.forEach(childrenToAdd, lang.hitch(this, this.addField, rowControls, response));
+                        }
+                        if (structureElement.children.length)
+                        {
+                           rowControls = [];
+                           structureWidget = {
+                              name: "alfresco/forms/ControlRow",
+                              config: {
+                                 widgets: rowControls
+                              }
+                           };
+                           formControls.push(structureWidget);
+                        }
+                     }
                   }
+                  else
+                  {
+                     // Select the appropriate target for the form controls, at the moment this assumes
+                     // that if a "message" attribute is provided then all form controls go into the same
+                     // row - however, that needs to be validated, it might be necessary to iterate over the
+                     // controls to ensure that the appropriate number of controls are added per row.
+                     var targetForControls = structureElement.message ? rowControls : formControls;
+                     if (structureElement.children)
+                     {
+                        array.forEach(structureElement.children, lang.hitch(this, this.addField, targetForControls, response));
+                     }
+                  }
+
                }, this);
 
                widgets.push(formConfig);
