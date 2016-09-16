@@ -388,6 +388,32 @@ define([],function() {
       DELETE_DATA_LIST_SUCCESS: "ALF_DELETE_DATA_LIST_SUCCESS",
 
       /**
+       * This topic is published to request the deletion of a itemS from a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string[]} nodeRefs The NodeRef of the Data List to delete
+       */
+      DELETE_DATA_LIST_ITEMS: "ALF_DELETE_DATA_LIST_ITEMS_REQUEST",
+
+      /**
+       * This topic is published when the user confirms that they wish to delete items from a Data List.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string} nodeRefs The NodeRefs of the items to delete
+       */
+      DELETE_DATA_LIST_ITEMS_CONFIRMATION: "ALF_DELETE_DATA_LIST_ITEMS_CONFIRMATION",
+
+      /**
        * This topic is published to request the deletion of a site.
        *
        * @instance
@@ -627,6 +653,19 @@ define([],function() {
       ENTER_KEY_PRESSED: "ALF_ENTER_KEY_PRESSED",
 
       /**
+       * This topic can be published to request that the current user follow the users provided.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since  1.0.86
+       *
+       * @event
+       * @property {string[]} userNames An array of the userNames of the users to follow.
+       */
+      FOLLOW_USERS: "ALF_FOLLOW_USERS",
+
+      /**
        * This topic can be published to request a list of authorities to be returned (e.g. users
        * or groups).
        * 
@@ -696,6 +735,19 @@ define([],function() {
        * @property {string} siteId The id of the site to get the Data Lists for
        */
       GET_DATA_LISTS: "ALF_GET_DATA_LISTS",
+
+      /**
+       * This topic can be used to request items for a particular Data Lists
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string} nodeRef The NodeRef of the Data List to get items for
+       */
+      GET_DATA_LIST_ITEMS: "ALF_GET_DATA_LIST_ITEMS",
 
       /**
        * This topic can be used to handle requests to build a widget model for displaying a list
@@ -787,6 +839,30 @@ define([],function() {
       GET_FAVOURITE_SITES: "ALF_GET_FAVOURITE_SITES",
 
       /**
+       * This can be published to request the list of users that the current user is following.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       *
+       * @since 1.0.86
+       * @event
+       */
+      GET_FOLLOWED_USERS: "ALF_GET_FOLLOWED_USERS",
+
+      /**
+       * This can be published to request the list of users that are following the current user.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       *
+       * @since 1.0.86
+       * @event
+       */
+      GET_FOLLOWING_USERS: "ALF_GET_FOLLOWING_USERS",
+
+      /**
        * This topic can be published by a [form control]{@link module:alfresco/forms/controls/BaseFormControl}
        * when it needs to retrieve options that can only be determined from other values containined within the
        * form. This allows options to be dynamically requested that change as other form values are updated.
@@ -800,6 +876,19 @@ define([],function() {
        * @property {string} publishTopic The topic publish the payload once augmented with the form value.
        */
       GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
+
+      /**
+       * This topic can be published to retrieve the details of a single user.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.86
+       *
+       * @event
+       * @property {string} userName The userName of the user to retrieve
+       */
+      GET_USER: "ALF_GET_USER",
 
       /**
        * This topic can be published to request a user preference be returned. It is typically handled by 
@@ -1231,11 +1320,14 @@ define([],function() {
        * @event
        * @property {string} itemKind The type of item for the form (e.g. "node")
        * @property {string} itemId The unique identifier for the item for the form (e.g. a NodeRef)
-       * @property {string} [formId] The unique identifier of the form to be retrieved
+       * @property {string} [formId=null] The unique identifier of the form to be retrieved
+       * @property {string} [alfDestination=null] A target NodeRef for the for data provided by the form
        * @property {string} mode The mode of form to retrieve (e.g. "view" or "edit")
        * @property {object} [formConfig=null] Some optional configuration for the form
        * @property {string} [formConfig.formId=null] The ID to give to the rendered form
        * @property {object} [formConfig.formSubmissionPayloadMixin] Some additional data to include in the form submission
+       * @property {object} [formConfig.useDialog=null] Indicates whether or not the form should be displayed as a dialog
+       * @property {object} [formConfig.dialogTitle=null] The title for the dialog when a dialog is being used
        */
       REQUEST_FORM: "ALF_FORM_REQUEST",
 
@@ -1670,6 +1762,33 @@ define([],function() {
        * @event
        */
       TOGGLE_ON: "ALF_TOGGLE_ON",
+
+      /**
+       * This topic is used by the [FormsRuntimeService]{@link module:alfresco/services/FormsRuntimeService}
+       * as a way of allowing other form controls (notably [Transitions]{@link module:alfresco/forms/controls/Transitions})
+       * to request that the form be published.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.86
+       *
+       * @event
+       */
+      TRIGGER_FORM_SUBMISSION: "ALF_TRIGGER_FORM_SUBMISSION",
+
+      /**
+       * This topic can be published to request that the current user unfollow the users provided.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since  1.0.86
+       *
+       * @event
+       * @property {string[]} userNames An array of the userNames of the users to unfollow.
+       */
+      UNFOLLOW_USERS: "ALF_UNFOLLOW_USERS",
 
       /**
        * This topic can be published to update the title and description of a Data List.

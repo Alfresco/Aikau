@@ -10,6 +10,7 @@
          margin-top: @standard-line-height;
          border: @thick-border-width solid transparent;
          border-radius: @standard-border-radius;
+         box-sizing: border-box;
          
          &--focused {
             border: @thick-border-width solid @hover-border-color;

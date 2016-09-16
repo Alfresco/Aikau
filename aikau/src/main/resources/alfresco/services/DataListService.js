@@ -261,14 +261,20 @@ define(["dojo/_base/declare",
        * @instance
        * @listens module:alfresco/core/topics#DELETE_DATA_LIST
        * @listens module:alfresco/core/topics#DELETE_DATA_LIST_CONFIRMATION
+       * @listens module:alfresco/core/topics#DELETE_DATA_LIST_ITEMS
+       * @listens module:alfresco/core/topics#DELETE_DATA_LIST_ITEMS_CONFIRMATION
        * @listens module:alfresco/core/topics#GET_DATA_LISTS
+       * @listens module:alfresco/core/topics#GET_DATA_LIST_ITEMS
        * @listens module:alfresco/core/topics#GET_DATA_LIST_WIDGETS
        * @listens module:alfresco/core/topics#UPDATE_DATA_LIST
        */
       registerSubscriptions: function alfresco_services_DataListService__registerSubscriptions() {
          this.alfSubscribe(topics.DELETE_DATA_LIST, lang.hitch(this, this.onDeleteDataListRequest));
          this.alfSubscribe(topics.DELETE_DATA_LIST_CONFIRMATION, lang.hitch(this, this.onDeleteDataListConfirmation));
+         this.alfSubscribe(topics.DELETE_DATA_LIST_ITEMS, lang.hitch(this, this.onDeleteDataListItemsRequest));
+         this.alfSubscribe(topics.DELETE_DATA_LIST_ITEMS_CONFIRMATION, lang.hitch(this, this.onDeleteDataListItemsConfirmation));
          this.alfSubscribe(topics.GET_DATA_LISTS, lang.hitch(this, this.getDataLists));
+         this.alfSubscribe(topics.GET_DATA_LIST_ITEMS, lang.hitch(this, this.getDataListItems));
          this.alfSubscribe(topics.GET_DATA_LIST_WIDGETS, lang.hitch(this, this.getDataListWidgets));
          this.alfSubscribe(topics.UPDATE_DATA_LIST, lang.hitch(this, this.updateDataList));
       },
@@ -293,6 +299,38 @@ define(["dojo/_base/declare",
          else
          {
             this.alfLog("warn", "A request was made to retrive Data Lists but no 'siteId' attribute was provided", payload, this);
+         }
+      },
+
+      /**
+       * Handles requests to retrieve Data Lists for the supplied site.
+       * 
+       * @instance
+       * @param  {object} payload The payload containing the details of the Data List to retreive items for
+       * @since 1.0.86
+       */
+      getDataListItems: function alfresco_services_DataListService__getDataListItems(payload) {
+         if (payload.nodeRef && payload.fields)
+         {
+            var nodeRef = NodeUtils.processNodeRef(payload.nodeRef);
+            var url = AlfConstants.PROXY_URI + "slingshot/datalists/data/node/" + nodeRef.uri;
+            var config = {
+               url: url,
+               method: "POST",
+               alfTopic: payload.alfResponseTopic,
+               data: {
+                  fields: payload.fields,
+                  filter: {
+                     filterData: "", // TODO: Handle filtering
+                     filterId: "all" // TODO: Handle filtering
+                  }
+               }
+            };
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to retrive Data List items either the 'nodeRef' or 'fields' attribute was not provided", payload, this);
          }
       },
 
@@ -353,7 +391,6 @@ define(["dojo/_base/declare",
          if (columns)
          {
             var fields = [];
-            var nodeRef = NodeUtils.processNodeRef(originalRequestConfig.data.nodeRef);
             var rowWidgets = [];
             var widgetsForHeader = [];
             var widgets = [
@@ -365,38 +402,20 @@ define(["dojo/_base/declare",
                      },
                      label: "New Item",
                      additionalCssClasses: "call-to-action",
-                     publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                     publishTopic: topics.REQUEST_FORM,
                      publishPayload: {
-                        dialogId: "NEW_DATA_LIST_ITEM_DIALOG",
-                        dialogTitle: "Create New Item",
-                        hideTopic: "ALF_CRUD_CREATE",
-                        widgetsContent: [
-                           {
-                              name: "alfresco/layout/DynamicWidgets",
-                              config: {
-                                 subscribeGlobal: true,
-                                 subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED"
-                              }
+                        formConfig: {
+                           useDialog: true,
+                           formId: "NEW_DATA_LIST_ITEM_DIALOG",
+                           dialogTitle: "Create New Item",
+                           formSubmissionPayloadMixin: {
+                              responseScope: "ALF_DATA_LIST_"
                            }
-                        ],
-                        publishOnShow: [
-                           {
-                              publishTopic: "ALF_FORM_REQUEST",
-                              publishPayload: {
-                                 itemId: originalRequestConfig.data.itemType,
-                                 itemKind: "type",
-                                 mode: "create",
-                                 alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED",
-                                 formConfig: {
-                                    formSubmissionPayloadMixin: {
-                                       alf_destination: originalRequestConfig.data.nodeRef,
-                                       alfResponseScope: "ALF_DATA_LIST_"
-                                    }
-                                 }
-                              },
-                              publishGlobal: true
-                           }
-                        ]
+                        },
+                        alfDestination: originalRequestConfig.data.nodeRef,
+                        itemId: originalRequestConfig.data.itemType,
+                        itemKind: "type",
+                        mode: "create"
                      }
                   }
                },
@@ -405,15 +424,10 @@ define(["dojo/_base/declare",
                   config: {
                      pubSubScope: "ALF_DATA_LIST_",
                      waitForPageWidgets: false,
-                     loadDataPublishTopic: "ALF_CRUD_CREATE",
+                     loadDataPublishTopic: topics.GET_DATA_LIST_ITEMS,
                      loadDataPublishPayload: {
-                        url: "slingshot/datalists/data/node/" + nodeRef.uri,
-                        fields: fields,
-                        filter: {
-                           filterData: "", // TODO: Handle filtering
-                           filterId: "all" // TODO: Handle filtering
-                        },
-                        noRefresh: true
+                        nodeRef: originalRequestConfig.data.nodeRef,
+                        fields: fields
                      },
                      itemsProperty: "items",
                      widgets: [
@@ -514,7 +528,8 @@ define(["dojo/_base/declare",
                         name: "alfresco/renderers/PublishAction",
                         config: {
                            iconClass: "delete-16",
-                           publishTopic: "ALF_CRUD_CREATE",
+                           onlyShowOnHover: true,
+                           publishTopic: topics.DELETE_DATA_LIST_ITEMS,
                            publishPayloadType: "PROCESS",
                            publishPayloadModifiers: ["processCurrentItemTokens"],
                            publishPayload: {
@@ -528,39 +543,22 @@ define(["dojo/_base/declare",
                         name: "alfresco/renderers/PublishAction",
                         config: {
                            iconClass: "edit-16",
+                           onlyShowOnHover: true,
+                           publishTopic: topics.REQUEST_FORM,
                            publishPayloadType: "PROCESS",
                            publishPayloadModifiers: ["processCurrentItemTokens"],
-                           publishTopic: "ALF_CREATE_DIALOG_REQUEST",
                            publishPayload: {
-                              dialogId: "EDIT_DATA_LIST_ITEM_DIALOG",
-                              dialogTitle: "Edit Data Item",
-                              hideTopic: "ALF_CRUD_CREATE",
-                              widgetsContent: [
-                                 {
-                                    name: "alfresco/layout/DynamicWidgets",
-                                    config: {
-                                       subscribeGlobal: true,
-                                       subscriptionTopic: "ALF_DATALIST_FORM_RETRIEVED_x"
-                                    }
+                              formConfig: {
+                                 useDialog: true,
+                                 formId: "EDIT_DATA_LIST_ITEM_DIALOG",
+                                 dialogTitle: "Edit Data Item",
+                                 formSubmissionPayloadMixin: {
+                                    responseScope: "ALF_DATA_LIST_"
                                  }
-                              ],
-                              publishOnShow: [
-                                 {
-                                    publishTopic: "ALF_FORM_REQUEST",
-                                    publishPayload: {
-                                       itemId: "{nodeRef}",
-                                       itemKind: "node",
-                                       mode: "edit",
-                                       alfSuccessTopic: "ALF_DATALIST_FORM_RETRIEVED_x",
-                                       formConfig: {
-                                          formSubmissionPayloadMixin: {
-                                             alfResponseScope: "ALF_DATA_LIST_"
-                                          }
-                                       }
-                                    },
-                                    publishGlobal: true
-                                 }
-                              ]
+                              },
+                              itemId: "{nodeRef}",
+                              itemKind: "node",
+                              mode: "edit"
                            },
                            publishGlobal: true
                         }
@@ -607,7 +605,6 @@ define(["dojo/_base/declare",
             });
          }
       },
-
 
       /**
        * Handles requests to delete a Data List. Generates a confirmation prompt to the user.
@@ -686,6 +683,58 @@ define(["dojo/_base/declare",
       onDeleteDataListFailure: function alfresco_services_DataListService__onDeleteDataListFailure(response, originalRequestConfig) {
          this.alfLog("error", "It was not possible to delete a Data List", response, originalRequestConfig, this);
       },
+
+      /**
+       * Handles requests to delete items from a Data List. Generates a confirmation prompt to the user.
+       *
+       * @instance
+       * @param  {object} payload The payload containing the NodeRefs of the items to delete
+       * @since 1.0.86
+       * @fires module:alfresco/core/topics#REQUEST_CONFIRMATION_PROMPT
+       */
+      onDeleteDataListItemsRequest: function alfresco_services_DataListService__onDeleteDataListItemsRequest(payload) {
+         if (payload.nodeRefs)
+         {
+            this.alfServicePublish(topics.REQUEST_CONFIRMATION_PROMPT, {
+               confirmationTitle: "Delete Item",
+               confirmationPrompt: "Are you sure you want to delete the item(s)?",
+               confirmationButtonLabel: "Yes",
+               cancellationButtonLabel: "No",
+               confirmationPublication: {
+                  publishTopic: topics.DELETE_DATA_LIST_ITEMS_CONFIRMATION,
+                  publishPayload: {
+                     nodeRefs: payload.nodeRefs,
+                     alfResponseScope: payload.alfResponseScope
+                  },
+                  publishGlobal: true
+               }
+            });
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to delete items from a Data List but no 'nodeRefs' attribute was provided in the payload", payload, this);
+         }
+      },
+
+      /**
+       * Handles the confrmation of a request to delete a Data List.
+       *
+       * @instance
+       * @param  {object} payload The payload containing the NodeRef of the Data List to delete
+       */
+      onDeleteDataListItemsConfirmation: function alfresco_services_DataListService__onDeleteDataListItemsConfirmation(payload) {
+         this.serviceXhr({
+            url: AlfConstants.PROXY_URI + "slingshot/datalists/action/items?alf_method=delete",
+            method: "POST",
+            data: {
+               alfResponseTopic: topics.RELOAD_DATA_TOPIC,
+               alfResponseScope: payload.alfResponseScope,
+               nodeRefs: payload.nodeRefs
+            }
+         });
+      },
+
+      
 
       /**
        * Handles requests to update the title and description of a Data List

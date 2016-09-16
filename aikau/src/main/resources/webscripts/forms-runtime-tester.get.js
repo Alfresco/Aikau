@@ -1,14 +1,5 @@
 model.jsonModel = {
    services: [
-      {
-            name: "alfresco/services/LoggingService",
-            config: {
-               loggingPreferences: {
-                  enabled: true,
-                  all: true
-               }
-            }
-      },
       "alfresco/services/SearchService",
       "alfresco/services/FormsRuntimeService",
       "alfresco/services/CrudService",
@@ -126,9 +117,6 @@ model.jsonModel = {
                }
             ]
          }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
    ]
 };

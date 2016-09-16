@@ -52,6 +52,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/Select",
         "alfresco/forms/controls/TextArea",
         "alfresco/forms/controls/TextBox",
+        "alfresco/forms/controls/Transitions",
         "alfresco/node/MetadataGroups",
         "alfresco/renderers/Date",
         "alfresco/renderers/Property",
@@ -80,6 +81,14 @@ define(["dojo/_base/declare",
          // control mappings, this allows there to be flexibility in configuration and mapping
          // on "kind" (type) specific mapping...
          "default": {
+            "/org/alfresco/components/form/controls/association.ftl": {
+               name: "alfresco/forms/controls/FilePicker",
+               config: {
+                  valueDelimiter: ",",
+                  addedAndRemovedValues: true
+               }
+            },
+
             "/org/alfresco/components/form/controls/authority.ftl": {
                name: "alfresco/forms/controls/MultiSelectInput",
                config: {
@@ -144,6 +153,14 @@ define(["dojo/_base/declare",
                   permittedDecimalPlaces: 10
                }
             },
+
+            "/org/alfresco/components/form/controls/workflow/taskowner.ftl": {
+               name: "alfresco/renderers/User",
+               config: {
+
+               }
+            },
+
             "/org/alfresco/components/form/controls/workflow/packageitems.ftl": {
                name: "alfresco/forms/controls/FilePicker",
                config: {
@@ -240,6 +257,9 @@ define(["dojo/_base/declare",
          task: {
             edit: {
 
+               "/org/alfresco/components/form/controls/workflow/transitions.ftl": {
+                  name: "alfresco/forms/controls/Transitions"
+               }
             },
 
             view: {
@@ -303,6 +323,15 @@ define(["dojo/_base/declare",
          // TODO: "Alfresco.forms.validation.email" not handled yet due to complexity
 
       },
+
+      /**
+       * Custom control mappings to check before the default control mappings.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       */
+      customControlMappings: null,
 
       /**
        * This will be populated with MIME type options the first time the 
@@ -431,6 +460,7 @@ define(["dojo/_base/declare",
             this.serviceXhr({url : url,
                              method: "GET",
                              formConfig: payload.formConfig,
+                             alfDestination: payload.alfDestination,
                              alfSuccessTopic: successTopic,
                              successCallback: this.onFormLoaded,
                              failureCallback: this.onFormLoadFailure,
@@ -440,6 +470,40 @@ define(["dojo/_base/declare",
          {
             this.alfLog("error", "A request was made to retrieve a form that was missing one of 'itemKind', 'itemId', 'formId' or 'mode' attributes", payload, this);
          }
+      },
+
+      /**
+       * Returns the number of columns that should be used for the 
+       * [ControlRow]{@link module:alfresco/forms/ControlRow} for the supplied structure. The
+       * "message" attribute in the structure contains the name of a template that can
+       * be mapped to a number of controls.
+       * 
+       * @instance
+       * @return {number|null} The number of columns or null if they can't be determined
+       * @since 1.0.86
+       */
+      getColumnsForControlRow: function alfresco_services_FormsRuntimeService__getColumnsForControlRow(structureElement) {
+         var columns = null;
+         if (structureElement.message)
+         {
+            switch (structureElement.message) {
+               case "/org/alfresco/components/form/2-column-set.ftl":
+                  columns = 2;
+                  break;
+
+               case "/org/alfresco/components/form/2-column-wide-left-set.ftl":
+                  columns = 2;
+                  break;
+
+               case "/org/alfresco/components/form/3-column-set.ftl":
+                  columns = 3;
+                  break;
+
+               default:
+                  this.alfLog("warn", "Could not find a layout structure for ", structureElement.message, this);
+            }
+         }
+         return columns;
       },
 
       /**
@@ -490,7 +554,8 @@ define(["dojo/_base/declare",
                var formSubmissionPayloadMixin = lang.getObject("formConfig.formSubmissionPayloadMixin", false, originalRequestConfig);
                var okButtonPublishPayload = {
                   url: response.submissionUrl,
-                  urlType: "FULL"
+                  urlType: "FULL",
+                  alf_destination: originalRequestConfig.alfDestination
                };
                formSubmissionPayloadMixin && lang.mixin(okButtonPublishPayload, formSubmissionPayloadMixin);
 
@@ -505,7 +570,8 @@ define(["dojo/_base/declare",
                      okButtonPublishPayload: okButtonPublishPayload,
                      okButtonPublishGlobal: true,
                      value: response.data,
-                     widgets: formControls
+                     widgets: formControls,
+                     formSubmissionTriggerTopic: topics.TRIGGER_FORM_SUBMISSION
                   }
                };
 
@@ -522,27 +588,71 @@ define(["dojo/_base/declare",
                      }
                   };
                   formControls.push(structureWidget);
-
-                  // Select the appropriate target for the form controls, at the moment this assumes
-                  // that if a "message" attribute is provided then all form controls go into the same
-                  // row - however, that needs to be validated, it might be necessary to iterate over the
-                  // controls to ensure that the appropriate number of controls are added per row.
-                  var targetForControls = structureElement.message ? rowControls : formControls;
-                  if (structureElement.children)
+                  
+                  var columns = this.getColumnsForControlRow(structureElement);
+                  if (columns)
                   {
-                     array.forEach(structureElement.children, lang.hitch(this, this.addField, targetForControls, response));
+                     while (structureElement.children.length)
+                     {
+                        var childrenToAdd = structureElement.children.splice(0, columns);
+                        if (childrenToAdd)
+                        {
+                           array.forEach(childrenToAdd, lang.hitch(this, this.addField, rowControls, response));
+                        }
+                        if (structureElement.children.length)
+                        {
+                           rowControls = [];
+                           structureWidget = {
+                              name: "alfresco/forms/ControlRow",
+                              config: {
+                                 widgets: rowControls
+                              }
+                           };
+                           formControls.push(structureWidget);
+                        }
+                     }
                   }
+                  else
+                  {
+                     // Select the appropriate target for the form controls, at the moment this assumes
+                     // that if a "message" attribute is provided then all form controls go into the same
+                     // row - however, that needs to be validated, it might be necessary to iterate over the
+                     // controls to ensure that the appropriate number of controls are added per row.
+                     var targetForControls = structureElement.message ? rowControls : formControls;
+                     if (structureElement.children)
+                     {
+                        array.forEach(structureElement.children, lang.hitch(this, this.addField, targetForControls, response));
+                     }
+                  }
+
                }, this);
 
                widgets.push(formConfig);
             }
             
-            this.alfPublish(originalRequestConfig.alfSuccessTopic, {
-               widgets: widgets
-            });
+            var useDialog = lang.getObject("formConfig.useDialog", false, originalRequestConfig);
+            if (useDialog)
+            {
+               var dialogTitle = lang.getObject("formConfig.dialogTitle", false, originalRequestConfig);
+               var dialogId = lang.getObject("formConfig.formId", false, originalRequestConfig);
+               this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
+                  dialogId: dialogId,
+                  dialogTitle: dialogTitle,
+                  formSubmissionTopic: formConfig.config.okButtonPublishTopic,
+                  formSubmissionGlobal: true,
+                  formSubmissionPayloadMixin: formConfig.config.okButtonPublishPayload,
+                  formValue: formConfig.config.value,
+                  widgets: formConfig.config.widgets,
+                  formSubmissionTriggerTopic: topics.TRIGGER_FORM_SUBMISSION
+               });
+            }
+            else
+            {
+               this.alfPublish(originalRequestConfig.alfSuccessTopic, {
+                  widgets: widgets
+               });
+            }
          }
-
-         
       },
 
       /**
@@ -601,37 +711,39 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @param {object} formConfig The full configuration for the form being rendered
-       * @param  {object} targetField The configuration for the field to render.
-       * @param  {string} controlTemplate The name of the template to be mapped to a widget
+       * @param {object} targetField The configuration for the field to render.
+       * @param {string} controlTemplate The name of the template to be mapped to a widget
+       * @param {object} mappings The mappings configuration object to explore
        * @return {object} The mapped control.
        * @since 1.0.77
        */
-      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, targetField, controlTemplate) {
+      getMappedControl: function alfresco_services_FormsRuntimeService__getMappedControl(formConfig, targetField, controlTemplate, mappings) {
          var kind = formConfig["arguments"].itemKind;
          var mode = formConfig.mode;
-
-         // TODO: Need to check as yet undeclared custom mappings...
          var control;
-         var kindMapping = this.controlMappings[kind];
-         if (kindMapping)
+         if (mappings)
          {
-            var modeMapping = kindMapping[mode];
-            if (modeMapping)
+            var kindMapping = mappings[kind];
+            if (kindMapping)
             {
-               control = modeMapping[targetField.dataKeyName];
+               var modeMapping = kindMapping[mode];
+               if (modeMapping)
+               {
+                  control = modeMapping[targetField.dataKeyName];
+                  if (!control)
+                  {
+                     control = modeMapping[controlTemplate];
+                  }
+               }
                if (!control)
                {
-                  control = modeMapping[controlTemplate];
+                  control = kindMapping[controlTemplate];
                }
             }
             if (!control)
             {
-               control = kindMapping[controlTemplate];
+               control = mappings["default"][controlTemplate];
             }
-         }
-         if (!control)
-         {
-            control = this.controlMappings["default"][controlTemplate];
          }
          return control;
       },
@@ -648,7 +760,8 @@ define(["dojo/_base/declare",
        */
       getViewProperty: function alfresco_services_FormsRuntimeService__getViewProperty(targetField, controlTemplate, formConfig) {
          var widget;
-         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate);
+         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate, this.customControlMappings) ||
+                           this.getMappedControl(formConfig, targetField, controlTemplate, this.controlMappings);
          if (formControl)
          {
             widget = lang.clone(formControl);
@@ -681,7 +794,8 @@ define(["dojo/_base/declare",
       getEditFormControl: function alfresco_services_FormsRuntimeService__addFormControl(targetField, controlTemplate, formConfig) {
          var widget;
          
-         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate);
+         var formControl = this.getMappedControl(formConfig, targetField, controlTemplate, this.customControlMappings) ||
+                           this.getMappedControl(formConfig, targetField, controlTemplate, this.controlMappings);
          if (formControl)
          {
             widget = lang.clone(formControl);

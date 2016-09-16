@@ -24,8 +24,11 @@
  */
 define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
-        "dojo/text!./responseTemplates/User/Users.json"], 
-        function(declare, MockXhr, users) {
+        "dojo/text!./responseTemplates/User/Users.json",
+        "dojo/text!./responseTemplates/User/Following.json",
+        "dojo/text!./responseTemplates/User/Follows.json",
+        "dojo/text!./responseTemplates/User/Trashcan.json"], 
+        function(declare, MockXhr, users, Following, Follows, Trashcan) {
 
    return declare([MockXhr], {
 
@@ -50,6 +53,27 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      users]);
+
+            this.server.respondWith("GET",
+                                    "/aikau/proxy/alfresco/api/subscriptions/guest/following",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     Following]);
+
+            this.server.respondWith("POST",
+                                    "/aikau/proxy/alfresco/api/subscriptions/guest/follows",
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     Follows]);
+
+            this.server.respondWith("GET",
+                                    /\/aikau\/proxy\/alfresco\/api\/archive\/workspace\/SpacesStore\?maxItems=51(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     Trashcan]);
+
+            this.server.respondWith("POST", "/aikau/proxy/alfresco/api/subscriptions/guest/follow", [200, {}, ""]);
+            this.server.respondWith("POST", "/aikau/proxy/alfresco/api/subscriptions/guest/unfollow", [200, {}, ""]);
          }
          catch(e)
          {

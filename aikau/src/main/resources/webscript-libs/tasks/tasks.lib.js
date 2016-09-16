@@ -50,36 +50,18 @@ function getTaskDialogRequestPayload(data) {
    data = data || {};
 
    return {
-      dialogId: data.dialogId || "CREATE_TASK_DIALOG",
-      dialogTitle: data.dialogTitle || "View Task",
-      contentWidth: "1000px",
-      hideTopic: "ALF_CRUD_CREATE",
-      widgetsContent: [
-         {
-            name: "alfresco/layout/DynamicWidgets",
-            config: {
-               subscribeGlobal: true,
-               subscriptionTopic: "TASK_FORM_RETRIEVED"
-            }
+      itemId: data.itemId || "{id}",
+      itemKind: data.itemKind || "task",
+      mode: data.mode || "view",
+      alfSuccessTopic: "TASK_FORM_RETRIEVED",
+      formConfig: {
+         useDialog: true,
+         formId: data.dialogId || "CREATE_TASK_DIALOG",
+         dialogTitle: data.dialogTitle || "View Task",
+         formSubmissionPayloadMixin: {
+            alfResponseScope: "TASKS_"
          }
-      ],
-      publishOnShow: [
-         {
-            publishTopic: "ALF_FORM_REQUEST",
-            publishPayload: {
-               itemId: data.itemId || "{id}",
-               itemKind: data.itemKind || "task",
-               mode: data.mode || "view",
-               alfSuccessTopic: "TASK_FORM_RETRIEVED",
-               formConfig: {
-                  formSubmissionPayloadMixin: {
-                     alfResponseScope: "TASKS_"
-                  }
-               }
-            },
-            publishGlobal: true
-         }
-      ]
+      }
    };
 }
 
@@ -102,7 +84,7 @@ function getTaskListView() {
                                  config: {
                                     propertyToRender: "properties.bpm_description",
                                     renderSize: "large",
-                                    publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                                    publishTopic: "ALF_FORM_REQUEST",
                                     publishPayloadType: "PROCESS",
                                     publishPayloadModifiers: ["processCurrentItemTokens"],
                                     useCurrentItemAsPayload: false,
@@ -170,7 +152,7 @@ function getTaskListView() {
                                  name: "alfresco/renderers/Link",
                                  config: {
                                     linkLabel: "Edit task",
-                                    publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                                    publishTopic: "ALF_FORM_REQUEST",
                                     publishPayloadType: "PROCESS",
                                     publishPayloadModifiers: ["processCurrentItemTokens"],
                                     useCurrentItemAsPayload: false,
@@ -186,7 +168,7 @@ function getTaskListView() {
                                  name: "alfresco/renderers/Link",
                                  config: {
                                     linkLabel: "View task",
-                                    publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                                    publishTopic: "ALF_FORM_REQUEST",
                                     publishPayloadType: "PROCESS",
                                     publishPayloadModifiers: ["processCurrentItemTokens"],
                                     useCurrentItemAsPayload: false,
