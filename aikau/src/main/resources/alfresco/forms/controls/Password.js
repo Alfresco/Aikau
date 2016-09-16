@@ -27,11 +27,58 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/forms/controls/TextBox"], 
-        function(declare, TextBox) {
+        "alfresco/forms/controls/TextBox",
+        "dojo/_base/lang"], 
+        function(declare, TextBox, lang) {
    
    return declare([TextBox], {
       
+      /**
+       * An array of the i18n files to use with this widget.
+       *
+       * @instance
+       * @type {Array}
+       * @since 1.0.87
+       */
+      i18nRequirements: [{i18nFile: "./i18n/Password.properties"}],
+
+      /**
+       * This can be configured to be the [fieldId]{@link module:alfresco/forms/controls/BaseFormControl#fieldId}
+       * of another form control (preferably another password field!) that the value of this field should
+       * match. The typical use case is when prompting a user to confirm the change of password.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       */
+      confirmationTargetId: null,
+
+      /**
+       * The error message to display when the entered value does not match that of the 
+       * [field to compare against]{@link module:alfresco/forms/controls/Password#confirmationTargetId}
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       */
+      confirmationErrorMessage: "password.not.match.error",
+
+      /**
+       * This is a validation callback function that is automatically used when a
+       * [confirmationTargetId]{@link module:alfresco/forms/controls/Password#confirmationTargetId}
+       * is specified.
+       * 
+       * @instance
+       * @param {object} validationConfig The configuration for the requested validation
+       * @since 1.0.87
+       */
+      confirmMatchingPassword: function alfresco_forms_controls_Password__confirmMatchingPassword(validationConfig) {
+         var isValid = this.confirmationTargetValue === this.getValue();
+         this.reportValidationResult(validationConfig, isValid);
+      },
+
       /**
        * Extends the [inherited function]{@link module:alfresco/forms/controls/TextBox#getWidgetConfig}
        * to make the text box of type "password".
@@ -42,6 +89,36 @@ define(["dojo/_base/declare",
          var config = this.inherited(arguments);
          config.type = "password";
          return config;
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#postMixInProperties}
+       * to setup validation for any configured 
+       * [confirmationTargetId]{@link module:alfresco/forms/controls/Password#confirmationTargetId}
+       * 
+       * @instance
+       * @since 1.0.87
+       */
+      postMixInProperties: function alfresco_forms_controls_Password__postMixInProperties() {
+         this.inherited(arguments);
+
+         if (this.confirmationTargetId)
+         {
+            var topic = "_valueChangeOf_" + this.confirmationTargetId;
+            this.alfSubscribe(topic, lang.hitch(this, function(payload) {
+               this.confirmationTargetValue = payload.value;
+               this.validate();
+            }));
+
+            if (!this.validationConfig)
+            {
+               this.validationConfig = [];
+            }
+            this.validationConfig.push({
+               validation: "confirmMatchingPassword",
+               errorMessage: this.confirmationErrorMessage
+            });
+         }
       }
    });
 });

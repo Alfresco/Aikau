@@ -916,8 +916,13 @@ define(["dojo/_base/declare",
        * @returns {boolean} True if the filter criteria have been met and false otherwise.
        */
       processFilterConfig: function alfresco_core_CoreWidgetProcessing__processFilterConfig(renderFilterConfig, /*jshint unused:false*/ index) {
+         // jshint maxcomplexity:false
          var passesFilter = false;
-         if (this.filterPropertyExists(renderFilterConfig))
+         if (renderFilterConfig.comparator === "currentUser")
+         {
+            passesFilter = AlfConstants.USERNAME === renderFilterConfig.value;
+         }
+         else if (this.filterPropertyExists(renderFilterConfig))
          {
             // Compare the property value against the applicable values...
             var renderFilterProperty = this.getRenderFilterPropertyValue(renderFilterConfig);

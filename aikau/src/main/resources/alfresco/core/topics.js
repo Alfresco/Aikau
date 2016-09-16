@@ -443,6 +443,19 @@ define([],function() {
       DIALOG_CHANGE_TITLE: "ALF_DIALOG_CHANGE_TITLE",
 
       /**
+       * This topic can be published to disabled the activity feed for a site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       *
+       * @event
+       * @parameter {string} siteId The shortName of the site to disable the activitiy feed for.
+       */
+      DISABLE_SITE_ACTIVITY_FEED: "ALF_DISABLE_SITE_ACTIVITY_FEED",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *
@@ -639,6 +652,19 @@ define([],function() {
        * @parameter {string} site The shortName of the site to be edited
        */
       EDIT_SITE: "ALF_EDIT_SITE",
+
+      /**
+       * This topic can be published to enable the activity feed for a site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       *
+       * @event
+       * @parameter {string} siteId The shortName of the site to be enable the activity feed for
+       */
+      ENABLE_SITE_ACTIVITY_FEED: "ALF_ENABLE_SITE_ACTIVITY_FEED",
 
       /**
        * This topic can be fired when the enter key is pressed (but normally is not by default).
@@ -931,6 +957,7 @@ define([],function() {
        * @since 1.0.81
        *
        * @event
+       * @property {boolean} [includeFeedSettings=false] Indicates whether feed control data should be retrieved
        */
       GET_SITES: "ALF_GET_SITES",
 
@@ -949,6 +976,18 @@ define([],function() {
        * @property {string} alfResponseTopic The topic on which to publish the users data
        */
       GET_USERS: "ALF_GET_USERS",
+
+      /**
+       * This topic can be published to get a list of the sites that a user belongs to.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       *
+       * @event
+       */
+      GET_USER_SITES: "ALF_GET_USER_SITES",
 
       /**
        * Can be published to initialise the creation of a synchronization between an on-premise node and
