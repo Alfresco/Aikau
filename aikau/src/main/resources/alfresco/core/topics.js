@@ -443,6 +443,19 @@ define([],function() {
       DIALOG_CHANGE_TITLE: "ALF_DIALOG_CHANGE_TITLE",
 
       /**
+       * This topic can be published to disabled the activity feed for a site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       *
+       * @event
+       * @parameter {string} siteId The shortName of the site to disable the activitiy feed for.
+       */
+      DISABLE_SITE_ACTIVITY_FEED: "ALF_DISABLE_SITE_ACTIVITY_FEED",
+
+      /**
        * This topic can be published to request that a notification be displayed. It is subscribed to 
        * by the [NotificationService]{@link module:alfresco/services/NotificationService}.
        *
@@ -639,6 +652,19 @@ define([],function() {
        * @parameter {string} site The shortName of the site to be edited
        */
       EDIT_SITE: "ALF_EDIT_SITE",
+
+      /**
+       * This topic can be published to enable the activity feed for a site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       *
+       * @event
+       * @parameter {string} siteId The shortName of the site to be enable the activity feed for
+       */
+      ENABLE_SITE_ACTIVITY_FEED: "ALF_ENABLE_SITE_ACTIVITY_FEED",
 
       /**
        * This topic can be fired when the enter key is pressed (but normally is not by default).

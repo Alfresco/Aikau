@@ -138,6 +138,8 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.GET_FAVOURITE_SITES, lang.hitch(this, this.getFavouriteSites));
          this.alfSubscribe(topics.CANCEL_JOIN_SITE_REQUEST, lang.hitch(this, this.cancelJoinSiteRequest));
          this.alfSubscribe(topics.GET_USER_SITES, lang.hitch(this, this.getUserSites));
+         this.alfSubscribe(topics.ENABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.enableSiteActivityFeed));
+         this.alfSubscribe(topics.DISABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.disableSiteActivityFeed));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
          // editing. At some stage this will not be needed when a new edit site dialog is provided.
@@ -145,6 +147,55 @@ define(["dojo/_base/declare",
          require([AlfConstants.URL_RESCONTEXT + "modules/edit-site.js"], function() {
             _this.alfLog("log", "Edit Site JavaScript resource loaded");
          });
+      },
+
+      /**
+       * Handles requests to enable the activity feed for a site (for the current user).
+       * 
+       * @instance
+       * @param {object} payload The details of the site to enable the feed for
+       * @instance 1.0.87
+       */
+      enableSiteActivityFeed: function alfresco_services_SiteService__enableSiteActivityFeed(payload) {
+         if (payload.siteId)
+         {
+            var config = {
+               url: AlfConstants.PROXY_URI + "api/activities/feed/control?s=" + payload.siteId,
+               method: "DELETE"
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to enable the activity feed for a site, but no 'siteId' attribute was provided", payload, this);
+         }
+      },
+
+      /**
+       * Handles requests to disable the activity feed for a site (for the current user).
+       * 
+       * @instance
+       * @param {object} payload The details of the site to disable the feed for
+       * @instance 1.0.87
+       */
+      disableSiteActivityFeed: function alfresco_services_SiteService__disableSiteActivityFeed(payload) {
+         if (payload.siteId)
+         {
+            var config = {
+               url: AlfConstants.PROXY_URI + "api/activities/feed/control",
+               method: "POST",
+               data: {
+                  siteId: payload.siteId
+               }
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to disable the activity feed for a site, but no 'siteId' attribute was provided", payload, this);
+         }
       },
 
       /**

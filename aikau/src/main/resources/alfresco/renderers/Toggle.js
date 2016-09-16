@@ -466,9 +466,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       toggledOn: function alfresco_renderers_Toggle__toggledOn() {
-         var responseTopic = this.pubSubScope + this.generateUuid();
-         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOnSuccess), true);
-         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOnFailure), true);
+         var responseTopic = this.generateUuid();
+         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOnSuccess));
+         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOnFailure));
          if (this.toggleOnPublishPayload)
          {
             var publishPayload = this.generatePayload(this.toggleOnPublishPayload, 
@@ -478,6 +478,8 @@ define(["dojo/_base/declare",
                                                       this.toggleOnPublishPayloadItemMixin, 
                                                       this.toggleOnPublishPayloadModifiers);
             publishPayload.alfResponseTopic = responseTopic;
+            publishPayload.alfSuccessTopic = responseTopic + "_SUCCESS";
+            publishPayload.alfFailureTopic = responseTopic + "_FAILURE";
             this.alfPublish(this.toggleOnTopic, publishPayload, this.toggleOnPublishGlobal, this.toggleOnPublishToParent, this.toggleOnPublishScope);
          }
          else
@@ -496,9 +498,9 @@ define(["dojo/_base/declare",
        * @instance
        */
       toggledOff: function alfresco_renderers_Toggle__toggledOff() {
-         var responseTopic = this.pubSubScope + this.generateUuid();
-         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOffSuccess), true);
-         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOffFailure), true);
+         var responseTopic = this.generateUuid();
+         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOffSuccess));
+         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOffFailure));
          if (this.toggleOffPublishPayload)
          {
             var publishPayload = this.generatePayload(this.toggleOffPublishPayload, 
@@ -508,6 +510,8 @@ define(["dojo/_base/declare",
                                                       this.toggleOffPublishPayloadItemMixin, 
                                                       this.toggleOffPublishPayloadModifiers);
             publishPayload.alfResponseTopic = responseTopic;
+            publishPayload.alfSuccessTopic = responseTopic + "_SUCCESS";
+            publishPayload.alfFailureTopic = responseTopic + "_FAILURE";
             this.alfPublish(this.toggleOffTopic, publishPayload, this.toggleOffPublishGlobal, this.toggleOffPublishToParent, this.toggleOffPublishScope);
          }
          else
