@@ -38,6 +38,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @type {Array}
+       * @since 1.0.87
        */
       i18nRequirements: [{i18nFile: "./i18n/Password.properties"}],
 
@@ -70,7 +71,8 @@ define(["dojo/_base/declare",
        * is specified.
        * 
        * @instance
-       * @return {[type]} [description]
+       * @param {object} validationConfig The configuration for the requested validation
+       * @since 1.0.87
        */
       confirmMatchingPassword: function alfresco_forms_controls_Password__confirmMatchingPassword(validationConfig) {
          var isValid = this.confirmationTargetValue === this.getValue();
@@ -90,6 +92,9 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#postMixInProperties}
+       * to setup validation for any configured 
+       * [confirmationTargetId]{@link module:alfresco/forms/controls/Password#confirmationTargetId}
        * 
        * @instance
        * @since 1.0.87
