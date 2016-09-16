@@ -606,7 +606,8 @@ function getUserProfileChangePasswordTab() {
                            fieldId: "NEW_PASSWORD_CONFIRMATION",
                            label: "Confirm New Password",
                            value: "",
-                           name: "-newpassword2"
+                           name: "-newpassword2",
+                           confirmationTargetId: "NEW_PASSWORD"
                         }
                      }
                   ]
