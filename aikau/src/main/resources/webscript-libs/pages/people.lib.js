@@ -556,10 +556,9 @@ function getFollowersTab() {
    };
 }
 
-function getUserProfileChangePasswordTab() {
+function getUserProfileChangePasswordLink() {
    return {
-      name: "alfresco/layout/VerticalWidgets",
-      title: "Change Password",
+      name: "alfresco/renderers/Link",
       config: {
          renderFilter: [
             {
@@ -567,53 +566,50 @@ function getUserProfileChangePasswordTab() {
                values: [user.name]
             }
          ],
-         widgets: [
-            {
-               name: "alfresco/forms/Form",
-               config: {
-                  okButtonPublishTopic: "ALF_CRUD_CREATE",
-                  okButtonPublishLabel: "OK",
-                  okButtonPublishGlobal: true,
-                  okButtonPublishPayload: {
-                     url: "components/profile/change-password",
-                     urlType: "SHARE",
-                     failureMessage: "Incorrect authentication details or not authorised to change password.",
-                     successMessage: "Password updated"
-                  },
-                  showCancelButton: false,
-                  widgets: [
-                     {
-                        name: "alfresco/forms/controls/Password",
-                        config: {
-                           fieldId: "OLD_PASSWORD",
-                           label: "Current Password",
-                           value: "",
-                           name: "-oldpassword"
-                        }
-                     },
-                     {
-                        name: "alfresco/forms/controls/Password",
-                        config: {
-                           fieldId: "NEW_PASSWORD",
-                           label: "New Password",
-                           value: "",
-                           name: "-newpassword1"
-                        }
-                     },
-                     {
-                        name: "alfresco/forms/controls/Password",
-                        config: {
-                           fieldId: "NEW_PASSWORD_CONFIRMATION",
-                           label: "Confirm New Password",
-                           value: "",
-                           name: "-newpassword2",
-                           confirmationTargetId: "NEW_PASSWORD"
-                        }
-                     }
-                  ]
+         linkLabel: "Change Password",
+         renderOnNewLine: true,
+         publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+         publishPayload: {
+            dialogId: "CHANGE_PASSWORD",
+            dialogTitle: "Change Password",
+            formSubmissionTopic: "ALF_CRUD_CREATE",
+            formSubmissionPayloadMixin: {
+               url: "components/profile/change-password",
+               urlType: "SHARE",
+               failureMessage: "Incorrect authentication details or not authorised to change password.",
+               successMessage: "Password updated"
+            },
+            widgets: [
+               {
+                  name: "alfresco/forms/controls/Password",
+                  config: {
+                     fieldId: "OLD_PASSWORD",
+                     label: "Current Password",
+                     value: "",
+                     name: "-oldpassword"
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/Password",
+                  config: {
+                     fieldId: "NEW_PASSWORD",
+                     label: "New Password",
+                     value: "",
+                     name: "-newpassword1"
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/Password",
+                  config: {
+                     fieldId: "NEW_PASSWORD_CONFIRMATION",
+                     label: "Confirm New Password",
+                     value: "",
+                     name: "-newpassword2",
+                     confirmationTargetId: "NEW_PASSWORD"
+                  }
                }
-            }
-         ]
+            ]
+         }
       }
    };
 }
@@ -873,7 +869,8 @@ function getUserProfileInfo() {
                            propertyToRender: "location",
                            renderOnNewLine: true
                         }
-                     }
+                     },
+                     getUserProfileChangePasswordLink()
                   ]
                }
             }
@@ -930,7 +927,6 @@ function getUserProfileTabContainer() {
             getUserProfileRecentlyModifiedTab(),
             getFollowingTab(),
             getFollowersTab(),
-            getUserProfileChangePasswordTab(),
             getUserProfileNotificationsTab(),
             getUserProfileTrashcan()
          ]
