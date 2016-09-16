@@ -351,12 +351,19 @@ define(["dojo/_base/declare",
             this.label = "";
          }
 
+         var highlight;
+         if (this.highlightProperty)
+         {
+            highlight = lang.getObject(this.highlightProperty, false, this.currentItem);
+         }
+
          if (ObjectTypeUtils.isString(this.propertyToRender) &&
              ObjectTypeUtils.isObject(this.currentItem) &&
              lang.exists(this.propertyToRender, this.currentItem)) 
          {
             this.renderPropertyNotFound = false;
-            this.originalRenderedValue = this.getRenderedProperty(lang.getObject(this.propertyToRender, false, this.currentItem));
+            this.originalRenderedValue = this.getRenderedProperty(lang.getObject(this.propertyToRender, false, this.currentItem),
+                                                                  highlight);
             this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
          } 
          else 
@@ -430,40 +437,77 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      renderDate: function(date, format) {
+      renderDate: function alfresco_renderers_Property__renderDate(date, format) {
          return this.formatDate(this.fromISO8601(date), format);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {string} value The value to update with highlight marks
+       * @param {string} highlight The text to highlight
+       * @return {string} The highlighted value
+       */
+      addHighlightMarks: function alfresco_renderers_Property__addHighlightMarks(value, highlight) {
+         var re = new RegExp(highlight, "g");
+         return value.replace(re, "<mark>$&</mark>");
       },
 
       /**
        * @instance
        * @param {string} property The name of the property to render
        */
-      getRenderedProperty: function alfresco_renderers_Property__getRenderedProperty(property) {
+      getRenderedProperty: function alfresco_renderers_Property__getRenderedProperty(property, highlight) {
          /*jshint maxcomplexity:false*/
          var value = "";
-         if (property === null || typeof property === "undefined") {
+         if (property === null || typeof property === "undefined") 
+         {
             // No action required if a property isn't supplied
-         } else if (ObjectTypeUtils.isString(property)) {
+         } 
+         else if (ObjectTypeUtils.isString(property)) 
+         {
             value = this.encodeHTML(property);
-         } else if (ObjectTypeUtils.isArray(property)) {
+         } 
+         else if (ObjectTypeUtils.isArray(property)) 
+         {
             value = property.length;
-         } else if (ObjectTypeUtils.isBoolean(property)) {
+         } 
+         else if (ObjectTypeUtils.isBoolean(property)) 
+         {
             value = property;
-         } else if (ObjectTypeUtils.isNumber(property)) {
+         } 
+         else if (ObjectTypeUtils.isNumber(property)) 
+         {
             value = property;
-         } else if (ObjectTypeUtils.isObject(property)) {
+         } 
+         else if (ObjectTypeUtils.isObject(property)) 
+         {
             // TODO: This should probably be moved out into a Node specific sub-class
-            if (property.hasOwnProperty("iso8601")) {
+            if (property.hasOwnProperty("iso8601")) 
+            {
                value = this.renderDate(property.iso8601);
-            } else if (property.hasOwnProperty("userName") && property.hasOwnProperty("displayName")) {
+            } 
+            else if (property.hasOwnProperty("userName") && property.hasOwnProperty("displayName")) 
+            {
                value = this.userProfileLink(property.userName, property.displayName);
-            } else if (property.hasOwnProperty("displayName")) {
+            } 
+            else if (property.hasOwnProperty("displayName")) 
+            {
                value = this.encodeHTML(property.displayName || "");
-            } else if (property.hasOwnProperty("title")) {
+            } 
+            else if (property.hasOwnProperty("title")) 
+            {
                value = this.encodeHTML(property.title || "");
-            } else if (property.hasOwnProperty("name")) {
+            } 
+            else if (property.hasOwnProperty("name")) 
+            {
                value = this.encodeHTML(property.name || "");
             }
+         }
+
+         if (highlight)
+         {
+            value = this.addHighlightMarks(value, highlight);
          }
          return value;
       }
