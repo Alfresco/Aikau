@@ -320,11 +320,10 @@ function getUserProfileSitesTab() {
                config: {
                   pubSubScope: "SITES_",
                   waitForPageWidgets: false,
-                  loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                  loadDataPublishTopic: "ALF_GET_USER_SITES",
                   loadDataPublishPayload: {
-                     url: "api/people/{userName}/sites"
+                     userName: "{userName}"
                   },
-                  itemsProperty: "",
                   widgets: [
                      {
                         name: "alfresco/lists/views/AlfListView",
@@ -368,6 +367,32 @@ function getUserProfileSitesTab() {
                                                    config: {
                                                       propertyToRender: "description",
                                                       renderOnNewLine: true
+                                                   }
+                                                },
+                                                { 
+                                                   name: "alfresco/renderers/Toggle",
+                                                   config: {
+                                                      propertyToRender: "activityFeedEnabled",
+                                                      checkedValue: true,
+                                                      onLabel: "Following actvity",
+                                                      offLabel: "Follow activity",
+                                                      onTooltip: "Disable activity feed for {0}",
+                                                      offTooltip: "Enable activity feed for {0}",
+                                                      tooltipIdProperty: "title",
+                                                      toggleOnTopic: "ALF_ENABLE_SITE_ACTIVITY_FEED",
+                                                      toggleOnPublishPayload: {
+                                                         siteId: ["{shortName}"]
+                                                      },
+                                                      toggleOnPublishGlobal: true,
+                                                      toggleOnPublishPayloadType: "PROCESS",
+                                                      toggleOnPublishPayloadModifiers: ["processCurrentItemTokens"],
+                                                      toggleOffTopic: "ALF_DISABLED_SITE_ACTIVITY_FEED",
+                                                      toggleOffPublishPayload: {
+                                                         siteId: ["{shortName}"]
+                                                      },
+                                                      toggleOffPublishGlobal: true,
+                                                      toggleOffPublishPayloadType: "PROCESS",
+                                                      toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"]
                                                    }
                                                 }
                                              ]
@@ -748,8 +773,16 @@ function getUserProfileInfo() {
                         name: "alfresco/renderers/Property",
                         config: {
                            propertyToRender: "displayName",
-                           renderSize: "large",
-                           renderOnNewLine: true
+                           renderSize: "large"
+                        }
+                     },
+                     {
+                        name: "alfresco/renderers/Property",
+                        config: {
+                           propertyToRender: "userName",
+                           deemphasized: true,
+                           renderedValuePrefix: "(",
+                           renderedValueSuffix: ")"
                         }
                      },
                      {
@@ -883,8 +916,9 @@ function getUserProfilesList() {
            config: {
              fieldId: "FILTER",
              name: "filter",
-             placeHolder: "Enter filter text...",
-             label: "Name"
+             placeHolder: "Search text...",
+             label: "Search for People",
+             description: "To search user profiles (by location, job title, or organization) include the profile property you're searching by, for example, \"location:London\", \"organization:Alfresco\", or \"jobtitle:Manager\"."
            }
          }],
          widgets: [
@@ -944,4 +978,3 @@ function getUserProfileWidgets(data) {
       }
    };
 }
-

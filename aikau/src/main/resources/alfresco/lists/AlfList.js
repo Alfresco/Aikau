@@ -1326,6 +1326,9 @@ define(["dojo/_base/declare",
                };
             }
 
+            !payload.alfSuccessTopic && (payload.alfSuccessTopic = this.pubSubScope + this.loadDataSuccessTopic);
+            !payload.alfFailureTopic && (payload.alfFailureTopic = this.pubSubScope + this.loadDataFailureTopic);
+
             // Generate and set a requestId. If the service supports passing this in the XHR request
             // (which is not guaranteed) then this allows for the opportunity to cancel the request
             // if a second request is made before the first completes...

@@ -91,7 +91,11 @@ define(["dojo/_base/declare",
          if (requestPayload && xhrPayload)
          {
             var topic;
-            if (requestPayload.alfResponseTopic)
+            if (requestPayload.alfResponseTopic === requestPayload.alfResponseScope + requestPayload.alfTopic)
+            {
+               topic = requestPayload.alfResponseTopic;
+            }
+            else if (requestPayload.alfResponseTopic)
             {
                topic = (requestPayload.alfResponseScope || "") + requestPayload.alfResponseTopic;
             }

@@ -931,6 +931,7 @@ define([],function() {
        * @since 1.0.81
        *
        * @event
+       * @property {boolean} [includeFeedSettings=false] Indicates whether feed control data should be retrieved
        */
       GET_SITES: "ALF_GET_SITES",
 
@@ -949,6 +950,18 @@ define([],function() {
        * @property {string} alfResponseTopic The topic on which to publish the users data
        */
       GET_USERS: "ALF_GET_USERS",
+
+      /**
+       * This topic can be published to get a list of the sites that a user belongs to.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       *
+       * @event
+       */
+      GET_USER_SITES: "ALF_GET_USER_SITES",
 
       /**
        * Can be published to initialise the creation of a synchronization between an on-premise node and
