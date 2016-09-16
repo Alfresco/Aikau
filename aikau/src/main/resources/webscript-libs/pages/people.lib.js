@@ -372,6 +372,12 @@ function getUserProfileSitesTab() {
                                                 { 
                                                    name: "alfresco/renderers/Toggle",
                                                    config: {
+                                                      renderFilter: [
+                                                         {
+                                                            comparator: "currentUser",
+                                                            value: "{userName}"
+                                                         }
+                                                      ],
                                                       propertyToRender: "activityFeedEnabled",
                                                       checkedValue: true,
                                                       onLabel: "Following actvity",
@@ -381,14 +387,14 @@ function getUserProfileSitesTab() {
                                                       tooltipIdProperty: "title",
                                                       toggleOnTopic: "ALF_ENABLE_SITE_ACTIVITY_FEED",
                                                       toggleOnPublishPayload: {
-                                                         siteId: ["{shortName}"]
+                                                         siteId: "{shortName}"
                                                       },
                                                       toggleOnPublishGlobal: true,
                                                       toggleOnPublishPayloadType: "PROCESS",
                                                       toggleOnPublishPayloadModifiers: ["processCurrentItemTokens"],
-                                                      toggleOffTopic: "ALF_DISABLED_SITE_ACTIVITY_FEED",
+                                                      toggleOffTopic: "ALF_DISABLE_SITE_ACTIVITY_FEED",
                                                       toggleOffPublishPayload: {
-                                                         siteId: ["{shortName}"]
+                                                         siteId: "{shortName}"
                                                       },
                                                       toggleOffPublishGlobal: true,
                                                       toggleOffPublishPayloadType: "PROCESS",
@@ -542,6 +548,67 @@ function getFollowersTab() {
                   itemsProperty: "people",
                   widgets: [
                      getFollowUserListView()
+                  ]
+               }
+            }
+         ]
+      }
+   };
+}
+
+function getUserProfileChangePasswordTab() {
+   return {
+      name: "alfresco/layout/VerticalWidgets",
+      title: "Change Password",
+      config: {
+         renderFilter: [
+            {
+               property: "userName",
+               values: [user.name]
+            }
+         ],
+         widgets: [
+            {
+               name: "alfresco/forms/Form",
+               config: {
+                  okButtonPublishTopic: "ALF_CRUD_CREATE",
+                  okButtonPublishLabel: "OK",
+                  okButtonPublishGlobal: true,
+                  okButtonPublishPayload: {
+                     url: "components/profile/change-password",
+                     urlType: "SHARE",
+                     failureMessage: "Incorrect authentication details or not authorised to change password.",
+                     successMessage: "Password updated"
+                  },
+                  showCancelButton: false,
+                  widgets: [
+                     {
+                        name: "alfresco/forms/controls/Password",
+                        config: {
+                           fieldId: "OLD_PASSWORD",
+                           label: "Current Password",
+                           value: "",
+                           name: "-oldpassword"
+                        }
+                     },
+                     {
+                        name: "alfresco/forms/controls/Password",
+                        config: {
+                           fieldId: "NEW_PASSWORD",
+                           label: "New Password",
+                           value: "",
+                           name: "-newpassword1"
+                        }
+                     },
+                     {
+                        name: "alfresco/forms/controls/Password",
+                        config: {
+                           fieldId: "NEW_PASSWORD_CONFIRMATION",
+                           label: "Confirm New Password",
+                           value: "",
+                           name: "-newpassword2"
+                        }
+                     }
                   ]
                }
             }
@@ -862,6 +929,7 @@ function getUserProfileTabContainer() {
             getUserProfileRecentlyModifiedTab(),
             getFollowingTab(),
             getFollowersTab(),
+            getUserProfileChangePasswordTab(),
             getUserProfileNotificationsTab(),
             getUserProfileTrashcan()
          ]
