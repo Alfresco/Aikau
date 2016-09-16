@@ -1,4 +1,4 @@
-Aikau 1.0.85 Release Notes
+Aikau 1.0.86 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,10 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.86:
+* [AKU-1036](https://issues.alfresco.com/jira/browse/AKU-1036)       - Added a User renderer
+* [AKU-1014](https://issues.alfresco.com/jira/browse/AKU-1014)       - More FormsRuntimeService updates
+
 1.0.85:
 * [AKU-1075](https://issues.alfresco.com/jira/browse/AKU-1075)       - Improve dialog title handling on copy/move action
 * [AKU-1084](https://issues.alfresco.com/jira/browse/AKU-1084)       - Ensure ContainerPicker selects recent sites on display
