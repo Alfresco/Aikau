@@ -35,10 +35,15 @@ define(["module",
       "Test dialog title of copy via ActionService": function() {
          return this.remote.findByCssSelector("#COPY1_label")
             .click()
-            .end()
-            .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
-            .end()
-            .findByCssSelector(".dijitDialogTitle")
+         .end()
+         
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker")
+         .end()
+         
+         .findByCssSelector(".dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Copy File 1 to...", "Copy dialog title not set correctly");
