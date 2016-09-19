@@ -46,7 +46,7 @@ define(["dojo/_base/declare",
                      }
                   }
                ],
-               requestItemsTopic: topics.GET_RECENT_SITES
+               requestItemsTopic: "ALF_GET_RECENT_SITES"
             }
          }
       ]

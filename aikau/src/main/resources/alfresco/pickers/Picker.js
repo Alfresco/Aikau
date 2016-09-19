@@ -36,10 +36,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Picker.html",
         "alfresco/core/Core",
         "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/topics",
         "dojo/_base/array",
         "dojo/_base/lang"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, array, lang) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, array, lang) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing], {
 
