@@ -74,6 +74,13 @@ define(["module",
             .then(function(text) {
                assert.equal(text, "Test Action");
             });
+      },
+
+      "Words are highlighted": function() {
+         return this.remote.findAllByCssSelector(".alfresco-search-AlfSearchResult mark")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4);
+            });
       }
    });
 });

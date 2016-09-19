@@ -101,6 +101,29 @@ define(["dojo/_base/declare",
       deemphasized: false,
 
       /**
+       * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
+       * that should be used to identify the content with in the 
+       * [renderedValue]{@link module:alfresco/renderers/Property#renderedValue} to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.87
+       */
+      highlightProperty: null,
+
+      /**
+       * This is a specific value to highlight. It will be not be used if
+       * [highlightProperty]{@link module:alfresco/renderers/Property#highlightProperty} is configured.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.87
+       */
+      highlightValue: null,
+
+      /**
        * The label for the property. Won't be shown if left as null.
        *
        * @instance
@@ -351,7 +374,7 @@ define(["dojo/_base/declare",
             this.label = "";
          }
 
-         var highlight;
+         var highlight = this.highlightValue;
          if (this.highlightProperty)
          {
             highlight = lang.getObject(this.highlightProperty, false, this.currentItem);
@@ -442,14 +465,17 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Updates the supplied value to include HTML mark elements around all instances of the
+       * supplied highlight value.
        * 
        * @instance
        * @param {string} value The value to update with highlight marks
        * @param {string} highlight The text to highlight
        * @return {string} The highlighted value
+       * @since 1.0.87
        */
       addHighlightMarks: function alfresco_renderers_Property__addHighlightMarks(value, highlight) {
-         var re = new RegExp(highlight, "g");
+         var re = new RegExp(highlight, "gi");
          return value.replace(re, "<mark>$&</mark>");
       },
 
@@ -505,7 +531,7 @@ define(["dojo/_base/declare",
             }
          }
 
-         if (highlight)
+         if (value && highlight)
          {
             value = this.addHighlightMarks(value, highlight);
          }
