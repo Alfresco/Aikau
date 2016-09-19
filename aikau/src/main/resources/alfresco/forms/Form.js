@@ -408,6 +408,12 @@ define(["dojo/_base/declare",
          // Setup some arrays for recording the valid and invalid widgets...
          this.invalidFormControls = [];
          
+         // Generate a new pubSubScope if required...
+         if (this.scopeFormControls === true && this.pubSubScope === "")
+         {
+            this.pubSubScope = this.generateUuid();
+         }
+
          // If requested in the configuration, the value of a form can be set via a publication,
          // however to avoid generating subscriptions unnecessarily the subscription is only
          // set if explicitly requested. Global scope is intentionally used for the subscription
@@ -419,12 +425,6 @@ define(["dojo/_base/declare",
          // Create a subscription that allows fields within the form to request options with a payload
          // that is augmented with the value of the form...
          this.alfSubscribe(topics.GET_FORM_VALUE_DEPENDENT_OPTIONS, lang.hitch(this, this.getFormValueDependantOptions));
-
-         // Generate a new pubSubScope if required...
-         if (this.scopeFormControls === true && this.pubSubScope === "")
-         {
-            this.pubSubScope = this.generateUuid();
-         }
 
          // Create any configured warnings...
          this.createWarnings();
