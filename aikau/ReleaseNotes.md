@@ -1,4 +1,4 @@
-Aikau 1.0.86 Release Notes
+Aikau 1.0.87 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,10 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.87:
+* [AKU-1087](https://issues.alfresco.com/jira/browse/AKU-1087)       - Update Property to support highlighting
+* [AKU-1088](https://issues.alfresco.com/jira/browse/AKU-1088)       - Form setValueTopic scope fix
+
 1.0.86:
 * [AKU-1036](https://issues.alfresco.com/jira/browse/AKU-1036)       - Added a User renderer
 * [AKU-1014](https://issues.alfresco.com/jira/browse/AKU-1014)       - More FormsRuntimeService updates
