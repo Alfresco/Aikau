@@ -31,10 +31,12 @@ define(["dojo/_base/declare",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/topics",
         "alfresco/enums/urlTypes",
+        "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"],
-        function(declare, BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils, ObjectTypeUtils, topics, urlTypes, lang, AlfButton, AlfConstants) {
+        function(declare, BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils, ObjectTypeUtils, topics, 
+                 urlTypes, array, lang, AlfButton, AlfConstants) {
 
    return declare([BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils], {
 
@@ -111,6 +113,7 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#GET_FAVOURITE_SITES
        * @listens module:alfresco/core/topics#GET_RECENT_SITES
        * @listens module:alfresco/core/topics#GET_SITES
+       * @listens module:alfresco/core/topics#GET_USER_SITES
        * @listens module:alfresco/core/topics#SITE_CREATION_REQUEST
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
@@ -134,6 +137,9 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.GET_RECENT_SITES, lang.hitch(this, this.getRecentSites));
          this.alfSubscribe(topics.GET_FAVOURITE_SITES, lang.hitch(this, this.getFavouriteSites));
          this.alfSubscribe(topics.CANCEL_JOIN_SITE_REQUEST, lang.hitch(this, this.cancelJoinSiteRequest));
+         this.alfSubscribe(topics.GET_USER_SITES, lang.hitch(this, this.getUserSites));
+         this.alfSubscribe(topics.ENABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.enableSiteActivityFeed));
+         this.alfSubscribe(topics.DISABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.disableSiteActivityFeed));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
          // editing. At some stage this will not be needed when a new edit site dialog is provided.
@@ -144,6 +150,55 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to enable the activity feed for a site (for the current user).
+       * 
+       * @instance
+       * @param {object} payload The details of the site to enable the feed for
+       * @instance 1.0.87
+       */
+      enableSiteActivityFeed: function alfresco_services_SiteService__enableSiteActivityFeed(payload) {
+         if (payload.siteId)
+         {
+            var config = {
+               url: AlfConstants.PROXY_URI + "api/activities/feed/control?s=" + payload.siteId,
+               method: "DELETE"
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to enable the activity feed for a site, but no 'siteId' attribute was provided", payload, this);
+         }
+      },
+
+      /**
+       * Handles requests to disable the activity feed for a site (for the current user).
+       * 
+       * @instance
+       * @param {object} payload The details of the site to disable the feed for
+       * @instance 1.0.87
+       */
+      disableSiteActivityFeed: function alfresco_services_SiteService__disableSiteActivityFeed(payload) {
+         if (payload.siteId)
+         {
+            var config = {
+               url: AlfConstants.PROXY_URI + "api/activities/feed/control",
+               method: "POST",
+               data: {
+                  siteId: payload.siteId
+               }
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to disable the activity feed for a site, but no 'siteId' attribute was provided", payload, this);
+         }
+      },
+
+      /**
        *
        * @instance
        * @param {object} payload The details of the request
@@ -151,11 +206,107 @@ define(["dojo/_base/declare",
       getSites: function alfresco_services_SiteService__getSites(payload) {
          // TODO: Clean this up. Choose on or other as the Aikau standard.
          var alfResponseTopic = payload.alfResponseTopic || payload.responseTopic;
-         this.serviceXhr({
+         var config = {
             url: AlfConstants.PROXY_URI + "api/sites",
             method: "GET",
             alfTopic: alfResponseTopic
-         });
+         };
+         this.serviceXhr(config);
+      },
+
+      /**
+       * 
+       * @instance
+       * @param  {payload} payload The details of the user to retrieve sites for
+       * @since 1.0.87
+       */
+      getUserSites: function alfresco_services_SiteService__getSites(payload) {
+         if (payload.userName)
+         {
+            var config = {
+               url: AlfConstants.PROXY_URI + "api/people/admin/sites",
+               method: "GET",
+               successCallback: this.onUserSitesSuccess,
+               failureCallback: this.onUserSitesFailure,
+               callbackScope: this
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+         else
+         {
+            this.alfLog("warn", "A request was made to get the sites for a user but no 'userName' attribute was provided", payload, this);
+         }
+      },
+
+      /**
+       * Handles successful requests to get users filtered by the supplied user name. Makes an additional
+       * XHR request to determine whether or not the user is being followed by the current user.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.86
+       */
+      onUserSitesSuccess: function alfresco_services_SiteService__onUserSitesSuccess(response, originalRequestConfig) {
+         var url = AlfConstants.PROXY_URI + "api/activities/feed/controls";
+         var config = {
+            url: url,
+            sitesData: response,
+            initialRequestConfig: originalRequestConfig,
+            method: "GET",
+            successCallback: this.publishSites,
+            callbackScope: this
+         };
+         this.serviceXhr(config);
+      },
+
+      /**
+       * This is the success callback for [getUserSites]{@link module:alfresco/services/SiteService#getUserSites}.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.86
+       */
+      publishSites: function alfresco_services_SiteService__publishSites(response, originalRequestConfig) {
+         var sites = originalRequestConfig.sitesData;
+         
+         // Update the site data with the activity feed control data...
+         sites = array.map(sites, function(site) {
+            site.activityFeedEnabled = true;
+            if (site.shortName)
+            {
+               site.activityFeedEnabled = !array.some(response, function(feedControl) {
+                  return feedControl.siteId === site.shortName;
+               });
+               return site;
+            }
+         }, this);
+
+         var topic = lang.getObject("initialRequestConfig.alfSuccessTopic", false, originalRequestConfig);
+         if (!topic)
+         {
+            topic = lang.getObject("initialRequestConfig.alfResponseTopic", false, originalRequestConfig);
+         }
+         if (topic)
+         {
+            this.alfPublish(topic, {
+               items: sites
+            });
+         }
+      },
+
+      /**
+       * This is the failure callback for [getUserSites]{@link module:alfresco/services/SiteService#getUserSites}.
+       * 
+       * @instance
+       * @param {object} response The response from the request
+       * @param {object} originalRequestConfig The configuration passed on the original request
+       * @since 1.0.87
+       */
+      onUserSitesFailure: function alfresco_services_UserService__onUserSitesFailure(response, originalRequestConfig) {
+         this.alfLog("error", "It was not possible to retrieve the sites for a user", response, originalRequestConfig, this);
       },
 
       /**

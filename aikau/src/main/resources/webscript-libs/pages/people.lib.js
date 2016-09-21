@@ -320,11 +320,10 @@ function getUserProfileSitesTab() {
                config: {
                   pubSubScope: "SITES_",
                   waitForPageWidgets: false,
-                  loadDataPublishTopic: "ALF_CRUD_GET_ALL",
+                  loadDataPublishTopic: "ALF_GET_USER_SITES",
                   loadDataPublishPayload: {
-                     url: "api/people/{userName}/sites"
+                     userName: "{userName}"
                   },
-                  itemsProperty: "",
                   widgets: [
                      {
                         name: "alfresco/lists/views/AlfListView",
@@ -368,6 +367,38 @@ function getUserProfileSitesTab() {
                                                    config: {
                                                       propertyToRender: "description",
                                                       renderOnNewLine: true
+                                                   }
+                                                },
+                                                { 
+                                                   name: "alfresco/renderers/Toggle",
+                                                   config: {
+                                                      renderFilter: [
+                                                         {
+                                                            comparator: "currentUser",
+                                                            value: "{userName}"
+                                                         }
+                                                      ],
+                                                      propertyToRender: "activityFeedEnabled",
+                                                      checkedValue: true,
+                                                      onLabel: "Following actvity",
+                                                      offLabel: "Follow activity",
+                                                      onTooltip: "Disable activity feed for {0}",
+                                                      offTooltip: "Enable activity feed for {0}",
+                                                      tooltipIdProperty: "title",
+                                                      toggleOnTopic: "ALF_ENABLE_SITE_ACTIVITY_FEED",
+                                                      toggleOnPublishPayload: {
+                                                         siteId: "{shortName}"
+                                                      },
+                                                      toggleOnPublishGlobal: true,
+                                                      toggleOnPublishPayloadType: "PROCESS",
+                                                      toggleOnPublishPayloadModifiers: ["processCurrentItemTokens"],
+                                                      toggleOffTopic: "ALF_DISABLE_SITE_ACTIVITY_FEED",
+                                                      toggleOffPublishPayload: {
+                                                         siteId: "{shortName}"
+                                                      },
+                                                      toggleOffPublishGlobal: true,
+                                                      toggleOffPublishPayloadType: "PROCESS",
+                                                      toggleOffPublishPayloadModifiers: ["processCurrentItemTokens"]
                                                    }
                                                 }
                                              ]
@@ -521,6 +552,64 @@ function getFollowersTab() {
                }
             }
          ]
+      }
+   };
+}
+
+function getUserProfileChangePasswordLink() {
+   return {
+      name: "alfresco/renderers/Link",
+      config: {
+         renderFilter: [
+            {
+               property: "userName",
+               values: [user.name]
+            }
+         ],
+         linkLabel: "Change Password",
+         renderOnNewLine: true,
+         publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+         publishPayload: {
+            dialogId: "CHANGE_PASSWORD",
+            dialogTitle: "Change Password",
+            formSubmissionTopic: "ALF_CRUD_CREATE",
+            formSubmissionPayloadMixin: {
+               url: "components/profile/change-password",
+               urlType: "SHARE",
+               failureMessage: "Incorrect authentication details or not authorised to change password.",
+               successMessage: "Password updated"
+            },
+            widgets: [
+               {
+                  name: "alfresco/forms/controls/Password",
+                  config: {
+                     fieldId: "OLD_PASSWORD",
+                     label: "Current Password",
+                     value: "",
+                     name: "-oldpassword"
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/Password",
+                  config: {
+                     fieldId: "NEW_PASSWORD",
+                     label: "New Password",
+                     value: "",
+                     name: "-newpassword1"
+                  }
+               },
+               {
+                  name: "alfresco/forms/controls/Password",
+                  config: {
+                     fieldId: "NEW_PASSWORD_CONFIRMATION",
+                     label: "Confirm New Password",
+                     value: "",
+                     name: "-newpassword2",
+                     confirmationTargetId: "NEW_PASSWORD"
+                  }
+               }
+            ]
+         }
       }
    };
 }
@@ -748,8 +837,16 @@ function getUserProfileInfo() {
                         name: "alfresco/renderers/Property",
                         config: {
                            propertyToRender: "displayName",
-                           renderSize: "large",
-                           renderOnNewLine: true
+                           renderSize: "large"
+                        }
+                     },
+                     {
+                        name: "alfresco/renderers/Property",
+                        config: {
+                           propertyToRender: "userName",
+                           deemphasized: true,
+                           renderedValuePrefix: "(",
+                           renderedValueSuffix: ")"
                         }
                      },
                      {
@@ -772,7 +869,8 @@ function getUserProfileInfo() {
                            propertyToRender: "location",
                            renderOnNewLine: true
                         }
-                     }
+                     },
+                     getUserProfileChangePasswordLink()
                   ]
                }
             }
@@ -883,8 +981,9 @@ function getUserProfilesList() {
            config: {
              fieldId: "FILTER",
              name: "filter",
-             placeHolder: "Enter filter text...",
-             label: "Name"
+             placeHolder: "Search text...",
+             label: "Search for People",
+             description: "To search user profiles (by location, job title, or organization) include the profile property you're searching by, for example, \"location:London\", \"organization:Alfresco\", or \"jobtitle:Manager\"."
            }
          }],
          widgets: [
@@ -944,4 +1043,3 @@ function getUserProfileWidgets(data) {
       }
    };
 }
-

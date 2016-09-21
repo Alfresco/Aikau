@@ -32,7 +32,8 @@ model.jsonModel = {
                         shortName: "normalResult"
                      },
                      path: "/one/two/three/four",
-                     size: 283746
+                     size: 283746,
+                     highlight: "normal"
                   }
                ]
             },
@@ -84,7 +85,9 @@ model.jsonModel = {
                               bannerMessage: "Lookout Above!"
                            }
                         }
-                     ]
+                     ],
+                     showSearchTermHighlights: true,
+                     highlightProperty: "highlight"
                   }
                }
             ]

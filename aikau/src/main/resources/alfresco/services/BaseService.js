@@ -90,18 +90,8 @@ define(["dojo/_base/declare",
       mergeTopicsIntoXhrPayload: function alfresco_services_BaseService__mergeTopicsIntoXhrPayload(requestPayload, xhrPayload) {
          if (requestPayload && xhrPayload)
          {
-            var topic;
-            if (requestPayload.alfResponseTopic)
-            {
-               topic = (requestPayload.alfResponseScope || "") + requestPayload.alfResponseTopic;
-            }
-            else if (requestPayload.responseTopic)
-            {
-               topic = requestPayload.responseTopic;
-            }
-
-            xhrPayload.alfTopic = topic;
-            xhrPayload.alfResponseTopic = topic;
+            xhrPayload.alfResponseTopic = requestPayload.alfResponseTopic;
+            xhrPayload.alfResponseScope = requestPayload.alfResponseScope;
             xhrPayload.alfSuccessTopic = requestPayload.alfSuccessTopic;
             xhrPayload.alfFailureTopic = requestPayload.alfFailureTopic;
          }
