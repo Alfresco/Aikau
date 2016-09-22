@@ -67,6 +67,17 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/Date.properties"}],
       
       /**
+       * An optional format to apply to the date. This is only used when 
+       * [simple]{@link module:alfresco/renderers/Date#simple} is configured to be true.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.88
+       */
+      format: null,
+
+      /**
        * This can be set to override the default property to use to get the ISO 8601 
        * modification date which (in dot-notation) will be "jsNode.properties.modified.iso8601".
        * This is the property that is typically available when dealing with standard
@@ -161,7 +172,7 @@ define(["dojo/_base/declare",
             {
                this.renderPropertyNotFound = false;
                var dateProperty = lang.getObject(this.propertyToRender, false, this.currentItem);
-               this.originalRenderedValue = this.renderedValue = this.renderDate(dateProperty);
+               this.originalRenderedValue = this.renderedValue = this.renderDate(dateProperty, this.format);
             }
             else
             {
