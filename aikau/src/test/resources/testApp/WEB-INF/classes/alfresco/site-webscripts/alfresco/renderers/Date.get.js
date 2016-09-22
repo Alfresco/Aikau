@@ -125,7 +125,7 @@ model.jsonModel = {
          name: "alfresco/html/Heading",
          config: {
             level: 3,
-            label: "Not available"
+            label: "Custom Format"
          }
       },
       {
