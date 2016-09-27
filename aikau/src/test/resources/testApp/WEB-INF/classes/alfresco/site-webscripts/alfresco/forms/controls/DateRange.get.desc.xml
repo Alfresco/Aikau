@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>DateRange Test</shortname>
+  <description>This shows various configured instances of the alfresco/forms/controls/DateRange.</description>
+  <family>aikau-unit-tests</family>
+  <url>/DateRange</url>
+</webscript>

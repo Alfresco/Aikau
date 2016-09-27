@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       configureValidation: function alfresco_forms_controls_DateTextBox__configureValidation() {
-         if (!this.validationConfig || ObjectTypeUtils.isObject(this.validationConfig)) {
+         if (!this.validationConfig || !ObjectTypeUtils.isArray(this.validationConfig)) {
             this.validationConfig = [];
          }
          this.validationConfig.push({
@@ -146,6 +146,19 @@ define(["dojo/_base/declare",
        */
       getValue: function alfresco_forms_controls_DateTextBox__getValue() {
          var value = this.inherited(arguments);
+         var returnValue = this.processDateValue(value);
+         return returnValue;
+      },
+
+      /**
+       * Processes a value to apply date formatting as necessary.
+       * 
+       * @instance
+       * @param  {object} value The value to process
+       * @return {object} The processed value
+       * @since 1.0.91
+       */
+      processDateValue: function alfresco_forms_controls_DateTextBox__processDateValue(value) {
          var returnValue = value && stamp.toISOString(value, { selector: this.valueFormatSelector });
          if (!returnValue && typeof this.unsetReturnValue !== "undefined")
          {

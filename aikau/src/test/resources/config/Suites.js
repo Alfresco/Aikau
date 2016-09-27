@@ -137,6 +137,7 @@ define(function() {
       "alfresco/forms/controls/ComboBoxTest",
       "alfresco/forms/controls/ContainerPickerTest",
       "alfresco/forms/controls/DateTextBoxTest",
+      "alfresco/forms/controls/DateRangeTest",
       "alfresco/forms/controls/DisablingSubmitFormTest",
       "alfresco/forms/controls/DocumentPickerTest",
       "alfresco/forms/controls/DocumentPickerSingleItemTest",
