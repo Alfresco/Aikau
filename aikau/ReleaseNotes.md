@@ -1,4 +1,4 @@
-Aikau 1.0.87 Release Notes
+Aikau 1.0.88 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,10 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.88:
+* [AKU-1090](https://issues.alfresco.com/jira/browse/AKU-1090)       - Fix copy/move partial success messages
+* [AKU-1091](https://issues.alfresco.com/jira/browse/AKU-1091)       - AlfSearchResult styling update
+
 1.0.87:
 * [AKU-1087](https://issues.alfresco.com/jira/browse/AKU-1087)       - Update Property to support highlighting
 * [AKU-1088](https://issues.alfresco.com/jira/browse/AKU-1088)       - Form setValueTopic scope fix

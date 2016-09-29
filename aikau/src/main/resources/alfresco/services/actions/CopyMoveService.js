@@ -285,7 +285,7 @@ define(["dojo/_base/declare",
             {
                failures = failures.substring(0, failures.length - 2);
             }
-            var messageKey = payload.requestConfig.copy ? "copyMoveService.copy.partialSuccess" : "copyMoveService.move.partialSuccess";
+            var messageKey = payload.requestConfig.copy ? "copyMoveService.copy.multiple.failure" : "copyMoveService.move.multiple.failure";
             var message = this.message(messageKey);
             this.alfPublish("ALF_DISPLAY_PROMPT", {
                message: message

@@ -96,6 +96,14 @@ define(["module",
             .then(function(visibleText) {
                assert.equal(visibleText, "No Description:");
             });
+      },
+
+      "Date rendered in custom format": function() {
+         return this.remote.findByCssSelector("#FORMATTED .value")
+            .getVisibleText()
+            .then(function(visibleText) {
+               assert.equal(visibleText, "11/4/00");
+            });
       }
    });
 });
