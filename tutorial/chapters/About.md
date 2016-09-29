@@ -16,6 +16,8 @@ Great care has been taken to ensure that the steps and sample code provided in t
 4. [Clear Surf dependency caches](./ClearingDependencyCaches.md)
 5. Enable logging (see [Tutorial 4](./Tutorial4.md)) and check the browser console for errors
 6. Check the Jetty server standard out log for errors
+7. Check to see if you have the latest version of Aikau (the Maven Archetype should use the latest release, but releases are very frequent so one or more releases may have been made before you finish the tutorial!)
+8. Raise an issue and report the problem!
 
 If all else fails, turn it off and on again (e.g. restart the server, clear the browser caches)
 
