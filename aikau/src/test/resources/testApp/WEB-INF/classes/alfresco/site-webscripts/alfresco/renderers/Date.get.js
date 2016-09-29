@@ -122,6 +122,26 @@ model.jsonModel = {
          }
       },
       {
+         name: "alfresco/html/Heading",
+         config: {
+            level: 3,
+            label: "Custom Format"
+         }
+      },
+      {
+         id: "FORMATTED",
+         name: "alfresco/renderers/Date",
+         config: {
+            currentItem: {
+               date: "2000-04-11T12:42:02+00:00"
+            },
+            simple: true,
+            propertyToRender: "date",
+            renderOnNewLine: true,
+            format: "shortDate"
+         }
+      },
+      {
          name: "alfresco/logging/DebugLog"
       }
    ]
