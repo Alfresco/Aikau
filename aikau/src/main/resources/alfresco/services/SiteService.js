@@ -911,17 +911,12 @@ define(["dojo/_base/declare",
                message: this.message("create-site.creating")
             });
 
-            var visibility = payload.visibility;
-            if (visibility === "PUBLIC" && payload.moderated)
-            {
-               visibility = "MODERATED";
-            }
             var url = AlfConstants.URL_SERVICECONTEXT + "modules/create-site";
             this.serviceXhr({
                url : url,
                method: "POST",
                data: {
-                  visibility: visibility,
+                  visibility: payload.visibility,
                   title: payload.title,
                   shortName: payload.shortName,
                   description: payload.description || "",
@@ -1026,13 +1021,6 @@ define(["dojo/_base/declare",
          var shortName = lang.getObject("shortName", false, response);
          if (response)
          {
-            // Set the moderated and visibility attributes appropriately...
-            response.moderated = response.visibility === "MODERATED";
-            if (response.moderated)
-            {
-               response.visibility = "PUBLIC";
-            }
-
             var dialogWidgets = lang.clone(this.widgetsForEditSiteDialog);
             this.processObject(["processInstanceTokens"], dialogWidgets);
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
@@ -1069,17 +1057,12 @@ define(["dojo/_base/declare",
                message: this.message("edit-site.saving")
             });
 
-            var visibility = payload.visibility;
-            if (visibility === "PUBLIC" && payload.moderated)
-            {
-               visibility = "MODERATED";
-            }
             var url = AlfConstants.PROXY_URI + "api/sites/" + payload.shortName;
             this.serviceXhr({
                url : url,
                method: "PUT",
                data: {
-                  visibility: visibility,
+                  visibility: payload.visibility,
                   title: payload.title,
                   shortName: payload.shortName,
                   description: payload.description || ""
@@ -1413,25 +1396,8 @@ define(["dojo/_base/declare",
                optionsConfig: {
                   fixed: [
                      { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
+                     { label: "create-site.dialog.visibility.moderated", value: "MODERATED" },
                      { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
-                  ]
-               }
-            }
-         },
-         {
-            id: "CREATE_SITE_FIELD_MODERATED",
-            name: "alfresco/forms/controls/CheckBox",
-            config: {
-               fieldId: "MODERATED",
-               label: "create-site.dialog.moderated.label",
-               description: "create-site.dialog.moderated.description",
-               name: "moderated",
-               visibilityConfig: {
-                  rules: [
-                     {
-                        targetId: "VISIBILITY",
-                        is: ["PUBLIC"]
-                     }
                   ]
                }
             }
@@ -1491,25 +1457,8 @@ define(["dojo/_base/declare",
                optionsConfig: {
                   fixed: [
                      { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
+                     { label: "create-site.dialog.visibility.moderated", value: "MODERATED" },
                      { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
-                  ]
-               }
-            }
-         },
-         {
-            id: "EDIT_SITE_FIELD_MODERATED",
-            name: "alfresco/forms/controls/CheckBox",
-            config: {
-               fieldId: "MODERATED",
-               label: "create-site.dialog.moderated.label",
-               description: "create-site.dialog.moderated.description",
-               name: "moderated",
-               visibilityConfig: {
-                  rules: [
-                     {
-                        targetId: "VISIBILITY",
-                        is: ["PUBLIC"]
-                     }
                   ]
                }
             }

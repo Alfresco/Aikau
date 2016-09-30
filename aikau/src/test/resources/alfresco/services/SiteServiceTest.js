@@ -60,14 +60,14 @@ define(["module",
 
          .findByCssSelector(selectors.buttons.createSite)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.dialogs.createSite.visible)
-            .end()
+         .end()
 
          .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .type(" has*odd & chars")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
             .getProperty("value")
@@ -80,11 +80,11 @@ define(["module",
          return this.remote.findByCssSelector(selectors.textBoxes.createSiteShortName.input)
             .clearValue()
             .type("fail")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .type("no copying now")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
             .getProperty("value")
@@ -97,48 +97,47 @@ define(["module",
          return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .clearValue()
             .type("fail")
-            .end()
+         .end()
 
          .findById("CREATE_SITE_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
-            .end()
+         .end()
 
          .findDisplayedById("NOTIFICATION_PROMPT")
-            .end()
+         .end()
 
          .findById("NOTIFCATION_PROMPT_ACKNOWLEDGEMENT_label")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#NOTIFICATION_PROMPT.dialogHidden")
-            .end();
+         .findByCssSelector("#NOTIFICATION_PROMPT.dialogHidden");
       },
 
       "Create site success": function() {
          return this.remote.findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_TITLE .dijitInputContainer input")
             .clearValue()
             .type("pass")
-            .end()
+         .end()
 
          .findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_SHORTNAME .dijitInputContainer input")
             .clearValue()
             .type("pass")
-            .end()
+         .end()
 
          .clearLog()
 
          .findById("CREATE_SITE_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#CREATE_SITE_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
-            .end()
+         .end()
 
          .getLastPublish("ALF_SITE_CREATION_REQUEST")
             .getLastPublish("ALF_SITE_CREATION_SUCCESS")
@@ -151,24 +150,24 @@ define(["module",
       "Edit site": function() {
          return this.remote.findById("EDIT_SITE_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_TITLE .dijitInputContainer input")
             .clearValue()
             .type("New Site Title")
-            .end()
+         .end()
 
          .clearLog()
 
          .findById("EDIT_SITE_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
-            .end()
+         .end()
 
          .getLastPublish("ALF_SITE_EDIT_REQUEST")
             .getLastPublish("ALF_SITE_EDIT_SUCCESS")
@@ -181,14 +180,10 @@ define(["module",
       "Edit moderated site": function() {
          return this.remote.findById("EDIT_MODERATED_SITE_label")
             .click()
-            .end()
-
-         // The moderated checkbox should be checked
-         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_MODERATED .dijitCheckBoxChecked")
          .end()
 
-         // The public visibility radio button should be selected
-         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_VISIBILITY_CONTROL .dijitRadioChecked input[value=PUBLIC]")
+         // The moderated visibility radio button should be selected
+         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_VISIBILITY_CONTROL .dijitRadioChecked input[value=MODERATED]")
          .end()
 
          .clearLog()
@@ -206,14 +201,14 @@ define(["module",
       "Request to join site navigates user to their dashboard afterwards": function() {
          return this.remote.findById("REQUEST_SITE_MEMBERSHIP_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(".dialogDisplayed .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".dialogDisplayed")
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
@@ -226,14 +221,14 @@ define(["module",
       "Requesting to join site with request already pending displays suitable error message": function() {
          return this.remote.findById("REQUEST_SITE_MEMBERSHIP_ALREADY_PENDING_label")
             .click()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "A request to join this site is already pending");
             })
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
       },
@@ -241,14 +236,14 @@ define(["module",
       "Error occurring when requesting to join site displays error message": function() {
          return this.remote.findById("REQUEST_SITE_MEMBERSHIP_ERROR_label")
             .click()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
             .getVisibleText()
             .then(function(visibleText) {
                assert.equal(visibleText, "The request to join the site failed");
             })
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
       },
@@ -257,7 +252,7 @@ define(["module",
          return this.remote.findById("CANCEL_PENDING_REQUEST_label")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastXhr("api/sites/my-site/invitations/foo")
 
@@ -266,7 +261,7 @@ define(["module",
             .then(function(visibleText) {
                assert.equal(visibleText, "Successfully cancelled request to join site My Site");
             })
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification")
 
@@ -276,14 +271,14 @@ define(["module",
       "Leave site and confirm user home page override works": function() {
          return this.remote.findById("LEAVE_SITE_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(".dialogDisplayed .dijitButton:first-child .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".dialogDisplayed")
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
@@ -295,7 +290,7 @@ define(["module",
          return this.remote.findById("BECOME_SITE_MANAGER_label")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_RELOAD_DATA");
       },
@@ -304,7 +299,7 @@ define(["module",
          return this.remote.findById("BECOME_SITE_MANAGER_PAGE_RELOAD_label")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RELOAD_PAGE");
       }
