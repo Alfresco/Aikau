@@ -1953,6 +1953,21 @@ define([],function() {
       UPLOAD_TO_UNKNOWN_LOCATION: "ALF_UPLOAD_TO_UNKNOWN_LOCATION",
 
       /**
+       * This topic can be published to request whether or not a particular site identifier
+       * (either the title or shortName) has already been used for a site.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.89
+       *
+       * @event
+       * @property {string} [shortName] The shortName to validate
+       * @property {string} [title] The title to validate
+       */
+      VALIDATE_SITE_IDENTIFIER: "ALF_VALIDATE_SITE_IDENTIFIER",
+
+      /**
        * This topic is published to indicate that widget processing has been completed. It is typically
        * fired by widgets that dynamically render widget models.
        *

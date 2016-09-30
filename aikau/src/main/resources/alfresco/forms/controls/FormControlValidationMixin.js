@@ -584,10 +584,10 @@ define(["dojo/_base/declare",
        * That topic will receive the value in payload.value & should publish a response on payload.alfResponseTopic
        * The response payload should contain an "isValid" boolean property.
        *
-       * @param validationConfig
+       * @instance
+       * @param {object} validationConfig
        */
-      validationTopic: function alfresco_forms_controls_FormControlValidationMixin__validationTopic(validationConfig)
-      {
+      validationTopic: function alfresco_forms_controls_FormControlValidationMixin__validationTopic(validationConfig) {
          if (!validationConfig || !validationConfig.validationTopic)
          {
             this.alfLog("warn", "ValidationTopic missing required fields: " + validationConfig);
@@ -599,14 +599,38 @@ define(["dojo/_base/declare",
          // Save a reference so we can get the config later
          this._validationTopicConfig = validationConfig;
 
-         var payload = {
+         var payload;
+         if (validationConfig.validationPayload)
+         {
+            // Use the configured payload if provided (but add in the necessary attributes to ensure
+            // that the publication/subscription works)...
+            payload = lang.clone(validationConfig.validationPayload);
+            payload.alfResponseTopic = validationConfig.alfResponseTopic || this.generateUuid();
+            payload.validationConfig = validationConfig;
+         }
+         else
+         {
+            // Create a default payload if none is provided...
+            payload = {
                validationConfig: validationConfig,
                value: this.getValue(),
                field: this,
                alfResponseTopic: validationConfig.alfResponseTopic || this.generateUuid()
-            },
-            publishGlobal = true,
-            publishScope = null;
+            };
+         }
+
+         // Duplicate the alfResponseTopic...
+         payload.alfSuccessTopic = payload.alfResponseTopic;
+         payload.alfResponseScope = this.generateUuid();
+
+         // Set the validation value as required...
+         if (validationConfig.validationValueProperty)
+         {
+            lang.setObject(validationConfig.validationValueProperty, this.getValue(), payload);
+         }
+
+         var publishGlobal = true;
+         var publishScope = null;
 
          if (validationConfig.validationTopicScope)
          {
@@ -614,30 +638,34 @@ define(["dojo/_base/declare",
             publishScope = validationConfig.validationTopicScope;
          }
 
-         this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), true);
-
+         this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), false, false, payload.alfResponseScope);
          this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
-
       },
 
       /**
        * The response called by the topic specified in validationTopic. Receives the isValid state and updates the form.
        *
        * @instance
-       * @param payload
+       * @param {object} payload
        */
-      onValidationTopicResponse: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicResponse(payload)
-      {
+      onValidationTopicResponse: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicResponse(payload) {
          this.alfUnsubscribeSaveHandles([this._validationTopicHandles]);
 
-         if (!payload) {
+         if (!payload) 
+         {
             this.alfLog("warn", "ValidationTopic missing payload");
          }
 
-         var isValid = !!payload.isValid,
-            validationConfig = this._validationTopicConfig;
-
+         var validationConfig = this._validationTopicConfig;
          this._validationTopicConfig = null;
+
+         var resultProperty = validationConfig.validationResultProperty || "isValid";
+         var isValid = lang.getObject(resultProperty, false, payload);
+
+         if (validationConfig.negate)
+         {
+            isValid = !isValid;
+         }
 
          // Report back with the validation result...
          this.reportValidationResult(validationConfig, isValid);

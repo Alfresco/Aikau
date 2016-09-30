@@ -115,6 +115,7 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#GET_SITES
        * @listens module:alfresco/core/topics#GET_USER_SITES
        * @listens module:alfresco/core/topics#SITE_CREATION_REQUEST
+       * @listens module:alfresco/core/topics#VALIDATE_SITE_IDENTIFIER
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe(topics.GET_SITES, lang.hitch(this, this.getSites));
@@ -140,6 +141,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.GET_USER_SITES, lang.hitch(this, this.getUserSites));
          this.alfSubscribe(topics.ENABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.enableSiteActivityFeed));
          this.alfSubscribe(topics.DISABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.disableSiteActivityFeed));
+         this.alfSubscribe(topics.VALIDATE_SITE_IDENTIFIER, lang.hitch(this, this.validateSiteIdentifier));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
          // editing. At some stage this will not be needed when a new edit site dialog is provided.
@@ -1295,6 +1297,33 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to validate whether or not a suggested site title or shortName has
+       * already been used.
+       *
+       * @instance
+       * @param {object} payload
+       * @since 1.0.89
+       */
+      validateSiteIdentifier: function alfresco_services_SiteService__validateSiteIdentifier(payload) {
+         var url = AlfConstants.PROXY_URI + "slingshot/site-identifier-used?";
+         if (typeof payload.title === "undefined" && typeof payload.shortName === "undefined")
+         {
+            this.alfLog("warn", "A request was made to validate site identification but neither 'title' nor 'shortName' was provided", payload, this);
+         }
+         else
+         {
+            url += payload.shortName ? ("shortName=" + payload.shortName) : ("title=" + payload.title);
+            var config = {
+               url: url,
+               method: "GET",
+               callbackScope: this
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+      },
+
+      /**
        * This is the widget model displayed when creating sites.
        * 
        * @instance
@@ -1439,6 +1468,10 @@ define(["dojo/_base/declare",
                      validation: "maxLength",
                      length: 256,
                      errorMessage: "create-site.dialog.name.maxLength"
+                  },
+                  {
+                     validation: "validationTopic",
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER
                   }
                ]
             }
