@@ -1395,9 +1395,21 @@ define(["dojo/_base/declare",
                name: "visibility",
                optionsConfig: {
                   fixed: [
-                     { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
-                     { label: "create-site.dialog.visibility.moderated", value: "MODERATED" },
-                     { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
+                     { 
+                        label: "create-site.dialog.visibility.public", 
+                        description: "create-site.dialog.visibility.public.description",
+                        value: "PUBLIC" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.moderated", 
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "MODERATED" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.private",  
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "PRIVATE" 
+                     }
                   ]
                }
             }
@@ -1456,9 +1468,21 @@ define(["dojo/_base/declare",
                name: "visibility",
                optionsConfig: {
                   fixed: [
-                     { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
-                     { label: "create-site.dialog.visibility.moderated", value: "MODERATED" },
-                     { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
+                     { 
+                        label: "create-site.dialog.visibility.public", 
+                        description: "create-site.dialog.visibility.public.description",
+                        value: "PUBLIC" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.moderated", 
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "MODERATED" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.private",  
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "PRIVATE" 
+                     }
                   ]
                }
             }

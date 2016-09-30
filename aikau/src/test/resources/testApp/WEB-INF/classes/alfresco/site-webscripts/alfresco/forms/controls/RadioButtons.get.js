@@ -61,11 +61,13 @@ model.jsonModel = {
                         fixed: [
                            {
                               label: "Yes",
-                              value: true
+                              value: true,
+                              description: "Affirmative"
                            },
                            {
                               label: "No",
-                              value: false
+                              value: false,
+                              description: "Negative"
                            }
                         ]
                      }

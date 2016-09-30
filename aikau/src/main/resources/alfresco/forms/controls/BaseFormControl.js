@@ -794,6 +794,11 @@ define(["dojo/_base/declare",
             this.alfLog("warn", "An option was provided with neither label nor value", option, this);
          }
 
+         if (option.description)
+         {
+            option.description = this.message(option.description);
+         }
+
          // See AKU-844 - also update the value attribute whilst we're here, not the correct location despite
          // the function name !
          if (option[valueAttribute])

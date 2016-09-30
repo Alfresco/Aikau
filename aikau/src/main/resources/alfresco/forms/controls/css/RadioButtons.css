@@ -1,3 +1,19 @@
-.alfresco-forms-controls-RadioButtons .radio-button > div {
-   display: inline-block;
+.alfresco-forms-controls-RadioButtons {
+   .radio-button {
+      > div {
+         display: inline-block;
+         vertical-align: top;
+      }
+      
+      .radio-button-label {
+         width: ~"calc(100% - 30px)";
+      }
+
+
+      .alfresco-forms-controls-RadioButtons__description {
+         font-size: @very-small-font-size;
+         color: @de-emphasized-font-color;
+         margin: 5px 0;
+      }
+   }
 }
