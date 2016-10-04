@@ -1315,7 +1315,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            url += payload.shortName ? ("shortName=" + payload.shortName) : ("title=" + payload.title);
+            url += payload.shortName ? ("shortName=" + encodeURIComponent(payload.shortName)) : ("title=" + encodeURIComponent(payload.title));
             var config = {
                url: url,
                method: "GET",
