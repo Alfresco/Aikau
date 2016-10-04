@@ -162,7 +162,12 @@ define(["dojo/_base/declare",
             used: used
          };
 
-         request.respond(200, {
+         var statusCode = 200;
+         if (id === "500")
+         {
+            statusCode = 500;
+         }
+         request.respond(statusCode, {
             "Content-Type": "application/json;charset=UTF-8"
          }, JSON.stringify(response));
       }

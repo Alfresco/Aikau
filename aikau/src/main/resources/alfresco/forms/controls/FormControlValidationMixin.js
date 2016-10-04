@@ -653,6 +653,7 @@ define(["dojo/_base/declare",
 
             // Duplicate the alfResponseTopic...
             payload.alfSuccessTopic = payload.alfResponseTopic;
+            payload.alfFailureTopic = this.generateUuid();
             payload.alfResponseScope = this.generateUuid();
 
             // Set the validation value as required...
@@ -670,11 +671,11 @@ define(["dojo/_base/declare",
                publishScope = validationConfig.validationTopicScope;
             }
 
-            this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), false, false, payload.alfResponseScope);
+            this._validationTopicHandles = [];
+            this._validationTopicHandles.push(this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), false, false, payload.alfResponseScope));
+            this._validationTopicHandles.push(this.alfSubscribe(payload.alfFailureTopic, lang.hitch(this, this.onValidationTopicFailure), false, false, payload.alfResponseScope));
             this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
-            
          }
-
       },
 
       /**
@@ -684,7 +685,7 @@ define(["dojo/_base/declare",
        * @param {object} payload
        */
       onValidationTopicResponse: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicResponse(payload) {
-         this.alfUnsubscribeSaveHandles([this._validationTopicHandles]);
+         this.alfUnsubscribeSaveHandles(this._validationTopicHandles);
 
          if (!payload) 
          {
@@ -704,6 +705,18 @@ define(["dojo/_base/declare",
 
          // Report back with the validation result...
          this.reportValidationResult(validationConfig, isValid);
+      },
+
+      /**
+       * Handles failed requests to peform validation by publishing a topic. Assumes valid data on failure.
+       * 
+       * @instance
+       * @param  {object} payload The details of the validation failure
+       * @since 1.0.89
+       */
+      onValidationTopicFailure: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicFailure(payload) {
+         this.alfLog("warn", "It was not possible to validate the field", payload, this);
+         this.reportValidationResult(this._validationTopicConfig, true);
       }
    });
 });
