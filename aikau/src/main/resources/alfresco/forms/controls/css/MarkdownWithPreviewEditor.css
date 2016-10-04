@@ -1,0 +1,18 @@
+.alfresco-forms-controls-MarkdownWithPreviewEditor {
+
+   .control-row {
+      .control {
+         box-sizing: content-box;
+      }
+   }
+
+   div.CodeMirror {
+      display: inline-block;
+   }
+
+   &__previewNode {
+      float: right;
+      border-left: @standard-border;
+      overflow: auto;
+   }
+}
