@@ -599,47 +599,56 @@ define(["dojo/_base/declare",
          // Save a reference so we can get the config later
          this._validationTopicConfig = validationConfig;
 
-         var payload;
-         if (validationConfig.validationPayload)
+         if (validationConfig.validateInitialValue === false && this.getValue() === this.initialValue)
          {
-            // Use the configured payload if provided (but add in the necessary attributes to ensure
-            // that the publication/subscription works)...
-            payload = lang.clone(validationConfig.validationPayload);
-            payload.alfResponseTopic = validationConfig.alfResponseTopic || this.generateUuid();
-            payload.validationConfig = validationConfig;
+            this.reportValidationResult(validationConfig, true);
          }
          else
          {
-            // Create a default payload if none is provided...
-            payload = {
-               validationConfig: validationConfig,
-               value: this.getValue(),
-               field: this,
-               alfResponseTopic: validationConfig.alfResponseTopic || this.generateUuid()
-            };
+            var payload;
+            if (validationConfig.validationPayload)
+            {
+               // Use the configured payload if provided (but add in the necessary attributes to ensure
+               // that the publication/subscription works)...
+               payload = lang.clone(validationConfig.validationPayload);
+               payload.alfResponseTopic = validationConfig.alfResponseTopic || this.generateUuid();
+               payload.validationConfig = validationConfig;
+            }
+            else
+            {
+               // Create a default payload if none is provided...
+               payload = {
+                  validationConfig: validationConfig,
+                  value: this.getValue(),
+                  field: this,
+                  alfResponseTopic: validationConfig.alfResponseTopic || this.generateUuid()
+               };
+            }
+
+            // Duplicate the alfResponseTopic...
+            payload.alfSuccessTopic = payload.alfResponseTopic;
+            payload.alfResponseScope = this.generateUuid();
+
+            // Set the validation value as required...
+            if (validationConfig.validationValueProperty)
+            {
+               lang.setObject(validationConfig.validationValueProperty, this.getValue(), payload);
+            }
+
+            var publishGlobal = true;
+            var publishScope = null;
+
+            if (validationConfig.validationTopicScope)
+            {
+               publishGlobal = false;
+               publishScope = validationConfig.validationTopicScope;
+            }
+
+            this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), false, false, payload.alfResponseScope);
+            this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
+            
          }
 
-         // Duplicate the alfResponseTopic...
-         payload.alfSuccessTopic = payload.alfResponseTopic;
-         payload.alfResponseScope = this.generateUuid();
-
-         // Set the validation value as required...
-         if (validationConfig.validationValueProperty)
-         {
-            lang.setObject(validationConfig.validationValueProperty, this.getValue(), payload);
-         }
-
-         var publishGlobal = true;
-         var publishScope = null;
-
-         if (validationConfig.validationTopicScope)
-         {
-            publishGlobal = false;
-            publishScope = validationConfig.validationTopicScope;
-         }
-
-         this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), false, false, payload.alfResponseScope);
-         this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
       },
 
       /**

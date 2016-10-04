@@ -25,8 +25,9 @@
 define(["module",
         "alfresco/TestCommon",
         "alfresco/defineSuite",
-        "intern/chai!assert"],
-        function(module, TestCommon, defineSuite, assert) {
+        "intern/chai!assert",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, TestCommon, defineSuite, assert, keys) {
 
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
@@ -38,7 +39,10 @@ define(["module",
       },
       dialogs: {
          createSite: {
-            visible: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["CREATE_SITE_DIALOG"])
+            visible: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["CREATE_SITE_DIALOG"]),
+            hidden: TestCommon.getTestSelector(dialogSelectors, "hidden.dialog", ["CREATE_SITE_DIALOG"]),
+            confirmationButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.confirmation.button", ["CREATE_SITE_DIALOG"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(dialogSelectors, "disabled.form.dialog.confirmation.button", ["CREATE_SITE_DIALOG"])
          }
       },
       textBoxes: {
@@ -83,6 +87,7 @@ define(["module",
          .end()
 
          .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
+            .clearValue()
             .type("no copying now")
          .end()
 
@@ -96,44 +101,34 @@ define(["module",
       "Create site (duplicate shortName)": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .clearValue()
-            .type("fail")
+            .type("used")
          .end()
 
-         .findById("CREATE_SITE_DIALOG_OK_label")
-            .click()
-         .end()
-
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
-         .end()
-
-         .findDisplayedById("NOTIFICATION_PROMPT")
-         .end()
-
-         .findById("NOTIFCATION_PROMPT_ACKNOWLEDGEMENT_label")
-            .click()
-         .end()
-
-         .findByCssSelector("#NOTIFICATION_PROMPT.dialogHidden");
+         .findByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton);
       },
 
       "Create site success": function() {
-         return this.remote.findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_TITLE .dijitInputContainer input")
+         return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .clearValue()
             .type("pass")
          .end()
 
-         .findByCssSelector("#CREATE_SITE_DIALOG #CREATE_SITE_FIELD_SHORTNAME .dijitInputContainer input")
+         .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
             .clearValue()
             .type("pass")
          .end()
+         
+         .waitForDeletedByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
+         .end()
 
-         .clearLog()
-
-         .findById("CREATE_SITE_DIALOG_OK_label")
+         .findByCssSelector(selectors.dialogs.createSite.confirmationButton)
+            .clearLog()
             .click()
+            .click() // For some reason in automated testing a second click is required here
+                     // Adding a long pause and a manual click and it works fine...
          .end()
 
-         .findByCssSelector("#CREATE_SITE_DIALOG.dialogHidden")
+         .findByCssSelector(selectors.dialogs.createSite.hidden)
          .end()
 
          .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
@@ -161,6 +156,8 @@ define(["module",
 
          .findById("EDIT_SITE_DIALOG_OK_label")
             .click()
+            .click() // For some reason in automated testing a second click is required here
+                     // Adding a long pause and a manual click and it works fine...
          .end()
 
          .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")

@@ -1465,6 +1465,19 @@ define(["dojo/_base/declare",
       _hadFocus: false,
 
       /**
+       * This is used to log whether or not the form control has been updated by the user, typically this would
+       * be set when the user performs an action (such as typing). Unlike 
+       * [_hadFocus]{@link module:alfresco/forms/controls/BaseFormControl#_hadFocus} it is not set by all form
+       * controls.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.89
+       */
+      _hadUserUpdate: false,
+
+      /**
        * This function is called whenever the form control loses focus. When this happens the
        * [_hadFocus]{@link module:alfresco/forms/controls/BaseFormControl#_hadFocus} attribute is set to
        * true and if the
@@ -1870,7 +1883,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       showValidationFailure: function alfresco_forms_controls_BaseFormControl__showValidationFailure() {
-         if (this.showValidationErrorsImmediately || this._hadFocus)
+         if (this.showValidationErrorsImmediately || (this._hadFocus || this._hadUserUpdate))
          {
             domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--invalid");
          }

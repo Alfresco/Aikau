@@ -1020,9 +1020,9 @@ define(["dojo/_base/declare",
        */
       showEditSiteDialog: function alfresco_services_SiteService__showEditSiteDialog(response, originalRequestConfig) {
          // Check that the resposne is the expected siteData...
-         var shortName = lang.getObject("shortName", false, response);
          if (response)
          {
+            var shortName = lang.getObject("shortName", false, response);
             var dialogWidgets = lang.clone(this.widgetsForEditSiteDialog);
             this.processObject(["processInstanceTokens"], dialogWidgets);
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
@@ -1039,7 +1039,10 @@ define(["dojo/_base/declare",
                widgets: dialogWidgets
             });
          }
-         this.alfLog("warn", "It was not possible to retrieve the current site data for editing", response, originalRequestConfig, this);
+         else
+         {
+            this.alfLog("warn", "It was not possible to retrieve the current site data for editing", response, originalRequestConfig, this);
+         }
       },
 
       /**
@@ -1346,6 +1349,14 @@ define(["dojo/_base/declare",
                      validation: "maxLength",
                      length: 256,
                      errorMessage: "create-site.dialog.name.maxLength"
+                  },
+                  {
+                     validation: "validationTopic",
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
+                     validationValueProperty: "title",
+                     negate: true,
+                     validationResultProperty: "response.used",
+                     errorMessage: "create-site-dialog.title.already.used"
                   }
                ]
             }
@@ -1383,6 +1394,14 @@ define(["dojo/_base/declare",
                      validation: "regex",
                      regex: "^[0-9a-zA-Z-]+$",
                      errorMessage: "create-site.dialog.urlname.regex"
+                  },
+                  {
+                     validation: "validationTopic",
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
+                     validationValueProperty: "shortName",
+                     negate: true,
+                     validationResultProperty: "response.used",
+                     errorMessage: "create-site-dialog.name.already.used"
                   }
                ]
             }
@@ -1471,7 +1490,12 @@ define(["dojo/_base/declare",
                   },
                   {
                      validation: "validationTopic",
-                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
+                     validationValueProperty: "title",
+                     negate: true,
+                     validateInitialValue: false,
+                     validationResultProperty: "response.used",
+                     errorMessage: "create-site-dialog.title.already.used"
                   }
                ]
             }

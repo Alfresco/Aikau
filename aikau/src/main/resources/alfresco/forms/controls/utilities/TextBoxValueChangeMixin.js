@@ -68,6 +68,10 @@ define(["alfresco/core/topics",
        * @since 1.0.49
        */
       handleKeyUp: function alfresco_forms_controls_utilities_TextBoxValueChangeMixin__handleKeyUp(evt) {
+         // On key up events indicate that the user has changed the field, this means that 
+         // error messages can be displayed without relying on focus being lost
+         this._hadUserUpdate = true;
+         
          if (this.publishTopicOnEnter && evt.keyCode === keys.ENTER) {
             this.alfPublish(this.publishTopicOnEnter, {
                fieldId: this.id

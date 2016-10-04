@@ -131,7 +131,7 @@ model.jsonModel = {
                      fieldId: "TOPIC_VALIDATION",
                      label: "Customized validation Topic",
                      description: "This simulates validating uniqueness of site identifier",
-                     value: "",
+                     value: "test",
                      validationConfig: [
                         {
                            validation: "validationTopic",
@@ -140,6 +140,7 @@ model.jsonModel = {
                            validationPayload: {
                               title: null
                            },
+                           validateInitialValue: false,
                            negate: true,
                            validationResultProperty: "response.used",
                            errorMessage: "Identifier has been used"
