@@ -25,9 +25,8 @@
 define(["module",
         "alfresco/TestCommon",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "intern/dojo/node!leadfoot/keys"],
-        function(module, TestCommon, defineSuite, assert, keys) {
+        "intern/chai!assert"],
+        function(module, TestCommon, defineSuite, assert) {
 
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");

@@ -88,6 +88,16 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/FormControlValidationMixin.properties"}],
 
       /**
+       * The time in milliseconds to wait before displaying the validation progress indicator.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.89
+       */
+      validationProgressDisplayTimeout: 1000,
+
+      /**
        * Indicates whether or not validation is currently in-progress or not
        *
        * @instance
@@ -116,6 +126,17 @@ define(["dojo/_base/declare",
        * @default
        */
       _validationInProgressState: true,
+
+      /**
+       * A timeout for showing in-progress validation indicators. Used to debounce the display of the indicator
+       * to prevent "jumping".
+       * 
+       * @instance
+       * @type {object}
+       * @defaul
+       * @since 1.0.89 
+       */
+      _validationInProgressTimeout: null,
 
       /**
        * This is used to build up the overall validation message.
@@ -155,7 +176,11 @@ define(["dojo/_base/declare",
 
             // Hide any previous errors and reveal the in-progress indicator...
             this.hideValidationFailure();
-            domClass.remove(this._validationInProgressIndicator, "hidden");
+
+            clearTimeout(this._validationInProgressTimeout);
+            this._validationInProgressTimeout = setTimeout(lang.hitch(this, function() {
+               domClass.remove(this._validationInProgressIndicator, "hidden");
+            }), this.validationProgressDisplayTimeout);
 
             // Iterate over each validation configuration, start it and add it to a count...
             var validationErrors = [];
@@ -284,6 +309,7 @@ define(["dojo/_base/declare",
             // If all are complete then update validation status
             if (count === 0)
             {
+               clearTimeout(this._validationInProgressTimeout);
                this.validationComplete();
             }
             else
