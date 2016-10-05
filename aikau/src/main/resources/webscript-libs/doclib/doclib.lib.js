@@ -295,32 +295,6 @@ var xml = generateCreateContentMenuItem({
 });
 createContent.splice(0, 0, folder, plainText, html, xml);
 
-// Create content by template
-var createContentByTemplateEnabled = true;
-if (docLibXmlConfig["create-content-by-template"] && docLibXmlConfig["create-content-by-template"].value)
-{
-   createContentByTemplateEnabled = docLibXmlConfig["create-content-by-template"].value.toString().equals("true") || false;
-}
-if (createContentByTemplateEnabled)
-{
-   createContent.push({
-      id: "CREATE_NODE_TEMPLATES",
-      name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
-      config: {
-         label: msg.get("menu.create-content.by-template-node")
-      }
-   });
-   createContent.push({
-      id: "CREATE_FOLDER_TEMPLATES",
-      name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
-      config: {
-         label: msg.get("menu.create-content.by-template-folder"),
-         _templatesUrl: "slingshot/doclib/folder-templates",
-         templateType: "folder"
-      }
-   });
-}
-
 /**
  * Helper function to retrieve configuration values.
  * 
@@ -660,6 +634,34 @@ function getDocLibCategories(options) {
 }
 
 function getDocLibCreateContentMenu(options) {
+   var createContentItems = (options.createContentItems || createContent).concat(options.additionalCreateContentItems || []);
+
+   // Create content by template
+   var createContentByTemplateEnabled = true;
+   if (docLibXmlConfig["create-content-by-template"] && docLibXmlConfig["create-content-by-template"].value)
+   {
+      createContentByTemplateEnabled = docLibXmlConfig["create-content-by-template"].value.toString().equals("true") || false;
+   }
+   if (createContentByTemplateEnabled)
+   {
+      createContentItems.push({
+         id: "CREATE_NODE_TEMPLATES",
+         name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
+         config: {
+            label: msg.get("menu.create-content.by-template-node")
+         }
+      });
+      createContentItems.push({
+         id: "CREATE_FOLDER_TEMPLATES",
+         name: "alfresco/documentlibrary/AlfCreateTemplateContentMenu",
+         config: {
+            label: msg.get("menu.create-content.by-template-folder"),
+            _templatesUrl: "slingshot/doclib/folder-templates",
+            templateType: "folder"
+         }
+      });
+   }
+
    var menu = {
       id: (options.idPrefix || "") + "DOCLIB_CREATE_CONTENT_MENU",
       name: "alfresco/documentlibrary/AlfCreateContentMenuBarPopup",
@@ -669,7 +671,7 @@ function getDocLibCreateContentMenu(options) {
                id: (options.idPrefix || "") + "DOCLIB_CREATE_CONTENT_MENU_GROUP1",
                name: "alfresco/menus/AlfMenuGroup",
                config: {
-                  widgets: createContent
+                  widgets: createContentItems
                }
             }
          ]
