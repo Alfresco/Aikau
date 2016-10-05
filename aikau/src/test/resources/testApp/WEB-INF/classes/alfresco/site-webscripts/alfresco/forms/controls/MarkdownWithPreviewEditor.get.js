@@ -23,34 +23,42 @@ model.jsonModel = {
                   id: "MDWPE1",
                   name: "alfresco/forms/controls/MarkdownWithPreviewEditor",
                   config: {
-                     name: "markdown1"
+                     fieldId: "MDWPE1",
+                     label: "Markdown with preview",
+                     description: "This shows an editor configured for markdown format with an associated preview",
+                     name: "markdown1",
+                     value: "# Heading"
                   }
                }
             ]
          }
       },
-      // {
-      //    name: "alfresco/buttons/AlfButton",
-      //    id: "DIALOG_BUTTON",
-      //    config: {
-      //       label: "Display editor in dialog",
-      //       publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
-      //       publishPayload: {
-      //          dialogTitle: "CodeMirror Editor Dialog",
-      //          formSubmissionTopic: "POST_FORM_DIALOG",
-      //          contentWidth: "600px",
-      //          widgets: [
-      //             {
-      //                id: "CODE_MIRROR_2",
-      //                name: "alfresco/forms/controls/CodeMirrorEditor",
-      //                config: {
-      //                   name: "codeMirrorValue2"
-      //                }
-      //             }
-      //          ]
-      //       }
-      //    }
-      // },
+      {
+         id: "DIALOG_BUTTON",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Display editor in dialog",
+            publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+            publishPayload: {
+               dialogTitle: "Markdown with Preview Editor Dialog",
+               formSubmissionTopic: "POST_FORM_DIALOG",
+               contentWidth: "850px",
+               widgets: [
+                  {
+                     id: "MDWPE2",
+                     name: "alfresco/forms/controls/MarkdownWithPreviewEditor",
+                     config: {
+                        fieldId: "MDWPE2",
+                        label: "Markdown with preview",
+                        description: "This shows an editor configured for markdown format with an associated preview",
+                        name: "markdown1",
+                        width: 300
+                     }
+                  }
+               ]
+            }
+         }
+      },
       {
          name: "alfresco/logging/DebugLog"
       }
