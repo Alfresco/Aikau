@@ -24,6 +24,8 @@ model.jsonModel = {
                   id: "CODE_MIRROR_1",
                   name: "alfresco/forms/controls/CodeMirrorEditor",
                   config: {
+                     label: "Editor",
+                     description: "Code mirror editor",
                      name: "codeMirrorValue"
                   }
                }

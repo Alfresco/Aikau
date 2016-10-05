@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Markdown with Preview Editor Test</shortname>
+  <description>Shows the form control for editing markdown with a preview</description>
+  <family>aikau-unit-tests</family>
+  <url>/MarkDownWithPreviewEditor</url>
+</webscript>

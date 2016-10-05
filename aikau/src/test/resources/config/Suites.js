@@ -143,6 +143,7 @@ define(function() {
       "alfresco/forms/controls/FilePickerTest",
       "alfresco/forms/controls/FilteringSelectTest",
       "alfresco/forms/controls/FormButtonDialogTest",
+      "alfresco/forms/controls/MarkdownWithPreviewEditorTest",
       "alfresco/forms/controls/MultipleEntryFormControlTest",
       "alfresco/forms/controls/MultiSelectInputTest",
       "alfresco/forms/controls/NumberSpinnerTest",
