@@ -119,6 +119,16 @@ define(["dojo/_base/declare",
       publishGlobal: true,
 
       /**
+       * The width of the dialog.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.89
+       */
+      dialogWidth: "550px",
+
+      /**
        * This should be configured to be an array of form control widgets to be placed into the create content dialog.
        *
        * @instance
@@ -137,7 +147,7 @@ define(["dojo/_base/declare",
          {
             // If no explicit payload has been configured then use a default payload to generate a form dialog request...
             publishPayload = {
-               contentWidth: "550px",
+               contentWidth: this.dialogWidth || "550px",
                dialogId: "ALF_CREATE_CONTENT_DIALOG",
                dialogTitle: this.message(this.dialogTitle),
                dialogConfirmationButtonTitle: this.message(this.dialogConfirmationLabel),

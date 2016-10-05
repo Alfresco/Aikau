@@ -183,15 +183,16 @@ var getMultiActionImage = function(attr) {
 
 var createContent = [];
 
-function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, modelType, mimeType, contentWidgetName, contentWidgetConfig, additionalWidgets) {
+function generateCreateContentMenuItem(data) {
    var menuItem = {
       name: "alfresco/documentlibrary/AlfCreateContentMenuItem",
       config: {
-         label: menuItemLabel,
-         iconClass: iconClass,
-         dialogTitle: dialogTitle,
-         contentType: modelType,
-         mimeType: mimeType,
+         label: data.menuItemLabel,
+         iconClass: data.iconClass,
+         dialogTitle: data.dialogTitle,
+         dialogWidth: data.dialogWidth,
+         contentType: data.modelType,
+         mimeType: data.mimeType,
          widgets: [
             {
                name: "alfresco/forms/controls/TextBox",
@@ -225,23 +226,23 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
    };
    // If a content widget name has been specified then define the additional widget
    // and add in any additionally supplied configuration for it
-   if (contentWidgetName)
+   if (data.contentWidgetName)
    {
       var contentWidget = {
-         name: contentWidgetName,
+         name: data.contentWidgetName,
          config: {
             label: msg.get("create.content.content.label"),
             name: "prop_cm_content",
             value: ""
          }
       };
-      if (contentWidgetConfig)
+      if (data.contentWidgetConfig)
       {
-         for (var key in contentWidgetConfig)
+         for (var key in data.contentWidgetConfig)
          {
-            if (contentWidgetConfig.hasOwnProperty(key))
+            if (data.contentWidgetConfig.hasOwnProperty(key))
             {
-               contentWidget.config[key] = contentWidgetConfig[key];
+               contentWidget.config[key] = data.contentWidgetConfig[key];
             }
          }
       }
@@ -249,15 +250,49 @@ function generateCreateContentMenuItem(menuItemLabel, dialogTitle, iconClass, mo
    }
 
    // Add in any additional widgets requested...
-   menuItem.config.widgets.concat(additionalWidgets || []);
+   menuItem.config.widgets.concat(data.additionalWidgets || []);
    return menuItem;
 }
 
 // Add in the create content options...
-var folder = generateCreateContentMenuItem(msg.get("create.folder.label"), msg.get("create.folder.title"), "alf-showfolders-icon", "cm:folder", null);
-var plainText = generateCreateContentMenuItem(msg.get("create.text-document.label"), msg.get("create.text-document.title"), "alf-textdoc-icon", "cm:content", "text/plain", "alfresco/forms/controls/TextArea");
-var html = generateCreateContentMenuItem(msg.get("create.html-document.label"), msg.get("create.html-document.title"), "alf-htmldoc-icon", "cm:content", "text/html", "alfresco/forms/controls/TinyMCE");
-var xml = generateCreateContentMenuItem(msg.get("create.xml-document.label"), msg.get("create.xml-document.title"), "alf-xmldoc-icon", "cm:content", "text/xml", "alfresco/forms/controls/CodeMirrorEditor", { editMode: "xml", width: 538, height: 250 }); // Dimensions as per defaults in TinyMCE control
+var folder = generateCreateContentMenuItem({
+   menuItemLabel: msg.get("create.folder.label"), 
+   dialogTitle: msg.get("create.folder.title"), 
+   iconClass: "alf-showfolders-icon", 
+   modelType: "cm:folder", 
+   mimeType: null
+});
+var plainText = generateCreateContentMenuItem({
+   menuItemLabel: msg.get("create.text-document.label"), 
+   dialogTitle: msg.get("create.text-document.title"), 
+   iconClass: "alf-textdoc-icon", 
+   modelType: "cm:content", 
+   mimeType: "text/plain", 
+   contentWidgetName: "alfresco/forms/controls/TextArea"
+});
+var html = generateCreateContentMenuItem({
+   menuItemLabel: msg.get("create.html-document.label"), 
+   dialogTitle: msg.get("create.html-document.title"), 
+   iconClass: "alf-htmldoc-icon", 
+   modelType: "cm:content", 
+   mimeType: "text/html",
+   dialogWidth: "800px", 
+   contentWidgetName: "alfresco/forms/controls/TinyMCE"
+});
+var xml = generateCreateContentMenuItem({
+   menuItemLabel: msg.get("create.xml-document.label"), 
+   dialogTitle: msg.get("create.xml-document.title"), 
+   iconClass: "alf-xmldoc-icon", 
+   modelType: "cm:content", 
+   mimeType: "text/xml",
+   dialogWidth: "800px",
+   contentWidgetName: "alfresco/forms/controls/CodeMirrorEditor", 
+   contentWidgetConfig: { 
+      editMode: "xml", 
+      width: 538, 
+      height: 250
+   }
+});
 createContent.splice(0, 0, folder, plainText, html, xml);
 
 // Create content by template
