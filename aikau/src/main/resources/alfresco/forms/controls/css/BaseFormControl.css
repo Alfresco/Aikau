@@ -22,6 +22,8 @@
       height: 16px;
       margin: 0 4px;
       width: 16px;
+      line-height: 20px;
+      vertical-align: text-bottom;
    }
    &--no-label {
       > .title-row {

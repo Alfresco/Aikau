@@ -58,6 +58,13 @@ define(["alfresco/forms/controls/BaseFormControl",
          this._radioButton = new DojoRadioButton({name: this.name, value: this.value});
          this._radioButton.placeAt(this._radioButtonNode);
          this._labelNode.innerHTML = this.encodeHTML(this.message(this.label));
+
+         if (this.description)
+         {
+            domConstruct.create("div", {
+               className: "alfresco-forms-controls-RadioButtons__description"
+            }, this._labelNode, "last").appendChild(document.createTextNode(this.description));
+         }
       }
    });
 

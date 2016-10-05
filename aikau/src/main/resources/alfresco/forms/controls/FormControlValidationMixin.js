@@ -88,6 +88,16 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/FormControlValidationMixin.properties"}],
 
       /**
+       * The time in milliseconds to wait before displaying the validation progress indicator.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.89
+       */
+      validationProgressDisplayTimeout: 1000,
+
+      /**
        * Indicates whether or not validation is currently in-progress or not
        *
        * @instance
@@ -116,6 +126,17 @@ define(["dojo/_base/declare",
        * @default
        */
       _validationInProgressState: true,
+
+      /**
+       * A timeout for showing in-progress validation indicators. Used to debounce the display of the indicator
+       * to prevent "jumping".
+       * 
+       * @instance
+       * @type {object}
+       * @defaul
+       * @since 1.0.89 
+       */
+      _validationInProgressTimeout: null,
 
       /**
        * This is used to build up the overall validation message.
@@ -155,7 +176,11 @@ define(["dojo/_base/declare",
 
             // Hide any previous errors and reveal the in-progress indicator...
             this.hideValidationFailure();
-            domClass.remove(this._validationInProgressIndicator, "hidden");
+
+            clearTimeout(this._validationInProgressTimeout);
+            this._validationInProgressTimeout = setTimeout(lang.hitch(this, function() {
+               domClass.remove(this._validationInProgressIndicator, "hidden");
+            }), this.validationProgressDisplayTimeout);
 
             // Iterate over each validation configuration, start it and add it to a count...
             var validationErrors = [];
@@ -284,6 +309,7 @@ define(["dojo/_base/declare",
             // If all are complete then update validation status
             if (count === 0)
             {
+               clearTimeout(this._validationInProgressTimeout);
                this.validationComplete();
             }
             else
@@ -584,10 +610,10 @@ define(["dojo/_base/declare",
        * That topic will receive the value in payload.value & should publish a response on payload.alfResponseTopic
        * The response payload should contain an "isValid" boolean property.
        *
-       * @param validationConfig
+       * @instance
+       * @param {object} validationConfig
        */
-      validationTopic: function alfresco_forms_controls_FormControlValidationMixin__validationTopic(validationConfig)
-      {
+      validationTopic: function alfresco_forms_controls_FormControlValidationMixin__validationTopic(validationConfig) {
          if (!validationConfig || !validationConfig.validationTopic)
          {
             this.alfLog("warn", "ValidationTopic missing required fields: " + validationConfig);
@@ -599,48 +625,98 @@ define(["dojo/_base/declare",
          // Save a reference so we can get the config later
          this._validationTopicConfig = validationConfig;
 
-         var payload = {
-               validationConfig: validationConfig,
-               value: this.getValue(),
-               field: this,
-               alfResponseTopic: validationConfig.alfResponseTopic || this.generateUuid()
-            },
-            publishGlobal = true,
-            publishScope = null;
-
-         if (validationConfig.validationTopicScope)
+         if (validationConfig.validateInitialValue === false && this.getValue() === this.initialValue)
          {
-            publishGlobal = false;
-            publishScope = validationConfig.validationTopicScope;
+            this.reportValidationResult(validationConfig, true);
          }
+         else
+         {
+            var payload;
+            if (validationConfig.validationPayload)
+            {
+               // Use the configured payload if provided (but add in the necessary attributes to ensure
+               // that the publication/subscription works)...
+               payload = lang.clone(validationConfig.validationPayload);
+               payload.alfResponseTopic = validationConfig.alfResponseTopic || this.generateUuid();
+               payload.validationConfig = validationConfig;
+            }
+            else
+            {
+               // Create a default payload if none is provided...
+               payload = {
+                  validationConfig: validationConfig,
+                  value: this.getValue(),
+                  field: this,
+                  alfResponseTopic: validationConfig.alfResponseTopic || this.generateUuid()
+               };
+            }
 
-         this._validationTopicHandles = this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), true);
+            // Duplicate the alfResponseTopic...
+            payload.alfSuccessTopic = payload.alfResponseTopic;
+            payload.alfFailureTopic = this.generateUuid();
+            payload.alfResponseScope = this.generateUuid();
 
-         this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
+            // Set the validation value as required...
+            if (validationConfig.validationValueProperty)
+            {
+               lang.setObject(validationConfig.validationValueProperty, this.getValue(), payload);
+            }
 
+            var publishGlobal = true;
+            var publishScope = null;
+
+            if (validationConfig.validationTopicScope)
+            {
+               publishGlobal = false;
+               publishScope = validationConfig.validationTopicScope;
+            }
+
+            this._validationTopicHandles = [];
+            this._validationTopicHandles.push(this.alfSubscribe(payload.alfResponseTopic, lang.hitch(this, this.onValidationTopicResponse), false, false, payload.alfResponseScope));
+            this._validationTopicHandles.push(this.alfSubscribe(payload.alfFailureTopic, lang.hitch(this, this.onValidationTopicFailure), false, false, payload.alfResponseScope));
+            this.alfPublish(validationConfig.validationTopic, payload, publishGlobal, false, publishScope);
+         }
       },
 
       /**
        * The response called by the topic specified in validationTopic. Receives the isValid state and updates the form.
        *
        * @instance
-       * @param payload
+       * @param {object} payload
        */
-      onValidationTopicResponse: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicResponse(payload)
-      {
-         this.alfUnsubscribeSaveHandles([this._validationTopicHandles]);
+      onValidationTopicResponse: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicResponse(payload) {
+         this.alfUnsubscribeSaveHandles(this._validationTopicHandles);
 
-         if (!payload) {
+         if (!payload) 
+         {
             this.alfLog("warn", "ValidationTopic missing payload");
          }
 
-         var isValid = !!payload.isValid,
-            validationConfig = this._validationTopicConfig;
-
+         var validationConfig = this._validationTopicConfig;
          this._validationTopicConfig = null;
+
+         var resultProperty = validationConfig.validationResultProperty || "isValid";
+         var isValid = lang.getObject(resultProperty, false, payload);
+
+         if (validationConfig.negate)
+         {
+            isValid = !isValid;
+         }
 
          // Report back with the validation result...
          this.reportValidationResult(validationConfig, isValid);
+      },
+
+      /**
+       * Handles failed requests to peform validation by publishing a topic. Assumes valid data on failure.
+       * 
+       * @instance
+       * @param  {object} payload The details of the validation failure
+       * @since 1.0.89
+       */
+      onValidationTopicFailure: function alfresco_forms_controls_FormControlValidationMixin__onValidationTopicFailure(payload) {
+         this.alfLog("warn", "It was not possible to validate the field", payload, this);
+         this.reportValidationResult(this._validationTopicConfig, true);
       }
    });
 });

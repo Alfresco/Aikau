@@ -59,7 +59,7 @@ define(["dojo/_base/declare",
             this.alfSubscribe("GET_DUMMY_VALUES", lang.hitch(this, this.onGetDummyValues));
             this.alfSubscribe("BLOCK_RESPONSES", lang.hitch(this, this.onBlockResponses));
             this.alfSubscribe("UNBLOCK_RESPONSES", lang.hitch(this, this.onUnblockResponses));
-            this.alfSubscribe("ALF_VALIDATE_TOPIC_TEST", lang.hitch(this,  this.onValidateTopicTest));
+            this.alfSubscribe("ALF_VALIDATE_TOPIC_TEST", lang.hitch(this, this.onValidateTopicTest));
          },
 
          /**
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
           * @instance
           * @param {object} payload The published payload.
           */
-         onBlockResponses: function alfresco_testing_mockservices_FormControlValidationTestService__onBlockResponses(payload) {
+         onBlockResponses: function alfresco_testing_mockservices_FormControlValidationTestService__onBlockResponses(/*jshint unused:false*/payload) {
             this.responsesBlocked = true;
          },
 
@@ -79,8 +79,8 @@ define(["dojo/_base/declare",
           * @instance
           * @param {object} payload The published payload
           */
-         onUnblockResponses: function alfresco_testing_mockservices_FormControlValidationTestService__onBlockResponses(payload) {
-            array.forEach(this.responses, function(response, index) {
+         onUnblockResponses: function alfresco_testing_mockservices_FormControlValidationTestService__onBlockResponses(/*jshint unused:false*/payload) {
+            array.forEach(this.responses, function(response) {
                this.alfPublish(response.publishTopic, response.publishPayload);
             }, this);
             this.responsesBlocked = false;
@@ -90,8 +90,8 @@ define(["dojo/_base/declare",
           * @instance
           */
          onGetDummyValues: function alfresco_testing_mockservices_FormControlValidationTestService__onGetDummyValues(payload) {
-            var alfTopic = ((payload.alfResponseTopic != null) ? payload.alfResponseTopic : "NO_ALFRESPONSETOPIC") + "_SUCCESS";
-            var payload = {
+            var alfTopic = ((payload.alfResponseTopic) ? payload.alfResponseTopic : "NO_ALFRESPONSETOPIC") + "_SUCCESS";
+            payload = {
                someData: [
                   {
                      name: "One"
@@ -123,7 +123,7 @@ define(["dojo/_base/declare",
           */
          onValidateTopicTest: function alfresco_testing_mockservices_FormControlValidationTestService__onValidateTopicTest(payload) {
             var isValid = (payload.value !== "#fail");
-            this.alfPublish(payload.alfResponseTopic, {isValid: isValid}, true);
+            this.alfPublish(payload.alfResponseTopic, {isValid: isValid}, false, false, payload.alfResponseScope);
          }
       });
    });
