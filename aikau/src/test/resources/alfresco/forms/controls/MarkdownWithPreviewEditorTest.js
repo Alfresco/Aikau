@@ -24,19 +24,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!assert",
-        "alfresco/TestCommon"],
-        function(module, defineSuite, assert, TestCommon) {
-
-   var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
-   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
-
-   var selectors = {
-      form: {
-         confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["FORM1"])
-      },
-      button: TestCommon.getTestSelector(buttonSelectors, "button.label", ["DIALOG_BUTTON"])
-   };
+        "intern/chai!assert"],
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "Markdown with Preview Tests",
