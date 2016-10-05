@@ -115,6 +115,7 @@ define(["dojo/_base/declare",
        * @listens module:alfresco/core/topics#GET_SITES
        * @listens module:alfresco/core/topics#GET_USER_SITES
        * @listens module:alfresco/core/topics#SITE_CREATION_REQUEST
+       * @listens module:alfresco/core/topics#VALIDATE_SITE_IDENTIFIER
        */
       registerSubscriptions: function alfresco_services_SiteService__registerSubscriptions() {
          this.alfSubscribe(topics.GET_SITES, lang.hitch(this, this.getSites));
@@ -140,6 +141,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.GET_USER_SITES, lang.hitch(this, this.getUserSites));
          this.alfSubscribe(topics.ENABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.enableSiteActivityFeed));
          this.alfSubscribe(topics.DISABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.disableSiteActivityFeed));
+         this.alfSubscribe(topics.VALIDATE_SITE_IDENTIFIER, lang.hitch(this, this.validateSiteIdentifier));
 
          // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
          // editing. At some stage this will not be needed when a new edit site dialog is provided.
@@ -911,17 +913,12 @@ define(["dojo/_base/declare",
                message: this.message("create-site.creating")
             });
 
-            var visibility = payload.visibility;
-            if (visibility === "PUBLIC" && payload.moderated)
-            {
-               visibility = "MODERATED";
-            }
             var url = AlfConstants.URL_SERVICECONTEXT + "modules/create-site";
             this.serviceXhr({
                url : url,
                method: "POST",
                data: {
-                  visibility: visibility,
+                  visibility: payload.visibility,
                   title: payload.title,
                   shortName: payload.shortName,
                   description: payload.description || "",
@@ -1023,16 +1020,9 @@ define(["dojo/_base/declare",
        */
       showEditSiteDialog: function alfresco_services_SiteService__showEditSiteDialog(response, originalRequestConfig) {
          // Check that the resposne is the expected siteData...
-         var shortName = lang.getObject("shortName", false, response);
          if (response)
          {
-            // Set the moderated and visibility attributes appropriately...
-            response.moderated = response.visibility === "MODERATED";
-            if (response.moderated)
-            {
-               response.visibility = "PUBLIC";
-            }
-
+            var shortName = lang.getObject("shortName", false, response);
             var dialogWidgets = lang.clone(this.widgetsForEditSiteDialog);
             this.processObject(["processInstanceTokens"], dialogWidgets);
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
@@ -1049,7 +1039,10 @@ define(["dojo/_base/declare",
                widgets: dialogWidgets
             });
          }
-         this.alfLog("warn", "It was not possible to retrieve the current site data for editing", response, originalRequestConfig, this);
+         else
+         {
+            this.alfLog("warn", "It was not possible to retrieve the current site data for editing", response, originalRequestConfig, this);
+         }
       },
 
       /**
@@ -1069,17 +1062,12 @@ define(["dojo/_base/declare",
                message: this.message("edit-site.saving")
             });
 
-            var visibility = payload.visibility;
-            if (visibility === "PUBLIC" && payload.moderated)
-            {
-               visibility = "MODERATED";
-            }
             var url = AlfConstants.PROXY_URI + "api/sites/" + payload.shortName;
             this.serviceXhr({
                url : url,
                method: "PUT",
                data: {
-                  visibility: visibility,
+                  visibility: payload.visibility,
                   title: payload.title,
                   shortName: payload.shortName,
                   description: payload.description || ""
@@ -1312,6 +1300,33 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles requests to validate whether or not a suggested site title or shortName has
+       * already been used.
+       *
+       * @instance
+       * @param {object} payload
+       * @since 1.0.89
+       */
+      validateSiteIdentifier: function alfresco_services_SiteService__validateSiteIdentifier(payload) {
+         var url = AlfConstants.PROXY_URI + "slingshot/site-identifier-used?";
+         if (typeof payload.title === "undefined" && typeof payload.shortName === "undefined")
+         {
+            this.alfLog("warn", "A request was made to validate site identification but neither 'title' nor 'shortName' was provided", payload, this);
+         }
+         else
+         {
+            url += payload.shortName ? ("shortName=" + encodeURIComponent(payload.shortName)) : ("title=" + encodeURIComponent(payload.title));
+            var config = {
+               url: url,
+               method: "GET",
+               callbackScope: this
+            };
+            this.mergeTopicsIntoXhrPayload(payload, config);
+            this.serviceXhr(config);
+         }
+      },
+
+      /**
        * This is the widget model displayed when creating sites.
        * 
        * @instance
@@ -1334,6 +1349,14 @@ define(["dojo/_base/declare",
                      validation: "maxLength",
                      length: 256,
                      errorMessage: "create-site.dialog.name.maxLength"
+                  },
+                  {
+                     validation: "validationTopic",
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
+                     validationValueProperty: "title",
+                     negate: true,
+                     validationResultProperty: "response.used",
+                     errorMessage: "create-site-dialog.title.already.used"
                   }
                ]
             }
@@ -1371,6 +1394,14 @@ define(["dojo/_base/declare",
                      validation: "regex",
                      regex: "^[0-9a-zA-Z-]+$",
                      errorMessage: "create-site.dialog.urlname.regex"
+                  },
+                  {
+                     validation: "validationTopic",
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
+                     validationValueProperty: "shortName",
+                     negate: true,
+                     validationResultProperty: "response.used",
+                     errorMessage: "create-site-dialog.name.already.used"
                   }
                ]
             }
@@ -1412,25 +1443,20 @@ define(["dojo/_base/declare",
                name: "visibility",
                optionsConfig: {
                   fixed: [
-                     { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
-                     { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
-                  ]
-               }
-            }
-         },
-         {
-            id: "CREATE_SITE_FIELD_MODERATED",
-            name: "alfresco/forms/controls/CheckBox",
-            config: {
-               fieldId: "MODERATED",
-               label: "create-site.dialog.moderated.label",
-               description: "create-site.dialog.moderated.description",
-               name: "moderated",
-               visibilityConfig: {
-                  rules: [
-                     {
-                        targetId: "VISIBILITY",
-                        is: ["PUBLIC"]
+                     { 
+                        label: "create-site.dialog.visibility.public", 
+                        description: "create-site.dialog.visibility.public.description",
+                        value: "PUBLIC" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.moderated", 
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "MODERATED" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.private",  
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "PRIVATE" 
                      }
                   ]
                }
@@ -1461,6 +1487,15 @@ define(["dojo/_base/declare",
                      validation: "maxLength",
                      length: 256,
                      errorMessage: "create-site.dialog.name.maxLength"
+                  },
+                  {
+                     validation: "validationTopic",
+                     validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
+                     validationValueProperty: "title",
+                     negate: true,
+                     validateInitialValue: false,
+                     validationResultProperty: "response.used",
+                     errorMessage: "create-site-dialog.title.already.used"
                   }
                ]
             }
@@ -1490,25 +1525,20 @@ define(["dojo/_base/declare",
                name: "visibility",
                optionsConfig: {
                   fixed: [
-                     { label: "create-site.dialog.visibility.public", value: "PUBLIC" },
-                     { label: "create-site.dialog.visibility.private", value: "PRIVATE" }
-                  ]
-               }
-            }
-         },
-         {
-            id: "EDIT_SITE_FIELD_MODERATED",
-            name: "alfresco/forms/controls/CheckBox",
-            config: {
-               fieldId: "MODERATED",
-               label: "create-site.dialog.moderated.label",
-               description: "create-site.dialog.moderated.description",
-               name: "moderated",
-               visibilityConfig: {
-                  rules: [
-                     {
-                        targetId: "VISIBILITY",
-                        is: ["PUBLIC"]
+                     { 
+                        label: "create-site.dialog.visibility.public", 
+                        description: "create-site.dialog.visibility.public.description",
+                        value: "PUBLIC" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.moderated", 
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "MODERATED" 
+                     },
+                     { 
+                        label: "create-site.dialog.visibility.private",  
+                        description: "create-site.dialog.visibility.moderated.description",
+                        value: "PRIVATE" 
                      }
                   ]
                }

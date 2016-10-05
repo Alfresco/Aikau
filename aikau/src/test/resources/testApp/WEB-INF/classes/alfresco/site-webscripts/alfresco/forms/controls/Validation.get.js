@@ -12,6 +12,7 @@ model.jsonModel = {
          }
       },
       "alfresco/services/DialogService",
+      "alfresco/services/SiteService",
       "aikauTesting/mockservices/FormControlValidationTestService",
       "alfresco/services/ErrorReporter"
    ],
@@ -23,7 +24,7 @@ model.jsonModel = {
             widgets: [
                {
                   id: "TEST_CONTROL",
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      label: null, // PLEASE NOTE: Label left intentionally blank for testing purposes (AKU-951)
                      description: "Three Letters Or More",
@@ -56,7 +57,7 @@ model.jsonModel = {
                },
                {
                   id: "TEST_CONTROL_INVERT",
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      label: "No illegal characters",
                      name: "name",
@@ -83,7 +84,7 @@ model.jsonModel = {
                },
                {
                   id: "MATCH_TARGET",
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      fieldId: "MATCH_TARGET",
                      label: "Field to match against",
@@ -92,7 +93,7 @@ model.jsonModel = {
                },
                {
                   id: "MATCH_SOURCE",
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      fieldId: "MATCH_SOURCE",
                      label: "Field to test match",
@@ -108,16 +109,41 @@ model.jsonModel = {
                },
                {
                   id: "TOPIC_VALIDATION",
-                  name: "alfresco/forms/controls/DojoValidationTextBox",
+                  name: "alfresco/forms/controls/TextBox",
                   config: {
                      fieldId: "TOPIC_VALIDATION",
                      label: "Validation Topic",
+                     description: "Enter #fail as value to put into error state",
                      value: "",
                      validationConfig: [
                         {
                            validation: "validationTopic",
                            validationTopic: "ALF_VALIDATE_TOPIC_TEST",
                            errorMessage: "Value should not be #fail"
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "CUSTOMIZED_TOPIC_VALIDATION",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     fieldId: "TOPIC_VALIDATION",
+                     label: "Customized validation Topic",
+                     description: "This simulates validating uniqueness of site identifier",
+                     value: "test",
+                     validationConfig: [
+                        {
+                           validation: "validationTopic",
+                           validationTopic: "ALF_VALIDATE_SITE_IDENTIFIER",
+                           validationValueProperty: "title",
+                           validationPayload: {
+                              title: null
+                           },
+                           validateInitialValue: false,
+                           negate: true,
+                           validationResultProperty: "response.used",
+                           errorMessage: "Identifier has been used"
                         }
                      ]
                   }
@@ -231,6 +257,9 @@ model.jsonModel = {
                ]
             }
          }
+      },
+      {
+         name: "aikauTesting/mockservices/SiteMockXhr"
       },
       {
          name: "alfresco/logging/DebugLog"

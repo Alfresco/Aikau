@@ -373,6 +373,13 @@ define(["dojo/_base/declare",
                response: response
             }, false, false, requestConfig.data.alfResponseScope);
          }
+         else if (requestConfig.alfFailureTopic) {
+            this.alfPublish(requestConfig.alfFailureTopic, {
+               requestConfig: requestConfig,
+               response: response
+            }, false, false, requestConfig.alfResponseScope);
+         }
+         
          if (typeof this.displayMessage === "function" && response.response.text)
          {
             try
