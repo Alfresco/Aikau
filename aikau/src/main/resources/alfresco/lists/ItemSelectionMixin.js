@@ -151,24 +151,31 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles the individual selection or deselection of an object.
        * 
        * @instance
        * @param {boolean} select  Indicates if this is a selection action
-       * @param {object} payload The payload containing the details of the item selected
+       * @param {object}  payload The payload containing the details of the item selected
+       * @param {boolean} [payload.selfProcessing=false] Indicates whether or not to only respond to requests initiated from the current instance
+       * @param {object}  [payload.requester=null] The instance that originated this request
+       * @param {object}  [payload.value] The item to be selected or deselected
        */
       onIndividualItemSelection: function alfresco_lists_ItemSelectionMixin__onIndividualItemSelection(select, payload) {
-         var a = lang.getObject(this.itemKey, false, payload.value);
-         var b = lang.getObject(this.itemKey, false, this.currentItem);
-         var match = ((a || a === 0) && a === b);
-         if (match)
+         if (!payload.selfProcessing || payload.requester === this)
          {
-            if (select)
+            var a = lang.getObject(this.itemKey, false, payload.value);
+            var b = lang.getObject(this.itemKey, false, this.currentItem);
+            var match = ((a || a === 0) && a === b);
+            if (match)
             {
-               domClass.add(this.domNode, this.selectedCssClass);
-            }
-            else
-            {
-               domClass.remove(this.domNode, this.selectedCssClass);
+               if (select)
+               {
+                  domClass.add(this.domNode, this.selectedCssClass);
+               }
+               else
+               {
+                  domClass.remove(this.domNode, this.selectedCssClass);
+               }
             }
          }
       },
@@ -198,13 +205,16 @@ define(["dojo/_base/declare",
             else if (payload.value === "selectInvert")
             {
                // Invert the current status
+               // See AKU-1093 - it is important to indicate that selection should only be handled by
+               // if the ultimate subscriber is the same as the publisher, this ensures that invertion
+               // does not occur multiple times on a single request.
                if (domClass.contains(this.domNode, this.selectedCssClass))
                {
-                  this.deselect();
+                  this.deselect(true);
                }
                else
                {
-                  this.select();
+                  this.select(true);
                }
             }
             else if (payload.value === "selectFolders" && this.currentItem && this.currentItem.jsNode)
@@ -254,12 +264,15 @@ define(["dojo/_base/declare",
        * to indicate that an item has been selected.
        * 
        * @instance
+       * @param {boolean} [selfProcessing=false] Indicates whether or not the subscriber should only handle publications made by itself
        * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentSelectedTopic
        */
-      select: function alfresco_lists_ItemSelectionMixin__select() {
+      select: function alfresco_lists_ItemSelectionMixin__select(selfProcessing) {
          domClass.add(this.domNode, this.selectedCssClass);
          this.alfPublish(this.documentSelectedTopic, {
-            value: this.currentItem
+            value: this.currentItem,
+            requester: this,
+            selfProcessing: selfProcessing
          }, this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
       },
       
@@ -269,12 +282,15 @@ define(["dojo/_base/declare",
        * to indicate that an item has been de-selected.
        * 
        * @instance
+       * @param {boolean} [selfProcessing=false] Indicates whether or not the subscriber should only handle publications made by itself
        * @fires module:alfresco/documentlibrary/_AlfDocumentListTopicMixin#documentDeselectedTopic
        */
-      deselect: function alfresco_lists_ItemSelectionMixin__deselect() {
+      deselect: function alfresco_lists_ItemSelectionMixin__deselect(selfProcessing) {
          domClass.remove(this.domNode, this.selectedCssClass);
          this.alfPublish(this.documentDeselectedTopic, {
-            value: this.currentItem
+            value: this.currentItem,
+            requester: this,
+            selfProcessing: selfProcessing
          }, this.getSelectionPublishGlobal(), this.getSelectionPublishToParent());
       },
       
