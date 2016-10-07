@@ -175,7 +175,8 @@ define(["dojo/_base/declare",
 
          if (this.publishOnReady)
          {
-            array.forEach(this.publishOnReady, function(publication) {
+            var clonedPublishOnReady = lang.clone(this.publishOnReady);
+            array.forEach(clonedPublishOnReady, function(publication) {
                if (publication.publishTopic)
                {
                   this.alfPublish(publication.publishTopic,
