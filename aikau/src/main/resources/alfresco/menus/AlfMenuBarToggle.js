@@ -62,15 +62,16 @@
 define(["dojo/_base/declare",
         "alfresco/menus/AlfMenuBarItem",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
+        "alfresco/documentlibrary/_AlfHashMixin",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-attr",
         "dojo/_base/lang",
         "alfresco/util/hashUtils"], 
-        function(declare, AlfMenuBarItem, _AlfDocumentListTopicMixin, domConstruct, domClass, domAttr, lang, hashUtils) {
+        function(declare, AlfMenuBarItem, _AlfDocumentListTopicMixin, _AlfHashMixin, domConstruct, domClass, domAttr, 
+                 lang, hashUtils) {
    
-   
-   return declare([AlfMenuBarItem, _AlfDocumentListTopicMixin], {
+   return declare([AlfMenuBarItem, _AlfDocumentListTopicMixin, _AlfHashMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -226,7 +227,7 @@ define(["dojo/_base/declare",
          {
             var currHash = hashUtils.getHash();
             this.checked = (currHash[this.hashName] && currHash[this.hashName] === "true");
-            this.alfSubscribe(this.filterChangeTopic, lang.hitch(this, "setState"));
+            this.alfSubscribe(this.hashChangeTopic, lang.hitch(this, this.setState));
          }
 
          this.inherited(arguments);

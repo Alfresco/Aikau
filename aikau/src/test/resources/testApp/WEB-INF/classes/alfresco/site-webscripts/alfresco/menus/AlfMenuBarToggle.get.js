@@ -9,7 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter"
+      "alfresco/services/NavigationService"
    ],
    widgets: [
       {
@@ -17,18 +17,18 @@ model.jsonModel = {
          config: {
             widgets: [
                {
+                  id: "BASIC_MENU_BAR_TOGGLE",
                   name: "alfresco/menus/AlfMenuBarToggle",
                   config: {
-                     id: "BASIC_MENU_BAR_TOGGLE",
                      subscriptionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
                      subscriptionAttribute: "direction",
                      checkedValue: "ascending"
                   }
                },
                {
+                  id: "MENU_BAR_TOGGLE_CUSTOM_LABEL",
                   name: "alfresco/menus/AlfMenuBarToggle",
                   config: {
-                     id: "MENU_BAR_TOGGLE_CUSTOM_LABEL",
                      checked: true,
                      subscriptionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
                      subscriptionAttribute: "direction",
@@ -52,10 +52,10 @@ model.jsonModel = {
                   }
                },
                {
+                  id: "MENU_BAR_TOGGLE_WITH_ICON",
                   name: "alfresco/menus/AlfMenuBarToggle",
                   config: {
                      checked: false,
-                     id: "MENU_BAR_TOGGLE_WITH_ICON",
                      subscriptionTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
                      subscriptionAttribute: "direction",
                      checkedValue: "ascending",
@@ -78,14 +78,43 @@ model.jsonModel = {
                         }
                      }
                   }
+               },
+               {
+                  id: "MENU_BAR_TOGGLE_USE_HASH",
+                  name: "alfresco/menus/AlfMenuBarToggle",
+                  config: {
+                     hashName: "sortAscending",
+                     checked: false,
+                     subscriptionTopic: "CUSTOM",
+                     subscriptionAttribute: "sortAscending",
+                     checkedValue: "true",
+                     onConfig: {
+                        label: "Ascending",
+                        iconClass: "alf-sort-ascending-icon",
+                        publishTopic: "CLICK",
+                        publishPayload: {
+                           clicked: "TOGGLE_WITH_ICON",
+                           value: "descending"
+                        }
+                     },
+                     offConfig: {
+                        label: "Descending",
+                        iconClass: "alf-sort-descending-icon",
+                        publishTopic: "CLICK",
+                        publishPayload: {
+                           clicked: "TOGGLE_WITH_ICON",
+                           value: "ascending"
+                        }
+                     }
+                  }
                }
             ]
          }
       },
       {
+         id: "TEST_BUTTON_ASC",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "TEST_BUTTON_ASC",
             label: "Set toggle state ascending",
             publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
             publishPayload: {
@@ -94,9 +123,9 @@ model.jsonModel = {
          }
       },
       {
+         id: "TEST_BUTTON_DESC",
          name: "alfresco/buttons/AlfButton",
          config: {
-            id: "TEST_BUTTON_DESC",
             label: "Set toggle state descending",
             publishTopic: "ALF_DOCLIST_SORT_FIELD_SELECTION",
             publishPayload: {
@@ -105,11 +134,19 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         id: "SET_HASH",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Set Hash",
+            publishTopic: "ALF_NAVIGATE_TO_PAGE",
+            publishPayload: {
+               url: "sortAscending=false",
+               type: "HASH"
+            }
+         }
       },
       {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
-}
-;
+};
