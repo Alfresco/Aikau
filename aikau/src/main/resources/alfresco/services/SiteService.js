@@ -1455,7 +1455,7 @@ define(["dojo/_base/declare",
                      },
                      { 
                         label: "create-site.dialog.visibility.private",  
-                        description: "create-site.dialog.visibility.moderated.description",
+                        description: "create-site.dialog.visibility.private.description",
                         value: "PRIVATE" 
                      }
                   ]
@@ -1537,7 +1537,7 @@ define(["dojo/_base/declare",
                      },
                      { 
                         label: "create-site.dialog.visibility.private",  
-                        description: "create-site.dialog.visibility.moderated.description",
+                        description: "create-site.dialog.visibility.private.description",
                         value: "PRIVATE" 
                      }
                   ]
