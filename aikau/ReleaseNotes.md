@@ -1,4 +1,4 @@
-Aikau 1.0.89 Release Notes
+Aikau 1.0.90 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.90:
+* [AKU-1093](https://issues.alfresco.com/jira/browse/AKU-1093)       - Fixed bug with inverting selection on AlfGalleryView
+* [AKU-1094](https://issues.alfresco.com/jira/browse/AKU-1094)       - Updated error message for Copy/Move failures
+* [AKU-1095](https://issues.alfresco.com/jira/browse/AKU-1095)       - Ensure copy/move dialog model is properly cloned
+* [AKU-1096](https://issues.alfresco.com/jira/browse/AKU-1096)       - Fixed AlfMenuBarToggle URL hash updating
+
 1.0.89:
 * [AKU-1092](https://issues.alfresco.com/jira/browse/AKU-1092)       - Updated SiteService to improve site creation and editing
 * Added MarkdownWithPreviewEditor widget
