@@ -187,8 +187,8 @@ define(["module",
    });
 
    defineSuite(module, {
-      name: "AlfMenuBarToggle Tests (Keyboard)",
-      testPage: "/AlfMenuBarToggle",
+      name: "AlfMenuBarToggle Tests (Publications/Hashing)",
+      testPage: "/AlfMenuBarToggle#sortAscending=true",
 
       "Test external publication updates label (basic toggle) ON": function() {
          return this.remote.findById("TEST_BUTTON_ASC")
@@ -241,6 +241,26 @@ define(["module",
          return this.remote.findByCssSelector("#MENU_BAR_TOGGLE_WITH_ICON > img.alf-sort-descending-icon")
             .then(function() {}, function() {
                assert(false, "Test #1f - Image for desc icon toggle had wrong or missing CSS class");
+            });
+      },
+
+      "Test hash initialises state": function() {
+         return this.remote.findById("MENU_BAR_TOGGLE_USE_HASH_text")
+            .getVisibleText()
+            .then(function(initialValue) {
+               assert.equal(initialValue, "Ascending");
+            });
+      },
+
+      "Update hash changes toggle": function() {
+         return this.remote.findById("SET_HASH_label")
+            .click()
+         .end()
+
+         .findById("MENU_BAR_TOGGLE_USE_HASH_text")
+            .getVisibleText()
+            .then(function(initialValue) {
+               assert.equal(initialValue, "Descending");
             });
       }
    });
