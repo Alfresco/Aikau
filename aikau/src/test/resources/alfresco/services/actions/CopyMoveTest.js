@@ -142,7 +142,7 @@ define(["module",
          
          .getLastPublish("ALF_DISPLAY_PROMPT")
             .then(function(payload) {
-               assert.propertyVal(payload, "message", "The files or folders couldn't be moved right now. Check they're not locked for editing and try again.");
+               assert.propertyVal(payload, "message", "The files or folders couldn't be moved right now. Try again, or check with your IT Team.");
             });
       },
 
