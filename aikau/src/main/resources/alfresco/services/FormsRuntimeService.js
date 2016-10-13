@@ -133,6 +133,9 @@ define(["dojo/_base/declare",
                   unsetReturnValue: ""
                }
             },
+            "/org/alfresco/components/form/controls/daterange.ftl": {
+               name: "alfresco/forms/controls/DateRange"
+            },
             "/org/alfresco/components/form/controls/workflow/email-notification.ftl": {
                name: "alfresco/forms/controls/CheckBox"
             },
@@ -275,6 +278,9 @@ define(["dojo/_base/declare",
                },
                "/org/alfresco/components/form/controls/workflow/priority.ftl": {
                   name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/selectone.ftl": {
+                  name: "alfresco/renderers/Property" 
                }
             }
          },
