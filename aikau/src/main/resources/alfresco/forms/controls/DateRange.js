@@ -28,15 +28,14 @@
  */
 define(["dojo/_base/declare",
         "alfresco/forms/controls/DateTextBox",
-        "alfresco/core/CoreWidgetProcessing",
         "dijit/form/DateTextBox",
         "dojo/aspect",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/dom-construct"],
-        function(declare, DateTextBox, CoreWidgetProcessing, DojoDateTextBox, aspect, lang, domClass, domConstruct) {
+        function(declare, DateTextBox, DojoDateTextBox, aspect, lang, domClass, domConstruct) {
 
-   return declare([DateTextBox, CoreWidgetProcessing], {
+   return declare([DateTextBox], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -143,8 +142,6 @@ define(["dojo/_base/declare",
        * to create an additional Date selector to complete the range selection options.
        * 
        * @instance
-       * @param {object} config The configuration to create the form control with
-       * @param {element} domNode The element to create the form control in.
        */
       placeWidget: function alfresco_forms_controls_DateRange__placeWidget() {
          this.inherited(arguments);
