@@ -161,6 +161,7 @@ define(["dojo/_base/declare",
          else
          {
             // Reset the _validatorsInProgress attribute...
+            this._validationWarnings = false;
             this._validationInProgressState = true;
             this._validatorsInProgress = {};
             this._validationErrorMessage = "";
@@ -292,8 +293,19 @@ define(["dojo/_base/declare",
                   this._validationErrorMessage += this.message(validationConfig.errorMessage);
                }
 
+               if (validationConfig.warnOnly === true)
+               {
+                  // Show as a warning...
+                  this._validationWarnings = true;
+                  result = true;
+               }
+               else
+               {
+                  // Show as a failure...
+                  this.showValidationFailure();
+               }
+
                // Update the validation message...
-               this.showValidationFailure();
                this._validationMessage.innerHTML = this._validationErrorMessage;
             }
 
@@ -342,6 +354,11 @@ define(["dojo/_base/declare",
                fieldId: this.fieldId
             });
             this.hideValidationFailure();
+
+            if (this._validationWarnings)
+            {
+               this.showValidationWarning();
+            }
          }
          else
          {

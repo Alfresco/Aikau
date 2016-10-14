@@ -134,6 +134,7 @@ model.jsonModel = {
                      value: "test",
                      validationConfig: [
                         {
+                           warnOnly: true,
                            validation: "validationTopic",
                            validationTopic: "ALF_VALIDATE_SITE_IDENTIFIER",
                            validationValueProperty: "title",

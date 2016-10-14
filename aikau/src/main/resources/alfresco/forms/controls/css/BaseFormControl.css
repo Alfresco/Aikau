@@ -25,6 +25,14 @@
       line-height: 20px;
       vertical-align: text-bottom;
    }
+   &__validation-warning {
+      display: none;
+      height: 16px;
+      margin: 0 4px;
+      width: 16px;
+      line-height: 20px;
+      vertical-align: text-bottom;
+   }
    &--no-label {
       > .title-row {
          display: none;
@@ -34,6 +42,17 @@
       > .title-row {
          display: block;
          > .alfresco-forms-controls-BaseFormControl__validation-error {
+            display: inline-block;
+         }
+         > span.validation-message {
+            display: inline-block;
+         }
+      }
+   }
+   &--warning {
+      > .title-row {
+         display: block;
+         > .alfresco-forms-controls-BaseFormControl__validation-warning {
             display: inline-block;
          }
          > span.validation-message {

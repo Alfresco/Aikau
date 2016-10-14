@@ -1117,6 +1117,26 @@ define(["dojo/_base/declare",
       validationErrorAltText: "validation.error.alttext",
 
       /**
+       * The local image to use for a validation-warning indicator.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.91
+       */
+      validationWarningImg: "warning-16.png",
+
+      /**
+       * The alt-text label to use for the validation-warning indicator.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.91
+       */
+      validationWarningAltText: "validation.warning.alttext",
+
+      /**
        * The local image to use for the inline help indicator.
        *
        * @instance
@@ -1166,6 +1186,13 @@ define(["dojo/_base/declare",
             0: this.message(this.label)
          });
 
+         if (!this.validationWarningImgSrc)
+         {
+            this.validationWarningImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationWarningImg);
+         }
+         this.validationWarningAltText = this.message(this.validationWarningAltText, {
+            0: this.message(this.label)
+         });
          if (!this.validationErrorImgSrc)
          {
             this.validationErrorImgSrc = require.toUrl("alfresco/forms/controls/css/images/" + this.validationErrorImg);
@@ -1894,6 +1921,26 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * By default this simply adds the "validation-warning" and "display" classes to the _validationIndicator
+       * and _validationMessage DOM nodes respectively. However, the code has been broken out into a separate function
+       * to support extending classes that may provide alternative HTML templates or wish to render errors
+       * differently.
+       *
+       * @instance
+       * @since 1.0.91
+       */
+      showValidationWarning: function alfresco_forms_controls_BaseFormControl__showValidationWarning() {
+         if (this.showValidationErrorsImmediately || (this._hadFocus || this._hadUserUpdate))
+         {
+            domClass.add(this.domNode, "alfresco-forms-controls-BaseFormControl--warning");
+         }
+         else
+         {
+            this._pendingValidationFailureDisplay = true;
+         }
+      },
+
+      /**
        * By default this simply removes the "validation-error" and "display" classes to the _validationIndicator
        * and _validationMessage DOM nodes respectively. However, the code has been broken out into a separate function
        * to support extending classes that may provide alternative HTML templates or wish to render errors
@@ -1903,6 +1950,7 @@ define(["dojo/_base/declare",
        */
       hideValidationFailure: function alfresco_forms_controls_BaseFormControl__hideValidationFailure() {
          domClass.remove(this.domNode, "alfresco-forms-controls-BaseFormControl--invalid");
+         domClass.remove(this.domNode, "alfresco-forms-controls-BaseFormControl--warning");
          this._pendingValidationFailureDisplay = false;
       },
 
