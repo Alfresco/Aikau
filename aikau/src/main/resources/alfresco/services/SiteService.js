@@ -1337,6 +1337,18 @@ define(["dojo/_base/declare",
        */
       widgetsForCreateSiteDialog: [
          {
+            id: "CREATE_SITE_FIELD_PRESET",
+            name: "alfresco/forms/controls/Select",
+            config: {
+               fieldId: "PRESET",
+               label: "create-site.dialog.type.label",
+               name: "sitePreset",
+               optionsConfig: {
+                  fixed: "{sitePresets}"
+               }
+            }
+         },
+         {
             id: "CREATE_SITE_FIELD_TITLE",
             name: "alfresco/forms/controls/TextBox",
             config: {
@@ -1423,18 +1435,6 @@ define(["dojo/_base/declare",
                      errorMessage: "create-site.dialog.description.maxLength"
                   }
                ]
-            }
-         },
-         {
-            id: "CREATE_SITE_FIELD_PRESET",
-            name: "alfresco/forms/controls/Select",
-            config: {
-               fieldId: "PRESET",
-               label: "create-site.dialog.type.label",
-               name: "sitePreset",
-               optionsConfig: {
-                  fixed: "{sitePresets}"
-               }
             }
          },
          {
