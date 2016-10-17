@@ -20,20 +20,18 @@
 /**
  * @module alfresco/navigation/TreeStore
  * @extends external:dojo/store/JsonRest
- * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dojo/store/JsonRest", 
-        "alfresco/core/Core",
         "alfresco/core/CoreXhr",
         "dojo/Deferred",
         "dojo/_base/lang",
         "dojo/_base/array"], 
-        function(declare, JsonRest, AlfCore, CoreXhr, Deferred, lang, array) {
+        function(declare, JsonRest, CoreXhr, Deferred, lang, array) {
    
-   return declare([JsonRest, AlfCore, CoreXhr], {
+   return declare([JsonRest, CoreXhr], {
       
       /**
        * This is an array of Regular Expressions that should match pathes to show. At least one of the 

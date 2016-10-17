@@ -26,6 +26,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
+        "alfresco/core/Core",
         "alfresco/core/topics",
         "service/constants/Default",
         "webscripts/defaults",
@@ -39,9 +40,10 @@ define(["dojo/_base/declare",
         "dojo/json",
         "dojo/date/stamp",
         "dojo/cookie"],
-        function(declare, topics, AlfConstants, webScriptDefaults, registry, pubSub, array, lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
+        function(declare, Core, topics, AlfConstants, webScriptDefaults, registry, pubSub, array, 
+                 lang, domConstruct, uuid, xhr, JSON, stamp, dojoCookie) {
 
-   return declare(null, {
+   return declare([Core], {
 
       /**
        * Indicates whether or not to call the JavaScript encodeURI function on URLs before they

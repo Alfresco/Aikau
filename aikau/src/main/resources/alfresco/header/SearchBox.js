@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
         "dojo/date/stamp",
         "dojo/on"], 
         function(declare, lang, array, _Widget, _Templated, TemporalUtils, FileSizeMixin, _PublishPayloadMixin,
-                 SearchBoxTemplate, LiveSearchTemplate, LiveSearchItemTemplate, AlfCore, AlfXhr, urlTypes, AlfMenuBar, 
+                 SearchBoxTemplate, LiveSearchTemplate, LiveSearchItemTemplate, AlfCore, CoreXhr, urlTypes, AlfMenuBar, 
                  urlUtils, AlfConstants, JSON, domAttr, domStyle, domClass, domConstruct, Stamp, on) {
 
    /**
@@ -274,7 +274,7 @@ define(["dojo/_base/declare",
    /**
     * alfresco/header/SearchBox widget
     */ 
-   return declare([_Widget, _Templated, AlfCore, AlfXhr, TemporalUtils, FileSizeMixin], {
+   return declare([_Widget, _Templated, CoreXhr, TemporalUtils, FileSizeMixin], {
 
       /**
        * The scope to use for i18n messages.
