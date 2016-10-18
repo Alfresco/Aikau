@@ -70,6 +70,16 @@
          margin: 0 0 @standard-line-height 0;
       }
    }
+   &__warning-row {
+      max-width: @dialog-control-section;
+
+      &__warning {
+         color: @validation-warning-font-color;
+         line-height: ceil(@small-font-size/@standard-line-height) * @standard-line-height;
+         margin: 0 0 @standard-line-height 0;
+      }
+   }
+
    &.hiddenlabel > .title-row {
       height: 0;
       left: -999em;
@@ -115,7 +125,7 @@
          }
       }
       > .validation-message {
-         color: #ed2525;
+         color: @validation-error-font-color;
          display: none;
          font-size: @normal-font-size - 3;
          margin: 0;
@@ -182,6 +192,11 @@
                > .description-row > .description {
                   margin: 0 0 @standard-line-height @dialog-label-section + 4;
                }
+               > .alfresco-forms-controls-BaseFormControl__warning-row {
+                  > .alfresco-forms-controls-BaseFormControl__warning-row__warning {
+                     margin: 0 0 @standard-line-height @dialog-label-section + 4;
+                  }
+               }
                > .title-row {
                   display: inline;
                   float: left;
@@ -212,6 +227,11 @@
                         margin: 0;
                      }
                   }
+                  > .alfresco-forms-controls-BaseFormControl__warning-row {
+                     > .alfresco-forms-controls-BaseFormControl__warning-row__warning {
+                        margin: 0;
+                     }
+                  }
                }
                &--invalid {
                   > .title-row {
@@ -222,6 +242,11 @@
                   }
                   > .description-row {
                      > .description {
+                        margin: 0 0 @standard-line-height @dialog-label-section + 4;
+                     }
+                  }
+                  > .alfresco-forms-controls-BaseFormControl__warning-row {
+                     > .alfresco-forms-controls-BaseFormControl__warning-row__warning {
                         margin: 0 0 @standard-line-height @dialog-label-section + 4;
                      }
                   }
@@ -242,6 +267,10 @@
                   }
                   > .description-row {
                      > .description {
+                        margin: 0;
+                     }
+                  }> .alfresco-forms-controls-BaseFormControl__warning-row {
+                     > .alfresco-forms-controls-BaseFormControl__warning-row__warning {
                         margin: 0;
                      }
                   }

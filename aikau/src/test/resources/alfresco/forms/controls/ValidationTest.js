@@ -69,7 +69,7 @@ define(["module",
          },
          customTopicValidation: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["CUSTOMIZED_TOPIC_VALIDATION"]),
-            validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["CUSTOMIZED_TOPIC_VALIDATION"])
+            validationWarning: TestCommon.getTestSelector(formControlSelectors, "validation.warning", ["CUSTOMIZED_TOPIC_VALIDATION"])
          }
       },
       buttons: {
@@ -382,7 +382,7 @@ define(["module",
             .type("used")
          .end()
 
-         .findDisplayedByCssSelector(selectors.textBoxes.customTopicValidation.validationMessage)
+         .findDisplayedByCssSelector(selectors.textBoxes.customTopicValidation.validationWarning)
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Identifier has been used");
