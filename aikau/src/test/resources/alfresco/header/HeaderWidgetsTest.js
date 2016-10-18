@@ -108,7 +108,7 @@ define(["module",
          return this.remote.findByCssSelector("#PRESET_STATUS > div.lastUpdate > span")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "over 16 years ago", "Preset status time not displayed as expected");
+               assert.equal(resultText, "over 17 years ago", "Preset status time not displayed as expected");
             });
       },
 
@@ -194,7 +194,7 @@ define(["module",
          return this.remote.findByCssSelector("#NO_STATUS > div.lastUpdate > span")
             .getVisibleText()
             .then(function(resultText) {
-               assert.equal(resultText, "over 16 years ago", "Status time not updated");
+               assert.equal(resultText, "over 17 years ago", "Status time not updated");
             })
             .end();
 
