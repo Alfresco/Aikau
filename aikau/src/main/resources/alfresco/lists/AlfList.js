@@ -1219,6 +1219,7 @@ define(["dojo/_base/declare",
          }
          else
          {
+            domClass.add(this.dataFailureNode, "share-hidden");
             domClass.remove(this.dataLoadingMoreNode, "share-hidden");
          }
       },
