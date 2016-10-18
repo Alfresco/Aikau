@@ -80,7 +80,17 @@ define(["dojo/_base/declare",
       moveAPI: "slingshot/doclib/action/move-to/node/",
 
       /**
-       * Sets up the service using the configuration provided. 
+       * URL to call to create a link to a document
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
+      createLinkAPI: "api/node/doclink/",
+
+
+      /**
+       * Sets up the service using the configuration provided.
        *
        * @instance
        * @since 1.0.32
@@ -124,10 +134,18 @@ define(["dojo/_base/declare",
                documents: documents,
                responseScope: payload.alfResponseScope
             };
+         var createLinkButtonLabel = payload.createLinkButtonLabel || "services.ActionService.createLink",
+             createLinkResponseTopic = this.generateUuid() + "_ALF_CREATE_LINK_LOCATION_PICKED",
+             createLinkPublishPayload = {
+                        nodes: nodes,
+                        documents: documents,
+                        responseScope: payload.alfResponseScope
+                     };
 
          var firstFileName = documents.length ? documents[0].fileName : null;
          var fileName = (nodes.length === 1 && firstFileName) ? firstFileName : this.message("services.ActionService.copyMoveTo.multipleFiles");
          this._actionHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onCopyMoveLocationSelected, urlPrefix, payload.copy), true);
+         this._actionHandle = this.alfSubscribe(createLinkResponseTopic, lang.hitch(this, this.onCreateLinkLocationSelected), true);
          this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
             dialogId: "ALF_COPY_MOVE_DIALOG",
             dialogTitle: this.message(dialogTitle, { 0: fileName}),
@@ -143,6 +161,21 @@ define(["dojo/_base/declare",
                }
             ],
             widgetsButtons: [
+               {
+                  name: "alfresco/buttons/AlfButton",
+                  config: {
+                     label: createLinkButtonLabel,
+                     publishTopic: createLinkResponseTopic,
+                     publishPayload: createLinkPublishPayload,
+                     disableOnInvalidControls: true,
+                     validTopic: "ALF_PICKER_VALID",
+                     invalidTopic: "ALF_PICKER_INVALID",
+                     additionalCssClasses: "call-to-action",
+                     visibilityConfig: {
+                        initialValue: payload.copy
+                     }
+                  }
+               },
                {
                   name: "alfresco/buttons/AlfButton",
                   config: {
@@ -201,6 +234,42 @@ define(["dojo/_base/declare",
                }
             }));
          }
+      },
+
+       /**
+        * Handles the actual create link XHR call
+        *
+        * @instance
+        * @param {boolean} copy A boolean indicating if this is a copy action or not
+        * @param {object} payload The payload from confirmation of the action dialog
+        */
+      onCreateLinkLocationSelected: function alfresco_services_ActionService__onCreateLinkLocationSelected(payload) {
+          this.alfUnsubscribeSaveHandles([this._actionCopyHandle]);
+
+          // Get the locations to create link to and the documents to them...
+          if (payload.dialogContent)
+          {
+             when(payload.dialogContent, lang.hitch(this, function(content) {
+                if (content && content.length)
+                {
+                   var locations = lang.getObject("pickedItemsWidget.currentData.items", false, content[0]);
+                   var documents = lang.getObject("documents", false, payload);
+                   if (!locations || locations.length === 0)
+                   {
+                      this.alfLog("error", "createLinkTarget not specified");
+                   }
+                   else if (!documents || documents.length === 0)
+                   {
+                      this.alfLog("error", "Documents to create link not specified.");
+                   }
+                   else
+                   {
+                      var nodeRefs = NodeUtils.nodeRefArray(documents);
+                      array.forEach(locations, lang.hitch(this, this.performCreateLinkAction, nodeRefs, payload.alfResponseScope));
+                   }
+                }
+             }));
+          }
 
          
       },
@@ -233,8 +302,33 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Makes an XHR call to create links for the selected documents to the location provided.
+       *
+       * @instance
+       * @param {array} nodeRefs An array of the nodes to create links for
+       * @param {array} location  The location to move or copy the documents to
+       */
+      performCreateLinkAction: function alfresco_services_actions_CopyMoveService__performCreateLinkAction(nodeRefs, responseScope, location) {
+         var responseTopic = this.generateUuid();
+         var successSubscription = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onCreateLinkActionSuccess), true);
+         var failureSubscription = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onCreateLinkActionFailure), true);
+         this.serviceXhr({
+            alfTopic: responseTopic,
+            subscriptionHandles: [successSubscription,failureSubscription],
+            responseScope: responseScope,
+            url: AlfConstants.PROXY_URI +  this.createLinkAPI + location.nodeRef.replace("://", "/"),
+            method: "POST",
+            data: {
+               destinationNodeRef: location.nodeRef,
+               multipleFiles: nodeRefs
+            }
+         });
+      },
+
+
+      /**
        * Handles successful actions in one of two ways. When an attempt is made to move or copy more than one node
-       * it is possible that only some of the nodes will be moved/copied successfuly. If all the nodes were moved or
+       * it is possible that only some of the nodes will be moved/copied successfully. If all the nodes were moved or
        * copied successfully then a simple notification is displayed indicating a successful action was completed, however
        * if a partial success was reported then a prompt is displayed listing the nodes that could not be copied or moved.
        *
@@ -299,6 +393,44 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Handles successful actions. When an attempt is made to create link to more than one node it is possible that
+       * only for some of the nodes it will be created successfully. If for all the nodes the link was created
+       * successfully then a simple notification is displayed indicating a successful action was completed, or partial
+       * completed.
+       *
+       * @instance
+       * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
+       * @fires module:alfresco/core/topics#DISPLAY_PROMPT
+       * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
+       */
+      onCreateLinkActionSuccess: function alfresco_services_actions_CopyMoveService__onCreateLinkActionSuccess(payload) {
+         // jshint unused:false
+         var subscriptionHandles = lang.getObject("requestConfig.subscriptionHandles", false, payload);
+         if (subscriptionHandles)
+         {
+            this.alfUnsubscribeSaveHandles(subscriptionHandles);
+         }
+         if (payload.response.successCount === 0)
+         {
+            // See AKU-1068 - total failure returned as success...
+            var failureMessage;
+            failureMessage = payload.response.failureCount === 1 ? "copyMoveService.createLink.failure" : "copyMoveService.createLink.multiple.failure";
+
+            this.alfServicePublish(topics.DISPLAY_PROMPT, {
+               title: this.message("copyMoveService.createLink.failure.title"),
+               message: this.message(failureMessage)
+            });
+         }
+         else if (payload.response.overallSuccess === "true")
+         {
+            this.alfServicePublish(topics.DISPLAY_NOTIFICATION, {
+               message: this.message("copyMoveService.createLink.completeSuccess")
+            });
+         }
+         this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, payload.requestConfig.responseScope);
+      },
+      /**
        * Handles failed actions by displaying a notification indicating that the action was not successful.
        *
        * @instance
@@ -316,6 +448,25 @@ define(["dojo/_base/declare",
          this.alfServicePublish(topics.DISPLAY_PROMPT, {
             title: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure.title") : this.message("copyMoveService.move.failure.title"),
             message: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure") : this.message("copyMoveService.move.failure")
+         });
+      },
+      /**
+       * Handles failed actions by displaying a notification indicating that the action was not successful.
+       *
+       * @instance
+       * @param {object} payload
+       * @fires module:alfresco/core/topics#DISPLAY_PROMPT
+       */
+      onCreateLinkActionFailure: function alfresco_services_actions_CopyMoveService__onActionFailure(payload) {
+         // jshint unused:false
+         var subscriptionHandles = lang.getObject("requestConfig.subscriptionHandles", false, payload);
+         if (subscriptionHandles)
+         {
+            this.alfUnsubscribeSaveHandles(subscriptionHandles);
+         }
+         this.alfServicePublish(topics.DISPLAY_PROMPT, {
+            title: this.message("copyMoveService.createLink.failure.title"),
+            message: this.message("copyMoveService.createLink.failure")
          });
       }
    });

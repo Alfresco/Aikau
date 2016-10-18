@@ -24,8 +24,9 @@
 define(["dojo/_base/declare",
         "alfresco/testing/MockXhr",
         "dojo/text!./responseTemplates/CopyMoveService/Copy.json",
-        "dojo/text!./responseTemplates/CopyMoveService/Move.json"], 
-        function(declare, MockXhr, Copy, Move) {
+        "dojo/text!./responseTemplates/CopyMoveService/Move.json",
+        "dojo/text!./responseTemplates/CopyMoveService/CreateLink.json"],
+        function(declare, MockXhr, Copy, Move, CreateLink) {
    
    return declare([MockXhr], {
 
@@ -49,6 +50,12 @@ define(["dojo/_base/declare",
                                     {"Content-Type":"application/json;charset=UTF-8",
                                      "Content-Length":2563},
                                      Move]);
+            this.server.respondWith("POST",
+                                    "/aikau/proxy/alfresco/api/node/doclink/alfresco/company/home",
+                                    [200,
+                                    {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":2563},
+                                     CreateLink]);
             this.alfPublish("ALF_MOCK_XHR_SERVICE_READY", {});
          }
          catch(e)
