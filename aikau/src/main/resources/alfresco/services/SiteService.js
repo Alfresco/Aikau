@@ -886,6 +886,7 @@ define(["dojo/_base/declare",
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
                dialogId: "CREATE_SITE_DIALOG",
                dialogTitle: "create-site.dialog.title",
+               dialogConfirmationButtonTitle: "create-site-dialog.name.create.label",
                dialogCloseTopic: topics.SITE_CREATION_SUCCESS,
                formSubmissionTopic: topics.SITE_CREATION_REQUEST,
                formSubmissionGlobal: true,
@@ -1028,6 +1029,7 @@ define(["dojo/_base/declare",
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
                dialogId: "EDIT_SITE_DIALOG",
                dialogTitle: "edit-site.dialog.title",
+               dialogConfirmationButtonTitle: "edit-site-dialog.name.save.label",
                dialogCloseTopic: topics.SITE_EDIT_SUCCESS,
                formSubmissionTopic: topics.SITE_EDIT_REQUEST,
                formSubmissionPayloadMixin: {
@@ -1335,6 +1337,18 @@ define(["dojo/_base/declare",
        */
       widgetsForCreateSiteDialog: [
          {
+            id: "CREATE_SITE_FIELD_PRESET",
+            name: "alfresco/forms/controls/Select",
+            config: {
+               fieldId: "PRESET",
+               label: "create-site.dialog.type.label",
+               name: "sitePreset",
+               optionsConfig: {
+                  fixed: "{sitePresets}"
+               }
+            }
+         },
+         {
             id: "CREATE_SITE_FIELD_TITLE",
             name: "alfresco/forms/controls/TextBox",
             config: {
@@ -1351,6 +1365,7 @@ define(["dojo/_base/declare",
                      errorMessage: "create-site.dialog.name.maxLength"
                   },
                   {
+                     warnOnly: true,
                      validation: "validationTopic",
                      validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
                      validationValueProperty: "title",
@@ -1423,18 +1438,6 @@ define(["dojo/_base/declare",
             }
          },
          {
-            id: "CREATE_SITE_FIELD_PRESET",
-            name: "alfresco/forms/controls/Select",
-            config: {
-               fieldId: "PRESET",
-               label: "create-site.dialog.type.label",
-               name: "sitePreset",
-               optionsConfig: {
-                  fixed: "{sitePresets}"
-               }
-            }
-         },
-         {
             id: "CREATE_SITE_FIELD_VISIBILITY",
             name: "alfresco/forms/controls/RadioButtons",
             config: {
@@ -1489,6 +1492,7 @@ define(["dojo/_base/declare",
                      errorMessage: "create-site.dialog.name.maxLength"
                   },
                   {
+                     warnOnly: true,
                      validation: "validationTopic",
                      validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
                      validationValueProperty: "title",

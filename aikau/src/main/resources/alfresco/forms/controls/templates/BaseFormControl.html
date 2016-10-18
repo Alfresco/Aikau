@@ -2,6 +2,7 @@
    <div data-dojo-attach-point="_titleRowNode" class="title-row">
       <img class="validationInProgress hidden" src="${validationInProgressImgSrc}" alt="${validationInProgressAltText}" data-dojo-attach-point="_validationInProgressIndicator">
       <img class="alfresco-forms-controls-BaseFormControl__validation-error" src="${validationErrorImgSrc}" alt="${validationErrorAltText}" title="${validationErrorAltText}" data-dojo-attach-point="_validationErrorIndicator">
+      <img class="alfresco-forms-controls-BaseFormControl__validation-warning" src="${validationWarningImgSrc}" alt="${validationWarningAltText}" title="${validationWarningAltText}" data-dojo-attach-point="_validationWarningIndicator">
       <img class="inlineHelp hidden" src="${inlineHelpImgSrc}" alt="${inlineHelpAltText}" data-dojo-attach-point="_inlineHelpIndicator" data-dojo-attach-event="ondijitclick:showInlineHelp">
       <label class="label" data-dojo-attach-point="_labelNode"></label>
       <span class="requirementIndicator" data-dojo-attach-point="_requirementIndicator">*</span>
@@ -10,6 +11,9 @@
    <div class="control-row">
       <div class="control" data-dojo-attach-point="_controlNode"></div>
       <span class="units" data-dojo-attach-point="_unitsNode"></span>
+   </div>
+   <div data-dojo-attach-point="_warningRowNode" class="alfresco-forms-controls-BaseFormControl__warning-row">
+      <div class="alfresco-forms-controls-BaseFormControl__warning-row__warning" data-dojo-attach-point="_warningMessage"></div>
    </div>
    <div data-dojo-attach-point="_descriptionRowNode" class="description-row">
       <div class="description" data-dojo-attach-point="_descriptionNode"></div>

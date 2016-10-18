@@ -103,7 +103,13 @@ define(["module",
             .type("used")
          .end()
 
-         .findByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton);
+         .findDisplayedByCssSelector("#CREATE_SITE_FIELD_TITLE .alfresco-forms-controls-BaseFormControl__validation-warning")
+         .end()
+
+         .findAllByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
       },
 
       "Create site success": function() {
