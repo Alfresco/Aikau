@@ -613,7 +613,6 @@ define(["dojo/_base/declare",
                formSubmissionPayloadMixin && lang.mixin(okButtonPublishPayload, formSubmissionPayloadMixin);
 
                var okButtonPublishTopic = lang.getObject("formConfig.okButtonPublishTopic", false, originalRequestConfig);
-               var okButtonLabel = lang.getObject("formConfig.okButtonLabel", false, originalRequestConfig);
                var widgetsBefore = lang.getObject("formConfig.widgetsBefore", false, originalRequestConfig) || [];
 
                var formControls = lang.clone(widgetsBefore);
@@ -623,7 +622,6 @@ define(["dojo/_base/declare",
                   config: {
                      showOkButton: response.showSubmitButton,
                      showCancelButton: response.showCancelButton,
-                     okButtonLabel: okButtonLabel,
                      okButtonPublishTopic: okButtonPublishTopic || (response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE"),
                      okButtonPublishPayload: okButtonPublishPayload,
                      okButtonPublishGlobal: true,
@@ -632,6 +630,12 @@ define(["dojo/_base/declare",
                      formSubmissionTriggerTopic: topics.TRIGGER_FORM_SUBMISSION
                   }
                };
+
+               var okButtonLabel = lang.getObject("formConfig.okButtonLabel", false, originalRequestConfig);
+               if (okButtonLabel)
+               {
+                  formConfig.config.okButtonLabel = okButtonLabel;
+               }
 
                // Iterate over the structure array and add the the form controls for all of the fields
                // that it contains...
