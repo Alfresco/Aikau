@@ -593,8 +593,9 @@ define(["dojo/_base/declare",
 
                var okButtonPublishTopic = lang.getObject("formConfig.okButtonPublishTopic", false, originalRequestConfig);
                var okButtonLabel = lang.getObject("formConfig.okButtonLabel", false, originalRequestConfig);
+               var widgetsBefore = lang.getObject("formConfig.widgetsBefore", false, originalRequestConfig) || [];
 
-               var formControls = [];
+               var formControls = widgetsBefore;
                var formConfig = {
                   id: formId,
                   name: "alfresco/forms/Form",
