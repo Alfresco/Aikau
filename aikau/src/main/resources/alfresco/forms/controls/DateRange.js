@@ -95,14 +95,19 @@ define(["dojo/_base/declare",
          if (value)
          {
             var valueTokens = value.split(this.dateSeparator);
-            var fromValue = valueTokens[0];
-            var toValue = valueTokens[1];
-            if (fromValue !== "null" && toValue !== "null") 
+            var fromValue = "";
+            var toValue = "";
+            if (valueTokens.length === 2)
+            {
+               fromValue = valueTokens[0];
+               toValue = valueTokens[1];
+            }
+            if (fromValue !== "" && toValue !== "") 
             {
                // If both pickers have a date, compare the values...
                isValid = new Date(fromValue) < new Date(toValue);
             }
-            else if (fromValue === "null" && toValue === "null")
+            else if (fromValue === "" && toValue === "")
             {
                // If neither picker has a value, it's fine...
                isValid = true;
@@ -185,8 +190,15 @@ define(["dojo/_base/declare",
          toValue = this.convertStringValuesToBoolean(toValue);
          toValue = this.processDateValue(toValue);
 
+         // Convert "null" to empty string...
+         !fromValue && (fromValue = "");
+         !toValue && (toValue = "");
+
          // Concatenate them together...
-         return fromValue + this.dateSeparator + toValue;
+         var value = fromValue + this.dateSeparator + toValue;
+         (value === "|") && (value = "");
+
+         return value;
       },
 
       /**

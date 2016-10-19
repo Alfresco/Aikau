@@ -136,7 +136,10 @@ define(["dojo/_base/declare",
                }
             },
             "/org/alfresco/components/form/controls/daterange.ftl": {
-               name: "alfresco/forms/controls/DateRange"
+               name: "alfresco/forms/controls/DateRange",
+               config: {
+                  valueFormatSelector: "datetime"
+               }
             },
             "/org/alfresco/components/form/controls/workflow/email-notification.ftl": {
                name: "alfresco/forms/controls/CheckBox"
@@ -294,6 +297,24 @@ define(["dojo/_base/declare",
          workflow: {
             create: {
 
+            }
+         }
+      },
+
+      /**
+       * This has been added to support the slightly unsual scenarios where the configured
+       * parameter name in the form is not the parameter name that should be substitued. This
+       * was originally added to support the case of "Advanced Search" forms where the
+       * "prop_cm_modified" parameter name should be modified to be "prop_cm_modified-date-range"
+       * 
+       * @instance
+       * @type {object}
+       * @since 1.0.91
+       */
+      propertyNameMapping: {
+         type: {
+            edit: {
+               prop_cm_modified: "prop_cm_modified-date-range"
             }
          }
       },
@@ -595,7 +616,7 @@ define(["dojo/_base/declare",
                var okButtonLabel = lang.getObject("formConfig.okButtonLabel", false, originalRequestConfig);
                var widgetsBefore = lang.getObject("formConfig.widgetsBefore", false, originalRequestConfig) || [];
 
-               var formControls = widgetsBefore;
+               var formControls = lang.clone(widgetsBefore);
                var formConfig = {
                   id: formId,
                   name: "alfresco/forms/Form",
@@ -835,14 +856,18 @@ define(["dojo/_base/declare",
                            this.getMappedControl(formConfig, targetField, controlTemplate, this.controlMappings);
          if (formControl)
          {
+            var kind = formConfig["arguments"].itemKind;
+            var mode = formConfig.mode;
+            var name = lang.getObject(kind + "." + mode + "." + targetField.name, false, this.propertyNameMapping) || targetField.name;
+
             widget = lang.clone(formControl);
             var data = {
                id: targetField.name.toUpperCase(),
                config: {
                   currentItem: formConfig.data,
                   fieldId: targetField.name.toUpperCase(),
-                  propertyToRender: targetField.name, // NOTE: Hedging bets for renderers
-                  name: targetField.name,
+                  propertyToRender: name, // NOTE: Hedging bets for renderers
+                  name: name,
                   label: targetField.label,
                   description: targetField.description
                }
