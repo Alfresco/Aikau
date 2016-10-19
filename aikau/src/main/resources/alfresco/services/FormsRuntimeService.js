@@ -45,8 +45,10 @@ define(["dojo/_base/declare",
         "alfresco/forms/ControlRow",
         "alfresco/renderers/Boolean",
         "alfresco/forms/controls/CheckBox",
+        "alfresco/forms/controls/DateRange",
         "alfresco/forms/controls/DateTextBox",
         "alfresco/forms/controls/FilePicker",
+        "alfresco/forms/controls/FilteringSelect",
         "alfresco/forms/controls/MultiSelectInput",
         "alfresco/forms/controls/NumberSpinner",
         "alfresco/forms/controls/Select",
@@ -143,10 +145,14 @@ define(["dojo/_base/declare",
                name: "alfresco/renderers/Property"
             },
             "/org/alfresco/components/form/controls/mimetype.ftl": {
-               name: "alfresco/forms/controls/Select",
+               name: "alfresco/forms/controls/FilteringSelect",
                config: {
                   optionsConfig: {
-                     publishTopic: topics.GET_FORMS_FORMS_RUNTIME_MIMETYPES
+                     queryAttribute: "label",
+                     publishTopic: topics.GET_FORMS_FORMS_RUNTIME_MIMETYPES,
+                     publishPayload: {
+                        resultsProperty: "options"
+                     }
                   }
                }
             },
@@ -416,6 +422,26 @@ define(["dojo/_base/declare",
                   value: value
                });
             }, this);
+
+            // Sort alphabetically by label...
+            this._loadedMimeTypes.sort(function(a,b) {
+               var nameA = a.label.toUpperCase();
+               var nameB = b.label.toUpperCase();
+               if (nameA < nameB) {
+                  return -1;
+               }
+               if (nameA > nameB) {
+                  return 1;
+               }
+               return 0;
+            });
+
+            // Add "Unknown" type in first...
+            this._loadedMimeTypes.unshift({
+               label: this.message("formsruntimeservice.unknown.mimetype"),
+               value: ""
+            });
+
             this.publishMimeTypeOptions(originalRequestConfig.data);
          }
       },
@@ -565,6 +591,9 @@ define(["dojo/_base/declare",
                };
                formSubmissionPayloadMixin && lang.mixin(okButtonPublishPayload, formSubmissionPayloadMixin);
 
+               var okButtonPublishTopic = lang.getObject("formConfig.okButtonPublishTopic", false, originalRequestConfig);
+               var okButtonLabel = lang.getObject("formConfig.okButtonLabel", false, originalRequestConfig);
+
                var formControls = [];
                var formConfig = {
                   id: formId,
@@ -572,7 +601,8 @@ define(["dojo/_base/declare",
                   config: {
                      showOkButton: response.showSubmitButton,
                      showCancelButton: response.showCancelButton,
-                     okButtonPublishTopic: response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE",
+                     okButtonLabel: okButtonLabel,
+                     okButtonPublishTopic: okButtonPublishTopic || (response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE"),
                      okButtonPublishPayload: okButtonPublishPayload,
                      okButtonPublishGlobal: true,
                      value: response.data,

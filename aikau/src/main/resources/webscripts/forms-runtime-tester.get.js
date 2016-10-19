@@ -60,6 +60,9 @@ model.jsonModel = {
                                                       },
                                                       {
                                                          label: "Task", value: "task"
+                                                      },
+                                                      {
+                                                         label: "Type", value: "type"
                                                       }
                                                    ]
                                                 }
