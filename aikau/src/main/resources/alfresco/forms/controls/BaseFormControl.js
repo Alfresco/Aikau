@@ -598,6 +598,13 @@ define(["dojo/_base/declare",
             // Process the configuration...
             this.processConfig(instanceVar, config);
          }
+         else if (config.copyRule && config.copyRule.targetId)
+         {
+            var topic = "_valueChangeOf_" + config.copyRule.targetId;
+            this.alfSubscribe(topic, lang.hitch(this, function(payload) {
+               this.setValue(payload.value);
+            }));
+         }
          else
          {
             this.alfLog("warn", "An autoset configuration element was provided without both 'rulePassValue' and 'ruleFailValue' attribute", config, this);
