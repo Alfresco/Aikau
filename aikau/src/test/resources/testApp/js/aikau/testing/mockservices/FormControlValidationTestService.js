@@ -60,6 +60,7 @@ define(["dojo/_base/declare",
             this.alfSubscribe("BLOCK_RESPONSES", lang.hitch(this, this.onBlockResponses));
             this.alfSubscribe("UNBLOCK_RESPONSES", lang.hitch(this, this.onUnblockResponses));
             this.alfSubscribe("ALF_VALIDATE_TOPIC_TEST", lang.hitch(this, this.onValidateTopicTest));
+            this.alfSubscribe("ALF_VALIDATE_TOPIC_SCOPED_TEST", lang.hitch(this, this.onValidateTopicScopedTest));
          },
 
          /**
@@ -123,7 +124,19 @@ define(["dojo/_base/declare",
           */
          onValidateTopicTest: function alfresco_testing_mockservices_FormControlValidationTestService__onValidateTopicTest(payload) {
             var isValid = (payload.value !== "#fail");
-            this.alfPublish(payload.alfResponseTopic, {isValid: isValid}, false, false, payload.alfResponseScope);
+            this.alfPublish(payload.alfResponseTopic, {isValid: isValid}, true);
+         },
+
+         /**
+          * Validation fails when value provided is "#fail" - responseTopic is published on
+          * responseScope provided.
+          * 
+          * @instance
+          * @since 1.0.91
+          */
+         onValidateTopicScopedTest: function alfresco_testing_mockservices_FormControlValidationTestService__onValidateTopicScopedTest(payload) {
+            var isValid = (payload.value !== "#fail");
+            this.alfPublish(payload.alfResponseTopic, {isValid: isValid},  false, false, payload.alfResponseScope);
          }
       });
    });

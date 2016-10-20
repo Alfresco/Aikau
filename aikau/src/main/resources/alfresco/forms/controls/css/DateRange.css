@@ -1,0 +1,11 @@
+.alfresco-forms-controls-DateRange {
+
+   &__from,
+   &__to {
+      display: inline-block;
+   }
+
+   &__separator {
+      margin: 0 @standard-column-spacing;
+   }
+}

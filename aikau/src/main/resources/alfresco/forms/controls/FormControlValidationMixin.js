@@ -148,6 +148,16 @@ define(["dojo/_base/declare",
       _validationErrorMessage: null,
 
       /**
+       * This is used to build up the overall validation message for warnings.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.91
+       */
+      _validationWarningMessage: null,
+
+      /**
        * Called to start processing validators. If validation is already in progress then a flag will be set
        * to queue another validation run once the current processing has completed.
        *
@@ -161,10 +171,14 @@ define(["dojo/_base/declare",
          else
          {
             // Reset the _validatorsInProgress attribute...
+            this._validationWarnings = false;
             this._validationInProgressState = true;
             this._validatorsInProgress = {};
             this._validationErrorMessage = "";
-            this._validationMessage.innerHTML = this._validationErrorMessage;
+            this._validationMessage.textContent = this._validationErrorMessage;
+            this._validationWarningMessage = "";
+            this._warningMessage.textContent = this._validationWarningMessage;
+
             this._validationInProgress = true;
             this._queuedValidationRequest = false;
 
@@ -285,16 +299,42 @@ define(["dojo/_base/declare",
             {
                if (validationConfig.errorMessage)
                {
-                  if (this._validationErrorMessage.length !== 0)
+                  if (validationConfig.warnOnly === true)
                   {
-                     this._validationErrorMessage += ", ";
+                     if (this._validationWarningMessage.length !== 0)
+                     {
+                        this._validationWarningMessage += ", ";
+                     }
+                     this._validationWarningMessage += this.message(validationConfig.errorMessage);
                   }
-                  this._validationErrorMessage += this.message(validationConfig.errorMessage);
+                  else
+                  {
+                     if (this._validationErrorMessage.length !== 0)
+                     {
+                        this._validationErrorMessage += ", ";
+                     }
+                     this._validationErrorMessage += this.message(validationConfig.errorMessage);
+                  }
                }
 
-               // Update the validation message...
-               this.showValidationFailure();
-               this._validationMessage.innerHTML = this._validationErrorMessage;
+               if (validationConfig.warnOnly === true)
+               {
+                  // Show as a warning...
+                  this._validationWarnings = true;
+                  result = true;
+                  this.showValidationWarning();
+
+                  // Update the validation message...
+                  this._warningMessage.textContent = this._validationWarningMessage;
+               }
+               else
+               {
+                  // Show as a failure...
+                  this.showValidationFailure();
+
+                  // Update the validation message...
+                  this._validationMessage.textContent = this._validationErrorMessage;
+               }
             }
 
             // Update the overall result...
@@ -342,6 +382,11 @@ define(["dojo/_base/declare",
                fieldId: this.fieldId
             });
             this.hideValidationFailure();
+
+            if (this._validationWarnings)
+            {
+               this.showValidationWarning();
+            }
          }
          else
          {
@@ -654,8 +699,17 @@ define(["dojo/_base/declare",
             // Duplicate the alfResponseTopic...
             payload.alfSuccessTopic = payload.alfResponseTopic;
             payload.alfFailureTopic = this.generateUuid();
-            payload.alfResponseScope = this.generateUuid();
 
+            payload.alfResponseScope = ""; // This effectively defaults to global scope...
+            if (validationConfig.scopeValidation)
+            {
+               // See AKU-1099 - it is better to scope responses to ensure that validation of
+               // one field does not impact another, however - for backwards compability support
+               // for RM 2.5 it is necessary to depend on the opt-in "scopeValidation" attribute
+               // which should be a boolean.
+               payload.alfResponseScope = this.generateUuid();
+            }
+            
             // Set the validation value as required...
             if (validationConfig.validationValueProperty)
             {

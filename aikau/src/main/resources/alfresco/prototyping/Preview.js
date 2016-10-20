@@ -26,14 +26,13 @@
  * @module alfresco/prototyping/Preview
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Preview.html",
-        "alfresco/core/Core",
         "alfresco/core/CoreXhr",
         "alfresco/core/topics",
         "service/constants/Default",
@@ -47,10 +46,10 @@ define(["dojo/_base/declare",
         "dojo/json",
         "dojo/query",
         "dojo/NodeList-manipulate"], 
-        function(declare, _Widget, _Templated, template, AlfCore, CoreXhr, topics, AlfConstants, Page, objectProcessingUtil, 
+        function(declare, _Widget, _Templated, template, CoreXhr, topics, AlfConstants, Page, objectProcessingUtil, 
                  domConstruct, lang, array, Deferred, when, dojoJson, query) {
    
-   return declare([_Widget, _Templated, AlfCore, CoreXhr], {
+   return declare([_Widget, _Templated, CoreXhr], {
       
       /**
        * An array of the CSS files to use with this widget.

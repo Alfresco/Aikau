@@ -324,6 +324,7 @@ define(["dojo/_base/declare",
        */
       onAdvancedSearch: function alfresco_search_AlfSearchList__onAdvancedSearch(payload) {
          this.resetResultsList();
+         this.alfCleanFrameworkAttributes(payload, true);
          this.searchTerm = payload.searchTerm;
          delete payload.searchTerm;
          this.query = payload;

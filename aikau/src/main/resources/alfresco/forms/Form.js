@@ -164,10 +164,11 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/_base/event",
-        "dojo/on"], 
+        "dojo/on",
+        "jquery"], 
         function(declare, _Widget, _Templated, Form, AlfCore, CoreWidgetProcessing, topics, _AlfHashMixin, RulesEngineMixin, 
                  template, ioQuery, Warning, hashUtils, lang, AlfButton, array, registry, Deferred, domConstruct, domClass, 
-                 Event, on) {
+                 Event, on, $) {
    
    return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing, _AlfHashMixin, RulesEngineMixin], {
       
@@ -627,7 +628,10 @@ define(["dojo/_base/declare",
 
             autoSavePayload = lang.mixin(this.autoSavePublishPayload || {}, {
                alfValidForm: isValid
-            }, this.getValue());
+            });
+
+            $.extend(true, autoSavePayload, this.getValue());
+
             this.alfPublish(this.autoSavePublishTopic, autoSavePayload, this.autoSavePublishGlobal);
          }
       },

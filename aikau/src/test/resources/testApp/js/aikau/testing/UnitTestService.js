@@ -19,18 +19,16 @@
 
 /**
  * @module aikauTesting/UnitTestService
- * @extends module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreXhr
+ * @extends module:alfresco/core/CoreXhr
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
         "alfresco/core/CoreXhr",
         "dojo/_base/lang",
         "service/constants/Default"],
-        function(declare, AlfCore, CoreXhr, lang, AlfConstants) {
+        function(declare, CoreXhr, lang, AlfConstants) {
    
-   return declare([AlfCore, CoreXhr], {
+   return declare([CoreXhr], {
       
       /**
        * Sets up a subscription for processing unit test requests. This is hitched to the

@@ -46,7 +46,6 @@
  * @module alfresco/html/Markdown
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreXhr
  * @author Dave Draper
  * @since 1.0.53
@@ -55,16 +54,15 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/Markdown.html",
-        "alfresco/core/Core",
         "alfresco/core/CoreXhr",
         "webscripts/defaults",
         "service/constants/Default",
         "dojo/_base/lang",
         "dojo/_base/array",
         "showdown"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreXhr, webScriptDefaults, AlfConstants, lang, array, showdown) {
+        function(declare, _WidgetBase, _TemplatedMixin, template, CoreXhr, webScriptDefaults, AlfConstants, lang, array, showdown) {
    
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreXhr], {
+   return declare([_WidgetBase, _TemplatedMixin, CoreXhr], {
 
       /**
        * The HTML template to use for the widget.

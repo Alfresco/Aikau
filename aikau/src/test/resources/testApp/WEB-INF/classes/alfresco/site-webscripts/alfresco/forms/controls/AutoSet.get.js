@@ -102,6 +102,20 @@ model.jsonModel = {
                   config: {
                      name: "hidden2"
                   }
+               },
+               {
+                  id: "COPY",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     name: "copied",
+                     autoSetConfig: [
+                        {
+                           copyRule: {
+                              targetId: "SOURCE_FIELD"
+                           }
+                        }
+                     ]
+                  }
                }
             ]
          }

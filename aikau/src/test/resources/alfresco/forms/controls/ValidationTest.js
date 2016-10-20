@@ -52,6 +52,10 @@ define(["module",
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TOPIC_VALIDATION"]),
             validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["TOPIC_VALIDATION"])
          },
+         scopedTopicValidation: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["SCOPED_TOPIC_VALIDATION"]),
+            validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["SCOPED_TOPIC_VALIDATION"])
+         },
          matchTarget: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["MATCH_TARGET"]),
             validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["MATCH_TARGET"])
@@ -69,7 +73,7 @@ define(["module",
          },
          customTopicValidation: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["CUSTOMIZED_TOPIC_VALIDATION"]),
-            validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["CUSTOMIZED_TOPIC_VALIDATION"])
+            validationWarning: TestCommon.getTestSelector(formControlSelectors, "validation.warning", ["CUSTOMIZED_TOPIC_VALIDATION"])
          }
       },
       buttons: {
@@ -300,6 +304,27 @@ define(["module",
             });
       },
 
+      "Test scoped validationTopic returns a failure": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.scopedTopicValidation.input)
+            .clearValue()
+            .type("#fail")
+         .end()
+
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
+
+      "Test scoped validationTopic returns success": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.scopedTopicValidation.input)
+            .clearValue()
+            .type("success")
+         .end()
+
+         .findAllByCssSelector(selectors.form.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
+            });
+      },
+
       "Test Match Validation - Source Change": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.matchTarget.input)
             .clearValue()
@@ -382,7 +407,7 @@ define(["module",
             .type("used")
          .end()
 
-         .findDisplayedByCssSelector(selectors.textBoxes.customTopicValidation.validationMessage)
+         .findDisplayedByCssSelector(selectors.textBoxes.customTopicValidation.validationWarning)
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Identifier has been used");

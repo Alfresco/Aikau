@@ -1,4 +1,4 @@
-Aikau 1.0.90 Release Notes
+Aikau 1.0.91 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.91:
+* [AKU-1092](https://issues.alfresco.com/jira/browse/AKU-1092)       - Improvements to site edit/creation validation
+* [AKU-1094](https://issues.alfresco.com/jira/browse/AKU-1094)       - Updated error message for Copy/Move failures
+* [AKU-1098](https://issues.alfresco.com/jira/browse/AKU-1098)       - Hide list error messages when loading
+* [AKU-1099](https://issues.alfresco.com/jira/browse/AKU-1099)       - Fixed validationTopic backwards compatibility
+
 1.0.90:
 * [AKU-1093](https://issues.alfresco.com/jira/browse/AKU-1093)       - Fixed bug with inverting selection on AlfGalleryView
 * [AKU-1094](https://issues.alfresco.com/jira/browse/AKU-1094)       - Updated error message for Copy/Move failures

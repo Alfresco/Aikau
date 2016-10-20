@@ -45,8 +45,10 @@ define(["dojo/_base/declare",
         "alfresco/forms/ControlRow",
         "alfresco/renderers/Boolean",
         "alfresco/forms/controls/CheckBox",
+        "alfresco/forms/controls/DateRange",
         "alfresco/forms/controls/DateTextBox",
         "alfresco/forms/controls/FilePicker",
+        "alfresco/forms/controls/FilteringSelect",
         "alfresco/forms/controls/MultiSelectInput",
         "alfresco/forms/controls/NumberSpinner",
         "alfresco/forms/controls/Select",
@@ -133,6 +135,12 @@ define(["dojo/_base/declare",
                   unsetReturnValue: ""
                }
             },
+            "/org/alfresco/components/form/controls/daterange.ftl": {
+               name: "alfresco/forms/controls/DateRange",
+               config: {
+                  valueFormatSelector: "datetime"
+               }
+            },
             "/org/alfresco/components/form/controls/workflow/email-notification.ftl": {
                name: "alfresco/forms/controls/CheckBox"
             },
@@ -140,10 +148,14 @@ define(["dojo/_base/declare",
                name: "alfresco/renderers/Property"
             },
             "/org/alfresco/components/form/controls/mimetype.ftl": {
-               name: "alfresco/forms/controls/Select",
+               name: "alfresco/forms/controls/FilteringSelect",
                config: {
                   optionsConfig: {
-                     publishTopic: topics.GET_FORMS_FORMS_RUNTIME_MIMETYPES
+                     queryAttribute: "label",
+                     publishTopic: topics.GET_FORMS_FORMS_RUNTIME_MIMETYPES,
+                     publishPayload: {
+                        resultsProperty: "options"
+                     }
                   }
                }
             },
@@ -275,6 +287,9 @@ define(["dojo/_base/declare",
                },
                "/org/alfresco/components/form/controls/workflow/priority.ftl": {
                   name: "alfresco/renderers/Property"
+               },
+               "/org/alfresco/components/form/controls/selectone.ftl": {
+                  name: "alfresco/renderers/Property" 
                }
             }
          },
@@ -282,6 +297,24 @@ define(["dojo/_base/declare",
          workflow: {
             create: {
 
+            }
+         }
+      },
+
+      /**
+       * This has been added to support the slightly unsual scenarios where the configured
+       * parameter name in the form is not the parameter name that should be substitued. This
+       * was originally added to support the case of "Advanced Search" forms where the
+       * "prop_cm_modified" parameter name should be modified to be "prop_cm_modified-date-range"
+       * 
+       * @instance
+       * @type {object}
+       * @since 1.0.91
+       */
+      propertyNameMapping: {
+         type: {
+            edit: {
+               prop_cm_modified: "prop_cm_modified-date-range"
             }
          }
       },
@@ -410,6 +443,26 @@ define(["dojo/_base/declare",
                   value: value
                });
             }, this);
+
+            // Sort alphabetically by label...
+            this._loadedMimeTypes.sort(function(a,b) {
+               var nameA = a.label.toUpperCase();
+               var nameB = b.label.toUpperCase();
+               if (nameA < nameB) {
+                  return -1;
+               }
+               if (nameA > nameB) {
+                  return 1;
+               }
+               return 0;
+            });
+
+            // Add "Unknown" type in first...
+            this._loadedMimeTypes.unshift({
+               label: this.message("formsruntimeservice.unknown.mimetype"),
+               value: ""
+            });
+
             this.publishMimeTypeOptions(originalRequestConfig.data);
          }
       },
@@ -559,14 +612,17 @@ define(["dojo/_base/declare",
                };
                formSubmissionPayloadMixin && lang.mixin(okButtonPublishPayload, formSubmissionPayloadMixin);
 
-               var formControls = [];
+               var okButtonPublishTopic = lang.getObject("formConfig.okButtonPublishTopic", false, originalRequestConfig);
+               var widgetsBefore = lang.getObject("formConfig.widgetsBefore", false, originalRequestConfig) || [];
+
+               var formControls = lang.clone(widgetsBefore);
                var formConfig = {
                   id: formId,
                   name: "alfresco/forms/Form",
                   config: {
                      showOkButton: response.showSubmitButton,
                      showCancelButton: response.showCancelButton,
-                     okButtonPublishTopic: response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE",
+                     okButtonPublishTopic: okButtonPublishTopic || (response.method === "post" ? "ALF_CRUD_CREATE" : "ALF_CRUD_UPDATE"),
                      okButtonPublishPayload: okButtonPublishPayload,
                      okButtonPublishGlobal: true,
                      value: response.data,
@@ -574,6 +630,12 @@ define(["dojo/_base/declare",
                      formSubmissionTriggerTopic: topics.TRIGGER_FORM_SUBMISSION
                   }
                };
+
+               var okButtonLabel = lang.getObject("formConfig.okButtonLabel", false, originalRequestConfig);
+               if (okButtonLabel)
+               {
+                  formConfig.config.okButtonLabel = okButtonLabel;
+               }
 
                // Iterate over the structure array and add the the form controls for all of the fields
                // that it contains...
@@ -798,14 +860,18 @@ define(["dojo/_base/declare",
                            this.getMappedControl(formConfig, targetField, controlTemplate, this.controlMappings);
          if (formControl)
          {
+            var kind = formConfig["arguments"].itemKind;
+            var mode = formConfig.mode;
+            var name = lang.getObject(kind + "." + mode + "." + targetField.name, false, this.propertyNameMapping) || targetField.name;
+
             widget = lang.clone(formControl);
             var data = {
                id: targetField.name.toUpperCase(),
                config: {
                   currentItem: formConfig.data,
                   fieldId: targetField.name.toUpperCase(),
-                  propertyToRender: targetField.name, // NOTE: Hedging bets for renderers
-                  name: targetField.name,
+                  propertyToRender: name, // NOTE: Hedging bets for renderers
+                  name: name,
                   label: targetField.label,
                   description: targetField.description
                }
