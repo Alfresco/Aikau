@@ -52,6 +52,10 @@ define(["module",
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["TOPIC_VALIDATION"]),
             validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["TOPIC_VALIDATION"])
          },
+         scopedTopicValidation: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["SCOPED_TOPIC_VALIDATION"]),
+            validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["SCOPED_TOPIC_VALIDATION"])
+         },
          matchTarget: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["MATCH_TARGET"]),
             validationMessage: TestCommon.getTestSelector(formControlSelectors, "validation.message", ["MATCH_TARGET"])
@@ -290,6 +294,27 @@ define(["module",
 
       "Test validationTopic returns success": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.topicValidation.input)
+            .clearValue()
+            .type("success")
+         .end()
+
+         .findAllByCssSelector(selectors.form.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0, "The forms confirmation button should be enabled");
+            });
+      },
+
+      "Test scoped validationTopic returns a failure": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.scopedTopicValidation.input)
+            .clearValue()
+            .type("#fail")
+         .end()
+
+         .findByCssSelector(selectors.form.disabledConfirmationButton);
+      },
+
+      "Test scoped validationTopic returns success": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.scopedTopicValidation.input)
             .clearValue()
             .type("success")
          .end()

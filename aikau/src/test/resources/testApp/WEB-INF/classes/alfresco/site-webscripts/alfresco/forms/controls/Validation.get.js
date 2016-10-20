@@ -13,8 +13,7 @@ model.jsonModel = {
       },
       "alfresco/services/DialogService",
       "alfresco/services/SiteService",
-      "aikauTesting/mockservices/FormControlValidationTestService",
-      "alfresco/services/ErrorReporter"
+      "aikauTesting/mockservices/FormControlValidationTestService"
    ],
    widgets: [
       {
@@ -119,6 +118,24 @@ model.jsonModel = {
                         {
                            validation: "validationTopic",
                            validationTopic: "ALF_VALIDATE_TOPIC_TEST",
+                           errorMessage: "Value should not be #fail"
+                        }
+                     ]
+                  }
+               },
+               {
+                  id: "SCOPED_TOPIC_VALIDATION",
+                  name: "alfresco/forms/controls/TextBox",
+                  config: {
+                     fieldId: "SCOPED_TOPIC_VALIDATION",
+                     label: "Validation Topic (Scoped response)",
+                     description: "Enter #fail as value to put into error state",
+                     value: "",
+                     validationConfig: [
+                        {
+                           scopeValidation: true,
+                           validation: "validationTopic",
+                           validationTopic: "ALF_VALIDATE_TOPIC_SCOPED_TEST",
                            errorMessage: "Value should not be #fail"
                         }
                      ]
