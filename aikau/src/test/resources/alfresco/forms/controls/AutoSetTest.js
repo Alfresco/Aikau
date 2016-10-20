@@ -51,7 +51,7 @@ define(["module",
       "Check the initial post (source field)": function() {
          return this.remote.findByCssSelector(selectors.form.confirmationButton)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("POST_FORM")
             .then(function(payload) {
@@ -65,18 +65,18 @@ define(["module",
       "Check the updated post (source field)": function() {
          return this.remote.findByCssSelector(selectors.select.openIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.select.secondOption)
             .click()
-            .end()
+         .end()
 
          .clearLog()
 
          // Post the form, check the hidden field is set and the visible field isn't
          .findByCssSelector(selectors.form.confirmationButton)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("POST_FORM")
             .then(function(payload) {
@@ -90,27 +90,27 @@ define(["module",
          // Set the drop-down to 2...
          return this.remote.findByCssSelector(selectors.select.openIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.select.secondOption)
             .click()
-            .end()
+         .end()
 
          // Set the drop-down to 3...
          .findByCssSelector(selectors.select.openIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.select.thirdOption)
             .click()
-            .end()
+         .end()
 
          .clearLog()
 
          // Post the form, check the hidden field is not set and the visible field is...
          .findByCssSelector(selectors.form.confirmationButton)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("POST_FORM")
             .then(function(payload) {
@@ -123,17 +123,24 @@ define(["module",
       "Check that hidden field value can be set by form value update": function() {
          return this.remote.findByCssSelector(selectors.button)
             .click()
-            .end()
+         .end()
 
          .clearLog()
 
          .findByCssSelector(selectors.form.confirmationButton)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("POST_FORM")
             .then(function(payload) {
                assert.propertyVal(payload, "hidden2", "Value Set", "Second hidden field not posted correctly");
+            });
+      },
+
+      "Value is copied": function() {
+         return this.remote.getLastPublish("POST_FORM")
+            .then(function(payload) {
+               assert.propertyVal(payload, "copied", "3");
             });
       }
    });
