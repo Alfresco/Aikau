@@ -1365,6 +1365,7 @@ define(["dojo/_base/declare",
                      errorMessage: "create-site.dialog.name.maxLength"
                   },
                   {
+                     scopeValidation: true,
                      warnOnly: true,
                      validation: "validationTopic",
                      validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
@@ -1411,6 +1412,7 @@ define(["dojo/_base/declare",
                      errorMessage: "create-site.dialog.urlname.regex"
                   },
                   {
+                     scopeValidation: true,
                      validation: "validationTopic",
                      validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
                      validationValueProperty: "shortName",
@@ -1492,6 +1494,7 @@ define(["dojo/_base/declare",
                      errorMessage: "create-site.dialog.name.maxLength"
                   },
                   {
+                     scopeValidation: true,
                      warnOnly: true,
                      validation: "validationTopic",
                      validationTopic: topics.VALIDATE_SITE_IDENTIFIER,
