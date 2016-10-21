@@ -85,6 +85,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
+       * @since 1.0.91
        */
       createLinkAPI: "api/node/doclink/",
 
@@ -108,7 +109,7 @@ define(["dojo/_base/declare",
        * @property [confirmButtonLabel] {String} - The label for the confirmation button
        * @property [singleItemMode] {Bool} - {@link alfresco/pickers/PickedItems:singleItemMode}
        */
-      
+
       /* This function handles the creation of dialogs for both copy and move actions because
        * they are identical apart from the config object (which can be optionally passed in).
        * It defaults to copy mode if missing.
@@ -117,6 +118,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The action payload
        * @param {object} documents The documents selected for copy or move
        * @param {createCopyMoveDialogConfig} [config] The config object.
+       * @fires module:alfresco/core/topics#CREATE_DIALOG
        */
       createCopyMoveDialog: function alfresco_services_ActionService__createCopyMoveDialog(payload) {
          var documents = payload.documents || [];
@@ -137,16 +139,19 @@ define(["dojo/_base/declare",
          var createLinkButtonLabel = payload.createLinkButtonLabel || "services.ActionService.createLink",
              createLinkResponseTopic = this.generateUuid() + "_ALF_CREATE_LINK_LOCATION_PICKED",
              createLinkPublishPayload = {
-                        nodes: nodes,
-                        documents: documents,
-                        responseScope: payload.alfResponseScope
-                     };
+                nodes: nodes,
+                documents: documents,
+                responseScope: payload.alfResponseScope
+             };
 
          var firstFileName = documents.length ? documents[0].fileName : null;
          var fileName = (nodes.length === 1 && firstFileName) ? firstFileName : this.message("services.ActionService.copyMoveTo.multipleFiles");
-         this._actionHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onCopyMoveLocationSelected, urlPrefix, payload.copy), true);
-         this._actionHandle = this.alfSubscribe(createLinkResponseTopic, lang.hitch(this, this.onCreateLinkLocationSelected), true);
-         this.alfPublish("ALF_CREATE_DIALOG_REQUEST", {
+         this._actionHandles = [
+             this.alfSubscribe(responseTopic, lang.hitch(this, this.onLocationSelected, urlPrefix, payload.copy, this.performAction), true),
+             this.alfSubscribe(createLinkResponseTopic, lang.hitch(this, this.onLocationSelected, urlPrefix, payload.copy, this.performCreateLinkAction), true)
+          ];
+
+         this.alfPublish(topics.CREATE_DIALOG, {
             dialogId: "ALF_COPY_MOVE_DIALOG",
             dialogTitle: this.message(dialogTitle, { 0: fileName}),
             handleOverflow: false,
@@ -200,17 +205,18 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Handles the actual copy or move XHR call
+       * Handles the actual copy,move or create link XHR call
        *
        * @instance
        * @param {string} urlPrefix The specific URL prefix to use for the action (e.g. either move or copy)
        * @param {boolean} copy A boolean indicating if this is a copy action or not
        * @param {object} payload The payload from confirmation of the action dialog
+       * @param {function} function to call: create link or copy/move
        */
-      onCopyMoveLocationSelected: function alfresco_services_ActionService__onCopyMoveLocationSelected(urlPrefix, copy, payload) {
-         this.alfUnsubscribeSaveHandles([this._actionCopyHandle]);
+      onLocationSelected: function alfresco_services_ActionService__onLocationSelected(urlPrefix, copy, actionToCall, payload) {
+         this.alfUnsubscribeSaveHandles(this._actionHandles);
 
-         // Get the locations to copy to and the documents to them...
+         // Get the locations to copy/move/create link to and the documents to them...
          if (payload.dialogContent)
          {
             when(payload.dialogContent, lang.hitch(this, function(content) {
@@ -224,54 +230,16 @@ define(["dojo/_base/declare",
                   }
                   else if (!documents || documents.length === 0)
                   {
-                     this.alfLog("error", "Documents to copy not specified.");
+                     this.alfLog("error", "Documents to copy/move not specified.");
                   }
                   else
                   {
                      var nodeRefs = NodeUtils.nodeRefArray(documents);
-                     array.forEach(locations, lang.hitch(this, this.performAction, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
+                     array.forEach(locations, lang.hitch(this, actionToCall, nodeRefs, urlPrefix, copy, payload.alfResponseScope));
                   }
                }
             }));
          }
-      },
-
-       /**
-        * Handles the actual create link XHR call
-        *
-        * @instance
-        * @param {boolean} copy A boolean indicating if this is a copy action or not
-        * @param {object} payload The payload from confirmation of the action dialog
-        */
-      onCreateLinkLocationSelected: function alfresco_services_ActionService__onCreateLinkLocationSelected(payload) {
-          this.alfUnsubscribeSaveHandles([this._actionCopyHandle]);
-
-          // Get the locations to create link to and the documents to them...
-          if (payload.dialogContent)
-          {
-             when(payload.dialogContent, lang.hitch(this, function(content) {
-                if (content && content.length)
-                {
-                   var locations = lang.getObject("pickedItemsWidget.currentData.items", false, content[0]);
-                   var documents = lang.getObject("documents", false, payload);
-                   if (!locations || locations.length === 0)
-                   {
-                      this.alfLog("error", "createLinkTarget not specified");
-                   }
-                   else if (!documents || documents.length === 0)
-                   {
-                      this.alfLog("error", "Documents to create link not specified.");
-                   }
-                   else
-                   {
-                      var nodeRefs = NodeUtils.nodeRefArray(documents);
-                      array.forEach(locations, lang.hitch(this, this.performCreateLinkAction, nodeRefs, payload.alfResponseScope));
-                   }
-                }
-             }));
-          }
-
-         
       },
 
       /**
@@ -306,9 +274,12 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {array} nodeRefs An array of the nodes to create links for
-       * @param {array} location  The location to move or copy the documents to
+       * @param {string} urlPrefix The prefix to use in the action URL
+       * @param {boolean} copy A boolean indicating if this is a copy action or not
+       * @param {array} location  The location where links will be created
+       * @since 1.0.91
        */
-      performCreateLinkAction: function alfresco_services_actions_CopyMoveService__performCreateLinkAction(nodeRefs, responseScope, location) {
+      performCreateLinkAction: function alfresco_services_actions_CopyMoveService__performCreateLinkAction(nodeRefs, urlPrefix, copy, responseScope, location) {
          var responseTopic = this.generateUuid();
          var successSubscription = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onCreateLinkActionSuccess), true);
          var failureSubscription = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onCreateLinkActionFailure), true);
@@ -357,7 +328,7 @@ define(["dojo/_base/declare",
             {
                failureMessage = payload.response.totalResults === 1 ? "copyMoveService.move.failure" : "copyMoveService.move.multiple.failure";
             }
-            
+
             this.alfServicePublish(topics.DISPLAY_PROMPT, {
                title: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure.title") : this.message("copyMoveService.move.failure.title"),
                message: this.message(failureMessage)
@@ -403,6 +374,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        * @fires module:alfresco/core/topics#DISPLAY_PROMPT
        * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
+       * @since 1.0.91
        */
       onCreateLinkActionSuccess: function alfresco_services_actions_CopyMoveService__onCreateLinkActionSuccess(payload) {
          // jshint unused:false
@@ -456,8 +428,9 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload
        * @fires module:alfresco/core/topics#DISPLAY_PROMPT
+       * @since 1.0.91
        */
-      onCreateLinkActionFailure: function alfresco_services_actions_CopyMoveService__onActionFailure(payload) {
+      onCreateLinkActionFailure: function alfresco_services_actions_CopyMoveService__onCreateLinkActionFailure(payload) {
          // jshint unused:false
          var subscriptionHandles = lang.getObject("requestConfig.subscriptionHandles", false, payload);
          if (subscriptionHandles)
