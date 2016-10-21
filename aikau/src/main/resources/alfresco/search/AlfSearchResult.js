@@ -133,6 +133,28 @@ define(["dojo/_base/declare",
       enableContextMenu: false,
 
       /**
+       * The prefix string that indicates the start of text to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.92
+       */
+      highlightPrefix: "\u0000",
+
+      /**
+       * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
+       * that should be used to identify the content with in the 
+       * [renderedValue]{@link module:alfresco/renderers/Property#renderedValue} to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.92
+       */
+      highlightPostfix: "\u0003",
+
+      /**
        * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
        * that should be used to identify the content with.
        * 
@@ -140,6 +162,8 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default 
        * @since 1.0.87
+       * @deprecated Since 1.0.92 - use [highlightPrefix]{@link module:alfresco/search/AlfSearchResult#highlightPrefix}
+       * and [highlightPostfix]{@link module:alfresco/search/AlfSearchResult#highlightPostfix}
        */
       highlightProperty: null,
 
@@ -153,6 +177,8 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default 
        * @since 1.0.87
+       * @deprecated Since 1.0.92 - use [highlightPrefix]{@link module:alfresco/search/AlfSearchResult#highlightPrefix}
+       * and [highlightPostfix]{@link module:alfresco/search/AlfSearchResult#highlightPostfix}
        */
       highlightValue: null,
 
@@ -376,7 +402,9 @@ define(["dojo/_base/declare",
                pubSubScope: this.pubSubScope,
                propertyToRender: "description",
                renderSize: "small",
-               highlightValue: this.highlightValue
+               highlightValue: this.highlightValue,
+               highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+               highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
             }, this.descriptionNode);
          }
       },
@@ -431,7 +459,9 @@ define(["dojo/_base/declare",
             renderSize: "large",
             newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
             defaultNavigationTarget: this.navigationTarget,
-            highlightValue: this.highlightValue
+            highlightValue: this.highlightValue,
+            highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+            highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
          };
          if (this.navigationTarget)
          {
@@ -519,7 +549,9 @@ define(["dojo/_base/declare",
                },
                newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
                defaultNavigationTarget: this.navigationTarget,
-               highlightValue: this.highlightValue
+               highlightValue: this.highlightValue,
+               highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+               highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
             }, this.pathNode);
          }
       },
@@ -587,7 +619,9 @@ define(["dojo/_base/declare",
                },
                newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
                defaultNavigationTarget: this.navigationTarget,
-               highlightValue: this.highlightValue
+               highlightValue: this.highlightValue,
+               highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+               highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
             }, this.siteNode);
          }
       },
@@ -698,7 +732,9 @@ define(["dojo/_base/declare",
                renderSize: "small",
                renderedValuePrefix: "(",
                renderedValueSuffix: ")",
-               highlightValue: this.highlightValue
+               highlightValue: this.highlightValue,
+               highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+               highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
             }, this.titleNode);
          }
       },
