@@ -62,6 +62,16 @@ define(["dojo/_base/declare",
       repoNodeRef: "alfresco://company/home",
 
       /**
+       * Indicates whether or not [CopyMoveService]{@link module:alfresco/services/CopyMoveService} should support the
+       * creation of links for files and folders
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.33
+       */
+      supportLinkCreation: false,
+
+      /**
        * URL to call to copy a document
        *
        * @instance
@@ -85,7 +95,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.91
+       * @since 1.0.92
        */
       createLinkAPI: "api/node/doclink/",
 
@@ -161,7 +171,8 @@ define(["dojo/_base/declare",
                   config: {
                      singleItemMode: singleItemMode,
                      generatePubSubScope: true,
-                     repoNodeRef: this.repoNodeRef || "alfresco://company/home"
+                     repoNodeRef: this.repoNodeRef || "alfresco://company/home",
+                     supportLinkCreation : this.supportLinkCreation
                   }
                }
             ],
@@ -177,7 +188,7 @@ define(["dojo/_base/declare",
                      invalidTopic: "ALF_PICKER_INVALID",
                      additionalCssClasses: "call-to-action",
                      visibilityConfig: {
-                        initialValue: payload.copy
+                        initialValue: this.supportLinkCreation && payload.copy
                      }
                   }
                },
@@ -277,7 +288,7 @@ define(["dojo/_base/declare",
        * @param {string} urlPrefix The prefix to use in the action URL
        * @param {boolean} copy A boolean indicating if this is a copy action or not
        * @param {array} location  The location where links will be created
-       * @since 1.0.91
+       * @since 1.0.92
        */
       performCreateLinkAction: function alfresco_services_actions_CopyMoveService__performCreateLinkAction(nodeRefs, urlPrefix, copy, responseScope, location) {
          var responseTopic = this.generateUuid();
@@ -374,7 +385,7 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        * @fires module:alfresco/core/topics#DISPLAY_PROMPT
        * @fires module:alfresco/core/topics#RELOAD_DATA_TOPIC
-       * @since 1.0.91
+       * @since 1.0.92
        */
       onCreateLinkActionSuccess: function alfresco_services_actions_CopyMoveService__onCreateLinkActionSuccess(payload) {
          // jshint unused:false
@@ -402,6 +413,7 @@ define(["dojo/_base/declare",
          }
          this.alfPublish(topics.RELOAD_DATA_TOPIC, {}, false, false, payload.requestConfig.responseScope);
       },
+
       /**
        * Handles failed actions by displaying a notification indicating that the action was not successful.
        *
@@ -422,13 +434,14 @@ define(["dojo/_base/declare",
             message: payload.requestConfig.copy ? this.message("copyMoveService.copy.failure") : this.message("copyMoveService.move.failure")
          });
       },
+
       /**
        * Handles failed actions by displaying a notification indicating that the action was not successful.
        *
        * @instance
        * @param {object} payload
        * @fires module:alfresco/core/topics#DISPLAY_PROMPT
-       * @since 1.0.91
+       * @since 1.0.92
        */
       onCreateLinkActionFailure: function alfresco_services_actions_CopyMoveService__onCreateLinkActionFailure(payload) {
          // jshint unused:false
