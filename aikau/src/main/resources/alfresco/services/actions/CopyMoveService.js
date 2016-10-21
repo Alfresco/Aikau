@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {boolean}
        * @default
-       * @since 1.0.33
+       * @since 1.0.92
        */
       supportLinkCreation: false,
 
