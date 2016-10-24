@@ -64,24 +64,24 @@ define(["module",
       testPage: "/CopyTo",
 
       "Legacy single item copy works": function() {
-         return this.remote.findById("SINGLE_COPY_VIA_ACTION_SERVICE")
+         return this.remote.findDisplayedById("SINGLE_COPY_VIA_ACTION_SERVICE")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_MOVE_LOCATION_PICKED")
             .then(function(payload) {
@@ -92,22 +92,22 @@ define(["module",
       "Legacy multiple item copy works": function() {
          return this.remote.findById("MULTIPLE_COPY_VIA_ACTION_SERVICE")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_MOVE_LOCATION_PICKED")
             .then(function(payload) {
@@ -123,9 +123,9 @@ define(["module",
             .click()
             .end()
 
-         .findByCssSelector(actionSelector)
+         .findDisplayedByCssSelector(actionSelector)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_COPY_OR_MOVE_REQUEST", true)
             .then(function(payload) {
@@ -134,18 +134,18 @@ define(["module",
 
          .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed .dijitMenuItem:nth-child(4) .alf-menu-bar-label-node")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitTreeLabel")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
+         .findDisplayedByCssSelector("#ALF_COPY_MOVE_DIALOG .dijitButtonNode:first-of-type")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_MOVE_LOCATION_PICKED")
             .then(function(payload) {
