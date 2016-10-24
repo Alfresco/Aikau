@@ -55,7 +55,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       postCreate: function alfresco_forms_controls_RadioButtons_RadioButton__postCreate() {
-         this._radioButton = new DojoRadioButton({name: this.name, value: this.value});
+         this._radioButton = new DojoRadioButton({id: this.id + "_BUTTON", name: this.name, value: this.value});
          this._radioButton.placeAt(this._radioButtonNode);
          this._labelNode.innerHTML = this.encodeHTML(this.message(this.label));
 
@@ -112,10 +112,10 @@ define(["alfresco/forms/controls/BaseFormControl",
          this.optionToWidget = {};
          if (this.options && this.options instanceof Array)
          {
-            array.forEach(this.options, function(option) {
+            array.forEach(this.options, function(option, index) {
                if (typeof option.label === "string" && typeof option.value === "string")
                {
-                  this.addOption(option);
+                  this.addOption(option, index);
                }
                else
                {
@@ -130,9 +130,10 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        * @param {object} option The option to add
        */
-      addOption: function alfresco_forms_controls_RadioButtons_RadioButtons__addOption(option) {
+      addOption: function alfresco_forms_controls_RadioButtons_RadioButtons__addOption(option, index) {
          // Create and add a new RadioButton and record a reference to it...
          option.name = this.name; // Add the name to create the radio button "group" (TODO: Is this necessary for our purpose?)
+         option.id = this.id + "_OPTION" + index;
          var rb = new RadioButton(option);
          rb.placeAt(this.containerNode);
          this.optionToWidget[option.value] = rb;

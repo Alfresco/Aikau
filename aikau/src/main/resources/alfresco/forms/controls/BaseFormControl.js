@@ -1082,7 +1082,7 @@ define(["dojo/_base/declare",
        */
       addOption: function alfresco_forms_controls_BaseFormControl__addOption(option, index) {
          this.processOptionLabel(option, index);
-         this.wrappedWidget.addOption(option);
+         this.wrappedWidget.addOption(option, index);
       },
 
       /**
