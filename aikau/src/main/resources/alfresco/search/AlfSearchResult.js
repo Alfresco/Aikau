@@ -667,7 +667,8 @@ define(["dojo/_base/declare",
          // We only show the size if it's not empty and at least one byte
          if (!this.currentItem.size || this.currentItem.size < 0)
          {
-            domClass.add(this.sizeRow, "hidden");
+            domClass.add(this.sizeNode, "hidden");
+            domClass.add(this.sizeSeparatorNode, "hidden");
          }
          else
          {
