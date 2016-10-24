@@ -623,14 +623,16 @@ define(["dojo/_base/declare",
          var site = lang.getObject("site.title", false, this.currentItem);
          if (!site)
          {
-            domClass.add(this.siteRow, "hidden");
+            domClass.add(this.siteNode, "hidden");
+            domClass.add(this.siteSeparatorNode, "hidden");
          }
          else
          {
             // jshint nonew:false
             new PropertyLink({
                id: this.id + "_SITE",
-               renderedValueClass: "alfresco-renderers-Property pointer",
+               renderedValueClass: "alfresco-renderers-Property pointer alfresco-search-AlfSearchResult__site",
+               deemphasized: true,
                renderSize: "small",
                pubSubScope: this.pubSubScope,
                currentItem: this.currentItem,
@@ -675,6 +677,7 @@ define(["dojo/_base/declare",
                currentItem : this.currentItem,
                pubSubScope : this.pubSubScope,
                label : this.message("faceted-search.doc-lib.value-prefix.size"),
+               deemphasized: true,
                renderSize: "small",
                sizeProperty : "size"
             }, this.sizeNode);

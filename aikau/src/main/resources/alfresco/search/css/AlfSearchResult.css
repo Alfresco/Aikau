@@ -24,12 +24,11 @@
    }
 
    div.dateCell {
-      .alfresco-renderers-Property {
-         color: @de-emphasized-font-color;
-      }
+      color: @de-emphasized-font-color;
    }
 
    .contentCell {
+      margin-top: @standard-line-height;
       font-style: italic;
    }
 
