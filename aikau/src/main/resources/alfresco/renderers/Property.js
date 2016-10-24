@@ -557,7 +557,7 @@ define(["dojo/_base/declare",
          }
          else if (value && this.highlightPrefix && this.highlightPostfix)
          {
-            value = value.replace(this.highlightPrefix, "<mark>").replace(this.highlightPostfix, "</mark>");
+            value = value.replace(new RegExp(this.highlightPrefix, "g"), "<mark>").replace(new RegExp(this.highlightPostfix, "g"), "</mark>");
          }
 
          return value;

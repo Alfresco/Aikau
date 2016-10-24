@@ -326,6 +326,7 @@ define(["dojo/_base/declare",
          this.createSiteRenderer();
          this.createPathRenderer();
          this.createSizeRenderer();
+         this.createContentSnippet();
          this.createWidgetsBelow();
          this.createActionsRenderer();
          this.createContextActionsWidget();
@@ -350,6 +351,34 @@ define(["dojo/_base/declare",
             allowedActions: (this.currentItem.type === "document" || this.currentItem.type === "folder") ? this.documentAndFolderActions : this.otherNodeActions,
             widgetsForActions: this.widgetsForActions
          }, this.actionsNode);
+      },
+
+      /**
+       * 
+       * @instance
+       * @since 1.0.92
+       */
+      createContentSnippet: function alfresco_search_AlfSearchResult__createContentSnippet() {
+         if (this.showSearchTermHighlights)
+         {
+            var content = lang.getObject("highlighting.content", false, this.currentItem);
+            if (content)
+            {
+               // jshint nonew:false
+               new Property({
+                  id: this.id + "_CONTENT_SNIPPET",
+                  currentItem: this.currentItem,
+                  pubSubScope: this.pubSubScope,
+                  propertyToRender: "highlighting.content",
+                  renderedValuePrefix: "\"",
+                  renderedValueSuffix: "...\"",
+                  highlightValue: this.highlightValue,
+                  highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+                  highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
+               }, this.contentNode);
+            }
+         }
+
       },
 
       /**
