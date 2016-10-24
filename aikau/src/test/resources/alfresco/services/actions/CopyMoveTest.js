@@ -71,7 +71,7 @@ define(["module",
       },
 
       "Test that the copy confirmation button has correct label": function() {
-         return this.remote.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+         return this.remote.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(2) .dijitButtonText")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Copy", "The confirmation button on the copy dialog was incorrect");
@@ -132,7 +132,7 @@ define(["module",
       },
 
       "Test the partial success prompt": function() {
-         return this.remote.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+         return this.remote.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(2) .dijitButtonText")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Move", "The confirmation button on the move dialog was incorrect");
@@ -192,7 +192,7 @@ define(["module",
             .click()
          .end()
          
-         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(2) .dijitButtonText")
             .click();
       },
 
@@ -209,4 +209,74 @@ define(["module",
             .getLastXhr("aikau/proxy/alfresco/fail/some/fake/node");
       }
    });
+
+   defineSuite(module, {
+      name: "Create a link action tests ",
+      testPage: "/CopyMoveService",
+
+      "Test copy dialog has Create a link button via ActionService": function() {
+         return this.remote.findByCssSelector("#COPY1_label")
+            .click()
+         .end()
+
+         .findAllByCssSelector("#ALF_COPY_MOVE_DIALOG.dialogDisplayed")
+         .end()
+
+         .findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker")
+         .end()
+
+         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Create a link", "The create link button on the copy dialog was incorrect");
+            })
+         .end()
+
+         .findByCssSelector(".dijitDialogTitle")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Copy File 1 to...", "Copy dialog title not set correctly");
+            });
+      },
+
+      "Test Repository location shows root node": function() {
+         return this.remote.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(5)")
+            .click()
+         .end()
+
+         .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
+            .then(function(elements) {
+               assert.lengthOf(elements, 2, "The Repository sub-picker was not shown");
+            })
+         .end()
+
+         .findAllByCssSelector(".alfresco-navigation-Tree .dijitTreeLabel")
+            .then(function(elements) {
+               assert.lengthOf(elements, 1, "Only one tree node was expected");
+            })
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Repository", "The tree node did not have the expected label");
+            })
+            .click();
+      },
+
+      "Click on Create a link button": function() {
+         return this.remote.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
+            .clearLog()
+            .click();
+         },
+
+      "Test that a notification of complete success is displayed": function() {
+         return this.remote.getLastPublish("ALF_DISPLAY_NOTIFICATION")
+            .then(function(payload) {
+               assert.propertyVal(payload, "message", "Create link completed successfully");
+            });
+      },
+
+      "Test that the create link request was successful": function() {
+         return this.remote.getLastPublish("ALF_DOCLIST_RELOAD_DATA");
+      }
+   });
+
 });

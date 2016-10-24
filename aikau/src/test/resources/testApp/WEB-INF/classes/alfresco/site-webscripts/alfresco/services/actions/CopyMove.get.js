@@ -19,7 +19,8 @@ model.jsonModel = {
          name: "alfresco/services/actions/CopyMoveService",
          config: {
             repoNodeRef: page.url.args["repoNodeRef"] || "alfresco://company/home",
-            copyAPI: page.url.args["copyAPI"] ||"slingshot/doclib/action/copy-to/node/"
+            copyAPI: page.url.args["copyAPI"] ||"slingshot/doclib/action/copy-to/node/",
+            supportLinkCreation: true
          }
       }
    ],
