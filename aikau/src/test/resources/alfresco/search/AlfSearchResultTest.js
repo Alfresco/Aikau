@@ -45,13 +45,13 @@ define(["module",
          var activeElementId;
          return this.remote.findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
             .click()
-            .end()
+         .end()
 
          .getActiveElement()
             .then(function(element) {
                activeElementId = element.elementId;
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-search-AlfSearchResult:last-child")
 
@@ -63,7 +63,7 @@ define(["module",
       "Event result opens correct date in calendar": function() {
          return this.remote.findByCssSelector(".alfresco-search-AlfSearchResult:last-child .nameAndTitleCell .alfresco-renderers-PropertyLink > .inner")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
@@ -74,7 +74,7 @@ define(["module",
       "Click on folder link container ampersand": function() {
          return this.remote.findByCssSelector(".alfresco-search-AlfSearchResult:first-child .nameAndTitleCell .alfresco-renderers-PropertyLink > .inner")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
@@ -85,7 +85,7 @@ define(["module",
       "Click on 'In folder' link": function() {
          return this.remote.findByCssSelector(".alfresco-search-AlfSearchResult:first-child .pathCell .alfresco-renderers-PropertyLink > .inner")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
@@ -94,10 +94,10 @@ define(["module",
       },
 
       "Site link uses correct landing page URL": function() {
-         return this.remote.findByCssSelector("#SEARCH_RESULTS_ITEMS .alfresco-search-AlfSearchResult:last-child .siteCell .alfresco-renderers-PropertyLink .inner")
+         return this.remote.findByCssSelector("#SEARCH_RESULTS_ITEMS .alfresco-search-AlfSearchResult:last-child .alfresco-search-AlfSearchResult__site .inner")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NAVIGATE_TO_PAGE", true)
             .then(function(payload) {
@@ -110,7 +110,7 @@ define(["module",
          return this.remote.findByCssSelector(actionSelector)
             .moveMouseTo(1, 1)
             .click()
-            .end()
+         .end()
 
          .findById("SR_ACTIONS_CUSTOM3")
             .end()
@@ -125,8 +125,9 @@ define(["module",
       "Left click name goes to current target": function() {
          return this.remote.findByCssSelector("#SR_DISPLAY_NAME .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "CURRENT", "Name link should use CURRENT target");
             })
@@ -136,8 +137,9 @@ define(["module",
       "Left click site goes to current target": function() {
          return this.remote.findByCssSelector("#SR_SITE .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "CURRENT", "Site link should use CURRENT target");
             })
@@ -147,8 +149,9 @@ define(["module",
       "Left click path goes to current target": function() {
          return this.remote.findByCssSelector("#SR_PATH .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "CURRENT", "Path link should use CURRENT target");
             })
@@ -158,8 +161,9 @@ define(["module",
       "Left click date goes to current target": function() {
          return this.remote.findByCssSelector("#SR_DATE .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "CURRENT", "Date link should use CURRENT target");
             })
@@ -171,8 +175,9 @@ define(["module",
             .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+      
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Control click name link should use NEW target");
             })
@@ -184,8 +189,9 @@ define(["module",
             .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+      
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Control click site link should use NEW target");
             })
@@ -197,8 +203,9 @@ define(["module",
             .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+      
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Control click path link should use NEW target");
             })
@@ -210,8 +217,9 @@ define(["module",
             .pressKeys(keys.CONTROL)
             .click()
             .pressKeys(keys.NULL)
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+      
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Control click date link should use NEW target");
             })
@@ -226,8 +234,9 @@ define(["module",
       "Name goes to new target": function() {
          return this.remote.findByCssSelector("#SR_DISPLAY_NAME .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
@@ -237,8 +246,9 @@ define(["module",
       "Site goes to new target": function() {
          return this.remote.findByCssSelector("#SR_SITE .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
@@ -248,8 +258,9 @@ define(["module",
       "Path goes to new target": function() {
          return this.remote.findByCssSelector("#SR_PATH .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })
@@ -259,8 +270,9 @@ define(["module",
       "Date goes to new target": function() {
          return this.remote.findByCssSelector("#SR_DATE .value")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "target", "NEW", "Name link should use NEW target");
             })

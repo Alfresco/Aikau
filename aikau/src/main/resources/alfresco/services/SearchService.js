@@ -247,7 +247,12 @@ define(["dojo/_base/declare",
                pageSize: payload.pageSize || this.pageSize, // It makes no sense for page size to ever be 0
                maxResults: payload.maxResults || 0,
                noCache: new Date().getTime(),
-               spellcheck: payload.spellcheck || false
+               spellcheck: payload.spellcheck || false,
+               highlightPrefix: "\u0000",
+               highlightPostfix: "\u0003",
+               highlightFields: "cm:name,cm:description,cm:title,content,ia:descriptionEvent,ia:whatEvent,lnk:title",
+               highlightSnippetCount: 30,
+               highlightMergeContiguous: false
             };
             var config = {
                requestId: payload.requestId,
