@@ -1,6 +1,7 @@
 .alfresco-renderers-Property {
    mark {
       display: inline-block;
+      background-color: @text-highlight-color;
    }
 
    color: @general-font-color;
