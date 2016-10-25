@@ -30,7 +30,7 @@
  *       label: "Valid date #1"
  *    }
  * }
- * 
+ *
  * @module alfresco/forms/controls/DateTextBox
  * @extends module:alfresco/forms/controls/BaseFormControl
  * @mixes module:alfresco/forms/controls/utilities/TextBoxValueChangeMixin
@@ -48,9 +48,9 @@ define(["dojo/_base/declare",
    return declare([BaseFormControl, TextBoxValueChangeMixin], {
 
       /**
-       * The value to return when no date has been selected. By default this will return null, however some 
+       * The value to return when no date has been selected. By default this will return null, however some
        * REST APIs may require an alternative value such as the empty string.
-       * 
+       *
        * @instance
        * @type {object|string|null}
        * @default
@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
 
       /**
        * The selector to use for formatting a date. An alternative might be "datetime".
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -70,7 +70,7 @@ define(["dojo/_base/declare",
 
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/DateTextBox.css"}]
@@ -93,7 +93,7 @@ define(["dojo/_base/declare",
 
       /**
        * Get the configuration for the wrapped widget
-       * 
+       *
        * @instance
        * @returns {object} The configuration for the form control
        */
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is used to set or update the validationConfig
-       * 
+       *
        * @instance
        */
       configureValidation: function alfresco_forms_controls_DateTextBox__configureValidation() {
@@ -140,7 +140,7 @@ define(["dojo/_base/declare",
 
       /**
        * Get the value currently assigned to the wrapped widget
-       * 
+       *
        * @instance
        * @returns {object} The current value of the field
        */
@@ -152,7 +152,7 @@ define(["dojo/_base/declare",
 
       /**
        * Processes a value to apply date formatting as necessary.
-       * 
+       *
        * @instance
        * @param  {object} value The value to process
        * @return {object} The processed value
@@ -194,7 +194,7 @@ define(["dojo/_base/declare",
        * @since 1.0.84
        */
       formControlValueChange: function alfresco_forms_controls_DateTextBox__formControlValueChange(attributeName, oldValue, value) {
-         if (value) 
+         if (value && value instanceof Date)
          {
             value = stamp.toISOString(value, { selector: this.valueFormatSelector });
          }

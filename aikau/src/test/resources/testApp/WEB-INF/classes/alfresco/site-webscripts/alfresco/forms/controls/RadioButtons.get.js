@@ -15,8 +15,8 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "alfresco/buttons/AlfButton",
          id: "CANT_BUILD_VALUE",
+         name: "alfresco/buttons/AlfButton",
          config: {
             label: "No we can't",
             publishTopic: "SET_FORM_VALUE",
@@ -26,8 +26,8 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/buttons/AlfButton",
          id: "RUGBY_UNION_VALUE",
+         name: "alfresco/buttons/AlfButton",
          config: {
             label: "Rugby Union",
             publishTopic: "SET_FORM_VALUE",
@@ -43,16 +43,16 @@ model.jsonModel = {
          }
       },
       {
+         id: "RADIO_FORM",
          name: "alfresco/forms/Form",
          config: {
-            id: "RADIO_FORM",
             okButtonPublishTopic: "POST_FORM",
             setValueTopic: "SET_FORM_VALUE",
             pubSubScope: "SCOPED_",
             widgets: [
                {
-                  name: "alfresco/forms/controls/RadioButtons",
                   id: "CAN_BUILD",
+                  name: "alfresco/forms/controls/RadioButtons",
                   config: {
                      name: "canbuild",
                      label: "Can build",
@@ -74,8 +74,8 @@ model.jsonModel = {
                   }
                },
                {
-                  name: "alfresco/forms/controls/RadioButtons",
                   id: "PROPER_FOOTBALL",
+                  name: "alfresco/forms/controls/RadioButtons",
                   config: {
                      name: "properfootball",
                      label: "Proper football",

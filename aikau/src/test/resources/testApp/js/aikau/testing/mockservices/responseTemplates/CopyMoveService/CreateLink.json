@@ -1,0 +1,11 @@
+{
+   "linkNodes":
+   [
+      {
+         "nodeRef": "workspace:\/\/SpacesStore\/3f3ecd27-87fd-4bf9-bddf-a79d6cb999e4"
+      }
+   ],
+  "successCount": 1,
+  "failureCount": 0,
+  "overallSuccess": "true"
+}

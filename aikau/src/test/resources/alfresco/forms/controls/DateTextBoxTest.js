@@ -21,6 +21,7 @@
  *
  * @author Erik Winlöf
  * @author Dave Draper
+ * @author David Webster
  */
 define(["module",
         "alfresco/defineSuite",
@@ -104,7 +105,7 @@ define(["module",
             });
       },
 
-      "Value change publications contain correct value": function() {
+      "Value change publications contain correct value when date selected": function() {
          // Open the first date pop-up...
          return this.remote.findByCssSelector("#VALID_DATE_VALUE_1 .dijitArrowButtonInner")
             .click()
@@ -120,6 +121,18 @@ define(["module",
          .getLastPublish("FORM1__valueChangeOf_VALID1")
             .then(function(payload) {
                assert.propertyVal(payload, "value", "2012-11-25");
+            });
+      },
+
+      "Value change publications contain correct value when invalid date typed": function () {
+         return this.remote.findById("VALID_DATE_VALUE_1_CONTROL")
+            .clearValue() // Clear the value previously selected
+            .type("10/10/2") // invalid date
+            .clearLog()
+            .type("0") // make date valid.
+            .getLastPublish("FORM1__valueChangeOf_VALID1")
+            .then(function(payload) {
+               assert.propertyVal(payload, "value", "2020-10-10");
             });
       },
 
@@ -153,7 +166,7 @@ define(["module",
             .click()
             .type("05/05/1946")
          .end()
-            
+
          .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {
@@ -167,7 +180,7 @@ define(["module",
             .type("1") // ...add a single character to be deleted with backspace...
             .pressKeys(keys.BACKSPACE) // ...and delete
          .end()
-         
+
          .findByCssSelector("#RULES_SUBSCRIBER .requirementIndicator")
             .isDisplayed()
             .then(function(displayed) {

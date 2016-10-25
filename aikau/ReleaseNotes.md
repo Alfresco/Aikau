@@ -1,4 +1,4 @@
-Aikau 1.0.91 Release Notes
+Aikau 1.0.92 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,10 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.92:
+* [AKU-1097](https://issues.alfresco.com/jira/browse/AKU-1097)       - Updates for search term highlighting
+* [AKU-1100](https://issues.alfresco.com/jira/browse/AKU-1100)       - DateTextBox keyup validation fix
+
 1.0.91:
 * [AKU-1092](https://issues.alfresco.com/jira/browse/AKU-1092)       - Improvements to site edit/creation validation
 * [AKU-1094](https://issues.alfresco.com/jira/browse/AKU-1094)       - Updated error message for Copy/Move failures
@@ -89,7 +93,8 @@ Resolved issues:
 * [AKU-1077](https://issues.alfresco.com/jira/browse/AKU-1077)       - Support label maps on AlfFilteredList summary
 * [AKU-1079](https://issues.alfresco.com/jira/browse/AKU-1079)       - Support copy/paste value update trigger in form controls
 * [AKU-1080](https://issues.alfresco.com/jira/browse/AKU-1080)       - Clone models for dialogs
-* [AKU-1081](https://issues.alfresco.com/jira/browse/AKU-1081)       - Ensure DateTextBox value change publication is correct
+* [AKU-1081](https://issues.alfresco.com/jira/browse/AKU-1081)       - Support mix-in values on FormsRuntimeService requests
+* [AKU-1082](https://issues.alfresco.com/jira/browse/AKU-1082)       - Ensure DateTextBox value change publication is correct
 * [AKU-1083](https://issues.alfresco.com/jira/browse/AKU-1083)       - Support empty value options for Select form control
 
 1.0.83:

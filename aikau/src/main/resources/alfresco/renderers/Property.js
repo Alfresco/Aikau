@@ -113,6 +113,26 @@ define(["dojo/_base/declare",
       highlightProperty: null,
 
       /**
+       * The prefix string that indicates the start of text to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.92
+       */
+      highlightPrefix: null,
+
+      /**
+       * The postfix string that indicates the start of text to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.92
+       */
+      highlightPostfix: null,
+      
+      /**
        * This is a specific value to highlight. It will be not be used if
        * [highlightProperty]{@link module:alfresco/renderers/Property#highlightProperty} is configured.
        * 
@@ -535,6 +555,11 @@ define(["dojo/_base/declare",
          {
             value = this.addHighlightMarks(value, highlight);
          }
+         else if (value && this.highlightPrefix && this.highlightPostfix)
+         {
+            value = value.replace(new RegExp(this.highlightPrefix, "g"), "<mark>").replace(new RegExp(this.highlightPostfix, "g"), "</mark>");
+         }
+
          return value;
       }
    });

@@ -27,15 +27,40 @@ define(["module",
         "intern/dojo/node!leadfoot/keys"],
         function(module, defineSuite, assert, TestCommon, keys) {
 
+   var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
+   var radiobuttonSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/RadioButtons");
+   var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
+
+   var selectors = {
+      form: {
+         confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["RADIO_FORM"])
+      },
+      rbs: {
+         canbuild: {
+            yesButton: TestCommon.getTestSelector(radiobuttonSelectors, "nth.option.button", ["CAN_BUILD", "1"]),
+            noButton: TestCommon.getTestSelector(radiobuttonSelectors, "nth.option.button", ["CAN_BUILD", "2"])
+         },
+         properfootball: {
+            rugbyFootballButton: TestCommon.getTestSelector(radiobuttonSelectors, "nth.option.button", ["PROPER_FOOTBALL", "1"]),
+            rugbyUnionButton: TestCommon.getTestSelector(radiobuttonSelectors, "nth.option.button", ["PROPER_FOOTBALL", "2"]),
+            unionFootballButton: TestCommon.getTestSelector(radiobuttonSelectors, "nth.option.button", ["PROPER_FOOTBALL", "3"])
+         }
+      },
+      buttons: {
+         cannotBuild: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CANT_BUILD_VALUE"]),
+         rugbyValue: TestCommon.getTestSelector(buttonSelectors, "button.label", ["RUGBY_UNION_VALUE"])
+      }
+   };
+
    defineSuite(module, {
       name: "RadioButtons Tests",
       testPage: "/RadioButtons",
 
       "Initial value is set correctly": function() {
-         return this.remote.findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+         return this.remote.findByCssSelector(selectors.form.confirmationButton)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -45,18 +70,18 @@ define(["module",
       },
 
       "Value can be updated by publish": function() {
-         return this.remote.findById("CANT_BUILD_VALUE")
+         return this.remote.findByCssSelector(selectors.buttons.cannotBuild)
             .click()
-            .end()
+         .end()
 
-         .findById("RUGBY_UNION_VALUE")
+         .findByCssSelector(selectors.buttons.rugbyValue)
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector(selectors.form.confirmationButton)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -70,12 +95,12 @@ define(["module",
             .pressKeys(keys.ARROW_UP)
             .pressKeys(keys.SPACE)
             .pressKeys(keys.NULL) // Cancel modifiers
-            .end()
+         .end()
 
-         .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector(selectors.form.confirmationButton)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
@@ -84,14 +109,14 @@ define(["module",
       },
 
       "Can select radio button with mouse": function() {
-         return this.remote.findByCssSelector("input[value=\"union_football\"]")
+         return this.remote.findByCssSelector(selectors.rbs.properfootball.unionFootballButton)
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector("#RADIO_FORM .confirmationButton .dijitButtonNode")
+         .findByCssSelector(selectors.form.confirmationButton)
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_POST_FORM", true)
             .then(function(payload) {
