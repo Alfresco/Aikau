@@ -18,27 +18,34 @@
  */
 
 /**
- * <p><b>This widget is in the "aikau" package and does not adhere to the backwards compatibility standards
- * of the "alfresco" package. The code in this package is intended to form the basis of the next major release
- * of Aikau and will remain in an unstable state until ready for release. Please evaluate and feedback on this
- * module but do not rely on it in production!</b></p>
- *
- * @module aikau/layout/Spacer
- * @extends module:aikau/mdl/BaseMdlWidget
+ * 
+ * @module aikau/lists/views/layouts/HeaderCell
+ * @extends module:alfresco/lists/views/layouts/HeaderCell
  * @author Dave Draper
  * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
-        "aikau/mdl/BaseMdlWidget"], 
-        function(declare, BaseMdlWidget) {
-   
-   return declare([BaseMdlWidget], {
+        "alfresco/lists/views/layouts/HeaderCell", 
+        "dojo/text!./templates/HeaderCell.html"], 
+        function(declare, HeaderCell, template) {
+
+   return declare([HeaderCell], {
+
+      /**
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default [{cssFile:"./css/HeaderCell.css"}]
+       */
+      cssRequirements: [{cssFile:"./css/HeaderCell.css"}],
 
       /**
        * The HTML template to use for the widget.
+       * 
        * @instance
        * @type {String}
        */
-      templateString: "<div class='mdl-layout-spacer'></div>"
+      templateString: template
    });
 });

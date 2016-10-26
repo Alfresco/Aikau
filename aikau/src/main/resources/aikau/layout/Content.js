@@ -18,6 +18,11 @@
  */
 
 /**
+ * <p><b>This widget is in the "aikau" package and does not adhere to the backwards compatibility standards
+ * of the "alfresco" package. The code in this package is intended to form the basis of the next major release
+ * of Aikau and will remain in an unstable state until ready for release. Please evaluate and feedback on this
+ * module but do not rely on it in production!</b></p>
+ *
  * @module aikau/layout/Content
  * @extends module:aikau/mdl/BaseMdlWidget
  * @author Dave Draper

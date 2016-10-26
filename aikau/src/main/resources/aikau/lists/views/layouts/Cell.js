@@ -23,22 +23,27 @@
  * of Aikau and will remain in an unstable state until ready for release. Please evaluate and feedback on this
  * module but do not rely on it in production!</b></p>
  *
- * @module aikau/layout/Spacer
- * @extends module:aikau/mdl/BaseMdlWidget
+ * @module aikau/lists/views/layouts/Cell
+ * @extends module:alfresco/lists/views/layouts/Cell
  * @author Dave Draper
  * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
-        "aikau/mdl/BaseMdlWidget"], 
-        function(declare, BaseMdlWidget) {
-   
-   return declare([BaseMdlWidget], {
+        "alfresco/lists/views/layouts/Cell",
+        "dojo/dom-class"], 
+        function(declare, Cell, domClass) {
+
+   return declare([Cell], {
 
       /**
-       * The HTML template to use for the widget.
+       * Overrides the [inherited function]{@link module:alfresco/lists/views/layouts/Cell#postCreate}
+       * to add the additional CSS class for the widget.
+       * 
        * @instance
-       * @type {String}
        */
-      templateString: "<div class='mdl-layout-spacer'></div>"
+      postCreate: function aikau_lists_views_layouts_Cell__postCreate() {
+         domClass.add(this.domNode, "mdl-data-table__cell--non-numeric");
+         this.inherited(arguments);
+      }
    });
 });

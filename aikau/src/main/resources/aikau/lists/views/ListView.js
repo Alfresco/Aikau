@@ -23,22 +23,37 @@
  * of Aikau and will remain in an unstable state until ready for release. Please evaluate and feedback on this
  * module but do not rely on it in production!</b></p>
  *
- * @module aikau/layout/Spacer
- * @extends module:aikau/mdl/BaseMdlWidget
+ * @module aikau/lists/views/ListView
+ * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
  * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
-        "aikau/mdl/BaseMdlWidget"], 
-        function(declare, BaseMdlWidget) {
-   
-   return declare([BaseMdlWidget], {
+        "alfresco/lists/views/AlfListView",
+        "dojo/dom-class"], 
+        function(declare, AlfListView, domClass) {
+
+   return declare([AlfListView], {
 
       /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {String}
+       * An array of the CSS files to use with this widget.
+       * 
+       * @instance cssRequirements {Array}
+       * @type {object[]}
+       * @default [{cssFile:"./css/ListView.css"}]
        */
-      templateString: "<div class='mdl-layout-spacer'></div>"
+      cssRequirements: [{cssFile:"./css/ListView.css"}],
+      
+      /**
+       * Overrides the [inherited function]{@link module:alfresco/lists/views/AlfListView#postCreate}
+       * to add the additional CSS class for the widget.
+       * 
+       * @instance
+       */
+      postCreate: function aikau_lists_views_ListView__postCreate() {
+         domClass.add(this.domNode, "aikau-lists-views-ListView");
+         domClass.add(this.tableNode, "mdl-data-table mdl-js-data-table mdl-shadow--2dp");
+         this.inherited(arguments);
+      }
    });
 });
