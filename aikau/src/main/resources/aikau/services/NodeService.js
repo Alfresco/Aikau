@@ -62,6 +62,11 @@ define(["dojo/_base/declare",
             url += "&maxItems=" + payload.pageSize;
          }
 
+         if (payload.sortField)
+         {
+            url += "&orderBy=" + payload.sortField + " " + (payload.sortAscending ? "ASC" : "DESC");
+         }
+
          var config = {
             alfSuccessTopic: payload.alfSuccessTopic,
             alfFailureTopic: payload.alfFailureTopic,

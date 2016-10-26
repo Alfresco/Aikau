@@ -16,7 +16,11 @@ th.aikau-lists-views-layouts-HeaderCell:last-of-type {
 
    img.hidden {
       display: none;
-   } 
+   }
+
+   i.material-icons {
+      cursor: pointer;
+   }
 }
 
 th.aikau-lists-views-layouts-HeaderCell.hiddenAccessible {
