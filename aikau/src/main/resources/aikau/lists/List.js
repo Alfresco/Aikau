@@ -24,17 +24,17 @@
  * module but do not rely on it in production!</b></p>
  *
  * @module aikau/lists/List
- * @extends module:alfresco/lists/AlfList
+ * @extends module:alfresco/lists/AlfSortablePaginatedList
  * @author Dave Draper
  * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
-        "alfresco/lists/AlfList",
+        "alfresco/lists/AlfSortablePaginatedList",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(declare, AlfList, lang, domClass) {
+        function(declare, AlfSortablePaginatedList, lang, domClass) {
 
-   return declare([AlfList], {
+   return declare([AlfSortablePaginatedList], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -111,6 +111,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload object to update
        */
       updateLoadDataPayload: function alfresco_lists_AlfList__updateLoadDataPayload(payload) {
+         this.inherited(arguments);
          payload.relativePath = this.relativePath;
       }
    });

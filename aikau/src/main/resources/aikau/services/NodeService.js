@@ -55,6 +55,13 @@ define(["dojo/_base/declare",
          var relativePath = payload.relativePath || "";
          url += "&relativePath=" + relativePath;
 
+         if (payload.page && payload.pageSize)
+         {
+            var skipCount = --payload.page * payload.pageSize;
+            url += "&skipCount=" + skipCount;
+            url += "&maxItems=" + payload.pageSize;
+         }
+
          var config = {
             alfSuccessTopic: payload.alfSuccessTopic,
             alfFailureTopic: payload.alfFailureTopic,
