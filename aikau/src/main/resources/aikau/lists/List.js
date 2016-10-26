@@ -98,6 +98,7 @@ define(["dojo/_base/declare",
                   pathElements.shift(); // Remove the first element
                   this.relativePath = pathElements.join("/");
                   name && (this.relativePath += ("/" + name));
+                  this.currentPage = 1;
                   this.loadData();
                }
             }
