@@ -201,6 +201,27 @@ define(["dojo/_base/declare",
       lastBreadcrumbPublishPayloadModifiers: null,
 
       /**
+       * A topic to subscribe to for path change events.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.17
+       */
+      pathChangeTopic: null,
+
+      /**
+       * The property to use when retrieving path data from payloads published on the 
+       * [pathChangeTopic]{@link module:alfresco/documentlibrary/AlfBreadCrumbTrail#pathChangeTopic}.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.NEXT
+       */
+      pathChangeTopicPathProperty: "path",
+
+      /**
        * The label for the root of the breadcrumb trail.
        * 
        * @instance
@@ -350,10 +371,11 @@ define(["dojo/_base/declare",
        */
       onPathChanged: function alfresco_documentlibrary_AlfBreadcrumbTrail__onPathChanged(payload) {
          this.alfLog("log", "Detected path change", payload);
-         if (payload && payload.path)
+         var path = payload && lang.getObject(this.pathChangeTopicPathProperty, false, payload);
+         if (path)
          {
             this._filterDisplayed = false;
-            this.currentPath = payload.path;
+            this.currentPath = path;
             this.renderPathBreadcrumbTrail();
             if(this.useHash === true) {
                hashUtils.updateHash({

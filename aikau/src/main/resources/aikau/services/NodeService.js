@@ -52,7 +52,8 @@ define(["dojo/_base/declare",
          var url =  AlfConstants.URL_CONTEXT + 
                     "proxy/alfresco-api/-default-/public/alfresco/versions/1/nodes/-root-/children?include=path";
          
-         payload.relativePath && (url += "&relativePath=" + payload.relativePath);
+         var relativePath = payload.relativePath || "";
+         url += "&relativePath=" + relativePath;
 
          var config = {
             alfSuccessTopic: payload.alfSuccessTopic,

@@ -87,20 +87,21 @@ define(["dojo/_base/declare",
          var isFolder = lang.getObject("entry.isFolder", false, payload);
          if (isFolder)
          {
-            var pathElements = lang.getObject("entry.path.elements", false, payload);
+            var path = lang.getObject("entry.path.name", false, payload);
             var name = lang.getObject("entry.name", false, payload);
-            if (pathElements)
+            if (path)
             {
-               pathElements.shift(); // Remove the first element
-               pathElements = pathElements.map(function(element) {
-                  return element.name;
-               });
-               this.relativePath = pathElements.join("/") + "/" + name;
-               this.loadData();
+               path.startsWith("/") && (path = path.substring(1));
+               var pathElements = path.split("/");
+               if (pathElements)
+               {
+                  pathElements.shift(); // Remove the first element
+                  this.relativePath = pathElements.join("/");
+                  name && (this.relativePath += ("/" + name));
+                  this.loadData();
+               }
             }
          }
-
-         
       },
 
       /**
