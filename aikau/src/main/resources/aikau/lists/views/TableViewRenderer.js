@@ -18,10 +18,15 @@
  */
 
 /**
- * 
+ * <p><b>This widget is in the "aikau" package and does not adhere to the backwards compatibility standards
+ * of the "alfresco" package. The code in this package is intended to form the basis of the next major release
+ * of Aikau and will remain in an unstable state until ready for release. Please evaluate and feedback on this
+ * module but do not rely on it in production!</b></p>
+ *
  * @module aikau/lists/views/TableViewRenderer
  * @extends module:alfresco/lists/views/ListRenderer
  * @author Dave Draper
+ * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/ListRenderer",

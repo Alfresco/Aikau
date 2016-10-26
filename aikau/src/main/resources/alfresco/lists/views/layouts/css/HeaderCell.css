@@ -1,21 +1,17 @@
-// th.alfresco-lists-views-layouts-HeaderCell {
-//    background-color: @list-header-background-color;
-//    border-top: 1px solid @list-header-border-color;
-//    border-bottom: 1px solid @list-header-border-color;
-//    border-right: 1px solid @list-header-border-color;
-//    padding: 10px;
-//    margin: 0;
-//    vertical-align: middle;
-//    text-align: left;
-// }
+th.alfresco-lists-views-layouts-HeaderCell {
+   background-color: @list-header-background-color;
+   border-top: 1px solid @list-header-border-color;
+   border-bottom: 1px solid @list-header-border-color;
+   border-right: 1px solid @list-header-border-color;
+   padding: 10px;
+   margin: 0;
+   vertical-align: middle;
+   text-align: left;
+}
 
 th.alfresco-lists-views-layouts-HeaderCell.last,
 th.alfresco-lists-views-layouts-HeaderCell:last-of-type {
    border-right: none;
-}
-
-.alfresco-lists-views-layouts-HeaderCell span {
-   vertical-align: super;
 }
 
 .alfresco-lists-views-layouts-HeaderCell img {

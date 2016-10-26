@@ -26,11 +26,11 @@ var docLib = getDocLibList({
 
 docLib.config.widgets = [
    {
-      name: "alfresco/lists/views/AlfListView",
+      name: "aikau/lists/views/ListView",
       config: {
          widgetsForHeader: [
             {
-               name: "alfresco/lists/views/layouts/HeaderCell",
+               name: "aikau/lists/views/layouts/HeaderCell",
                config: {
                   label: "Name",
                   sortable: true,
@@ -39,7 +39,7 @@ docLib.config.widgets = [
                }
             },
             {
-               name: "alfresco/lists/views/layouts/HeaderCell",
+               name: "aikau/lists/views/layouts/HeaderCell",
                config: {
                   label: "Modified on",
                   sortable: true,
@@ -48,7 +48,7 @@ docLib.config.widgets = [
                }
             },
             {
-               name: "alfresco/lists/views/layouts/HeaderCell",
+               name: "aikau/lists/views/layouts/HeaderCell",
                config: {
                   label: "by",
                   sortable: true,
@@ -63,7 +63,7 @@ docLib.config.widgets = [
                config: {
                   widgets: [
                      {
-                        name: "alfresco/lists/views/layouts/Cell",
+                        name: "aikau/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {
@@ -79,7 +79,7 @@ docLib.config.widgets = [
                         }
                      },
                      {
-                        name: "alfresco/lists/views/layouts/Cell",
+                        name: "aikau/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {
@@ -89,7 +89,7 @@ docLib.config.widgets = [
                         }
                      },
                      {
-                        name: "alfresco/lists/views/layouts/Cell",
+                        name: "aikau/lists/views/layouts/Cell",
                         config: {
                            widgets: [
                               {
