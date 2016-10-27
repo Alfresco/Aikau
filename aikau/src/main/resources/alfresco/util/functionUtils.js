@@ -252,6 +252,7 @@ define([
                   delete period.running;
                }
             }, period.delay);
+            period.running = true;
          }
       };
 
