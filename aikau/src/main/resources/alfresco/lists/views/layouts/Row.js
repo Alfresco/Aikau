@@ -25,6 +25,7 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
@@ -34,13 +35,15 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Row.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
+        "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
-        "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _LayoutMixin, 
-                 _AlfDndDocumentUploadMixin, domClass) {
+        "dojo/dom-class",
+        "dojo/_base/event"], 
+        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
+                 _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _LayoutMixin, _AlfDndDocumentUploadMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -133,6 +136,11 @@ define(["dojo/_base/declare",
             this.addUploadDragAndDrop(this.domNode);
             this._currentNode = this.currentItem.node;
          }
+
+         if (this.publishTopic)
+         {
+            domClass.add(this.domNode, "alfresco-lists-views-layouts-Row--supports-click");
+         }
       },
 
       /**
@@ -142,8 +150,23 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      focus: function alfresco_lists_views_layouts_Row__focus() {
+      focus: function alfresco_lists_views_layouts_Row__focus(evt) {
          this.domNode.focus();
+
+         if (this.publishTopic)
+         {
+            var payload = this.generatePayload(this.publishPayload || {}, 
+                                               this.currentItem, 
+                                               null, 
+                                               this.publishPayloadType, 
+                                               this.publishPayloadItemMixin, 
+                                               this.publishPayloadModifiers);
+            this.alfPublish(this.publishTopic, payload, this.publishGlobal, this.publishToParent, this.publishScope);
+            if (evt && typeof evt.preventDefault === "function")
+            {
+               event.stop(evt);
+            }
+         }
       }
    });
 });
