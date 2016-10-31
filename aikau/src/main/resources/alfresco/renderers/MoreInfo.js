@@ -117,6 +117,28 @@ define(["dojo/_base/declare",
       altText: "moreinfo.altTextWithContext.label",
 
       /**
+       * The prefix string that indicates the start of text to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.93
+       */
+      highlightPrefix: "\u0000",
+
+      /**
+       * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
+       * that should be used to identify the content with in the 
+       * [renderedValue]{@link module:alfresco/renderers/Property#renderedValue} to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.93
+       */
+      highlightPostfix: "\u0003",
+
+      /**
        * This is required for ensure that the alt text is meaningful. It is the value to include in the alt text
        * and title attributes that identifies the item to the user.
        *
@@ -145,6 +167,7 @@ define(["dojo/_base/declare",
             this.altText = this.message(this.altText, {
                0: (this.currentItem != null ? this.currentItem[this.propertyToRender] : "")
             });
+            this.altText = this.altText.replace(new RegExp(this.highlightPrefix, "g"), "").replace(new RegExp(this.highlightPostfix, "g"), "");
          }
          else
          {
