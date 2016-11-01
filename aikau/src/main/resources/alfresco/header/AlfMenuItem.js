@@ -18,7 +18,7 @@
  */
 
 /**
- * @module alfresco/header/AlfMenuBar
+ * @module alfresco/header/AlfMenuItem
  * @extends module:alfresco/menus/AlfMenuBar
  * @author Dave Draper
  */
