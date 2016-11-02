@@ -1,4 +1,4 @@
-Aikau 1.0.92 Release Notes
+Aikau 1.0.93 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,11 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.93:
+* [AKU-1101](https://issues.alfresco.com/jira/browse/AKU-1101)       - Support for click on Row
+* [AKU-1105](https://issues.alfresco.com/jira/browse/AKU-1105)       - Remove unicode chars from MoreInfo on search
+* [AKU-1106](https://issues.alfresco.com/jira/browse/AKU-1106)       - Ensure edit site redirects to correct URL
+
 1.0.92:
 * [AKU-1097](https://issues.alfresco.com/jira/browse/AKU-1097)       - Updates for search term highlighting
 * [AKU-1100](https://issues.alfresco.com/jira/browse/AKU-1100)       - DateTextBox keyup validation fix

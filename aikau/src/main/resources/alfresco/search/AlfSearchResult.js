@@ -517,7 +517,9 @@ define(["dojo/_base/declare",
                pubSubScope: this.pubSubScope,
                xhrRequired: true,
                filterActions: true,
-               darkIcon: true
+               darkIcon: true,
+               highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+               highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
             };
             if (this.currentItem.type === "document" || this.currentItem.type === "folder")
             {

@@ -1098,7 +1098,7 @@ define(["dojo/_base/declare",
       onSiteEditSuccess: function alfresco_services_SiteService__onSiteEditSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          this.alfServicePublish(topics.SITE_EDIT_SUCCESS);
          this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
-            url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
+            url: "site/" + originalRequestConfig.data.shortName
          });
       },
 

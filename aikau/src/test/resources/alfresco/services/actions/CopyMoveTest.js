@@ -211,10 +211,10 @@ define(["module",
    });
 
    defineSuite(module, {
-      name: "Create a link action tests ",
+      name: "Create link action tests ",
       testPage: "/CopyMoveService",
 
-      "Test copy dialog has Create a link button via ActionService": function() {
+      "Test copy dialog has Create link button via ActionService": function() {
          return this.remote.findByCssSelector("#COPY1_label")
             .click()
          .end()
@@ -228,7 +228,7 @@ define(["module",
          .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Create a link", "The create link button on the copy dialog was incorrect");
+               assert.equal(text, "Create link", "The create link button on the copy dialog was incorrect");
             })
          .end()
 
@@ -261,7 +261,7 @@ define(["module",
             .click();
       },
 
-      "Click on Create a link button": function() {
+      "Click on Create link button": function() {
          return this.remote.findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
             .clearLog()
             .click();

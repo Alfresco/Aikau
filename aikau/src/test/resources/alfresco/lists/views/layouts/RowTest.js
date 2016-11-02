@@ -48,10 +48,22 @@ define(["module",
          // See AKU-498 - There are two rows, but only one of them should highlight when focused
          return this.remote.findById("CELL1_ITEM_0")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-lists-views-layout-_MultiItemRendererMixin__item--focusHighlighting")
+         .end()
+      
+         .findAllByCssSelector(".alfresco-lists-views-layout-_MultiItemRendererMixin__item--focusHighlighting")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The row did not have the focus class");
+            });
+      },
+
+      "Check click handling": function() {
+         return this.remote.findById("CELL3_ITEM_0")
+            .click()
+         .end()
+
+         .getLastPublish("TESTING")
+            .then(function(payload) {
+               assert.propertyVal(payload, "test", "data2");
             });
       }
    });
