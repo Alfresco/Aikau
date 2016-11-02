@@ -65,6 +65,12 @@ model.jsonModel = {
                {
                   name: "alfresco/lists/views/layouts/Row",
                   config: {
+                     publishTopic: "TESTING",
+                     publishPayload: {
+                        test: "{two}"
+                     },
+                     publishPayloadType: "PROCESS",
+                     publishPayloadModifiers: ["processCurrentItemTokens"],
                      widgets: [
                         {
                            id: "CELL3",

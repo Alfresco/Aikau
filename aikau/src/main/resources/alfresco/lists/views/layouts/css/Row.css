@@ -13,3 +13,7 @@
 .alfresco-lists-views-layouts-Row.zebra-striping:focus {
    background-color: @list-focus-color;
 }
+
+.alfresco-lists-views-layouts-Row--supports-click {
+   cursor: pointer;
+}
