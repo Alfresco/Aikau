@@ -175,7 +175,7 @@ define(["module",
             .getLastPublish("ALF_SITE_EDIT_SUCCESS")
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.propertyVal(payload, "url", "site/site1/dashboard");
+               assert.propertyVal(payload, "url", "site/site1");
             });
       },
 
