@@ -255,6 +255,17 @@ define(["dojo/_base/declare",
       options: null,
 
       /**
+       * Indicates whether or not values should be trimmed of whitespace (this only applies to 
+       * values that are strings).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.94
+       */
+      trimValue: false,
+
+      /**
        * The value to submit as the value of the field when the form is submitted.
        *
        * @instance
@@ -1584,6 +1595,10 @@ define(["dojo/_base/declare",
             {
                this.alfLog("log", "An exception was thrown retrieving the value for field: '" + this.fieldId + "'");
             }
+         }
+         if (this.trimValue && value && typeof value.trim === "function")
+         {
+            value = value.trim();
          }
          value = this.convertStringValuesToBoolean(value);
          return value;
