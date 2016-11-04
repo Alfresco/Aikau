@@ -1363,6 +1363,7 @@ define(["dojo/_base/declare",
                fieldId: "TITLE",
                label: "create-site.dialog.name.label",
                name: "title",
+               trimValue: true,
                requirementConfig: {
                   initialValue: true
                },
@@ -1402,6 +1403,7 @@ define(["dojo/_base/declare",
                      flags: "g"
                   }
                ],
+               trimValue: true,
                label: "create-site.dialog.urlname.label",
                description: "create-site.dialog.urlname.description",
                name: "shortName",

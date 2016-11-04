@@ -100,7 +100,7 @@ define(["module",
       "Create site (duplicate shortName)": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .clearValue()
-            .type("used")
+            .type(" used")
          .end()
 
          .findDisplayedByCssSelector("#CREATE_SITE_FIELD_TITLE .alfresco-forms-controls-BaseFormControl__validation-warning")
