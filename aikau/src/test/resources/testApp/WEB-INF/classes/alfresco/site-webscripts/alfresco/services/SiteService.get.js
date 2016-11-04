@@ -12,7 +12,7 @@ model.jsonModel = {
       {
          name: "alfresco/services/SiteService",
          config: {
-            userHomePage: "home",
+            userHomePage: "/home",
             legacyMode: false
          }
       },
