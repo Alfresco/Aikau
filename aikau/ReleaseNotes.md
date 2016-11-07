@@ -1,4 +1,4 @@
-Aikau 1.0.93 Release Notes
+Aikau 1.0.94 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,11 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.94:
+* [AKU-1107](https://issues.alfresco.com/jira/browse/AKU-1107)       - Ensure spaces are trimmed in site data
+* [AKU-1108](https://issues.alfresco.com/jira/browse/AKU-1108)       - Ensure new sites are favourited
+* [AKU-1109](https://issues.alfresco.com/jira/browse/AKU-1109)       - Fix Cloud Sync action issues
+
 1.0.93:
 * [AKU-1101](https://issues.alfresco.com/jira/browse/AKU-1101)       - Support for click on Row
 * [AKU-1105](https://issues.alfresco.com/jira/browse/AKU-1105)       - Remove unicode chars from MoreInfo on search
