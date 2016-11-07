@@ -397,6 +397,21 @@ define(["dojo/_base/declare",
       hideValidation: false,
 
       /**
+       * This attribute has been added to retain backwards compatibility with regards to validation
+       * of invisible fields. Fields that are invisible are not validated by default but it may be
+       * necessary to validate hidden fields that are progressively disclosed. The use case for this
+       * addition was the implementation of the Cloud Sync capabilities that required a form to be
+       * disabled until a path was selected (but the path field was hidden until a network and
+       * site were selected).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.94
+       */
+      validateWhenHidden: false,
+
+      /**
        * The default visibility status is always true (this can be overridden by extending controls).
        *
        * @instance
@@ -1865,7 +1880,7 @@ define(["dojo/_base/declare",
        */
       processValidationRules: function alfresco_forms_controls_BaseFormControl__processValidationRules() {
          var valid = true;
-         if (this._visible && !this._disabled)
+         if ((this._visible || this.validateWhenHidden) && !this._disabled)
          {
             // Things to validate against are...
             // 1) Does the widget have a value if it is required

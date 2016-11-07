@@ -31,7 +31,8 @@ define(function() {
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/renderers/InlineEditPropertyLinkTest"
+      "alfresco/forms/controls/TreeTest",
+      "alfresco/services/CloudSyncServiceTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -156,6 +157,7 @@ define(function() {
       "alfresco/forms/controls/SitePickerTest",
       "alfresco/forms/controls/TextAreaTest",
       "alfresco/forms/controls/TextBoxTest",
+      "alfresco/forms/controls/TreeTest",
       "alfresco/forms/controls/TinyMCETest",
       "alfresco/forms/controls/ValidationTest",
       "alfresco/forms/controls/XssPreventionTest",

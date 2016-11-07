@@ -41,11 +41,13 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/aspect",
+        "dojo/dom-class",
         "alfresco/navigation/TreeStore",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree"], 
         function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, topics, AlfConstants, _AlfDocumentListTopicMixin, 
-                 _NavigationServiceTopicMixin, domConstruct, lang, array, TreeStore, ObjectStoreModel, Tree) {
+                 _NavigationServiceTopicMixin, domConstruct, lang, array, aspect, domClass, TreeStore, ObjectStoreModel, Tree) {
    
    // Extend the standard Dijit tree to support better identification of nodes (primarily for the purpose of unit testing)...
    var AikauTree = declare([Tree], {
@@ -57,7 +59,71 @@ define(["dojo/_base/declare",
                id: this.id + "_" + id.replace("://", "_").replace("/", "_") // Clean up NodeRef IDs
             });
          }
-         return this.inherited(arguments);
+         var treeNode = this.inherited(arguments);
+
+         // When a tree node is added it is possible that it can be disabled if it meets 
+         // configured disablement rules. This has been implemented to support the use case
+         // required for Cloud Sync where existing sync folders cannot be reused.
+         if (this.tree.treeNodeDisablementConfig && this.tree.treeNodeDisablementConfig.rules)
+         {
+            var item = arguments[0];
+            var disabled = array.some(this.tree.treeNodeDisablementConfig.rules, lang.hitch(this, this.processDisablementRule, item));
+            if (disabled) 
+            {
+               domClass.add(treeNode.domNode, "alfresco-navigation-Tree__node--disabled");
+            }
+         }
+
+         return treeNode;
+      },
+
+      /**
+       * Extended to ignore clicks on disabled nodes.
+       * 
+       * @param  {object}  nodeWidget The tree node widget clicked
+       * @param  {object}  e          The click event
+       * @param  {boolean} doOpen     Whether or not to open
+       * @param  {string}  func       A click callback function.
+       * @since 1.0.94
+       */
+      __click: function alfresco_navigation_Tree_AikauTree____click(/*jshint unused:false*/ nodeWidget, e, doOpen, func) {
+         if (nodeWidget && nodeWidget.domNode && domClass.contains(nodeWidget.domNode, "alfresco-navigation-Tree__node--disabled"))
+         {
+            e.stopPropagation();
+            e.preventDefault();
+         }
+         else
+         {
+            this.inherited(arguments);
+         }
+      },
+
+      /**
+       * Processes any configured disablement rules for tree nodes. Please note that at present only
+       * the "contains" rule is supported. If other rules are required then please raise an issue
+       * for them to be implemented.
+       *
+       * @instance
+       * @param  {object} node The node item to evaluate the data of
+       * @param  {object} rule The rule configuration to process
+       * @return {boolean} Whether or not the tree node should be disabled
+       * @since 1.0.94
+       */
+      processDisablementRule: function alfresco_navigation_Tree_AikauTree__processDisablementRule(node, rule) {
+         var disabled = false;
+         if (rule.property && rule.contains)
+         {
+            var targetArray = lang.getObject(rule.property, false, node);
+            if (targetArray)
+            {
+               disabled = array.some(targetArray, function(target) {
+                  return array.some(rule.contains, function(containsItem) {
+                     return containsItem === target;
+                  });
+               });
+            }
+         }
+         return disabled;
       }
    });
 
@@ -202,6 +268,16 @@ define(["dojo/_base/declare",
       childRequestPublishGlobal: true,
 
       /**
+       * Configuration rules that determine when a tree node should be disabled.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.94
+       */
+      treeNodeDisablementConfig: null,
+
+      /**
        * @instance
        * @return {string} The root of the URL to use when requesting child nodes.
        */
@@ -292,10 +368,33 @@ define(["dojo/_base/declare",
             showRoot: this.showRoot,
             onClick: lang.hitch(this, this.onClick),
             onOpen: lang.hitch(this, this.onNodeExpand),
-            onClose: lang.hitch(this, this.onNodeCollapse)
+            onClose: lang.hitch(this, this.onNodeCollapse),
+            treeNodeDisablementConfig: this.treeNodeDisablementConfig
          });
          this.tree.placeAt(this.domNode);
          this.tree.startup();
+
+         // This section of code creates an aspect around the dndController created for the tree
+         // to prevent it from selecting nodes when the selected node is disabled...
+         // It works by only calling the original function when a non-disabled node has been selected
+         if (this.tree.dndController)
+         {
+            aspect.around(this.tree.dndController, "setSelection", function(originalFunction) {
+               return function(newSelection) {
+                  if (newSelection && 
+                      newSelection.length && 
+                      newSelection[0].domNode &&
+                      domClass.contains(newSelection[0].domNode, "alfresco-navigation-Tree__node--disabled"))
+                  {
+                     return null;
+                  }
+                  else
+                  {
+                     return originalFunction.apply(this, arguments);
+                  }
+               };
+            });
+         }
       },
       
       /**
@@ -326,18 +425,26 @@ define(["dojo/_base/declare",
        * @param {object} evt The click event
        */
       onClick: function alfresco_navigation_Tree__onClick(item, node, evt) {
-         this.alfLog("log", "Tree Node clicked", item, node, evt);
-
-         // Assign the clicked item as the currentItem value so that it can be used in payload generation...
-         this.currentItem = item;
-         if (!this.currentItem.nodeRef)
+         if (node && node.domNode && domClass.contains(node.domNode, "alfresco-navigation-Tree__node--disabled"))
          {
-            this.currentItem.nodeRef = this.rootNode;
+            // Ignore clicks on nodes where the tree node is disabled...
+            this.alfLog("log", "Ignoring click on disabled tree node", item, node, evt);
          }
+         else
+         {
+            this.alfLog("log", "Tree Node clicked", item, node, evt);
 
-         this.publishPayload = lang.clone(this.publishPayload);
-         var generatedPayload = this.getGeneratedPayload(true);
-         this.alfPublish(this.publishTopic, generatedPayload, this.publishGlobal);
+            // Assign the clicked item as the currentItem value so that it can be used in payload generation...
+            this.currentItem = item;
+            if (!this.currentItem.nodeRef)
+            {
+               this.currentItem.nodeRef = this.rootNode;
+            }
+
+            this.publishPayload = lang.clone(this.publishPayload);
+            var generatedPayload = this.getGeneratedPayload(true);
+            this.alfPublish(this.publishTopic, generatedPayload, this.publishGlobal);
+         }
       },
       
       /**

@@ -79,8 +79,21 @@ define(["dojo/_base/declare",
             method: "GET",
             data: payload,
             successCallback: this.processTenantOptions,
+            progressCallback: this.optionsProgress,
             callbackScope: this
          });
+      },
+
+      /**
+       * Handles progress updates by doing nothing.
+       * 
+       * @instance
+       * @param {object} response
+       * @param {object} originalRequestConfig
+       * @since 1.0.94
+       */
+      optionsProgress: function alfresco_services_CloudSyncService__optionsProgress(/*jshint unused:false*/ response, originalRequestConfig) {
+         // No action intentionally
       },
 
       /**
@@ -133,6 +146,8 @@ define(["dojo/_base/declare",
             this.serviceXhr({
                url : AlfConstants.PROXY_URI + "cloud/people/" + payload.username + "/sites?network=" + payload.remoteTenantId,
                method: "GET",
+               alfTopic: payload.alfResponseTopic,
+               alfResponseScope: payload.alfResponseScope,
                data: payload
             });
          }
@@ -155,6 +170,8 @@ define(["dojo/_base/declare",
             this.serviceXhr({
                url : AlfConstants.PROXY_URI + "cloud/doclib/treenode/site/" + payload.remoteSiteId + "/documentLibrary" + payload.path + "?children=true&max=-1&network=" + payload.remoteTenantId,
                method: "GET",
+               alfTopic: payload.alfResponseTopic,
+               alfResponseScope: payload.alfResponseScope,
                data: payload
             });
          }
@@ -330,6 +347,7 @@ define(["dojo/_base/declare",
          else
          {
             // Show a dialog to select the location to sync to
+            originalRequestConfig.data.username = response.username;
             this.showCloudLocationPicker(originalRequestConfig.data);
          }
       },
@@ -371,7 +389,7 @@ define(["dojo/_base/declare",
             var dialogTitle = this.message("cloud-sync.dialog.multiple.title");
             if (data.nodes.length === 1)
             {
-               var displayName = data.node[0].displayName;
+               var displayName = data.nodes[0].displayName;
                dialogTitle = this.message("cloud-sync.dialog.single.title", {
                   0: displayName
                });
@@ -515,12 +533,24 @@ define(["dojo/_base/declare",
                   },
                   publishGlobal: false
                },
+               validateWhenHidden: true,
                visibilityConfig: {
                   initialValue: false,
                   rules: [
                      {
                         targetId: "CLOUD_SYNC_SITE",
                         isNot: ["",null]
+                     }
+                  ]
+               },
+               requirementConfig: {
+                  initialValue: true
+               },
+               treeNodeDisablementConfig: {
+                  rules: [
+                     {
+                        property: "item.aspects",
+                        contains: ["sync:synced"]
                      }
                   ]
                }

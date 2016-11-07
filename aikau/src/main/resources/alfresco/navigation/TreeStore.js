@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
        */
       onChildren: function alfresco_navigation_TreeStore__onChildren(deferred, parent, subscriptionHandles, payload) {
          this.alfUnsubscribeSaveHandles(subscriptionHandles);
-         array.forEach(payload.response.items, lang.hitch(this, this.updateChild, parent));
+         array.forEach(payload.response.items, lang.hitch(this, this.updateChild, payload.requestConfig.data));
          
          // If required, filter the items based on their paths...
          var filteredResponse = payload.response.items;

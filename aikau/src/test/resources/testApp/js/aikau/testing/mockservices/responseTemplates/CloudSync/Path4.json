@@ -31,7 +31,6 @@
             "sync:syncSetMemberNode",
             "sys:referenceable",
             "cm:titled",
-            "sync:synced",
             "cm:versionable"
          ]
       },

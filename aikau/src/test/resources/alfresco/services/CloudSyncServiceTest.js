@@ -39,8 +39,9 @@ define(["module",
       "Request cloud authentication": function() {
          return this.remote.findById("UNAUTHENTICATED_label")
             .click()
-            .end()
-            .findByCssSelector("#ALF_CLOUD_AUTHENTICATION_DIALOG.dialogDisplayed");
+         .end()
+         
+         .findByCssSelector("#ALF_CLOUD_AUTHENTICATION_DIALOG.dialogDisplayed");
       },
 
       "Authentication failure against the Cloud": function() {
@@ -48,27 +49,26 @@ define(["module",
          return this.remote.findByCssSelector("#ALF_CLOUD_AUTHENTICATION_DIALOG #CLOUD_AUTH_USERNAME .dijitInputContainer input")
             .clearValue()
             .type("bob@alfresco.com")
-            .end()
+         .end()
 
          // Enter a password...
          .findByCssSelector("#ALF_CLOUD_AUTHENTICATION_DIALOG #CLOUD_AUTH_PASSWORD .dijitInputContainer input")
             .clearValue()
             .type("invalid")
-            .end()
+         .end()
 
          // Hit the confirmation button...
          .findById("ALF_CLOUD_AUTHENTICATION_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          // Error notifcation prompt should be displayed
          .findByCssSelector("#NOTIFICATION_PROMPT.dialogDisplayed")
-            .end()
+         .end()
 
          // Close the error prompt...
          .findById("NOTIFCATION_PROMPT_ACKNOWLEDGEMENT_label")
-            .click()
-            .end();
+            .click();
       },
 
       "Authentication success against the Cloud": function() {
@@ -76,18 +76,17 @@ define(["module",
          return this.remote.findByCssSelector("#ALF_CLOUD_AUTHENTICATION_DIALOG #CLOUD_AUTH_USERNAME .dijitInputContainer input")
             .clearValue()
             .type("tony@alfresco.com")
-            .end()
+         .end()
 
          // Enter a password...
          .findByCssSelector("#ALF_CLOUD_AUTHENTICATION_DIALOG #CLOUD_AUTH_PASSWORD .dijitInputContainer input")
             .clearValue()
             .type("password")
-            .end()
+         .end()
 
          // Hit the confirmation button...
          .findById("ALF_CLOUD_AUTHENTICATION_DIALOG_OK_label")
-            .click()
-            .end();
+            .click();
       },
 
       "Make sure that path is not shown initially": function() {
@@ -107,7 +106,7 @@ define(["module",
          return this.remote.findById("CLOUD_SYNC_TENANT_CONTROL")
             .clearValue()
             .type("a")
-            .end()
+         .end()
 
          // Get all the options
          .findAllByCssSelector("#CLOUD_SYNC_TENANT_CONTROL_popup div.dijitReset.dijitMenuItem")
@@ -124,16 +123,16 @@ define(["module",
          .findById("CLOUD_SYNC_SITE_CONTROL")
             .clearValue()
             .type("s")
-            .end()
+         .end()
 
          // Wait for the options popup
          .findDisplayedById("CLOUD_SYNC_SITE_CONTROL_popup")
-            .end()
+         .end()
 
          // Now select the option...
          .findById("CLOUD_SYNC_SITE_CONTROL")
             .pressKeys(keys.ENTER)
-            .end()
+         .end()
 
          .findDisplayedById("CLOUD_SYNC_CONTAINER")
             .isDisplayed()
@@ -154,7 +153,7 @@ define(["module",
          // Only the "release pipeline" folder can be expanded...
          return this.remote.findByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(4) .dijitTreeExpando")
             .click()
-            .end()
+         .end()
 
          // There should now be a new container
          .findDisplayedByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(4) .dijitTreeNodeContainer .dijitTreeLabel")
@@ -167,23 +166,23 @@ define(["module",
       "Fail to create a sync": function() {
          // The "CANNOT SYNC" node will NOT be accepted by the mock XHR handler, so selecting it
          // and posting the form should result in an error...
-         return this.remote.findByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(4) .dijitTreeNodeContainer .dijitTreeLabel")
+         return this.remote.findDisplayedByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(4) .dijitTreeNodeContainer .dijitTreeLabel")
             .click()
-            .end()
+         .end()
 
          // Submit the form dialog...
-         .findById("ALF_CLOUD_SYNC_DIALOG_OK_label")
+         .findDisplayedById("ALF_CLOUD_SYNC_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          // Check the failure notification is displayed...
          .findByCssSelector("#NOTIFICATION_PROMPT.dialogDisplayed")
-            .end()
+         .end()
 
          // Acknowledge the notification...
-         .findById("NOTIFCATION_PROMPT_ACKNOWLEDGEMENT_label")
+         .findDisplayedById("NOTIFCATION_PROMPT_ACKNOWLEDGEMENT_label")
             .click()
-            .end()
+         .end()
 
          // Wait for the prompt to be hidden...
          .findByCssSelector("#NOTIFICATION_PROMPT.dialogHidden");
@@ -194,16 +193,16 @@ define(["module",
          return this.remote.findById("CLOUD_SYNC_SITE_CONTROL").clearLog()
             .clearValue()
             .type("a")
-            .end()
+         .end()
 
          // Wait for the options popup
          .findDisplayedById("CLOUD_SYNC_SITE_CONTROL_popup")
-            .end()
+         .end()
 
          // Now select the option...
          .findById("CLOUD_SYNC_SITE_CONTROL")
             .pressKeys(keys.ENTER)
-            .end()
+         .end()
 
          .getLastPublish("ALF_GET_CLOUD_PATH")
             .then(function(payload) {
@@ -212,22 +211,22 @@ define(["module",
       },
 
       "Successfully create a sync": function() {
-         return this.remote.findByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(1) .dijitTreeLabel")
+         return this.remote.findDisplayedByCssSelector("#CLOUD_SYNC_CONTAINER .dijitTreeNodeContainer .dijitTreeNode:nth-child(1) .dijitTreeLabel")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Presentation Collaboration");
             })
             .click()
-            .end()
+         .end()
 
          // Submit the form dialog...
-         .findById("ALF_CLOUD_SYNC_DIALOG_OK_label")
+         .findDisplayedById("ALF_CLOUD_SYNC_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          // Wait for the dialog to be hidden...
          .findByCssSelector("#ALF_CLOUD_SYNC_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_SYNC_TO_CLOUD")
             .then(function(payload) {

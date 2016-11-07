@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Tree (form control)</shortname>
+  <description>Test page for Tree form controls</description>
+  <family>aikau-unit-tests</family>
+  <url>/TreeField</url>
+</webscript>

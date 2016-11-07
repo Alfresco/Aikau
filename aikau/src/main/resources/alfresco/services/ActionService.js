@@ -877,6 +877,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload from the original request
+       * @fires module:alfresco/core/topics#COPY_OR_MOVE
        */
       onActionCopyTo: function alfresco_services_ActionService__onActionCopyTo(payload) {
          var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
@@ -892,6 +893,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload from the original request
+       * @fires module:alfresco/core/topics#COPY_OR_MOVE
        */
       onActionMoveTo: function alfresco_services_ActionService__onActionMoveTo(payload) {
          var nodes = payload.documents || (payload.document ? [payload.document] : [payload]);
@@ -907,6 +909,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload from the original request
+       * @fires module:alfresco/core/topics#DELETE_CONTENT
        */
       onActionDelete: function alfresco_services_ActionService__onActionDelete(payload) {
          this.alfPublish(topics.DELETE_CONTENT, payload);
@@ -947,9 +950,22 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload from the original request
        * @since 1.0.58
+       * @fires module:alfresco/core/topics#CHANGE_TYPE_REQUEST
        */
       onActionChangeType: function alfresco_services_ActionService__onActionChangeType(payload) {
          this.alfPublish(topics.CHANGE_TYPE_REQUEST, payload.document);
+      },
+
+      /**
+       * Handles requests to sync content to the cloud.
+       *
+       * @instance
+       * @param {object} payload The payload from the original request
+       * @since 1.0.94
+       * @fires module:alfresco/core/topics#INIT_CLOUD_SYNC
+       */
+      onActionCloudSync: function alfresco_services_ActionService__onActionCloudSync(payload) {
+         this.alfPublish(topics.INIT_CLOUD_SYNC, payload);
       },
 
       /**
@@ -959,6 +975,7 @@ define(["dojo/_base/declare",
        * @instance
        * @param {object} payload The payload from the original request
        * @since 1.0.33
+       * @fires module:alfresco/core/topics#DOWNLOAD_AS_ZIP
        */
       onActionDownload: function alfresco_services_ActionService__onActionDownload(payload) {
          this.alfPublish(topics.DOWNLOAD_AS_ZIP, payload);
@@ -969,6 +986,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {object} payload The payload from the original request
+       * @fires module:alfresco/core/topics#DOWNLOAD_AS_ZIP
        */
       onActionFolderDownload: function alfresco_services_ActionService__onActionFolderDownload(payload) {
          this.alfPublish(topics.DOWNLOAD_AS_ZIP, payload);
