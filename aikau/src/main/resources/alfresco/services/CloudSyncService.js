@@ -533,12 +533,24 @@ define(["dojo/_base/declare",
                   },
                   publishGlobal: false
                },
+               validateWhenHidden: true,
                visibilityConfig: {
                   initialValue: false,
                   rules: [
                      {
                         targetId: "CLOUD_SYNC_SITE",
                         isNot: ["",null]
+                     }
+                  ]
+               },
+               requirementConfig: {
+                  initialValue: true
+               },
+               treeNodeDisablementConfig: {
+                  rules: [
+                     {
+                        property: "item.aspects",
+                        contains: ["sync:synced"]
                      }
                   ]
                }

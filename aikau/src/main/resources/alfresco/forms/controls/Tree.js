@@ -113,7 +113,8 @@ define(["dojo/_base/declare",
             publishTopic: this._treeNodeSelectedTopic,
             childRequestPublishTopic: this.optionsConfig.publishTopic,
             childRequestPublishPayload: this.optionsConfig.publishPayload,
-            childRequestPublishGlobal: this.optionsConfig.publishGlobal
+            childRequestPublishGlobal: this.optionsConfig.publishGlobal,
+            treeNodeDisablementConfig: this.treeNodeDisablementConfig
          });
       },
 
