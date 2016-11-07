@@ -1,6 +1,35 @@
-.alfresco-navigation-Tree .dijitTree {
-   overflow-x: hidden;
-   overflow-y: visible;
+.alfresco-navigation-Tree {
+
+   .dijitTree {
+      overflow-x: hidden;
+      overflow-y: visible;
+   }
+
+   &__node {
+      &--disabled {
+
+         .dijitFolderClosed {
+            opacity: 0.5;
+         }
+
+         >.dijitTreeRow.dijitTreeRowSelected {
+            background-color: initial;
+         }
+
+         >.dijitTreeRow.dijitTreeRowHover {
+            background-color: initial;
+         }
+
+         .dijitTreeExpando {
+            visibility: hidden;
+         }
+
+         .dijitTreeLabel {
+            color: @de-emphasized-font-color;
+            cursor: default;
+         }
+      }
+   }
 }
 
 .alfresco-navigation-Tree .label {

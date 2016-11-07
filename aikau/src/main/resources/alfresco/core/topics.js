@@ -44,6 +44,20 @@ define([],function() {
       ADD_FAVOURITE_NODE: "ALF_PREFERENCE_ADD_DOCUMENT_FAVOURITE",
 
       /**
+       * This can be published to request to add a site as a favourite.
+       *
+       * @instance
+       * @type {String}
+       * @default
+       * @since 1.0.94
+       * 
+       * @event
+       * @property {string} site The shortName of the site to add as a favourite
+       * @property {string} user The username of the user to make the site a favourite of
+       */
+      ADD_FAVOURITE_SITE: "ALF_ADD_FAVOURITE_SITE",
+
+      /**
        * Triggered when the progress request has failed
        *
        * @instance

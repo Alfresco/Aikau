@@ -109,11 +109,13 @@ define(["dojo/_base/declare",
        */
       createTree: function alfresco_forms_controls_Tree__createTree() {
          return new Tree({
+            id: this.id + "_TREE",
             pubSubScope: this.pubSubScope,
             publishTopic: this._treeNodeSelectedTopic,
             childRequestPublishTopic: this.optionsConfig.publishTopic,
             childRequestPublishPayload: this.optionsConfig.publishPayload,
-            childRequestPublishGlobal: this.optionsConfig.publishGlobal
+            childRequestPublishGlobal: this.optionsConfig.publishGlobal,
+            treeNodeDisablementConfig: this.treeNodeDisablementConfig
          });
       },
 
@@ -150,8 +152,8 @@ define(["dojo/_base/declare",
          {
             value = lang.getObject(this.valueProperty, false, payload);
          }
-         this.onValueChangeEvent(this.name, this.value, value);
          this.value = value;
+         this.onValueChangeEvent(this.name, this.value, value);
       },
       
       /**

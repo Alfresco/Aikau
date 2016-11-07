@@ -85,7 +85,8 @@
          "sys:localized",
          "sys:referenceable",
          "cm:titled",
-         "cm:auditable"
+         "cm:auditable",
+         "sync:synced"
       ]
    }]
 }

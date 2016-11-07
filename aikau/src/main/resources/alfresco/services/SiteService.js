@@ -106,6 +106,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#ADD_FAVOURITE_SITE
        * @listens module:alfresco/core/topics#BECOME_SITE_MANAGER
        * @listens module:alfresco/core/topics#CREATE_SITE
        * @listens module:alfresco/core/topics#DELETE_SITE
@@ -133,7 +134,7 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.EDIT_SITE, lang.hitch(this, this.editSite));
          this.alfSubscribe(topics.SITE_EDIT_REQUEST, lang.hitch(this, this.editEditSiteData));
          this.alfSubscribe(topics.DELETE_SITE, lang.hitch(this, this.onActionDeleteSite));
-         this.alfSubscribe("ALF_ADD_FAVOURITE_SITE", lang.hitch(this, this.addSiteAsFavourite));
+         this.alfSubscribe(topics.ADD_FAVOURITE_SITE, lang.hitch(this, this.addSiteAsFavourite));
          this.alfSubscribe("ALF_REMOVE_FAVOURITE_SITE", lang.hitch(this, this.removeSiteFromFavourites));
          this.alfSubscribe(topics.GET_RECENT_SITES, lang.hitch(this, this.getRecentSites));
          this.alfSubscribe(topics.GET_FAVOURITE_SITES, lang.hitch(this, this.getFavouriteSites));
@@ -944,10 +945,17 @@ define(["dojo/_base/declare",
        * @param  {object} response The response from the request to create the site
        * @param  {object} originalRequestConfig The configuration for the request to create the site
        * @since 1.0.55
+       * @fires module:alfresco/core/topics#ADD_FAVOURITE_SITE
        * @fires module:alfresco/core/topics#SITE_CREATION_SUCCESS
        * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
        */
       onSiteCreationSuccess: function alfresco_services_SiteService__onSiteCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
+         // Mark the new site as a favourite...
+         this.alfServicePublish(topics.ADD_FAVOURITE_SITE, {
+            site: originalRequestConfig.data.shortName,
+            user: AlfConstants.USERNAME
+         });
+
          this.alfServicePublish(topics.SITE_CREATION_SUCCESS);
          this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
             url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
@@ -1098,7 +1106,7 @@ define(["dojo/_base/declare",
       onSiteEditSuccess: function alfresco_services_SiteService__onSiteEditSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          this.alfServicePublish(topics.SITE_EDIT_SUCCESS);
          this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
-            url: "site/" + originalRequestConfig.data.shortName
+            url: "site/" + originalRequestConfig.data.shortName + this.userHomePage
          });
       },
 
@@ -1355,6 +1363,7 @@ define(["dojo/_base/declare",
                fieldId: "TITLE",
                label: "create-site.dialog.name.label",
                name: "title",
+               trimValue: true,
                requirementConfig: {
                   initialValue: true
                },
@@ -1394,6 +1403,7 @@ define(["dojo/_base/declare",
                      flags: "g"
                   }
                ],
+               trimValue: true,
                label: "create-site.dialog.urlname.label",
                description: "create-site.dialog.urlname.description",
                name: "shortName",

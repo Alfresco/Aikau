@@ -100,7 +100,7 @@ define(["module",
       "Create site (duplicate shortName)": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
             .clearValue()
-            .type("used")
+            .type(" used")
          .end()
 
          .findDisplayedByCssSelector("#CREATE_SITE_FIELD_TITLE .alfresco-forms-controls-BaseFormControl__validation-warning")
@@ -140,11 +140,12 @@ define(["module",
          .end()
 
          .getLastPublish("ALF_SITE_CREATION_REQUEST")
-            .getLastPublish("ALF_SITE_CREATION_SUCCESS")
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-            .then(function(payload) {
-               assert.propertyVal(payload, "url", "site/pass/dashboard");
-            });
+         .getLastPublish("ALF_ADD_FAVOURITE_SITE")
+         .getLastPublish("ALF_SITE_CREATION_SUCCESS")
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .then(function(payload) {
+            assert.propertyVal(payload, "url", "site/pass/dashboard");
+         });
       },
 
       "Edit site": function() {
@@ -175,7 +176,7 @@ define(["module",
             .getLastPublish("ALF_SITE_EDIT_SUCCESS")
             .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
-               assert.propertyVal(payload, "url", "site/site1");
+               assert.propertyVal(payload, "url", "site/site1/home");
             });
       },
 
