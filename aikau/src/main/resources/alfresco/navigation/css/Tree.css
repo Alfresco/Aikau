@@ -8,6 +8,14 @@
    &__node {
       &--disabled {
 
+         .dijitFolderClosed {
+            opacity: 0.5;
+         }
+
+         >.dijitTreeRow.dijitTreeRowSelected {
+            background-color: initial;
+         }
+
          .dijitTreeExpando {
             visibility: hidden;
          }

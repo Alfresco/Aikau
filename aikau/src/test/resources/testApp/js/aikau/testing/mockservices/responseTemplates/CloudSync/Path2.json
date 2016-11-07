@@ -24,7 +24,8 @@
          "cm:auditable",
          "sys:referenceable",
          "cm:titled",
-         "cm:taggable"
+         "cm:taggable",
+         "sync:synced"
       ]
    }]
 }

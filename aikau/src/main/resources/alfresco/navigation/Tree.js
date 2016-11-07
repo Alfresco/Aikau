@@ -99,10 +99,12 @@ define(["dojo/_base/declare",
        * Processes any configured disablement rules for tree nodes. Please note that at present only
        * the "contains" rule is supported. If other rules are required then please raise an issue
        * for them to be implemented.
-       * 
-       * @param  {[type]} node [description]
-       * @param  {[type]} rule [description]
-       * @return {[type]}      [description]
+       *
+       * @instance
+       * @param  {object} node The node item to evaluate the data of
+       * @param  {object} rule The rule configuration to process
+       * @return {boolean} Whether or not the tree node should be disabled
+       * @since 1.0.94
        */
       processDisablementRule: function alfresco_navigation_Tree_AikauTree__processDisablementRule(node, rule) {
          var disabled = false;
@@ -263,6 +265,7 @@ define(["dojo/_base/declare",
       childRequestPublishGlobal: true,
 
       /**
+       * Configuration rules that determine when a tree node should be disabled.
        * 
        * @instance
        * @type {object}
