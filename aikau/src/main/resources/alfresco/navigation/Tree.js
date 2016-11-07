@@ -41,12 +41,13 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/_base/lang",
         "dojo/_base/array",
+        "dojo/aspect",
         "dojo/dom-class",
         "alfresco/navigation/TreeStore",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree"], 
         function(declare, _Widget, _Templated, template, _PublishPayloadMixin, AlfCore, CoreWidgetProcessing, topics, AlfConstants, _AlfDocumentListTopicMixin, 
-                 _NavigationServiceTopicMixin, domConstruct, lang, array, domClass, TreeStore, ObjectStoreModel, Tree) {
+                 _NavigationServiceTopicMixin, domConstruct, lang, array, aspect, domClass, TreeStore, ObjectStoreModel, Tree) {
    
    // Extend the standard Dijit tree to support better identification of nodes (primarily for the purpose of unit testing)...
    var AikauTree = declare([Tree], {
@@ -121,6 +122,10 @@ define(["dojo/_base/declare",
             }
          }
          return disabled;
+      },
+
+      setSelection: function(/*dijit/Tree._TreeNode[]*/ newSelection) {
+         this.inherited(arguments);
       }
    });
 
@@ -370,6 +375,28 @@ define(["dojo/_base/declare",
          });
          this.tree.placeAt(this.domNode);
          this.tree.startup();
+
+         // This section of code creates an aspect around the dndController created for the tree
+         // to prevent it from selecting nodes when the selected node is disabled...
+         // It works by only calling the original function when a non-disabled node has been selected
+         if (this.tree.dndController)
+         {
+            aspect.around(this.tree.dndController, "setSelection", function(originalFunction) {
+               return function(newSelection) {
+                  if (newSelection && 
+                      newSelection.length && 
+                      newSelection[0].domNode &&
+                      domClass.contains(newSelection[0].domNode, "alfresco-navigation-Tree__node--disabled"))
+                  {
+                     return null;
+                  }
+                  else
+                  {
+                     return originalFunction.apply(this, arguments);
+                  }
+               };
+            });
+         }
       },
       
       /**
