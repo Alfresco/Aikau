@@ -124,10 +124,6 @@ define(["dojo/_base/declare",
             }
          }
          return disabled;
-      },
-
-      setSelection: function(/*dijit/Tree._TreeNode[]*/ newSelection) {
-         this.inherited(arguments);
       }
    });
 
