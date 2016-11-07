@@ -61,7 +61,9 @@ define(["dojo/_base/declare",
          }
          var treeNode = this.inherited(arguments);
 
-         // TODO: Disable if necessary...
+         // When a tree node is added it is possible that it can be disabled if it meets 
+         // configured disablement rules. This has been implemented to support the use case
+         // required for Cloud Sync where existing sync folders cannot be reused.
          if (this.tree.treeNodeDisablementConfig && this.tree.treeNodeDisablementConfig.rules)
          {
             var item = arguments[0];
