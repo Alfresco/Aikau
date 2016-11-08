@@ -85,6 +85,18 @@ define(["dojo/_base/declare",
       userHomePage: "/dashboard",
 
       /**
+       * The prefix to apply to site locations to complete the URL for site home pages. Prior to 
+       * version 5.1 of Share this would be "/dashboard" but from Share 5.1 onwards the site
+       * home page is configurable so should be configured to be the empty string.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.95
+       */
+      siteHomePage: "/dashboard",
+
+      /**
        * Ensures that default [sitePresets]{@link module:alfresco/services/SiteService#sitePresets} are configured
        * if no custom values have been provided.
        * 
@@ -1106,7 +1118,7 @@ define(["dojo/_base/declare",
       onSiteEditSuccess: function alfresco_services_SiteService__onSiteEditSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          this.alfServicePublish(topics.SITE_EDIT_SUCCESS);
          this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
-            url: "site/" + originalRequestConfig.data.shortName + this.userHomePage
+            url: "site/" + originalRequestConfig.data.shortName + this.siteHomePage
          });
       },
 
