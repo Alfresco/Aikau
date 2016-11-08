@@ -25,8 +25,9 @@
 define(["module",
         "alfresco/TestCommon",
         "alfresco/defineSuite",
-        "intern/chai!assert"],
-        function(module, TestCommon, defineSuite, assert) {
+        "intern/chai!assert",
+        "intern/dojo/node!leadfoot/keys"],
+        function(module, TestCommon, defineSuite, assert, keys) {
 
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
@@ -126,12 +127,16 @@ define(["module",
          .waitForDeletedByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
          .end()
 
-         .findByCssSelector(selectors.dialogs.createSite.confirmationButton)
-            .clearLog()
-            .click()
-            .click() // For some reason in automated testing a second click is required here
-                     // Adding a long pause and a manual click and it works fine...
-         .end()
+         .clearLog()
+         .pressKeys(keys.ENTER)
+
+         
+         // .findByCssSelector(selectors.dialogs.createSite.confirmationButton)
+         //    .clearLog()
+         //    .click()
+         //    .click() // For some reason in automated testing a second click is required here
+         //             // Adding a long pause and a manual click and it works fine...
+         // .end()
 
          .findByCssSelector(selectors.dialogs.createSite.hidden)
          .end()
