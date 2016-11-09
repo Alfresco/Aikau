@@ -130,14 +130,6 @@ define(["module",
          .clearLog()
          .pressKeys(keys.ENTER)
 
-         
-         // .findByCssSelector(selectors.dialogs.createSite.confirmationButton)
-         //    .clearLog()
-         //    .click()
-         //    .click() // For some reason in automated testing a second click is required here
-         //             // Adding a long pause and a manual click and it works fine...
-         // .end()
-
          .findByCssSelector(selectors.dialogs.createSite.hidden)
          .end()
 
