@@ -212,13 +212,21 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Cause this button to respond as if it had been clicked.
+       * Cause this button to respond as if it had been clicked. The button will only 
+       * act as though it has been clicked if it is not disabled when the function is called.
        *
        * @instance
        * @since 1.0.49
        */
       activate: function alfresco_buttons_AlfButton__activate() {
-         this.onClick();
+         if (this.get("disabled"))
+         {
+            this.alfLog("log", "Button not activated when disabled", this);
+         }
+         else
+         {
+            this.onClick();
+         }
       },
 
       /**

@@ -878,7 +878,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published with the request to create a site
        * @fires module:alfresco/core/topics#CREATE_FORM_DIALOG
        */
-      createSite: function alfresco_services_SiteService__editSite(config) {
+      createSite: function alfresco_services_SiteService__createSite(config) {
          this.alfLog("log", "A request has been made to create a site: ", config);
          if (this.legacyMode)
          {
@@ -904,6 +904,9 @@ define(["dojo/_base/declare",
                formSubmissionTopic: topics.SITE_CREATION_REQUEST,
                formSubmissionGlobal: true,
                showValidationErrorsImmediately: false,
+               customFormConfig: {
+                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED]
+               },
                widgets: dialogWidgets
             });
          }
@@ -1058,6 +1061,9 @@ define(["dojo/_base/declare",
                formSubmissionGlobal: true,
                formValue: response,
                showValidationErrorsImmediately: false,
+               customFormConfig: {
+                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED]
+               },
                widgets: dialogWidgets
             });
          }
