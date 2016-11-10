@@ -937,6 +937,7 @@ define(["dojo/_base/declare",
                this.siteContext = false;
                this.lastSearchText = "";
                this.onSearchBoxKeyUp(evt);
+               evt.preventDefault();
             }));
             on(this._LiveSearch.contextSiteNode, "click", lang.hitch(this, function(evt) {
                // change context to site
@@ -945,6 +946,7 @@ define(["dojo/_base/declare",
                this.siteContext = true;
                this.lastSearchText = "";
                this.onSearchBoxKeyUp(evt);
+               evt.preventDefault();
             }));
 
             // event handlers to hide/show the panel
