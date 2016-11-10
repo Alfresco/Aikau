@@ -72,18 +72,25 @@ define(["alfresco/core/topics",
          // error messages can be displayed without relying on focus being lost
          this._hadUserUpdate = true;
          
-         if (this.publishTopicOnEnter && evt.keyCode === keys.ENTER) {
+         if (this.publishTopicOnEnter && evt.keyCode === keys.ENTER) 
+         {
             this.alfPublish(this.publishTopicOnEnter, {
                fieldId: this.id
             });
             evt.preventDefault();
-         } else {
+         } 
+         else 
+         {
             this._oldValue = this.__oldValue; // Set the old value as the last buffer...
             this.__oldValue = this.getValue(); // Make the last buffer the current value being set
 
-            this.alfLog("log", "keyup - OLD value: " + this._oldValue + ", NEW value: " + this.getValue());
-            this.formControlValueChange(this.name, this._oldValue, this.getValue());
-            this.validate();
+            // See AKU-1121 - only validate on actual changes...
+            if (this._oldValue !== this.__oldValue)
+            {
+               this.alfLog("log", "keyup - OLD value: " + this._oldValue + ", NEW value: " + this.getValue());
+               this.formControlValueChange(this.name, this._oldValue, this.getValue());
+               this.validate();
+            }
          }
       },
 
