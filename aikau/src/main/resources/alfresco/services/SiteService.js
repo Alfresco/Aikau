@@ -49,6 +49,21 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SiteService.properties"}],
 
       /**
+       * This can be configured to be an array of additional site presets that will be 
+       * added to the default set (which will just be the "Collaboration Site"). Rather
+       * than configuring the [sitePresets]{@link module:alfresco/services/SiteService#sitePresets}
+       * it may be better to define additional presets. Each element in the array should be
+       * an object with "label" and "value" attributes where the value matches a preset
+       * configured in Share.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.95
+       */
+      additionalSitePresets: null,
+
+      /**
        * Indicates whether or not the Site Service is running in legacy mode. When configured in this mode
        * the service will attempt to use the YUI2 based dialogs provided by Alfresch Share for creating and
        * editing sites. If this is configured to be false then the 
@@ -73,6 +88,20 @@ define(["dojo/_base/declare",
        * @since 1.0.55
        */
       sitePresets: null,
+
+      /**
+       * This can be configured to be a string array of the site preset values to be removed
+       * from both [sitePresets]{@link module:alfresco/services/SiteService#sitePresets} and
+       * [additionalSitePresets]{@link module:alfresco/services/SiteService#additionalSitePresets}.
+       * Note that unlike those attributes this is just a string array rather than an object
+       * array because only the site preset values (not labels) are matched.
+       *
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.95
+       */
+      sitePresetsToRemove: null,
 
       /**
        * The standard home page for a user
@@ -110,6 +139,20 @@ define(["dojo/_base/declare",
             this.sitePresets = [
                { label: "create-site.dialog.type.collaboration", value: "site-dashboard" }
             ];
+         }
+
+         if (this.additionalSitePresets && this.additionalSitePresets.length)
+         {
+            this.sitePresets = this.sitePresets.concat(this.additionalSitePresets);
+         }
+
+         if (this.sitePresetsToRemove && this.sitePresetsToRemove.length)
+         {
+            this.sitePresets = array.filter(this.sitePresets, function(preset) {
+               return !array.some(this.sitePresetsToRemove, function(presetToRemove) {
+                  return preset.value === presetToRemove;
+               });
+            }, this);
          }
       },
 

@@ -32,6 +32,7 @@ define(["module",
    var textBoxSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/TextBox");
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
+   var selectSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/Select");
 
    var selectors = {
       buttons: {
@@ -51,6 +52,15 @@ define(["module",
          },
          createSiteShortName: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["CREATE_SITE_FIELD_SHORTNAME"])
+         }
+      },
+      selectControls: {
+         sitePresets: {
+            dropDown: TestCommon.getTestSelector(selectSelectors, "option.menu", ["CREATE_SITE_FIELD_PRESET"]),
+            openIcon: TestCommon.getTestSelector(selectSelectors, "open.menu.icon", ["CREATE_SITE_FIELD_PRESET"]),
+            options: TestCommon.getTestSelector(selectSelectors, "options", ["CREATE_SITE_FIELD_PRESET"]),
+            option1: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["CREATE_SITE_FIELD_PRESET", "1"]),
+            option2: TestCommon.getTestSelector(selectSelectors, "nth.option.label", ["CREATE_SITE_FIELD_PRESET", "2"])
          }
       }
    };
@@ -302,6 +312,118 @@ define(["module",
          .end()
 
          .getLastPublish("ALF_RELOAD_PAGE");
+      }
+   });
+
+   defineSuite(module, {
+      name: "SiteService Tests (Reconfigured presets)",
+      testPage: "/SiteService?sitePresets=configured",
+
+      "Reconfigured site presets are correct": function() {
+         return this.remote.setFindTimeout(5000)
+
+         .findByCssSelector(selectors.buttons.createSite)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.createSite.visible)
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
+         .end()
+
+         .findAllByCssSelector(selectors.selectControls.sitePresets.options)
+            .then(function(options) {
+               assert.lengthOf(options, 1);
+            })
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.option1)
+            .getVisibleText()
+            .then(function(sitePresetLabel) {
+               assert.equal(sitePresetLabel, "Custom");
+            });
+      }
+   });
+
+   defineSuite(module, {
+      name: "SiteService Tests (Additional presets)",
+      testPage: "/SiteService?sitePresets=additional",
+
+      "Reconfigured site presets are correct": function() {
+         return this.remote.setFindTimeout(5000)
+
+         .findByCssSelector(selectors.buttons.createSite)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.createSite.visible)
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
+         .end()
+
+         .findAllByCssSelector(selectors.selectControls.sitePresets.options)
+            .then(function(options) {
+               assert.lengthOf(options, 2);
+            })
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.option1)
+            .getVisibleText()
+            .then(function(sitePresetLabel) {
+               assert.equal(sitePresetLabel, "Collaboration Site");
+            })
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.option2)
+            .getVisibleText()
+            .then(function(sitePresetLabel) {
+               assert.equal(sitePresetLabel, "Additional Custom");
+            });
+      }
+   });
+
+   defineSuite(module, {
+      name: "SiteService Tests (Removed presets)",
+      testPage: "/SiteService?sitePresets=remove",
+
+      "Reconfigured site presets are correct": function() {
+         return this.remote.setFindTimeout(5000)
+
+         .findByCssSelector(selectors.buttons.createSite)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.createSite.visible)
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
+         .end()
+
+         .findAllByCssSelector(selectors.selectControls.sitePresets.options)
+            .then(function(options) {
+               assert.lengthOf(options, 1);
+            })
+         .end()
+
+         .findByCssSelector(selectors.selectControls.sitePresets.option1)
+            .getVisibleText()
+            .then(function(sitePresetLabel) {
+               assert.equal(sitePresetLabel, "Additional Custom");
+            });
       }
    });
 });
