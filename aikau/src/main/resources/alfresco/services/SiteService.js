@@ -965,6 +965,15 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
        */
       onSiteCreationSuccess: function alfresco_services_SiteService__onSiteCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
+         // See AKU-1108 - Need to ensure that favourite is added before navigating to the new page...
+         //                Intentionally not cleaning up subscription because page will change...
+         this.alfSubscribe("ALF_FAVOURITE_SITE_ADDED", lang.hitch(this, function() {
+            this.alfServicePublish(topics.SITE_CREATION_SUCCESS);
+            this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+               url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
+            });
+         }));
+
          // Mark the new site as a favourite...
          this.alfServicePublish(topics.ADD_FAVOURITE_SITE, {
             site: originalRequestConfig.data.shortName,
