@@ -80,8 +80,10 @@ define(["dojo/_base/declare",
       /**
        * This is an array of site preset options that will be displayed when creating a site (when the service
        * is not configured to be in [legacyMode]{@link module:alfresco/services/SiteService#legacyMode}). The
-       * default configuration just contains the "Collaboration Site", but this can be re-configured to contain
-       * additional site presets. Any additional presets must have values that map to presets in the Surf configuration.
+       * default configuration just contains the "Collaboration Site", but this can be overridden here. Any 
+       * presets must have values that map to presets in the Surf configuration. Note that 
+       * [additionalSitePresets]{@link module:alfresco/services/SiteService#additionalSitePresets} can be used
+       * to augment the default list rather than replacing it completely.
        * 
        * @instance
        * @type {object[]}
