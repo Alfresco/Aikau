@@ -187,6 +187,10 @@
    .dialog-body {
       .alfresco-forms-Form.root-dialog-form {
          > form {
+            > .alfresco-forms-controls-BaseFormControl:first-child {
+               margin-top: 5px;
+            }
+
             > .alfresco-forms-controls-BaseFormControl {
                min-width: @dialog-control-section + 2;
                > .description-row > .description {
