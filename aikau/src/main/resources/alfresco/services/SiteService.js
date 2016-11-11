@@ -143,7 +143,9 @@ define(["dojo/_base/declare",
             ];
          }
 
-         if (this.additionalSitePresets && this.additionalSitePresets.length)
+         if (this.additionalSitePresets && 
+             ObjectTypeUtils.isArray(this.additionalSitePresets) && 
+             this.additionalSitePresets.length)
          {
             this.sitePresets = this.sitePresets.concat(this.additionalSitePresets);
          }
