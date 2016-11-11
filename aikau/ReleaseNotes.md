@@ -1,4 +1,4 @@
-Aikau 1.0.94 Release Notes
+Aikau 1.0.95 Release Notes
 ===
 
 Current deprecations:
@@ -48,6 +48,17 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.95:
+* [AKU-1108](https://issues.alfresco.com/jira/browse/AKU-1108)       - Ensure new sites are favourited (Firefox fix)
+* [AKU-1114](https://issues.alfresco.com/jira/browse/AKU-1114)       - Remove unicode STH delineation from Thumbnail title
+* [AKU-1115](https://issues.alfresco.com/jira/browse/AKU-1115)       - Redirect to user dashboard on request to join moderated site
+* [AKU-1116](https://issues.alfresco.com/jira/browse/AKU-1116)       - Add support for enter key completing dialog forms (within field)
+* [AKU-1117](https://issues.alfresco.com/jira/browse/AKU-1117)       - Update site creation error messages
+* [AKU-1118](https://issues.alfresco.com/jira/browse/AKU-1118)       - Support PathTree updates with no "/" prefix
+* [AKU-1119](https://issues.alfresco.com/jira/browse/AKU-1119)       - Improve SiteService preset configuration options
+* [AKU-1121](https://issues.alfresco.com/jira/browse/AKU-1121)       - Debounce form validation styling changes
+* [AKU-1123](https://issues.alfresco.com/jira/browse/AKU-1123)       - OSX fix for dialog form field highlighting clipping
+
 1.0.94:
 * [AKU-1107](https://issues.alfresco.com/jira/browse/AKU-1107)       - Ensure spaces are trimmed in site data
 * [AKU-1108](https://issues.alfresco.com/jira/browse/AKU-1108)       - Ensure new sites are favourited
