@@ -1100,9 +1100,21 @@ define(["dojo/_base/declare",
        * @since 1.0.49
        */
       submitOkButton: function alfresco_forms_Form__submitOkButton() {
-         if(!this.okButton) {
+         if(!this.okButton) 
+         {
             this.alfLog("warn", "Cannot submit OK button as button not defined");
-         } else {
+
+            // See AKU-1116
+            // If no buttons can be found then the likely scenario is that we are within
+            // a form dialog. Therefore emit a custom event requesting that the form be
+            // submitted...
+            on.emit(this.domNode, "onFormSubmit", {
+               bubbles: true,
+               cancelable: true
+            });
+         }
+         else 
+         {
             this.okButton.activate();
          }
       },

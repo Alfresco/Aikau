@@ -182,8 +182,15 @@ define(["dojo/_base/declare",
          if (payload && payload.path !== null && payload.path !== undefined)
          {
             this.alfLog("log", "Filter updated", payload);
-            var pathElements = payload.path.split("/");
-            
+
+            // See AKU-1118... add a forward slash prefix if missing...
+            var path = payload.path;
+            if (path[0] !== "/")
+            {
+               path = "/" + path;
+            }
+
+            var pathElements = path.split("/");
             if (this.tree !== null && this.tree !== undefined && pathElements.length > 0)
             {
                var rootNode = this.tree.getChildren()[0];

@@ -49,6 +49,21 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SiteService.properties"}],
 
       /**
+       * This can be configured to be an array of additional site presets that will be 
+       * added to the default set (which will just be the "Collaboration Site"). Rather
+       * than configuring the [sitePresets]{@link module:alfresco/services/SiteService#sitePresets}
+       * it may be better to define additional presets. Each element in the array should be
+       * an object with "label" and "value" attributes where the value matches a preset
+       * configured in Share.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.95
+       */
+      additionalSitePresets: null,
+
+      /**
        * Indicates whether or not the Site Service is running in legacy mode. When configured in this mode
        * the service will attempt to use the YUI2 based dialogs provided by Alfresch Share for creating and
        * editing sites. If this is configured to be false then the 
@@ -65,14 +80,30 @@ define(["dojo/_base/declare",
       /**
        * This is an array of site preset options that will be displayed when creating a site (when the service
        * is not configured to be in [legacyMode]{@link module:alfresco/services/SiteService#legacyMode}). The
-       * default configuration just contains the "Collaboration Site", but this can be re-configured to contain
-       * additional site presets. Any additional presets must have values that map to presets in the Surf configuration.
+       * default configuration just contains the "Collaboration Site", but this can be overridden here. Any 
+       * presets must have values that map to presets in the Surf configuration. Note that 
+       * [additionalSitePresets]{@link module:alfresco/services/SiteService#additionalSitePresets} can be used
+       * to augment the default list rather than replacing it completely.
        * 
        * @instance
        * @type {object[]}
        * @since 1.0.55
        */
       sitePresets: null,
+
+      /**
+       * This can be configured to be a string array of the site preset values to be removed
+       * from both [sitePresets]{@link module:alfresco/services/SiteService#sitePresets} and
+       * [additionalSitePresets]{@link module:alfresco/services/SiteService#additionalSitePresets}.
+       * Note that unlike those attributes this is just a string array rather than an object
+       * array because only the site preset values (not labels) are matched.
+       *
+       * @instance
+       * @type {string[]}
+       * @default
+       * @since 1.0.95
+       */
+      sitePresetsToRemove: null,
 
       /**
        * The standard home page for a user
@@ -83,6 +114,18 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       userHomePage: "/dashboard",
+
+      /**
+       * The prefix to apply to site locations to complete the URL for site home pages. Prior to 
+       * version 5.1 of Share this would be "/dashboard" but from Share 5.1 onwards the site
+       * home page is configurable so should be configured to be the empty string.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.95
+       */
+      siteHomePage: "/dashboard",
 
       /**
        * Ensures that default [sitePresets]{@link module:alfresco/services/SiteService#sitePresets} are configured
@@ -98,6 +141,22 @@ define(["dojo/_base/declare",
             this.sitePresets = [
                { label: "create-site.dialog.type.collaboration", value: "site-dashboard" }
             ];
+         }
+
+         if (this.additionalSitePresets && 
+             ObjectTypeUtils.isArray(this.additionalSitePresets) && 
+             this.additionalSitePresets.length)
+         {
+            this.sitePresets = this.sitePresets.concat(this.additionalSitePresets);
+         }
+
+         if (this.sitePresetsToRemove && this.sitePresetsToRemove.length)
+         {
+            this.sitePresets = array.filter(this.sitePresets, function(preset) {
+               return !array.some(this.sitePresetsToRemove, function(presetToRemove) {
+                  return preset.value === presetToRemove;
+               });
+            }, this);
          }
       },
 
@@ -866,7 +925,7 @@ define(["dojo/_base/declare",
        * @param {object} payload The payload published with the request to create a site
        * @fires module:alfresco/core/topics#CREATE_FORM_DIALOG
        */
-      createSite: function alfresco_services_SiteService__editSite(config) {
+      createSite: function alfresco_services_SiteService__createSite(config) {
          this.alfLog("log", "A request has been made to create a site: ", config);
          if (this.legacyMode)
          {
@@ -892,6 +951,9 @@ define(["dojo/_base/declare",
                formSubmissionTopic: topics.SITE_CREATION_REQUEST,
                formSubmissionGlobal: true,
                showValidationErrorsImmediately: false,
+               customFormConfig: {
+                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED]
+               },
                widgets: dialogWidgets
             });
          }
@@ -950,6 +1012,15 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#NAVIGATE_TO_PAGE
        */
       onSiteCreationSuccess: function alfresco_services_SiteService__onSiteCreationSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
+         // See AKU-1108 - Need to ensure that favourite is added before navigating to the new page...
+         //                Intentionally not cleaning up subscription because page will change...
+         this.alfSubscribe("ALF_FAVOURITE_SITE_ADDED", lang.hitch(this, function() {
+            this.alfServicePublish(topics.SITE_CREATION_SUCCESS);
+            this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
+               url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
+            });
+         }));
+
          // Mark the new site as a favourite...
          this.alfServicePublish(topics.ADD_FAVOURITE_SITE, {
             site: originalRequestConfig.data.shortName,
@@ -1046,6 +1117,9 @@ define(["dojo/_base/declare",
                formSubmissionGlobal: true,
                formValue: response,
                showValidationErrorsImmediately: false,
+               customFormConfig: {
+                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED]
+               },
                widgets: dialogWidgets
             });
          }
@@ -1106,7 +1180,7 @@ define(["dojo/_base/declare",
       onSiteEditSuccess: function alfresco_services_SiteService__onSiteEditSuccess(/*jshint unused:false*/ response, originalRequestConfig) {
          this.alfServicePublish(topics.SITE_EDIT_SUCCESS);
          this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
-            url: "site/" + originalRequestConfig.data.shortName + this.userHomePage
+            url: "site/" + originalRequestConfig.data.shortName + this.siteHomePage
          });
       },
 

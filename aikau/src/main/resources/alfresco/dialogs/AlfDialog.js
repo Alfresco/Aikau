@@ -624,6 +624,25 @@ define(["dojo/_base/declare",
             // When creating the buttons, attach the handler to each created...
             this._buttons = [];
             array.forEach(widgets, lang.hitch(this, this.attachButtonHandler));
+
+            // See AKU-1116... 
+            // Forms support the ability to submit on the publication of a topic, but form
+            // dialogs hide the standard form buttons. This section of code will handle events
+            // emitted by forms when no form buttons can be found. It allows the form dialogs
+            // to be submitted on enter...
+            on(this.domNode, "onFormSubmit", lang.hitch(this, function() {
+               if (this._buttons)
+               {
+                  array.some(this._buttons, function(button) {
+                     if (domClass.contains(button.domNode, "confirmationButton"))
+                     {
+                        button.activate();
+                        return true;
+                     }
+                     return false;
+                  });
+               }
+            }));
          }
          else
          {

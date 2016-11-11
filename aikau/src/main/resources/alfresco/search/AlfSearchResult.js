@@ -701,7 +701,9 @@ define(["dojo/_base/declare",
             pubSubScope: this.pubSubScope,
             showDocumentPreview: true,
             newTabOnMiddleOrCtrlClick: this.newTabOnMiddleOrCtrlClick,
-            defaultNavigationTarget: this.navigationTarget
+            defaultNavigationTarget: this.navigationTarget,
+            highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
+            highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
          };
          if (this.navigationTarget)
          {

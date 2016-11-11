@@ -1,3 +1,32 @@
+var siteService = {
+   name: "alfresco/services/SiteService",
+   config: {
+      userHomePage: "/home",
+      siteHomePage: "",
+      legacyMode: false
+   }
+};
+
+/* global page */
+/* jshint sub:true */
+if (page.url.args["sitePresets"])
+{
+   switch (page.url.args["sitePresets"]) {
+      case "configured": 
+         siteService.config.sitePresets = [{ label: "Custom", value: "custom_preset" } ];
+         break;
+
+      case "additional": 
+         siteService.config.additionalSitePresets = [{ label: "Additional Custom", value: "custom_preset" } ];
+         break;
+
+      case "remove":
+         siteService.config.additionalSitePresets = [{ label: "Additional Custom", value: "custom_preset" } ];
+         siteService.config.sitePresetsToRemove = [ "site-dashboard" ];
+         break;
+   }
+}
+
 model.jsonModel = {
    services: [
       {
@@ -9,13 +38,7 @@ model.jsonModel = {
             }
          }
       },
-      {
-         name: "alfresco/services/SiteService",
-         config: {
-            userHomePage: "/home",
-            legacyMode: false
-         }
-      },
+      siteService,
       "alfresco/services/DialogService",
       "alfresco/services/NotificationService",
       "alfresco/services/ErrorReporter"

@@ -63,6 +63,11 @@
       border-radius: @call-to-action-button-border-radius;
       margin: @call-to-action-button-margin;
       padding: @call-to-action-button-padding;
+
+      transition-property: background border;
+      transition-duration: 0s;
+      transition-delay: 0.1s;
+         
       .dijitButtonText {
          font-family: @call-to-action-button-font-family;
          font-size: @call-to-action-button-font-size;
@@ -71,6 +76,10 @@
          margin: @call-to-action-button-text-margin;
       }
       .dijitReset.dijitInline.dijitButtonNode {
+         transition-duration: 0s;
+         transition-property: color;
+         transition-delay: 0.1s;
+            
          color: @call-to-action-button-font-color;
       }
       &.dijitButtonFocused, &.dijitButtonHover {
