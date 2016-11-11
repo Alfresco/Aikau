@@ -42,6 +42,17 @@ model.jsonModel = {
                                     }
                                  },
                                  {
+                                    id: "SET_PATH_NO_SLASH",
+                                    name: "alfresco/buttons/AlfButton",
+                                    config: {
+                                       label: "Set path (no slash)",
+                                       publishTopic: "ALF_DOCUMENTLIST_PATH_CHANGED",
+                                       publishPayload: {
+                                          path: "documentLibrary"
+                                       }
+                                    }
+                                 },
+                                 {
                                     id: "SET_PATH",
                                     name: "alfresco/buttons/AlfButton",
                                     config: {

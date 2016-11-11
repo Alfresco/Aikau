@@ -182,6 +182,12 @@ define(["dojo/_base/declare",
          if (payload && payload.path !== null && payload.path !== undefined)
          {
             this.alfLog("log", "Filter updated", payload);
+
+            if (payload.path[0] !== "/")
+            {
+               payload.path = "/" + payload.path;
+            }
+
             var pathElements = payload.path.split("/");
             
             if (this.tree !== null && this.tree !== undefined && pathElements.length > 0)

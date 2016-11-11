@@ -56,8 +56,9 @@ define(["module",
       "Test that clicking on TREE1 publishes path": function() {
          return this.remote.findByCssSelector("#TREE1 .dijitTreeIsRoot > div.dijitTreeRow .dijitTreeLabel")
             .click()
-            .end()
-            .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
+         .end()
+         
+         .getLastPublish("ALF_DOCUMENTLIST_PATH_CHANGED")
             .then(function(payload) {
                assert.propertyVal(payload, "path", "/", "Clicking on the root of TREE1 did not publish the expected path");
             });
@@ -66,8 +67,9 @@ define(["module",
       "Test that clicking on TREE2 publishes custom topic": function() {
          return this.remote.findByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeRow .dijitTreeLabel")
             .click()
-            .end()
-            .getLastPublish("ALF_ITEM_SELECTED", "The topic published by clicking on TREE2 nodes is not requested custom topic");
+         .end()
+         
+         .getLastPublish("ALF_ITEM_SELECTED", "The topic published by clicking on TREE2 nodes is not requested custom topic");
       },
 
       "Test that TREE1 has NOT filtered site containers": function() {
@@ -102,8 +104,9 @@ define(["module",
       "Test that opening a node loads its children": function() {
          return this.remote.findByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeRow .dijitTreeExpando")
             .click()
-            .end()
-            .findAllByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeNodeContainer > *")
+         .end()
+         
+         .findAllByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeNodeContainer > *")
             .then(function(elements) {
                assert.lengthOf(elements, 4, "The child nodes of the Document Library in TREE2 were not loaded when requested");
             });
@@ -112,8 +115,9 @@ define(["module",
       "Test that paths are correct for child nodes": function() {
          return this.remote.findByCssSelector("#TREE2 .dijitTreeIsRoot > div.dijitTreeNodeContainer div.dijitTreeNodeContainer > div:first-child div.dijitTreeRow .dijitTreeLabel")
             .click()
-            .end()
-            .getLastPublish("ALF_ITEM_SELECTED")
+         .end()
+   
+         .getLastPublish("ALF_ITEM_SELECTED")
             .then(function(payload) {
                assert.propertyVal(payload, "path", "/documentLibrary/Agency Files/", "Clicking on a child node of TREE2 did not publish the expected path");
             });
@@ -122,23 +126,37 @@ define(["module",
       "Publish hash change": function() {
          return this.remote.findById("SET_HASH_label")
             .click()
-            .end()
-            .findAllByCssSelector("#TREE1 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+         .end()
+      
+         .findAllByCssSelector("#TREE1 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Setting the hash did not expand the first tree");
             })
-            .end()
-            .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+         .end()
+  
+         .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
             .then(function(elements) {
                assert.lengthOf(elements, 0, "Setting the hash should not have expanded the second tree");
+            });
+      },
+
+      "Publish path change (no slash prefix)": function() {
+         return this.remote.findById("SET_PATH_NO_SLASH_label")
+            .click()
+         .end()
+       
+         .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+            .then(function(elements) {
+               assert.lengthOf(elements, 4, "Setting the path did not expand the second tree");
             });
       },
 
       "Publish path change": function() {
          return this.remote.findById("SET_PATH_label")
             .click()
-            .end()
-            .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
+         .end()
+       
+         .findAllByCssSelector("#TREE2 .dijitTreeNode .dijitTreeNode .dijitTreeNode .dijitTreeNode")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Setting the path did not expand the second tree");
             });
@@ -154,7 +172,7 @@ define(["module",
          return this.remote.findById("ADD_FOLDER_label")
             .clearXhrLog()
             .click()
-            .end()
+         .end()
 
          .getLastXhr()
             .then(function(xhr) {
@@ -167,7 +185,7 @@ define(["module",
          return this.remote.findById("DELETE_FOLDER_label")
             .clearXhrLog()
             .click()
-            .end()
+         .end()
 
          .getLastXhr()
             .then(function(xhr) {
@@ -181,7 +199,7 @@ define(["module",
          return this.remote.findById("ADD_FOLDER_AT_ROOT_label")
             .clearXhrLog()
             .click()
-            .end()
+         .end()
 
          .getLastXhr()
             .then(function(xhr) {
@@ -194,7 +212,7 @@ define(["module",
          return this.remote.findById("DELETE_FOLDER_AT_ROOT_label")
             .clearXhrLog()
             .click()
-            .end()
+         .end()
 
          .getLastXhr()
             .then(function(xhr) {
