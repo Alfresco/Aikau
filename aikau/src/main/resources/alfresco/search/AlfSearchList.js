@@ -59,6 +59,17 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/AlfSearchList.css"}],
 
       /**
+       * An optional map of additional key/value pairs of query parameters to apply to all
+       * searches.
+       *
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.96
+       */
+      additionalQueryParameters: null,
+
+      /**
        * The facet fields to include in searches. This is updated by the onIncludeFacetRequest function.
        *
        * @instance
@@ -665,6 +676,18 @@ define(["dojo/_base/declare",
                      if (this.query.hasOwnProperty(key))
                      {
                         searchPayload[key] = this.query[key];
+                     }
+                  }
+               }
+
+               // Add in any additional query parameters...
+               if (this.additionalQueryParameters)
+               {
+                  for (key in this.additionalQueryParameters)
+                  {
+                     if (this.additionalQueryParameters.hasOwnProperty(key))
+                     {
+                        searchPayload[key] = this.additionalQueryParameters[key];
                      }
                   }
                }
