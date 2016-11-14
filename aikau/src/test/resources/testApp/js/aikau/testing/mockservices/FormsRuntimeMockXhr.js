@@ -33,9 +33,10 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflow.json",
         "dojo/text!./responseTemplates/FormsRuntime/CreateWorkflowSuccess.json",
         "dojo/text!./responseTemplates/FormsRuntime/EditTask.json",
-        "dojo/text!./responseTemplates/FormsRuntime/EditDataListItem.json"], 
+        "dojo/text!./responseTemplates/FormsRuntime/EditDataListItem.json",
+        "dojo/text!./responseTemplates/previews/PDF.json"], 
         function(declare, MockXhr, webScriptDefaults, lang, Authorities, EditDocLibSimpleMetadata, ViewNodeDefault, 
-                 CreateWorkflow, CreateWorkflowSuccess, EditTask, EditDataListItem) {
+                 CreateWorkflow, CreateWorkflowSuccess, EditTask, EditDataListItem, pdfNodeData) {
    
    return declare([MockXhr], {
 
@@ -88,6 +89,12 @@ define(["dojo/_base/declare",
                                     [200,
                                      {"Content-Type":"application/json;charset=UTF-8"},
                                      EditDataListItem]);
+
+            this.server.respondWith("GET",
+                                    /\/aikau\/service\/components\/documentlibrary\/data\/node\/workspace\/SpacesStore\/1a0b110f-1e09-4ca2-b367-fe25e4964a4e(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8"},
+                                     pdfNodeData]);
          }
          catch(e)
          {
