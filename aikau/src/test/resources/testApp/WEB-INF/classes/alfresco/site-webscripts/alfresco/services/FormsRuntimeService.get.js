@@ -12,7 +12,8 @@ model.jsonModel = {
       "alfresco/services/FormsRuntimeService",
       "alfresco/services/DialogService",
       "alfresco/services/UserService",
-      "alfresco/services/CrudService"
+      "alfresco/services/CrudService",
+      "alfresco/services/DocumentService"
    ],
    widgets: [
       {
@@ -77,6 +78,27 @@ model.jsonModel = {
                   dialogTitle: "Edit Task",
                   formSubmissionPayloadMixin: {
                      alfResponseScope: "EDIT_TASK_SCOPE_"
+                  }
+               }
+            }
+         }
+      },
+      {
+         id: "EDIT_DATA_LIST_ITEM",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Edit data list item",
+            publishTopic: "ALF_FORM_REQUEST",
+            publishPayload: {
+               itemKind: "node",
+               itemId: "workspace://SpacesStore/7778cf88-836f-4833-a0df-3056d2b20e7a",
+               mode: "edit",
+               formConfig: {
+                  useDialog: true,
+                  formId: "EDIT_DLI_FORM",
+                  dialogTitle: "Edit Task",
+                  formSubmissionPayloadMixin: {
+                     alfResponseScope: "EDIT_DLI_SCOPE_"
                   }
                }
             }

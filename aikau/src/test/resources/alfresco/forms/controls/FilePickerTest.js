@@ -92,8 +92,8 @@ define(["module",
                assert.isArray(payload.singleFile);
                assert.lengthOf(payload.singleFile, 0);
                assert.isArray(payload.multiFile);
-               assert.include(payload.multiFile, {nodeRef :"workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4" });
-               assert.include(payload.multiFile, {nodeRef :"workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5" });
+               assert.include(payload.multiFile[0], "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4");
+               assert.include(payload.multiFile[1], "workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5");
                assert.equal(payload.delimitedValue, "workspace://SpacesStore/62e6c83c-f239-4f85-b1e8-6ba0fd50fac4,workspace://SpacesStore/a4fc4392-27f6-49fd-8b6e-20b953c59ff5");
                assert.equal(payload.delimited_added, "");
                assert.equal(payload.delimited_removed, "");
