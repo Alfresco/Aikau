@@ -34,15 +34,17 @@ define(["module",
          // Include a facet with no data...
          return this.remote.findByCssSelector("#INCLUDE_FACET_0")
             .click()
-            .end()
+         .end()
+            
             // Include an initial facet (for code coverage)...
-            .findByCssSelector("#INCLUDE_FACET_1")
+         .findByCssSelector("#INCLUDE_FACET_1")
             .click()
-            .end()
-            // The initial AlfSearchList doesn't perform an initial search when "useHash" is set to true (which
-            // for this test it is).
-            // Check that no request to search exists...
-            .getAllPublishes("ALF_SEARCH_REQUEST")
+         .end()
+   
+         // The initial AlfSearchList doesn't perform an initial search when "useHash" is set to true (which
+         // for this test it is).
+         // Check that no request to search exists...
+         .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Search request made unexpectedly");
             });
@@ -60,8 +62,9 @@ define(["module",
          // Click the button to set a search term (but don't actually provide one)
          return this.remote.findByCssSelector("#SET_SEARCH_TERM_1")
             .click()
-            .end()
-            .getAllPublishes("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Search request made unexpectedly");
             });
@@ -71,9 +74,10 @@ define(["module",
          // Click the button to set the search term...
          return this.remote.findByCssSelector("#SET_SEARCH_TERM_2")
             .click()
-            .end()
-            // Check that updating the hash results in a search request being made...
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         // Check that updating the hash results in a search request being made...
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "term", "testTerm1", "Search term didn't request search");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from request");
@@ -93,8 +97,9 @@ define(["module",
          return this.remote.findByCssSelector("#SET_SEARCH_TERM_3")
             .clearLog()
             .click()
-            .end()
-            .getAllPublishes("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Another search request made before previous response returned");
             });
@@ -105,8 +110,9 @@ define(["module",
          // requests and the last one should be for the last search term...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "term", "testTerm2", "Search term didn't request search");
             });
@@ -124,14 +130,15 @@ define(["module",
          // Return response from previous request...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
+         .end()
 
          // Set identical search term...
          .findByCssSelector("#SET_SEARCH_TERM_3")
             .clearLog()
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "term", "testTerm2", "Search term didn't request search");
             });
@@ -142,11 +149,13 @@ define(["module",
          // Set the same term again to check that the filters are removed...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
+         .end()
+         
+         .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet fields were not set appropriately from hash change");
             });
@@ -156,11 +165,13 @@ define(["module",
          // Ensure the next search term will be set by publishing some data (to prevent concurrent request blocking)...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#SET_SEARCH_TERM_2")
+         .end()
+         
+         .findByCssSelector("#SET_SEARCH_TERM_2")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "term", "testTerm1", "New search term not issued");
                assert.propertyVal(payload, "filters", "", "Facet fields were not cleared");
@@ -172,12 +183,15 @@ define(["module",
          // Set empty scope...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .clearLog()
-            .findByCssSelector("#SET_SCOPE_0")
+         .end()
+         
+         .clearLog()
+      
+         .findByCssSelector("#SET_SCOPE_0")
             .click()
-            .end()
-            .getAllPublishes("ALF_SEARCH_REQUEST")
+         .end()
+   
+         .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Setting a null scope issued a search request");
             });
@@ -186,8 +200,9 @@ define(["module",
       "Test that setting the same scope doesn't issue new search": function() {
          return this.remote.findByCssSelector("#SET_SCOPE_1")
             .click()
-            .end()
-            .getAllPublishes("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Setting the same scope issued a search request");
             });
@@ -196,8 +211,9 @@ define(["module",
       "Test that setting a new scope issues a new search": function() {
          return this.remote.findByCssSelector("#SET_SCOPE_2")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "repo", false, "Setting a new scope didn't issue a search request (and repo wasn't set to false)");
                assert.propertyVal(payload, "site", "", "Site wasn't set to empty string for ALL_SITES scope");
@@ -207,11 +223,13 @@ define(["module",
       "Test that setting specific site scope issues a new search": function() {
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#SET_SCOPE_3")
+         .end()
+         
+         .findByCssSelector("#SET_SCOPE_3")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "repo", false, "Repo wasn't set to false for site scope search");
                assert.propertyVal(payload, "site", "site1", "Site wasn't set requested site");
@@ -221,11 +239,13 @@ define(["module",
       "Test that setting repo scope issues a new search": function() {
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#SET_SCOPE_1")
+         .end()
+         
+         .findByCssSelector("#SET_SCOPE_1")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "repo", true, "Repo wasn't set to true for repo scope search");
                assert.propertyVal(payload, "site", "", "Site wasn't cleared for repo scope search");
@@ -236,11 +256,13 @@ define(["module",
          // Check that updating the hash results in a search request being made...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
+         .end()
+         
+         .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "term", "testTerm2", "Search term not set appropriately from hash change");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
@@ -254,11 +276,13 @@ define(["module",
          // Click the button to remove filter2 from the filters list...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#REMOVE_FACET_FILTER")
+         .end()
+         
+         .findByCssSelector("#REMOVE_FACET_FILTER")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "filter1,filter3", "Facet filters not set appropriately from hash change");
             });
@@ -268,16 +292,20 @@ define(["module",
          // Test facet includes...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .clearLog()
-            // Click the button to include an additional facet in search requests...
-            .findByCssSelector("#INCLUDE_FACET_2")
+         .end()
+         
+         .clearLog()
+         
+         // Click the button to include an additional facet in search requests...
+         .findByCssSelector("#INCLUDE_FACET_2")
             .click()
-            .end()
-            .findByCssSelector("#APPLY_FACET_FILTER_0")
+         .end()
+         
+         .findByCssSelector("#APPLY_FACET_FILTER_0")
             .click()
-            .end()
-            .getAllPublishes("ALF_SEARCH_REQUEST")
+         .end()
+      
+         .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
                assert.lengthOf(payloads, 0, "Bad facet filter triggered search");
             });
@@ -287,8 +315,9 @@ define(["module",
          // Click the button to add filter4 to the filters list...
          return this.remote.findByCssSelector("#APPLY_FACET_FILTER")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "filter1,filter3,filter4", "Applying a filter didn't trigger a search");
                assert.propertyVal(payload, "facetFields", "qname1", "Facet fields not set appropriately from hash change");
@@ -299,11 +328,13 @@ define(["module",
          // Publish data to prevent block on concurrent requests...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA_2")
+         .end()
+         
+         .findByCssSelector("#SET_MULTIPLE_SEARCH_DATA_2")
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST")
+         .end()
+      
+         .getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "term", "testTerm3", "Search term not set appropriately from hash change");
                assert.propertyVal(payload, "filters", "filter1,filter2,filter3", "Facet filters not set appropriately from hash change");
@@ -314,19 +345,22 @@ define(["module",
          // Click the button to generate a fake search request response...
          return this.remote.findByCssSelector("#PUBLISH_SEARCH_RESULTS")
             .click()
-            .end()
-            // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
-            .getLastPublish("ALF_FACET_RESULTS_qname1")
+         .end()
+         
+         // Check that facet data is published... NOTE: TOPIC THROWS AN ERROR IN TESTING - MUST BE THE @
+         .getLastPublish("ALF_FACET_RESULTS_qname1")
             .then(function(payload) {
                assert.deepPropertyVal(payload, "facetResults.test", 3, "Search result facet data not published");
             })
-            // Check that search result count is published...
-            .getLastPublish("ALF_SEARCH_RESULTS_COUNT")
+         
+         // Check that search result count is published...
+         .getLastPublish("ALF_SEARCH_RESULTS_COUNT")
             .then(function(payload) {
                assert.propertyVal(payload, "count", 3, "Search resultset size not published");
             })
-            // Test that Number of search results is as expected.
-            .findAllByCssSelector(".alfresco-search-AlfSearchResult")
+         
+         // Test that Number of search results is as expected.
+         .findAllByCssSelector(".alfresco-search-AlfSearchResult")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Number of results expected is 3, actual results displayed is: " + elements.length);
             });
@@ -338,7 +372,7 @@ define(["module",
          return this.remote.findByCssSelector("#SELECT_A_RESULT")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_SELECTED_FILES_CHANGED", "Item selection not detected");
       }
@@ -352,6 +386,23 @@ define(["module",
          return this.remote.findByCssSelector("body").end().getLastPublish("ALF_SEARCH_REQUEST")
             .then(function(payload) {
                assert.propertyVal(payload, "filters", "{http://www.alfresco.org/model/content/1.0}creator|mjackson,{http://www.alfresco.org/model/content/1.0}content.mimetype|image/png", "Incorrect filters applied to search");
+            });
+      }
+   });
+
+   defineSuite(module, {
+      name: "SearchList Tests (additonal query parameters)",
+      testPage: "/SearchList?additionalQueryParameters=true",
+
+      "Additional query parameters included": function() {
+         return this.remote.findByCssSelector("#SET_SEARCH_TERM_2")
+            .click()
+         .end()
+         
+         // Check that updating the hash results in a search request being made...
+         .getLastPublish("ALF_SEARCH_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "datatype", "cm:content");
             });
       }
    });

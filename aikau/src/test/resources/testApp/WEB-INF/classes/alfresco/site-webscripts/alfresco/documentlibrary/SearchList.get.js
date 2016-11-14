@@ -1,3 +1,13 @@
+/* global page */
+/* jshint sub:true */
+var additionalQueryParameters = null;
+if (page.url.args["additionalQueryParameters"] === "true")
+{
+   additionalQueryParameters = {
+      datatype: "cm:content"
+   };
+}
+
 model.jsonModel = {
    services: [
       {
@@ -13,8 +23,7 @@ model.jsonModel = {
       },
       {
          name: "alfresco/services/NavigationService"
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets: [
       {
@@ -230,6 +239,7 @@ model.jsonModel = {
       {
          name: "alfresco/search/AlfSearchList",
          config: {
+            additionalQueryParameters: additionalQueryParameters,
             useHash: true,
             hashVarsForUpdate: [
                "searchTerm",
