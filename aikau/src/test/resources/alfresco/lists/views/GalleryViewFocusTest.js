@@ -35,7 +35,7 @@ define(["module",
       "Keyboard focus works": function() {
          return this.remote.findDisplayedByCssSelector("#VERTICAL_ITEM_0 .alfresco-renderers-Property")
             .click()
-            .end()
+         .end()
 
          .pressKeys(keys.ARROW_RIGHT)
 

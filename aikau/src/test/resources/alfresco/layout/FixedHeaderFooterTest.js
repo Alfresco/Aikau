@@ -60,16 +60,16 @@ define(["module",
          return this.remote.findByCssSelector(".alfresco-layout-FixedHeaderFooter__content")
             .getPosition()
             .then(function(position) {
-               // NOTE: "top" takes margin of 10 into consideration...
-               assert.equal(position.y, 10, "Content should be at top of page");
+               assert.equal(position.y, 0, "Content should be at top of page");
             });
       },
 
       "Reveal header": function() {
          return this.remote.findById("SHOW_HEADER_label")
             .click()
-            .end()
-            .findByCssSelector(".alfresco-layout-FixedHeaderFooter__header")
+         .end()
+         
+         .findByCssSelector(".alfresco-layout-FixedHeaderFooter__header")
             .getSize()
             .then(function(size) {
                assert.notEqual(size.height, 0, "Header should now have height");
@@ -79,8 +79,9 @@ define(["module",
       "Reveal footer": function() {
          return this.remote.findById("SHOW_FOOTER_label")
             .click()
-            .end()
-            .findByCssSelector(".alfresco-layout-FixedHeaderFooter__footer")
+         .end()
+         
+         .findByCssSelector(".alfresco-layout-FixedHeaderFooter__footer")
             .getSize()
             .then(function(size) {
                assert.notEqual(size.height, 0, "Footer should now have height");
@@ -135,12 +136,12 @@ define(["module",
       "Header resize fires resize event": function() {
          return this.remote.findById("SHOW_HEADER_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#HEADER_TWISTER .label")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_NODE_RESIZED")
             .then(function(payload) {
@@ -161,12 +162,12 @@ define(["module",
             .then(function(size) {
                windowHeight = size.height;
             })
-            .end()
-            .findByCssSelector("#HEADER_FOOTER")
+         .end()
+         
+         .findByCssSelector("#HEADER_FOOTER")
             .getSize()
             .then(function(size) {
-               // PLEASE NOTE: 20 pixels deducted for test page padding
-               assert.equal(size.height, windowHeight - 20, "Height not calculated correctly");
+               assert.equal(size.height, windowHeight, "Height not calculated correctly");
             });
       },
 
@@ -178,12 +179,12 @@ define(["module",
             .then(function(size) {
                windowHeight = size.height;
             })
-            .end()
-            .findByCssSelector("#HEADER_FOOTER")
+         .end()
+         
+         .findByCssSelector("#HEADER_FOOTER")
             .getSize()
             .then(function(size) {
-               // PLEASE NOTE: 20 pixels deducted for test page padding
-               assert.equal(size.height, windowHeight - 20, "Height not calculated correctly");
+               assert.equal(size.height, windowHeight, "Height not calculated correctly");
             });
       }
    });

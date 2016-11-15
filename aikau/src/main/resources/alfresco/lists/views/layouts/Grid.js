@@ -50,13 +50,13 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-geometry",
-        "dojo/query",
         "dojo/dom-style",
         "dijit/registry",
-        "dijit/focus"],
+        "dijit/focus",
+        "jquery"],
         function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, KeyboardNavigationSuppressionMixin, template, _MultiItemRendererMixin,
-                 AlfCore, _LayoutMixin, WidgetsCreator, keys, on, lang, array, domAttr, domClass, domConstruct, domGeom, query, domStyle,
-                 registry, focusUtil) {
+                 AlfCore, _LayoutMixin, WidgetsCreator, keys, on, lang, array, domAttr, domClass, domConstruct, domGeom, domStyle,
+                 registry, focusUtil, $) {
 
    return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _KeyNavContainer, _MultiItemRendererMixin, KeyboardNavigationSuppressionMixin, AlfCore, _LayoutMixin], {
 
@@ -568,7 +568,7 @@ define(["dojo/_base/declare",
             if (this.fixedColumns === true)
             {
                var widthToSet = (Math.floor(marginBox.w / this.columns) - 10) + "px";
-               query(".alfresco-lists-views-layouts-Grid > tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
+               $(node).find("tr > td").each(lang.hitch(this, this.resizeCell, marginBox, widthToSet));
             }
             else
             {
@@ -602,7 +602,7 @@ define(["dojo/_base/declare",
 
                   // Resize the cells and widgets...
                   domStyle.set(this.domNode, "width", gridWidth + "px");
-                  query("tr > td", node).forEach(lang.hitch(this, this.resizeCell, marginBox, this.thumbnailSize + "px"));
+                  $(node).find("tr > td").each(lang.hitch(this, this.resizeCell, marginBox, this.thumbnailSize + "px"));
                }
             }
          }
@@ -617,7 +617,7 @@ define(["dojo/_base/declare",
        * @param {element} node The node to set width on
        * @param {number} index The current index of the element in the array
        */
-      resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, node, /*jshint unused:false*/ index) {
+      resizeCell: function alfresco_lists_views_layouts_Grid__resizeCell(containerNodeMarginBox, widthToSet, index, node /*jshint unused:false*/) {
          if (!domClass.contains(node.parentNode, "alfresco-lists-views-layouts-Grid__expandedPanel"))
          {
             domStyle.set(node, {"width": widthToSet});
@@ -646,15 +646,15 @@ define(["dojo/_base/declare",
          if (widget && typeof widget.resize === "function")
          {
             widget.resize({
-               w: dimensions.w + 6,
+               w: dimensions.w,
                h: null
             });
          }
          else
          {
             // See AKU-689 - resize the widgets DOM node and publish an event to indicate that it has been resized...
-            domStyle.set(widget.domNode, "width", dimensions.w + 6);
-            this.alfPublishResizeEvent(widget.domNode);
+            domStyle.set(widget.domNode, "width", dimensions.w);
+            this.alfPublishResizeEvent(widget.domNode, true);
          }
       },
 
