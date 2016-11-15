@@ -18,8 +18,29 @@
  */
 
 /**
- * This is a prototype form control that wraps a new instance of a <a href="http://codemirror.net/">Code Mirror editor</a>.
- * It is not ready for production use yet.
+ * This is a form control that wraps a new instance of a 
+ * <a href="http://codemirror.net/">Code Mirror editor</a> (version 5.20.2)
+ * which allows user input to be syntax highlighted according to the configured
+ * [editMode]{@link module:alfresco/forms/controls/CodeMirrorEditor#editMode}.
+ * The default editing mode is for XML but other modes are available (see
+ * the Code Mirror documentation for details). In addition to supporting all the
+ * standard configuration attributes for all 
+ * [form controls]{@link module:alfresco/forms/controls/BaseFormControl} it is 
+ * also possible to configure the 
+ * [height][editMode]{@link module:alfresco/forms/controls/CodeMirrorEditor#height}
+ * and [width][editMode]{@link module:alfresco/forms/controls/CodeMirrorEditor#width}
+ * of the editor.
+ *
+ * @example <caption>Sample configuration changing the default mode:</caption>
+ * {
+ *   name: "alfresco/forms/controls/CodeMirrorEditor",
+ *   config: {
+ *     label: "Enter script",
+ *     description: "Add your JavaScript code here",
+ *     name: "js",
+ *     editMode: "javascript"
+ *   }
+ * }
  * 
  * @module alfresco/forms/controls/CodeMirrorEditor
  * @extends module:alfresco/forms/controls/BaseFormControl
@@ -59,16 +80,14 @@ define(["alfresco/forms/controls/BaseFormControl",
       editMode: "xml",
 
       /**
+       * The height of the editor  (in pixels).
+       * 
        * @instance
+       * @type {number}
+       * @default
        */
-      getWidgetConfig: function alfresco_forms_controls_CodeMirrorEditor__getWidgetConfig() {
-         // Return the configuration for the widget
-         return {
-            id : this.generateUuid(),
-            name: this.name
-         };
-      },
-      
+      height: 300,
+
       /**
        * Indicates that the call to [createFormControl]{@link module:alfresco/forms/controls/CodeMirrorEditor#createFormControl}
        * is going to return a "promise" rather than an actual widget because it needs to require the additional AMD resources
@@ -79,6 +98,15 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @default
        */
       isPromisedWidget: true,
+
+      /**
+       * The width of the editor (in pixels).
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       */
+      width: 600,
 
       /**
        * Instantiates a new JSON editor, places it in the template DOM and setups the change events.
@@ -112,6 +140,17 @@ define(["alfresco/forms/controls/BaseFormControl",
       },
 
       /**
+       * @instance
+       */
+      getWidgetConfig: function alfresco_forms_controls_CodeMirrorEditor__getWidgetConfig() {
+         // Return the configuration for the widget
+         return {
+            id : this.generateUuid(),
+            name: this.name
+         };
+      },
+      
+      /**
        * This is the callback function for resize events relating to the DOM element of this widget. It's
        * primary use is to call the CodeMirror refresh function and has been added to handle the scenario
        * where an editor is included in an [AlfDialog]{@link module:alfresco/dialogs/AlfDialog}. The AlfDialog
@@ -121,26 +160,11 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @instance
        */
       onResizeEvent: function alfresco_forms_controls_CodeMirrorEditor__onResizeEvent() {
-         this.wrappedWidget.refresh();
+         if (this.wrappedWidget && typeof this.wrappedWidget.refresh === "function")
+         {
+            this.wrappedWidget.refresh();
+         }
       },
-
-      /**
-       * The width of the editor (in pixels).
-       * 
-       * @instance
-       * @type {number}
-       * @default
-       */
-      width: 600,
-
-      /**
-       * The height of the editor  (in pixels).
-       * 
-       * @instance
-       * @type {number}
-       * @default
-       */
-      height: 300,
 
       /**
        * Creates and configures the CodeMirror editor.

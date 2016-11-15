@@ -3,42 +3,16 @@
 
 /**
  * Supported keybindings:
+ *   Too many to list. Refer to defaultKeyMap below.
  *
- *   Motion:
- *   h, j, k, l
- *   gj, gk
- *   e, E, w, W, b, B, ge, gE
- *   f<character>, F<character>, t<character>, T<character>
- *   $, ^, 0, -, +, _
- *   gg, G
- *   %
- *   '<character>, `<character>
- *
- *   Operator:
- *   d, y, c
- *   dd, yy, cc
- *   g~, g~g~
- *   >, <, >>, <<
- *
- *   Operator-Motion:
- *   x, X, D, Y, C, ~
- *
- *   Action:
- *   a, i, s, A, I, S, o, O
- *   zz, z., z<CR>, zt, zb, z-
- *   J
- *   u, Ctrl-r
- *   m<character>
- *   r<character>
- *
- *   Modes:
- *   ESC - leave insert mode, visual mode, and clear input state.
- *   Ctrl-[, Ctrl-c - same as ESC.
+ * Supported Ex commands:
+ *   Refer to defaultExCommandMap below.
  *
  * Registers: unnamed, -, a-z, A-Z, 0-9
  *   (Does not respect the special case for number registers when delete
  *    operator is made with these commands: %, (, ),  , /, ?, n, N, {, } )
  *   TODO: Implement the remaining registers.
+ *
  * Marks: a-z, A-Z, and 0-9
  *   TODO: Implement the remaining special marks. They have more complex
  *       behavior.
@@ -52,11 +26,12 @@
  *  2. Variable declarations and short basic helpers
  *  3. Instance (External API) implementation
  *  4. Internal state tracking objects (input state, counter) implementation
- *     and instanstiation
+ *     and instantiation
  *  5. Key handler (the main command dispatcher) implementation
  *  6. Motion, operator, and action implementations
  *  7. Helper functions for the key handler, motions, operators, and actions
  *  8. Set up Vim to work as a keymap for CodeMirror.
+ *  9. Ex command implementations.
  */
 
 (function(mod) {
@@ -77,11 +52,11 @@
     { keys: '<Up>', type: 'keyToKey', toKeys: 'k' },
     { keys: '<Down>', type: 'keyToKey', toKeys: 'j' },
     { keys: '<Space>', type: 'keyToKey', toKeys: 'l' },
-    { keys: '<BS>', type: 'keyToKey', toKeys: 'h' },
+    { keys: '<BS>', type: 'keyToKey', toKeys: 'h', context: 'normal'},
     { keys: '<C-Space>', type: 'keyToKey', toKeys: 'W' },
-    { keys: '<C-BS>', type: 'keyToKey', toKeys: 'B' },
+    { keys: '<C-BS>', type: 'keyToKey', toKeys: 'B', context: 'normal' },
     { keys: '<S-Space>', type: 'keyToKey', toKeys: 'w' },
-    { keys: '<S-BS>', type: 'keyToKey', toKeys: 'b' },
+    { keys: '<S-BS>', type: 'keyToKey', toKeys: 'b', context: 'normal' },
     { keys: '<C-n>', type: 'keyToKey', toKeys: 'j' },
     { keys: '<C-p>', type: 'keyToKey', toKeys: 'k' },
     { keys: '<C-[>', type: 'keyToKey', toKeys: '<Esc>' },
@@ -89,14 +64,15 @@
     { keys: '<C-[>', type: 'keyToKey', toKeys: '<Esc>', context: 'insert' },
     { keys: '<C-c>', type: 'keyToKey', toKeys: '<Esc>', context: 'insert' },
     { keys: 's', type: 'keyToKey', toKeys: 'cl', context: 'normal' },
-    { keys: 's', type: 'keyToKey', toKeys: 'xi', context: 'visual'},
+    { keys: 's', type: 'keyToKey', toKeys: 'c', context: 'visual'},
     { keys: 'S', type: 'keyToKey', toKeys: 'cc', context: 'normal' },
-    { keys: 'S', type: 'keyToKey', toKeys: 'dcc', context: 'visual' },
+    { keys: 'S', type: 'keyToKey', toKeys: 'VdO', context: 'visual' },
     { keys: '<Home>', type: 'keyToKey', toKeys: '0' },
     { keys: '<End>', type: 'keyToKey', toKeys: '$' },
     { keys: '<PageUp>', type: 'keyToKey', toKeys: '<C-b>' },
     { keys: '<PageDown>', type: 'keyToKey', toKeys: '<C-f>' },
     { keys: '<CR>', type: 'keyToKey', toKeys: 'j^', context: 'normal' },
+    { keys: '<Ins>', type: 'action', action: 'toggleOverwrite', context: 'insert' },
     // Motions
     { keys: 'H', type: 'motion', motion: 'moveToTopLine', motionArgs: { linewise: true, toJumplist: true }},
     { keys: 'M', type: 'motion', motion: 'moveToMiddleLine', motionArgs: { linewise: true, toJumplist: true }},
@@ -156,31 +132,40 @@
     { keys: 'c', type: 'operator', operator: 'change' },
     { keys: '>', type: 'operator', operator: 'indent', operatorArgs: { indentRight: true }},
     { keys: '<', type: 'operator', operator: 'indent', operatorArgs: { indentRight: false }},
-    { keys: 'g~', type: 'operator', operator: 'swapcase' },
+    { keys: 'g~', type: 'operator', operator: 'changeCase' },
+    { keys: 'gu', type: 'operator', operator: 'changeCase', operatorArgs: {toLower: true}, isEdit: true },
+    { keys: 'gU', type: 'operator', operator: 'changeCase', operatorArgs: {toLower: false}, isEdit: true },
     { keys: 'n', type: 'motion', motion: 'findNext', motionArgs: { forward: true, toJumplist: true }},
     { keys: 'N', type: 'motion', motion: 'findNext', motionArgs: { forward: false, toJumplist: true }},
     // Operator-Motion dual commands
     { keys: 'x', type: 'operatorMotion', operator: 'delete', motion: 'moveByCharacters', motionArgs: { forward: true }, operatorMotionArgs: { visualLine: false }},
     { keys: 'X', type: 'operatorMotion', operator: 'delete', motion: 'moveByCharacters', motionArgs: { forward: false }, operatorMotionArgs: { visualLine: true }},
-    { keys: 'D', type: 'operatorMotion', operator: 'delete', motion: 'moveToEol', motionArgs: { inclusive: true }, operatorMotionArgs: { visualLine: true }},
-    { keys: 'Y', type: 'operatorMotion', operator: 'yank', motion: 'moveToEol', motionArgs: { inclusive: true }, operatorMotionArgs: { visualLine: true }},
-    { keys: 'C', type: 'operatorMotion', operator: 'change', motion: 'moveToEol', motionArgs: { inclusive: true }, operatorMotionArgs: { visualLine: true }},
-    { keys: '~', type: 'operatorMotion', operator: 'swapcase', operatorArgs: { shouldMoveCursor: true }, motion: 'moveByCharacters', motionArgs: { forward: true }},
+    { keys: 'D', type: 'operatorMotion', operator: 'delete', motion: 'moveToEol', motionArgs: { inclusive: true }, context: 'normal'},
+    { keys: 'D', type: 'operator', operator: 'delete', operatorArgs: { linewise: true }, context: 'visual'},
+    { keys: 'Y', type: 'operatorMotion', operator: 'yank', motion: 'moveToEol', motionArgs: { inclusive: true }, context: 'normal'},
+    { keys: 'Y', type: 'operator', operator: 'yank', operatorArgs: { linewise: true }, context: 'visual'},
+    { keys: 'C', type: 'operatorMotion', operator: 'change', motion: 'moveToEol', motionArgs: { inclusive: true }, context: 'normal'},
+    { keys: 'C', type: 'operator', operator: 'change', operatorArgs: { linewise: true }, context: 'visual'},
+    { keys: '~', type: 'operatorMotion', operator: 'changeCase', motion: 'moveByCharacters', motionArgs: { forward: true }, operatorArgs: { shouldMoveCursor: true }, context: 'normal'},
+    { keys: '~', type: 'operator', operator: 'changeCase', context: 'visual'},
+    { keys: '<C-w>', type: 'operatorMotion', operator: 'delete', motion: 'moveByWords', motionArgs: { forward: false, wordEnd: false }, context: 'insert' },
     // Actions
     { keys: '<C-i>', type: 'action', action: 'jumpListWalk', actionArgs: { forward: true }},
     { keys: '<C-o>', type: 'action', action: 'jumpListWalk', actionArgs: { forward: false }},
     { keys: '<C-e>', type: 'action', action: 'scroll', actionArgs: { forward: true, linewise: true }},
     { keys: '<C-y>', type: 'action', action: 'scroll', actionArgs: { forward: false, linewise: true }},
-    { keys: 'a', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'charAfter' }},
-    { keys: 'A', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'eol' }},
+    { keys: 'a', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'charAfter' }, context: 'normal' },
+    { keys: 'A', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'eol' }, context: 'normal' },
     { keys: 'A', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'endOfSelectedArea' }, context: 'visual' },
-    { keys: 'i', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'inplace' }},
-    { keys: 'I', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'firstNonBlank' }},
-    { keys: 'o', type: 'action', action: 'newLineAndEnterInsertMode', isEdit: true, interlaceInsertRepeat: true, actionArgs: { after: true }},
-    { keys: 'O', type: 'action', action: 'newLineAndEnterInsertMode', isEdit: true, interlaceInsertRepeat: true, actionArgs: { after: false }},
+    { keys: 'i', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'inplace' }, context: 'normal' },
+    { keys: 'I', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'firstNonBlank'}, context: 'normal' },
+    { keys: 'I', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { insertAt: 'startOfSelectedArea' }, context: 'visual' },
+    { keys: 'o', type: 'action', action: 'newLineAndEnterInsertMode', isEdit: true, interlaceInsertRepeat: true, actionArgs: { after: true }, context: 'normal' },
+    { keys: 'O', type: 'action', action: 'newLineAndEnterInsertMode', isEdit: true, interlaceInsertRepeat: true, actionArgs: { after: false }, context: 'normal' },
     { keys: 'v', type: 'action', action: 'toggleVisualMode' },
     { keys: 'V', type: 'action', action: 'toggleVisualMode', actionArgs: { linewise: true }},
     { keys: '<C-v>', type: 'action', action: 'toggleVisualMode', actionArgs: { blockwise: true }},
+    { keys: '<C-q>', type: 'action', action: 'toggleVisualMode', actionArgs: { blockwise: true }},
     { keys: 'gv', type: 'action', action: 'reselectLastSelection' },
     { keys: 'J', type: 'action', action: 'joinLines', isEdit: true },
     { keys: 'p', type: 'action', action: 'paste', isEdit: true, actionArgs: { after: true, isEdit: true }},
@@ -190,9 +175,9 @@
     { keys: 'q<character>', type: 'action', action: 'enterMacroRecordMode' },
     // Handle Replace-mode as a special case of insert mode.
     { keys: 'R', type: 'action', action: 'enterInsertMode', isEdit: true, actionArgs: { replace: true }},
-    { keys: 'u', type: 'action', action: 'undo' },
-    { keys: 'u', type: 'action', action: 'changeCase', actionArgs: {toLower: true}, context: 'visual', isEdit: true },
-    { keys: 'U',type: 'action', action: 'changeCase', actionArgs: {toLower: false}, context: 'visual', isEdit: true },
+    { keys: 'u', type: 'action', action: 'undo', context: 'normal' },
+    { keys: 'u', type: 'operator', operator: 'changeCase', operatorArgs: {toLower: true}, context: 'visual', isEdit: true },
+    { keys: 'U', type: 'operator', operator: 'changeCase', operatorArgs: {toLower: false}, context: 'visual', isEdit: true },
     { keys: '<C-r>', type: 'action', action: 'redo' },
     { keys: 'm<character>', type: 'action', action: 'setMark' },
     { keys: '"<character>', type: 'action', action: 'setRegister' },
@@ -219,74 +204,126 @@
     { keys: ':', type: 'ex' }
   ];
 
+  /**
+   * Ex commands
+   * Care must be taken when adding to the default Ex command map. For any
+   * pair of commands that have a shared prefix, at least one of their
+   * shortNames must not match the prefix of the other command.
+   */
+  var defaultExCommandMap = [
+    { name: 'colorscheme', shortName: 'colo' },
+    { name: 'map' },
+    { name: 'imap', shortName: 'im' },
+    { name: 'nmap', shortName: 'nm' },
+    { name: 'vmap', shortName: 'vm' },
+    { name: 'unmap' },
+    { name: 'write', shortName: 'w' },
+    { name: 'undo', shortName: 'u' },
+    { name: 'redo', shortName: 'red' },
+    { name: 'set', shortName: 'se' },
+    { name: 'set', shortName: 'se' },
+    { name: 'setlocal', shortName: 'setl' },
+    { name: 'setglobal', shortName: 'setg' },
+    { name: 'sort', shortName: 'sor' },
+    { name: 'substitute', shortName: 's', possiblyAsync: true },
+    { name: 'nohlsearch', shortName: 'noh' },
+    { name: 'yank', shortName: 'y' },
+    { name: 'delmarks', shortName: 'delm' },
+    { name: 'registers', shortName: 'reg', excludeFromCommandHistory: true },
+    { name: 'global', shortName: 'g' }
+  ];
+
   var Pos = CodeMirror.Pos;
 
-  var modifierCodes = [16, 17, 18, 91];
-  var specialKey = {Enter:'CR',Backspace:'BS',Delete:'Del'};
-  var mac = /Mac/.test(navigator.platform);
   var Vim = function() {
-    CodeMirror.defineOption('vimMode', false, function(cm, val) {
-      function lookupKey(e) {
-        var keyCode = e.keyCode;
-        if (modifierCodes.indexOf(keyCode) != -1) { return; }
-        var hasModifier = e.ctrlKey || e.shiftKey || e.metaKey || e.ctrlKey;
-        var key = CodeMirror.keyNames[keyCode];
-        key = specialKey[key] || key;
-        var name = '';
-        if (e.ctrlKey) { name += 'C-'; }
-        if (e.altKey) { name += 'A-'; }
-        if (mac && e.metaKey || (!hasModifier || e.shiftKey) && key.length < 2) {
-          // Shift key bindings can only specified for special characters.
-          return;
-        } else if (e.shiftKey) { name += 'S-'; }
-        if (key.length == 1) { key = key.toLowerCase(); }
-        name += key;
-        if (name.length > 1) { name = '<' + name + '>'; }
-        return name;
-      }
-      // Keys with modifiers are handled using keydown due to limitations of
-      // keypress event.
-      function handleKeyDown(cm, e) {
-        var name = lookupKey(e);
-        if (!name) { return; }
+    function enterVimMode(cm) {
+      cm.setOption('disableInput', true);
+      cm.setOption('showCursorWhenSelecting', false);
+      CodeMirror.signal(cm, "vim-mode-change", {mode: "normal"});
+      cm.on('cursorActivity', onCursorActivity);
+      maybeInitVimState(cm);
+      CodeMirror.on(cm.getInputField(), 'paste', getOnPasteFn(cm));
+    }
 
-        CodeMirror.signal(cm, 'vim-keypress', name);
-        if (CodeMirror.Vim.handleKey(cm, name, 'user')) {
-          CodeMirror.e_stop(e);
-        }
-      }
-      // Keys without modifiers are handled using keypress to work best with
-      // non-standard keyboard layouts.
-      function handleKeyPress(cm, e) {
-        var code = e.charCode || e.keyCode;
-        if (e.ctrlKey || e.metaKey || e.altKey) { return; }
-        var name = String.fromCharCode(code);
+    function leaveVimMode(cm) {
+      cm.setOption('disableInput', false);
+      cm.off('cursorActivity', onCursorActivity);
+      CodeMirror.off(cm.getInputField(), 'paste', getOnPasteFn(cm));
+      cm.state.vim = null;
+    }
 
-        CodeMirror.signal(cm, 'vim-keypress', name);
-        if (CodeMirror.Vim.handleKey(cm, name, 'user')) {
-          CodeMirror.e_stop(e);
-        }
-      }
-      if (val) {
-        cm.setOption('keyMap', 'vim');
-        cm.setOption('disableInput', true);
-        cm.setOption('showCursorWhenSelecting', false);
-        CodeMirror.signal(cm, "vim-mode-change", {mode: "normal"});
-        cm.on('cursorActivity', onCursorActivity);
-        maybeInitVimState(cm);
-        CodeMirror.on(cm.getInputField(), 'paste', getOnPasteFn(cm));
-        cm.on('keypress', handleKeyPress);
-        cm.on('keydown', handleKeyDown);
-      } else if (cm.state.vim) {
-        cm.setOption('keyMap', 'default');
-        cm.setOption('disableInput', false);
-        cm.off('cursorActivity', onCursorActivity);
-        CodeMirror.off(cm.getInputField(), 'paste', getOnPasteFn(cm));
-        cm.state.vim = null;
-        cm.off('keypress', handleKeyPress);
-        cm.off('keydown', handleKeyDown);
-      }
+    function detachVimMap(cm, next) {
+      if (this == CodeMirror.keyMap.vim)
+        CodeMirror.rmClass(cm.getWrapperElement(), "cm-fat-cursor");
+
+      if (!next || next.attach != attachVimMap)
+        leaveVimMode(cm, false);
+    }
+    function attachVimMap(cm, prev) {
+      if (this == CodeMirror.keyMap.vim)
+        CodeMirror.addClass(cm.getWrapperElement(), "cm-fat-cursor");
+
+      if (!prev || prev.attach != attachVimMap)
+        enterVimMode(cm);
+    }
+
+    // Deprecated, simply setting the keymap works again.
+    CodeMirror.defineOption('vimMode', false, function(cm, val, prev) {
+      if (val && cm.getOption("keyMap") != "vim")
+        cm.setOption("keyMap", "vim");
+      else if (!val && prev != CodeMirror.Init && /^vim/.test(cm.getOption("keyMap")))
+        cm.setOption("keyMap", "default");
     });
+
+    function cmKey(key, cm) {
+      if (!cm) { return undefined; }
+      if (this[key]) { return this[key]; }
+      var vimKey = cmKeyToVimKey(key);
+      if (!vimKey) {
+        return false;
+      }
+      var cmd = CodeMirror.Vim.findKey(cm, vimKey);
+      if (typeof cmd == 'function') {
+        CodeMirror.signal(cm, 'vim-keypress', vimKey);
+      }
+      return cmd;
+    }
+
+    var modifiers = {'Shift': 'S', 'Ctrl': 'C', 'Alt': 'A', 'Cmd': 'D', 'Mod': 'A'};
+    var specialKeys = {Enter:'CR',Backspace:'BS',Delete:'Del',Insert:'Ins'};
+    function cmKeyToVimKey(key) {
+      if (key.charAt(0) == '\'') {
+        // Keypress character binding of format "'a'"
+        return key.charAt(1);
+      }
+      var pieces = key.split(/-(?!$)/);
+      var lastPiece = pieces[pieces.length - 1];
+      if (pieces.length == 1 && pieces[0].length == 1) {
+        // No-modifier bindings use literal character bindings above. Skip.
+        return false;
+      } else if (pieces.length == 2 && pieces[0] == 'Shift' && lastPiece.length == 1) {
+        // Ignore Shift+char bindings as they should be handled by literal character.
+        return false;
+      }
+      var hasCharacter = false;
+      for (var i = 0; i < pieces.length; i++) {
+        var piece = pieces[i];
+        if (piece in modifiers) { pieces[i] = modifiers[piece]; }
+        else { hasCharacter = true; }
+        if (piece in specialKeys) { pieces[i] = specialKeys[piece]; }
+      }
+      if (!hasCharacter) {
+        // Vim does not support modifier only keys.
+        return false;
+      }
+      // TODO: Current bindings expect the character to be lower case, but
+      // it looks like vim key notation uses upper case.
+      if (isUpperCase(lastPiece)) {
+        pieces[pieces.length - 1] = lastPiece.toLowerCase();
+      }
+      return '<' + pieces.join('-') + '>';
+    }
+
     function getOnPasteFn(cm) {
       var vim = cm.state.vim;
       if (!vim.onPasteFn) {
@@ -301,7 +338,11 @@
     }
 
     var numberRegex = /[\d]/;
-    var wordRegexp = [(/\w/), (/[^\w\s]/)], bigWordRegexp = [(/\S/)];
+    var wordCharTest = [CodeMirror.isWordChar, function(ch) {
+      return ch && !CodeMirror.isWordChar(ch) && !/\s/.test(ch);
+    }], bigWordCharTest = [function(ch) {
+      return /\S/.test(ch);
+    }];
     function makeKeyRange(start, size) {
       var keys = [];
       for (var i = start; i < start + size; i++) {
@@ -343,18 +384,30 @@
     }
 
     var options = {};
-    function defineOption(name, defaultValue, type) {
-      if (defaultValue === undefined) { throw Error('defaultValue is required'); }
+    function defineOption(name, defaultValue, type, aliases, callback) {
+      if (defaultValue === undefined && !callback) {
+        throw Error('defaultValue is required unless callback is provided');
+      }
       if (!type) { type = 'string'; }
       options[name] = {
         type: type,
-        defaultValue: defaultValue
+        defaultValue: defaultValue,
+        callback: callback
       };
-      setOption(name, defaultValue);
+      if (aliases) {
+        for (var i = 0; i < aliases.length; i++) {
+          options[aliases[i]] = options[name];
+        }
+      }
+      if (defaultValue) {
+        setOption(name, defaultValue);
+      }
     }
 
-    function setOption(name, value) {
+    function setOption(name, value, cm, cfg) {
       var option = options[name];
+      cfg = cfg || {};
+      var scope = cfg.scope;
       if (!option) {
         throw Error('Unknown option: ' + name);
       }
@@ -366,16 +419,59 @@
           value = true;
         }
       }
-      option.value = option.type == 'boolean' ? !!value : value;
+      if (option.callback) {
+        if (scope !== 'local') {
+          option.callback(value, undefined);
+        }
+        if (scope !== 'global' && cm) {
+          option.callback(value, cm);
+        }
+      } else {
+        if (scope !== 'local') {
+          option.value = option.type == 'boolean' ? !!value : value;
+        }
+        if (scope !== 'global' && cm) {
+          cm.state.vim.options[name] = {value: value};
+        }
+      }
     }
 
-    function getOption(name) {
+    function getOption(name, cm, cfg) {
       var option = options[name];
+      cfg = cfg || {};
+      var scope = cfg.scope;
       if (!option) {
         throw Error('Unknown option: ' + name);
       }
-      return option.value;
+      if (option.callback) {
+        var local = cm && option.callback(undefined, cm);
+        if (scope !== 'global' && local !== undefined) {
+          return local;
+        }
+        if (scope !== 'local') {
+          return option.callback();
+        }
+        return;
+      } else {
+        var local = (scope !== 'global') && (cm && cm.state.vim.options[name]);
+        return (local || (scope !== 'local') && option || {}).value;
+      }
     }
+
+    defineOption('filetype', undefined, 'string', ['ft'], function(name, cm) {
+      // Option is local. Do nothing for global.
+      if (cm === undefined) {
+        return;
+      }
+      // The 'filetype' option proxies to the CodeMirror 'mode' option.
+      if (name === undefined) {
+        var mode = cm.getOption('mode');
+        return mode == 'null' ? '' : mode;
+      } else {
+        var mode = name == '' ? 'null' : name;
+        cm.setOption('mode', mode);
+      }
+    });
 
     var createCircularJumpList = function() {
       var size = 100;
@@ -529,8 +625,9 @@
           visualBlock: false,
           lastSelection: null,
           lastPastedText: null,
-          // Used by two-character ESC keymap routines. Should not be changed from false here.
-          awaitingEscapeSecondCharacter: false
+          sel: {},
+          // Buffer-local/window-local values of vim options.
+          options: {}
         };
       }
       return cm.state.vim;
@@ -547,7 +644,7 @@
         jumpList: createCircularJumpList(),
         macroModeState: new MacroModeState,
         // Recording latest f, t, F or T motion command.
-        lastChararacterSearch: {increment:0, forward:true, selectedCharacter:''},
+        lastCharacterSearch: {increment:0, forward:true, selectedCharacter:''},
         registerController: new RegisterController({}),
         // search history buffer
         searchHistoryController: new HistoryController({}),
@@ -581,24 +678,47 @@
       // Testing hook.
       maybeInitVimState_: maybeInitVimState,
 
+      suppressErrorLogging: false,
+
       InsertModeKey: InsertModeKey,
       map: function(lhs, rhs, ctx) {
         // Add user defined key bindings.
         exCommandDispatcher.map(lhs, rhs, ctx);
       },
+      unmap: function(lhs, ctx) {
+        exCommandDispatcher.unmap(lhs, ctx);
+      },
+      // TODO: Expose setOption and getOption as instance methods. Need to decide how to namespace
+      // them, or somehow make them work with the existing CodeMirror setOption/getOption API.
       setOption: setOption,
       getOption: getOption,
       defineOption: defineOption,
       defineEx: function(name, prefix, func){
-        if (name.indexOf(prefix) !== 0) {
+        if (!prefix) {
+          prefix = name;
+        } else if (name.indexOf(prefix) !== 0) {
           throw new Error('(Vim.defineEx) "'+prefix+'" is not a prefix of "'+name+'", command not registered');
         }
         exCommands[name]=func;
         exCommandDispatcher.commandMap_[prefix]={name:name, shortName:prefix, type:'api'};
       },
-      // This is the outermost function called by CodeMirror, after keys have
-      // been mapped to their Vim equivalents.
-      handleKey: function(cm, key, origin) {
+      handleKey: function (cm, key, origin) {
+        var command = this.findKey(cm, key, origin);
+        if (typeof command === 'function') {
+          return command();
+        }
+      },
+      /**
+       * This is the outermost function called by CodeMirror, after keys have
+       * been mapped to their Vim equivalents.
+       *
+       * Finds a command based on the key (and cached keys if there is a
+       * multi-key sequence). Returns `undefined` if no key is matched, a noop
+       * function if a partial match is found (multi-key), and a function to
+       * execute the bound command if a a key is matched. The function always
+       * returns true.
+       */
+      findKey: function(cm, key, origin) {
         var vim = maybeInitVimState(cm);
         function handleMacroRecording() {
           var macroModeState = vimGlobalState.macroModeState;
@@ -623,16 +743,6 @@
               exitInsertMode(cm);
             }
             return true;
-          }
-        }
-        function handleExternalSelection() {
-          // Enter visual mode when the mouse selects text.
-          if (!vim.visualMode && !vim.insertMode &&
-              !cursorEqual(cm.getCursor('head'), cm.getCursor('anchor'))) {
-            vim.visualMode = true;
-            vim.visualLine = false;
-            CodeMirror.signal(cm, "vim-mode-change", {mode: "visual"});
-            cm.on('mousedown', exitVisualMode);
           }
         }
         function doKeyToKey(keys) {
@@ -670,27 +780,25 @@
 
           if (lastInsertModeKeyTimer) { window.clearTimeout(lastInsertModeKeyTimer); }
           if (keysAreChars) {
-            var here = cm.getCursor();
-            cm.replaceRange('', offsetCursor(here, 0, -(keys.length - 1)), here, '+input');
+            var selections = cm.listSelections();
+            for (var i = 0; i < selections.length; i++) {
+              var here = selections[i].head;
+              cm.replaceRange('', offsetCursor(here, 0, -(keys.length - 1)), here, '+input');
+            }
+            vimGlobalState.macroModeState.lastInsertModeChanges.changes.pop();
           }
           clearInputState(cm);
-          var command = match.command;
-          if (command.type == 'keyToKey') {
-            doKeyToKey(command.toKeys);
-          } else {
-            commandDispatcher.processCommand(cm, vim, command);
-          }
-          return !keysAreChars;
+          return match.command;
         }
 
         function handleKeyNonInsertMode() {
           if (handleMacroRecording() || handleEsc()) { return true; };
-          handleExternalSelection();
 
           var keys = vim.inputState.keyBuffer = vim.inputState.keyBuffer + key;
           if (/^[1-9]\d*$/.test(keys)) { return true; }
 
           var keysMatcher = /^(\d*)(.*)$/.exec(keys);
+          if (!keysMatcher) { clearInputState(cm); return false; }
           var context = vim.visualMode ? 'visual' :
                                          'normal';
           var match = commandDispatcher.matchCommand(keysMatcher[2] || keysMatcher[1], defaultKeymap, vim.inputState, context);
@@ -698,25 +806,61 @@
           else if (match.type == 'partial') { return true; }
 
           vim.inputState.keyBuffer = '';
-          var command = match.command;
           var keysMatcher = /^(\d*)(.*)$/.exec(keys);
           if (keysMatcher[1] && keysMatcher[1] != '0') {
             vim.inputState.pushRepeatDigit(keysMatcher[1]);
           }
-          if (command.type == 'keyToKey') {
-            doKeyToKey(command.toKeys);
-          } else {
-            commandDispatcher.processCommand(cm, vim, command);
-          }
-          return true;
+          return match.command;
         }
 
-        if (vim.insertMode) { return handleKeyInsertMode(); }
-        else { return handleKeyNonInsertMode(); }
+        var command;
+        if (vim.insertMode) { command = handleKeyInsertMode(); }
+        else { command = handleKeyNonInsertMode(); }
+        if (command === false) {
+          return undefined;
+        } else if (command === true) {
+          // TODO: Look into using CodeMirror's multi-key handling.
+          // Return no-op since we are caching the key. Counts as handled, but
+          // don't want act on it just yet.
+          return function() { return true; };
+        } else {
+          return function() {
+            return cm.operation(function() {
+              cm.curOp.isVimOp = true;
+              try {
+                if (command.type == 'keyToKey') {
+                  doKeyToKey(command.toKeys);
+                } else {
+                  commandDispatcher.processCommand(cm, vim, command);
+                }
+              } catch (e) {
+                // clear VIM state in case it's in a bad state.
+                cm.state.vim = undefined;
+                maybeInitVimState(cm);
+                if (!CodeMirror.Vim.suppressErrorLogging) {
+                  console['log'](e);
+                }
+                throw e;
+              }
+              return true;
+            });
+          };
+        }
       },
       handleEx: function(cm, input) {
         exCommandDispatcher.processCommand(cm, input);
-      }
+      },
+
+      defineMotion: defineMotion,
+      defineAction: defineAction,
+      defineOperator: defineOperator,
+      mapCommand: mapCommand,
+      _mapCommand: _mapCommand,
+
+      defineRegister: defineRegister,
+
+      exitVisualMode: exitVisualMode,
+      exitInsertMode: exitInsertMode
     };
 
     // Represents the current input state.
@@ -803,6 +947,25 @@
         return this.keyBuffer.join('');
       }
     };
+
+    /**
+     * Defines an external register.
+     *
+     * The name should be a single character that will be used to reference the register.
+     * The register should support setText, pushText, clear, and toString(). See Register
+     * for a reference implementation.
+     */
+    function defineRegister(name, register) {
+      var registers = vimGlobalState.registerController.registers[name];
+      if (!name || name.length != 1) {
+        throw Error('Register name must be 1 character');
+      }
+      if (registers[name]) {
+        throw Error('Register already defined ' + name);
+      }
+      registers[name] = register;
+      validRegisters.push(name);
+    }
 
     /*
      * vim registers allow you to keep many independent copy and paste buffers.
@@ -891,7 +1054,7 @@
     };
     function HistoryController() {
         this.historyBuffer = [];
-        this.iterator;
+        this.iterator = 0;
         this.initialPrefix = null;
     }
     HistoryController.prototype = {
@@ -940,7 +1103,7 @@
         var bestMatch;
         for (var i = 0; i < matches.full.length; i++) {
           var match = matches.full[i];
-          if (!bestMatch || match.context == context) {
+          if (!bestMatch) {
             bestMatch = match;
           }
         }
@@ -1062,6 +1225,7 @@
             updateSearchQuery(cm, query, ignoreCase, smartCase);
           } catch (e) {
             showConfirm(cm, 'Invalid regex: ' + query);
+            clearInputState(cm);
             return;
           }
           commandDispatcher.processMotion(cm, vim, {
@@ -1104,15 +1268,21 @@
         }
         function onPromptKeyDown(e, query, close) {
           var keyName = CodeMirror.keyName(e);
-          if (keyName == 'Esc' || keyName == 'Ctrl-C' || keyName == 'Ctrl-[') {
+          if (keyName == 'Esc' || keyName == 'Ctrl-C' || keyName == 'Ctrl-[' ||
+              (keyName == 'Backspace' && query == '')) {
             vimGlobalState.searchHistoryController.pushInput(query);
             vimGlobalState.searchHistoryController.reset();
             updateSearchQuery(cm, originalQuery);
             clearSearchHighlight(cm);
             cm.scrollTo(originalScrollPos.left, originalScrollPos.top);
             CodeMirror.e_stop(e);
+            clearInputState(cm);
             close();
             cm.focus();
+          } else if (keyName == 'Ctrl-U') {
+            // Ctrl-U clears input.
+            CodeMirror.e_stop(e);
+            close('');
           }
         }
         switch (command.searchArgs.querySrc) {
@@ -1173,10 +1343,12 @@
         }
         function onPromptKeyDown(e, input, close) {
           var keyName = CodeMirror.keyName(e), up;
-          if (keyName == 'Esc' || keyName == 'Ctrl-C' || keyName == 'Ctrl-[') {
+          if (keyName == 'Esc' || keyName == 'Ctrl-C' || keyName == 'Ctrl-[' ||
+              (keyName == 'Backspace' && input == '')) {
             vimGlobalState.exCommandHistoryController.pushInput(input);
             vimGlobalState.exCommandHistoryController.reset();
             CodeMirror.e_stop(e);
+            clearInputState(cm);
             close();
             cm.focus();
           }
@@ -1184,6 +1356,10 @@
             up = keyName == 'Up' ? true : false;
             input = vimGlobalState.exCommandHistoryController.nextMatch(input, up) || '';
             close(input);
+          } else if (keyName == 'Ctrl-U') {
+            // Ctrl-U clears input.
+            CodeMirror.e_stop(e);
+            close('');
           } else {
             if ( keyName != 'Left' && keyName != 'Right' && keyName != 'Ctrl' && keyName != 'Alt' && keyName != 'Shift')
               vimGlobalState.exCommandHistoryController.reset();
@@ -1203,7 +1379,7 @@
         }
       },
       evalInput: function(cm, vim) {
-        // If the motion comand is set, execute both the operator and motion.
+        // If the motion command is set, execute both the operator and motion.
         // Otherwise return.
         var inputState = vim.inputState;
         var motion = inputState.motion;
@@ -1211,13 +1387,13 @@
         var operator = inputState.operator;
         var operatorArgs = inputState.operatorArgs || {};
         var registerName = inputState.registerName;
-        var selectionEnd = copyCursor(cm.getCursor('head'));
-        var selectionStart = copyCursor(cm.getCursor('anchor'));
-        // The difference between cur and selection cursors are that cur is
-        // being operated on and ignores that there is a selection.
-        var curStart = copyCursor(selectionEnd);
-        var curOriginal = copyCursor(curStart);
-        var curEnd;
+        var sel = vim.sel;
+        // TODO: Make sure cm and vim selections are identical outside visual mode.
+        var origHead = copyCursor(vim.visualMode ? clipCursorToContent(cm, sel.head): cm.getCursor('head'));
+        var origAnchor = copyCursor(vim.visualMode ? clipCursorToContent(cm, sel.anchor) : cm.getCursor('anchor'));
+        var oldHead = copyCursor(origHead);
+        var oldAnchor = copyCursor(origAnchor);
+        var newHead, newAnchor;
         var repeat;
         if (operator) {
           this.recordLastEdit(vim, inputState);
@@ -1244,7 +1420,7 @@
         motionArgs.repeat = repeat;
         clearInputState(cm);
         if (motion) {
-          var motionResult = motions[motion](cm, motionArgs, vim);
+          var motionResult = motions[motion](cm, origHead, motionArgs, vim);
           vim.lastMotion = motions[motion];
           if (!motionResult) {
             return;
@@ -1257,158 +1433,140 @@
               recordJumpPosition(cm, cachedCursor, motionResult);
               delete jumpList.cachedCursor;
             } else {
-              recordJumpPosition(cm, curOriginal, motionResult);
+              recordJumpPosition(cm, origHead, motionResult);
             }
           }
           if (motionResult instanceof Array) {
-            curStart = motionResult[0];
-            curEnd = motionResult[1];
+            newAnchor = motionResult[0];
+            newHead = motionResult[1];
           } else {
-            curEnd = motionResult;
+            newHead = motionResult;
           }
           // TODO: Handle null returns from motion commands better.
-          if (!curEnd) {
-            curEnd = Pos(curStart.line, curStart.ch);
+          if (!newHead) {
+            newHead = copyCursor(origHead);
           }
           if (vim.visualMode) {
-            // Check if the selection crossed over itself. Will need to shift
-            // the start point if that happened.
-            // offset is set to -1 or 1 to shift the curEnd
-            // left or right
-            var offset = 0;
-            if (cursorIsBefore(selectionStart, selectionEnd) &&
-                (cursorEqual(selectionStart, curEnd) ||
-                    cursorIsBefore(curEnd, selectionStart))) {
-              // The end of the selection has moved from after the start to
-              // before the start. We will shift the start right by 1.
-              selectionStart.ch += 1;
-              offset = -1;
-            } else if (cursorIsBefore(selectionEnd, selectionStart) &&
-                (cursorEqual(selectionStart, curEnd) ||
-                    cursorIsBefore(selectionStart, curEnd))) {
-              // The opposite happened. We will shift the start left by 1.
-              selectionStart.ch -= 1;
-              offset = 1;
+            if (!(vim.visualBlock && newHead.ch === Infinity)) {
+              newHead = clipCursorToContent(cm, newHead, vim.visualBlock);
             }
-            // in case of visual Block selectionStart and curEnd
-            // may not be on the same line,
-            // Also, In case of v_o this should not happen.
-            if (!vim.visualBlock && !(motionResult instanceof Array)) {
-              curEnd.ch += offset;
+            if (newAnchor) {
+              newAnchor = clipCursorToContent(cm, newAnchor, true);
             }
-            if (vim.lastHPos != Infinity) {
-              vim.lastHPos = curEnd.ch;
-            }
-            selectionEnd = curEnd;
-            selectionStart = (motionResult instanceof Array) ? curStart : selectionStart;
-            if (vim.visualLine) {
-              if (cursorIsBefore(selectionStart, selectionEnd)) {
-                selectionStart.ch = 0;
-
-                var lastLine = cm.lastLine();
-                if (selectionEnd.line > lastLine) {
-                  selectionEnd.line = lastLine;
-                }
-                selectionEnd.ch = lineLength(cm, selectionEnd.line);
-              } else {
-                selectionEnd.ch = 0;
-                selectionStart.ch = lineLength(cm, selectionStart.line);
-              }
-            } else if (vim.visualBlock) {
-              // Select a block and
-              // return the diagonally opposite end.
-              selectionStart = selectBlock(cm, selectionEnd);
-            }
-            if (!vim.visualBlock) {
-              cm.setSelection(selectionStart, selectionEnd);
-            }
+            newAnchor = newAnchor || oldAnchor;
+            sel.anchor = newAnchor;
+            sel.head = newHead;
+            updateCmSelection(cm);
             updateMark(cm, vim, '<',
-                cursorIsBefore(selectionStart, selectionEnd) ? selectionStart
-                    : selectionEnd);
+                cursorIsBefore(newAnchor, newHead) ? newAnchor
+                    : newHead);
             updateMark(cm, vim, '>',
-                cursorIsBefore(selectionStart, selectionEnd) ? selectionEnd
-                    : selectionStart);
+                cursorIsBefore(newAnchor, newHead) ? newHead
+                    : newAnchor);
           } else if (!operator) {
-            curEnd = clipCursorToContent(cm, curEnd);
-            cm.setCursor(curEnd.line, curEnd.ch);
+            newHead = clipCursorToContent(cm, newHead);
+            cm.setCursor(newHead.line, newHead.ch);
           }
         }
-
         if (operator) {
-          var inverted = false;
-          vim.lastMotion = null;
-          var lastSelection = vim.lastSelection;
-          operatorArgs.repeat = repeat; // Indent in visual mode needs this.
-          if (vim.visualMode) {
-            curStart = selectionStart;
-            curEnd = selectionEnd;
-            motionArgs.inclusive = true;
-            operatorArgs.shouldMoveCursor = false;
-          }
-          // Swap start and end if motion was backward.
-          if (curEnd && cursorIsBefore(curEnd, curStart)) {
-            var tmp = curStart;
-            curStart = curEnd;
-            curEnd = tmp;
-            inverted = true;
-          } else if (!curEnd) {
-            curEnd = copyCursor(curStart);
-          }
-          if (motionArgs.inclusive && !vim.visualMode) {
-            // Move the selection end one to the right to include the last
-            // character.
-            curEnd.ch++;
-          }
-          if (operatorArgs.selOffset) {
+          if (operatorArgs.lastSel) {
             // Replaying a visual mode operation
-            curEnd.line = curStart.line + operatorArgs.selOffset.line;
-            if (operatorArgs.selOffset.line) {curEnd.ch = operatorArgs.selOffset.ch; }
-            else { curEnd.ch = curStart.ch + operatorArgs.selOffset.ch; }
-            // In case of blockwise visual
-            if (lastSelection && lastSelection.visualBlock) {
-              var block = lastSelection.visualBlock;
-              var width = block.width;
-              var height = block.height;
-              curEnd = Pos(curStart.line + height, curStart.ch + width);
-              // selectBlock creates a 'proper' rectangular block.
-              // We do not want that in all cases, so we manually set selections.
-              var selections = [];
-              for (var i = curStart.line; i < curEnd.line; i++) {
-                var anchor = Pos(i, curStart.ch);
-                var head = Pos(i, curEnd.ch);
-                var range = {anchor: anchor, head: head};
-                selections.push(range);
-              }
-              cm.setSelections(selections);
-              var blockSelected = true;
+            newAnchor = oldAnchor;
+            var lastSel = operatorArgs.lastSel;
+            var lineOffset = Math.abs(lastSel.head.line - lastSel.anchor.line);
+            var chOffset = Math.abs(lastSel.head.ch - lastSel.anchor.ch);
+            if (lastSel.visualLine) {
+              // Linewise Visual mode: The same number of lines.
+              newHead = Pos(oldAnchor.line + lineOffset, oldAnchor.ch);
+            } else if (lastSel.visualBlock) {
+              // Blockwise Visual mode: The same number of lines and columns.
+              newHead = Pos(oldAnchor.line + lineOffset, oldAnchor.ch + chOffset);
+            } else if (lastSel.head.line == lastSel.anchor.line) {
+              // Normal Visual mode within one line: The same number of characters.
+              newHead = Pos(oldAnchor.line, oldAnchor.ch + chOffset);
+            } else {
+              // Normal Visual mode with several lines: The same number of lines, in the
+              // last line the same number of characters as in the last line the last time.
+              newHead = Pos(oldAnchor.line + lineOffset, oldAnchor.ch);
             }
+            vim.visualMode = true;
+            vim.visualLine = lastSel.visualLine;
+            vim.visualBlock = lastSel.visualBlock;
+            sel = vim.sel = {
+              anchor: newAnchor,
+              head: newHead
+            };
+            updateCmSelection(cm);
           } else if (vim.visualMode) {
-            var selOffset = Pos();
-            selOffset.line = curEnd.line - curStart.line;
-            if (selOffset.line) { selOffset.ch = curEnd.ch; }
-            else { selOffset.ch = curEnd.ch - curStart.ch; }
-            operatorArgs.selOffset = selOffset;
+            operatorArgs.lastSel = {
+              anchor: copyCursor(sel.anchor),
+              head: copyCursor(sel.head),
+              visualBlock: vim.visualBlock,
+              visualLine: vim.visualLine
+            };
           }
-          var linewise = motionArgs.linewise ||
-              (vim.visualMode && vim.visualLine) ||
-              operatorArgs.linewise;
-          if (linewise) {
-            // Expand selection to entire line.
-            expandSelectionToLine(cm, curStart, curEnd);
-          } else if (motionArgs.forward) {
-            // Clip to trailing newlines only if the motion goes forward.
-            clipToLine(cm, curStart, curEnd);
+          var curStart, curEnd, linewise, mode;
+          var cmSel;
+          if (vim.visualMode) {
+            // Init visual op
+            curStart = cursorMin(sel.head, sel.anchor);
+            curEnd = cursorMax(sel.head, sel.anchor);
+            linewise = vim.visualLine || operatorArgs.linewise;
+            mode = vim.visualBlock ? 'block' :
+                   linewise ? 'line' :
+                   'char';
+            cmSel = makeCmSelection(cm, {
+              anchor: curStart,
+              head: curEnd
+            }, mode);
+            if (linewise) {
+              var ranges = cmSel.ranges;
+              if (mode == 'block') {
+                // Linewise operators in visual block mode extend to end of line
+                for (var i = 0; i < ranges.length; i++) {
+                  ranges[i].head.ch = lineLength(cm, ranges[i].head.line);
+                }
+              } else if (mode == 'line') {
+                ranges[0].head = Pos(ranges[0].head.line + 1, 0);
+              }
+            }
+          } else {
+            // Init motion op
+            curStart = copyCursor(newAnchor || oldAnchor);
+            curEnd = copyCursor(newHead || oldHead);
+            if (cursorIsBefore(curEnd, curStart)) {
+              var tmp = curStart;
+              curStart = curEnd;
+              curEnd = tmp;
+            }
+            linewise = motionArgs.linewise || operatorArgs.linewise;
+            if (linewise) {
+              // Expand selection to entire line.
+              expandSelectionToLine(cm, curStart, curEnd);
+            } else if (motionArgs.forward) {
+              // Clip to trailing newlines only if the motion goes forward.
+              clipToLine(cm, curStart, curEnd);
+            }
+            mode = 'char';
+            var exclusive = !motionArgs.inclusive || linewise;
+            cmSel = makeCmSelection(cm, {
+              anchor: curStart,
+              head: curEnd
+            }, mode, exclusive);
           }
+          cm.setSelections(cmSel.ranges, cmSel.primary);
+          vim.lastMotion = null;
+          operatorArgs.repeat = repeat; // For indent in visual mode.
           operatorArgs.registerName = registerName;
           // Keep track of linewise as it affects how paste and change behave.
           operatorArgs.linewise = linewise;
-          if (!vim.visualBlock && !blockSelected) {
-            cm.setSelection(curStart, curEnd);
-          }
-          operators[operator](cm, operatorArgs, vim, curStart,
-              curEnd, curOriginal);
+          var operatorMoveTo = operators[operator](
+            cm, operatorArgs, cmSel.ranges, oldAnchor, newHead);
           if (vim.visualMode) {
-            exitVisualMode(cm);
+            exitVisualMode(cm, operatorMoveTo != null);
+          }
+          if (operatorMoveTo) {
+            cm.setCursor(operatorMoveTo);
           }
         }
       },
@@ -1428,7 +1586,7 @@
      */
     // All of the functions below return Cursor objects.
     var motions = {
-      moveToTopLine: function(cm, motionArgs) {
+      moveToTopLine: function(cm, _head, motionArgs) {
         var line = getUserVisibleLines(cm).top + motionArgs.repeat -1;
         return Pos(line, findFirstNonWhiteSpaceCharacter(cm.getLine(line)));
       },
@@ -1437,17 +1595,17 @@
         var line = Math.floor((range.top + range.bottom) * 0.5);
         return Pos(line, findFirstNonWhiteSpaceCharacter(cm.getLine(line)));
       },
-      moveToBottomLine: function(cm, motionArgs) {
+      moveToBottomLine: function(cm, _head, motionArgs) {
         var line = getUserVisibleLines(cm).bottom - motionArgs.repeat +1;
         return Pos(line, findFirstNonWhiteSpaceCharacter(cm.getLine(line)));
       },
-      expandToLine: function(cm, motionArgs) {
+      expandToLine: function(_cm, head, motionArgs) {
         // Expands forward to end of line, and then to next line if repeat is
         // >1. Does not handle backward motion!
-        var cur = cm.getCursor();
+        var cur = head;
         return Pos(cur.line + motionArgs.repeat - 1, Infinity);
       },
-      findNext: function(cm, motionArgs) {
+      findNext: function(cm, _head, motionArgs) {
         var state = getSearchState(cm);
         var query = state.getQuery();
         if (!query) {
@@ -1459,7 +1617,7 @@
         highlightSearchMatches(cm, query);
         return findNext(cm, prev/** prev */, query, motionArgs.repeat);
       },
-      goToMark: function(cm, motionArgs, vim) {
+      goToMark: function(cm, _head, motionArgs, vim) {
         var mark = vim.marks[motionArgs.selectedCharacter];
         if (mark) {
           var pos = mark.find();
@@ -1467,22 +1625,19 @@
         }
         return null;
       },
-      moveToOtherHighlightedEnd: function(cm, motionArgs, vim) {
-        var ranges = cm.listSelections();
-        var curEnd = cm.getCursor('head');
-        var curStart = ranges[0].anchor;
-        var curIndex = cursorEqual(ranges[0].head, curEnd) ? ranges.length-1 : 0;
-        if (motionArgs.sameLine && vim.visualBlock) {
-          curStart = Pos(curEnd.line, ranges[curIndex].anchor.ch);
-          curEnd = Pos(ranges[curIndex].head.line, curEnd.ch);
+      moveToOtherHighlightedEnd: function(cm, _head, motionArgs, vim) {
+        if (vim.visualBlock && motionArgs.sameLine) {
+          var sel = vim.sel;
+          return [
+            clipCursorToContent(cm, Pos(sel.anchor.line, sel.head.ch)),
+            clipCursorToContent(cm, Pos(sel.head.line, sel.anchor.ch))
+          ];
         } else {
-          curStart = ranges[curIndex].anchor;
+          return ([vim.sel.head, vim.sel.anchor]);
         }
-        cm.setCursor(curEnd);
-        return ([curEnd, curStart]);
       },
-      jumpToMark: function(cm, motionArgs, vim) {
-        var best = cm.getCursor();
+      jumpToMark: function(cm, head, motionArgs, vim) {
+        var best = head;
         for (var i = 0; i < motionArgs.repeat; i++) {
           var cursor = best;
           for (var key in vim.marks) {
@@ -1502,8 +1657,8 @@
 
             var equal = cursorEqual(cursor, best);
             var between = (motionArgs.forward) ?
-              cusrorIsBetween(cursor, mark, best) :
-              cusrorIsBetween(best, mark, cursor);
+              cursorIsBetween(cursor, mark, best) :
+              cursorIsBetween(best, mark, cursor);
 
             if (equal || between) {
               best = mark;
@@ -1519,14 +1674,14 @@
         }
         return best;
       },
-      moveByCharacters: function(cm, motionArgs) {
-        var cur = cm.getCursor();
+      moveByCharacters: function(_cm, head, motionArgs) {
+        var cur = head;
         var repeat = motionArgs.repeat;
         var ch = motionArgs.forward ? cur.ch + repeat : cur.ch - repeat;
         return Pos(cur.line, ch);
       },
-      moveByLines: function(cm, motionArgs, vim) {
-        var cur = cm.getCursor();
+      moveByLines: function(cm, head, motionArgs, vim) {
+        var cur = head;
         var endCh = cur.ch;
         // Depending what our last motion was, we may want to do different
         // things. If our last motion was moving vertically, we want to
@@ -1548,11 +1703,12 @@
         var line = motionArgs.forward ? cur.line + repeat : cur.line - repeat;
         var first = cm.firstLine();
         var last = cm.lastLine();
-        // Vim cancels linewise motions that start on an edge and move beyond
-        // that edge. It does not cancel motions that do not start on an edge.
-        if ((line < first && cur.line == first) ||
-            (line > last && cur.line == last)) {
-          return;
+        // Vim go to line begin or line end when cursor at first/last line and
+        // move to previous/next line is triggered.
+        if (line < first && cur.line == first){
+          return this.moveToStartOfLine(cm, head, motionArgs, vim);
+        }else if (line > last && cur.line == last){
+            return this.moveToEol(cm, head, motionArgs, vim);
         }
         if (motionArgs.toFirstChar){
           endCh=findFirstNonWhiteSpaceCharacter(cm.getLine(line));
@@ -1561,8 +1717,8 @@
         vim.lastHSPos = cm.charCoords(Pos(line, endCh),'div').left;
         return Pos(line, endCh);
       },
-      moveByDisplayLines: function(cm, motionArgs, vim) {
-        var cur = cm.getCursor();
+      moveByDisplayLines: function(cm, head, motionArgs, vim) {
+        var cur = head;
         switch (vim.lastMotion) {
           case this.moveByDisplayLines:
           case this.moveByScroll:
@@ -1589,40 +1745,28 @@
         vim.lastHPos = res.ch;
         return res;
       },
-      moveByPage: function(cm, motionArgs) {
+      moveByPage: function(cm, head, motionArgs) {
         // CodeMirror only exposes functions that move the cursor page down, so
         // doing this bad hack to move the cursor and move it back. evalInput
         // will move the cursor to where it should be in the end.
-        var curStart = cm.getCursor();
+        var curStart = head;
         var repeat = motionArgs.repeat;
         return cm.findPosV(curStart, (motionArgs.forward ? repeat : -repeat), 'page');
       },
-      moveByParagraph: function(cm, motionArgs) {
-        var line = cm.getCursor().line;
-        var repeat = motionArgs.repeat;
-        var inc = motionArgs.forward ? 1 : -1;
-        for (var i = 0; i < repeat; i++) {
-          if ((!motionArgs.forward && line === cm.firstLine() ) ||
-              (motionArgs.forward && line == cm.lastLine())) {
-            break;
-          }
-          line += inc;
-          while (line !== cm.firstLine() && line != cm.lastLine() && cm.getLine(line)) {
-            line += inc;
-          }
-        }
-        return Pos(line, 0);
+      moveByParagraph: function(cm, head, motionArgs) {
+        var dir = motionArgs.forward ? 1 : -1;
+        return findParagraph(cm, head, motionArgs.repeat, dir);
       },
-      moveByScroll: function(cm, motionArgs, vim) {
+      moveByScroll: function(cm, head, motionArgs, vim) {
         var scrollbox = cm.getScrollInfo();
         var curEnd = null;
         var repeat = motionArgs.repeat;
         if (!repeat) {
           repeat = scrollbox.clientHeight / (2 * cm.defaultTextHeight());
         }
-        var orig = cm.charCoords(cm.getCursor(), 'local');
+        var orig = cm.charCoords(head, 'local');
         motionArgs.repeat = repeat;
-        var curEnd = motions.moveByDisplayLines(cm, motionArgs, vim);
+        var curEnd = motions.moveByDisplayLines(cm, head, motionArgs, vim);
         if (!curEnd) {
           return null;
         }
@@ -1630,11 +1774,11 @@
         cm.scrollTo(null, scrollbox.top + dest.top - orig.top);
         return curEnd;
       },
-      moveByWords: function(cm, motionArgs) {
-        return moveToWord(cm, motionArgs.repeat, !!motionArgs.forward,
+      moveByWords: function(cm, head, motionArgs) {
+        return moveToWord(cm, head, motionArgs.repeat, !!motionArgs.forward,
             !!motionArgs.wordEnd, !!motionArgs.bigWord);
       },
-      moveTillCharacter: function(cm, motionArgs) {
+      moveTillCharacter: function(cm, _head, motionArgs) {
         var repeat = motionArgs.repeat;
         var curEnd = moveToCharacter(cm, repeat, motionArgs.forward,
             motionArgs.selectedCharacter);
@@ -1644,26 +1788,26 @@
         curEnd.ch += increment;
         return curEnd;
       },
-      moveToCharacter: function(cm, motionArgs) {
+      moveToCharacter: function(cm, head, motionArgs) {
         var repeat = motionArgs.repeat;
         recordLastCharacterSearch(0, motionArgs);
         return moveToCharacter(cm, repeat, motionArgs.forward,
-            motionArgs.selectedCharacter) || cm.getCursor();
+            motionArgs.selectedCharacter) || head;
       },
-      moveToSymbol: function(cm, motionArgs) {
+      moveToSymbol: function(cm, head, motionArgs) {
         var repeat = motionArgs.repeat;
         return findSymbol(cm, repeat, motionArgs.forward,
-            motionArgs.selectedCharacter) || cm.getCursor();
+            motionArgs.selectedCharacter) || head;
       },
-      moveToColumn: function(cm, motionArgs, vim) {
+      moveToColumn: function(cm, head, motionArgs, vim) {
         var repeat = motionArgs.repeat;
         // repeat is equivalent to which column we want to move to!
         vim.lastHPos = repeat - 1;
-        vim.lastHSPos = cm.charCoords(cm.getCursor(),'div').left;
+        vim.lastHSPos = cm.charCoords(head,'div').left;
         return moveToColumn(cm, repeat);
       },
-      moveToEol: function(cm, motionArgs, vim) {
-        var cur = cm.getCursor();
+      moveToEol: function(cm, head, motionArgs, vim) {
+        var cur = head;
         vim.lastHPos = Infinity;
         var retval= Pos(cur.line + motionArgs.repeat - 1, Infinity);
         var end=cm.clipPos(retval);
@@ -1671,15 +1815,15 @@
         vim.lastHSPos = cm.charCoords(end,'div').left;
         return retval;
       },
-      moveToFirstNonWhiteSpaceCharacter: function(cm) {
+      moveToFirstNonWhiteSpaceCharacter: function(cm, head) {
         // Go to the start of the line where the text begins, or the end for
         // whitespace-only lines
-        var cursor = cm.getCursor();
+        var cursor = head;
         return Pos(cursor.line,
                    findFirstNonWhiteSpaceCharacter(cm.getLine(cursor.line)));
       },
-      moveToMatchedSymbol: function(cm) {
-        var cursor = cm.getCursor();
+      moveToMatchedSymbol: function(cm, head) {
+        var cursor = head;
         var line = cursor.line;
         var ch = cursor.ch;
         var lineText = cm.getLine(line);
@@ -1700,11 +1844,10 @@
           return cursor;
         }
       },
-      moveToStartOfLine: function(cm) {
-        var cursor = cm.getCursor();
-        return Pos(cursor.line, 0);
+      moveToStartOfLine: function(_cm, head) {
+        return Pos(head.line, 0);
       },
-      moveToLineOrEdgeOfDocument: function(cm, motionArgs) {
+      moveToLineOrEdgeOfDocument: function(cm, _head, motionArgs) {
         var lineNum = motionArgs.forward ? cm.lastLine() : cm.firstLine();
         if (motionArgs.repeatIsExplicit) {
           lineNum = motionArgs.repeat - cm.getOption('firstLineNumber');
@@ -1712,7 +1855,7 @@
         return Pos(lineNum,
                    findFirstNonWhiteSpaceCharacter(cm.getLine(lineNum)));
       },
-      textObjectManipulation: function(cm, motionArgs) {
+      textObjectManipulation: function(cm, head, motionArgs, vim) {
         // TODO: lots of possible exceptions that can be thrown here. Try da(
         //     outside of a () block.
 
@@ -1741,25 +1884,39 @@
 
         var tmp;
         if (mirroredPairs[character]) {
-          tmp = selectCompanionObject(cm, character, inclusive);
+          tmp = selectCompanionObject(cm, head, character, inclusive);
         } else if (selfPaired[character]) {
-          tmp = findBeginningAndEnd(cm, character, inclusive);
+          tmp = findBeginningAndEnd(cm, head, character, inclusive);
         } else if (character === 'W') {
           tmp = expandWordUnderCursor(cm, inclusive, true /** forward */,
                                                      true /** bigWord */);
         } else if (character === 'w') {
           tmp = expandWordUnderCursor(cm, inclusive, true /** forward */,
                                                      false /** bigWord */);
+        } else if (character === 'p') {
+          tmp = findParagraph(cm, head, motionArgs.repeat, 0, inclusive);
+          motionArgs.linewise = true;
+          if (vim.visualMode) {
+            if (!vim.visualLine) { vim.visualLine = true; }
+          } else {
+            var operatorArgs = vim.inputState.operatorArgs;
+            if (operatorArgs) { operatorArgs.linewise = true; }
+            tmp.end.line--;
+          }
         } else {
           // No text object defined for this, don't move.
           return null;
         }
 
-        return [tmp.start, tmp.end];
+        if (!cm.state.vim.visualMode) {
+          return [tmp.start, tmp.end];
+        } else {
+          return expandSelection(cm, tmp.start, tmp.end);
+        }
       },
 
-      repeatLastCharacterSearch: function(cm, motionArgs) {
-        var lastSearch = vimGlobalState.lastChararacterSearch;
+      repeatLastCharacterSearch: function(cm, head, motionArgs) {
+        var lastSearch = vimGlobalState.lastCharacterSearch;
         var repeat = motionArgs.repeat;
         var forward = motionArgs.forward === lastSearch.forward;
         var increment = (lastSearch.increment ? 1 : 0) * (forward ? -1 : 1);
@@ -1768,138 +1925,120 @@
         var curEnd = moveToCharacter(cm, repeat, forward, lastSearch.selectedCharacter);
         if (!curEnd) {
           cm.moveH(increment, 'char');
-          return cm.getCursor();
+          return head;
         }
         curEnd.ch += increment;
         return curEnd;
       }
     };
 
+    function defineMotion(name, fn) {
+      motions[name] = fn;
+    }
+
+    function fillArray(val, times) {
+      var arr = [];
+      for (var i = 0; i < times; i++) {
+        arr.push(val);
+      }
+      return arr;
+    }
+    /**
+     * An operator acts on a text selection. It receives the list of selections
+     * as input. The corresponding CodeMirror selection is guaranteed to
+    * match the input selection.
+     */
     var operators = {
-      change: function(cm, operatorArgs, vim) {
-        var selections = cm.listSelections();
-        var start = selections[0], end = selections[selections.length-1];
-        var curStart = cursorIsBefore(start.anchor, start.head) ? start.anchor : start.head;
-        var curEnd = cursorIsBefore(end.anchor, end.head) ? end.head : end.anchor;
-        var text = cm.getSelection();
-        var visualBlock = vim.visualBlock;
-        if (vim.lastSelection && !vim.visualMode) {
-          visualBlock = vim.lastSelection.visualBlock ? true : visualBlock;
-        }
-        var lastInsertModeChanges = vimGlobalState.macroModeState.lastInsertModeChanges;
-        lastInsertModeChanges.inVisualBlock = visualBlock;
-        var replacement = new Array(selections.length).join('1').split('1');
-        // save the selectionEnd mark
-        var selectionEnd = vim.marks['>'] ? vim.marks['>'].find() : cm.getCursor('head');
-        vimGlobalState.registerController.pushText(
-            operatorArgs.registerName, 'change', text,
-            operatorArgs.linewise);
-        if (operatorArgs.linewise) {
-          // 'C' in visual block extends the block till eol for all lines
-          if (visualBlock){
-            var startLine = curStart.line;
-            while (startLine <= curEnd.line) {
-              var endCh = lineLength(cm, startLine);
-              var head = Pos(startLine, endCh);
-              var anchor = Pos(startLine, curStart.ch);
-              startLine++;
-              cm.replaceRange('', anchor, head);
-            }
-          } else {
-            // Push the next line back down, if there is a next line.
-            replacement = '\n';
-            if (curEnd.line == curStart.line && curEnd.line == cm.lastLine()) {
-              replacement = '';
-            }
-            cm.replaceRange(replacement, curStart, curEnd);
-            cm.indentLine(curStart.line, 'smart');
-            // null ch so setCursor moves to end of line.
-            curStart.ch = null;
-            cm.setCursor(curStart);
-          }
-        } else {
-          // Exclude trailing whitespace if the range is not all whitespace.
-          var text = cm.getRange(curStart, curEnd);
-          if (!isWhiteSpaceString(text)) {
+      change: function(cm, args, ranges) {
+        var finalHead, text;
+        var vim = cm.state.vim;
+        vimGlobalState.macroModeState.lastInsertModeChanges.inVisualBlock = vim.visualBlock;
+        if (!vim.visualMode) {
+          var anchor = ranges[0].anchor,
+              head = ranges[0].head;
+          text = cm.getRange(anchor, head);
+          var lastState = vim.lastEditInputState || {};
+          if (lastState.motion == "moveByWords" && !isWhiteSpaceString(text)) {
+            // Exclude trailing whitespace if the range is not all whitespace.
             var match = (/\s+$/).exec(text);
-            if (match) {
-              curEnd = offsetCursor(curEnd, 0, - match[0].length);
+            if (match && lastState.motionArgs && lastState.motionArgs.forward) {
+              head = offsetCursor(head, 0, - match[0].length);
+              text = text.slice(0, - match[0].length);
             }
           }
-          if (visualBlock) {
-            cm.replaceSelections(replacement);
+          var prevLineEnd = new Pos(anchor.line - 1, Number.MAX_VALUE);
+          var wasLastLine = cm.firstLine() == cm.lastLine();
+          if (head.line > cm.lastLine() && args.linewise && !wasLastLine) {
+            cm.replaceRange('', prevLineEnd, head);
           } else {
-            cm.setCursor(curStart);
-            cm.replaceRange('', curStart, curEnd);
+            cm.replaceRange('', anchor, head);
           }
+          if (args.linewise) {
+            // Push the next line back down, if there is a next line.
+            if (!wasLastLine) {
+              cm.setCursor(prevLineEnd);
+              CodeMirror.commands.newlineAndIndent(cm);
+            }
+            // make sure cursor ends up at the end of the line.
+            anchor.ch = Number.MAX_VALUE;
+          }
+          finalHead = anchor;
+        } else {
+          text = cm.getSelection();
+          var replacement = fillArray('', ranges.length);
+          cm.replaceSelections(replacement);
+          finalHead = cursorMin(ranges[0].head, ranges[0].anchor);
         }
-        vim.marks['>'] = cm.setBookmark(selectionEnd);
-        actions.enterInsertMode(cm, {}, cm.state.vim);
+        vimGlobalState.registerController.pushText(
+            args.registerName, 'change', text,
+            args.linewise, ranges.length > 1);
+        actions.enterInsertMode(cm, {head: finalHead}, cm.state.vim);
       },
       // delete is a javascript keyword.
-      'delete': function(cm, operatorArgs, vim) {
-        var selections = cm.listSelections();
-        var start = selections[0], end = selections[selections.length-1];
-        var curStart = cursorIsBefore(start.anchor, start.head) ? start.anchor : start.head;
-        var curEnd = cursorIsBefore(end.anchor, end.head) ? end.head : end.anchor;
-        // Save the '>' mark before cm.replaceRange clears it.
-        var selectionEnd, selectionStart;
-        var blockwise = vim.visualBlock;
-        if (vim.visualMode) {
-          selectionEnd = vim.marks['>'].find();
-          selectionStart = vim.marks['<'].find();
-        } else if (vim.lastSelection) {
-          selectionEnd = vim.lastSelection.curStartMark.find();
-          selectionStart = vim.lastSelection.curEndMark.find();
-          blockwise = vim.lastSelection.visualBlock;
-        }
-        var text = cm.getSelection();
-        vimGlobalState.registerController.pushText(
-            operatorArgs.registerName, 'delete', text,
-            operatorArgs.linewise, blockwise);
-        var replacement = new Array(selections.length).join('1').split('1');
-        // If the ending line is past the last line, inclusive, instead of
-        // including the trailing \n, include the \n before the starting line
-        if (operatorArgs.linewise &&
-            curEnd.line == cm.lastLine() && curStart.line == curEnd.line) {
-          if (curEnd.line == 0) {
-            curStart.ch = 0;
+      'delete': function(cm, args, ranges) {
+        var finalHead, text;
+        var vim = cm.state.vim;
+        if (!vim.visualBlock) {
+          var anchor = ranges[0].anchor,
+              head = ranges[0].head;
+          if (args.linewise &&
+              head.line != cm.firstLine() &&
+              anchor.line == cm.lastLine() &&
+              anchor.line == head.line - 1) {
+            // Special case for dd on last line (and first line).
+            if (anchor.line == cm.firstLine()) {
+              anchor.ch = 0;
+            } else {
+              anchor = Pos(anchor.line - 1, lineLength(cm, anchor.line - 1));
+            }
           }
-          else {
-            var tmp = copyCursor(curEnd);
-            curStart.line--;
-            curStart.ch = lineLength(cm, curStart.line);
-            curEnd = tmp;
+          text = cm.getRange(anchor, head);
+          cm.replaceRange('', anchor, head);
+          finalHead = anchor;
+          if (args.linewise) {
+            finalHead = motions.moveToFirstNonWhiteSpaceCharacter(cm, anchor);
           }
-          cm.replaceRange('', curStart, curEnd);
         } else {
+          text = cm.getSelection();
+          var replacement = fillArray('', ranges.length);
           cm.replaceSelections(replacement);
+          finalHead = ranges[0].anchor;
         }
-        // restore the saved bookmark
-        if (selectionEnd) {
-          var curStartMark = cm.setBookmark(selectionStart);
-          var curEndMark = cm.setBookmark(selectionEnd);
-          if (vim.visualMode) {
-            vim.marks['<'] = curStartMark;
-            vim.marks['>'] = curEndMark;
-          } else {
-            vim.lastSelection.curStartMark = curStartMark;
-            vim.lastSelection.curEndMark = curEndMark;
-          }
-        }
-        if (operatorArgs.linewise) {
-          cm.setCursor(motions.moveToFirstNonWhiteSpaceCharacter(cm));
-        } else {
-          cm.setCursor(curStart);
-        }
+        vimGlobalState.registerController.pushText(
+            args.registerName, 'delete', text,
+            args.linewise, vim.visualBlock);
+        return clipCursorToContent(cm, finalHead);
       },
-      indent: function(cm, operatorArgs, vim, curStart, curEnd) {
-        var startLine = curStart.line;
-        var endLine = curEnd.line;
+      indent: function(cm, args, ranges) {
+        var vim = cm.state.vim;
+        var startLine = ranges[0].anchor.line;
+        var endLine = vim.visualBlock ?
+          ranges[ranges.length - 1].anchor.line :
+          ranges[0].head.line;
         // In visual mode, n> shifts the selection right n times, instead of
         // shifting n lines right once.
-        var repeat = (vim.visualMode) ? operatorArgs.repeat : 1;
-        if (operatorArgs.linewise) {
+        var repeat = (vim.visualMode) ? args.repeat : 1;
+        if (args.linewise) {
           // The only way to delete a newline is to delete until the start of
           // the next line, so in linewise mode evalInput will include the next
           // line. We don't want this in indent, so we go back a line.
@@ -1907,41 +2046,58 @@
         }
         for (var i = startLine; i <= endLine; i++) {
           for (var j = 0; j < repeat; j++) {
-            cm.indentLine(i, operatorArgs.indentRight);
+            cm.indentLine(i, args.indentRight);
           }
         }
-        cm.setCursor(curStart);
-        cm.setCursor(motions.moveToFirstNonWhiteSpaceCharacter(cm));
+        return motions.moveToFirstNonWhiteSpaceCharacter(cm, ranges[0].anchor);
       },
-      swapcase: function(cm, operatorArgs, _vim, _curStart, _curEnd, _curOriginal) {
+      changeCase: function(cm, args, ranges, oldAnchor, newHead) {
         var selections = cm.getSelections();
-        var ranges = cm.listSelections();
         var swapped = [];
+        var toLower = args.toLower;
         for (var j = 0; j < selections.length; j++) {
           var toSwap = selections[j];
           var text = '';
-          for (var i = 0; i < toSwap.length; i++) {
-            var character = toSwap.charAt(i);
-            text += isUpperCase(character) ? character.toLowerCase() :
-                character.toUpperCase();
+          if (toLower === true) {
+            text = toSwap.toLowerCase();
+          } else if (toLower === false) {
+            text = toSwap.toUpperCase();
+          } else {
+            for (var i = 0; i < toSwap.length; i++) {
+              var character = toSwap.charAt(i);
+              text += isUpperCase(character) ? character.toLowerCase() :
+                  character.toUpperCase();
+            }
           }
           swapped.push(text);
         }
         cm.replaceSelections(swapped);
-        var curStart  = ranges[0].anchor;
-        var curEnd = ranges[0].head;
-        if (!operatorArgs.shouldMoveCursor) {
-          cm.setCursor(cursorIsBefore(curStart, curEnd) ? curStart : curEnd);
+        if (args.shouldMoveCursor){
+          return newHead;
+        } else if (!cm.state.vim.visualMode && args.linewise && ranges[0].anchor.line + 1 == ranges[0].head.line) {
+          return motions.moveToFirstNonWhiteSpaceCharacter(cm, oldAnchor);
+        } else if (args.linewise){
+          return oldAnchor;
+        } else {
+          return cursorMin(ranges[0].anchor, ranges[0].head);
         }
       },
-      yank: function(cm, operatorArgs, vim, _curStart, _curEnd, curOriginal) {
+      yank: function(cm, args, ranges, oldAnchor) {
+        var vim = cm.state.vim;
         var text = cm.getSelection();
+        var endPos = vim.visualMode
+          ? cursorMin(vim.sel.anchor, vim.sel.head, ranges[0].head, ranges[0].anchor)
+          : oldAnchor;
         vimGlobalState.registerController.pushText(
-            operatorArgs.registerName, 'yank',
-            text, operatorArgs.linewise, vim.visualBlock);
-        cm.setCursor(curOriginal);
+            args.registerName, 'yank',
+            text, args.linewise, vim.visualBlock);
+        return endPos;
       }
     };
+
+    function defineOperator(name, fn) {
+      operators[name] = fn;
+    }
 
     var actions = {
       jumpListWalk: function(cm, actionArgs, vim) {
@@ -2003,9 +2159,7 @@
         switch (actionArgs.position) {
           case 'center': y = y - (height / 2) + lineHeight;
             break;
-          case 'bottom': y = y - height + lineHeight*1.4;
-            break;
-          case 'top': y = y + lineHeight*0.4;
+          case 'bottom': y = y - height + lineHeight;
             break;
         }
         cm.scrollTo(null, y);
@@ -2026,53 +2180,62 @@
         var registerName = actionArgs.selectedCharacter;
         macroModeState.enterMacroRecordMode(cm, registerName);
       },
+      toggleOverwrite: function(cm) {
+        if (!cm.state.overwrite) {
+          cm.toggleOverwrite(true);
+          cm.setOption('keyMap', 'vim-replace');
+          CodeMirror.signal(cm, "vim-mode-change", {mode: "replace"});
+        } else {
+          cm.toggleOverwrite(false);
+          cm.setOption('keyMap', 'vim-insert');
+          CodeMirror.signal(cm, "vim-mode-change", {mode: "insert"});
+        }
+      },
       enterInsertMode: function(cm, actionArgs, vim) {
         if (cm.getOption('readOnly')) { return; }
         vim.insertMode = true;
         vim.insertModeRepeat = actionArgs && actionArgs.repeat || 1;
         var insertAt = (actionArgs) ? actionArgs.insertAt : null;
-        if (vim.visualMode) {
-          var selections = getSelectedAreaRange(cm, vim);
-          var selectionStart = selections[0];
-          var selectionEnd = selections[1];
-        }
+        var sel = vim.sel;
+        var head = actionArgs.head || cm.getCursor('head');
+        var height = cm.listSelections().length;
         if (insertAt == 'eol') {
-          var cursor = cm.getCursor();
-          cursor = Pos(cursor.line, lineLength(cm, cursor.line));
-          cm.setCursor(cursor);
+          head = Pos(head.line, lineLength(cm, head.line));
         } else if (insertAt == 'charAfter') {
-          cm.setCursor(offsetCursor(cm.getCursor(), 0, 1));
+          head = offsetCursor(head, 0, 1);
         } else if (insertAt == 'firstNonBlank') {
-          if (vim.visualMode && !vim.visualBlock) {
-            if (selectionEnd.line < selectionStart.line) {
-              cm.setCursor(selectionEnd);
+          head = motions.moveToFirstNonWhiteSpaceCharacter(cm, head);
+        } else if (insertAt == 'startOfSelectedArea') {
+          if (!vim.visualBlock) {
+            if (sel.head.line < sel.anchor.line) {
+              head = sel.head;
             } else {
-              selectionStart = Pos(selectionStart.line, 0);
-              cm.setCursor(selectionStart);
+              head = Pos(sel.anchor.line, 0);
             }
-            cm.setCursor(motions.moveToFirstNonWhiteSpaceCharacter(cm));
-          } else if (vim.visualBlock) {
-            selectionEnd = Pos(selectionEnd.line, selectionStart.ch);
-            cm.setCursor(selectionStart);
-            selectBlock(cm, selectionEnd);
           } else {
-            cm.setCursor(motions.moveToFirstNonWhiteSpaceCharacter(cm));
+            head = Pos(
+                Math.min(sel.head.line, sel.anchor.line),
+                Math.min(sel.head.ch, sel.anchor.ch));
+            height = Math.abs(sel.head.line - sel.anchor.line) + 1;
           }
         } else if (insertAt == 'endOfSelectedArea') {
-          if (vim.visualBlock) {
-            selectionStart = Pos(selectionStart.line, selectionEnd.ch);
-            cm.setCursor(selectionStart);
-            selectBlock(cm, selectionEnd);
-          } else if (selectionEnd.line < selectionStart.line) {
-            selectionEnd = Pos(selectionStart.line, 0);
-            cm.setCursor(selectionEnd);
+          if (!vim.visualBlock) {
+            if (sel.head.line >= sel.anchor.line) {
+              head = offsetCursor(sel.head, 0, 1);
+            } else {
+              head = Pos(sel.anchor.line, 0);
+            }
+          } else {
+            head = Pos(
+                Math.min(sel.head.line, sel.anchor.line),
+                Math.max(sel.head.ch + 1, sel.anchor.ch));
+            height = Math.abs(sel.head.line - sel.anchor.line) + 1;
           }
         } else if (insertAt == 'inplace') {
           if (vim.visualMode){
             return;
           }
         }
-        cm.setOption('keyMap', 'vim-insert');
         cm.setOption('disableInput', false);
         if (actionArgs && actionArgs.replace) {
           // Handle Replace-mode as a special case of insert mode.
@@ -2080,6 +2243,7 @@
           cm.setOption('keyMap', 'vim-replace');
           CodeMirror.signal(cm, "vim-mode-change", {mode: "replace"});
         } else {
+          cm.toggleOverwrite(false);
           cm.setOption('keyMap', 'vim-insert');
           CodeMirror.signal(cm, "vim-mode-change", {mode: "insert"});
         }
@@ -2091,129 +2255,68 @@
         if (vim.visualMode) {
           exitVisualMode(cm);
         }
+        selectForInsert(cm, head, height);
       },
       toggleVisualMode: function(cm, actionArgs, vim) {
         var repeat = actionArgs.repeat;
-        var curStart = cm.getCursor();
-        var curEnd;
-        var selections = cm.listSelections();
+        var anchor = cm.getCursor();
+        var head;
         // TODO: The repeat should actually select number of characters/lines
         //     equal to the repeat times the size of the previous visual
         //     operation.
         if (!vim.visualMode) {
-          cm.on('mousedown', exitVisualMode);
+          // Entering visual mode
           vim.visualMode = true;
           vim.visualLine = !!actionArgs.linewise;
           vim.visualBlock = !!actionArgs.blockwise;
-          if (vim.visualLine) {
-            curStart.ch = 0;
-            curEnd = clipCursorToContent(
-              cm, Pos(curStart.line + repeat - 1, lineLength(cm, curStart.line)),
+          head = clipCursorToContent(
+              cm, Pos(anchor.line, anchor.ch + repeat - 1),
               true /** includeLineBreak */);
-          } else {
-            curEnd = clipCursorToContent(
-              cm, Pos(curStart.line, curStart.ch + repeat),
-              true /** includeLineBreak */);
-          }
-          cm.setSelection(curStart, curEnd);
-          CodeMirror.signal(cm, "vim-mode-change", {mode: "visual", subMode: vim.visualLine ? "linewise" : ""});
+          vim.sel = {
+            anchor: anchor,
+            head: head
+          };
+          CodeMirror.signal(cm, "vim-mode-change", {mode: "visual", subMode: vim.visualLine ? "linewise" : vim.visualBlock ? "blockwise" : ""});
+          updateCmSelection(cm);
+          updateMark(cm, vim, '<', cursorMin(anchor, head));
+          updateMark(cm, vim, '>', cursorMax(anchor, head));
+        } else if (vim.visualLine ^ actionArgs.linewise ||
+            vim.visualBlock ^ actionArgs.blockwise) {
+          // Toggling between modes
+          vim.visualLine = !!actionArgs.linewise;
+          vim.visualBlock = !!actionArgs.blockwise;
+          CodeMirror.signal(cm, "vim-mode-change", {mode: "visual", subMode: vim.visualLine ? "linewise" : vim.visualBlock ? "blockwise" : ""});
+          updateCmSelection(cm);
         } else {
-          curStart = cm.getCursor('anchor');
-          curEnd = cm.getCursor('head');
-          if (vim.visualLine) {
-            if (actionArgs.blockwise) {
-              // This means Ctrl-V pressed in linewise visual
-              vim.visualBlock = true;
-              selectBlock(cm, curEnd);
-              CodeMirror.signal(cm, 'vim-mode-change', {mode: 'visual', subMode: 'blockwise'});
-            } else if (!actionArgs.linewise) {
-              // v pressed in linewise, switch to characterwise visual mode
-              CodeMirror.signal(cm, 'vim-mode-change', {mode: 'visual'});
-            } else {
-              exitVisualMode(cm);
-            }
-            vim.visualLine = false;
-          } else if (vim.visualBlock) {
-            if (actionArgs.linewise) {
-              // Shift-V pressed in blockwise visual mode
-              vim.visualLine = true;
-              curStart = Pos(selections[0].anchor.line, 0);
-              curEnd = Pos(selections[selections.length-1].anchor.line, lineLength(cm, selections[selections.length-1].anchor.line));
-              cm.setSelection(curStart, curEnd);
-              CodeMirror.signal(cm, 'vim-mode-change', {mode: 'visual', subMode: 'linewise'});
-            } else if (!actionArgs.blockwise) {
-              // v pressed in blockwise mode, Switch to characterwise
-              if (curEnd != selections[0].head) {
-                curStart = selections[0].anchor;
-              } else {
-                curStart = selections[selections.length-1].anchor;
-              }
-              cm.setSelection(curStart, curEnd);
-              CodeMirror.signal(cm, 'vim-mode-change', {mode: 'visual'});
-            } else {
-              exitVisualMode(cm);
-            }
-            vim.visualBlock = false;
-          } else if (actionArgs.linewise) {
-              // Shift-V pressed in characterwise visual mode. Switch to linewise
-              // visual mode instead of exiting visual mode.
-              vim.visualLine = true;
-              curStart.ch = cursorIsBefore(curStart, curEnd) ? 0 :
-                lineLength(cm, curStart.line);
-              curEnd.ch = cursorIsBefore(curStart, curEnd) ?
-                lineLength(cm, curEnd.line) : 0;
-              cm.setSelection(curStart, curEnd);
-              CodeMirror.signal(cm, "vim-mode-change", {mode: "visual", subMode: "linewise"});
-            } else if (actionArgs.blockwise) {
-              vim.visualBlock = true;
-              selectBlock(cm, curEnd);
-              CodeMirror.signal(cm, 'vim-mode-change', {mode: 'visual', subMode: 'blockwise'});
-            } else {
-              exitVisualMode(cm);
-            }
+          exitVisualMode(cm);
         }
-        updateMark(cm, vim, '<', cursorIsBefore(curStart, curEnd) ? curStart
-            : curEnd);
-        updateMark(cm, vim, '>', cursorIsBefore(curStart, curEnd) ? curEnd
-            : curStart);
       },
       reselectLastSelection: function(cm, _actionArgs, vim) {
-        var curStart = vim.marks['<'].find();
-        var curEnd = vim.marks['>'].find();
         var lastSelection = vim.lastSelection;
+        if (vim.visualMode) {
+          updateLastSelection(cm, vim);
+        }
         if (lastSelection) {
-          // Set the selections as per last selection
-          var selectionStart = lastSelection.curStartMark.find();
-          var selectionEnd = lastSelection.curEndMark.find();
-          var blockwise = lastSelection.visualBlock;
-          // update last selection
-          updateLastSelection(cm, vim, curStart, curEnd);
-          if (blockwise) {
-            cm.setCursor(selectionStart);
-            selectionStart = selectBlock(cm, selectionEnd);
-          } else {
-            cm.setSelection(selectionStart, selectionEnd);
-            selectionStart = cm.getCursor('anchor');
-            selectionEnd = cm.getCursor('head');
+          var anchor = lastSelection.anchorMark.find();
+          var head = lastSelection.headMark.find();
+          if (!anchor || !head) {
+            // If the marks have been destroyed due to edits, do nothing.
+            return;
           }
-          if (vim.visualMode) {
-            updateMark(cm, vim, '<', cursorIsBefore(selectionStart, selectionEnd) ? selectionStart
-              : selectionEnd);
-            updateMark(cm, vim, '>', cursorIsBefore(selectionStart, selectionEnd) ? selectionEnd
-              : selectionStart);
-          }
-          // Last selection is updated now
+          vim.sel = {
+            anchor: anchor,
+            head: head
+          };
           vim.visualMode = true;
-          if (lastSelection.visualLine) {
-            vim.visualLine = true;
-            vim.visualBlock = false;
-          } else if (lastSelection.visualBlock) {
-            vim.visualLine = false;
-            vim.visualBlock = true;
-          } else {
-            vim.visualBlock = vim.visualLine = false;
-          }
-          CodeMirror.signal(cm, "vim-mode-change", {mode: "visual", subMode: vim.visualLine ? "linewise" : ""});
+          vim.visualLine = lastSelection.visualLine;
+          vim.visualBlock = lastSelection.visualBlock;
+          updateCmSelection(cm);
+          updateMark(cm, vim, '<', cursorMin(anchor, head));
+          updateMark(cm, vim, '>', cursorMax(anchor, head));
+          CodeMirror.signal(cm, 'vim-mode-change', {
+            mode: 'visual',
+            subMode: vim.visualLine ? 'linewise' :
+                     vim.visualBlock ? 'blockwise' : ''});
         }
       },
       joinLines: function(cm, actionArgs, vim) {
@@ -2221,6 +2324,11 @@
         if (vim.visualMode) {
           curStart = cm.getCursor('anchor');
           curEnd = cm.getCursor('head');
+          if (cursorIsBefore(curEnd, curStart)) {
+            var tmp = curEnd;
+            curEnd = curStart;
+            curStart = tmp;
+          }
           curEnd.ch = lineLength(cm, curEnd.line) - 1;
         } else {
           // Repeat is the number of lines to join. Minimum 2 lines.
@@ -2230,18 +2338,19 @@
                                                Infinity));
         }
         var finalCh = 0;
-        cm.operation(function() {
-          for (var i = curStart.line; i < curEnd.line; i++) {
-            finalCh = lineLength(cm, curStart.line);
-            var tmp = Pos(curStart.line + 1,
-                          lineLength(cm, curStart.line + 1));
-            var text = cm.getRange(curStart, tmp);
-            text = text.replace(/\n\s*/g, ' ');
-            cm.replaceRange(text, curStart, tmp);
-          }
-          var curFinalPos = Pos(curStart.line, finalCh);
-          cm.setCursor(curFinalPos);
-        });
+        for (var i = curStart.line; i < curEnd.line; i++) {
+          finalCh = lineLength(cm, curStart.line);
+          var tmp = Pos(curStart.line + 1,
+                        lineLength(cm, curStart.line + 1));
+          var text = cm.getRange(curStart, tmp);
+          text = text.replace(/\n\s*/g, ' ');
+          cm.replaceRange(text, curStart, tmp);
+        }
+        var curFinalPos = Pos(curStart.line, finalCh);
+        if (vim.visualMode) {
+          exitVisualMode(cm, false);
+        }
+        cm.setCursor(curFinalPos);
       },
       newLineAndEnterInsertMode: function(cm, actionArgs, vim) {
         vim.insertMode = true;
@@ -2270,11 +2379,12 @@
           return;
         }
         if (actionArgs.matchIndent) {
-          // length that considers tabs and cm.options.tabSize
+          var tabSize = cm.getOption("tabSize");
+          // length that considers tabs and tabSize
           var whitespaceLength = function(str) {
             var tabs = (str.split("\t").length - 1);
             var spaces = (str.split(" ").length - 1);
-            return tabs * cm.options.tabSize + spaces * 1;
+            return tabs * tabSize + spaces * 1;
           };
           var currentLine = cm.getLine(cm.getCursor().line);
           var indent = whitespaceLength(currentLine.match(/^\s*/)[0]);
@@ -2287,8 +2397,8 @@
             if (newIndent < 0) {
               return "";
             }
-            else if (cm.options.indentWithTabs) {
-              var quotient = Math.floor(newIndent / cm.options.tabSize);
+            else if (cm.getOption("indentWithTabs")) {
+              var quotient = Math.floor(newIndent / tabSize);
               return Array(quotient + 1).join('\t');
             }
             else {
@@ -2336,7 +2446,7 @@
           var emptyStrings = new Array(selections.length).join('1').split('1');
           // save the curEnd marker before it get cleared due to cm.replaceRange.
           if (vim.lastSelection) {
-            lastSelectionCurEnd = vim.lastSelection.curEndMark.find();
+            lastSelectionCurEnd = vim.lastSelection.headMark.find();
           }
           // push the previously selected text to unnamed register
           vimGlobalState.registerController.unnamedRegister.setText(selectedText);
@@ -2358,9 +2468,9 @@
             cm.replaceRange(text, selectionStart, selectionEnd);
             curPosFinal = cm.posFromIndex(cm.indexFromPos(selectionStart) + text.length - 1);
           }
-          // restore the curEnd marker
+          // restore the the curEnd marker
           if(lastSelectionCurEnd) {
-            vim.lastSelection.curEndMark = cm.setBookmark(lastSelectionCurEnd);
+            vim.lastSelection.headMark = cm.setBookmark(lastSelectionCurEnd);
           }
           if (linewise) {
             curPosFinal.ch=0;
@@ -2402,10 +2512,10 @@
             }
           }
         }
-        cm.setCursor(curPosFinal);
         if (vim.visualMode) {
-          exitVisualMode(cm);
+          exitVisualMode(cm, false);
         }
+        cm.setCursor(curPosFinal);
       },
       undo: function(cm, actionArgs) {
         cm.operation(function() {
@@ -2450,7 +2560,7 @@
           replaceWithStr = replaceWithStr.replace(/[^\n]/g, replaceWith);
           if (vim.visualBlock) {
             // Tabs are split in visua block before replacing
-            var spaces = new Array(cm.options.tabSize+1).join(' ');
+            var spaces = new Array(cm.getOption("tabSize")+1).join(' ');
             replaceWithStr = cm.getSelection();
             replaceWithStr = replaceWithStr.replace(/\t/g, spaces).replace(/[^\n]/g, replaceWith).split('\n');
             cm.replaceSelections(replaceWithStr);
@@ -2461,7 +2571,7 @@
             curStart = cursorIsBefore(selections[0].anchor, selections[0].head) ?
                          selections[0].anchor : selections[0].head;
             cm.setCursor(curStart);
-            exitVisualMode(cm);
+            exitVisualMode(cm, false);
           } else {
             cm.setCursor(offsetCursor(curEnd, 0, -1));
           }
@@ -2506,30 +2616,12 @@
         }
         repeatLastEdit(cm, vim, repeat, false /** repeatForInsert */);
       },
-      changeCase: function(cm, actionArgs, vim) {
-        var selectionStart = getSelectedAreaRange(cm, vim)[0];
-        var text = cm.getSelection();
-        var lastSelectionCurEnd;
-        var blockSelection;
-        if (vim.lastSelection) {
-        // save the curEnd marker to avoid its removal due to cm.replaceRange
-          lastSelectionCurEnd = vim.lastSelection.curEndMark.find();
-          blockSelection = vim.lastSelection.visualBlock;
-        }
-        var toLower = actionArgs.toLower;
-        text = toLower ? text.toLowerCase() : text.toUpperCase();
-        cm.replaceSelections(vim.visualBlock || blockSelection ? text.split('\n') : [text]);
-        // restore the last selection curEnd marker
-        if (lastSelectionCurEnd) {
-          vim.lastSelection.curEndMark = cm.setBookmark(lastSelectionCurEnd);
-        }
-        cm.setCursor(selectionStart);
-        if (vim.visualMode) {
-          exitVisualMode(cm);
-        }
-      },
       exitInsertMode: exitInsertMode
     };
+
+    function defineAction(name, fn) {
+      actions[name] = fn;
+    }
 
     /*
      * Below are miscellaneous utility functions used by vim.js
@@ -2556,7 +2648,17 @@
       return ret;
     }
     function offsetCursor(cur, offsetLine, offsetCh) {
+      if (typeof offsetLine === 'object') {
+        offsetCh = offsetLine.ch;
+        offsetLine = offsetLine.line;
+      }
       return Pos(cur.line + offsetLine, cur.ch + offsetCh);
+    }
+    function getOffset(anchor, head) {
+      return {
+        line: head.line - anchor.line,
+        ch: head.line - anchor.line
+      };
     }
     function commandMatches(keys, keyMap, context, inputState) {
       // Partial matches are not applied. They inform the key handler
@@ -2629,7 +2731,19 @@
       }
       return false;
     }
-    function cusrorIsBetween(cur1, cur2, cur3) {
+    function cursorMin(cur1, cur2) {
+      if (arguments.length > 2) {
+        cur2 = cursorMin.apply(undefined, Array.prototype.slice.call(arguments, 1));
+      }
+      return cursorIsBefore(cur1, cur2) ? cur1 : cur2;
+    }
+    function cursorMax(cur1, cur2) {
+      if (arguments.length > 2) {
+        cur2 = cursorMax.apply(undefined, Array.prototype.slice.call(arguments, 1));
+      }
+      return cursorIsBefore(cur1, cur2) ? cur2 : cur1;
+    }
+    function cursorIsBetween(cur1, cur2, cur3) {
       // returns true if cur2 is between cur1 and cur3.
       var cur1before2 = cursorIsBefore(cur1, cur2);
       var cur2before3 = cursorIsBefore(cur2, cur3);
@@ -2637,9 +2751,6 @@
     }
     function lineLength(cm, lineNum) {
       return cm.getLine(lineNum).length;
-    }
-    function reverse(s){
-      return s.split('').reverse().join('');
     }
     function trim(s) {
       if (s.trim) {
@@ -2664,121 +2775,59 @@
     // Distance between selectionEnd.ch and any(first considered here) selection.ch
     function selectBlock(cm, selectionEnd) {
       var selections = [], ranges = cm.listSelections();
-      var firstRange = ranges[0].anchor, lastRange = ranges[ranges.length-1].anchor;
-      var start, end, direction, selectionStart;
-      var curEnd = cm.getCursor('head');
-      var originalSelectionEnd = copyCursor(selectionEnd);
-      start = firstRange.line;
-      end = lastRange.line;
-      if (selectionEnd.line < curEnd.line) {
-        direction = 'up';
-      } else if (selectionEnd.line > curEnd.line) {
-        direction = 'down';
-      } else {
-        if (selectionEnd.ch != curEnd.ch) {
-          direction = selectionEnd.ch > curEnd.ch ? 'right' : 'left';
-        }
-        selectionStart = cm.getCursor('anchor');
+      var head = copyCursor(cm.clipPos(selectionEnd));
+      var isClipped = !cursorEqual(selectionEnd, head);
+      var curHead = cm.getCursor('head');
+      var primIndex = getIndex(ranges, curHead);
+      var wasClipped = cursorEqual(ranges[primIndex].head, ranges[primIndex].anchor);
+      var max = ranges.length - 1;
+      var index = max - primIndex > primIndex ? max : 0;
+      var base = ranges[index].anchor;
+
+      var firstLine = Math.min(base.line, head.line);
+      var lastLine = Math.max(base.line, head.line);
+      var baseCh = base.ch, headCh = head.ch;
+
+      var dir = ranges[index].head.ch - baseCh;
+      var newDir = headCh - baseCh;
+      if (dir > 0 && newDir <= 0) {
+        baseCh++;
+        if (!isClipped) { headCh--; }
+      } else if (dir < 0 && newDir >= 0) {
+        baseCh--;
+        if (!wasClipped) { headCh++; }
+      } else if (dir < 0 && newDir == -1) {
+        baseCh--;
+        headCh++;
       }
-      var primIndex = getIndex(ranges, curEnd);
-      // sets to true when selectionEnd already lies inside the existing selections
-      selectionEnd = cm.clipPos(selectionEnd);
-      var contains = getIndex(ranges, selectionEnd) < 0 ? false : true;
-      var isClipped = !cursorEqual(originalSelectionEnd, selectionEnd);
-      // This function helps to check selection crossing
-      // in case of short lines.
-      var processSelectionCrossing = function() {
-        if (isClipped) {
-          if (curEnd.ch >= selectionStart.ch) {
-            selectionStart.ch++;
-          }
-        } else if (curEnd.ch == lineLength(cm, curEnd.line)) {
-          if (cursorEqual(ranges[primIndex].anchor, ranges[primIndex].head) && ranges.length>1) {
-            if (direction == 'up') {
-              if (contains || primIndex>0) {
-              start = firstRange.line;
-              end = selectionEnd.line;
-              selectionStart = ranges[primIndex-1].anchor;
-            }
-          } else {
-              if (contains || primIndex == 0) {
-                end = lastRange.line;
-                start = selectionEnd.line;
-                selectionStart = ranges[primIndex+1].anchor;
-              }
-            }
-            if (selectionEnd.ch >= selectionStart.ch) {
-              selectionStart.ch--;
-            }
-          }
-        }
-      };
-      switch(direction) {
-        case 'up':
-          start = contains ? firstRange.line : selectionEnd.line;
-          end = contains ? selectionEnd.line : lastRange.line;
-          selectionStart = lastRange;
-          processSelectionCrossing();
-          break;
-        case 'down':
-          start = contains ? selectionEnd.line : firstRange.line;
-          end = contains ? lastRange.line : selectionEnd.line;
-          selectionStart = firstRange;
-          processSelectionCrossing();
-          break;
-        case 'left':
-          if ((selectionEnd.ch <= selectionStart.ch) && (curEnd.ch > selectionStart.ch)) {
-            selectionStart.ch++;
-            selectionEnd.ch--;
-          }
-          break;
-        case 'right':
-          if ((selectionStart.ch <= selectionEnd.ch) && (curEnd.ch < selectionStart.ch)) {
-            selectionStart.ch--;
-            selectionEnd.ch++;
-          }
-          break;
-        default:
-          start = selectionStart.line;
-          end = selectionEnd.line;
-      }
-      while (start <= end) {
-        var anchor = {line: start, ch: selectionStart.ch};
-        var head = {line: start, ch: selectionEnd.ch};
-        var range = {anchor: anchor, head: head};
+      for (var line = firstLine; line <= lastLine; line++) {
+        var range = {anchor: new Pos(line, baseCh), head: new Pos(line, headCh)};
         selections.push(range);
-        if (cursorEqual(head, selectionEnd)) {
-            primIndex = selections.indexOf(range);
-        }
-        start++;
       }
-      // Update selectionEnd and selectionStart
-      // after selection crossing
-      selectionEnd.ch = selections[0].head.ch;
-      selectionStart.ch = selections[0].anchor.ch;
-      if (cursorEqual(selectionEnd, selections[0].head)) {
-        selectionStart.line = selections[selections.length-1].anchor.line;
-      } else {
-        selectionStart.line = selections[0].anchor.line;
+      primIndex = head.line == lastLine ? selections.length - 1 : 0;
+      cm.setSelections(selections);
+      selectionEnd.ch = headCh;
+      base.ch = baseCh;
+      return base;
+    }
+    function selectForInsert(cm, head, height) {
+      var sel = [];
+      for (var i = 0; i < height; i++) {
+        var lineHead = offsetCursor(head, i, 0);
+        sel.push({anchor: lineHead, head: lineHead});
       }
-      cm.setSelections(selections, primIndex);
-      return selectionStart;
+      cm.setSelections(sel, 0);
     }
     // getIndex returns the index of the cursor in the selections.
     function getIndex(ranges, cursor, end) {
-      var pos = -1;
       for (var i = 0; i < ranges.length; i++) {
-        var atAnchor = cursorEqual(ranges[i].anchor, cursor);
-        var atHead = cursorEqual(ranges[i].head, cursor);
-        if (end == 'head') {
-        pos = atHead ? i : pos;
-        } else if (end == 'anchor') {
-          pos = atAnchor ? i : pos;
-        } else {
-          pos = (atAnchor || atHead) ? i : pos;
+        var atAnchor = end != 'head' && cursorEqual(ranges[i].anchor, cursor);
+        var atHead = end != 'anchor' && cursorEqual(ranges[i].head, cursor);
+        if (atAnchor || atHead) {
+          return i;
         }
       }
-      return pos;
+      return -1;
     }
     function getSelectedAreaRange(cm, vim) {
       var lastSelection = vim.lastSelection;
@@ -2809,8 +2858,8 @@
           }
           cm.setSelections(selections);
         } else {
-          var start = lastSelection.curStartMark.find();
-          var end = lastSelection.curEndMark.find();
+          var start = lastSelection.anchorMark.find();
+          var end = lastSelection.headMark.find();
           var line = end.line - start.line;
           var ch = end.ch - start.ch;
           selectionEnd = {line: selectionEnd.line + line, ch: line ? selectionEnd.ch : ch + selectionEnd.ch};
@@ -2829,51 +2878,133 @@
         return getCurrentSelectedAreaRange();
       }
     }
-    function updateLastSelection(cm, vim, selectionStart, selectionEnd) {
-      if (!selectionStart || !selectionEnd) {
-        selectionStart = vim.marks['<'].find() || cm.getCursor('anchor');
-        selectionEnd = vim.marks['>'].find() || cm.getCursor('head');
-      }
+    // Updates the previous selection with the current selection's values. This
+    // should only be called in visual mode.
+    function updateLastSelection(cm, vim) {
+      var anchor = vim.sel.anchor;
+      var head = vim.sel.head;
       // To accommodate the effect of lastPastedText in the last selection
       if (vim.lastPastedText) {
-        selectionEnd = cm.posFromIndex(cm.indexFromPos(selectionStart) + vim.lastPastedText.length);
+        head = cm.posFromIndex(cm.indexFromPos(anchor) + vim.lastPastedText.length);
         vim.lastPastedText = null;
       }
-      var ranges = cm.listSelections();
-      // This check ensures to set the cursor
-      // position where we left off in previous selection
-      var swap = getIndex(ranges, selectionStart, 'head') > -1;
-      if (vim.visualBlock) {
-        var height = Math.abs(selectionStart.line - selectionEnd.line)+1;
-        var width =  Math.abs(selectionStart.ch - selectionEnd.ch);
-        var block = {height: height, width: width};
-      }
-      // can't use selection state here because yank has already reset its cursor
-      // Also, Bookmarks make the visual selections robust to edit operations
-      vim.lastSelection = {'curStartMark': cm.setBookmark(swap ? selectionEnd : selectionStart),
-                           'curEndMark': cm.setBookmark(swap ? selectionStart : selectionEnd),
+      vim.lastSelection = {'anchorMark': cm.setBookmark(anchor),
+                           'headMark': cm.setBookmark(head),
+                           'anchor': copyCursor(anchor),
+                           'head': copyCursor(head),
                            'visualMode': vim.visualMode,
                            'visualLine': vim.visualLine,
-                           'visualBlock': block};
+                           'visualBlock': vim.visualBlock};
+    }
+    function expandSelection(cm, start, end) {
+      var sel = cm.state.vim.sel;
+      var head = sel.head;
+      var anchor = sel.anchor;
+      var tmp;
+      if (cursorIsBefore(end, start)) {
+        tmp = end;
+        end = start;
+        start = tmp;
+      }
+      if (cursorIsBefore(head, anchor)) {
+        head = cursorMin(start, head);
+        anchor = cursorMax(anchor, end);
+      } else {
+        anchor = cursorMin(start, anchor);
+        head = cursorMax(head, end);
+        head = offsetCursor(head, 0, -1);
+        if (head.ch == -1 && head.line != cm.firstLine()) {
+          head = Pos(head.line - 1, lineLength(cm, head.line - 1));
+        }
+      }
+      return [anchor, head];
+    }
+    /**
+     * Updates the CodeMirror selection to match the provided vim selection.
+     * If no arguments are given, it uses the current vim selection state.
+     */
+    function updateCmSelection(cm, sel, mode) {
+      var vim = cm.state.vim;
+      sel = sel || vim.sel;
+      var mode = mode ||
+        vim.visualLine ? 'line' : vim.visualBlock ? 'block' : 'char';
+      var cmSel = makeCmSelection(cm, sel, mode);
+      cm.setSelections(cmSel.ranges, cmSel.primary);
+      updateFakeCursor(cm);
+    }
+    function makeCmSelection(cm, sel, mode, exclusive) {
+      var head = copyCursor(sel.head);
+      var anchor = copyCursor(sel.anchor);
+      if (mode == 'char') {
+        var headOffset = !exclusive && !cursorIsBefore(sel.head, sel.anchor) ? 1 : 0;
+        var anchorOffset = cursorIsBefore(sel.head, sel.anchor) ? 1 : 0;
+        head = offsetCursor(sel.head, 0, headOffset);
+        anchor = offsetCursor(sel.anchor, 0, anchorOffset);
+        return {
+          ranges: [{anchor: anchor, head: head}],
+          primary: 0
+        };
+      } else if (mode == 'line') {
+        if (!cursorIsBefore(sel.head, sel.anchor)) {
+          anchor.ch = 0;
+
+          var lastLine = cm.lastLine();
+          if (head.line > lastLine) {
+            head.line = lastLine;
+          }
+          head.ch = lineLength(cm, head.line);
+        } else {
+          head.ch = 0;
+          anchor.ch = lineLength(cm, anchor.line);
+        }
+        return {
+          ranges: [{anchor: anchor, head: head}],
+          primary: 0
+        };
+      } else if (mode == 'block') {
+        var top = Math.min(anchor.line, head.line),
+            left = Math.min(anchor.ch, head.ch),
+            bottom = Math.max(anchor.line, head.line),
+            right = Math.max(anchor.ch, head.ch) + 1;
+        var height = bottom - top + 1;
+        var primary = head.line == top ? 0 : height - 1;
+        var ranges = [];
+        for (var i = 0; i < height; i++) {
+          ranges.push({
+            anchor: Pos(top + i, left),
+            head: Pos(top + i, right)
+          });
+        }
+        return {
+          ranges: ranges,
+          primary: primary
+        };
+      }
+    }
+    function getHead(cm) {
+      var cur = cm.getCursor('head');
+      if (cm.getSelection().length == 1) {
+        // Small corner case when only 1 character is selected. The "real"
+        // head is the left of head and anchor.
+        cur = cursorMin(cur, cm.getCursor('anchor'));
+      }
+      return cur;
     }
 
-    function exitVisualMode(cm) {
-      cm.off('mousedown', exitVisualMode);
+    /**
+     * If moveHead is set to false, the CodeMirror selection will not be
+     * touched. The caller assumes the responsibility of putting the cursor
+    * in the right place.
+     */
+    function exitVisualMode(cm, moveHead) {
       var vim = cm.state.vim;
-      var selectionStart = cm.getCursor('anchor');
-      var selectionEnd = cm.getCursor('head');
-      // hack to place the cursor at the right place
-      // in case of visual block
-      if (vim.visualBlock && (cursorIsBefore(selectionStart, selectionEnd))) {
-          selectionEnd.ch--;
+      if (moveHead !== false) {
+        cm.setCursor(clipCursorToContent(cm, vim.sel.head));
       }
       updateLastSelection(cm, vim);
       vim.visualMode = false;
       vim.visualLine = false;
       vim.visualBlock = false;
-      if (!cursorEqual(selectionStart, selectionEnd)) {
-        cm.setCursor(clipCursorToContent(cm, selectionEnd));
-      }
       CodeMirror.signal(cm, "vim-mode-change", {mode: "normal"});
       if (vim.fakeCursor) {
         vim.fakeCursor.clear();
@@ -2889,7 +3020,7 @@
       // Only clip if the selection ends with trailing newline + whitespace
       if (/\n\s*$/.test(selection)) {
         var lines = selection.split('\n');
-        // We know this is all whitepsace.
+        // We know this is all whitespace.
         lines.pop();
 
         // Cases:
@@ -2928,65 +3059,44 @@
     }
 
     function expandWordUnderCursor(cm, inclusive, _forward, bigWord, noSymbol) {
-      var cur = cm.getCursor();
+      var cur = getHead(cm);
       var line = cm.getLine(cur.line);
       var idx = cur.ch;
 
       // Seek to first word or non-whitespace character, depending on if
       // noSymbol is true.
-      var textAfterIdx = line.substring(idx);
-      var firstMatchedChar;
-      if (noSymbol) {
-        firstMatchedChar = textAfterIdx.search(/\w/);
-      } else {
-        firstMatchedChar = textAfterIdx.search(/\S/);
+      var test = noSymbol ? wordCharTest[0] : bigWordCharTest [0];
+      while (!test(line.charAt(idx))) {
+        idx++;
+        if (idx >= line.length) { return null; }
       }
-      if (firstMatchedChar == -1) {
-        return null;
-      }
-      idx += firstMatchedChar;
-      textAfterIdx = line.substring(idx);
-      var textBeforeIdx = line.substring(0, idx);
 
-      var matchRegex;
-      // Greedy matchers for the "word" we are trying to expand.
       if (bigWord) {
-        matchRegex = /^\S+/;
+        test = bigWordCharTest[0];
       } else {
-        if ((/\w/).test(line.charAt(idx))) {
-          matchRegex = /^\w+/;
-        } else {
-          matchRegex = /^[^\w\s]+/;
+        test = wordCharTest[0];
+        if (!test(line.charAt(idx))) {
+          test = wordCharTest[1];
         }
       }
 
-      var wordAfterRegex = matchRegex.exec(textAfterIdx);
-      var wordStart = idx;
-      var wordEnd = idx + wordAfterRegex[0].length;
-      // TODO: Find a better way to do this. It will be slow on very long lines.
-      var revTextBeforeIdx = reverse(textBeforeIdx);
-      var wordBeforeRegex = matchRegex.exec(revTextBeforeIdx);
-      if (wordBeforeRegex) {
-        wordStart -= wordBeforeRegex[0].length;
-      }
+      var end = idx, start = idx;
+      while (test(line.charAt(end)) && end < line.length) { end++; }
+      while (test(line.charAt(start)) && start >= 0) { start--; }
+      start++;
 
       if (inclusive) {
-        // If present, trim all whitespace after word.
-        // Otherwise, trim all whitespace before word.
-        var textAfterWordEnd = line.substring(wordEnd);
-        var whitespacesAfterWord = textAfterWordEnd.match(/^\s*/)[0].length;
-        if (whitespacesAfterWord > 0) {
-          wordEnd += whitespacesAfterWord;
-        } else {
-          var revTrim = revTextBeforeIdx.length - wordStart;
-          var textBeforeWordStart = revTextBeforeIdx.substring(revTrim);
-          var whitespacesBeforeWord = textBeforeWordStart.match(/^\s*/)[0].length;
-          wordStart -= whitespacesBeforeWord;
+        // If present, include all whitespace after word.
+        // Otherwise, include all whitespace before word, except indentation.
+        var wordEnd = end;
+        while (/\s/.test(line.charAt(end)) && end < line.length) { end++; }
+        if (wordEnd == end) {
+          var wordStart = start;
+          while (/\s/.test(line.charAt(start - 1)) && start > 0) { start--; }
+          if (!start) { start = wordStart; }
         }
       }
-
-      return { start: Pos(cur.line, wordStart),
-               end: Pos(cur.line, wordEnd) };
+      return { start: Pos(cur.line, start), end: Pos(cur.line, end) };
     }
 
     function recordJumpPosition(cm, oldCur, newCur) {
@@ -2996,9 +3106,9 @@
     }
 
     function recordLastCharacterSearch(increment, args) {
-        vimGlobalState.lastChararacterSearch.increment = increment;
-        vimGlobalState.lastChararacterSearch.forward = args.forward;
-        vimGlobalState.lastChararacterSearch.selectedCharacter = args.selectedCharacter;
+        vimGlobalState.lastCharacterSearch.increment = increment;
+        vimGlobalState.lastCharacterSearch.forward = args.forward;
+        vimGlobalState.lastCharacterSearch.selectedCharacter = args.selectedCharacter;
     }
 
     var symbolToMode = {
@@ -3122,7 +3232,7 @@
       return cur;
     }
 
-    /*
+    /**
      * Returns the boundaries of the next word. If the cursor in the middle of
      * the word, then returns the boundaries of the current word, starting at
      * the cursor. If the cursor is at the start/end of a word, and we are going
@@ -3144,7 +3254,7 @@
       var pos = cur.ch;
       var line = cm.getLine(lineNum);
       var dir = forward ? 1 : -1;
-      var regexps = bigWord ? bigWordRegexp : wordRegexp;
+      var charTests = bigWord ? bigWordCharTest: wordCharTest;
 
       if (emptyLineIsWord && line == '') {
         lineNum += dir;
@@ -3164,11 +3274,11 @@
         // Find bounds of next word.
         while (pos != stop) {
           var foundWord = false;
-          for (var i = 0; i < regexps.length && !foundWord; ++i) {
-            if (regexps[i].test(line.charAt(pos))) {
+          for (var i = 0; i < charTests.length && !foundWord; ++i) {
+            if (charTests[i](line.charAt(pos))) {
               wordStart = pos;
               // Advance to end of word.
-              while (pos != stop && regexps[i].test(line.charAt(pos))) {
+              while (pos != stop && charTests[i](line.charAt(pos))) {
                 pos += dir;
               }
               wordEnd = pos;
@@ -3197,12 +3307,11 @@
         line = cm.getLine(lineNum);
         pos = (dir > 0) ? 0 : line.length;
       }
-      // Should never get here.
-      throw new Error('The impossible happened.');
     }
 
     /**
      * @param {CodeMirror} cm CodeMirror object.
+     * @param {Pos} cur The position to start from.
      * @param {int} repeat Number of words to move past.
      * @param {boolean} forward True to search forward. False to search
      *     backward.
@@ -3212,8 +3321,7 @@
      *     False if only alphabet characters count as part of the word.
      * @return {Cursor} The position the cursor should move to.
      */
-    function moveToWord(cm, repeat, forward, wordEnd, bigWord) {
-      var cur = cm.getCursor();
+    function moveToWord(cm, cur, repeat, forward, wordEnd, bigWord) {
       var curStart = copyCursor(cur);
       var words = [];
       if (forward && !wordEnd || !forward && wordEnd) {
@@ -3311,10 +3419,58 @@
       return idx;
     }
 
+    function findParagraph(cm, head, repeat, dir, inclusive) {
+      var line = head.line;
+      var min = cm.firstLine();
+      var max = cm.lastLine();
+      var start, end, i = line;
+      function isEmpty(i) { return !cm.getLine(i); }
+      function isBoundary(i, dir, any) {
+        if (any) { return isEmpty(i) != isEmpty(i + dir); }
+        return !isEmpty(i) && isEmpty(i + dir);
+      }
+      if (dir) {
+        while (min <= i && i <= max && repeat > 0) {
+          if (isBoundary(i, dir)) { repeat--; }
+          i += dir;
+        }
+        return new Pos(i, 0);
+      }
+
+      var vim = cm.state.vim;
+      if (vim.visualLine && isBoundary(line, 1, true)) {
+        var anchor = vim.sel.anchor;
+        if (isBoundary(anchor.line, -1, true)) {
+          if (!inclusive || anchor.line != line) {
+            line += 1;
+          }
+        }
+      }
+      var startState = isEmpty(line);
+      for (i = line; i <= max && repeat; i++) {
+        if (isBoundary(i, 1, true)) {
+          if (!inclusive || isEmpty(i) != startState) {
+            repeat--;
+          }
+        }
+      }
+      end = new Pos(i, 0);
+      // select boundary before paragraph for the last one
+      if (i > max && !startState) { startState = true; }
+      else { inclusive = false; }
+      for (i = line; i > min; i--) {
+        if (!inclusive || isEmpty(i) == startState || i == line) {
+          if (isBoundary(i, -1, true)) { break; }
+        }
+      }
+      start = new Pos(i, 0);
+      return { start: start, end: end };
+    }
+
     // TODO: perhaps this finagling of start and end positions belonds
-    // in codmirror/replaceRange?
-    function selectCompanionObject(cm, symb, inclusive) {
-      var cur = cm.getCursor(), start, end;
+    // in codemirror/replaceRange?
+    function selectCompanionObject(cm, head, symb, inclusive) {
+      var cur = head, start, end;
 
       var bracketRegexp = ({
         '(': /[()]/, ')': /[()]/,
@@ -3358,8 +3514,8 @@
     // Takes in a symbol and a cursor and tries to simulate text objects that
     // have identical opening and closing symbols
     // TODO support across multiple lines
-    function findBeginningAndEnd(cm, symb, inclusive) {
-      var cur = copyCursor(cm.getCursor());
+    function findBeginningAndEnd(cm, head, symb, inclusive) {
+      var cur = copyCursor(head);
       var line = cm.getLine(cur.line);
       var chars = line.split('');
       var start, end, i, len;
@@ -3437,6 +3593,12 @@
       },
       setReversed: function(reversed) {
         vimGlobalState.isReversed = reversed;
+      },
+      getScrollbarAnnotate: function() {
+        return this.annotate;
+      },
+      setScrollbarAnnotate: function(annotate) {
+        this.annotate = annotate;
       }
     };
     function getSearchState(cm) {
@@ -3446,7 +3608,8 @@
     function dialog(cm, template, shortText, onClose, options) {
       if (cm.openDialog) {
         cm.openDialog(template, onClose, { bottom: true, value: options.value,
-            onKeyDown: options.onKeyDown, onKeyUp: options.onKeyUp });
+            onKeyDown: options.onKeyDown, onKeyUp: options.onKeyUp,
+            selectValueOnOpen: false});
       }
       else {
         onClose(prompt(shortText, ''));
@@ -3520,13 +3683,17 @@
     // Translates the replace part of a search and replace from ex (vim) syntax into
     // javascript form.  Similar to translateRegex, but additionally fixes back references
     // (translates '\[0..9]' to '$[0..9]') and follows different rules for escaping '$'.
+    var charUnescapes = {'\\n': '\n', '\\r': '\r', '\\t': '\t'};
     function translateRegexReplace(str) {
       var escapeNextChar = false;
       var out = [];
       for (var i = -1; i < str.length; i++) {
         var c = str.charAt(i) || '';
         var n = str.charAt(i+1) || '';
-        if (escapeNextChar) {
+        if (charUnescapes[c + n]) {
+          out.push(charUnescapes[c+n]);
+          i++;
+        } else if (escapeNextChar) {
           // At any point in the loop, escapeNextChar is true if the previous
           // character was a '\' and was not escaped.
           out.push(c);
@@ -3554,6 +3721,7 @@
     }
 
     // Unescape \ and / in the replace part, for PCRE mode.
+    var unescapes = {'\\/': '/', '\\\\': '\\', '\\n': '\n', '\\r': '\r', '\\t': '\t'};
     function unescapeRegexReplace(str) {
       var stream = new CodeMirror.StringStream(str);
       var output = [];
@@ -3562,13 +3730,15 @@
         while (stream.peek() && stream.peek() != '\\') {
           output.push(stream.next());
         }
-        if (stream.match('\\/', true)) {
-          // \/ => /
-          output.push('/');
-        } else if (stream.match('\\\\', true)) {
-          // \\ => \
-          output.push('\\');
-        } else {
+        var matched = false;
+        for (var matcher in unescapes) {
+          if (stream.match(matcher, true)) {
+            matched = true;
+            output.push(unescapes[matcher]);
+            break;
+          }
+        }
+        if (!matched) {
           // Don't change anything
           output.push(stream.next());
         }
@@ -3629,17 +3799,10 @@
       }
     }
     function makePrompt(prefix, desc) {
-      var raw = '';
-      if (prefix) {
-        raw += '<span style="font-family: monospace">' + prefix + '</span>';
-      }
-      raw += '<input type="text"/> ' +
-          '<span style="color: #888">';
-      if (desc) {
-        raw += '<span style="color: #888">';
-        raw += desc;
-        raw += '</span>';
-      }
+      var raw = '<span style="font-family: monospace; white-space: pre">' +
+          (prefix || "") + '<input type="text"></span>';
+      if (desc)
+        raw += ' <span style="color: #888">' + desc + '</span>';
       return raw;
     }
     var searchPromptDesc = '(Javascript regexp)';
@@ -3715,14 +3878,21 @@
       };
     }
     function highlightSearchMatches(cm, query) {
-      var overlay = getSearchState(cm).getOverlay();
+      var searchState = getSearchState(cm);
+      var overlay = searchState.getOverlay();
       if (!overlay || query != overlay.query) {
         if (overlay) {
           cm.removeOverlay(overlay);
         }
         overlay = searchOverlay(query);
         cm.addOverlay(overlay);
-        getSearchState(cm).setOverlay(overlay);
+        if (cm.showMatchesOnScrollbar) {
+          if (searchState.getScrollbarAnnotate()) {
+            searchState.getScrollbarAnnotate().clear();
+          }
+          searchState.setScrollbarAnnotate(cm.showMatchesOnScrollbar(query));
+        }
+        searchState.setOverlay(overlay);
       }
     }
     function findNext(cm, prev, query, repeat) {
@@ -3747,8 +3917,13 @@
       });
     }
     function clearSearchHighlight(cm) {
+      var state = getSearchState(cm);
       cm.removeOverlay(getSearchState(cm).getOverlay());
-      getSearchState(cm).setOverlay(null);
+      state.setOverlay(null);
+      if (state.getScrollbarAnnotate()) {
+        state.getScrollbarAnnotate().clear();
+        state.setScrollbarAnnotate(null);
+      }
     }
     /**
      * Check if pos is in the specified range, INCLUSIVE.
@@ -3786,32 +3961,18 @@
       return {top: from.line, bottom: to.line};
     }
 
-    // Ex command handling
-    // Care must be taken when adding to the default Ex command map. For any
-    // pair of commands that have a shared prefix, at least one of their
-    // shortNames must not match the prefix of the other command.
-    var defaultExCommandMap = [
-      { name: 'map' },
-      { name: 'imap', shortName: 'im' },
-      { name: 'nmap', shortName: 'nm' },
-      { name: 'vmap', shortName: 'vm' },
-      { name: 'unmap' },
-      { name: 'write', shortName: 'w' },
-      { name: 'undo', shortName: 'u' },
-      { name: 'redo', shortName: 'red' },
-      { name: 'set', shortName: 'set' },
-      { name: 'sort', shortName: 'sor' },
-      { name: 'substitute', shortName: 's', possiblyAsync: true },
-      { name: 'nohlsearch', shortName: 'noh' },
-      { name: 'delmarks', shortName: 'delm' },
-      { name: 'registers', shortName: 'reg', excludeFromCommandHistory: true },
-      { name: 'global', shortName: 'g' }
-    ];
-    Vim.ExCommandDispatcher = function() {
+    var ExCommandDispatcher = function() {
       this.buildCommandMap_();
     };
-    Vim.ExCommandDispatcher.prototype = {
+    ExCommandDispatcher.prototype = {
       processCommand: function(cm, input, opt_params) {
+        var that = this;
+        cm.operation(function () {
+          cm.curOp.isVimOp = true;
+          that._processCommand(cm, input, opt_params);
+        });
+      },
+      _processCommand: function(cm, input, opt_params) {
         var vim = cm.state.vim;
         var commandHistoryRegister = vimGlobalState.registerController.getRegister(':');
         var previousCommand = commandHistoryRegister.toString();
@@ -4024,6 +4185,13 @@
     };
 
     var exCommands = {
+      colorscheme: function(cm, params) {
+        if (!params.args || params.args.length < 1) {
+          showConfirm(cm, cm.getOption('theme'));
+          return;
+        }
+        cm.setOption('theme', params.args[0]);
+      },
       map: function(cm, params, ctx) {
         var mapArgs = params.args;
         if (!mapArgs || mapArgs.length < 2) {
@@ -4057,6 +4225,9 @@
       },
       set: function(cm, params) {
         var setArgs = params.args;
+        // Options passed through to the setOption/getOption calls. May be passed in by the
+        // local/global versions of the set command
+        var setCfg = params.setCfg || {};
         if (!setArgs || setArgs.length < 1) {
           if (cm) {
             showConfirm(cm, 'Invalid mapping: ' + params.input);
@@ -4080,24 +4251,35 @@
           optionName = optionName.substring(2);
           value = false;
         }
+
         var optionIsBoolean = options[optionName] && options[optionName].type == 'boolean';
         if (optionIsBoolean && value == undefined) {
           // Calling set with a boolean option sets it to true.
           value = true;
         }
-        if (!optionIsBoolean && !value || forceGet) {
-          var oldValue = getOption(optionName);
-          // If no value is provided, then we assume this is a get.
+        // If no value is provided, then we assume this is a get.
+        if (!optionIsBoolean && value === undefined || forceGet) {
+          var oldValue = getOption(optionName, cm, setCfg);
           if (oldValue === true || oldValue === false) {
             showConfirm(cm, ' ' + (oldValue ? '' : 'no') + optionName);
           } else {
             showConfirm(cm, '  ' + optionName + '=' + oldValue);
           }
         } else {
-          setOption(optionName, value);
+          setOption(optionName, value, cm, setCfg);
         }
       },
-      registers: function(cm,params) {
+      setlocal: function (cm, params) {
+        // setCfg is passed through to setOption
+        params.setCfg = {scope: 'local'};
+        this.set(cm, params);
+      },
+      setglobal: function (cm, params) {
+        // setCfg is passed through to setOption
+        params.setCfg = {scope: 'global'};
+        this.set(cm, params);
+      },
+      registers: function(cm, params) {
         var regArgs = params.args;
         var registers = vimGlobalState.registerController.registers;
         var regInfo = '----------Registers----------<br><br>';
@@ -4141,7 +4323,7 @@
               if (decimal + hex + octal > 1) { return 'Invalid arguments'; }
               number = decimal && 'decimal' || hex && 'hex' || octal && 'octal';
             }
-            if (args.eatSpace() && args.match(/\/.*\//)) { 'patterns not supported'; }
+            if (args.match(/\/.*\//)) { return 'patterns not supported'; }
           }
         }
         var err = parseArgs();
@@ -4324,6 +4506,9 @@
         var query = state.getQuery();
         var lineStart = (params.line !== undefined) ? params.line : cm.getCursor().line;
         var lineEnd = params.lineEnd || lineStart;
+        if (lineStart == cm.firstLine() && lineEnd == cm.lastLine()) {
+          lineEnd = Infinity;
+        }
         if (count) {
           lineStart = lineEnd;
           lineEnd = lineStart + count - 1;
@@ -4338,13 +4523,20 @@
         if (CodeMirror.commands.save) {
           // If a save command is defined, call it.
           CodeMirror.commands.save(cm);
-        } else {
-          // Saves to text area if no save command is defined.
+        } else if (cm.save) {
+          // Saves to text area if no save command is defined and cm.save() is available.
           cm.save();
         }
       },
       nohlsearch: function(cm) {
         clearSearchHighlight(cm);
+      },
+      yank: function (cm) {
+        var cur = copyCursor(cm.getCursor());
+        var line = cur.line;
+        var lineText = cm.getLine(line);
+        vimGlobalState.registerController.pushText(
+          '0', 'yank', lineText, true, true);
       },
       delmarks: function(cm, params) {
         if (!params.argString || !trim(params.argString)) {
@@ -4409,7 +4601,7 @@
       }
     };
 
-    var exCommandDispatcher = new Vim.ExCommandDispatcher();
+    var exCommandDispatcher = new ExCommandDispatcher();
 
     /**
     * @param {CodeMirror} cm CodeMirror instance we are in.
@@ -4442,10 +4634,9 @@
         searchCursor.replace(newText);
       }
       function next() {
-        var found;
         // The below only loops to skip over multiple occurrences on the same
         // line when 'global' is not true.
-        while(found = searchCursor.findNext() &&
+        while(searchCursor.findNext() &&
               isInRange(searchCursor.from(), lineStart, lineEnd)) {
           if (!global && lastPos && searchCursor.from().line == lastPos.line) {
             continue;
@@ -4497,6 +4688,7 @@
             break;
         }
         if (done) { stop(close); }
+        return true;
       }
 
       // Actually do replace.
@@ -4517,9 +4709,10 @@
     }
 
     CodeMirror.keyMap.vim = {
-        'nofallthrough': true,
-        'style': 'fat-cursor'
-      };
+      attach: attachVimMap,
+      detach: detachVimMap,
+      call: cmKey
+    };
 
     function exitInsertMode(cm) {
       var vim = cm.state.vim;
@@ -4575,6 +4768,19 @@
       }
     }
 
+    function _mapCommand(command) {
+      defaultKeymap.unshift(command);
+    }
+
+    function mapCommand(keys, type, name, args, extra) {
+      var command = {keys: keys, type: type};
+      command[type] = name;
+      command[type + "Args"] = args;
+      for (var key in extra)
+        command[key] = extra[key];
+      _mapCommand(command);
+    }
+
     // The timeout in milliseconds for the two-character ESC keymap should be
     // adjusted according to your typing speed to prevent false positives.
     defineOption('insertModeEscKeysTimeout', 200, 'number');
@@ -4582,27 +4788,30 @@
     CodeMirror.keyMap['vim-insert'] = {
       // TODO: override navigation keys so that Esc will cancel automatic
       // indentation from o, O, i_<CR>
-      'Ctrl-N': 'autocomplete',
-      'Ctrl-P': 'autocomplete',
-      'Enter': function(cm) {
-        var fn = CodeMirror.commands.newlineAndIndentContinueComment ||
-            CodeMirror.commands.newlineAndIndent;
-        fn(cm);
-      },
-      fallthrough: ['default']
-    };
-
-    CodeMirror.keyMap['await-second'] = {
-      fallthrough: ['vim-insert']
+      fallthrough: ['default'],
+      attach: attachVimMap,
+      detach: detachVimMap,
+      call: cmKey
     };
 
     CodeMirror.keyMap['vim-replace'] = {
       'Backspace': 'goCharLeft',
-      fallthrough: ['vim-insert']
+      fallthrough: ['vim-insert'],
+      attach: attachVimMap,
+      detach: detachVimMap,
+      call: cmKey
     };
 
     function executeMacroRegister(cm, vim, macroModeState, registerName) {
       var register = vimGlobalState.registerController.getRegister(registerName);
+      if (registerName == ':') {
+        // Read-only register containing last Ex command.
+        if (register.keyBuffer[0]) {
+          exCommandDispatcher.processCommand(cm, register.keyBuffer[0]);
+        }
+        macroModeState.isPlaying = false;
+        return;
+      }
       var keyBuffer = register.keyBuffer;
       var imc = 0;
       macroModeState.isPlaying = true;
@@ -4642,7 +4851,7 @@
       if (macroModeState.isPlaying) { return; }
       var registerName = macroModeState.latestRegister;
       var register = vimGlobalState.registerController.getRegister(registerName);
-      if (register) {
+      if (register && register.pushInsertModeChanges) {
         register.pushInsertModeChanges(macroModeState.lastInsertModeChanges);
       }
     }
@@ -4651,7 +4860,7 @@
       if (macroModeState.isPlaying) { return; }
       var registerName = macroModeState.latestRegister;
       var register = vimGlobalState.registerController.getRegister(registerName);
-      if (register) {
+      if (register && register.pushSearchQuery) {
         register.pushSearchQuery(query);
       }
     }
@@ -4669,6 +4878,10 @@
           if (changeObj.origin == '+input' || changeObj.origin == 'paste'
               || changeObj.origin === undefined /* only in testing */) {
             var text = changeObj.text.join('\n');
+            if (lastChange.maybeReset) {
+              lastChange.changes = [];
+              lastChange.maybeReset = false;
+            }
             lastChange.changes.push(text);
           }
           // Change objects may be chained with next.
@@ -4691,30 +4904,51 @@
           lastChange.expectCursorActivityForChange = false;
         } else {
           // Cursor moved outside the context of an edit. Reset the change.
-          lastChange.changes = [];
+          lastChange.maybeReset = true;
         }
-      } else if (cm.doc.history.lastSelOrigin == '*mouse') {
-        // Reset lastHPos if mouse click was done in normal mode.
-        vim.lastHPos = cm.doc.getCursor().ch;
-        if (cm.somethingSelected()) {
-          // If something is still selected, enter visual mode.
-          vim.visualMode = true;
-        }
+      } else if (!cm.curOp.isVimOp) {
+        handleExternalSelection(cm, vim);
       }
       if (vim.visualMode) {
-        var from, head;
-        from = head = cm.getCursor('head');
-        var anchor = cm.getCursor('anchor');
-        var to = Pos(head.line, from.ch + (cursorIsBefore(anchor, head) ? -1 : 1));
-        if (cursorIsBefore(to, from)) {
-          var temp = from;
-          from = to;
-          to = temp;
-        }
-        if (vim.fakeCursor) {
-          vim.fakeCursor.clear();
-        }
-        vim.fakeCursor = cm.markText(from, to, {className: 'cm-animate-fat-cursor'});
+        updateFakeCursor(cm);
+      }
+    }
+    function updateFakeCursor(cm) {
+      var vim = cm.state.vim;
+      var from = clipCursorToContent(cm, copyCursor(vim.sel.head));
+      var to = offsetCursor(from, 0, 1);
+      if (vim.fakeCursor) {
+        vim.fakeCursor.clear();
+      }
+      vim.fakeCursor = cm.markText(from, to, {className: 'cm-animate-fat-cursor'});
+    }
+    function handleExternalSelection(cm, vim) {
+      var anchor = cm.getCursor('anchor');
+      var head = cm.getCursor('head');
+      // Enter or exit visual mode to match mouse selection.
+      if (vim.visualMode && !cm.somethingSelected()) {
+        exitVisualMode(cm, false);
+      } else if (!vim.visualMode && !vim.insertMode && cm.somethingSelected()) {
+        vim.visualMode = true;
+        vim.visualLine = false;
+        CodeMirror.signal(cm, "vim-mode-change", {mode: "visual"});
+      }
+      if (vim.visualMode) {
+        // Bind CodeMirror selection model to vim selection model.
+        // Mouse selections are considered visual characterwise.
+        var headOffset = !cursorIsBefore(head, anchor) ? -1 : 0;
+        var anchorOffset = cursorIsBefore(head, anchor) ? -1 : 0;
+        head = offsetCursor(head, 0, headOffset);
+        anchor = offsetCursor(anchor, 0, anchorOffset);
+        vim.sel = {
+          anchor: anchor,
+          head: head
+        };
+        updateMark(cm, vim, '<', cursorMin(head, anchor));
+        updateMark(cm, vim, '>', cursorMax(head, anchor));
+      } else if (!vim.insertMode) {
+        // Reset lastHPos if selection was modified by something outside of vim mode e.g. by mouse.
+        vim.lastHPos = cm.getCursor().ch;
       }
     }
 
@@ -4732,12 +4966,17 @@
       var macroModeState = vimGlobalState.macroModeState;
       var lastChange = macroModeState.lastInsertModeChanges;
       var keyName = CodeMirror.keyName(e);
+      if (!keyName) { return; }
       function onKeyFound() {
+        if (lastChange.maybeReset) {
+          lastChange.changes = [];
+          lastChange.maybeReset = false;
+        }
         lastChange.changes.push(new InsertModeKey(keyName));
         return true;
       }
       if (keyName.indexOf('Delete') != -1 || keyName.indexOf('Backspace') != -1) {
-        CodeMirror.lookupKey(keyName, ['vim-insert'], onKeyFound);
+        CodeMirror.lookupKey(keyName, 'vim-insert', onKeyFound);
       }
     }
 
@@ -4806,32 +5045,33 @@
         }
         return true;
       }
-      var curStart = cm.getCursor();
+      var head = cm.getCursor('head');
       var inVisualBlock = vimGlobalState.macroModeState.lastInsertModeChanges.inVisualBlock;
       if (inVisualBlock) {
         // Set up block selection again for repeating the changes.
         var vim = cm.state.vim;
-        var block = vim.lastSelection.visualBlock;
-        var curEnd = Pos(curStart.line + block.height-1, curStart.ch);
-        cm.setCursor(curStart);
-        selectBlock(cm, curEnd);
+        var lastSel = vim.lastSelection;
+        var offset = getOffset(lastSel.anchor, lastSel.head);
+        selectForInsert(cm, head, offset.line + 1);
         repeat = cm.listSelections().length;
-        cm.setCursor(curStart);
+        cm.setCursor(head);
       }
       for (var i = 0; i < repeat; i++) {
+        if (inVisualBlock) {
+          cm.setCursor(offsetCursor(head, i, 0));
+        }
         for (var j = 0; j < changes.length; j++) {
           var change = changes[j];
           if (change instanceof InsertModeKey) {
-            CodeMirror.lookupKey(change.keyName, ['vim-insert'], keyHandler);
+            CodeMirror.lookupKey(change.keyName, 'vim-insert', keyHandler);
           } else {
             var cur = cm.getCursor();
             cm.replaceRange(change, cur, cur);
           }
         }
-        if (inVisualBlock) {
-          curStart.line++;
-          cm.setCursor(curStart);
-        }
+      }
+      if (inVisualBlock) {
+        cm.setCursor(offsetCursor(head, 0, 1));
       }
     }
 
