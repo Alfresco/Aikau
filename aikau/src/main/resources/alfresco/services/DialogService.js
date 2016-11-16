@@ -502,7 +502,7 @@ define(["dojo/_base/declare",
             dialogConfig.additionalCssClasses += " alfresco-dialogs-AlfDialog--textContent";
          }
 
-         var dialog = new AlfDialog(dialogConfig);
+         var dialog = this.createDialog(dialogConfig);
 
          if (payload.publishOnShow)
          {
@@ -516,6 +516,18 @@ define(["dojo/_base/declare",
             var handle = this.alfSubscribe(payload.hideTopic, lang.hitch(dialog, dialog.hide));
             this.mapRequestedIdToHandle(payload, "dialog.hide", handle);
          }
+      },
+
+      /**
+       * Creates and returns a [dialog]{@link module:alfresco/dialogs/AlfDialog} using
+       * the configuration provided.
+       * 
+       * @instance
+       * @parameter {object} config The configuration to use to create the dialog
+       * @since 1.0.NEXT
+       */
+      createDialog: function alfresco_services_DialogService__createDialog(config) {
+         return new AlfDialog(config);
       },
 
       /**
@@ -592,7 +604,7 @@ define(["dojo/_base/declare",
                   formConfig.config.showValidationErrorsImmediately = false;
                }
                var dialogConfig = this.createDialogConfig(config, formConfig);
-               var dialog = new AlfDialog(dialogConfig);
+               var dialog = this.createDialog(dialogConfig);
                this.mapRequestedIdToDialog(payload, dialog);
                this._showDialog(payload, dialog);
 

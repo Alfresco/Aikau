@@ -16,6 +16,14 @@ var pageServices = [
 var docLibServices = getDocumentLibraryServices();
 var services = pageServices.concat(docLibServices);
 
+for (var i=0; i<services.length; i++)
+{
+   if (services[i].id === "DIALOG_SERVICE")
+   {
+      services[i].name = "aikau/services/MdlDialogService";
+   }
+}
+
 var docLib = getDocLibList({
    siteId: null, 
    containerId: null, 
@@ -174,45 +182,81 @@ model.jsonModel = {
             ],
             widgetsForDrawer: [
                {
-                  name: "aikau/buttons/Button",
-                  config: {
-                     buttonClasses: "mdl-button--raised mdl-button--colored mdl-button--accent",
-                     trailingIcon: "arrow_drop_down",
-                     label: "New"
-                  }
-               },
-               {
                   name: "aikau/menus/Menu",
                   config: {
-                     label: "Company Libraries",
-                     leadingIcon: "group_work",
+                     label: "New",
+                     buttonClasses: "mdl-button--raised mdl-button--colored mdl-button--accent",
                      trailingIcon: "expand_more",
                      widgets: [
                         {
                            name: "aikau/menus/MenuItem",
                            config: {
-                              title: "Help"
+                              title: "Text file",
+                              publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+                              publishPayload: {
+                                 dialogTitle: "Create text file",
+                                 formSubmissionTopic: "CREATE",
+                                 widgets: [
+                                    {
+                                       name: "alfresco/forms/controls/TextBox",
+                                       config: {
+                                          label: "Name",
+                                          description: "Description",
+                                          name: "name"
+                                       }
+                                    }
+                                 ],
+                                 widgetsButtons: [
+                                    {
+                                       name: "aikau/buttons/Button",
+                                       config: {
+                                          label: "OK",
+                                          buttonClasses: "mdl-button"
+                                       }
+                                    }
+                                 ]
+                              }
                            }
                         }
                      ]
                   }
                },
                {
-                  name: "aikau/menus/Menu",
+                  name: "aikau/navigation/Links",
                   config: {
-                     label: "Smart Folders",
-                     leadingIcon: "folder_special",
-                     trailingIcon: "expand_more",
                      widgets: [
                         {
-                           name: "aikau/menus/MenuItem",
+                           name: "aikau/navigation/Link",
                            config: {
-                              title: "Help"
+                              label: "Shared",
+                              icon: "people"
+                           }
+                        },
+                        {
+                           name: "aikau/navigation/Link",
+                           config: {
+                              label: "Recents",
+                              icon: "access_time"
+                           }
+                        },
+                        {
+                           name: "aikau/navigation/Link",
+                           config: {
+                              label: "Favourites",
+                              icon: "star"
+                           }
+                        },
+                        {
+                           name: "aikau/navigation/Link",
+                           config: {
+                              label: "Bin",
+                              icon: "delete"
                            }
                         }
                      ]
                   }
                }
+               
             ],
             widgetsForToolbarLeft: [
                getDocLibBreadcrumbTrail({
