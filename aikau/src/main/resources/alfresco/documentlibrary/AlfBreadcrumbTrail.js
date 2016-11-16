@@ -353,9 +353,12 @@ define(["dojo/_base/declare",
        * @since 1.0.60
        */
       onHashChanged: function alfresco_documentlibrary_AlfBreadcrumbTrail__onHashChanged(newHash) {
-         if (newHash.path) {
+         if (newHash.path) 
+         {
             this.onPathChanged(newHash);
-         } else if (newHash.filter && newHash.description) {
+         } 
+         else if (newHash.filter && newHash.description) 
+         {
             this.onFilterSelection(newHash);
          }
       },
@@ -565,8 +568,11 @@ define(["dojo/_base/declare",
             this.renderBreadcrumb({
                label: payload.description
             });
-            if(this.useHash === true) {
-               if(!hashUtils.getHash().description) {
+            
+            if(this.useHash === true) 
+            {
+               if(hashUtils.getHash().description !== payload.description) 
+               {
                   hashUtils.updateHash({
                      description: payload.description
                   }, true);
