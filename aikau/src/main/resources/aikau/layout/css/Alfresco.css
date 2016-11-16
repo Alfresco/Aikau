@@ -6,6 +6,7 @@
 
    .mdl-layout__drawer {
       box-shadow: none;
+      overflow-x: hidden;
    }
 
    .aikau-layout_Alfresco__toolbar {
