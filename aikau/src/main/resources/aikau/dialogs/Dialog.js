@@ -33,8 +33,9 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/Dialog.html",
         "alfresco/core/topics",
         "dojo/_base/lang",
-        "dojo/aspect"], 
-        function(declare, BaseMdlWidget, template, topics, lang, aspect) {
+        "dojo/aspect",
+        "dojo/dom-style"], 
+        function(declare, BaseMdlWidget, template, topics, lang, aspect, domStyle) {
    
    return declare([BaseMdlWidget], {
 
@@ -102,6 +103,14 @@ define(["dojo/_base/declare",
                this.buttons = widgets;
                this.buttons.forEach(lang.hitch(this, this.attachButtonHandler));
             }));
+         }
+
+         if (this.dialogWidth)
+         {
+            domStyle.set(this.domNode, {
+               width: this.dialogWidth,
+               margin: "auto"
+            });
          }
 
          // It is necessary to append the dialog to the document body in order

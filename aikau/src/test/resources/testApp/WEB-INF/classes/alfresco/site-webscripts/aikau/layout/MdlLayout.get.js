@@ -195,14 +195,16 @@ model.jsonModel = {
                               publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
                               publishPayload: {
                                  dialogTitle: "Create text file",
+                                 dialogWidth: "500px",
                                  formSubmissionTopic: "CREATE",
                                  widgets: [
                                     {
-                                       name: "alfresco/forms/controls/TextBox",
+                                       name: "aikau/forms/controls/MdlTextBox",
                                        config: {
                                           label: "Name",
-                                          description: "Description",
-                                          name: "name"
+                                          description: "This is the name of the file that you wish to create",
+                                          name: "name",
+                                          placeHolder: "File name..."
                                        }
                                     }
                                  ],
