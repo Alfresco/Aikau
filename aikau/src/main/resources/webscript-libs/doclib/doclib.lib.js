@@ -1100,7 +1100,7 @@ function getDocLibList(options) {
          sortAscending: options.docLibPreferences.sortAscending,
          sortField: options.docLibPreferences.sortField,
          view: options.docLibPreferences.viewRendererName,
-         widgets: [
+         widgets: options.views || [
             {
                id: (options.idPrefix || "") + "DOCLIB_SIMPLE_VIEW",
                name: "alfresco/documentlibrary/views/AlfSimpleView"

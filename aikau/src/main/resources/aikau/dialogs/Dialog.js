@@ -113,6 +113,15 @@ define(["dojo/_base/declare",
             });
          }
 
+         if (this.contentHeight)
+         {
+            domStyle.set(this.contentNode, "height", this.contentHeight);
+         }
+         if (this.contentWidth)
+         {
+            domStyle.set(this.contentNode, "width", this.contentWidth);
+         }
+
          // It is necessary to append the dialog to the document body in order
          // for the showModal function to work...
          document.body.appendChild(this.domNode);

@@ -45,27 +45,13 @@ define(["dojo/_base/declare",
        * @since 1.0.NEXT
        */
       createDialog: function aikau_services_MdlDialogService__createDialog(config) {
-         return new Dialog(config);
-      },
-
-      /**
-       * Extends the [inherited function]{@link module:alfresco/services/DialogService#createDialogConfig}
-       * to swap the default buttons for Material Design buttons.
-       * 
-       * @instance
-       * @parameter {object} config The configuration to use to create the dialog
-       * @since 1.0.NEXT
-       */
-      createDialogConfig: function alfresco_services_DialogService__createDialogConfig() {
-         var defaultConfig = this.inherited(arguments);
-         if (defaultConfig.widgetsButtons)
+         if (config.widgetsButtons)
          {
-            defaultConfig.widgetsButtons.forEach(function(button) {
+            config.widgetsButtons.forEach(function(button) {
                button.name = "aikau/buttons/Button";
             });
          }
-
-         return defaultConfig;
+         return new Dialog(config);
       }
    });
 });
