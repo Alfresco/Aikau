@@ -84,16 +84,6 @@ define(["dojo/_base/declare",
          this._targetNode = this.widgetsContent;
          this.inherited(arguments);
 
-         if (this.widgetsContent)
-         {
-            this.createChildren({
-               widgets: this.widgetsContent,
-               targetNode: this.contentNode
-            }).then(lang.hitch(this, function(widgets) {
-               this.content = widgets;
-            }));
-         }
-
          if (this.widgetsButtons)
          {
             this.createChildren({
@@ -102,6 +92,26 @@ define(["dojo/_base/declare",
             }).then(lang.hitch(this, function(widgets) {
                this.buttons = widgets;
                this.buttons.forEach(lang.hitch(this, this.attachButtonHandler));
+            }));
+         }
+
+         if (this.widgetsContent)
+         {
+            this.createChildren({
+               widgets: this.widgetsContent,
+               targetNode: this.contentNode
+            }).then(lang.hitch(this, function(widgets) {
+               this.content = widgets;
+
+               this.buttons.forEach(lang.hitch(this, function(button) {
+                  // TODO: This section of code would be better abstracted from AlfDialog...
+                  if (!button.publishPayload)
+                  {
+                     button.publishPayload = {};
+                  }
+                  button.publishPayload.dialogContent = widgets;
+                  button.publishPayload.dialogRef = this;
+               }));
             }));
          }
 
@@ -128,6 +138,15 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Returns an array of all the buttons in the dialog.
+       * 
+       * @instance
+       */
+      getButtons: function aikau_dialogs_Dialog__getButtons() {
+         return this.buttons;
+      },
+
+      /**
        * This function is called to display the dialog.
        * 
        * @instance
@@ -143,10 +162,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       hide: function aikau_dialogs_Dialog__hide() {
-         this.domNode.close();
+         this.domNode.open && this.domNode.close();
       },
-
-      
 
       /**
        * Hide the dialog when any button is clicked.
@@ -158,7 +175,5 @@ define(["dojo/_base/declare",
       attachButtonHandler: function aikau_dialogs_Dialog__attachButtonHandler(button) {
          aspect.before(button, "onClick", lang.hitch(this, this.hide));
       }
-
-      
    });
 });

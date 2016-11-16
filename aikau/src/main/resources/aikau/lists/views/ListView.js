@@ -30,8 +30,9 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",
-        "dojo/dom-class"], 
-        function(declare, AlfListView, domClass) {
+        "dojo/dom-class",
+        "dojo/_base/lang"], 
+        function(declare, AlfListView, domClass, lang) {
 
    return declare([AlfListView], {
 
@@ -53,6 +54,28 @@ define(["dojo/_base/declare",
       postCreate: function aikau_lists_views_ListView__postCreate() {
          domClass.add(this.domNode, "aikau-lists-views-ListView");
          domClass.add(this.tableNode, "mdl-data-table mdl-js-data-table mdl-shadow--2dp");
+         this.inherited(arguments);
+      },
+
+      /**
+       * This method is called when there is no data to be shown. By default this just shows a standard localized
+       * message to say that there is no data.
+       *
+       * @instance
+       * @override
+       */
+      renderNoDataDisplay: function aikau_lists_views_ListView__renderNoDataDisplay() {
+         // Determine whether user can upload and pass on to the widgetsForNoDataDisplay config(s)
+         var permissions = lang.getObject("_currentNode.parent.permissions", false, this);
+         var canUpload = permissions && lang.getObject("user.CreateChildren", false, permissions) === true;
+         if (this.widgetsForNoDataDisplay)
+         {
+            this.widgetsForNoDataDisplay.forEach(function(widget) {
+               widget.config = lang.mixin(widget.config || {}, {
+                  canUpload: canUpload
+               });
+            });
+         }
          this.inherited(arguments);
       }
    });
