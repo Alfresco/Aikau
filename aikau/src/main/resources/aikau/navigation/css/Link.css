@@ -1,0 +1,8 @@
+.aikau-navigation-Link {
+
+   cursor: pointer;
+
+   .material-icons {
+      margin-right: 32px;
+   }
+}

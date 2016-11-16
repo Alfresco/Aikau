@@ -33,8 +33,9 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "alfresco/core/Core",
-        "aikau/core/ChildProcessing"], 
-        function(declare, _WidgetBase, _TemplatedMixin, Core, ChildProcessing) {
+        "aikau/core/ChildProcessing",
+        "dojo/_base/lang"], 
+        function(declare, _WidgetBase, _TemplatedMixin, Core, ChildProcessing, lang) {
    
    return declare([_WidgetBase, _TemplatedMixin, Core, ChildProcessing], {
 
@@ -104,7 +105,9 @@ define(["dojo/_base/declare",
             this.createChildren({
                widgets: this.widgets,
                targetNode: this._targetNode || this.domNode
-            });
+            }).then(lang.hitch(this, function(widgets) {
+               this.childWidgets = widgets;
+            }));
          }
       },
 
