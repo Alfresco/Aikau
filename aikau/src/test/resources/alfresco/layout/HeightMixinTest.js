@@ -177,7 +177,7 @@ define(["module",
                .getSize()
                .then(function(size) {
                   // NOTE: target height is client height minus dialog "margin", padding and title
-                  var target = windowHeight - 80 - 39;
+                  var target = windowHeight - 80 - 39 - 20 - 20;
                   assert.closeTo(size.height, target, 10, "Height not calculated correctly");
                })
             .end()
@@ -186,7 +186,7 @@ define(["module",
                .click()
             .end()
 
-            .findByCssSelector("#FSDNB.dialogHidden");
+            .findByCssSelector("#FSDNB.dialogHidden").end();
          },
 
          "Show full screen dialog with buttons bar": function() {
@@ -201,7 +201,7 @@ define(["module",
                .getSize()
                .then(function(size) {
                   // NOTE: target height is client height minus dialog "margin", padding, title and button bars
-                  var target = windowHeight - 80 - 39 - 44;
+                  var target = windowHeight - 80 - 39 - 44 - 20 - 20;
                   assert.closeTo(size.height, target, 10, "Height not calculated correctly");
                })
             .end()
@@ -210,7 +210,7 @@ define(["module",
                .click()
             .end()
 
-            .findByCssSelector("#FSD.dialogHidden");
+            .findByCssSelector("#FSD.dialogHidden").end();
          }
       };
    });
