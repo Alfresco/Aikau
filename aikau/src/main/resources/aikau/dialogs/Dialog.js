@@ -34,8 +34,9 @@ define(["dojo/_base/declare",
         "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/aspect",
-        "dojo/dom-style"], 
-        function(declare, BaseMdlWidget, template, topics, lang, aspect, domStyle) {
+        "dojo/dom-style",
+        "dojo/sniff"], 
+        function(declare, BaseMdlWidget, template, topics, lang, aspect, domStyle, has) {
    
    return declare([BaseMdlWidget], {
 
@@ -130,6 +131,15 @@ define(["dojo/_base/declare",
          if (this.contentWidth)
          {
             domStyle.set(this.contentNode, "width", this.contentWidth);
+
+            var ieRegex = /(Trident\/)|(Edge\/)/;
+            var isIE = has("IE") || ieRegex.test(navigator.userAgent);
+            if (isIE)
+            {
+               var pureWidth = Number(this.contentWidth.replace(/[^\d\.\-]/g, ""));
+               pureWidth += 40;
+               domStyle.set(this.domNode, "width", pureWidth + "px");
+            }
          }
 
          /* global dialogPolyfill */

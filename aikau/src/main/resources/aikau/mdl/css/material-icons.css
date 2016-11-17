@@ -2,7 +2,8 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(./material-icons.woff2) format('woff2');
+  src: local('Material Icons'), 
+       url(./material-icons.woff) format('woff');
 }
 
 .material-icons {
