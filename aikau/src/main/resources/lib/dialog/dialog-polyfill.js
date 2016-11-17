@@ -522,4 +522,5 @@
   //   // all others
   //   window['dialogPolyfill'] = dialogPolyfill;
   // }
+  window['dialogPolyfill'] = dialogPolyfill;
 })();

@@ -47,7 +47,7 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Dialog.css"}]
        */
       cssRequirements: [{cssFile:"./css/Dialog.css"},
-                        {cssFile:"/js/lib/dialog-polyfill/dialog-polyfill.css"}],
+                        {cssFile:"/js/lib/dialog/dialog-polyfill.css"}],
       
       /**
        * The HTML template to use for the widget.
@@ -131,6 +131,9 @@ define(["dojo/_base/declare",
          {
             domStyle.set(this.contentNode, "width", this.contentWidth);
          }
+
+         /* global dialogPolyfill */
+         dialogPolyfill.registerDialog(this.domNode);
 
          // It is necessary to append the dialog to the document body in order
          // for the showModal function to work...
