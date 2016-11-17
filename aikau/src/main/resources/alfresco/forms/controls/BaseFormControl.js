@@ -737,25 +737,36 @@ define(["dojo/_base/declare",
                }
             }
 
-            // Generate the initial set of options in the following precedence...
-            // 1) PubSub Config
-            // 2) Callback function
-            // 3) Fixed options
-            var pubSub = lang.getObject("publishTopic", false, config),
-                callback = lang.getObject("callback", false, config),
-                fixed = lang.getObject("fixed", false, config);
-            if (pubSub && this.getPubSubOptionsImmediately)
-            {
-               this.getPubSubOptions(config);
-            }
-            else if (callback)
-            {
-               this.processCallbackOptions(callback, config);
-            }
-            else if (fixed)
-            {
-               this.processFixedOptions(fixed);
-            }
+            this.getInitialOptions(config);
+         }
+      },
+
+      /**
+       * Generate the initial set of options in the following precedence: 
+       * 
+       * <ol><li>PubSub Config</li>
+       * <li>Callback function</li>
+       * <li>Fixed options</li></ol>
+       *  
+       * @instance
+       * @param {object} config The options configuration
+       * @since 1.0.96
+       */
+      getInitialOptions: function alfresco_forms_controls_BaseFormControl__getInitialOptions(config) {
+         var pubSub = lang.getObject("publishTopic", false, config),
+             callback = lang.getObject("callback", false, config),
+             fixed = lang.getObject("fixed", false, config);
+         if (pubSub && this.getPubSubOptionsImmediately)
+         {
+            this.getPubSubOptions(config);
+         }
+         else if (callback)
+         {
+            this.processCallbackOptions(callback, config);
+         }
+         else if (fixed)
+         {
+            this.processFixedOptions(fixed);
          }
       },
 

@@ -68,6 +68,19 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Overrides the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#getInitialOptions}
+       * to intentionally do nothing as the [ServiceStore]{@link module:alfresco/forms/controls/utilities/ServiceStore}
+       * will retrieve the initial options.
+       * 
+       * @instance
+       * @param {object} config The options configuration
+       * @since 1.0.96
+       */
+      getInitialOptions: function alfresco_forms_controls_utilities_UseServiceStoreMixin__getInitialOptions(config) {
+         // Do nothing intentionally. Do not call the inherited function.
+      },
+
+      /**
        * In vanilla Dojo, when you open either a ComboBox or FilteringSelect you will
        * get all options, not those filtered on the current form control value. This
        * function can be called to override the default _startSearchAll function

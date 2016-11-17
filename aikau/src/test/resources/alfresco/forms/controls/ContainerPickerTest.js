@@ -22,9 +22,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!expect",
         "intern/chai!assert"],
-        function(module, defineSuite, expect, assert) {
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "ContainerPicker Tests",
@@ -33,30 +32,19 @@ define(["module",
       "Test picker dialog can be displayed": function() {
          return this.remote.findByCssSelector("#FOLDER_PICKER .alfresco-layout-VerticalWidgets > span > span > span")
             .click()
-            .end()
-            .findByCssSelector(".alfresco-pickers-Picker")
-            .then(
-               function() {},
-               function() {
-                  assert(false, "The dialog has NOT opened with the picker");
-               }
-            );
+         .end()
+       
+         .findDisplayedByCssSelector(".alfresco-pickers-Picker");
       },
 
       "Test Recent Sites sub-picker is shown": function() {
          // Select "Recent Sites" (the results for this are mocked)
-         return this.remote.findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:first-child .dijitMenuItem:nth-child(1)")
-            .click()
-            .end()
-            .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
-            .then(function(elements) {
-               assert.lengthOf(elements, 2, "The Recent Sites sub-picker was not shown");
-            });
+         return this.remote.findDisplayedByCssSelector(".alfresco-pickers-SingleItemPicker");
       },
 
       "Test Recent Sites result count": function() {
          // Count the mocked results...
-         return this.remote.findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:nth-child(2) .alfresco-menus-AlfMenuBar .dijitMenuItem")
+         return this.remote.findAllByCssSelector(".alfresco-pickers-SingleItemPicker .alfresco-menus-_AlfMenuItemMixin")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Unexpected number of Recent Sites shown");
             });
@@ -66,8 +54,9 @@ define(["module",
          // Count the mocked results...
          return this.remote.findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:nth-child(2) .alfresco-menus-AlfMenuBar .dijitMenuItem:first-child")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "The tree sub-picker was not shown");
             });
@@ -75,11 +64,13 @@ define(["module",
 
       "Test selecting a container": function() {
          // Using implicit wait of findAll... here...
-         return this.remote.findAllByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:nth-child(3) .dijitTreeNodeContainer .dijitTreeRow .dijitTreeLabel").end()
-            .findByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:nth-child(3) .dijitTreeNodeContainer .dijitTreeRow .dijitTreeLabel")
+         return this.remote.getLastPublish("ALF_RESIZE_SIDEBAR").findDisplayedByCssSelector(".alfresco-pickers-Picker .sub-pickers > div:nth-child(3) .dijitTreeNodeContainer .dijitTreeRow .dijitTreeLabel")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-pickers-Picker .picked-items tr")
+         .end()
+
+         
+         
+         .findAllByCssSelector(".alfresco-pickers-Picker .picked-items tr")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "The container was not picked");
             });

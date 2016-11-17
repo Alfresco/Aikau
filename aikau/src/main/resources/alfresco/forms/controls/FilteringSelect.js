@@ -71,7 +71,6 @@ define(["alfresco/forms/controls/BaseFormControl",
          var filteringSelect = new FilteringSelect({
             id: this.id + "_CONTROL",
             name: this.name,
-            value: this.value,
             store: serviceStore,
             searchAttr: serviceStore.queryAttribute,
             labelAttribute: serviceStore.labelAttribute,

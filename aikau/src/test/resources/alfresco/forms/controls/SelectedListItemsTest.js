@@ -67,7 +67,7 @@ define(["module",
       "Publish initial form value": function() {
          return this.remote.findByCssSelector(selectors.form.confirmationButton)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("FORMSAVE")
             .then(function(payload) {
@@ -78,16 +78,21 @@ define(["module",
       "Check fifth and post form": function() {
          return this.remote.findByCssSelector(selectors.selectors.fifth.element)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.selectors.fifth.checked)
-            .end()
+         .end()
 
          .clearLog()
 
+         .getLastPublish("FORMALF_FORM_VALIDITY")
+            .then(function(payload) {
+               assert.propertyVal(payload, "valid", true);
+            })
+
          .findByCssSelector(selectors.form.confirmationButton)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("FORMSAVE")
             .then(function(payload) {
