@@ -31,6 +31,13 @@ define(["module",
       name: "FilteringSelect Tests",
       testPage: "/FilteringSelect",
 
+      "Only one XHR request should be made for each control": function() {
+         return this.remote.getXhrEntries({ method: "GET" })
+            .then(function(entries) {
+               assert.lengthOf(entries, 3);
+            });
+      },
+
       "Value assigned to control is selected": function() {
          this.remote.findByCssSelector("#FILTERING_SELECT_1_CONTROL")
             .getVisibleText()

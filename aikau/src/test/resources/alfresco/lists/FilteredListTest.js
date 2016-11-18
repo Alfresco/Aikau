@@ -34,13 +34,6 @@ define(["module",
       name: "FilteredList Tests",
       testPage: "/FilteredList",
 
-      "Only one XHR request should be made for each control": function() {
-         return this.remote.getXhrEntries({ method: "GET" })
-            .then(function(entries) {
-               assert.lengthOf(entries, 3);
-            });
-      },
-
       "Check that results are loaded initially": function() {
          return this.remote.findAllByCssSelector("#SEPARATE .alfresco-lists-views-layouts-Row")
             .then(function(elements) {
