@@ -18,6 +18,7 @@ model.jsonModel = {
       {
          name: "alfresco/forms/Form",
          config: {
+            pubSubScope: "FORM_",
             okButtonPublishTopic: "SAVE_FORM",
             okButtonLabel: "Save",
             value: {
@@ -54,6 +55,7 @@ model.jsonModel = {
                      fieldId: "FILTERING_SELECT_2",
                      name: "person2",
                      label: "Select a person (FilteringSelect form value)",
+                     showAllOptionsOnOpen: true,
                      optionsConfig: {
                         queryAttribute: "label",
                         labelAttribute: "label",
