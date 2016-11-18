@@ -31,19 +31,54 @@ define(["module",
       name: "FilteringSelect Tests",
       testPage: "/FilteringSelect",
 
+      "Only one XHR request should be made for each control": function() {
+         return this.remote.getXhrEntries({ method: "GET" })
+            .then(function(entries) {
+               assert.lengthOf(entries, 3);
+            });
+      },
+
       "Value assigned to control is selected": function() {
-         this.remote.findByCssSelector("#FILTERING_SELECT_1_CONTROL")
-            .getVisibleText()
+         return this.remote.findByCssSelector("#FILTERING_SELECT_1_CONTROL")
+            .getProperty("value")
             .then(function(text) {
                assert.equal(text, "abeecher");
             });
       },
 
       "Value assigned to form is selected": function() {
-         this.remote.findByCssSelector("#FILTERING_SELECT_2_CONTROL")
-            .getVisibleText()
+         return this.remote.findByCssSelector("#FILTERING_SELECT_2_CONTROL")
+            .getProperty("value")
             .then(function(text) {
                assert.equal(text, "abeecher");
+            });
+      },
+
+      "Only value matched options are shown": function() {
+         return this.remote.findByCssSelector("#widget_FILTERING_SELECT_1_CONTROL .dijitArrowButton")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#FILTERING_SELECT_1_CONTROL_popup")
+         .end()
+
+         .findAllByCssSelector("#FILTERING_SELECT_1_CONTROL_popup .dijitMenuItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 3); // NOTE including previous and next items!
+            });
+      },
+
+      "All options are shown": function() {
+         return this.remote.findByCssSelector("#widget_FILTERING_SELECT_2_CONTROL .dijitArrowButton")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#FILTERING_SELECT_2_CONTROL_popup")
+         .end()
+
+         .findAllByCssSelector("#FILTERING_SELECT_2_CONTROL_popup .dijitMenuItem")
+            .then(function(elements) {
+               assert.lengthOf(elements, 8); // NOTE including previous and next items!
             });
       }
    });

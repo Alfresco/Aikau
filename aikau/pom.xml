@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.96-SNAPSHOT</version>
+      <version>1.0.97-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -141,6 +141,12 @@
             <targetPath>META-INF/js/aikau/${project.version}/alfresco</targetPath>
             <filtering>false</filtering>
             <directory>${basedir}/src/main/resources/alfresco</directory>
+         </resource>
+
+         <resource>
+            <targetPath>META-INF/js/aikau/${project.version}/modules</targetPath>
+            <filtering>false</filtering>
+            <directory>${basedir}/src/main/resources/aikau</directory>
          </resource>
 
          <!-- Put the release notes in the root of the JAR file -->

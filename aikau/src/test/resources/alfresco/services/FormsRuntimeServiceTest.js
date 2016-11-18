@@ -30,12 +30,15 @@ define(["module",
    var buttonSelectors = TestCommon.getTestSelectors("alfresco/buttons/AlfButton");
    var formSelectors = TestCommon.getTestSelectors("alfresco/forms/Form");
    var multiSelectInputSelectors = TestCommon.getTestSelectors("alfresco/forms/controls/MultiSelectInput");
+   var dialogSelectors = TestCommon.getTestSelectors("alfresco/dialogs/AlfDialog");
+   
 
    var selectors = {
       buttons: {
          editNode: TestCommon.getTestSelector(buttonSelectors, "button.label", ["EDIT_NODE"]),
          viewNode: TestCommon.getTestSelector(buttonSelectors, "button.label", ["VIEW_NODE"]),
-         createWorkflow: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CREATE_WORKFLOW"])
+         createWorkflow: TestCommon.getTestSelector(buttonSelectors, "button.label", ["CREATE_WORKFLOW"]),
+         editDataListItem: TestCommon.getTestSelector(buttonSelectors, "button.label", ["EDIT_DATA_LIST_ITEM"])
       },
       authoritySelector: {
          control: TestCommon.getTestSelector(multiSelectInputSelectors, "control", ["ASSOC_BPM_ASSIGNEE"]),
@@ -57,6 +60,13 @@ define(["module",
             confirmationButton: TestCommon.getTestSelector(formSelectors, "confirmation.button", ["CREATE_WORKFLOW_FORM"])
          }
       },
+      dialogs: {
+         editDataListItem: {
+            confirmationButton: TestCommon.getTestSelector(dialogSelectors, "form.dialog.confirmation.button", ["EDIT_DLI_FORM"]),
+            disabledConfirmationButton: TestCommon.getTestSelector(dialogSelectors, "disabled.form.dialog.confirmation.button", ["EDIT_DLI_FORM"]),
+            displayed: TestCommon.getTestSelector(dialogSelectors, "visible.dialog", ["EDIT_DLI_FORM"]),
+         }
+      }
    };
 
    defineSuite(module, {
@@ -92,6 +102,23 @@ define(["module",
 
          // ...which should result in the scoped reload request
          .getLastPublish("CREATE_WORKFLOW_SCOPE_ALF_DOCLIST_RELOAD_DATA");
+      },
+
+      "Mandatory file association with initial value provided does not disable form": function() {
+         return this.remote.findByCssSelector(selectors.buttons.editDataListItem)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.editDataListItem.displayed)
+         .end()
+
+         .findDisplayedByCssSelector(selectors.dialogs.editDataListItem.confirmationButton)
+         .end()
+
+         .findAllByCssSelector(selectors.dialogs.editDataListItem.disabledConfirmationButton)
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
       }
    });
 });

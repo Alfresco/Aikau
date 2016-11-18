@@ -49,6 +49,18 @@ define(["alfresco/forms/controls/BaseFormControl",
                         {cssFile:"./css/ComboBox.css"}],
 
       /**
+       * Indicates whether opening the drop-down menu should show all available options
+       * or just those that match the current value of the control. Defaults to true
+       * (meaning that only filtered results are displayed).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.96
+       */
+      showAllOptionsOnOpen: false,
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_FilteringSelect__getWidgetConfig() {
@@ -71,14 +83,13 @@ define(["alfresco/forms/controls/BaseFormControl",
          var filteringSelect = new FilteringSelect({
             id: this.id + "_CONTROL",
             name: this.name,
-            value: this.value,
             store: serviceStore,
             searchAttr: serviceStore.queryAttribute,
             labelAttribute: serviceStore.labelAttribute,
             queryExpr: "${0}"
          });
          this.addIcon(filteringSelect);
-         this.showOptionsBasedOnValue(filteringSelect);
+         !this.showAllOptionsOnOpen && this.showOptionsBasedOnValue(filteringSelect);
 
          // It's necessary to override the standard Dojo validation message handling here.
          filteringSelect.displayMessage = lang.hitch(this, this.onFilteringValidation);

@@ -19,7 +19,7 @@
 
 /**
  * Provides a function for recursing through objects and processing data within them.
- * 
+ *
  * @module alfresco/util/objectProcessingUtil
  * @author Dave Draper
  * @since 1.0.49
@@ -31,9 +31,10 @@ define(["dojo/_base/lang"],
       var util = {
 
          /**
-          * Convert a URL string into a URL Object
+          * Locate one object inside another object
           *
-          * @param url {string}
+          * @param object {object} The haystack to search through
+          * @param parameters {object} The needle to find
           * @returns {object}
           */
          findObject: function alfresco_util_objectProcessingUtil__findObject(object, parameters) {
@@ -87,17 +88,18 @@ define(["dojo/_base/lang"],
       /**
        * The public API for this utility class
        *
-       * @alias module:alfresco/util/urlUtils
+       * @alias module:alfresco/util/objectProcessingUtil
        */
       return {
 
          /**
-          * Convert the supplied URL string into a URL object
+          * Locate one object inside another object
           *
           * @instance
           * @function
-          * @param {string} url The URL to parse
-          * @returns {object} The URL object
+          * @param object {object} The haystack to search through
+          * @param parameters {object} The needle to find
+          * @returns {object}
           */
          findObject: lang.hitch(util, util.findObject)
       };

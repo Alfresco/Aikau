@@ -322,7 +322,7 @@ define(["dojo/_base/declare",
                            {
                               name: "alfresco/preview/AlfDocumentPreview",
                               config: {
-                                 heightMode: "DIALOG",
+                                 heightMode: (vs.h-250),
                                  pluginConditionsOverrides: this.pluginConditionsOverrides,
                                  proxy: this.proxy,
                                  widgetsForPluginsOverrides: this.widgetsForPluginsOverrides

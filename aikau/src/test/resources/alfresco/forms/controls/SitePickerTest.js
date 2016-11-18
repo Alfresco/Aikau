@@ -33,33 +33,36 @@ define(["module",
       "Can choose single site": function() {
          return this.remote.findByCssSelector("#SITE_PICKER .alfresco-forms-controls-Picker__add-button .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector(".dijitMenuItem[aria-label^=\"Recent Sites\"]")
+         .findDisplayedByCssSelector(".dijitMenuItem[aria-label^=\"Recent Sites\"]")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
-            .click()
-            .end()
+         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+         .end()
 
-         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
+         .findDisplayedByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
+         .findDisplayedByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
             .click()
-            .end()
+         .end()
+
+         .findDisplayedByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
+            .click()
+         .end()
 
          .getLastPublish("ALF_ITEMS_SELECTED") // Helps ensure dialog has closed
-            .end()
+         .end()
 
-         .findByCssSelector("#SITE_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
+         .findDisplayedByCssSelector("#SITE_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SITE_PICKED")
             .then(function(payload) {
@@ -72,33 +75,36 @@ define(["module",
       "Can choose multiple sites": function() {
          return this.remote.findByCssSelector("#SITES_PICKER .alfresco-forms-controls-Picker__add-button .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector(".dijitMenuItem[aria-label^=\"Favorite Sites\"]")
+         .findDisplayedByCssSelector(".dijitMenuItem[aria-label^=\"Favorite Sites\"]")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED")
 
-         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
-            .click()
-            .end()
+         .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
+         .end()
 
-         .findByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
+         .findDisplayedByCssSelector(".alfresco-lists-AlfList tr:nth-child(1) .alfresco-renderers-PublishAction")
             .click()
-            .end()
+         .end()
 
-         .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
+         .findDisplayedByCssSelector(".alfresco-lists-AlfList tr:nth-child(2) .alfresco-renderers-PublishAction")
             .click()
-            .end()
+         .end()
+
+         .findDisplayedByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonNode")
+            .click()
+         .end()
 
          .getLastPublish("ALF_ITEMS_SELECTED") // Helps ensure dialog has closed
-            .end()
+         .end()
 
-         .findByCssSelector("#SITES_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
+         .findDisplayedByCssSelector("#SITES_PICKER_FORM .buttons .confirmationButton .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SITES_PICKED")
             .then(function(payload) {

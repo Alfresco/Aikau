@@ -1,5 +1,9 @@
-Aikau 1.0.95 Release Notes
+Aikau 1.0.96 Release Notes
 ===
+
+IMPORTANT
+---
+From version 1.0.96 onwards there is a new `aikau` package provided. The code in this package is intended to form the basis of a 1.1 version of Aikau (which will be the first release to contain breaking changes). The contents of this package at **not** subject to the same backwards compatibility rules as the `alfresco` package. Instead this will be a collaboration space where code can be changed with breaking changes up until the point where 1.1 is released. You should not use anything from the `aikau` package in production until 1.1 is released. There is no date yet determined for the 1.1 release, 1.0.x releases will continue as always as we prepare for it.
 
 Current deprecations:
 ---
@@ -48,6 +52,15 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.96:
+* [AKU-1111](https://issues.alfresco.com/jira/browse/AKU-1111)       - Update AlfSearchList to support additional query parameters
+* [AKU-1112](https://issues.alfresco.com/jira/browse/AKU-1112)       - Update FilePicker to properly support required state
+* [AKU-1113](https://issues.alfresco.com/jira/browse/AKU-1113)       - Upgrade of CodeMirror to 5.20.2
+* [AKU-1125](https://issues.alfresco.com/jira/browse/AKU-1125)       - Update AlfSelectDocumentListItems to disable correctly
+* [AKU-1127](https://issues.alfresco.com/jira/browse/AKU-1127)       - Increate Create Site dialog height to prevent jumping on validation
+* [AKU-1128](https://issues.alfresco.com/jira/browse/AKU-1128)       - Ensure FilteringSelect and ComboBox only request initial options once
+* [AKU-1129](https://issues.alfresco.com/jira/browse/AKU-1129)       - Add support for showing all option in FilteringSelect and ComboBox when drop-down opened
+
 1.0.95:
 * [AKU-1108](https://issues.alfresco.com/jira/browse/AKU-1108)       - Ensure new sites are favourited (Firefox fix)
 * [AKU-1114](https://issues.alfresco.com/jira/browse/AKU-1114)       - Remove unicode STH delineation from Thumbnail title

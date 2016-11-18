@@ -1,0 +1,29 @@
+th.aikau-lists-views-layouts-HeaderCell.last,
+th.aikau-lists-views-layouts-HeaderCell:last-of-type {
+   border-right: none;
+}
+
+.aikau-lists-views-layouts-HeaderCell {
+   span {
+      vertical-align: super;
+   }
+
+   img {
+      width: 16px;
+      height: 16px;
+      vertical-align: bottom;
+   }
+
+   img.hidden {
+      display: none;
+   }
+
+   i.material-icons {
+      cursor: pointer;
+   }
+}
+
+th.aikau-lists-views-layouts-HeaderCell.hiddenAccessible {
+   position: absolute;
+   left: -99999px;
+}

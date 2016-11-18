@@ -73,6 +73,18 @@ define(["dojo/_base/declare",
       placeHolder: null,
 
       /**
+       * Indicates whether opening the drop-down menu should show all available options
+       * or just those that match the current value of the control. Defaults to true
+       * (meaning that only filtered results are displayed).
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.96
+       */
+      showAllOptionsOnOpen: false,
+
+      /**
        * @instance
        */
       getWidgetConfig: function alfresco_forms_controls_ComboBox__getWidgetConfig() {
@@ -96,7 +108,6 @@ define(["dojo/_base/declare",
          var comboBox = new ComboBox({
             id: this.id + "_CONTROL",
             name: this.name,
-            value: this.value,
             placeHolder: placeHolder,
             store: serviceStore,
             searchAttr: serviceStore.queryAttribute,
@@ -105,7 +116,7 @@ define(["dojo/_base/declare",
             autoComplete: this.autoComplete
          });
          this.addIcon(comboBox);
-         this.showOptionsBasedOnValue(comboBox);
+         !this.showAllOptionsOnOpen && this.showOptionsBasedOnValue(comboBox);
          return comboBox;
       },
 

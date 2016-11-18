@@ -1,0 +1,21 @@
+.alfresco-lists-AlfList.alfresco-lists-AlfFilteredList > * {
+   margin: 0;
+}
+
+.alfresco-experimental-mdl-views-TableView--renderer {
+   width: 100%;
+
+   .alfresco-experimental-mdl-views-TableView__renderer__item {
+      .mdl-data-table__cell--non-numeric {
+         .material-icons {
+            vertical-align: bottom;
+         }
+
+         span {
+            display: inline-block;
+            padding-bottom: 3px;
+            margin-left: 10px;
+         }
+      }
+   }
+}

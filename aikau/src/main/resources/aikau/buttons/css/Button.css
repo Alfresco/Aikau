@@ -1,0 +1,6 @@
+.aikau-buttons-Button {
+   &.mdl-button {
+      margin: 10px;
+      text-transform: none;
+   }
+}

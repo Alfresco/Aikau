@@ -42,7 +42,7 @@ define(["module",
                });
             })
             .screenie()
-            .end()
+         .end()
 
          .findByCssSelector("#FORM1 .confirmationButton .dijitButtonNode")
             .click()
@@ -71,7 +71,7 @@ define(["module",
                });
             })
             .screenie()
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-dialog-AlfDialog .confirmationButton .dijitButtonNode")
             .click()

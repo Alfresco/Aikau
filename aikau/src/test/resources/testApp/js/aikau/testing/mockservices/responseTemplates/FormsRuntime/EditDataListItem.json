@@ -1,0 +1,216 @@
+{
+   "enctype": "multipart/form-data",
+   "method": "post",
+   "data": {
+      "prop_dl_todoDueDate": "2011-02-01T00:00:00.000Z",
+      "prop_dl_todoStatus": "Complete",
+      "prop_dl_todoTitle": "Contract",
+      "assoc_dl_attachments": "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+      "prop_dl_todoPriority": 2,
+      "assoc_dl_assignee": "",
+      "prop_dl_todoNotes": ""
+   },
+   "editTemplate": "../data-lists/forms/dataitem.ftl",
+   "constraints": [{
+      "validationHandler": "Alfresco.forms.validation.mandatory",
+      "id": "MANDATORY",
+      "event": "keyup,change",
+      "message": "The value cannot be empty.",
+      "params": {},
+      "fieldId": "prop_dl_todoTitle"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.mandatory",
+      "id": "MANDATORY",
+      "event": "change",
+      "message": "No attachments.",
+      "params": {},
+      "fieldId": "assoc_dl_attachments"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.number",
+      "id": "NUMBER",
+      "event": "keyup",
+      "message": "Value is not a number.",
+      "params": {},
+      "fieldId": "prop_dl_todoPriority"
+   }, {
+      "validationHandler": "Alfresco.forms.validation.inList",
+      "id": "LIST",
+      "event": "blur",
+      "message": "Value is not in list.",
+      "params": {
+         "allowedValues": ["Not Started|Not Started", "In Progress|In Progress", "Complete|Complete", "On Hold|On Hold"],
+         "sorted": false,
+         "caseSensitive": true
+      },
+      "fieldId": "prop_dl_todoStatus"
+   }],
+   "structure": [{
+      "children": [{
+         "kind": "field",
+         "id": "prop_dl_todoTitle"
+      }, {
+         "kind": "field",
+         "id": "prop_dl_todoDueDate"
+      }, {
+         "kind": "field",
+         "id": "prop_dl_todoPriority"
+      }, {
+         "kind": "field",
+         "id": "prop_dl_todoStatus"
+      }, {
+         "kind": "field",
+         "id": "prop_dl_todoNotes"
+      }, {
+         "kind": "field",
+         "id": "assoc_dl_assignee"
+      }, {
+         "kind": "field",
+         "id": "assoc_dl_attachments"
+      }],
+      "id": "",
+      "event": "form.default.set.label",
+      "fieldId": "set"
+   }],
+   "showCancelButton": false,
+   "mode": "edit",
+   "showResetButton": false,
+   "showSubmitButton": true,
+   "arguments": {
+      "itemKind": "node",
+      "formId": "null",
+      "itemId": "workspace://SpacesStore/7778cf88-836f-4833-a0df-3056d2b20e7a"
+   },
+   "showCaption": true,
+   "submissionUrl": "/share/proxy/alfresco/api/node/workspace/SpacesStore/7778cf88-836f-4833-a0df-3056d2b20e7a/formprocessor",
+   "fields": {
+      "prop_dl_todoDueDate": {
+         "configName": "dl:todoDueDate",
+         "endpointType": "datetime",
+         "kind": "field",
+         "dataType": "datetime",
+         "dataKeyName": "prop_dl_todoDueDate",
+         "name": "prop_dl_todoDueDate",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/date.ftl",
+            "params": {
+               "showTime": "true"
+            }
+         },
+         "id": "prop_dl_todoDueDate",
+         "label": "Due Date",
+         "type": "property",
+         "value": "2011-02-01T00:00:00.000Z",
+         "helpEncodeHtml": true
+      },
+      "prop_dl_todoStatus": {
+         "configName": "dl:todoStatus",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "dataKeyName": "prop_dl_todoStatus",
+         "name": "prop_dl_todoStatus",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/selectone.ftl",
+            "params": {
+               "options": "Not Started|Not Started#alf#In Progress|In Progress#alf#Complete|Complete#alf#On Hold|On Hold",
+               "optionSeparator": "#alf#"
+            }
+         },
+         "id": "prop_dl_todoStatus",
+         "label": "Status",
+         "type": "property",
+         "value": "Complete",
+         "helpEncodeHtml": true
+      },
+      "prop_dl_todoTitle": {
+         "configName": "dl:todoTitle",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "dataKeyName": "prop_dl_todoTitle",
+         "name": "prop_dl_todoTitle",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textfield.ftl",
+            "params": {}
+         },
+         "id": "prop_dl_todoTitle",
+         "label": "Title",
+         "type": "property",
+         "value": "Contract",
+         "helpEncodeHtml": true
+      },
+      "assoc_dl_attachments": {
+         "configName": "dl:attachments",
+         "endpointType": "cm:cmobject",
+         "kind": "field",
+         "dataType": "cm:cmobject",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/association.ftl",
+            "params": {
+               "startLocation": "{doclib}"
+            }
+         },
+         "label": "Attachments",
+         "type": "association",
+         "endpointDirection": "TARGET",
+         "dataKeyName": "assoc_dl_attachments",
+         "name": "assoc_dl_attachments",
+         "id": "assoc_dl_attachments",
+         "value": "workspace://SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+         "helpEncodeHtml": true
+      },
+      "prop_dl_todoPriority": {
+         "configName": "dl:todoPriority",
+         "endpointType": "int",
+         "kind": "field",
+         "dataType": "int",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/number.ftl",
+            "params": {}
+         },
+         "label": "Priority",
+         "type": "property",
+         "help": "form.field.constraint.number",
+         "dataKeyName": "prop_dl_todoPriority",
+         "name": "prop_dl_todoPriority",
+         "id": "prop_dl_todoPriority",
+         "value": 2,
+         "helpEncodeHtml": true
+      },
+      "assoc_dl_assignee": {
+         "configName": "dl:assignee",
+         "endpointType": "cm:person",
+         "kind": "field",
+         "dataType": "cm:person",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/authority.ftl",
+            "params": {}
+         },
+         "label": "Assignee",
+         "type": "association",
+         "endpointDirection": "TARGET",
+         "dataKeyName": "assoc_dl_assignee",
+         "name": "assoc_dl_assignee",
+         "id": "assoc_dl_assignee",
+         "value": "",
+         "helpEncodeHtml": true
+      },
+      "prop_dl_todoNotes": {
+         "configName": "dl:todoNotes",
+         "endpointType": "text",
+         "kind": "field",
+         "dataType": "text",
+         "dataKeyName": "prop_dl_todoNotes",
+         "name": "prop_dl_todoNotes",
+         "control": {
+            "template": "/org/alfresco/components/form/controls/textarea.ftl",
+            "params": {}
+         },
+         "id": "prop_dl_todoNotes",
+         "label": "Notes",
+         "type": "property",
+         "value": "",
+         "helpEncodeHtml": true
+      }
+   }
+}

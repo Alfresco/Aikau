@@ -424,6 +424,7 @@ define(["dojo/_base/declare",
                         this.selectedFiles = tmpSelectedFiles;
                         this.value = tmpValue;
                         this.updateSelectedFiles(this.showSelectedFilesTopic);
+                        this.onValueChangeEvent(this.name, null, tmpValue);
                      }
                   }), true);
 
