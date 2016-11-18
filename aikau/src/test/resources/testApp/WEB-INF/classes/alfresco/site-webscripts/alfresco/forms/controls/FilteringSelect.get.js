@@ -55,7 +55,7 @@ model.jsonModel = {
                      fieldId: "FILTERING_SELECT_2",
                      name: "person2",
                      label: "Select a person (FilteringSelect form value)",
-                     showAllOptionsOnOpen: false,
+                     showAllOptionsOnOpen: true,
                      optionsConfig: {
                         queryAttribute: "label",
                         labelAttribute: "label",

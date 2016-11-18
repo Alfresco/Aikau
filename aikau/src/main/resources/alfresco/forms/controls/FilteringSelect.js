@@ -58,7 +58,7 @@ define(["alfresco/forms/controls/BaseFormControl",
        * @default
        * @since 1.0.96
        */
-      showAllOptionsOnOpen: true,
+      showAllOptionsOnOpen: false,
 
       /**
        * @instance
@@ -89,7 +89,7 @@ define(["alfresco/forms/controls/BaseFormControl",
             queryExpr: "${0}"
          });
          this.addIcon(filteringSelect);
-         this.showAllOptionsOnOpen && this.showOptionsBasedOnValue(filteringSelect);
+         !this.showAllOptionsOnOpen && this.showOptionsBasedOnValue(filteringSelect);
 
          // It's necessary to override the standard Dojo validation message handling here.
          filteringSelect.displayMessage = lang.hitch(this, this.onFilteringValidation);

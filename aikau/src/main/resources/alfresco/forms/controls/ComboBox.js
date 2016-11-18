@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.96
        */
-      showAllOptionsOnOpen: true,
+      showAllOptionsOnOpen: false,
 
       /**
        * @instance
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
             autoComplete: this.autoComplete
          });
          this.addIcon(comboBox);
-         this.showAllOptionsOnOpen && this.showOptionsBasedOnValue(comboBox);
+         !this.showAllOptionsOnOpen && this.showOptionsBasedOnValue(comboBox);
          return comboBox;
       },
 
