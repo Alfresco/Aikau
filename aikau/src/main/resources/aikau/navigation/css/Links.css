@@ -1,0 +1,5 @@
+.aikau-navigation-Links.mdl-navigation {
+   .aikau-navigation-Link.mdl-navigation__link.aikau-navigation-Links--selected {
+      color: orange;
+   }
+}

@@ -20,6 +20,7 @@
 /**
  * This is a unit test for AlfTabContainer
  *
+ * @author Dave Draper
  * @author Richard Smith
  */
 define(["module",
@@ -164,7 +165,7 @@ define(["module",
       "Select 3rd tab, check 3rd panel becomes visible": function() {
          return this.remote.findByCssSelector(selectors.tc1.thirdTab)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.thirdPanel)
             .getAttribute("class")
@@ -265,7 +266,7 @@ define(["module",
       "Checking 1st panel is visible after external selection by index": function() {
          return this.remote.findByCssSelector(selectors.buttons.selectTab1)
             .click()
-            .end()
+         .end()
 
          .findById("Logo1")
             .isDisplayed()
@@ -285,7 +286,7 @@ define(["module",
       "Checking 2nd panel is visible after external selection by index": function() {
          return this.remote.findByCssSelector(selectors.buttons.selectTab2)
             .click()
-            .end()
+         .end()
 
          .findById("Logo2")
             .isDisplayed()
@@ -305,7 +306,7 @@ define(["module",
       "Checking 1st panel is visible after external selection by title": function() {
          return this.remote.findByCssSelector(selectors.buttons.selectTab3)
             .click()
-            .end()
+         .end()
 
          .findById("Logo1")
             .isDisplayed()
@@ -325,7 +326,7 @@ define(["module",
       "Checking 2nd panel is visible after external selection by title": function() {
          return this.remote.findByCssSelector(selectors.buttons.selectTab4)
             .click()
-            .end()
+         .end()
 
          .findById("Logo2")
             .isDisplayed()
@@ -345,7 +346,7 @@ define(["module",
       "Checking 1st panel is visible after external selection by id": function() {
          return this.remote.findByCssSelector(selectors.buttons.selectTab5)
             .click()
-            .end()
+         .end()
 
          .findById("Logo1")
             .isDisplayed()
@@ -365,7 +366,7 @@ define(["module",
       "Checking 2nd panel is visible after external selection by id": function() {
          return this.remote.findByCssSelector(selectors.buttons.selectTab6)
             .click()
-            .end()
+         .end()
 
          .findById("Logo2")
             .isDisplayed()
@@ -385,7 +386,7 @@ define(["module",
       "Checking 1st tab is disabled after external selection by index": function() {
          return this.remote.findByCssSelector(selectors.buttons.disableTabByIndex)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.firstTab)
             .getAttribute("class")
@@ -398,7 +399,7 @@ define(["module",
       "Checking 1st tab is enabled after external selection by index": function() {
          return this.remote.findByCssSelector(selectors.buttons.enableTabByIndex)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.firstTab)
             .getAttribute("class")
@@ -411,7 +412,7 @@ define(["module",
       "Checking 1st tab is disabled after external selection by title": function() {
          return this.remote.findByCssSelector(selectors.buttons.disableTabByTitle)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.firstTab)
             .getAttribute("class")
@@ -424,7 +425,7 @@ define(["module",
       "Checking 1st tab is enabled after external selection by title": function() {
          return this.remote.findByCssSelector(selectors.buttons.enableTabByTitle)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.firstTab)
             .getAttribute("class")
@@ -437,7 +438,7 @@ define(["module",
       "Checking 1st tab is disabled after external selection by id": function() {
          return this.remote.findByCssSelector(selectors.buttons.disableTabById)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.firstTab)
             .getAttribute("class")
@@ -450,7 +451,7 @@ define(["module",
       "Checking 1st tab is enabled after external selection by id": function() {
          return this.remote.findByCssSelector(selectors.buttons.enableTabById)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.tc1.firstTab)
             .getAttribute("class")
@@ -472,7 +473,7 @@ define(["module",
       "Check the correct number of tabs is present after deleting tab 7": function() {
          return this.remote.findByCssSelector(selectors.buttons.deleteTabByIndex)
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(selectors.tc1.tabs)
             .then(
@@ -485,7 +486,7 @@ define(["module",
       "Check the correct number of tabs is present after deleting tab titled 'Logo 8'": function() {
          return this.remote.findByCssSelector(selectors.buttons.deleteTabByTitle)
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(selectors.tc1.tabs)
             .then(
@@ -498,7 +499,7 @@ define(["module",
       "Check the correct number of tabs is present after deleting tab with id 'dijit_layout_ContentPane_8": function() {
          return this.remote.findByCssSelector(selectors.buttons.deleteTabById)
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(selectors.tc1.tabs)
             .then(
@@ -511,7 +512,7 @@ define(["module",
       "Check that delayed processing form control is displayed correctly": function() {
          return this.remote.findByCssSelector(selectors.tc1.formControlTab1)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#FormControl1 .label")
             .getVisibleText()
@@ -523,8 +524,9 @@ define(["module",
       "Check that non-delayed processing form control is displayed correctly": function() {
          return this.remote.findByCssSelector(selectors.tc1.formControlTab2)
             .click()
-            .end()
-            .findByCssSelector("#FormControl2 .label")
+         .end()
+         
+         .findByCssSelector("#FormControl2 .label")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Select...", "The form control was not displayed correctly");
@@ -546,8 +548,9 @@ define(["module",
       "Add a new panel to display first item": function() {
          return this.remote.findByCssSelector(".alfresco-lists-views-AlfListView tr:first-child .alfresco-renderers-Property .value")
             .click()
-            .end()
-            .findAllByCssSelector(selectors.tc1.tabs)
+         .end()
+         
+         .findAllByCssSelector(selectors.tc1.tabs)
             .then(function(tabs) {
                assert.lengthOf(tabs, 2, "A second tab should have been added");
             });
@@ -585,10 +588,10 @@ define(["module",
       "Select second tab and check search is not in progress": function() {
          return this.remote.findByCssSelector(selectors.tc1.secondTabLabel)
             .click()
-            .end()
+         .end()
 
          .findById("SEARCH_LIST")
-            .end()
+         .end()
 
          .getAllPublishes("ALF_SEARCH_REQUEST")
             .then(function(payloads) {
@@ -599,17 +602,18 @@ define(["module",
       "Click a button to trigger a reload and check reload request occurs": function() {
          return this.remote.findByCssSelector(selectors.buttons.reload)
             .click()
-            .end()
-            .getLastPublish("ALF_SEARCH_REQUEST", "Search request did not occur");
+         .end()
+         
+         .getLastPublish("ALF_SEARCH_REQUEST", "Search request did not occur");
       },
 
       "Create a new tab": function() {
          return this.remote.findByCssSelector(selectors.buttons.create)
             .click()
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector("#ADDED_LIST .rendered-view.share-hidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_DOCUMENTS_LOADED")
 
@@ -624,18 +628,18 @@ define(["module",
          // Switch back to the 2nd tab...
          return this.remote.findByCssSelector(selectors.tc1.searchListTab)
             .click()
-            .end()
+         .end()
 
          // Click to create the tab again...
          .findById("CREATE_TAB_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(selectors.tc1.tabs)
             .then(function(tabs) {
                assert.lengthOf(tabs, 3, "Wrong number of tabs!");
             })
-            .end()
+         .end()
 
          .findById("ADDED_FIXED_HEADER_FOOTER")
             .isDisplayed()
@@ -648,21 +652,21 @@ define(["module",
          // Switch back to the 2nd tab...
          return this.remote.findByCssSelector(selectors.tc1.searchListTab)
             .click()
-            .end()
+         .end()
 
          // Click the button to create a tab with a publication on addition...
          .findDisplayedByCssSelector(selectors.buttons.createViaPub)
             .click()
-            .end()
+         .end()
 
          // Find the new tab...
          .findDisplayedById("ADDED_LIST_2")
-            .end()
+         .end()
 
          // Switch back to the debug log...
          .findByCssSelector(selectors.tc1.debugTab)
             .click()
-            .end()
+         .end()
 
          // ...and check that it is loading request is published (this will be a result of the reload publication)...
          .getLastPublish("LIST_2_SCOPE_ALF_DOCLIST_RELOAD_DATA", "Follow publication not made");
@@ -674,24 +678,24 @@ define(["module",
       testPage: "/MixedLayoutHeights",
 
       // See AKU-489 - we want to check that a sidebar inside a tab is not bigger than the window. In fact
-      // it's height should be the body height, minus the offset (approx 36px) and the configured footer (10px)
+      // it's height should be the body height, minus the offset (approx 16px) and the configured footer (10px)
       "Check inner sidebar height": function() {
          var height;
          return this.remote.findByCssSelector(selectors.tc1.sidebarTab)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("body")
             .getSize()
             .then(function(size) {
                height = size.height;
             })
-            .end()
+         .end()
 
          .findById("SIDEBAR")
             .getSize()
             .then(function(size) {
-               var target = height - 46;
+               var target = height - 26;
                assert.closeTo(size.height, target, 5, "Sidebar height incorrect");
             });
       },
@@ -701,8 +705,9 @@ define(["module",
       "Check that list data is loaded": function() {
          return this.remote.findByCssSelector(selectors.tc1.debugTab)
             .click()
-            .end()
-            .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "List data was not requested on tab load");
+         .end()
+         
+         .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS", "List data was not requested on tab load");
       }
    });
 });

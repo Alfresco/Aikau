@@ -1,0 +1,14 @@
+.aikau-lists-views-ListView.alfresco-lists-views-AlfListView {
+   >table {
+      >tbody {
+         >tr {
+            >td {
+               /* This is far from ideal currently, but duplicated from MDL */
+               padding: 12px 18px 12px 18px;
+               margin: 0;
+               vertical-align: middle;
+            }
+         }
+      }
+   }
+}

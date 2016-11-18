@@ -1,0 +1,31 @@
+.aikau-layout-Alfresco {
+   
+   .mdl-layout__header-row {
+      padding: 0 40px 0 40px;
+   }
+
+   .mdl-layout__drawer {
+      box-shadow: none;
+      overflow-x: hidden;
+   }
+
+   .aikau-layout_Alfresco__toolbar {
+      background: #fafafa;
+      border-bottom: 1px solid #e0e0e0;
+   }
+
+   .aikau-layout-Alfresco__fixed-search {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 20px;
+      z-index: 1000;
+
+      .aikau-buttons-Button {
+         // TODO: NEED PROPER VALUES FROM XD
+         box-shadow: 3px 3px 4px 1px #ccc;
+      }
+   }
+}

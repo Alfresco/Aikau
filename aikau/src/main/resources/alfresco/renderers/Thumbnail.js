@@ -756,7 +756,7 @@ define(["dojo/_base/declare",
          this.resize(this.dimensions);
 
          // Apply some additional styling...
-         if (this.hasShadow)
+         if (this.hasShadow && !lang.getObject("node.isContainer", false, this.currentItem))
          {
             domClass.add(this.domNode, "alfresco-renderers-Thumbnail--shadow");
          }

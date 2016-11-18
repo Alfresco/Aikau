@@ -38,9 +38,8 @@ define(["module",
             return this.remote.findByCssSelector("body")
                .getSize()
                .then(function(size) {
-                  windowHeight = size.height - 20; // PLEASE NOTE: 20 pixels deducted for test page padding
-               })
-               .end();
+                  windowHeight = size.height;
+               });
          },
 
          "Check AUTO height": function() {
@@ -79,121 +78,139 @@ define(["module",
          "Show dialog with no padding and fixed height": function() {
             return this.remote.findById("LAUNCH_DIALOG_1_label")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_1.dialogDisplayed")
-               .end()
-               .findById("DIALOG_1_TEST")
+            .end()
+         
+            .findByCssSelector("#HEIGHT_DIALOG_1.dialogDisplayed")
+            .end()
+      
+            .findById("DIALOG_1_TEST")
                .getSize()
                .then(function(size) {
                   // Height is the dialog content height minus 2px adjustment to show border
                   assert.equal(size.height, 300, "Height not calculated correctly");
                })
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_1 .dijitDialogCloseIcon")
+            .end()
+
+            .findByCssSelector("#HEIGHT_DIALOG_1 .dijitDialogCloseIcon")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_1.dialogHidden")
-               .end();
+            .end()
+            
+            .findByCssSelector("#HEIGHT_DIALOG_1.dialogHidden");
          },
 
          "Show dialog with padding and fixed height": function() {
             return this.remote.findById("LAUNCH_DIALOG_2_label")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_2.dialogDisplayed")
-               .end()
-               .findById("DIALOG_2_TEST")
+            .end()
+         
+            .findByCssSelector("#HEIGHT_DIALOG_2.dialogDisplayed")
+            .end()
+      
+            .findById("DIALOG_2_TEST")
                .getSize()
                .then(function(size) {
                   // Height is minus the standard border adjustment of 24 pixels
                   assert.equal(size.height, 76, "Height not calculated correctly");
                })
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_2 .dijitDialogCloseIcon")
+            .end()
+
+            .findByCssSelector("#HEIGHT_DIALOG_2 .dijitDialogCloseIcon")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_2.dialogHidden")
-               .end();
+            .end()
+
+            .findByCssSelector("#HEIGHT_DIALOG_2.dialogHidden");
          },
 
          "Show dialog with defaults": function() {
             return this.remote.findById("LAUNCH_DIALOG_3_label")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_3.dialogDisplayed")
-               .end()
-               .findById("DIALOG_3_TEST")
+            .end()
+            
+            .findByCssSelector("#HEIGHT_DIALOG_3.dialogDisplayed")
+            .end()
+         
+            .findById("DIALOG_3_TEST")
                .getSize()
                .then(function(size) {
                   assert.equal(size.height, 18, "Height not calculated correctly");
                })
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_3 .dijitDialogCloseIcon")
+            .end()
+   
+            .findByCssSelector("#HEIGHT_DIALOG_3 .dijitDialogCloseIcon")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_3.dialogHidden")
-               .end();
+            .end()
+
+            .findByCssSelector("#HEIGHT_DIALOG_3.dialogHidden");
          },
 
          "Show dialog with buttons": function() {
             return this.remote.findById("LAUNCH_DIALOG_4_label")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_4.dialogDisplayed")
-               .end()
-               .findById("DIALOG_4_TEST")
+            .end()
+            
+            .findByCssSelector("#HEIGHT_DIALOG_4.dialogDisplayed")
+            .end()
+         
+            .findById("DIALOG_4_TEST")
                .getSize()
                .then(function(size) {
                   assert.equal(size.height, 18, "Height not calculated correctly");
                })
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_4 .dijitDialogCloseIcon")
+            .end()
+   
+            .findByCssSelector("#HEIGHT_DIALOG_4 .dijitDialogCloseIcon")
                .click()
-               .end()
-               .findByCssSelector("#HEIGHT_DIALOG_4.dialogHidden")
-               .end();
+            .end()
+
+            .findByCssSelector("#HEIGHT_DIALOG_4.dialogHidden");
          },
 
          "Show full screen dialog with no buttons": function() {
             return this.remote.findById("FULL_SCREEN_DIALOG_NO_BUTTON_label")
                .click()
-               .end()
-               .findByCssSelector("#FSDNB.dialogDisplayed")
-               .end()
-               .findByCssSelector("#FSDNB .alfresco-layout-FixedHeaderFooter")
+            .end()
+            
+            .findByCssSelector("#FSDNB.dialogDisplayed")
+            .end()
+         
+            .findByCssSelector("#FSDNB .alfresco-layout-FixedHeaderFooter")
                .getSize()
                .then(function(size) {
                   // NOTE: target height is client height minus dialog "margin", padding and title
-                  var target = windowHeight - 80 - 24 - 39;
+                  var target = windowHeight - 80 - 39 - 20 - 20;
                   assert.closeTo(size.height, target, 10, "Height not calculated correctly");
                })
-               .end()
-               .findByCssSelector("#FSDNB .dijitDialogCloseIcon")
+            .end()
+
+            .findByCssSelector("#FSDNB .dijitDialogCloseIcon")
                .click()
-               .end()
-               .findByCssSelector("#FSDNB.dialogHidden")
-               .end();
+            .end()
+
+            .findByCssSelector("#FSDNB.dialogHidden").end();
          },
 
          "Show full screen dialog with buttons bar": function() {
             return this.remote.findById("FULL_SCREEN_DIALOG_label")
                .click()
-               .end()
-               .findByCssSelector("#FSD.dialogDisplayed")
-               .end()
-               .findByCssSelector("#FSD .alfresco-layout-FixedHeaderFooter")
+            .end()
+            
+            .findByCssSelector("#FSD.dialogDisplayed")
+            .end()
+      
+            .findByCssSelector("#FSD .alfresco-layout-FixedHeaderFooter")
                .getSize()
                .then(function(size) {
                   // NOTE: target height is client height minus dialog "margin", padding, title and button bars
-                  var target = windowHeight - 80 - 24 - 39 - 44;
+                  var target = windowHeight - 80 - 39 - 44 - 20 - 20;
                   assert.closeTo(size.height, target, 10, "Height not calculated correctly");
                })
-               .end()
-               .findByCssSelector("#FSD .dijitDialogCloseIcon")
+            .end()
+
+            .findByCssSelector("#FSD .dijitDialogCloseIcon")
                .click()
-               .end()
-               .findByCssSelector("#FSD.dialogHidden")
-               .end();
+            .end()
+
+            .findByCssSelector("#FSD.dialogHidden").end();
          }
       };
    });

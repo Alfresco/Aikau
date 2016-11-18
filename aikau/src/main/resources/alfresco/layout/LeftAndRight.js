@@ -123,8 +123,8 @@ define(["dojo/_base/declare",
          // We need to reverse the order of RIGHT widgets so that the last widget is defined is furthest
          // to the RIGHT
          this.widgetsRight && this.widgetsRight.reverse();
-         this.processWidgets(this.widgetsRight, this.rightWidgets, "RIGHT");
-         this.processWidgets(this.widgetsLeft, this.leftWidgets, "LEFT");
+         this.widgetsRight && this.processWidgets(this.widgetsRight, this.rightWidgets, "RIGHT");
+         this.widgetsLeft && this.processWidgets(this.widgetsLeft, this.leftWidgets, "LEFT");
 
          // Create a semantic wrapper if required
          if(this.semanticWrapper)

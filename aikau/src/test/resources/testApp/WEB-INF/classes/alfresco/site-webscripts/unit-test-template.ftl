@@ -11,6 +11,7 @@
 <head>
    <title>Aikau Unit Testing</title>
    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
    <#-- Note that it's necessary to import the Sinon libs synchronously because version 1.10.3 does not support AMD and
         breaks when used with the Aikau widgets. This ensures that the global "sinon" object is available when required -->
@@ -39,7 +40,7 @@
    Pulls in main template body.
 -->
 <#macro templateBody>
-<body id="Share" class="claro alfresco-share" style="padding: 10px;">
+<body id="Share" class="claro alfresco-share">
 <#nested>
 </#macro>
 
