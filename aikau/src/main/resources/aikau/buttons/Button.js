@@ -26,7 +26,7 @@
  * @module aikau/buttons/Button
  * @extends module:aikau/mdl/BaseMdlWidget
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.96
  */
 define(["dojo/_base/declare",
         "aikau/mdl/BaseMdlWidget", 

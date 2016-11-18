@@ -26,7 +26,7 @@
  * @module aikau/menus/CreateContentMenuItem
  * @extends module:aikau/menus/MenuItem
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.96
  */
 define(["dojo/_base/declare",
         "aikau/menus/MenuItem",

@@ -26,7 +26,7 @@
  * @module aikau/lists/views/TableViewRenderer
  * @extends module:alfresco/lists/views/ListRenderer
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.96
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/ListRenderer",

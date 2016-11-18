@@ -217,7 +217,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {string}
        * @default
-       * @since 1.0.NEXT
+       * @since 1.0.96
        */
       pathChangeTopicPathProperty: "path",
 

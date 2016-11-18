@@ -26,7 +26,7 @@
  * @module aikau/lists/views/ListView
  * @extends module:alfresco/lists/views/AlfListView
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.96
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",

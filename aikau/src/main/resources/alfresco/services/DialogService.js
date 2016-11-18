@@ -524,7 +524,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @parameter {object} config The configuration to use to create the dialog
-       * @since 1.0.NEXT
+       * @since 1.0.96
        */
       createDialog: function alfresco_services_DialogService__createDialog(config) {
          return new AlfDialog(config);

@@ -26,7 +26,7 @@
  * @module aikau/services/MdlDialogService
  * @extends module:alfresco/services/DialogService
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.96
  */
 define(["dojo/_base/declare", 
         "alfresco/services/DialogService",
@@ -42,7 +42,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @parameter {object} config The configuration to use to create the dialog
-       * @since 1.0.NEXT
+       * @since 1.0.96
        */
       createDialog: function aikau_services_MdlDialogService__createDialog(config) {
          if (config.widgetsButtons)

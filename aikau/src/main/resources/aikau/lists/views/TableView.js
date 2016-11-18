@@ -26,7 +26,7 @@
  * @module aikau/lists/views/TableView
  * @extends module:aikau/lists/views/ListView
  * @author Dave Draper
- * @since 1.0.NEXT
+ * @since 1.0.96
  */
 define(["dojo/_base/declare",
         "aikau/lists/views/ListView",
