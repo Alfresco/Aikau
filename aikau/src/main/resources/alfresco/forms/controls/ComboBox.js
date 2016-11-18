@@ -96,7 +96,6 @@ define(["dojo/_base/declare",
          var comboBox = new ComboBox({
             id: this.id + "_CONTROL",
             name: this.name,
-            value: this.value,
             placeHolder: placeHolder,
             store: serviceStore,
             searchAttr: serviceStore.queryAttribute,
