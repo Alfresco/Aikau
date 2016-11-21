@@ -1027,11 +1027,6 @@ define(["dojo/_base/declare",
             site: originalRequestConfig.data.shortName,
             user: AlfConstants.USERNAME
          });
-
-         this.alfServicePublish(topics.SITE_CREATION_SUCCESS);
-         this.alfServicePublish(topics.NAVIGATE_TO_PAGE, {
-            url: "site/" + originalRequestConfig.data.shortName + "/dashboard"
-         });
       },
 
       /**
