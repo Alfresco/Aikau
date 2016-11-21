@@ -197,7 +197,10 @@ function buildPageModel(data) {
                               },
                               {
                                  title: "Pub/Sub Logging",
-                                 name: "alfresco/logging/DebugLog"
+                                 name: "alfresco/logging/DebugLog",
+                                 config: {
+                                    topicsToIgnore: ["ALF_NODE_RESIZED"]
+                                 }
                               },
                               {
                                  title: "Mock XHR Logging",

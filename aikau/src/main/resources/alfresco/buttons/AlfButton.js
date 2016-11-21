@@ -275,7 +275,10 @@ define(["dojo/_base/declare",
          {
             payload = this.generatePayload(this.publishPayload || {}, this.currentItem, null, this.publishPayloadType,
                     this.publishPayloadItemMixin, this.publishPayloadModifiers);
-            this.alfPublish(this.publishTopic, payload, (this.publishGlobal !== undefined && this.publishGlobal === true));
+            this.alfPublish(this.publishTopic, 
+                            payload, 
+                            (this.publishGlobal !== undefined && this.publishGlobal === true), 
+                            (this.publishToParent !== undefined && this.publishToParent === true));
          }
          else
          {
