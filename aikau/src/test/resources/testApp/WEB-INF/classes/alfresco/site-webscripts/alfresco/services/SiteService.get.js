@@ -27,6 +27,92 @@ if (page.url.args["sitePresets"])
    }
 }
 
+if (page.url.args["customize"] === "true")
+{
+   siteService.config.widgetsForCreateSiteDialogOverrides = [
+      {
+         id: "FIRST",
+         name: "alfresco/forms/controls/TextBox",
+         targetPosition: "START",
+         config: {
+            fieldId: "FIRST_TB",
+            label: "First",
+            name: "tb1",
+            description: "I should be the first form control"
+         }
+      },
+      {
+         id: "LAST",
+         name: "alfresco/forms/controls/TextBox",
+         targetPosition: "END",
+         config: {
+            fieldId: "LAST_TB",
+            label: "Last",
+            name: "tb2",
+            description: "I should be the last form control"
+         }
+      },
+      {
+         id: "BEFORE",
+         name: "alfresco/forms/controls/TextBox",
+         targetId: "CREATE_SITE_FIELD_TITLE",
+         targetPosition: "BEFORE",
+         config: {
+            fieldId: "BEFORE_TB",
+            label: "Before",
+            name: "tb3",
+            description: "I should be before the site title field"
+         }
+      },
+      {
+         id: "AFTER",
+         name: "alfresco/forms/controls/TextBox",
+         targetId: "CREATE_SITE_FIELD_TITLE",
+         targetPosition: "AFTER",
+         config: {
+            fieldId: "AFTER_TB",
+            label: "After",
+            name: "tb4",
+            description: "I should be after the site title field"
+         }
+      },
+      {
+         id: "CREATE_SITE_FIELD_TITLE",
+         name: "alfresco/forms/controls/TextArea",
+         config: {
+            label: "Updated",
+            description: "Updated title, description and control (for site title)"
+         }
+      },
+      {
+         id: "CREATE_SITE_FIELD_DESCRIPTION",
+         remove: true
+      },
+      {
+         id: "CREATE_SITE_FIELD_VISIBILITY",
+         replace: true,
+         name: "alfresco/forms/controls/RadioButtons",
+         config: {
+            fieldId: "VISIBILITY",
+            label: "How am I seen?",
+            name: "visibility",
+            optionsConfig: {
+               fixed: [
+                  { 
+                     label: "By everyone", 
+                     value: "PUBLIC" 
+                  },
+                  { 
+                     label: "By Some", 
+                     value: "MODERATED" 
+                  }
+               ]
+            }
+         }
+      }
+   ];
+}
+
 model.jsonModel = {
    services: [
       {

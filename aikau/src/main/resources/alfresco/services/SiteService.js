@@ -30,15 +30,16 @@ define(["dojo/_base/declare",
         "alfresco/core/NotificationUtils",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/topics",
+        "alfresco/core/WidgetsOverrideMixin",
         "alfresco/enums/urlTypes",
         "dojo/_base/array",
         "dojo/_base/lang",
         "alfresco/buttons/AlfButton",
         "service/constants/Default"],
         function(declare, BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils, ObjectTypeUtils, topics, 
-                 urlTypes, array, lang, AlfButton, AlfConstants) {
+                 WidgetsOverrideMixin, urlTypes, array, lang, AlfButton, AlfConstants) {
 
-   return declare([BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils], {
+   return declare([BaseService, CoreXhr, ObjectProcessingMixin, NotificationUtils, WidgetsOverrideMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -158,6 +159,8 @@ define(["dojo/_base/declare",
                });
             }, this);
          }
+
+         this.applyWidgetOverrides(this.widgetsForCreateSiteDialog, this.widgetsForCreateSiteDialogOverrides);
       },
 
       /**
@@ -1550,6 +1553,18 @@ define(["dojo/_base/declare",
       ],
 
       /**
+       * Overrides for the [default edit site dialog model]{@link module:alfresco/services/SiteService#widgetsForCreateSiteDialog}
+       * See the [applyWidgetOverrides]{@link module:alfresco/core/WidgetsOverrideMixin#applyWidgetOverrides}
+       * for detailed instructions on how to configure overrides to add, remove, replace and update widgets.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.97
+       */
+      widgetsForCreateSiteDialogOverrides: null,
+
+      /**
        * This is the widget model displayed when editing sites.
        * 
        * @instance
@@ -1631,6 +1646,18 @@ define(["dojo/_base/declare",
                }
             }
          }
-      ]
+      ],
+
+      /**
+       * Overrides for the [default edit site dialog model]{@link module:alfresco/services/SiteService#widgetsForEditSiteDialog}
+       * See the [applyWidgetOverrides]{@link module:alfresco/core/WidgetsOverrideMixin#applyWidgetOverrides}
+       * for detailed instructions on how to configure overrides to add, remove, replace and update widgets.
+       * 
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.97
+       */
+      widgetsForEditSiteDialogOverrides: null
    });
 });
