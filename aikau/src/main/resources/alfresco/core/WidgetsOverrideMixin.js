@@ -190,7 +190,7 @@ define(["dojo/_base/declare",
          if (ObjectTypeUtils.isArray(widgets) && ObjectTypeUtils.isArray(overrides))
          {
             overrides.forEach(function(override) {
-
+               // jshint maxcomplexity:false
                if (override.targetPosition === "START")
                {
                   // Place the override widget as the first entry...
@@ -205,39 +205,53 @@ define(["dojo/_base/declare",
                {
                   // Find the target widget...
                   existingWidgetIndex = this.findWidgetToOverride(widgets, override.targetId);
-                  if (typeof override.targetPosition === "undefined" || override.targetPosition === "BEFORE")
+                  if (existingWidgetIndex !== -1)
                   {
-                     // Place the override widget before the target
-                     widgets.splice(existingWidgetIndex, 0, override);
-                  }
-                  else if (override.targetPosition === "AFTER")
-                  {
-                     // Place the override widget after the target
-                     widgets.splice(existingWidgetIndex + 1, 0, override);
+                     if (typeof override.targetPosition === "undefined" || override.targetPosition === "BEFORE")
+                     {
+                        // Place the override widget before the target
+                        widgets.splice(existingWidgetIndex, 0, override);
+                     }
+                     else if (override.targetPosition === "AFTER")
+                     {
+                        // Place the override widget after the target
+                        widgets.splice(existingWidgetIndex + 1, 0, override);
+                     }
+                     else
+                     {
+                        this.alfLog("warn", "An override widget has a target, but an unknown position", override, this);
+                     }
                   }
                   else
                   {
-                     this.alfLog("warn", "An override widget has a target, but an unknown position", override, this);
+                     this.alfLog("warn", "Could not find widget with requested targetId", override.targetId, this);
                   }
                }
                else if (override.id)
                {
                   // Find the target widget...
                   existingWidgetIndex = this.findWidgetToOverride(widgets, override.id);
-                  if (override.remove)
+                  if (existingWidgetIndex !== -1)
                   {
-                     // Remove the widget (if it exists)
-                     widgets.splice(existingWidgetIndex, 1);
-                  }
-                  else if (override.replace)
-                  {
-                     // Replace the widget (if it exists)
-                     widgets[existingWidgetIndex] = override;
+                     if (override.remove)
+                     {
+                        // Remove the widget (if it exists)
+                        widgets.splice(existingWidgetIndex, 1);
+                     }
+                     else if (override.replace)
+                     {
+                        // Replace the widget (if it exists)
+                        widgets[existingWidgetIndex] = override;
+                     }
+                     else
+                     {
+                        // Merge into the widget (if it exists)
+                        $.extend(true, widgets[existingWidgetIndex], override);
+                     }
                   }
                   else
                   {
-                     // Merge into the widget (if it exists)
-                     $.extend(true, widgets[existingWidgetIndex], override);
+                     this.alfLog("warn", "Could not find widget with requested id", override.targetId, this);
                   }
                }
             }, this);
