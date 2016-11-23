@@ -65,6 +65,34 @@ define(["dojo/_base/declare",
       additionalSitePresets: null,
 
       /**
+       * This is an optional topic that can be configured to allow the create site dialog to have a value
+       * set on it. This can be useful when needing to pre-fill fields based changing data within the form
+       * (for example a custom preset). The use case is when a custom field needs to make an XHR request
+       * for data to be added (i.e. something not possible through 
+       * [autoSetConfig]{@link module:alfresco/forms/controls/BaseFormControl#autoSetConfig}).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.97
+       */
+      setCreateSiteDialogValueTopic: null,
+
+      /**
+       * This is an optional topic that can be configured to allow the edit site dialog to have a value
+       * set on it. This can be useful when needing to pre-fill fields based changing data within the form
+       * (for example a custom preset). The use case is when a custom field needs to make an XHR request
+       * for data to be added (i.e. something not possible through 
+       * [autoSetConfig]{@link module:alfresco/forms/controls/BaseFormControl#autoSetConfig}).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.97
+       */
+      setEditSiteDialogValueTopic: null,
+
+      /**
        * Indicates whether or not the Site Service is running in legacy mode. When configured in this mode
        * the service will attempt to use the YUI2 based dialogs provided by Alfresch Share for creating and
        * editing sites. If this is configured to be false then the 
@@ -947,6 +975,7 @@ define(["dojo/_base/declare",
             var dialogWidgets = lang.clone(this.widgetsForCreateSiteDialog);
             this.processObject(["processInstanceTokens"], dialogWidgets);
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
+               pubSubScope: "ALF_CREATE_SITE_",
                dialogId: "CREATE_SITE_DIALOG",
                dialogTitle: "create-site.dialog.title",
                dialogConfirmationButtonTitle: "create-site-dialog.name.create.label",
@@ -956,7 +985,8 @@ define(["dojo/_base/declare",
                formSubmissionGlobal: true,
                showValidationErrorsImmediately: false,
                customFormConfig: {
-                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED]
+                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED],
+                  setValueTopic: this.setCreateSiteDialogValueTopic
                },
                widgets: dialogWidgets
             });
@@ -1098,13 +1128,14 @@ define(["dojo/_base/declare",
        * @fires module:alfresco/core/topics#CREATE_FORM_DIALOG
        */
       showEditSiteDialog: function alfresco_services_SiteService__showEditSiteDialog(response, originalRequestConfig) {
-         // Check that the resposne is the expected siteData...
+         // Check that the response is the expected siteData...
          if (response)
          {
             var shortName = lang.getObject("shortName", false, response);
             var dialogWidgets = lang.clone(this.widgetsForEditSiteDialog);
             this.processObject(["processInstanceTokens"], dialogWidgets);
             this.alfServicePublish(topics.CREATE_FORM_DIALOG, {
+               pubSubScope: "ALF_EDIT_SITE_",
                dialogId: "EDIT_SITE_DIALOG",
                dialogTitle: "edit-site.dialog.title",
                dialogConfirmationButtonTitle: "edit-site-dialog.name.save.label",
@@ -1117,7 +1148,8 @@ define(["dojo/_base/declare",
                formValue: response,
                showValidationErrorsImmediately: false,
                customFormConfig: {
-                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED]
+                  publishValueSubscriptions: [topics.ENTER_KEY_PRESSED],
+                  setValueTopic: this.setEditSiteDialogValueTopic
                },
                widgets: dialogWidgets
             });

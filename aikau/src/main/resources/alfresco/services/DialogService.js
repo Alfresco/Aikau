@@ -573,7 +573,7 @@ define(["dojo/_base/declare",
             try
             {
                // Create a new pubSubScope just for this request (to allow multiple dialogs to behave independently)...
-               var pubSubScope = this.generateUuid();
+               var pubSubScope = payload.pubSubScope || this.generateUuid();
                var subcriptionTopic =  pubSubScope + this._formConfirmationTopic;
                var confirmationHandle = this.alfSubscribe(subcriptionTopic, lang.hitch(this, this.onFormDialogConfirmation));
                this.mapRequestedIdToHandle(payload, "dialog.confirmation", confirmationHandle);

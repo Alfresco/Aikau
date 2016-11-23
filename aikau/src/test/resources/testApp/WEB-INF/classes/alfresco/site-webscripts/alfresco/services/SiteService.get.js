@@ -29,6 +29,7 @@ if (page.url.args["sitePresets"])
 
 if (page.url.args["customize"] === "true")
 {
+   siteService.config.setCreateSiteDialogValueTopic = "UPDATE_CREATE_SITE_VALUES";
    siteService.config.widgetsForCreateSiteDialogOverrides = [
       {
          id: "FIRST",
