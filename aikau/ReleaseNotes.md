@@ -1,4 +1,4 @@
-Aikau 1.0.96 Release Notes
+Aikau 1.0.97 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,10 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.97:
+* [AKU-1108](https://issues.alfresco.com/jira/browse/AKU-1108)       - Ensure sites are favourited when created
+* [AKU-1130](https://issues.alfresco.com/jira/browse/AKU-1130)       - Improve create/edit site customization options through configuration
+
 1.0.96:
 * [AKU-1111](https://issues.alfresco.com/jira/browse/AKU-1111)       - Update AlfSearchList to support additional query parameters
 * [AKU-1112](https://issues.alfresco.com/jira/browse/AKU-1112)       - Update FilePicker to properly support required state
