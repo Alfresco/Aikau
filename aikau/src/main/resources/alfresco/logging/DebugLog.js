@@ -150,7 +150,6 @@ define(["alfresco/core/ObjectTypeUtils",
           */
          constructor: function() {
             this._entries = [];
-            this.topicsToIgnore = [];
          },
 
          /**
@@ -161,6 +160,8 @@ define(["alfresco/core/ObjectTypeUtils",
           */
          postMixInProperties: function() {
             this.inherited(arguments);
+            
+            this.topicsToIgnore = this.topicsToIgnore || [];
             this.payloadConfig = lang.mixin({}, this.defaultPayloadConfig, this.payloadConfig);
          },
 
