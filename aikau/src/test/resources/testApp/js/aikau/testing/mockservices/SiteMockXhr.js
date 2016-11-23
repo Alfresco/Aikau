@@ -109,6 +109,12 @@ define(["dojo/_base/declare",
                                      "Content-Length":7962},
                                      Preferences]);
 
+            this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, function() {
+               this.alfPublish("UPDATE_CREATE_SITE_VALUES", {
+                  tb4: "Value Set"
+               }, true);
+            }));
+
          }
          catch(e)
          {

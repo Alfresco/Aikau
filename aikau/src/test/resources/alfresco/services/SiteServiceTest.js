@@ -52,6 +52,9 @@ define(["module",
          },
          createSiteShortName: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["CREATE_SITE_FIELD_SHORTNAME"])
+         },
+         custom: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["AFTER"])
          }
       },
       selectControls: {
@@ -423,6 +426,69 @@ define(["module",
             .getVisibleText()
             .then(function(sitePresetLabel) {
                assert.equal(sitePresetLabel, "Additional Custom");
+            });
+      }
+   });
+
+   defineSuite(module, {
+      name: "SiteService Tests (Custom Dialogs)",
+      testPage: "/SiteService?customize=true",
+
+      "Open the customized dialog": function() {
+         return this.remote.setFindTimeout(5000)
+
+         .findByCssSelector(selectors.buttons.createSite)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.dialogs.createSite.visible)
+         .end();
+      },
+
+      "Field has been inserted first": function() {
+         return this.remote.findByCssSelector("#FIRST:nth-child(1)");
+      },
+
+      "Field has been inserted last": function() {
+         return this.remote.findByCssSelector("#LAST:last-child");
+      },
+
+      "Field has been inserted before": function() {
+         return this.remote.findByCssSelector("#BEFORE:nth-child(3)");
+      },
+
+      "Field has been inserted after": function() {
+         return this.remote.findByCssSelector("#AFTER:nth-child(5)");
+      },
+
+      "Field has been updated": function() {
+         return this.remote.findByCssSelector("#CREATE_SITE_FIELD_TITLE .label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Updated");
+            });
+      },
+
+      "Field has been removed": function() {
+         return this.remote.findAllByCssSelector("#CREATE_SITE_FIELD_DESCRIPTION")
+            .then(function(elements) {
+               assert.lengthOf(elements, 0);
+            });
+      },
+
+      "Field has been replaced": function() {
+         return this.remote.findByCssSelector("#CREATE_SITE_FIELD_VISIBILITY_CONTROL_OPTION0 .radio-button-label")
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "By everyone");
+            });
+      },
+
+      "Form value can be set": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.custom.input)
+            .getProperty("value")
+            .then(function(value) {
+               assert.equal(value, "Value Set");
             });
       }
    });
