@@ -174,6 +174,7 @@ define(["dojo/_base/declare",
                   handleAs: (config.handleAs) ? config.handleAs : "text",
                   method: (config.method) ? config.method : "POST",
                   data: data,
+                  sync : (config.sync) ? config.sync : false,
                   query: (config.query) ? config.query : null,
                   headers: headers
                };
