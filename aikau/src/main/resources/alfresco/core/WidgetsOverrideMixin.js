@@ -256,6 +256,10 @@ define(["dojo/_base/declare",
                }
             }, this);
          }
+         else
+         {
+            this.alfLog("warn", "Invalid arguments provided for overriding widgets, two arrays were expected", widgets, overrides, this);
+         }
       }
    });
 });
