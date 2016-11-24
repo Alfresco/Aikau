@@ -128,9 +128,8 @@ define(["dojo/_base/declare",
          {
             this.logoImageSrc = "alfresco-share-logo.png";
          }
-         if (this.logoImageSrc === "alfresco-share-logo-enterprise.png" ||
-             this.logoImageSrc === "alfresco-share-logo-team.png" ||
-             this.logoImageSrc === "alfresco-share-logo.png")
+         // Logos with a path are assumed to be custom - Share logos are provided locally
+         if (this.logoImageSrc.indexOf("/") === -1)
          {
             this.logoImageSrc = require.toUrl("alfresco/footer/css/images/" + this.logoImageSrc);
          }
