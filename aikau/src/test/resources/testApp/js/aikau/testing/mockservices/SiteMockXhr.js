@@ -30,8 +30,10 @@ define(["dojo/_base/declare",
         "dojo/text!./responseTemplates/SiteTest/PutSite.json",
         "dojo/text!./responseTemplates/SiteTest/DeleteSite.json",
         "dojo/text!./responseTemplates/SiteTest/PostBecomeSiteManager.json",
-        "dojo/text!./responseTemplates/SiteTest/PostRequestSiteMembership.json"], 
-        function(declare, lang, MockXhr, getSite, getModeratedSite, putSite, deleteSite, postBecomeSiteManager, postRequestSiteMembership) {
+        "dojo/text!./responseTemplates/SiteTest/PostRequestSiteMembership.json",
+        "dojo/text!./responseTemplates/Preferences/Preferences.json"], 
+        function(declare, lang, MockXhr, getSite, getModeratedSite, putSite, deleteSite, postBecomeSiteManager, 
+                 postRequestSiteMembership, Preferences) {
    
    return declare([MockXhr], {
 
@@ -99,6 +101,19 @@ define(["dojo/_base/declare",
             this.server.respondWith("GET",
                                     /\/aikau\/proxy\/alfresco\/slingshot\/site-identifier-used/,
                                     lang.hitch(this, this.validateSiteIdentifier));
+
+            this.server.respondWith("POST",
+                                    /\/aikau\/proxy\/alfresco\/api\/people\/guest\/preferences(.*)/,
+                                    [200,
+                                     {"Content-Type":"application/json;charset=UTF-8",
+                                     "Content-Length":7962},
+                                     Preferences]);
+
+            this.alfSubscribe("ALF_WIDGETS_READY", lang.hitch(this, function() {
+               this.alfPublish("UPDATE_CREATE_SITE_VALUES", {
+                  tb4: "Value Set"
+               }, true);
+            }));
 
          }
          catch(e)

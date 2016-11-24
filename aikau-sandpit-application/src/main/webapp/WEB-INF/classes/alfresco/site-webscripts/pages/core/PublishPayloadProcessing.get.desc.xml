@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Publish Payload Processing</shortname>
+  <description>Examples of how you can use the generate payloads.</description>
+  <family>ExamplePage</family>
+  <url>/PublishPayloadProcessing</url>
+</webscript>

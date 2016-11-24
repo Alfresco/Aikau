@@ -57,8 +57,9 @@ define(["module",
       "Check the link click published as expected": function() {
          return this.remote.findByCssSelector("#TAGS_4 span.alfresco-renderers-ReadOnlyTag:first-of-type a")
             .click()
-            .end()
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+         .end()
+         
+         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
             .then(function(payload) {
                assert.propertyVal(payload, "type", "HASH", "The link did not publish the payload with 'type' as 'HASH'");
                assert.propertyVal(payload, "url", "tag=Test1", "The link did not publish the payload with 'url' as 'tag=Test1'");
@@ -68,7 +69,7 @@ define(["module",
       "Check there are 3 edit tags now shown": function() {
          return this.remote.findByCssSelector("#TAGS_4 > img.editIcon")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag")
             .then(function(edittags) {
@@ -87,7 +88,7 @@ define(["module",
       "Check there are 2 edit tags now shown": function() {
          return this.remote.findByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag:first-of-type span.tagDelete")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#TAGS_4 span.alfresco-renderers-EditTag")
             .then(function(edittags) {
@@ -101,7 +102,7 @@ define(["module",
             .then(function(edittagtext) {
                assert.include(edittagtext, "Test2", "Edit tag 1 should now read 'Test2'");
             })
-            .end()
+         .end()
 
          // Click the cancel button
          .findByCssSelector("#TAGS_4 .editor .alfresco-forms-Form .cancelButton .dijitButtonText")
@@ -130,8 +131,11 @@ define(["module",
             })
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
-            .end()
-            .getLastPublish("ALF_RETRIEVE_CURRENT_TAGS", "No request made for existing tag data");
+            .pressKeys(keys.SPACE)
+            .pressKeys(keys.BACKSPACE)
+         .end()
+         
+         .getLastPublish("ALF_RETRIEVE_CURRENT_TAGS", "No request made for existing tag data");
       },
 
       "Type a new tag name and hit enter to create it": function() {
@@ -184,7 +188,7 @@ define(["module",
             })
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
-            .end()
+         .end()
 
          .findDisplayedById("TAGS_2_EDIT_TAGS_CONTROL");
       },
@@ -194,13 +198,12 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 0);
             })
-            .end()
+         .end()
 
          .findAllByCssSelector("#TAGS_2  .editor .alfresco-forms-Form .cancelButton .dijitButtonText")
             .then(function(elements) {
                assert.lengthOf(elements, 0);
-            })
-            .end();
+            });
       }
    });
 });
