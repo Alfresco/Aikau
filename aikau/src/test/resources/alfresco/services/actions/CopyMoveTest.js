@@ -228,7 +228,7 @@ define(["module",
          .findByCssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) .dijitButtonText")
             .getVisibleText()
             .then(function(text) {
-               assert.equal(text, "Create link", "The create link button on the copy dialog was incorrect");
+               assert.equal(text, "Create Link", "The create link button on the copy dialog was incorrect");
             })
          .end()
 
