@@ -562,6 +562,31 @@ define(["dojo/_base/declare",
        * set "rulePassValue" and "ruleFailValue" attributes that are the values that will be set on successful or
        * unsuccessful evaluation of the rule.
        *
+       * @example <caption>Automatically sets the value of the form control when "SOURCE_FIELD" is 3</caption>
+       * autoSetConfig: [
+       *   {
+       *     rulePassValue: "Updated",
+       *     ruleFailValue: "",
+       *     rules: [
+       *        {
+       *           targetId: "SOURCE_FIELD",
+       *           is: ["3"]
+       *        }
+       *     ]
+       *   }
+       * ]
+       *
+       * @example <caption>Automatically set the value of the form control to that of "SOURCE_FIELD"</caption>
+       * autoSetConfig: [
+       *   {
+       *     copyRule: [
+       *        {
+       *           targetId: "SOURCE_FIELD"
+       *        }
+       *     ]
+       *   }
+       * ]
+       *
        * @instance
        * @type {array}
        * @default

@@ -21,6 +21,15 @@
  * This service provides a way of requesting options data for form controls, providing
  * normalization of the data so that it adheres to the structure expected by form controls
  *
+ * @example <caption>Example publication configuration (url.context available in WebScript controller)</caption>
+ * publishTopic: "ALF_GET_FORM_CONTROL_OPTIONS",
+ * publishPayload: {
+ *   url: url.context + "/proxy/alfresco/api/people",
+ *   itemsAttribute: "people",
+ *   labelAttribute: "userName",
+ *   valueAttribute: "userName"
+ * }
+ *
  * @module alfresco/services/OptionsService
  * @extends module:alfresco/services/BaseService
  * @mixes module:alfresco/core/CoreXhr
@@ -29,22 +38,24 @@
 define(["dojo/_base/declare",
         "alfresco/services/BaseService",
         "alfresco/core/CoreXhr",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "service/constants/Default",
         "alfresco/core/NotificationUtils"],
-        function(declare, BaseService, AlfXhr, lang, array, AlfConstants, NotificationUtils) {
+        function(declare, BaseService, CoreXhr, topics, lang, array, AlfConstants, NotificationUtils) {
 
-   return declare([BaseService, AlfXhr, NotificationUtils], {
+   return declare([BaseService, CoreXhr, NotificationUtils], {
 
       /**
        * Sets up the subscriptions for the OptionsService
        *
        * @instance
        * @since 1.0.32
+       * @listens module:alfresco/core/topics#GET_FORM_CONTROL_OPTIONS
        */
       registerSubscriptions: function alfresco_services_OptionsService__registerSubscriptions() {
-         this.alfSubscribe("ALF_GET_FORM_CONTROL_OPTIONS", lang.hitch(this, this.onOptionsRequest));
+         this.alfSubscribe(topics.GET_FORM_CONTROL_OPTIONS, lang.hitch(this, this.onOptionsRequest));
       },
 
       /**
