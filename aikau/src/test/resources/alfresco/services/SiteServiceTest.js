@@ -172,8 +172,6 @@ define(["module",
 
          .findById("EDIT_SITE_DIALOG_OK_label")
             .click()
-            .click() // For some reason in automated testing a second click is required here
-                     // Adding a long pause and a manual click and it works fine...
          .end()
 
          .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
