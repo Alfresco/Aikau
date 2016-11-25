@@ -56,9 +56,9 @@
  * }
  * 
  * @module alfresco/forms/controls/MultiSelectInput
- * @extends alfresco/forms/controls/BaseFormControl
- * @mixes alfresco/forms/controls/utilities/IconMixin
- * @mixes alfresco/forms/controls/utilities/UseServiceStoreMixin
+ * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/forms/controls/utilities/IconMixin
+ * @mixes module:alfresco/forms/controls/utilities/UseServiceStoreMixin
  * @author Martin Doyle
  */
 define(["alfresco/core/CoreWidgetProcessing",

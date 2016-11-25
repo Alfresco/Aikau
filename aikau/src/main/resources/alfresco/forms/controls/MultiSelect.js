@@ -20,15 +20,16 @@
 // TODO: Add ARIA
 
 /**
- * 
+ * This is the inner controls used by the 
+ * [MultiSelectInput]{@link module:alfresco/forms/controls/MultiSelectInput} form control.
  *
  * @module alfresco/forms/controls/MultiSelect
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
  * @mixes external:dijit/_FocusMixin
- * @mixes alfresco/forms/controls/utilities/ChoiceMixin
- * @mixes alfresco/core/Core
- * @mixes alfresco/core/ObjectProcessingMixin
+ * @mixes module:alfresco/forms/controls/utilities/ChoiceMixin
+ * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @author Martin Doyle
  */
 define([

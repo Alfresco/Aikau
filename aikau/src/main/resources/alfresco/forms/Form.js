@@ -405,6 +405,7 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
+       * @listens module:alfresco/core/topics#GET_FORM_VALUE_DEPENDENT_OPTIONS
        */
       postCreate: function alfresco_forms_Form__postCreate() {
          // A form is configured to auto-save updates we want to be sure that it doesn't start saving until the 
