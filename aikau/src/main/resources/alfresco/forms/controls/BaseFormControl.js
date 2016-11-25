@@ -579,11 +579,9 @@ define(["dojo/_base/declare",
        * @example <caption>Automatically set the value of the form control to that of "SOURCE_FIELD"</caption>
        * autoSetConfig: [
        *   {
-       *     copyRule: [
-       *        {
-       *           targetId: "SOURCE_FIELD"
-       *        }
-       *     ]
+       *     copyRule: {
+       *       targetId: "SOURCE_FIELD"
+       *     }
        *   }
        * ]
        *
