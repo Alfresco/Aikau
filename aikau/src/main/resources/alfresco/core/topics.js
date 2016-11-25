@@ -842,7 +842,12 @@ define([],function() {
        * @since 1.0.98
        *
        * @event
-       * 
+       * @property {string} url The URL to retrieve the options from
+       * @property {string} [itemsAttribute=""] The dot-notation address of items array (e.g. "data")
+       * @property {string} labelAttribute The dot-notation for label within each item (e.g. "displayName")
+       * @property {string} valueAttribute The dot-notation for value within each item (e.g. "fullName")
+       * @property {string} [resultsProperty="response"] Required for form controls that use a ServiceStore
+       * @property {string} responseTopic This will be automatically provided by the form controls
        */
       GET_FORM_CONTROL_OPTIONS: "ALF_GET_FORM_CONTROL_OPTIONS",
 
@@ -857,12 +862,6 @@ define([],function() {
        * @since 1.0.77
        *
        * @event
-       * @property {string} url The URL to retrieve the options from
-       * @property {string} [itemsAttribute=""] The dot-notation address of items array (e.g. "data")
-       * @property {string} labelAttribute The dot-notation for label within each item (e.g. "displayName")
-       * @property {string} valueAttribute The dot-notation for value within each item (e.g. "fullName")
-       * @property {string} [resultsProperty="response"] Required for form controls that use a ServiceStore
-       * @property {string} responseTopic This will be automatically provided by the form controls
        */
       GET_FORMS_FORMS_RUNTIME_MIMETYPES: "ALF_GET_FORMS_RUNTIME_MIMETYPE",
 
