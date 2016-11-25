@@ -830,6 +830,28 @@ define([],function() {
       GET_DOCUMENT_LIST_SUCCESS: "ALF_RETRIEVE_DOCUMENTS_REQUEST_SUCCESS",
 
       /**
+       * This topic can be published to request the generation of options for a 
+       * [form control]{@link module:alfresco/forms/controls/BaseFormControl} such as
+       * [Select]{@link module:alfresco/forms/controls/Select} or
+       * [RadioButtons]{@link module:alfresco/forms/controls/RadioButtons}. By default it is
+       * handled by the [OptionsService]{@link module:alfresco/services/OptionsService}.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.98
+       *
+       * @event
+       * @property {string} url The URL to retrieve the options from
+       * @property {string} [itemsAttribute=""] The dot-notation address of items array (e.g. "data")
+       * @property {string} labelAttribute The dot-notation for label within each item (e.g. "displayName")
+       * @property {string} valueAttribute The dot-notation for value within each item (e.g. "fullName")
+       * @property {string} [resultsProperty="response"] Required for form controls that use a ServiceStore
+       * @property {string} responseTopic This will be automatically provided by the form controls
+       */
+      GET_FORM_CONTROL_OPTIONS: "ALF_GET_FORM_CONTROL_OPTIONS",
+
+      /**
        * This topic is used by the [FormsRuntimeService]{@link module:alfresco/services/FormsRuntimeServce}
        * as a simple way of providing the MIME type data for mapped Share Forms Runtime controls. Specifically
        * the "/org/alfresco/components/form/controls/mimetype.ftl" control.

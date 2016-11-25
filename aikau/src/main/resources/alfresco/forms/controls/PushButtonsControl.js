@@ -22,53 +22,12 @@
  * on [the mode]{@link module:alfresco/forms/controls/PushButtonsControl#multiMode}, rendered as a
  * single control with push-button options.
  *
- * @example <caption>Sample configuration (uses noWrap and percentGap overrides):</caption>
- * {
- *    name: "alfresco/forms/controls/PushButtons",
- *    id: "CAN_BUILD",
- *    config: {
- *       name: "canbuild",
- *       label: "Can we build it?",
- *       noWrap: true,
- *       percentGap: 5,
- *       optionsConfig: {
- *          fixed: [
- *             {
- *                label: "Yes we can",
- *                value: true
- *             },
- *             {
- *                label: "No we can't",
- *                value: false
- *             }
- *          ]
- *       }
- *    }
- * }
- * 
- * @example <caption>Sample configuration (uses custom theme, ficed-width, multi-value mode properties):</caption>
- * {
- *    name: "alfresco/forms/controls/PushButtons",
- *    id: "PROPER_FOOTBALL",
- *    config: {
- *       additionalCssClasses: "grey-gradient",
- *       name: "properfootball",
- *       label: "Only proper form of football?",
- *       width: 400,
- *       multiMode: true,
- *       optionsConfig: {
- *          publishTopic: "GET_FOOTBALL_OPTIONS",
- *          publishGlobal: true
- *       }
- *    }
- * }
- *
  * @module alfresco/forms/controls/PushButtonsControl
  * @extends external:dijit/_WidgetBase
  * @mixes external:dijit/_TemplatedMixin
  * @mixes external:dijit/_FocusMixin
- * @mixes alfresco/core/Core
- * @mixes alfresco/core/ObjectProcessingMixin
+ * @mixes module:alfresco/core/Core
+ * @mixes module:alfresco/core/ObjectProcessingMixin
  * @author Martin Doyle
  * @since 1.0.44
  */
