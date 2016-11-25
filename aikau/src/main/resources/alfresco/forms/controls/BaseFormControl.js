@@ -246,7 +246,7 @@ define(["dojo/_base/declare",
       name: "",
 
       /**
-       * The list of static options (TODO: We need to provide support for dynamic options via XHR or callback).
+       * The list of static options
        *
        * @instance
        * @type {array}
@@ -518,6 +518,68 @@ define(["dojo/_base/declare",
          
          this.validate();
       },
+
+      /**
+       * <p><strong>PLEATE NOTE: </strong>This configuration will not be applicable to all form controls</p>
+       * 
+       * <p>The configuration for options that can be selected from. These can either be "fixed" or requested 
+       * over the publication/subscription model. It is also possible to configure triggers that cause options
+       * to be refreshed (this can be useful when changing the value of one field will result in different
+       * options being available for another).</p>
+       *
+       * @example <caption>Basic fixed options</caption>
+       * optionsConfig: {
+       *   fixed: [
+       *     { label: "Option One", value: "1" },
+       *     { label: "Option Two", value: "2" },
+       *     { label: "Option Three", value: "3" }
+       *   ]
+       * }
+       *
+       * @example <caption>Basic publication for options</caption>
+       * optionsConfig: {
+       *   publishTopic: "ALF_GET_FORM_CONTROL_OPTIONS",
+       *   publishPayload: {
+       *     url: url.context + "/proxy/alfresco/api/people",
+       *     itemsAttribute: "people",
+       *     labelAttribute: "userName",
+       *     valueAttribute: "userName"
+       *   },
+       *   publishGlobal: true
+       * }
+       *
+       * @example <caption>Update options when "FIELD1" or "FIELD2" change value</caption>
+       * optionsConfig: {
+       *   changesTo: [
+       *     { targetId:"FIELD1" },
+       *     { targetId:"FIELD2" }
+       *   ],
+       *   publishTopic: "GET_OPTIONS_TOPIC"
+       * }
+       *
+       * @example <caption>Update options when "TOPIC1" is pulished globally or "TOPIC2" is published on the current scope</caption>
+       * optionsConfig: {
+       *   updateTopics: [
+       *     { topic:"TOPIC1", global: true },
+       *     { topic:"TOPIC2", global: false }
+       *   ],
+       *   publishTopic: "GET_OPTIONS_TOPIC"
+       * }
+       *
+       * @example <caption>Example requesting options with a payload containing all the current form values</caption>
+       * optionsConfig: {
+       *    publishTopic: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
+       *    publishPayload: {
+       *      publishTopic: "GET_OPTIONS_TOPIC"
+       *    },
+       *    publishGlobal: false // NOTE: It is important to set publishGlobal to false for this to work
+       * }
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       */
+      optionsConfig: null,
 
       /**
        * Defines the visibility behaviour of the widget. It is possible for the widget to dynamically be hidden
