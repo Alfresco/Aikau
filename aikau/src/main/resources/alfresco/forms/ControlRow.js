@@ -26,6 +26,31 @@
  * <p>When using this widget in a dialog you should make sure to configure it to have
  * a [fixedWidth]{@link module:alfresco/dialogs/AlfDialog#fixedWidth} - this can also be configured in the
  * when using the [DialogService]{@link module:alfresco/services/DialogService}.</p>
+ *
+ * @example <caption>Example control row with a title and description</caption>
+ * {
+ *   name: "alfresco/forms/ControlRow",
+ *   config: {
+ *      title: "About",
+ *      description: "Essential information about the user",
+ *      widgets: [
+ *        {
+ *          name: "alfresco/forms/controls/TextBox",
+ *          config: {
+ *            name: "name",
+ *            label: "Name"
+ *          }
+ *        },
+ *        {
+ *          name: "alfresco/forms/controls/TextArea",
+ *          config: {
+ *            name: "address",
+ *            label: "Address"
+ *          }
+ *        }
+ *      ]
+ *   }
+ * }
  * 
  * @module alfresco/forms/ControlRow
  * @extends module:alfresco/layout/HorizontalWidgets,

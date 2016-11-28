@@ -54,6 +54,8 @@
  *
  * @module alfresco/forms/controls/FilteringSelect
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/forms/controls/utilities/UseServiceStoreMixin
+ * @mixes module:alfresco/forms/controls/utilities/IconMixin
  * @author Dave Draper
  */
 define(["alfresco/forms/controls/BaseFormControl",

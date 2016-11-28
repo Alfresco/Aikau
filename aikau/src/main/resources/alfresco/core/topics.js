@@ -936,6 +936,7 @@ define([],function() {
        * 
        * @event
        * @property {string} publishTopic The topic publish the payload once augmented with the form value.
+       * @property {string[]} [publishPayloadModifiers=[]] Modifiers to apply to the payload
        */
       GET_FORM_VALUE_DEPENDENT_OPTIONS: "ALF_GET_FORM_VALUE_DEPENDENT_OPTIONS",
 
