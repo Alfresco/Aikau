@@ -1366,10 +1366,20 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       getFormValueDependantOptions: function alfresco_forms_Form__getFormValueDependantOptions(payload) {
-         if (payload.publishTopic)
+         if (payload.publishTopic && payload.publishTopic !== topics.GET_FORM_VALUE_DEPENDENT_OPTIONS)
          {
             var currentValue = this.getValue();
+            
             var clonedPayload = lang.clone(payload);
+            if (clonedPayload.publishPayloadModifiers)
+            {
+               // Set the current value in order to support the "processInstanceTokens" modifier... 
+               this.value = currentValue;
+               this.processObject(clonedPayload.publishPayloadModifiers, clonedPayload);
+               delete clonedPayload.publishPayloadModifiers;
+            }
+
+            // Mix the current value into the payload...
             lang.mixin(clonedPayload, currentValue);
             this.alfServicePublish(payload.publishTopic, clonedPayload);
          }
