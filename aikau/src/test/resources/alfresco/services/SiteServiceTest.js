@@ -55,6 +55,9 @@ define(["module",
          },
          custom: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["AFTER"])
+         },
+         first: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["FIRST"])
          }
       },
       selectControls: {
@@ -68,330 +71,330 @@ define(["module",
       }
    };
 
-   defineSuite(module, {
-      name: "SiteService Tests",
-      testPage: "/SiteService",
+   // defineSuite(module, {
+   //    name: "SiteService Tests",
+   //    testPage: "/SiteService",
 
-      "Create site (shortName set from title)": function() {
-         return this.remote.setFindTimeout(5000)
+   //    "Create site (shortName set from title)": function() {
+   //       return this.remote.setFindTimeout(5000)
 
-         .findByCssSelector(selectors.buttons.createSite)
-            .click()
-         .end()
+   //       .findByCssSelector(selectors.buttons.createSite)
+   //          .click()
+   //       .end()
 
-         .findByCssSelector(selectors.dialogs.createSite.visible)
-         .end()
+   //       .findByCssSelector(selectors.dialogs.createSite.visible)
+   //       .end()
 
-         .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
-            .type(" has*odd & chars")
-         .end()
+   //       .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
+   //          .type(" has*odd & chars")
+   //       .end()
 
-         .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
-            .getProperty("value")
-            .then(function(value) {
-               assert.equal(value, "hasodd-chars");
-            });
-      },
+   //       .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
+   //          .getProperty("value")
+   //          .then(function(value) {
+   //             assert.equal(value, "hasodd-chars");
+   //          });
+   //    },
 
-      "Create Site (edit shortName stops auto updating)": function() {
-         return this.remote.findByCssSelector(selectors.textBoxes.createSiteShortName.input)
-            .clearValue()
-            .type("fail")
-         .end()
+   //    "Create Site (edit shortName stops auto updating)": function() {
+   //       return this.remote.findByCssSelector(selectors.textBoxes.createSiteShortName.input)
+   //          .clearValue()
+   //          .type("fail")
+   //       .end()
 
-         .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
-            .clearValue()
-            .type("no copying now")
-         .end()
+   //       .findByCssSelector(selectors.textBoxes.createSiteTitle.input)
+   //          .clearValue()
+   //          .type("no copying now")
+   //       .end()
 
-         .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
-            .getProperty("value")
-            .then(function(value) {
-               assert.equal(value, "fail");
-            });
-      },
+   //       .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
+   //          .getProperty("value")
+   //          .then(function(value) {
+   //             assert.equal(value, "fail");
+   //          });
+   //    },
 
-      "Create site (duplicate shortName)": function() {
-         return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
-            .clearValue()
-            .type(" used")
-         .end()
+   //    "Create site (duplicate shortName)": function() {
+   //       return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
+   //          .clearValue()
+   //          .type(" used")
+   //       .end()
 
-         .findDisplayedByCssSelector("#CREATE_SITE_FIELD_TITLE .alfresco-forms-controls-BaseFormControl__validation-warning")
-         .end()
+   //       .findDisplayedByCssSelector("#CREATE_SITE_FIELD_TITLE .alfresco-forms-controls-BaseFormControl__validation-warning")
+   //       .end()
 
-         .findAllByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
-            .then(function(elements) {
-               assert.lengthOf(elements, 0);
-            });
-      },
+   //       .findAllByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
+   //          .then(function(elements) {
+   //             assert.lengthOf(elements, 0);
+   //          });
+   //    },
 
-      "Create site success": function() {
-         return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
-            .clearValue()
-            .type("pass")
-         .end()
+   //    "Create site success": function() {
+   //       return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
+   //          .clearValue()
+   //          .type("pass")
+   //       .end()
 
-         .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
-            .clearValue()
-            .type("pass")
-         .end()
+   //       .findByCssSelector(selectors.textBoxes.createSiteShortName.input)
+   //          .clearValue()
+   //          .type("pass")
+   //       .end()
          
-         .waitForDeletedByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
-         .end()
+   //       .waitForDeletedByCssSelector(selectors.dialogs.createSite.disabledConfirmationButton)
+   //       .end()
 
-         .clearLog()
-         .pressKeys(keys.ENTER)
+   //       .clearLog()
+   //       .pressKeys(keys.ENTER)
 
-         .findByCssSelector(selectors.dialogs.createSite.hidden)
-         .end()
+   //       .findByCssSelector(selectors.dialogs.createSite.hidden)
+   //       .end()
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
-         .end()
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+   //       .end()
 
-         .getLastPublish("ALF_SITE_CREATION_REQUEST")
-         .getLastPublish("ALF_ADD_FAVOURITE_SITE")
-         .getLastPublish("ALF_SITE_CREATION_SUCCESS")
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-         .then(function(payload) {
-            assert.propertyVal(payload, "url", "site/pass/dashboard");
-         });
-      },
+   //       .getLastPublish("ALF_SITE_CREATION_REQUEST")
+   //       .getLastPublish("ALF_ADD_FAVOURITE_SITE")
+   //       .getLastPublish("ALF_SITE_CREATION_SUCCESS")
+   //       .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+   //       .then(function(payload) {
+   //          assert.propertyVal(payload, "url", "site/pass/dashboard");
+   //       });
+   //    },
 
-      "Edit site": function() {
-         return this.remote.findById("EDIT_SITE_label")
-            .click()
-         .end()
+   //    "Edit site": function() {
+   //       return this.remote.findById("EDIT_SITE_label")
+   //          .click()
+   //       .end()
 
-         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_TITLE .dijitInputContainer input")
-            .clearValue()
-            .type("New Site Title")
-         .end()
+   //       .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_TITLE .dijitInputContainer input")
+   //          .clearValue()
+   //          .type("New Site Title")
+   //       .end()
 
-         .clearLog()
+   //       .clearLog()
 
-         .findById("EDIT_SITE_DIALOG_OK_label")
-            .click()
-         .end()
+   //       .findById("EDIT_SITE_DIALOG_OK_label")
+   //          .click()
+   //       .end()
 
-         .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
-         .end()
+   //       .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
+   //       .end()
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
-         .end()
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+   //       .end()
 
-         .getLastPublish("ALF_SITE_EDIT_REQUEST")
-            .getLastPublish("ALF_SITE_EDIT_SUCCESS")
-            .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-            .then(function(payload) {
-               assert.propertyVal(payload, "url", "site/site1");
-            });
-      },
+   //       .getLastPublish("ALF_SITE_EDIT_REQUEST")
+   //          .getLastPublish("ALF_SITE_EDIT_SUCCESS")
+   //          .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+   //          .then(function(payload) {
+   //             assert.propertyVal(payload, "url", "site/site1");
+   //          });
+   //    },
 
-      "Edit moderated site": function() {
-         return this.remote.findById("EDIT_MODERATED_SITE_label")
-            .click()
-         .end()
+   //    "Edit moderated site": function() {
+   //       return this.remote.findById("EDIT_MODERATED_SITE_label")
+   //          .click()
+   //       .end()
 
-         // The moderated visibility radio button should be selected
-         .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_VISIBILITY_CONTROL .dijitRadioChecked input[value=MODERATED]")
-         .end()
+   //       // The moderated visibility radio button should be selected
+   //       .findByCssSelector("#EDIT_SITE_DIALOG #EDIT_SITE_FIELD_VISIBILITY_CONTROL .dijitRadioChecked input[value=MODERATED]")
+   //       .end()
 
-         .clearLog()
+   //       .clearLog()
 
-         .findById("EDIT_SITE_DIALOG_OK_label")
-            .click()
-            .end()
+   //       .findById("EDIT_SITE_DIALOG_OK_label")
+   //          .click()
+   //          .end()
 
-         .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
-            .end()
+   //       .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
+   //          .end()
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
-      },
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
+   //    },
 
-      "Request to join site navigates user to their dashboard afterwards": function() {
-         return this.remote.findById("REQUEST_SITE_MEMBERSHIP_label")
-            .click()
-         .end()
+   //    "Request to join site navigates user to their dashboard afterwards": function() {
+   //       return this.remote.findById("REQUEST_SITE_MEMBERSHIP_label")
+   //          .click()
+   //       .end()
 
-         .findByCssSelector(".dialogDisplayed .dijitButtonNode")
-            .click()
-         .end()
+   //       .findByCssSelector(".dialogDisplayed .dijitButtonNode")
+   //          .click()
+   //       .end()
 
-         .waitForDeletedByCssSelector(".dialogDisplayed")
-         .end()
+   //       .waitForDeletedByCssSelector(".dialogDisplayed")
+   //       .end()
 
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-            .then(function(payload) {
-               assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not navigate to user home page");
-            })
+   //       .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+   //          .then(function(payload) {
+   //             assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not navigate to user home page");
+   //          })
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
-      },
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible");
+   //    },
 
-      "Requesting to join site with request already pending displays suitable error message": function() {
-         return this.remote.findById("REQUEST_SITE_MEMBERSHIP_ALREADY_PENDING_label")
-            .click()
-         .end()
+   //    "Requesting to join site with request already pending displays suitable error message": function() {
+   //       return this.remote.findById("REQUEST_SITE_MEMBERSHIP_ALREADY_PENDING_label")
+   //          .click()
+   //       .end()
 
-         .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
-            .getVisibleText()
-            .then(function(visibleText) {
-               assert.equal(visibleText, "A request to join this site is already pending");
-            })
-         .end()
+   //       .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
+   //          .getVisibleText()
+   //          .then(function(visibleText) {
+   //             assert.equal(visibleText, "A request to join this site is already pending");
+   //          })
+   //       .end()
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
-      },
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
+   //    },
 
-      "Error occurring when requesting to join site displays error message": function() {
-         return this.remote.findById("REQUEST_SITE_MEMBERSHIP_ERROR_label")
-            .click()
-         .end()
+   //    "Error occurring when requesting to join site displays error message": function() {
+   //       return this.remote.findById("REQUEST_SITE_MEMBERSHIP_ERROR_label")
+   //          .click()
+   //       .end()
 
-         .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
-            .getVisibleText()
-            .then(function(visibleText) {
-               assert.equal(visibleText, "The request to join the site failed");
-            })
-         .end()
+   //       .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
+   //          .getVisibleText()
+   //          .then(function(visibleText) {
+   //             assert.equal(visibleText, "The request to join the site failed");
+   //          })
+   //       .end()
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
-      },
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification");
+   //    },
 
-      "Can cancel request to join site": function() {
-         return this.remote.findById("CANCEL_PENDING_REQUEST_label")
-            .clearLog()
-            .click()
-         .end()
+   //    "Can cancel request to join site": function() {
+   //       return this.remote.findById("CANCEL_PENDING_REQUEST_label")
+   //          .clearLog()
+   //          .click()
+   //       .end()
 
-         .getLastXhr("api/sites/my-site/invitations/foo")
+   //       .getLastXhr("api/sites/my-site/invitations/foo")
 
-         .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
-            .getVisibleText()
-            .then(function(visibleText) {
-               assert.equal(visibleText, "Successfully cancelled request to join site My Site");
-            })
-         .end()
+   //       .findDisplayedByCssSelector(".alfresco-notifications-AlfNotification__message")
+   //          .getVisibleText()
+   //          .then(function(visibleText) {
+   //             assert.equal(visibleText, "Successfully cancelled request to join site My Site");
+   //          })
+   //       .end()
 
-         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification")
+   //       .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification")
 
-         .getLastPublish("ALF_RELOAD_PAGE");
-      },
+   //       .getLastPublish("ALF_RELOAD_PAGE");
+   //    },
 
-      "Leave site and confirm user home page override works": function() {
-         return this.remote.findById("LEAVE_SITE_label")
-            .click()
-         .end()
+   //    "Leave site and confirm user home page override works": function() {
+   //       return this.remote.findById("LEAVE_SITE_label")
+   //          .click()
+   //       .end()
 
-         .findByCssSelector(".dialogDisplayed .dijitButton:first-child .dijitButtonNode")
-            .click()
-         .end()
+   //       .findByCssSelector(".dialogDisplayed .dijitButton:first-child .dijitButtonNode")
+   //          .click()
+   //       .end()
 
-         .waitForDeletedByCssSelector(".dialogDisplayed")
-         .end()
+   //       .waitForDeletedByCssSelector(".dialogDisplayed")
+   //       .end()
 
-         .getLastPublish("ALF_NAVIGATE_TO_PAGE")
-            .then(function(payload) {
-               assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not generate URL with correct user home page");
-            });
-      },
+   //       .getLastPublish("ALF_NAVIGATE_TO_PAGE")
+   //          .then(function(payload) {
+   //             assert.propertyVal(payload, "url", "user/admin%40alfresco.com/home", "Did not generate URL with correct user home page");
+   //          });
+   //    },
 
-      "Become site manager (and reload data)": function() {
-         return this.remote.findById("BECOME_SITE_MANAGER_label")
-            .clearLog()
-            .click()
-         .end()
+   //    "Become site manager (and reload data)": function() {
+   //       return this.remote.findById("BECOME_SITE_MANAGER_label")
+   //          .clearLog()
+   //          .click()
+   //       .end()
 
-         .getLastPublish("ALF_DOCLIST_RELOAD_DATA");
-      },
+   //       .getLastPublish("ALF_DOCLIST_RELOAD_DATA");
+   //    },
 
-      "Become site manager (and reload page)": function() {
-         return this.remote.findById("BECOME_SITE_MANAGER_PAGE_RELOAD_label")
-            .clearLog()
-            .click()
-         .end()
+   //    "Become site manager (and reload page)": function() {
+   //       return this.remote.findById("BECOME_SITE_MANAGER_PAGE_RELOAD_label")
+   //          .clearLog()
+   //          .click()
+   //       .end()
 
-         .getLastPublish("ALF_RELOAD_PAGE");
-      }
-   });
+   //       .getLastPublish("ALF_RELOAD_PAGE");
+   //    }
+   // });
 
-   defineSuite(module, {
-      name: "SiteService Tests (Reconfigured presets)",
-      testPage: "/SiteService?sitePresets=configured",
+   // defineSuite(module, {
+   //    name: "SiteService Tests (Reconfigured presets)",
+   //    testPage: "/SiteService?sitePresets=configured",
 
-      "Reconfigured site presets are correct": function() {
-         return this.remote.setFindTimeout(5000)
+   //    "Reconfigured site presets are correct": function() {
+   //       return this.remote.setFindTimeout(5000)
 
-         .findByCssSelector(selectors.buttons.createSite)
-            .click()
-         .end()
+   //       .findByCssSelector(selectors.buttons.createSite)
+   //          .click()
+   //       .end()
 
-         .findByCssSelector(selectors.dialogs.createSite.visible)
-         .end()
+   //       .findByCssSelector(selectors.dialogs.createSite.visible)
+   //       .end()
 
-         .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
-            .click()
-         .end()
+   //       .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
+   //          .click()
+   //       .end()
 
-         .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
-         .end()
+   //       .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
+   //       .end()
 
-         .findAllByCssSelector(selectors.selectControls.sitePresets.options)
-            .then(function(options) {
-               assert.lengthOf(options, 1);
-            })
-         .end()
+   //       .findAllByCssSelector(selectors.selectControls.sitePresets.options)
+   //          .then(function(options) {
+   //             assert.lengthOf(options, 1);
+   //          })
+   //       .end()
 
-         .findByCssSelector(selectors.selectControls.sitePresets.option1)
-            .getVisibleText()
-            .then(function(sitePresetLabel) {
-               assert.equal(sitePresetLabel, "Custom");
-            });
-      }
-   });
+   //       .findByCssSelector(selectors.selectControls.sitePresets.option1)
+   //          .getVisibleText()
+   //          .then(function(sitePresetLabel) {
+   //             assert.equal(sitePresetLabel, "Custom");
+   //          });
+   //    }
+   // });
 
-   defineSuite(module, {
-      name: "SiteService Tests (Additional presets)",
-      testPage: "/SiteService?sitePresets=additional",
+   // defineSuite(module, {
+   //    name: "SiteService Tests (Additional presets)",
+   //    testPage: "/SiteService?sitePresets=additional",
 
-      "Reconfigured site presets are correct": function() {
-         return this.remote.setFindTimeout(5000)
+   //    "Reconfigured site presets are correct": function() {
+   //       return this.remote.setFindTimeout(5000)
 
-         .findByCssSelector(selectors.buttons.createSite)
-            .click()
-         .end()
+   //       .findByCssSelector(selectors.buttons.createSite)
+   //          .click()
+   //       .end()
 
-         .findByCssSelector(selectors.dialogs.createSite.visible)
-         .end()
+   //       .findByCssSelector(selectors.dialogs.createSite.visible)
+   //       .end()
 
-         .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
-            .click()
-         .end()
+   //       .findByCssSelector(selectors.selectControls.sitePresets.openIcon)
+   //          .click()
+   //       .end()
 
-         .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
-         .end()
+   //       .findDisplayedByCssSelector(selectors.selectControls.sitePresets.dropDown)
+   //       .end()
 
-         .findAllByCssSelector(selectors.selectControls.sitePresets.options)
-            .then(function(options) {
-               assert.lengthOf(options, 2);
-            })
-         .end()
+   //       .findAllByCssSelector(selectors.selectControls.sitePresets.options)
+   //          .then(function(options) {
+   //             assert.lengthOf(options, 2);
+   //          })
+   //       .end()
 
-         .findByCssSelector(selectors.selectControls.sitePresets.option1)
-            .getVisibleText()
-            .then(function(sitePresetLabel) {
-               assert.equal(sitePresetLabel, "Collaboration Site");
-            })
-         .end()
+   //       .findByCssSelector(selectors.selectControls.sitePresets.option1)
+   //          .getVisibleText()
+   //          .then(function(sitePresetLabel) {
+   //             assert.equal(sitePresetLabel, "Collaboration Site");
+   //          })
+   //       .end()
 
-         .findByCssSelector(selectors.selectControls.sitePresets.option2)
-            .getVisibleText()
-            .then(function(sitePresetLabel) {
-               assert.equal(sitePresetLabel, "Additional Custom");
-            });
-      }
-   });
+   //       .findByCssSelector(selectors.selectControls.sitePresets.option2)
+   //          .getVisibleText()
+   //          .then(function(sitePresetLabel) {
+   //             assert.equal(sitePresetLabel, "Additional Custom");
+   //          });
+   //    }
+   // });
 
    defineSuite(module, {
       name: "SiteService Tests (Removed presets)",
@@ -487,6 +490,34 @@ define(["module",
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "Value Set");
+            });
+      },
+
+      "Extra data is included": function() {
+         return this.remote.findByCssSelector("#CREATE_SITE_FIELD_TITLE textarea")
+            .clearValue()
+            .type("pass")
+         .end()
+
+         .findByCssSelector(selectors.textBoxes.first.input)
+            .clearValue()
+            .type("extra")
+         .end()
+
+         .clearLog()
+         .pressKeys(keys.ENTER)
+
+         .findByCssSelector(selectors.dialogs.createSite.hidden)
+         .end()
+
+         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+         .end()
+
+         .getLastPublish("ALF_SITE_CREATION_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "tb1", "extra");
+               assert.propertyVal(payload, "tb4", "Value Set");
+               assert.propertyVal(payload, "title", "pass");
             });
       }
    });

@@ -1011,17 +1011,15 @@ define(["dojo/_base/declare",
                message: this.message("create-site.creating")
             });
 
+            // Ensure that all supplied data is included in the request.
+            var data = this.alfCleanFrameworkAttributes(payload, false);
+            data.description = data.description || "";
+
             var url = AlfConstants.URL_SERVICECONTEXT + "modules/create-site";
             this.serviceXhr({
                url : url,
                method: "POST",
-               data: {
-                  visibility: payload.visibility,
-                  title: payload.title,
-                  shortName: payload.shortName,
-                  description: payload.description || "",
-                  sitePreset: payload.sitePreset
-               },
+               data: data,
                successCallback: this.onSiteCreationSuccess,
                failureCallback: this.onSiteCreationFailure,
                callbackScope: this
@@ -1177,16 +1175,15 @@ define(["dojo/_base/declare",
                message: this.message("edit-site.saving")
             });
 
+            // Ensure that all supplied data is included in the request.
+            var data = this.alfCleanFrameworkAttributes(payload, false);
+            data.description = data.description || "";
+
             var url = AlfConstants.PROXY_URI + "api/sites/" + payload.shortName;
             this.serviceXhr({
                url : url,
                method: "PUT",
-               data: {
-                  visibility: payload.visibility,
-                  title: payload.title,
-                  shortName: payload.shortName,
-                  description: payload.description || ""
-               },
+               data: data,
                successCallback: this.onSiteEditSuccess,
                failureCallback: this.onSiteEditFailure,
                callbackScope: this
