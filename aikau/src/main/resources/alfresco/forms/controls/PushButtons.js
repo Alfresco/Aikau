@@ -21,13 +21,50 @@
  * <p>An input control that offers the functionality of radio-buttons or checkboxes,
  * rendered as a single control with push-button options.</p>
  *
- * <p>For full information about how to use this control and all of the available
- * options, please see the implementing widget:
- * [alfresco/forms/controls/PushButtonsControl]{@link module:alfresco/forms/controls/PushButtonsControl}.</p>
+ * @example <caption>Sample configuration (uses noWrap and percentGap overrides):</caption>
+ * {
+ *    name: "alfresco/forms/controls/PushButtons",
+ *    id: "CAN_BUILD",
+ *    config: {
+ *       name: "canbuild",
+ *       label: "Can we build it?",
+ *       noWrap: true,
+ *       percentGap: 5,
+ *       optionsConfig: {
+ *          fixed: [
+ *             {
+ *                label: "Yes we can",
+ *                value: true
+ *             },
+ *             {
+ *                label: "No we can't",
+ *                value: false
+ *             }
+ *          ]
+ *       }
+ *    }
+ * }
+ * 
+ * @example <caption>Sample configuration (uses custom theme, ficed-width, multi-value mode properties):</caption>
+ * {
+ *    name: "alfresco/forms/controls/PushButtons",
+ *    id: "PROPER_FOOTBALL",
+ *    config: {
+ *       additionalCssClasses: "grey-gradient",
+ *       name: "properfootball",
+ *       label: "Only proper form of football?",
+ *       width: 400,
+ *       multiMode: true,
+ *       optionsConfig: {
+ *          publishTopic: "GET_FOOTBALL_OPTIONS",
+ *          publishGlobal: true
+ *       }
+ *    }
+ * }
  * 
  * @module alfresco/forms/controls/PushButtons
- * @extends alfresco/forms/controls/BaseFormControl
- * @mixes alfresco/core/CoreWidgetProcessing
+ * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Martin Doyle
  * @since 1.0.44
  */

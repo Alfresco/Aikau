@@ -1,4 +1,4 @@
-Aikau 1.0.97 Release Notes
+Aikau 1.0.98 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.98:
+* [AKU-1130](https://issues.alfresco.com/jira/browse/AKU-1130)       - Improve create/edit site customization options through configuration
+* [AKU-1131](https://issues.alfresco.com/jira/browse/AKU-1131)       - Create Link label updated
+* [AKU-1132](https://issues.alfresco.com/jira/browse/AKU-1132)       - Ensure site is created on first click of button
+
+
 1.0.97:
 * [AKU-1108](https://issues.alfresco.com/jira/browse/AKU-1108)       - Ensure sites are favourited when created
 * [AKU-1130](https://issues.alfresco.com/jira/browse/AKU-1130)       - Improve create/edit site customization options through configuration

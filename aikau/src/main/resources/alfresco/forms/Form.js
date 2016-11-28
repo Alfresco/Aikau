@@ -347,11 +347,29 @@ define(["dojo/_base/declare",
       waitForPageWidgets: true,
 
       /**
-       * Can be configured to display one or more banners on the form based on the changing value of fields
+       * <p>Can be configured to display one or more banners on the form based on the changing value of fields
        * within the form. The configuration is almost identical to that of the 
        * [visibilityConfig]{@link module:alfresco/forms/controls/BaseFormControl#visibilityConfig} in form fields
        * except that a "message" attribute should also be included that will be displayed when the rules 
-       * are evaluated to be true.
+       * are evaluated to be true.</p>
+       * <p>The default position for the warnings is at the top of the form but it is possible to move the
+       * warnings to the bottom of the form by configuring
+       * [warningsPosition]{@link module:alfresco/forms/Form#warningsPosition} to be "bottom".
+       * </p>
+       *
+       * @example <caption>Example configuration for warning displayed when "FIELD1" is set</caption>
+       * warnings: [
+       *   {
+       *     message: "Warning 1: Field 1 is not blank",
+       *     initialValue: true,
+       *     rules: [
+       *       {
+       *         targetId: "FIELD1",
+       *         isNot: [""]
+       *       }
+       *     ]
+       *   }
+       * ]
        *
        * @instance
        * @type {object[]}
@@ -387,6 +405,7 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
+       * @listens module:alfresco/core/topics#GET_FORM_VALUE_DEPENDENT_OPTIONS
        */
       postCreate: function alfresco_forms_Form__postCreate() {
          // A form is configured to auto-save updates we want to be sure that it doesn't start saving until the 
@@ -879,11 +898,16 @@ define(["dojo/_base/declare",
       cancelButtonPublishGlobal: null,
       
       /**
-       * If this is not null, then the form will auto-publish on this topic whenever a form's
-       * values change. This setting overrides and will remove the OK and Cancel buttons. If the form
-       * is being dynamically created after page load has completed (e.g. if the form is being displayed in 
-       * a dialog for example) then in order for auto-saving to occur it will also be necessary to configure 
-       * the [waitForPageWidgets]{@link module:alfresco/forms/Form#waitForPageWidgets} attribute to be false.
+       * <p>If this is not null, then the form will auto-publish on this topic whenever a form's
+       * values change. This setting overrides (and removes) the form buttons so that they are 
+       * no longer displayed. Auto-saving will <strong>not</strong> occur if the form is in an
+       * invalid state unless [autoSaveOnInvalid]{@link module:alfresco/forms/Form#autoSaveOnInvalid}
+       * is configured to be true.</p>
+       * 
+       * <p><strong>PLEASE NOTE:</strong> If the form is being dynamically created after page load has completed 
+       * (e.g. if the form is being displayed in a dialog for example) then in order for auto-saving to occur 
+       * it will also be necessary to configure the 
+       * [waitForPageWidgets]{@link module:alfresco/forms/Form#waitForPageWidgets} attribute to be false.</p>
        * 
        * @instance 
        * @type {string}
@@ -892,7 +916,9 @@ define(["dojo/_base/declare",
       autoSavePublishTopic: null,
       
       /**
-       * The payload to publish (will be the form's values if not specified)
+       * Additional data to be published on the 
+       * [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic} 
+       * along with the form value.
        * 
        * @instance
        * @type {object}
@@ -901,6 +927,9 @@ define(["dojo/_base/declare",
       autoSavePublishPayload: null,
       
       /**
+       * Indicates that the [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic}
+       * should be published on the global scope.
+       * 
        * @instance 
        * @type {string}
        * @default
@@ -908,10 +937,10 @@ define(["dojo/_base/declare",
       autoSavePublishGlobal: null,
 
       /**
-       * Whether, when autoSavePublish is enabled (i.e. autoSavePublishTopic is not null),
-       * to also publish when the form contains invalid values. If this is enabled, then
-       * the publish payload will have an additional alfFormInvalid property, which will
-       * be set to true.
+       * When [autoSavePublishTopic]{@link module:alfresco/forms/Form#autoSavePublishTopic} is
+       * configured this attribute can be set to true to indicate that publishing should also occur
+       * when the form contains invalid values. If this is enabled, then the publish payload will 
+       * have an additional alfFormInvalid property, which will be set to true.
        *
        * @instance
        * @type {boolean}
@@ -1337,10 +1366,20 @@ define(["dojo/_base/declare",
        * @since 1.0.39
        */
       getFormValueDependantOptions: function alfresco_forms_Form__getFormValueDependantOptions(payload) {
-         if (payload.publishTopic)
+         if (payload.publishTopic && payload.publishTopic !== topics.GET_FORM_VALUE_DEPENDENT_OPTIONS)
          {
             var currentValue = this.getValue();
+            
             var clonedPayload = lang.clone(payload);
+            if (clonedPayload.publishPayloadModifiers)
+            {
+               // Set the current value in order to support the "processInstanceTokens" modifier... 
+               this.value = currentValue;
+               this.processObject(clonedPayload.publishPayloadModifiers, clonedPayload);
+               delete clonedPayload.publishPayloadModifiers;
+            }
+
+            // Mix the current value into the payload...
             lang.mixin(clonedPayload, currentValue);
             this.alfServicePublish(payload.publishTopic, clonedPayload);
          }

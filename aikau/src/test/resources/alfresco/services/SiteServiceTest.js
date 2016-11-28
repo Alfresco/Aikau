@@ -55,6 +55,9 @@ define(["module",
          },
          custom: {
             input: TestCommon.getTestSelector(textBoxSelectors, "input", ["AFTER"])
+         },
+         first: {
+            input: TestCommon.getTestSelector(textBoxSelectors, "input", ["FIRST"])
          }
       },
       selectControls: {
@@ -172,8 +175,6 @@ define(["module",
 
          .findById("EDIT_SITE_DIALOG_OK_label")
             .click()
-            .click() // For some reason in automated testing a second click is required here
-                     // Adding a long pause and a manual click and it works fine...
          .end()
 
          .findByCssSelector("#EDIT_SITE_DIALOG.dialogHidden")
@@ -489,6 +490,34 @@ define(["module",
             .getProperty("value")
             .then(function(value) {
                assert.equal(value, "Value Set");
+            });
+      },
+
+      "Extra data is included": function() {
+         return this.remote.findByCssSelector("#CREATE_SITE_FIELD_TITLE textarea")
+            .clearValue()
+            .type("pass")
+         .end()
+
+         .findByCssSelector(selectors.textBoxes.first.input)
+            .clearValue()
+            .type("extra")
+         .end()
+
+         .clearLog()
+         .pressKeys(keys.ENTER)
+
+         .findByCssSelector(selectors.dialogs.createSite.hidden)
+         .end()
+
+         .waitForDeletedByCssSelector(".alfresco-notifications-AlfNotification--visible")
+         .end()
+
+         .getLastPublish("ALF_SITE_CREATION_REQUEST")
+            .then(function(payload) {
+               assert.propertyVal(payload, "tb1", "extra");
+               assert.propertyVal(payload, "tb4", "Value Set");
+               assert.propertyVal(payload, "title", "pass");
             });
       }
    });
