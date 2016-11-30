@@ -78,7 +78,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.99
        */
-      highlightFragmentSize: 100,
+      highlightFragmentSize: 255,
 
       /**
        * The number of characters to search into the content for the search term.
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.99
        */
-      highlightSnippetCount: 255,
+      highlightSnippetCount: 250,
       
       /**
        * Whether to use SpanScorer to highlight phrase terms only when they appear within the query phrase in 
