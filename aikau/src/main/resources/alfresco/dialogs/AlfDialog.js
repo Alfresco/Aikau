@@ -510,8 +510,6 @@ define(["dojo/_base/declare",
 
          this.alfPublishResizeEvent(this.domNode);
          domClass.remove(this.domNode, "dialogHidden");
-         domClass.add(this.domNode, "dialogDisplayed");
-         // TODO: We could optionally reveal the dialog after resizing to prevent any resizing jumping?
          
          // Publish the widgets ready
          this.alfPublish(topics.PAGE_WIDGETS_READY, {}, true);
@@ -536,6 +534,8 @@ define(["dojo/_base/declare",
                });
             }));
          }
+
+         domClass.add(this.domNode, "dialogDisplayed");
       },
 
       /**
