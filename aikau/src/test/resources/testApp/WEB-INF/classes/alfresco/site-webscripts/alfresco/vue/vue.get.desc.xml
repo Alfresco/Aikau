@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Vue.js Examples</shortname>
+  <description>Testing using Vue.js</description>
+  <family>aikau-unit-tests</family>
+  <url>/vue</url>
+</webscript>
