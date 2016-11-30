@@ -232,7 +232,8 @@ define(["dojo/_base/declare",
          this.moreInfoDialog = new Popup({
             title: title,
             currentItem: this.currentItem,
-            widgetsContent: widgetsContent
+            widgetsContent: widgetsContent,
+            handleOverflow: false
          });
          this.moreInfoDialog.show();
       },

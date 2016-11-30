@@ -3,13 +3,13 @@
    width: 16px;
    height: 16px;
    display: inline-block;
+   cursor: pointer;
 }
 
 .alfresco-renderers-MoreInfo.darkIcon {
    background-image: url(./images/info-16.png);
 }
 
-.alfresco-dialog-AlfDialog .alfresco-renderers-Thumbnail img {
-   max-width: 330px;
-   max-height: 240px;
+.alfresco-lists-views-layouts-Row:focus {
+   outline: none;
 }
