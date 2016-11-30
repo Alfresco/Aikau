@@ -572,7 +572,7 @@ define(["dojo/_base/declare",
 
          if (value && this.trimValue && typeof value.trim === "function")
          {
-            value = value.trim();
+            value = value.replace(/&nbsp;/g, " ").trim();
          }
 
          return value;
