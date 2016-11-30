@@ -29,16 +29,14 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Cell.html",
         "alfresco/core/Core",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
+        function(declare, _WidgetBase, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
+   return declare([_WidgetBase, AlfCore, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -48,14 +46,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Cell.css"}]
        */
       cssRequirements: [{cssFile:"./css/Cell.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -84,6 +74,11 @@ define(["dojo/_base/declare",
        * @default
        */
       width: null,
+
+      buildRendering: function alfresco_lists_views_layouts_Cell__buildRendering() {
+         this.containerNode = this.domNode = document.createElement("td");
+         this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}

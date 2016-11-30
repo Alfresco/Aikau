@@ -22,7 +22,6 @@
  * 
  * @module alfresco/lists/views/layouts/Row
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
@@ -31,8 +30,6 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Row.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/renderers/_PublishPayloadMixin",
@@ -40,10 +37,10 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/dom-class",
         "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
+        function(declare, _WidgetBase, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
                  _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
+   return declare([_WidgetBase, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -53,14 +50,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Row.css"}]
        */
       cssRequirements: [{cssFile:"./css/Row.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -114,6 +103,13 @@ define(["dojo/_base/declare",
        * @default
        */
       zebraStriping: false,
+
+      buildRendering: function alfresco_lists_views_layouts_Row__buildRendering() {
+         this.containerNode = this.domNode = document.createElement("tr");
+         this.domNode.classList.add("alfresco-lists-views-layouts-Row");
+         this.domNode.setAttribute("tabindex", "0");
+         /// TODO: Event handler!!
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}

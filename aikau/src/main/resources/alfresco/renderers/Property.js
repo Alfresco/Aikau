@@ -25,7 +25,6 @@
  *
  * @module alfresco/renderers/Property
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
@@ -34,11 +33,9 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin", 
         "alfresco/renderers/_JsNodeMixin", 
         "alfresco/core/ValueDisplayMapMixin", 
         "alfresco/core/Core", 
-        "dojo/text!./templates/Property.html", 
         "alfresco/core/ObjectTypeUtils", 
         "alfresco/core/UrlUtilsMixin", 
         "alfresco/core/TemporalUtils", 
@@ -47,10 +44,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style", 
         "dijit/Tooltip", 
         "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, template, 
+        function(declare, _WidgetBase, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, 
             ObjectTypeUtils, UrlUtilsMixin, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
+   return declare([_WidgetBase, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -73,13 +70,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{
          cssFile: "./css/Property.css"
       }],
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
 
       /**
        * This is the object that the property to be rendered will be retrieved from.
@@ -302,6 +292,30 @@ define(["dojo/_base/declare",
        */
       _tooltipPositions: ["below-centered", "above-centered"],
 
+      buildRendering: function alfresco_renderers_Property__buildRendering() {
+         this.renderedValueNode = this.domNode = document.createElement("span");
+         this.renderedValueClassArray.forEach(function(className) {
+            this.domNode.classList.add(className);
+         }, this);
+         this.domNode.setAttribute("tabindex", "0");
+
+         var innerSpan = document.createElement("span");
+         innerSpan.classList.add("inner");
+
+         var labelSpan = document.createElement("span");
+         labelSpan.classList.add("label");
+         labelSpan.textContent = this.label;
+
+         var valueSpan = document.createElement("span");
+         valueSpan.classList.add("value");
+         valueSpan.innerHTML = this.renderedValue;
+
+         innerSpan.appendChild(labelSpan);
+         innerSpan.appendChild(valueSpan);
+         this.domNode.appendChild(innerSpan);
+
+      },
+
       /**
        * Updates CSS classes based on the current state of the renderer. Currently this only
        * addressed warning message states.
@@ -436,13 +450,20 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
-         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-         if (this.renderOnNewLine === true) {
-            this.renderedValueClass = this.renderedValueClass + " block";
+         // this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
+         this.renderedValueClassArray = [this.renderedValueClass,this.renderSize];
+         if (this.renderOnNewLine === true) 
+         {
+            // this.renderedValueClass = this.renderedValueClass + " block";
+            this.renderedValueClassArray.push("block");
          }
-         if (this.deemphasized === true) {
-            this.renderedValueClass = this.renderedValueClass + " deemphasized";
+         if (this.deemphasized === true) 
+         {
+            // this.renderedValueClass = this.renderedValueClass + " deemphasized";
+            this.renderedValueClassArray.push("deemphasize");
          }
+         
+
       },
 
       /**

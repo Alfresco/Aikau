@@ -97,20 +97,20 @@ define(["alfresco/core/ProcessWidgets",
             // If we're in debug mode, then we should add some DOM elements for the Developer View. This will
             // allow developers to see which WebScript has generated the page and to click a link to generate
             // a sample JAR to customize the page.
-            if (AlfConstants.DEBUG && this.domNode && this.webScriptId)
-            {
-               this.webScriptLabel = "WebScript ID:";
-               this.extensionDownloadUrl = urlUtils.convertUrl("generator/extension?webscriptId=" + this.webScriptId, urlTypes.PAGE_RELATIVE);
-               this.extensionDownloadLabel = "(Click to generate extension JAR)";
-               var pageInfoTemplate = "<div class=\"alfresco-debug-PageInfo\">" +
-                  "<span class=\"label\">${webScriptLabel}</span>" +
-                  "<span class=\"value\">${webScriptId}</span>" +
-                  "<a href=\"${extensionDownloadUrl}\">${extensionDownloadLabel}</a>" +
-               "</div>";
-               var pageInfo = string.substitute(pageInfoTemplate, this);
-               var pageInfoDom = domConstruct.toDom(pageInfo);
-               domConstruct.place(pageInfoDom, this.domNode, "first");
-            }
+            // if (AlfConstants.DEBUG && this.domNode && this.webScriptId)
+            // {
+            //    this.webScriptLabel = "WebScript ID:";
+            //    this.extensionDownloadUrl = urlUtils.convertUrl("generator/extension?webscriptId=" + this.webScriptId, urlTypes.PAGE_RELATIVE);
+            //    this.extensionDownloadLabel = "(Click to generate extension JAR)";
+            //    var pageInfoTemplate = "<div class=\"alfresco-debug-PageInfo\">" +
+            //       "<span class=\"label\">${webScriptLabel}</span>" +
+            //       "<span class=\"value\">${webScriptId}</span>" +
+            //       "<a href=\"${extensionDownloadUrl}\">${extensionDownloadLabel}</a>" +
+            //    "</div>";
+            //    var pageInfo = string.substitute(pageInfoTemplate, this);
+            //    var pageInfoDom = domConstruct.toDom(pageInfo);
+            //    domConstruct.place(pageInfoDom, this.domNode, "first");
+            // }
 
             // See AKU-891 - Prevent all standard drag and drop events from working if they bubble as
             // far as the html element. This decision has been taken to prevent users from inadvertently
