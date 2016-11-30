@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.99
        */
-      highlightMaxAnalyzedChars: 1000,
+      highlightMaxAnalyzedChars: 500,
 
       /**
        * The number of characters to include in a highlight snippet.
@@ -98,7 +98,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.99
        */
-      highlightSnippetCount: 250,
+      highlightSnippetCount: 100,
       
       /**
        * Whether to use SpanScorer to highlight phrase terms only when they appear within the query phrase in 
