@@ -245,6 +245,16 @@ define(["dojo/_base/declare",
       renderSize: "medium",
 
       /**
+       * Indicates whether or not string values should be trimmed.
+       *
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.99
+       */
+      trimValue: false,
+
+      /**
        * Indicates whether or not a message should be displayed in place of the 
        * [propertyToRender]{@link module:alfresco/renderers/Property#propertyToRender} when it is not available.
        * This defaults to false but if configured to be true then the 
@@ -558,6 +568,11 @@ define(["dojo/_base/declare",
          else if (value && this.highlightPrefix && this.highlightPostfix)
          {
             value = value.replace(new RegExp(this.highlightPrefix, "g"), "<mark>").replace(new RegExp(this.highlightPostfix, "g"), "</mark>");
+         }
+
+         if (value && this.trimValue && typeof value.trim === "function")
+         {
+            value = value.trim();
          }
 
          return value;

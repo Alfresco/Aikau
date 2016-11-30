@@ -374,7 +374,8 @@ define(["dojo/_base/declare",
                   renderedValueSuffix: "...\"",
                   highlightValue: this.highlightValue,
                   highlightPrefix: this.showSearchTermHighlights ? this.highlightPrefix : null,
-                  highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null
+                  highlightPostfix: this.showSearchTermHighlights ? this.highlightPostfix : null,
+                  trimValue: true
                }, this.contentNode);
             }
          }

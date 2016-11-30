@@ -61,6 +61,68 @@ define(["dojo/_base/declare",
       autoSuggestAPI: AlfConstants.PROXY_URI + "slingshot/auto-suggest",
 
       /**
+       * A comma-delimited string of the properties to apply search term highlighting to.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.99
+       */
+      highlightFields: "cm:name,cm:description,cm:title,content,ia:descriptionEvent,ia:whatEvent,lnk:title",
+      
+      /**
+       * The number of characters to include in a highlight fragment of the content
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.99
+       */
+      highlightFragmentSize: 255,
+
+      /**
+       * The number of characters to search into the content for the search term.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.99
+       */
+      highlightMaxAnalyzedChars: 1000,
+
+      /**
+       * The number of characters to include in a highlight snippet.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.99
+       */
+      highlightSnippetCount: 250,
+      
+      /**
+       * Whether to use SpanScorer to highlight phrase terms only when they appear within the query phrase in 
+       * the document.
+       * 
+       * @instance
+       * @type {number}
+       * @default
+       * @since 1.0.99
+       */
+      highlightUsePhraseHighlighter: true,
+
+      /**
+       * Collapse contiguous fragments into a single fragment. If the value is true it indicates that contiguous 
+       * fragments will be collapsed into single fragment.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.99
+       */
+      highlightMergeContiguous: false,
+
+      /**
        * This is the default number of items to return as a single page of result data. This value will be used if
        * a specific value isn't supplied in a search request.
        *
@@ -250,9 +312,12 @@ define(["dojo/_base/declare",
                spellcheck: payload.spellcheck || false,
                highlightPrefix: "\u0000",
                highlightPostfix: "\u0003",
-               highlightFields: "cm:name,cm:description,cm:title,content,ia:descriptionEvent,ia:whatEvent,lnk:title",
-               highlightSnippetCount: 30,
-               highlightMergeContiguous: false
+               highlightFields: this.highlightFields,
+               highlightFragmentSize: this.highlightFragmentSize,
+               highlightSnippetCount: this.highlightSnippetCount,
+               highlightMergeContiguous: this.highlightMergeContiguous,
+               highlightMaxAnalyzedChars: this.highlightMaxAnalyzedChars,
+               highlightUsePhraseHighlighter: this.highlightUsePhraseHighlighter
             };
             var config = {
                requestId: payload.requestId,
