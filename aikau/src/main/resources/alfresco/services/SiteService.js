@@ -65,6 +65,33 @@ define(["dojo/_base/declare",
       additionalSitePresets: null,
 
       /**
+       * In order to get a smoother initial rendering of the create site dialog a fixed height
+       * is configured. However when customizing the contents of the create site dialog it may
+       * be advisable to set an alternative height (or configure to be null and allow natural
+       * sizing to occur).
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.99
+       */
+      createSiteDialogHeight: "500px",
+
+      /**
+       * In order to get a smoother initial rendering of the create site dialog a fixed width
+       * is configured. However when customizing the contents of the create site dialog it may
+       * be advisable to set an alternative width (or configure to be null and allow natural
+       * sizing to occur).
+       * 
+       * @instance
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.99
+       */
+      createSiteDialogWidth: "670px",
+
+      /**
        * This is an optional topic that can be configured to allow the create site dialog to have a value
        * set on it. This can be useful when needing to pre-fill fields based changing data within the form
        * (for example a custom preset). The use case is when a custom field needs to make an XHR request
@@ -980,7 +1007,8 @@ define(["dojo/_base/declare",
                dialogTitle: "create-site.dialog.title",
                dialogConfirmationButtonTitle: "create-site-dialog.name.create.label",
                dialogCloseTopic: topics.SITE_CREATION_SUCCESS,
-               contentHeight: "500px",
+               contentHeight: this.createSiteDialogHeight,
+               contentWidth: this.createSiteDialogWidth,
                formSubmissionTopic: topics.SITE_CREATION_REQUEST,
                formSubmissionGlobal: true,
                showValidationErrorsImmediately: false,
