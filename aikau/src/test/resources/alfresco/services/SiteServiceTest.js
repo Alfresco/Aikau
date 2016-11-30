@@ -96,6 +96,16 @@ define(["module",
             });
       },
 
+      // See AKU-1137 - site short name should also show as invalid...
+      "Create site (shortName error shows even before focus)": function() {
+         return this.remote.findByCssSelector(selectors.textBoxes.createSiteTitle.input)
+            .clearValue()
+            .type("used")
+         .end()
+
+         .findDisplayedByCssSelector("#CREATE_SITE_FIELD_SHORTNAME .alfresco-forms-controls-BaseFormControl__validation-error");
+      },
+
       "Create Site (edit shortName stops auto updating)": function() {
          return this.remote.findByCssSelector(selectors.textBoxes.createSiteShortName.input)
             .clearValue()
