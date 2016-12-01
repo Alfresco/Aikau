@@ -32,7 +32,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing",
+        "aikau/core/ChildProcessing",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -43,10 +43,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/on",
         "dojo/_base/event"], 
-        function(declare, CoreWidgetProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
+        function(declare, ChildProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
                  RenderAppendixSentinel, domClass, array, lang, domStyle, on, event) {
    
-   return declare([CoreWidgetProcessing, _AlfDocumentListTopicMixin], {
+   return declare([ChildProcessing, _AlfDocumentListTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -237,8 +237,15 @@ define(["dojo/_base/declare",
             }
 
             var itemsToRender = (this.currentIndex)? this.currentData.items.slice(this.currentIndex): this.currentData.items;
-            array.forEach(itemsToRender, lang.hitch(this, this.renderNextItem));
-            this.allItemsRendered();
+            // array.forEach(itemsToRender, lang.hitch(this, this.renderNextItem));
+            // this.allItemsRendered();
+
+            var promisedItems = [];
+            itemsToRender.forEach(function(item, index) {
+               var promisedItem = this.renderNextItem(item, index);
+               promisedItem && promisedItems.push(promisedItem);
+            }, this);
+            return Promise.all(promisedItems);
          }
          else
          {
@@ -251,14 +258,19 @@ define(["dojo/_base/declare",
        * defined in the JSON model for [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem}
        * @instance
        */
-      renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem() {
-         var itemToRender = this.currentData.items[this.currentIndex];
+      renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem(itemToRender, index) {
+         // var itemToRender = this.currentData.items[this.currentIndex];
+         this.currentItem = itemToRender;
          if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
          {
             // The current item is a marker to render an "appendix". This is a non-data entry into the list
             // of items to be rendered, the original use case is for some kind of "Add" style control that
             // can be used to create a new entry...
-            this.processWidgets(this.widgetsForAppendix, this.containerNode, "RENDER_APPENDIX_SENTINEL");
+            // this.processWidgets(this.widgetsForAppendix, this.containerNode, "RENDER_APPENDIX_SENTINEL");
+            return this.createChildren({
+               widgets: this.widgetsForAppendix,
+               targetNode: this.containerNode
+            });
          }
          else
          {
@@ -267,7 +279,7 @@ define(["dojo/_base/declare",
             
             // Mark the current item with an attribute indicating that it is the last item.
             // This is done for the benefit of renderers that need to know if they are the last item.
-            this.currentData.items[this.currentIndex].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
+            this.currentData.items[index].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
 
             // Set a width if provided...
             if (this.width)
@@ -281,7 +293,11 @@ define(["dojo/_base/declare",
                // var clonedWidgets = lang.clone(this.widgets);
                // Intentionally switched from lang.clone to native JSON approach to cloning for performance...
                var clonedWidgets = JSON.parse(JSON.stringify(this.widgets));
-               this.processWidgets(clonedWidgets, this.containerNode);
+               // this.processWidgets(clonedWidgets, this.containerNode);
+               return this.createChildren({
+                  widgets: clonedWidgets,
+                  targetNode: this.containerNode
+               });
             }
             else
             {

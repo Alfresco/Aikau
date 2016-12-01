@@ -100,7 +100,11 @@ define(["dojo/_base/declare",
          }
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.containerNode);
+            // this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
       }
    });

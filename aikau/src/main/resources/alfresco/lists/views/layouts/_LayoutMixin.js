@@ -31,10 +31,10 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing"], 
-        function(declare, CoreWidgetProcessing) {
+        "aikau/core/ChildProcessing"], 
+        function(declare, ChildProcessing) {
    
-   return declare([CoreWidgetProcessing], {
+   return declare([ChildProcessing], {
 
       /**
        * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#processWidgetConfig}
