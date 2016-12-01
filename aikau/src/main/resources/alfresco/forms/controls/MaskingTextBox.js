@@ -214,6 +214,11 @@ define(["dojo/_base/declare",
                }
             });
             this.setValue(maskedValue);
+
+            if (payload.value)
+            {
+               this._hadFocus = true;
+            }
          }
       }
    });

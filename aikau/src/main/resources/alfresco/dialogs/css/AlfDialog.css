@@ -5,6 +5,8 @@
 
 .alfresco-dialog-AlfDialog {
    &.dijitDialog {
+      opacity: 0;
+
       border: @standard-border;
       border-radius: 4px 4px 4px 4px;
       box-shadow: 0 3px 8px rgba(0,0,0,.1);
@@ -41,6 +43,9 @@
          border: @standard-border;
          font-weight: normal;
       }
+   }
+   &.dialogDisplayed {
+      opacity: 1;
    }
    &--no-min-width {
       &.dijitDialog {

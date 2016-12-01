@@ -1,4 +1,4 @@
-Aikau 1.0.98 Release Notes
+Aikau 1.0.99 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,13 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.99:
+* [AKU-1133](https://issues.alfresco.com/jira/browse/AKU-1133)       - Improve rendering of Create Site dialog opening
+* [AKU-1134](https://issues.alfresco.com/jira/browse/AKU-1134)       - Copyright year update
+* [AKU-1135](https://issues.alfresco.com/jira/browse/AKU-1135)       - Improve SearchService configuration options for search term highlighting
+* [AKU-1136](https://issues.alfresco.com/jira/browse/AKU-1136)       - Improve MoreInfo widget styling
+* [AKU-1137](https://issues.alfresco.com/jira/browse/AKU-1137)       - Impove create site validation display
+
 1.0.98:
 * [AKU-1130](https://issues.alfresco.com/jira/browse/AKU-1130)       - Improve create/edit site customization options through configuration
 * [AKU-1131](https://issues.alfresco.com/jira/browse/AKU-1131)       - Create Link label updated
