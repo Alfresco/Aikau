@@ -23,6 +23,7 @@
  * @module alfresco/core/CoreWidgetProcessing
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/core/ObjectProcessingMixin
+ * @mixes module:alfresco/forms/controls/utilities/RulesEngineMixin
  * @mixinSafe
  * @author Dave Draper
  */
@@ -41,7 +42,8 @@ define(["dojo/_base/declare",
         "dojo/Deferred",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"],
-        function(declare, AlfCore, ObjectProcessingMixin, RulesEngineMixin, ObjectTypeUtils, registry, array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
+        function(declare, AlfCore, ObjectProcessingMixin, RulesEngineMixin, ObjectTypeUtils, registry, 
+                 array, lang, domAttr, domConstruct, domClass, domStyle, Deferred, AlfConstants, WidgetInfo) {
 
    return declare([AlfCore, ObjectProcessingMixin, RulesEngineMixin], {
 
@@ -750,16 +752,16 @@ define(["dojo/_base/declare",
                   }
 
                   // Create a node for debug mode...
-                  // if (AlfConstants.DEBUG && instantiatedWidget.domNode)
-                  // {
-                  //    domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
-                  //    var infoWidget = new WidgetInfo({
-                  //       displayId: widget.id || "",
-                  //       displayType: widget.name,
-                  //       displayConfig: initArgs
-                  //    }).placeAt(instantiatedWidget.domNode);
-                  //    domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
-                  // }
+                  if (AlfConstants.DEBUG && instantiatedWidget.domNode)
+                  {
+                     domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
+                     var infoWidget = new WidgetInfo({
+                        displayId: widget.id || "",
+                        displayType: widget.name,
+                        displayConfig: initArgs
+                     }).placeAt(instantiatedWidget.domNode);
+                     domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
+                  }
 
                   // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
                   // This should cover any widgets created by a call to the processWidgets function but will

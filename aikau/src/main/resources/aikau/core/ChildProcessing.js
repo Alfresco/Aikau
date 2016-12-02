@@ -39,9 +39,11 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/promise/all",
-        "dijit/registry"], 
-        function(declare, CoreWidgetProcessing, lang, array, Deferred, domAttr, domClass, domConstruct, domStyle, all, registry) {
+        "dijit/registry",
+        "service/constants/Default",
+        "alfresco/debug/WidgetInfo"], 
+        function(declare, CoreWidgetProcessing, lang, array, Deferred, domAttr, domClass, domConstruct, domStyle, 
+                registry, AlfConstants, WidgetInfo) {
    
    return declare([CoreWidgetProcessing], {
       
@@ -238,6 +240,18 @@ define(["dojo/_base/declare",
                   domStyle.set(instantiatedWidget.domNode, input.args.style);
                }
 
+               // Create a node for debug mode...
+               if (AlfConstants.DEBUG && instantiatedWidget.domNode)
+               {
+                  domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
+                  var infoWidget = new WidgetInfo({
+                     displayId: input.widget.id || "",
+                     displayType: input.widget.name,
+                     displayConfig: input.args
+                  }).placeAt(instantiatedWidget.domNode);
+                  domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
+               }
+
                // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
                // This should cover any widgets created by a call to the processWidgets function but will
                // not capture widgets instantiated directly (which we should look to phase out) but this is
@@ -246,19 +260,15 @@ define(["dojo/_base/declare",
                {
                   domClass.add(instantiatedWidget.domNode, input.args.additionalCssClasses);
                }
-
-               // input.promise.resolve(instantiatedWidget);
             }
             catch (e)
             {
                this.alfLog("error", "The following error occurred creating a widget", e, this);
-               // input.promise.resolve(null);
             }
          }
          else
          {
             this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  input.widget.name + "'. Please correct the use of this widget in your page definition", this);
-            // input.promise.resolve(null);
          }
          return instantiatedWidget;
       }

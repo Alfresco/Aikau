@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
          lang.mixin(this, config);
          
          // check already resolved dateFormats before doing
-         var lookupKey = this.i18nScope || 'default';
+         var lookupKey = this.i18nScope || "default";
          if (cachedDateFormatsByI18nScope.hasOwnProperty(lookupKey))
          {
              this.dateFormats = JSON.parse(cachedDateFormatsByI18nScope[lookupKey]);

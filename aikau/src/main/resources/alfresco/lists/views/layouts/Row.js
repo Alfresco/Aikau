@@ -37,9 +37,10 @@ define(["dojo/_base/declare",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/dom-class",
-        "dojo/_base/event"], 
+        "dojo/_base/event",
+        "dojo/_base/lang"], 
         function(declare, _WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
-                 _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event) {
+                 _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event, lang) {
 
    return declare([_WidgetBase, _MultiItemRendererMixin, _TemplatedMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
@@ -121,7 +122,7 @@ define(["dojo/_base/declare",
             this.containerNode = this.domNode = document.createElement("tr");
             this.domNode.classList.add("alfresco-lists-views-layouts-Row");
             this.domNode.setAttribute("tabindex", "0");
-            // TODO: Event handler!!
+            this._attach(this.domNode, "onclick", lang.hitch(this, this.onFocusClick));
          }
       },
 
