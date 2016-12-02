@@ -203,6 +203,7 @@ define(["dojo/_base/declare",
        * @param {object} input.promise The promise to resolve with the instantiated widget
        */
       createNewModuleInstance: function aikau_core_ChildProcessing__createNewModuleInstance(input) {
+         // jshint maxcomplexity:false
          var instantiatedWidget;
          if (typeof input.Type === "function")
          {

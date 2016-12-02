@@ -485,13 +485,12 @@ define(["dojo/_base/declare",
                   
                   // Finally, render the current data (when using infinite scroll the data should have been augmented)
                   var promisedData = this.docListRenderer.renderData();
-                  if (promisedData)
+                  // Check to see if any rows were rendered (allows for renderFilters on widgets. If they weren't, render no Data Display.
+                  if (promisedData || query(this.renderFilterSelectorQuery, this.tableNode).length > 0)
                   {
-                     // promisedData.then()
+                     // No action
                   }
                   else
-                  // Check to see if any rows were rendered (allows for renderFilters on widgets. If they weren't, render no Data Display.
-                  // if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
                   {
                      this.renderNoDataDisplay();
                   }

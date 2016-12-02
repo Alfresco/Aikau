@@ -261,6 +261,10 @@ define(["dojo/_base/declare",
       renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem(itemToRender, index) {
          // var itemToRender = this.currentData.items[this.currentIndex];
          this.currentItem = itemToRender;
+         if (!this.currentItem.index || this.currentItem.index === 0)
+         {
+            this.currentItem.index = this.currentIndex;
+         }
          if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
          {
             // The current item is a marker to render an "appendix". This is a non-data entry into the list
