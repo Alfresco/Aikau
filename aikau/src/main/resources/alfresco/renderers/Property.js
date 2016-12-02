@@ -25,6 +25,7 @@
  *
  * @module alfresco/renderers/Property
  * @extends external:dijit/_WidgetBase
+ * @mixes external:dijit/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
@@ -33,6 +34,7 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin",
         "alfresco/renderers/_JsNodeMixin", 
         "alfresco/core/ValueDisplayMapMixin", 
         "alfresco/core/Core", 
@@ -44,10 +46,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style", 
         "dijit/Tooltip", 
         "dojo/on"], 
-        function(declare, _WidgetBase, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, 
+        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, 
             ObjectTypeUtils, UrlUtilsMixin, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
 
-   return declare([_WidgetBase, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -292,28 +294,40 @@ define(["dojo/_base/declare",
        */
       _tooltipPositions: ["below-centered", "above-centered"],
 
+      /**
+       * Builds the DOM model for the widget.
+       * 
+       * @instance
+       * @since 1.0.NEXT
+       */
       buildRendering: function alfresco_renderers_Property__buildRendering() {
-         this.renderedValueNode = this.domNode = document.createElement("span");
-         this.renderedValueClassArray.forEach(function(className) {
-            this.domNode.classList.add(className);
-         }, this);
-         this.domNode.setAttribute("tabindex", "0");
+         if (this.templateString)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.renderedValueNode = this.domNode = document.createElement("span");
+            this.renderedValueClassArray.forEach(function(className) {
+               this.domNode.classList.add(className);
+            }, this);
+            this.domNode.setAttribute("tabindex", "0");
 
-         var innerSpan = document.createElement("span");
-         innerSpan.classList.add("inner");
+            var innerSpan = document.createElement("span");
+            innerSpan.classList.add("inner");
 
-         var labelSpan = document.createElement("span");
-         labelSpan.classList.add("label");
-         labelSpan.textContent = this.label;
+            var labelSpan = document.createElement("span");
+            labelSpan.classList.add("label");
+            labelSpan.textContent = this.label;
 
-         var valueSpan = document.createElement("span");
-         valueSpan.classList.add("value");
-         valueSpan.innerHTML = this.renderedValue;
+            var valueSpan = document.createElement("span");
+            valueSpan.classList.add("value");
+            valueSpan.innerHTML = this.renderedValue;
 
-         innerSpan.appendChild(labelSpan);
-         innerSpan.appendChild(valueSpan);
-         this.domNode.appendChild(innerSpan);
-
+            innerSpan.appendChild(labelSpan);
+            innerSpan.appendChild(valueSpan);
+            this.domNode.appendChild(innerSpan);
+         }
       },
 
       /**

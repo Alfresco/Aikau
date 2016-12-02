@@ -30,6 +30,7 @@
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
+        "dijit/_TemplatedMixin",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/renderers/_PublishPayloadMixin",
@@ -37,10 +38,10 @@ define(["dojo/_base/declare",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/dom-class",
         "dojo/_base/event"], 
-        function(declare, _WidgetBase, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
+        function(declare, _WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
                  _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event) {
 
-   return declare([_WidgetBase, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
+   return declare([_WidgetBase, _MultiItemRendererMixin, _TemplatedMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -104,11 +105,24 @@ define(["dojo/_base/declare",
        */
       zebraStriping: false,
 
+      /**
+       * Builds the DOM model for the widget.
+       * 
+       * @instance
+       * @since 1.0.NEXT
+       */
       buildRendering: function alfresco_lists_views_layouts_Row__buildRendering() {
-         this.containerNode = this.domNode = document.createElement("tr");
-         this.domNode.classList.add("alfresco-lists-views-layouts-Row");
-         this.domNode.setAttribute("tabindex", "0");
-         /// TODO: Event handler!!
+         if (this.templateString)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.containerNode = this.domNode = document.createElement("tr");
+            this.domNode.classList.add("alfresco-lists-views-layouts-Row");
+            this.domNode.setAttribute("tabindex", "0");
+            // TODO: Event handler!!
+         }
       },
 
       /**

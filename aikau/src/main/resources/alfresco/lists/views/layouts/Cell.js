@@ -22,21 +22,22 @@
  * 
  * @module alfresco/lists/views/layouts/Cell
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @mixes external:dijit/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
+        "dijit/_TemplatedMixin",
         "alfresco/core/Core",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
+        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
 
-   return declare([_WidgetBase, AlfCore, _LayoutMixin], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -75,15 +76,28 @@ define(["dojo/_base/declare",
        */
       width: null,
 
+      /**
+       * Builds the DOM model for the widget.
+       * 
+       * @instance
+       * @since 1.0.NEXT
+       */
       buildRendering: function alfresco_lists_views_layouts_Cell__buildRendering() {
-         this.containerNode = this.domNode = document.createElement("td");
-         this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
+         if (this.templateString)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.containerNode = this.domNode = document.createElement("td");
+            this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
+         }
       },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
-       * @instance postCreate
+       * @instance
        */
       postCreate: function alfresco_lists_views_layouts_Cell__postCreate() {
          if (this.colspan)

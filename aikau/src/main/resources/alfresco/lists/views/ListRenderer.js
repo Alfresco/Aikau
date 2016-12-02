@@ -39,7 +39,7 @@
  * 
  * @module alfresco/lists/views/ListRenderer
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @mixes external:dijit/_TemplatedMixin
  * @mixes external:dojo/_KeyNavContainer
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/lists/KeyboardNavigationSuppressionMixin
