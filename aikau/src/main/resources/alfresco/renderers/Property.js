@@ -464,20 +464,15 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
-         // this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-         this.renderedValueClassArray = [this.renderedValueClass,this.renderSize];
+         this.renderedValueClassArray = ["alfresco-renderers-Property", this.renderedValueClass,this.renderSize];
          if (this.renderOnNewLine === true) 
          {
-            // this.renderedValueClass = this.renderedValueClass + " block";
             this.renderedValueClassArray.push("block");
          }
          if (this.deemphasized === true) 
          {
-            // this.renderedValueClass = this.renderedValueClass + " deemphasized";
             this.renderedValueClassArray.push("deemphasize");
          }
-         
-
       },
 
       /**

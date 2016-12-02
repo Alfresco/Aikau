@@ -237,15 +237,16 @@ define(["dojo/_base/declare",
             }
 
             var itemsToRender = (this.currentIndex)? this.currentData.items.slice(this.currentIndex): this.currentData.items;
-            // array.forEach(itemsToRender, lang.hitch(this, this.renderNextItem));
-            // this.allItemsRendered();
-
+            
             var promisedItems = [];
             itemsToRender.forEach(function(item, index) {
                var promisedItem = this.renderNextItem(item, index);
                promisedItem && promisedItems.push(promisedItem);
             }, this);
-            return Promise.all(promisedItems);
+            return Promise.all(promisedItems).then(lang.hitch(this, function(renderedItems) {
+               this.allItemsRendered();
+               return renderedItems;
+            }));
          }
          else
          {
@@ -261,9 +262,10 @@ define(["dojo/_base/declare",
       renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem(itemToRender, index) {
          // var itemToRender = this.currentData.items[this.currentIndex];
          this.currentItem = itemToRender;
-         if (!this.currentItem.index || this.currentItem.index === 0)
+         this.currentIndex = index;
+         if (typeof this.currentItem.index === "undefined")
          {
-            this.currentItem.index = this.currentIndex;
+            this.currentItem.index = index;
          }
          if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
          {
@@ -301,7 +303,12 @@ define(["dojo/_base/declare",
                return this.createChildren({
                   widgets: clonedWidgets,
                   targetNode: this.containerNode
-               });
+               })
+               .then(lang.hitch(this, function(widgets) {
+                  widgets.forEach(this.rootWidgetProcessing, this);
+                  this.allWidgetsProcessed(widgets);
+                  return widgets;
+               }));
             }
             else
             {
@@ -317,52 +324,52 @@ define(["dojo/_base/declare",
        * @param {Object[]}
        * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        */
-      allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets, processWidgetsId) {
-         /*jshint eqnull:true*/
-         if (!processWidgetsId || processWidgetsId === "RENDER_APPENDIX_SENTINEL")
-         {
-            // Push the processed widgets for the last item into the array of rendered widgets...
-            if (!this._renderedItemWidgets)
-            {
-               this._renderedItemWidgets = [];
-            }
+      // allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets, processWidgetsId) {
+      //    /*jshint eqnull:true*/
+      //    if (!processWidgetsId || processWidgetsId === "RENDER_APPENDIX_SENTINEL")
+      //    {
+      //       // Push the processed widgets for the last item into the array of rendered widgets...
+      //       if (!this._renderedItemWidgets)
+      //       {
+      //          this._renderedItemWidgets = [];
+      //       }
 
-            if (!processWidgetsId)
-            {
-               this._renderedItemWidgets.push(widgets);
-            }
+      //       if (!processWidgetsId)
+      //       {
+      //          this._renderedItemWidgets.push(widgets);
+      //       }
             
-            // Increment the current index and check to see if there are more items to render...
-            // Only the root widget(s) will have the currentData object set so we don't start rendering the next item
-            // on nested widgets...
-            this.currentIndex++;
-            if (this.currentData && 
-                this.currentData.items &&
-                this.currentData.items.length != null)
-            {
-               array.forEach(widgets, lang.hitch(this, this.rootWidgetProcessing));
-               if (this.currentIndex < this.currentData.items.length)
-               {
-                  // Render the next item...
-                  this.currentItem = this.currentData.items[this.currentIndex];
+      //       // Increment the current index and check to see if there are more items to render...
+      //       // Only the root widget(s) will have the currentData object set so we don't start rendering the next item
+      //       // on nested widgets...
+      //       this.currentIndex++;
+      //       if (this.currentData && 
+      //           this.currentData.items &&
+      //           this.currentData.items.length != null)
+      //       {
+      //          array.forEach(widgets, lang.hitch(this, this.rootWidgetProcessing));
+      //          if (this.currentIndex < this.currentData.items.length)
+      //          {
+      //             // Render the next item...
+      //             this.currentItem = this.currentData.items[this.currentIndex];
 
-                  // Add in the index...
-                  if (this.currentItem.index == null)
-                  {
-                     this.currentItem.index = this.currentIndex;
-                  }
-               }
-            }
-            else
-            {
-               // TODO: We need to make sure that we're able to stop rendering if another request arrives before we've completed
-            }
-         }
-         else
-         {
-            this.inherited(arguments);
-         }
-      },
+      //             // Add in the index...
+      //             if (this.currentItem.index == null)
+      //             {
+      //                this.currentItem.index = this.currentIndex;
+      //             }
+      //          }
+      //       }
+      //       else
+      //       {
+      //          // TODO: We need to make sure that we're able to stop rendering if another request arrives before we've completed
+      //       }
+      //    }
+      //    else
+      //    {
+      //       this.inherited(arguments);
+      //    }
+      // },
       
       /**
        * @instance

@@ -710,7 +710,7 @@ define(["dojo/_base/declare",
        */
       renderData: function alfresco_lists_views_layouts_Grid__renderData() {
          this.gridCellMapping = {};
-         this.inherited(arguments);
+         return this.inherited(arguments);
       }, 
 
       /**

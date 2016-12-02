@@ -32,6 +32,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/Deferred",
@@ -42,7 +43,7 @@ define(["dojo/_base/declare",
         "dijit/registry",
         "service/constants/Default",
         "alfresco/debug/WidgetInfo"], 
-        function(declare, CoreWidgetProcessing, lang, array, Deferred, domAttr, domClass, domConstruct, domStyle, 
+        function(declare, CoreWidgetProcessing, topics, lang, array, Deferred, domAttr, domClass, domConstruct, domStyle, 
                 registry, AlfConstants, WidgetInfo) {
    
    return declare([CoreWidgetProcessing], {
@@ -108,16 +109,16 @@ define(["dojo/_base/declare",
                   // used as the value with which to resolve the returned promise...
                   var createdChildren = [];
                   results.forEach(function(childWidget) {
-                     if (childWidget)
+                     if (childWidget.widget)
                      {
                         // Handle any dynamic visibility and invisibility rules...
-                        this.setupVisibilityConfigProcessing(childWidget, false);
-                        this.setupVisibilityConfigProcessing(childWidget, true);
+                        this.setupVisibilityConfigProcessing(childWidget.widget, false);
+                        this.setupVisibilityConfigProcessing(childWidget.widget, true);
 
                         // Add the created widget into the target node if provided...
                         if (input.targetNode)
                         {
-                           childWidget.placeAt(input.targetNode, input.targetPosition || "last");
+                           domConstruct.place(childWidget.rootNode.firstChild, input.targetNode, input.targetPosition || "last");
                         }
 
                         // Call post creation widget functioning...
@@ -126,12 +127,14 @@ define(["dojo/_base/declare",
                         });
                         
                         // Finally, add the widget to the array to used to resolve the returned promise...
-                        createdChildren.push(childWidget);
+                        createdChildren.push(childWidget.widget);
                      }
                   }, this);
 
                   // Resove the promise with the created children...
                   resolve(createdChildren);
+
+                  this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE, null, true);
                }));
 
                // TODO: Keep track of widgets to be destroyed?
@@ -203,7 +206,7 @@ define(["dojo/_base/declare",
        * @param {object} input.promise The promise to resolve with the instantiated widget
        */
       createNewModuleInstance: function aikau_core_ChildProcessing__createNewModuleInstance(input) {
-         // jshint maxcomplexity:false
+         // jshint maxcomplexity:false, maxstatements:false
          var instantiatedWidget;
          if (typeof input.Type === "function")
          {
@@ -217,7 +220,16 @@ define(["dojo/_base/declare",
                }
 
                // Instantiate the new widget
-               instantiatedWidget = new input.Type(input.args, domConstruct.create("div", {}));
+               var d = document.createElement("div");
+               var innerNode = this.createWidgetDomNode(input.widget, d, input.widget.className || "");
+
+               var outerNode = innerNode;
+               while (outerNode.parentNode)
+               {
+                  outerNode = outerNode.parentNode;
+               }
+
+               instantiatedWidget = new input.Type(input.args, innerNode);
                if (preferredDomNodeId)
                {
                   domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
@@ -271,7 +283,10 @@ define(["dojo/_base/declare",
          {
             this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  input.widget.name + "'. Please correct the use of this widget in your page definition", this);
          }
-         return instantiatedWidget;
+         return {
+            widget: instantiatedWidget,
+            rootNode: outerNode
+         };
       }
    });
 });
