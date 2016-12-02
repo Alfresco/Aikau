@@ -445,6 +445,7 @@ define(["dojo/_base/declare",
        * most common example of this is when infinite scroll is being used.
        */
       renderView: function alfresco_lists_views_AlfListView__renderView(preserveCurrentData) {
+         // jshint maxcomplexity:false
          if (this.currentData && this.currentData.items)
          {
             if (this.widgetsForAppendix)

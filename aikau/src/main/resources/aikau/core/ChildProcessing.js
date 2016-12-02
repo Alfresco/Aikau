@@ -220,8 +220,8 @@ define(["dojo/_base/declare",
                }
 
                // Instantiate the new widget
-               var d = document.createElement("div");
-               var innerNode = this.createWidgetDomNode(input.widget, d, input.widget.className || "");
+               var tmpTarget = document.createElement("div");
+               var innerNode = this.createWidgetDomNode(input.widget, tmpTarget, input.widget.className || "");
 
                var outerNode = innerNode;
                while (outerNode.parentNode)
