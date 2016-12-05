@@ -122,6 +122,7 @@ define(["dojo/_base/declare",
       postMixInProperties: function alfresco_renderers_Boolean__postMixInProperties() {
          /*jshint maxcomplexity:false*/
 
+         this.inherited(arguments);
          if(typeof this.displayTypeOptions.get(this.displayType) === "undefined")
          {
             this.alfLog("log", "Unknown displayType '" + this.displayType + "'. Please select displayType from: " + this.displayTypeOptions.enums, this);
@@ -192,6 +193,5 @@ define(["dojo/_base/declare",
             }
          }
       }
-
    });
 });

@@ -107,7 +107,8 @@ define(["alfresco/renderers/Property",
        * @override
        */
       postMixInProperties: function alfresco_renderers_ActivitySummary__postMixInProperties() {
-
+         this.inherited(arguments);
+         
          // Ensure we have a valid item
          if (this.currentItem && this.currentItem.activityType) {
 
