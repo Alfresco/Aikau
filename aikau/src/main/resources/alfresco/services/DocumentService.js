@@ -506,7 +506,7 @@ define(["dojo/_base/declare",
                   }
                }
             ],
-            handleOverflow: true
+            handleOverflow: false
          }, true);
       },
 
