@@ -59,29 +59,29 @@ define(["module",
          // Open the dialog for the first item in the list...
          return this.remote.findByCssSelector("#PROPERTY_LINK_ITEM_0 .value")
             .click()
-            .end()
+         .end()
 
          // Wait for the dialog to open...
          .findByCssSelector("#one_DIALOG.dialogDisplayed")
-            .end()
+         .end()
 
          // Close it...
          .findById("one_DIALOG_OK_label")
             .click()
-            .end()
+         .end()
 
          // Wait for it to close...
          .findByCssSelector("#one_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          // Open the dialog for the second item in the list...
          .findByCssSelector("#PROPERTY_LINK_ITEM_1 .value")
             .click()
-            .end()
+         .end()
 
          // Wait for the dialog to open...
          .findByCssSelector("#two_DIALOG.dialogDisplayed")
-            .end()
+         .end()
 
          .findByCssSelector("#two_DIALOG .alfresco-forms-controls-BaseFormControl")
             .isDisplayed()

@@ -42,7 +42,7 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Did not create one (and only one) version widget");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(3) .detail-item__version")
             .then(function(elements) {
@@ -56,22 +56,22 @@ define(["module",
             .then(function(displayed) {
                assert.isFalse(displayed, "Version information visible without hovering");
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(3)")
             .moveMouseTo()
-            .end()
+         .end()
 
          .findByCssSelector(".detail-item__version .value")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Version information not visible when hovering");
             })
-            .end()
+         .end()
 
          .findByCssSelector("body")
             .moveMouseTo(0, 0)
-            .end()
+         .end()
 
          .findByCssSelector(".detail-item__version .value")
             .isDisplayed()
@@ -92,13 +92,13 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of description widgets populated");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".detail-item__description .alfresco-renderers-Property.faded")
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of empty description widgets");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .detail-item__description .alfresco-renderers-Property:not(.faded), .alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__description:not(.faded)")
             .then(function(elements) {
@@ -111,7 +111,7 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Incorrect number of tag widgets created");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__tags")
             .then(function(elements) {
@@ -124,7 +124,7 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Incorrect number of category widgets populated");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(3) .detail-item__category")
             .then(function(elements) {
@@ -137,7 +137,7 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Incorrect number of editing indicators created");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .indicator[alt=editing]")
             .then(function(elements) {
@@ -150,7 +150,7 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Incorrect number of locked banners created");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__lockedBanner:not(.hidden)")
             .then(function(elements) {
@@ -163,7 +163,7 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 2, "Incorrect number of size widgets created");
             })
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(3) .detail-item__size, .alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(4) .detail-item__size")
             .then(function(elements) {
@@ -174,7 +174,7 @@ define(["module",
       "Clicking the comments link only opens the comments for that item": function() {
          return this.remote.findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(1) .comment-link")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_GET_COMMENTS", true)
 
@@ -183,7 +183,7 @@ define(["module",
             .then(function(size) {
                assert.notEqual(size.height, 0, "Comments not expanded for chosen item");
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-documentlibrary-views-AlfDetailedViewItem:nth-child(2) .detail-item__commentsReveal > .content")
             .getSize()
