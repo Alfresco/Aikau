@@ -46,6 +46,28 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/SearchThumbnailMixin.properties"}],
 
       /**
+       * The prefix string that indicates the start of text to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.95
+       */
+      highlightPrefix: "\u0000",
+
+      /**
+       * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
+       * that should be used to identify the content with in the 
+       * [renderedValue]{@link module:alfresco/renderers/Property#renderedValue} to highlight.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.95
+       */
+      highlightPostfix: "\u0003",
+
+      /**
        * Overrides the [inherited default configuration]{@link module:alfresco/node/DraggableNodeMixin#isDraggable}
        * to prevent search result thumbnails from being draggable.
        * 
@@ -161,6 +183,21 @@ define(["dojo/_base/declare",
             // the standard search result linking behaviour...
             this.publishPayload = this.getGeneratedPayload(false, null);
             this.alfPublish(this.publishTopic, this.publishPayload, publishGlobal, publishToParent);
+         }
+      },
+
+      /**
+       * Extends the [inherited function]{@link module:alfresco/renderers/Thumbnail#setImageTitle}
+       * to ensure that image titles have search term highlighting delineation removed.
+       *
+       * @instance
+       * @since 1.0.95
+       */
+      setImageTitle: function alfresco_search_SearchThumbnail__setImageTitle() {
+         this.inherited(arguments);
+         if (this.imgTitle)
+         {
+            this.imgTitle = this.imgTitle.replace(new RegExp(this.highlightPrefix, "g"), "").replace(new RegExp(this.highlightPostfix, "g"), "");
          }
       }
    });
