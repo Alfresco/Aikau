@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
                         this.setupVisibilityConfigProcessing(childWidget.widget, true);
 
                         // Add the created widget into the target node if provided...
-                        if (input.targetNode)
+                        if (input.targetNode && childWidget.rootNode.firstChild)
                         {
                            domConstruct.place(childWidget.rootNode.firstChild, input.targetNode, input.targetPosition || "last");
                         }

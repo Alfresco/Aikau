@@ -490,6 +490,7 @@ define(["dojo/_base/declare",
                   if (promisedData || query(this.renderFilterSelectorQuery, this.tableNode).length > 0)
                   {
                      // No action
+                     promisedData && promisedData.then(lang.hitch(this, this.viewRendered));
                   }
                   else
                   {

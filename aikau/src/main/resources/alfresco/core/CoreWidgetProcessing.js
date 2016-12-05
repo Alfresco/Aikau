@@ -261,8 +261,6 @@ define(["dojo/_base/declare",
          var countdown = lang.getObject(countDownLocation, false, this) - 1;
          lang.setObject(countDownLocation, countdown, this);
 
-         this.alfLog("log", "Widgets expected: ", countdown, this.id);
-
          // 1.0.35 UPDATE
          // If an "processWidgetsId" attribute is provided then we want to make sure that multiple calls to processWidgets
          // will not result in a _processedWidgets attribute containing results different calls. Therefore we want to map each
@@ -685,7 +683,101 @@ define(["dojo/_base/declare",
          // the promise of a widget and only register the widget once all the dependencies have been retrieved
          // and the widget has been instantiated. This ensures that the allWidgetsProcessed function is never
          // called until all widgets have truly been created.
-         var promisedWidget = new Deferred();
+         // var promisedWidget = new Deferred();
+         var promisedWidget = new Promise(function(resolve) {
+            // Create a reference for the widget to be added to. Technically the require statement
+            // will need to asynchronously request the widget module - however, assuming the widget
+            // has been included in such a way that it will have been included in the generated
+            // module cache then the require call will actually process synchronously and the widget
+            // variable will be returned with an assigned value...
+            var instantiatedWidget;
+
+            // Dynamically require the specified widget
+            // The use of indirection is done so modules will not rolled into a build (should we do one)
+            var requires = [widget.name];
+            require(requires, function(WidgetType) {
+               /* jshint maxcomplexity:false,maxstatements:false*/
+               // Just to be sure, check that no widget doesn't already exist with that id and
+               // if it does, generate a new one...
+               if (typeof WidgetType === "function")
+               {
+                  try
+                  {
+                     var preferredDomNodeId;
+                     if (registry.byId(initArgs.id))
+                     {
+                        preferredDomNodeId = initArgs.id;
+                        initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
+                     }
+
+                     // Instantiate the new widget
+                     // This is an asynchronous response so we need a callback method...
+                     instantiatedWidget = new WidgetType(initArgs, domNode);
+                     if (!_this.widgetsToDestroy)
+                     {
+                        _this.widgetsToDestroy = [];
+                        _this.widgetsToDestroy.push(widget);
+                     }
+
+                     if (preferredDomNodeId)
+                     {
+                        domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
+                        instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
+                     }
+
+                     if (typeof instantiatedWidget.startup === "function")
+                     {
+                        instantiatedWidget.startup();
+                     }
+
+                     var assignToScope = widget.assignToScope || _this;
+                     if (widget.assignTo)
+                     {
+                        assignToScope[widget.assignTo] = instantiatedWidget;
+                     }
+
+                     // Set any additional style attributes...
+                     if (initArgs.style && instantiatedWidget.domNode)
+                     {
+                        domStyle.set(instantiatedWidget.domNode, initArgs.style);
+                     }
+
+                     // Create a node for debug mode...
+                     if (AlfConstants.DEBUG && instantiatedWidget.domNode)
+                     {
+                        domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
+                        var infoWidget = new WidgetInfo({
+                           displayId: widget.id || "",
+                           displayType: widget.name,
+                           displayConfig: initArgs
+                        }).placeAt(instantiatedWidget.domNode);
+                        domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
+                     }
+
+                     // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
+                     // This should cover any widgets created by a call to the processWidgets function but will
+                     // not capture widgets instantiated directly (which we should look to phase out) but this is
+                     // why "additionalCssClasses" may still be defined and set explicitly in some widgets.
+                     if (instantiatedWidget.domNode && initArgs.additionalCssClasses)
+                     {
+                        domClass.add(instantiatedWidget.domNode, initArgs.additionalCssClasses);
+                     }
+                     resolve(instantiatedWidget);
+                  }
+                  catch (e)
+                  {
+                     _this.alfLog("error", "The following error occurred creating a widget", e, _this);
+                     resolve(null);
+                  }
+               }
+               else
+               {
+                  _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", _this);
+                  resolve(null);
+               }
+            });
+         });
+
          promisedWidget.then(lang.hitch(this, function(resolvedWidget) {
             if (callback)
             {
@@ -693,105 +785,11 @@ define(["dojo/_base/declare",
             }
          }));
 
-         // Create a reference for the widget to be added to. Technically the require statement
-         // will need to asynchronously request the widget module - however, assuming the widget
-         // has been included in such a way that it will have been included in the generated
-         // module cache then the require call will actually process synchronously and the widget
-         // variable will be returned with an assigned value...
-         var instantiatedWidget;
-
-         // Dynamically require the specified widget
-         // The use of indirection is done so modules will not rolled into a build (should we do one)
-         var requires = [widget.name];
-         require(requires, function(WidgetType) {
-            /* jshint maxcomplexity:false,maxstatements:false*/
-            // Just to be sure, check that no widget doesn't already exist with that id and
-            // if it does, generate a new one...
-            if (typeof WidgetType === "function")
-            {
-               try
-               {
-                  var preferredDomNodeId;
-                  if (registry.byId(initArgs.id))
-                  {
-                     preferredDomNodeId = initArgs.id;
-                     initArgs.id = widget.name.replace(/\//g, "_") + "___" + _this.generateUuid();
-                  }
-
-                  // Instantiate the new widget
-                  // This is an asynchronous response so we need a callback method...
-                  instantiatedWidget = new WidgetType(initArgs, domNode);
-                  if (!_this.widgetsToDestroy)
-                  {
-                     _this.widgetsToDestroy = [];
-                     _this.widgetsToDestroy.push(widget);
-                  }
-
-                  if (preferredDomNodeId)
-                  {
-                     domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
-                     instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
-                  }
-
-                  _this.alfLog("log", "Created widget", instantiatedWidget);
-                  if (typeof instantiatedWidget.startup === "function")
-                  {
-                     instantiatedWidget.startup();
-                  }
-
-                  var assignToScope = widget.assignToScope || _this;
-                  if (widget.assignTo)
-                  {
-                     assignToScope[widget.assignTo] = instantiatedWidget;
-                  }
-
-                  // Set any additional style attributes...
-                  if (initArgs.style && instantiatedWidget.domNode)
-                  {
-                     domStyle.set(instantiatedWidget.domNode, initArgs.style);
-                  }
-
-                  // Create a node for debug mode...
-                  if (AlfConstants.DEBUG && instantiatedWidget.domNode)
-                  {
-                     domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
-                     var infoWidget = new WidgetInfo({
-                        displayId: widget.id || "",
-                        displayType: widget.name,
-                        displayConfig: initArgs
-                     }).placeAt(instantiatedWidget.domNode);
-                     domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
-                  }
-
-                  // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
-                  // This should cover any widgets created by a call to the processWidgets function but will
-                  // not capture widgets instantiated directly (which we should look to phase out) but this is
-                  // why "additionalCssClasses" may still be defined and set explicitly in some widgets.
-                  if (instantiatedWidget.domNode && initArgs.additionalCssClasses)
-                  {
-                     domClass.add(instantiatedWidget.domNode, initArgs.additionalCssClasses);
-                  }
-                  promisedWidget.resolve(instantiatedWidget);
-               }
-               catch (e)
-               {
-                  _this.alfLog("error", "The following error occurred creating a widget", e, _this);
-                  promisedWidget.resolve(null);
-                  return null;
-               }
-            }
-            else
-            {
-               _this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  widget.name + "'. Please correct the use of this widget in your page definition", _this);
-               promisedWidget.resolve(null);
-            }
-         });
-
          if (!widget)
          {
             this.alfLog("warn", "A widget was not declared so that it's modules were included in the loader cache", widget, this);
          }
-         return instantiatedWidget || promisedWidget.promise;
+         return promisedWidget;
       },
 
       /**
