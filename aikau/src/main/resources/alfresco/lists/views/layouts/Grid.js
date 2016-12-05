@@ -262,7 +262,10 @@ define(["dojo/_base/declare",
          {
             if (this.widgets)
             {
-               this.processWidgets(this.widgets, this.containerNode);
+               this.createChildren({
+                  widgets: this.widgets,
+                  targetNode: this.containerNode
+               });
             }
          }
 
@@ -668,7 +671,7 @@ define(["dojo/_base/declare",
        * @param {string} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
        */
       createWidgetDomNode: function alfresco_lists_views_layouts_Grid__createWidgetDomNode(widget, rootNode, /*jshint unused:false*/ rootClassName) {
-         var nodeToAdd = rootNode;
+         var nodeToAdd;
          if (this.currentIndex % this.columns === 0)
          {
             // Create a new row if the maximum number of columns has been exceeded...
@@ -676,13 +679,14 @@ define(["dojo/_base/declare",
             nodeToAdd = domConstruct.create("TD", {
                className: "alfresco-lists-views-layouts-Grid__cell"
             }, newRow);
+
+            this.currentRow = newRow;
          }
          else
          {
-            var lastNode = rootNode.children[rootNode.children.length-1];
             nodeToAdd = domConstruct.create("TD", {
                className: "alfresco-lists-views-layouts-Grid__cell"
-            }, lastNode);
+            }, this.currentRow);
          }
 
          // TODO: Add warnings
@@ -710,7 +714,7 @@ define(["dojo/_base/declare",
        */
       renderData: function alfresco_lists_views_layouts_Grid__renderData() {
          this.gridCellMapping = {};
-         this.inherited(arguments);
+         return this.inherited(arguments);
       }, 
 
       /**

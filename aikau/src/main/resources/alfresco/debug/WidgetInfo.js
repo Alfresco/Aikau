@@ -24,7 +24,7 @@
  * 
  * @module alfresco/debug/WidgetInfo
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @mixes external:dijit/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
@@ -32,13 +32,14 @@ define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
         "dijit/_OnDijitClickMixin",
-        "dojo/text!./templates/WidgetInfo.html",
         "dojo/text!./templates/WidgetInfoData.html",
         "alfresco/core/Core",
+        "dojo/_base/lang",
         "dijit/TooltipDialog",
         "dijit/popup",
         "dojo/string"], 
-        function(declare, _Widget, _Templated, _OnDijitClickMixin, template, dataTemplate, AlfCore, TooltipDialog, popup, string) {
+        function(declare, _Widget, _Templated, _OnDijitClickMixin, dataTemplate, AlfCore, lang, 
+                 TooltipDialog, popup, string) {
    
    return declare([_Widget, _Templated, _OnDijitClickMixin, AlfCore], {
       
@@ -59,13 +60,6 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/WidgetInfo.properties"}],
       
       /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
-      
-      /**
        * Sets up the image source and it's alt text.
        * 
        * @instance
@@ -81,6 +75,32 @@ define(["dojo/_base/declare",
          else
          {
             this.altText = this.message("widgetInfo.unknown.alt.text");
+         }
+      },
+
+      /**
+       * Builds the DOM model for the widget.
+       * 
+       * @instance
+       * @since 1.0.NEXT
+       */
+      buildRendering: function alfresco_debug_WidgetInfo__buildRendering() {
+         if (this.templateString)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.domNode = document.createElement("div");
+            this.domNode.classList.add("alfresco-debug-WidgetInfo");
+            
+            var imgNode = document.createElement("img");
+            imgNode.classList.add("image");
+            imgNode.setAttribute("src", this.imgSrc);
+            imgNode.setAttribute("alt", this.altText);
+            this._attach(imgNode, "ondijitclick", lang.hitch(this, this.showInfo));
+
+            this.domNode.appendChild(imgNode);
          }
       },
 

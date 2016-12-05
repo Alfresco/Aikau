@@ -22,7 +22,6 @@
  * 
  * @module alfresco/lists/views/layouts/Row
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
@@ -32,18 +31,18 @@
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Row.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/core/Core",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/dom-class",
-        "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
-                 _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event) {
+        "dojo/_base/event",
+        "dojo/_base/lang"], 
+        function(declare, _WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
+                 _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event, lang) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
+   return declare([_WidgetBase, _MultiItemRendererMixin, _TemplatedMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -53,14 +52,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Row.css"}]
        */
       cssRequirements: [{cssFile:"./css/Row.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -116,11 +107,50 @@ define(["dojo/_base/declare",
       zebraStriping: false,
 
       /**
+       * Builds the DOM model for the widget.
+       * 
+       * @instance
+       * @since 1.0.NEXT
+       */
+      buildRendering: function alfresco_lists_views_layouts_Row__buildRendering() {
+         if (this.templateString)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.containerNode = this.domNode = document.createElement("tr");
+            this.domNode.classList.add("alfresco-lists-views-layouts-Row");
+            this.domNode.setAttribute("tabindex", "0");
+            this._attach(this.domNode, "onclick", lang.hitch(this, this.onFocusClick));
+         }
+      },
+      
+      /**
+       * @instance
+       * @since 1.0.NEXT
+       */
+      postMixInProperties : function alfresco_lists_views_layouts_Row__postMixInProperties() {
+          // this widget (as all Aikau widgets) can be configured with countless config attributes
+          // _applyAttributes causes significant overhead since it processes all "as if" they can be mapped to DOM
+          // most Aikau widgets would probably do good to prevent that
+          // those that extend Dojo/Dijit widgets may want to provide a reduced set
+          this._paramsOriginal = this.params;
+          this.params = null;
+          
+          this.inherited(arguments);
+      },
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Row__postCreate() {
+         // restore params for anyone that needs it later
+         this.params = this._paramsOriginal;
+         delete this._paramsOriginal;
+          
          domClass.add(this.domNode, this.additionalCssClasses ? this.additionalCssClasses : "");
          if (this.widgets)
          {
@@ -128,7 +158,11 @@ define(["dojo/_base/declare",
             {
                this.processObject(this.widgetModelModifiers, this.widgets);
             }
-            this.processWidgets(this.widgets, this.containerNode);
+            // this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
 
          if (this.hasUploadPermissions() === true)

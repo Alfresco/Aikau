@@ -32,6 +32,7 @@
  */
 define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
+        "alfresco/core/topics",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/Deferred",
@@ -39,9 +40,11 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/promise/all",
-        "dijit/registry"], 
-        function(declare, CoreWidgetProcessing, lang, array, Deferred, domAttr, domClass, domConstruct, domStyle, all, registry) {
+        "dijit/registry",
+        "service/constants/Default",
+        "alfresco/debug/WidgetInfo"], 
+        function(declare, CoreWidgetProcessing, topics, lang, array, Deferred, domAttr, domClass, domConstruct, domStyle, 
+                registry, AlfConstants, WidgetInfo) {
    
    return declare([CoreWidgetProcessing], {
       
@@ -67,131 +70,83 @@ define(["dojo/_base/declare",
        * @returns {object} A promise of the children to be created.
        */
       createChildren: function aikau_core_ChildProcessing__createChildren(input) {
-         var children = new Deferred();
-
-         // TODO: Are we better using something like lodash here?
-         if (lang.isArray(input.widgets))
-         {
-            // Create a map to hold all the promises (one for each child)...
-            // This map will be passed to the promise/all function that will resolve when 
-            // all the promises have been resolved...
-            var promises = {};
-         
-            // Filter the children to ensure that only those child matching the filter rules
-            // will be created...
-            var filteredChildren = this.filterChildren({
-               widgets: input.widgets
-            });
-
-            // Create each child widget...
-            array.forEach(filteredChildren.widgets, lang.hitch(this, function(widget, index) {
-
-               // Make a request to create the child, the response will be an object that will
-               // contain an attribute that is the promised...
-               var childData = this.createChild({
-                  widget: widget,
-                  index: index
+         var children = new Promise(lang.hitch(this, function(resolve) {
+            if (lang.isArray(input.widgets))
+            {
+               // Create a map to hold all the promises (one for each child)...
+               // This map will be passed to the promise/all function that will resolve when 
+               // all the promises have been resolved...
+               var promises = [];
+            
+               // Filter the children to ensure that only those child matching the filter rules
+               // will be created...
+               var filteredChildren = this.filterChildren({
+                  widgets: input.widgets
                });
 
-               // Add the promised child to the map of all promises, using the array index as the
-               // key...
-               promises[index] = childData.promisedChild;
-            }));
+               filteredChildren.widgets.forEach( function( widget , index) {
 
-            if (!this._childWidgets)
-            {
-               this._childWidgets = [];
-            }
+                  // Make a request to create the child, the response will be an object that will
+                  // contain an attribute that is the promised...
+                  var promisedChild = this.createChild({
+                     widget: widget,
+                     index: index
+                  });
+                  promises.push(promisedChild);
 
-            // If the targetNode is already in the browser document, then we can
-            // inform all the created children that they too are now in the browser
-            // document once creation has completed...
-            var targetNodeInDocument = document.body.contains(input.targetNode);
-            
-            // It is necessary to create a Deferred object for widgets at the "top" of the
-            // creation chain that were not created in calls to this function. This ensures
-            // that there is something to resolve...
-            if (!this._addedToDocument)
-            {
-               this._addedToDocument = new Deferred();
-            }
+               }, this);
 
-            // Use "all" here to add the created widgets to the targetNode once they have all been
-            // created (or have failed to create)...
-            all(promises).then(lang.hitch(this, lang.hitch(this, function(results) {
-               
-               // Create an array to hold all the child widgets that get created, this will be 
-               // used as the value with which to resolve the returned promise...
-               var createdChildren = [];
-               for (var key in results) {
-                  if (results.hasOwnProperty(key)) {
-                     var childWidget = results[key];
-                     if (childWidget)
+               if (!this._childWidgets)
+               {
+                  this._childWidgets = [];
+               }
+
+               // Use "all" here to add the created widgets to the targetNode once they have all been
+               // created (or have failed to create)...
+               Promise.all(promises).then(lang.hitch(this, function(results) {
+                  
+                  // Create an array to hold all the child widgets that get created, this will be 
+                  // used as the value with which to resolve the returned promise...
+                  var createdChildren = [];
+                  results.forEach(function(childWidget) {
+                     if (childWidget.widget)
                      {
+                        // Handle any dynamic visibility and invisibility rules...
+                        this.setupVisibilityConfigProcessing(childWidget.widget, false);
+                        this.setupVisibilityConfigProcessing(childWidget.widget, true);
+
                         // Add the created widget into the target node if provided...
-                        if (input.targetNode)
+                        if (input.targetNode && childWidget.rootNode.firstChild)
                         {
-                           childWidget.placeAt(input.targetNode, input.targetPosition || "last");
+                           domConstruct.place(childWidget.rootNode.firstChild, input.targetNode, input.targetPosition || "last");
                         }
 
                         // Call post creation widget functioning...
                         this.postCreationProcessing({
                            widget: childWidget
                         });
-
-                        // Create a new Deferred object for each child widget to be resolved when
-                        // it is added to the document. Chain a call to the onAddedToDocument function
-                        // using the widget itself as the execution scope...
-                        if (typeof childWidget.onAddedToDocument === "function") 
-                        {
-                           if (!childWidget._addedToDocument)
-                           {
-                              childWidget._addedToDocument = new Deferred();
-                           }
-                           childWidget._addedToDocument.then(lang.hitch(childWidget, childWidget.onAddedToDocument));
-                        }
                         
                         // Finally, add the widget to the array to used to resolve the returned promise...
-                        createdChildren.push(childWidget);
+                        createdChildren.push(childWidget.widget);
                      }
-                  }
-               }
-               
-               // If this widget is already in the document then we can resolve its "added to document"
-               // promise immediately, this will trigger a chained function to notify all the child widgets
-               // that they are in the document...
-               if (targetNodeInDocument)
-               {
-                  this._addedToDocument.resolve(); 
-               }
+                  }, this);
 
-               // Resove the promise with the created children...
-               children.resolve(createdChildren);
-            })));
+                  // Resove the promise with the created children...
+                  resolve(createdChildren);
 
-            // TODO: Keep track of widgets to be destroyed?
-         }
-         else
-         {
-            // If there are no children to create then just resolve with an empty list
-            children.resolve([]);
-         }
+                  this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE, null, true);
+               }));
 
-         // We are going to return a promise chain here that will ultimately contain the created
-         // widgets, but we want to insert a function in the chain to ensure that all the child
-         // widgets "added to document" promises are resolved when the current widget is added 
-         // to the document...
-         return children.then(lang.hitch(this, function(widgets) {
-            this._addedToDocument && this._addedToDocument.then(function() {
-               array.forEach(widgets, function(widget) {
-                  if (widget._addedToDocument && typeof widget._addedToDocument.resolve === "function")
-                  {
-                     widget._addedToDocument.resolve();
-                  }
-               });
-            });
-            return widgets;
+               // TODO: Keep track of widgets to be destroyed?
+            }
+            else
+            {
+               // If there are no children to create then just resolve with an empty list
+               resolve([]);
+            }
+
          }));
+         return children;
       },
       
       /**
@@ -205,10 +160,10 @@ define(["dojo/_base/declare",
        */
       filterChildren: function alfresco_core_ChildProcessing__filterChildren(input) {
          var output = {};
-
-         // TODO: Add filtering based on CoreWidgetProcessing code later
-         output.widgets = input.widgets;
-
+         if (input.widgets)
+         {
+            output.widgets = input.widgets.filter(this.filterWidget, this);
+         }
          return output;
       },
 
@@ -221,25 +176,20 @@ define(["dojo/_base/declare",
        * @returns {object} An object containing a promise to the created child
        */
       createChild: function aikau_core_ChildProcessing__createChild(input) {
-         var output = {};
-
          var initArgs = this.processWidgetConfig(input.widget);
-
-         var promisedWidget = new Deferred();
-         output.promisedChild = promisedWidget.promise;
-
-         var widget = input.widget;
-         var requires = [widget.name];
-         require(requires, lang.hitch(this, function(type) {
-            this.createNewModuleInstance({
-               Type: type,
-               widget: widget,
-               args: initArgs,
-               promise: promisedWidget
-            });
+         var promisedWidget = new Promise(lang.hitch(this, function(resolve) {
+            var widget = input.widget;
+            var requires = [widget.name];
+            require(requires, lang.hitch(this, function(type) {
+               resolve(this.createNewModuleInstance({
+                  Type: type,
+                  widget: widget,
+                  args: initArgs,
+                  promise: promisedWidget
+               }));
+            }));
          }));
-
-         return output;
+         return promisedWidget;
       },
 
       /**
@@ -256,6 +206,8 @@ define(["dojo/_base/declare",
        * @param {object} input.promise The promise to resolve with the instantiated widget
        */
       createNewModuleInstance: function aikau_core_ChildProcessing__createNewModuleInstance(input) {
+         // jshint maxcomplexity:false, maxstatements:false
+         var instantiatedWidget;
          if (typeof input.Type === "function")
          {
             try
@@ -268,7 +220,16 @@ define(["dojo/_base/declare",
                }
 
                // Instantiate the new widget
-               var instantiatedWidget = new input.Type(input.args, domConstruct.create("div", {}));
+               var tmpTarget = document.createElement("div");
+               var innerNode = this.createWidgetDomNode(input.widget, tmpTarget, input.widget.className || "");
+
+               var outerNode = innerNode;
+               while (outerNode.parentNode)
+               {
+                  outerNode = outerNode.parentNode;
+               }
+
+               instantiatedWidget = new input.Type(input.args, innerNode);
                if (preferredDomNodeId)
                {
                   domAttr.set(instantiatedWidget.domNode, "id", preferredDomNodeId);
@@ -292,6 +253,18 @@ define(["dojo/_base/declare",
                   domStyle.set(instantiatedWidget.domNode, input.args.style);
                }
 
+               // Create a node for debug mode...
+               if (AlfConstants.DEBUG && instantiatedWidget.domNode)
+               {
+                  domClass.add(instantiatedWidget.domNode, "alfresco-debug-Info highlight");
+                  var infoWidget = new WidgetInfo({
+                     displayId: input.widget.id || "",
+                     displayType: input.widget.name,
+                     displayConfig: input.args
+                  }).placeAt(instantiatedWidget.domNode);
+                  domConstruct.place(infoWidget.domNode, instantiatedWidget.domNode, "first");
+               }
+
                // Look to see if we can add any additional CSS classes configured onto the instantiated widgets
                // This should cover any widgets created by a call to the processWidgets function but will
                // not capture widgets instantiated directly (which we should look to phase out) but this is
@@ -300,20 +273,20 @@ define(["dojo/_base/declare",
                {
                   domClass.add(instantiatedWidget.domNode, input.args.additionalCssClasses);
                }
-
-               input.promise.resolve(instantiatedWidget);
             }
             catch (e)
             {
                this.alfLog("error", "The following error occurred creating a widget", e, this);
-               input.promise.resolve(null);
             }
          }
          else
          {
             this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  input.widget.name + "'. Please correct the use of this widget in your page definition", this);
-            input.promise.resolve(null);
          }
+         return {
+            widget: instantiatedWidget,
+            rootNode: outerNode
+         };
       }
    });
 });

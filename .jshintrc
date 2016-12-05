@@ -31,7 +31,8 @@
       "model": false,
       "appContext": false,
       "JSON": false,
-      "PDFJS": false
+      "PDFJS": false,
+      "Promise": false
    },
 
    "expr": true,

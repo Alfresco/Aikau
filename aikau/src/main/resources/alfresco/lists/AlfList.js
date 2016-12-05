@@ -100,7 +100,7 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin",
         "dojo/text!./templates/AlfList.html",
         "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
+        "aikau/core/ChildProcessing",
         "alfresco/core/topics",
         "alfresco/core/WidgetsCreator",
         "alfresco/lists/SelectedItemStateMixin",
@@ -114,11 +114,11 @@ define(["dojo/_base/declare",
         "dojo/dom-class",
         "dojo/io-query",
         "dojo/sniff"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
+        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, ChildProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
                  DynamicWidgetProcessingTopics, AlfListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct,
                  domClass, ioQuery, sniff) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
+   return declare([_WidgetBase, _TemplatedMixin, AlfCore, ChildProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -658,7 +658,13 @@ define(["dojo/_base/declare",
             // for hasty re-insertion if necessary. It is necessary to clone here because
             // the views will clone as necessary...
             var clonedWidgets = JSON.parse(JSON.stringify(this.widgets));
-            this.processWidgets(clonedWidgets, null, this.viewWidgetsMappingId);
+            // this.processWidgets(clonedWidgets, null, this.viewWidgetsMappingId);
+            this.createChildren({
+               widgets: clonedWidgets,
+               targetNode: null
+            }).then(lang.hitch(this, function(widgets) {
+               this.allWidgetsProcessed(widgets, this.viewWidgetsMappingId);
+            }));
          }
       },
 
@@ -1497,7 +1503,13 @@ define(["dojo/_base/declare",
                {
                   this.processObject(this.viewModifiers, clonedWidgets);
                }
-               this.processWidgets(clonedWidgets, null, "NEW_VIEW_INSTANCE");
+               // this.processWidgets(clonedWidgets, null, "NEW_VIEW_INSTANCE");
+               this.createChildren({
+                  widgets: clonedWidgets,
+                  targetNode: this.containerNode
+               }).then(lang.hitch(this, function(widgets) {
+                  this.allWidgetsProcessed(widgets, "NEW_VIEW_INSTANCE");
+               }));
             }
          }
 

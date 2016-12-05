@@ -22,21 +22,20 @@
  * 
  * @module alfresco/lists/views/layouts/Cell
  * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @mixes external:dijit/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Cell.html",
         "alfresco/core/Core",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
+        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
       
@@ -48,14 +47,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Cell.css"}]
        */
       cssRequirements: [{cssFile:"./css/Cell.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -86,11 +77,48 @@ define(["dojo/_base/declare",
       width: null,
 
       /**
+       * Builds the DOM model for the widget.
+       * 
+       * @instance
+       * @since 1.0.NEXT
+       */
+      buildRendering: function alfresco_lists_views_layouts_Cell__buildRendering() {
+         if (this.templateString)
+         {
+            this.inherited(arguments);
+         }
+         else
+         {
+            this.containerNode = this.domNode = document.createElement("td");
+            this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
+         }
+      },
+      
+      /**
+       * @instance
+       * @since 1.0.NEXT
+       */
+      postMixInProperties : function alfresco_lists_views_layouts_Cell__postMixInProperties() {
+          // this widget (as all Aikau widgets) can be configured with countless config attributes
+          // _applyAttributes causes significant overhead since it processes all "as if" they can be mapped to DOM
+          // most Aikau widgets would probably do good to prevent that
+          // those that extend Dojo/Dijit widgets may want to provide a reduced set
+          var paramsOriginal = this.params;
+          this.params = null;
+          
+          this.inherited(arguments);
+      },
+
+      /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
-       * @instance postCreate
+       * @instance
        */
       postCreate: function alfresco_lists_views_layouts_Cell__postCreate() {
+         // restore params for anyone that needs it later
+         this.params = this._paramsOriginal;
+         delete this._paramsOriginal;
+          
          if (this.colspan)
          {
             domAttr.set(this.domNode, "colspan", this.colspan);
@@ -105,7 +133,11 @@ define(["dojo/_base/declare",
          }
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.containerNode);
+            // this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
       }
    });
