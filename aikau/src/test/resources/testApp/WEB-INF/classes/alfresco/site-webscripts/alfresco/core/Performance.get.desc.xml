@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Performance Measurement Page</shortname>
+  <description>Page for testing performance</description>
+  <family>aikau-unit-tests</family>
+  <url>/Performance</url>
+</webscript>

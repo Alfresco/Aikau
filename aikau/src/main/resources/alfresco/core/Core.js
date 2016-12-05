@@ -812,11 +812,14 @@ define(["dojo/_base/declare",
       alfLog: function alfresco_core_Core__alfLog(severity, message) {
          // arguments.callee is deprecated, but there's no alternative to it, so ignore errors.
          /*jshint unused:false, noarg:false*/
-         this.alfPublish(this.alfLoggingTopic, {
-            callerName: arguments.callee.caller.name,
-            severity: severity,
-            messageArgs: Array.prototype.slice.call(arguments, 1)
-         }, true);
+         if (AlfConstants.DEBUG)
+         {
+            this.alfPublish(this.alfLoggingTopic, {
+               callerName: arguments.callee.caller.name,
+               severity: severity,
+               messageArgs: Array.prototype.slice.call(arguments, 1)
+            }, true);
+         }
       },
 
       /**
