@@ -467,8 +467,8 @@ define(["dojo/_base/declare",
        */
       toggledOn: function alfresco_renderers_Toggle__toggledOn() {
          var responseTopic = this.generateUuid();
-         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOnSuccess));
-         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOnFailure));
+         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOnSuccess), true);
+         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOnFailure), true);
          if (this.toggleOnPublishPayload)
          {
             var publishPayload = this.generatePayload(this.toggleOnPublishPayload, 
@@ -486,6 +486,8 @@ define(["dojo/_base/declare",
          {
             this.alfPublish(this.toggleOnTopic, {
                alfResponseTopic: responseTopic,
+               alfSuccessTopic: responseTopic + "_SUCCESS",
+               alfFailureTopic: responseTopic + "_FAILURE",
                node: this.currentItem
             }, true);
          }
@@ -499,8 +501,8 @@ define(["dojo/_base/declare",
        */
       toggledOff: function alfresco_renderers_Toggle__toggledOff() {
          var responseTopic = this.generateUuid();
-         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOffSuccess));
-         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOffFailure));
+         this._successHandle = this.alfSubscribe(responseTopic + "_SUCCESS", lang.hitch(this, this.onToggleOffSuccess), true);
+         this._failureHandle = this.alfSubscribe(responseTopic + "_FAILURE", lang.hitch(this, this.onToggleOffFailure), true);
          if (this.toggleOffPublishPayload)
          {
             var publishPayload = this.generatePayload(this.toggleOffPublishPayload, 
@@ -518,6 +520,8 @@ define(["dojo/_base/declare",
          {
             this.alfPublish(this.toggleOffTopic, {
                alfResponseTopic: responseTopic,
+               alfSuccessTopic: responseTopic + "_SUCCESS",
+               alfFailureTopic: responseTopic + "_FAILURE",
                node: this.currentItem
             }, true);
          }
