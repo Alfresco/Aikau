@@ -93,6 +93,21 @@ define(["dojo/_base/declare",
             this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
          }
       },
+      
+      /**
+       * @instance
+       * @since 1.0.NEXT
+       */
+      postMixInProperties : function alfresco_lists_views_layouts_Cell__postMixInProperties() {
+          // this widget (as all Aikau widgets) can be configured with countless config attributes
+          // _applyAttributes causes significant overhead since it processes all "as if" they can be mapped to DOM
+          // most Aikau widgets would probably do good to prevent that
+          // those that extend Dojo/Dijit widgets may want to provide a reduced set
+          var paramsOriginal = this.params;
+          this.params = null;
+          
+          this.inherited(arguments);
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
@@ -100,6 +115,10 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_lists_views_layouts_Cell__postCreate() {
+         // restore params for anyone that needs it later
+         this.params = this._paramsOriginal;
+         delete this._paramsOriginal;
+          
          if (this.colspan)
          {
             domAttr.set(this.domNode, "colspan", this.colspan);

@@ -125,6 +125,21 @@ define(["dojo/_base/declare",
             this._attach(this.domNode, "onclick", lang.hitch(this, this.onFocusClick));
          }
       },
+      
+      /**
+       * @instance
+       * @since 1.0.NEXT
+       */
+      postMixInProperties : function alfresco_lists_views_layouts_Row__postMixInProperties() {
+          // this widget (as all Aikau widgets) can be configured with countless config attributes
+          // _applyAttributes causes significant overhead since it processes all "as if" they can be mapped to DOM
+          // most Aikau widgets would probably do good to prevent that
+          // those that extend Dojo/Dijit widgets may want to provide a reduced set
+          this._paramsOriginal = this.params;
+          this.params = null;
+          
+          this.inherited(arguments);
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
@@ -132,6 +147,10 @@ define(["dojo/_base/declare",
        * @instance postCreate
        */
       postCreate: function alfresco_lists_views_layouts_Row__postCreate() {
+         // restore params for anyone that needs it later
+         this.params = this._paramsOriginal;
+         delete this._paramsOriginal;
+          
          domClass.add(this.domNode, this.additionalCssClasses ? this.additionalCssClasses : "");
          if (this.widgets)
          {
