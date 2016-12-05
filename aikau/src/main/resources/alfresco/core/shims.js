@@ -25,7 +25,7 @@
  * @module alfresco/core/shims
  * @author Martin Doyle
  */
-define(["es6Promise.auto"], function() {
+define(["es6Promise"], function() {
 
    // Only apply the shims once!
    var _applied = false;
