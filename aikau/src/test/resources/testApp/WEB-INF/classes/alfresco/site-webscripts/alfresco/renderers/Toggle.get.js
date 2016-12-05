@@ -8,8 +8,7 @@ model.jsonModel = {
                all: true
             }
          }
-      },
-      "alfresco/services/RatingsService"
+      }
    ],
    widgets:[
       {
@@ -18,9 +17,9 @@ model.jsonModel = {
             services: ["alfresco/services/PreferenceService"],
             widgets: [
                {
+                  id: "LIST",
                   name: "alfresco/lists/views/AlfListView",
                   config: {
-                     id: "LIST",
                      currentData: {
                         items: [
                            {
@@ -29,50 +28,59 @@ model.jsonModel = {
                                  nodeRef: "some://dummy/nodeRef"
                               },
                               name: "Test 1",
-                              liked: false,
-                              likeCount: 4,
-                              favourite: false,
-                              shareId: null,
-                              commentCount: 6
+                              favourite: false
                            }
                         ]
                      },
+                     additionalCssClasses: "bordered",
+                     widgetsForHeader: [
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              label: "Unscoped"
+                           }
+                        },
+                        {
+                           name: "alfresco/lists/views/layouts/HeaderCell",
+                           config: {
+                              label: "Scoped"
+                           }
+                        }
+                     ],
                      widgets:[
                         {
+                           id: "ROW",
                            name: "alfresco/lists/views/layouts/Row",
                            config: {
                               widgets: [
                                  {
+                                    id: "UNSCOPED_CELL",
                                     name: "alfresco/lists/views/layouts/Cell",
                                     config: {
+                                       additionalCssClasses: "mediumpad",
                                        widgets: [
                                           {
-                                             id: "LIKES",
-                                             name: "alfresco/renderers/Like",
-                                             config: {
-                                                propertyToRender: "liked",
-                                                likeCountProperty: "likeCount"
-                                             }
-                                          },
-                                          {
-                                             id: "FAVOURITES",
+                                             id: "UNSCOPED_FAVOURITES",
                                              name: "alfresco/renderers/Favourite",
                                              config: {
                                                 propertyToRender: "favourite"
                                              }
-                                          },
+                                          }
+                                       ]
+                                    }
+                                 },
+                                 {
+                                    id: "SCOPED_CELL",
+                                    name: "alfresco/lists/views/layouts/Cell",
+                                    config: {
+                                       additionalCssClasses: "mediumpad",
+                                       pubSubScope: "SCOPED_",
+                                       widgets: [
                                           {
-                                             id: "COMMENTS",
-                                             name: "alfresco/renderers/Comments",
+                                             id: "SCOPED_FAVOURITES",
+                                             name: "alfresco/renderers/Favourite",
                                              config: {
-                                                commentCountProperty: "commentCount"
-                                             }
-                                          },
-                                          {
-                                             id: "QUICKSHARE",
-                                             name: "alfresco/renderers/QuickShare",
-                                             config: {
-                                                propertyToRender: "shareId"
+                                                propertyToRender: "favourite"
                                              }
                                           }
                                        ]
