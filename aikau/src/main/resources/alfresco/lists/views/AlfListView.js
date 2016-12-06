@@ -445,6 +445,7 @@ define(["dojo/_base/declare",
        * most common example of this is when infinite scroll is being used.
        */
       renderView: function alfresco_lists_views_AlfListView__renderView(preserveCurrentData) {
+         // jshint maxcomplexity:false
          if (this.currentData && this.currentData.items)
          {
             if (this.widgetsForAppendix)
@@ -484,10 +485,13 @@ define(["dojo/_base/declare",
                   this.docListRenderer.itemKey = this.itemKey;
                   
                   // Finally, render the current data (when using infinite scroll the data should have been augmented)
-                  this.docListRenderer.renderData();
-
+                  var promisedData = this.docListRenderer.renderData();
                   // Check to see if any rows were rendered (allows for renderFilters on widgets. If they weren't, render no Data Display.
-                  if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
+                  if (promisedData || query(this.renderFilterSelectorQuery, this.tableNode).length > 0)
+                  {
+                     // No action
+                  }
+                  else
                   {
                      this.renderNoDataDisplay();
                   }

@@ -32,7 +32,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing",
+        "aikau/core/ChildProcessing",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -43,10 +43,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/on",
         "dojo/_base/event"], 
-        function(declare, CoreWidgetProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
+        function(declare, ChildProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
                  RenderAppendixSentinel, domClass, array, lang, domStyle, on, event) {
    
-   return declare([CoreWidgetProcessing, _AlfDocumentListTopicMixin], {
+   return declare([ChildProcessing, _AlfDocumentListTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -237,8 +237,16 @@ define(["dojo/_base/declare",
             }
 
             var itemsToRender = (this.currentIndex)? this.currentData.items.slice(this.currentIndex): this.currentData.items;
-            array.forEach(itemsToRender, lang.hitch(this, this.renderNextItem));
-            this.allItemsRendered();
+            
+            var promisedItems = [];
+            itemsToRender.forEach(function(item, index) {
+               var promisedItem = this.renderNextItem(item, index);
+               promisedItem && promisedItems.push(promisedItem);
+            }, this);
+            return Promise.all(promisedItems).then(lang.hitch(this, function(renderedItems) {
+               this.allItemsRendered();
+               return renderedItems;
+            }));
          }
          else
          {
@@ -251,23 +259,29 @@ define(["dojo/_base/declare",
        * defined in the JSON model for [currentItem]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#currentItem}
        * @instance
        */
-      renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem() {
-         var itemToRender = this.currentData.items[this.currentIndex];
+      renderNextItem: function alfresco_lists_views_layout___MultiItemRendererMixin__renderNextItem(itemToRender, index) {
+         this.currentItem = itemToRender;
+         this.currentIndex = index;
+         if (typeof this.currentItem.index === "undefined")
+         {
+            this.currentItem.index = index;
+         }
          if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
          {
             // The current item is a marker to render an "appendix". This is a non-data entry into the list
             // of items to be rendered, the original use case is for some kind of "Add" style control that
             // can be used to create a new entry...
-            this.processWidgets(this.widgetsForAppendix, this.containerNode, "RENDER_APPENDIX_SENTINEL");
+            return this.createChildren({
+               widgets: this.widgetsForAppendix,
+               targetNode: this.containerNode
+            });
          }
          else
          {
             // Process the widgets defined using the current item as the data to go into those widgets...
-            this.alfLog("log", "Rendering item", itemToRender);
-            
             // Mark the current item with an attribute indicating that it is the last item.
             // This is done for the benefit of renderers that need to know if they are the last item.
-            this.currentData.items[this.currentIndex].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
+            this.currentData.items[index].isLastItem = (this.currentItem.index === this.currentData.items.length -1);
 
             // Set a width if provided...
             if (this.width)
@@ -278,69 +292,22 @@ define(["dojo/_base/declare",
             if (this.containerNode)
             {
                // It is necessary to clone the widget definition to prevent them being modified for future iterations...
-               // var clonedWidgets = lang.clone(this.widgets);
                // Intentionally switched from lang.clone to native JSON approach to cloning for performance...
                var clonedWidgets = JSON.parse(JSON.stringify(this.widgets));
-               this.processWidgets(clonedWidgets, this.containerNode);
+               return this.createChildren({
+                  widgets: clonedWidgets,
+                  targetNode: this.containerNode
+               })
+               .then(lang.hitch(this, function(widgets) {
+                  widgets.forEach(this.rootWidgetProcessing, this);
+                  this.allWidgetsProcessed(widgets);
+                  return widgets;
+               }));
             }
             else
             {
                this.alfLog("warn", "There is no 'containerNode' for adding an item to");
             }
-         }
-      },
-      
-      /**
-       * Overrides the default implementation to start the rendering of the next item.
-       * 
-       * @instance
-       * @param {Object[]}
-       * @param {string} processWidgetsId An optional ID that might have been provided to map the results of multiple calls to [processWidgets]{@link module:alfresco/core/Core#processWidgets}
-       */
-      allWidgetsProcessed: function alfresco_lists_views_layout___MultiItemRendererMixin__allWidgetsProcessed(widgets, processWidgetsId) {
-         /*jshint eqnull:true*/
-         if (!processWidgetsId || processWidgetsId === "RENDER_APPENDIX_SENTINEL")
-         {
-            // Push the processed widgets for the last item into the array of rendered widgets...
-            if (!this._renderedItemWidgets)
-            {
-               this._renderedItemWidgets = [];
-            }
-
-            if (!processWidgetsId)
-            {
-               this._renderedItemWidgets.push(widgets);
-            }
-            
-            // Increment the current index and check to see if there are more items to render...
-            // Only the root widget(s) will have the currentData object set so we don't start rendering the next item
-            // on nested widgets...
-            this.currentIndex++;
-            if (this.currentData && 
-                this.currentData.items &&
-                this.currentData.items.length != null)
-            {
-               array.forEach(widgets, lang.hitch(this, this.rootWidgetProcessing));
-               if (this.currentIndex < this.currentData.items.length)
-               {
-                  // Render the next item...
-                  this.currentItem = this.currentData.items[this.currentIndex];
-
-                  // Add in the index...
-                  if (this.currentItem.index == null)
-                  {
-                     this.currentItem.index = this.currentIndex;
-                  }
-               }
-            }
-            else
-            {
-               // TODO: We need to make sure that we're able to stop rendering if another request arrives before we've completed
-            }
-         }
-         else
-         {
-            this.inherited(arguments);
          }
       },
       
