@@ -24,21 +24,20 @@
  * @module alfresco/core/ProcessWidgets
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @mixes module:aikau/core/ChildProcessing
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase", 
         "dijit/_TemplatedMixin",
-        "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
+        "aikau/core/ChildProcessing",
         "dojo/text!./templates/ProcessWidgets.html",
+        "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class"], 
-        function(declare, _Widget, _Templated, AlfCore, CoreWidgetProcessing, template, domConstruct, domClass) {
+        function(declare, _Widget, _Templated, ChildProcessing, template, lang, domConstruct, domClass) {
    
-   return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing], {
+   return declare([_Widget, _Templated, ChildProcessing], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -86,7 +85,12 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, this.additionalCssClasses || "");
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            }).then(lang.hitch(this, function(widgets) {
+               this.allWidgetsProcessed(widgets);
+            }));
          }
       }
    });

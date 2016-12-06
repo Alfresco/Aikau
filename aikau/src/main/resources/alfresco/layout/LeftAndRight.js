@@ -120,11 +120,17 @@ define(["dojo/_base/declare",
                return widget.align !== "right";
             });
          }
-         // We need to reverse the order of RIGHT widgets so that the last widget is defined is furthest
-         // to the RIGHT
+         // We need to reverse the order of RIGHT widgets so that the last widget is 
+         // defined is furthest to the RIGHT
          this.widgetsRight && this.widgetsRight.reverse();
-         this.widgetsRight && this.processWidgets(this.widgetsRight, this.rightWidgets, "RIGHT");
-         this.widgetsLeft && this.processWidgets(this.widgetsLeft, this.leftWidgets, "LEFT");
+         this.widgetsRight && this.createChildren({
+            widgets: this.widgetsRight,
+            targetNode: this.rightWidgets
+         });
+         this.widgetsLeft && this.createChildren({
+            widgets: this.widgetsLeft,
+            targetNode: this.leftWidgets
+         });
 
          // Create a semantic wrapper if required
          if(this.semanticWrapper)
