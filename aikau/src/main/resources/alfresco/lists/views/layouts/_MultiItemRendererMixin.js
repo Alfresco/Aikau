@@ -28,7 +28,8 @@
  * attribute (if applicable).
  * 
  * @module alfresco/lists/views/layouts/_MultiItemRendererMixin
- * @extends module:alfresco/core/Core
+ * @extends module:aikau/core/ChildProcessing
+ * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",

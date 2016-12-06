@@ -128,7 +128,10 @@ define(["dojo/_base/declare",
             {
                this.processObject(this.widgetModelModifiers, this.widgets);
             }
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
 
          if (this.hasUploadPermissions() === true)
