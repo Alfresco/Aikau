@@ -23,24 +23,20 @@
  * snippet that can be used in a Surf Extension to find the widget in the model in order to work with it.
  * 
  * @module alfresco/debug/WidgetInfo
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
-        "dojo/text!./templates/WidgetInfo.html",
         "dojo/text!./templates/WidgetInfoData.html",
-        "alfresco/core/Core",
         "dijit/TooltipDialog",
         "dijit/popup",
+        "dojo/_base/lang",
         "dojo/string"], 
-        function(declare, _Widget, _Templated, _OnDijitClickMixin, template, dataTemplate, AlfCore, TooltipDialog, popup, string) {
+        function(declare, BaseWidget, _OnDijitClickMixin, dataTemplate, TooltipDialog, popup, lang, string) {
    
-   return declare([_Widget, _Templated, _OnDijitClickMixin, AlfCore], {
+   return declare([BaseWidget, _OnDijitClickMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -59,12 +55,25 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/WidgetInfo.properties"}],
       
       /**
-       * The HTML template to use for the widget.
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
        * @instance
-       * @type {String}
+       * @since 1.0.100
        */
-      templateString: template,
-      
+      createWidgetDom: function alfresco_debug_WidgetInfo__createWidgetDom() {
+         this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-debug-WidgetInfo");
+         
+         var imgNode = document.createElement("img");
+         imgNode.classList.add("image");
+         imgNode.setAttribute("src", this.imgSrc);
+         imgNode.setAttribute("alt", this.altText);
+         this._attach(imgNode, "ondijitclick", lang.hitch(this, this.showInfo));
+
+         this.domNode.appendChild(imgNode);
+      },
+
       /**
        * Sets up the image source and it's alt text.
        * 
