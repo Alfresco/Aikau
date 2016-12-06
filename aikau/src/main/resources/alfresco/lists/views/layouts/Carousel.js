@@ -263,6 +263,20 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Extends the 
+       * [inherited function]{@link module:alfresco/lists/views/layouts/_MultiItemRendererMixin#allItemsRendered}
+       * to call the [renderDisplayedItems]{@link module:alfresco/lists/views/layouts/Carousel#renderDisplayedItems}
+       * once all items are rendered.
+       * 
+       * @instance
+       * @since 1.0.100
+       */
+      allItemsRendered: function alfresco_lists_views_layouts_Carousel__allItemsRendered() {
+         this.inherited(arguments);
+         this.renderDisplayedItems();
+      },
+
+      /**
        * This function is called once all widgets have been added onto the page. At this point it can be
        * assumed that the widget has been placed into the DOM model and has some dimensions to work with
        *

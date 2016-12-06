@@ -245,6 +245,7 @@ define(["dojo/_base/declare",
                promisedItem && promisedItems.push(promisedItem);
             }, this);
             return Promise.all(promisedItems).then(lang.hitch(this, function(renderedItems) {
+               this._renderedItemWidgets = renderedItems;
                this.allItemsRendered();
                return renderedItems;
             }));
