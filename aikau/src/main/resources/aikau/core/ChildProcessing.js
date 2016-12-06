@@ -61,6 +61,22 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This function is provided to support the ability to make a single change to the
+       * target node into which all child widgets will be placed. The use case for this was
+       * to support the ability of the [Carousel]{@link module:alfresco/lists/views/layouts/Carousel}
+       * to be ability to wrap all child widgets within an "li" element.
+       * 
+       * @instance
+       * @param  {object} input The configuration provided for creating child widgets
+       * @return {element} The element in which to append all children
+       * @since 1.0.100
+       * @overridable
+       */
+      getTargetNode: function aikau_core_ChildProcessing__getTargetNode(input) {
+         return input.targetNode;
+      },
+
+      /**
        * This function can be called to create child widgets.
        *
        * @instance
@@ -73,6 +89,8 @@ define(["dojo/_base/declare",
          var children = new Promise(lang.hitch(this, function(resolve) {
             if (lang.isArray(input.widgets))
             {
+               var targetNode = this.getTargetNode(input);
+
                // Create a map to hold all the promises (one for each child)...
                // This map will be passed to the promise/all function that will resolve when 
                // all the promises have been resolved...
@@ -84,7 +102,7 @@ define(["dojo/_base/declare",
                   widgets: input.widgets
                });
 
-               filteredChildren.widgets.forEach( function( widget , index) {
+               filteredChildren.widgets.forEach( function(widget, index) {
 
                   // Make a request to create the child, the response will be an object that will
                   // contain an attribute that is the promised...
@@ -118,7 +136,16 @@ define(["dojo/_base/declare",
                         // Add the created widget into the target node if provided...
                         if (input.targetNode)
                         {
-                           childWidget.widget.placeAt(input.targetNode, input.targetPosition || "last");
+                           // The following section of code is slightly strange so requires some explanation...
+                           // Previously the createWidgetDomNode was used to create the node for the widget
+                           // within the live DOM, however we're now creating a node for the widget outside
+                           // of the live DOM. We need to keep calling createWidgetDomNode for backwards compatibility
+                           // but in order to avoid having an extra node we need to remove the leaf of the DOM
+                           // created in the call to createWidgetDomNode...
+                           var tmp1 = this.createWidgetDomNode(childWidget.config, targetNode, childWidget.config.className || "");
+                           var tmp2 = tmp1.parentNode;
+                           tmp1.remove();
+                           childWidget.widget.placeAt(tmp2, input.targetPosition || "last");
                         }
 
                         // Call post creation widget functioning...
@@ -275,6 +302,7 @@ define(["dojo/_base/declare",
             this.alfLog("error", "The following widget could not be found, so is not included on the page '" +  input.widget.name + "'. Please correct the use of this widget in your page definition", this);
          }
          return {
+            config: input.widget,
             widget: instantiatedWidget
          };
       }

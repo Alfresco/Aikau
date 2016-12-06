@@ -333,15 +333,17 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the inherited function to add an additional li element for each item.
+       * Overrides the [inherited function]{@link module:alfresco/core/ChildWidgetProcessing#getTargetNode} 
+       * to add an additional li element within the target node.
        *
        * @instance
        * @param {array} widgets The widgets to create
        * @param {element} rootNode The DOM element to add them into.
        */
-      processWidgets: function alfresco_lists_views_layouts_Carousel__processWidgets(widgets, rootNode) {
-         var nodeToAdd = domConstruct.create("li", {}, rootNode);
-         this.inherited(arguments, [widgets, nodeToAdd]);
+      getTargetNode: function aikau_core_ChildProcessing__getTargetNode(input) {
+         var li = document.createElement("li");
+         input.targetNode.appendChild(li);
+         return li;
       },
 
       /**
