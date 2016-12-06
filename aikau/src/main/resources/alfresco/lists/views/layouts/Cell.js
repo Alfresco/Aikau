@@ -21,12 +21,12 @@
  * Use this widget to render a single cell within a [Row]{@link module:alfresco/lists/views/layouts/Row}
  * 
  * @module alfresco/lists/views/layouts/Cell
- * @extends module:alfresco/core/BaseWidget
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/BaseWidget",
+        "aikau/core/BaseWidget",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-class",
         "dojo/dom-style",
@@ -73,7 +73,7 @@ define(["dojo/_base/declare",
       width: null,
 
       /**
-       * Overrides [the inherited function]{@link module:alfresco/core/BaseWidget#createWidgetDom}
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
        * to construct the DOM for the widget using native browser capabilities.
        *
        * @instance

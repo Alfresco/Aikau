@@ -23,11 +23,11 @@
  * snippet that can be used in a Surf Extension to find the widget in the model in order to work with it.
  * 
  * @module alfresco/debug/WidgetInfo
- * @extends module:alfresco/core/BaseWidget
+ * @extends module:aikau/core/BaseWidget
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/BaseWidget",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "dojo/text!./templates/WidgetInfoData.html",
         "dijit/TooltipDialog",
@@ -55,7 +55,7 @@ define(["dojo/_base/declare",
       i18nRequirements: [{i18nFile: "./i18n/WidgetInfo.properties"}],
       
       /**
-       * Overrides [the inherited function]{@link module:alfresco/core/BaseWidget#createWidgetDom}
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
        * to construct the DOM for the widget using native browser capabilities.
        *
        * @instance

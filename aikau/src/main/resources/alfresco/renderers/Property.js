@@ -24,14 +24,14 @@
  * of different configuration options that control how the property is ultimately displayed.
  *
  * @module alfresco/renderers/Property
- * @extends module:alfresco/core/BaseWidget
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
  * @mixes module:alfresco/core/ValueDisplayMapMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/BaseWidget",
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_JsNodeMixin", 
         "alfresco/core/ValueDisplayMapMixin", 
         "alfresco/core/ObjectTypeUtils", 
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
       _tooltipPositions: ["below-centered", "above-centered"],
 
       /**
-       * Overrides [the inherited function]{@link module:alfresco/core/BaseWidget#createWidgetDom}
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
        * to construct the DOM for the widget using native browser capabilities.
        *
        * @instance

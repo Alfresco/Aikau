@@ -18,13 +18,18 @@
  */
 
 /**
- * Provides a base for all Aikau widgets to extend. It is not essential that a widget extends
+ * <p><b>This widget is in the "aikau" package and does not adhere to the backwards compatibility standards
+ * of the "alfresco" package. The code in this package is intended to form the basis of the next major release
+ * of Aikau and will remain in an unstable state until ready for release. Please evaluate and feedback on this
+ * module but do not rely on it in production!</b></p>
+ * 
+ * <p>Provides a base for all Aikau widgets to extend. It is not essential that a widget extends
  * this module but it can provide significant performance benefits if hundreds or thousands
  * of instances of the widget need to be rendered at a time. Any widget that does extend this
- * base must either define a [templateString]{@link module:alfresco/core/BaseWidget#templateString}
- * or override [createWidgetDom]{@link module:alfresco/core/BaseWidget#createWidgetDom}.
+ * base must either define a [templateString]{@link module:aikau/core/BaseWidget#templateString}
+ * or override [createWidgetDom]{@link module:aikau/core/BaseWidget#createWidgetDom}.</p>
  * 
- * @module alfresco/core/BaseWidget
+ * @module aikau/core/BaseWidget
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
@@ -43,7 +48,7 @@ define(["dojo/_base/declare",
        * The template that defines the DOM for the widget. If configured this will 
        * result in the capabilities of dijit/_TemplatedMixin being used to construct the 
        * DOM. Ideally this should be left as the default value of null and the 
-       * [createWidgetDom]{@link module:alfresco/core/BaseWidget#createWidgetDom} function
+       * [createWidgetDom]{@link module:aikau/core/BaseWidget#createWidgetDom} function
        * will be called - this function should be implemented to use the native capabilities
        * of the browser to build a DOM for the widget.
        * 
@@ -58,7 +63,7 @@ define(["dojo/_base/declare",
        * attributes from being applied. This changes the default widget behaviour in order
        * to gain performance improvements. Any parameters that do need to be applied can
        * be provided by overriding 
-       * [getParametersToApply]{@link module:alfresco/core/BaseWidget#getParametersToApply}.
+       * [getParametersToApply]{@link module:aikau/core/BaseWidget#getParametersToApply}.
        * 
        * @instance
        */
@@ -70,7 +75,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This is called from [_applyAttributes]{@link module:alfresco/core/BaseWidget#_applyAttributes}
+       * This is called from [_applyAttributes]{@link module:aikau/core/BaseWidget#_applyAttributes}
        * to get an object of the parameters that should be applied to the widget. This should only
        * be implemented as necessary. The more parameters applied the worse the performance at scale.
        * 
@@ -93,8 +98,8 @@ define(["dojo/_base/declare",
       /**
        * Extends the function inherited from dijit/_WidgetBase to only make use of the template
        * rendering capabilities provided by dijit/_TemplatedMixin when a
-       * [templateString]{@link module:alfresco/core/BaseWidget#templateString} is provided. Otherwise
-       * the [createWidgetDom]{@link module:alfresco/core/BaseWidget#createWidgetDom} will be called
+       * [templateString]{@link module:aikau/core/BaseWidget#templateString} is provided. Otherwise
+       * the [createWidgetDom]{@link module:aikau/core/BaseWidget#createWidgetDom} will be called
        * to build the DOM for the widget.
        * 
        * @instance
@@ -114,8 +119,8 @@ define(["dojo/_base/declare",
        * This function can be overridden to create the DOM model for the widget. Ideally this 
        * should construct the DOM using the native capabilities of the browser (i.e. 
        * making calls to document.createElement, etc). This function is called from 
-       * [buildRendering]{@link module:alfresco/core/BaseWidget#buildRendering} when no
-       * [templateString]{@link module:alfresco/core/BaseWidget#templateString} is defined.
+       * [buildRendering]{@link module:aikau/core/BaseWidget#buildRendering} when no
+       * [templateString]{@link module:aikau/core/BaseWidget#templateString} is defined.
        * 
        * @instance
        * @overridable

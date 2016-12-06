@@ -21,14 +21,14 @@
  * Use this widget to render a row of [cells]{@link module:alfresco/lists/views/layouts/Cell}
  * 
  * @module alfresco/lists/views/layouts/Row
- * @extends module:alfresco/core/BaseWidget
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/BaseWidget",
+        "aikau/core/BaseWidget",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/views/layouts/_LayoutMixin",
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
       zebraStriping: false,
 
       /**
-       * Overrides [the inherited function]{@link module:alfresco/core/BaseWidget#createWidgetDom}
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
        * to construct the DOM for the widget using native browser capabilities.
        *
        * @instance
