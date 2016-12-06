@@ -32,8 +32,8 @@ for (var i=0; i<50; i++)
    // non-functional so should only highlight performance issues in config handling
    for (var j=0; j<50; j++)
    {
-       propertyModel.config['configKey_' + j] = 'configValue_' + j;
-       cellModel.config['configKey_' + j] = 'configValue_' + j;
+       propertyModel.config["configKey_" + j] = "configValue_" + j;
+       cellModel.config["configKey_" + j] = "configValue_" + j;
    }
    
    rowModel.push(cellModel);

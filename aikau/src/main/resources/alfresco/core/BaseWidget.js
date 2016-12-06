@@ -64,7 +64,7 @@ define(["dojo/_base/declare",
        */
       _applyAttributes: function alfresco_core_BaseWidget___applyAttributes() {
          var originalParams = this.params;
-         this.params = this.getParametersToApply();
+         this.params = this.getParametersToApply(originalParams);
          this.inherited(arguments);
          this.params = originalParams;
       },
@@ -80,7 +80,14 @@ define(["dojo/_base/declare",
        * @return {object} An object of key/value pair parameters to be applied. 
        */
       getParametersToApply: function alfresco_core_BaseWidget__getParametersToApply(/*jshint unused:false*/ originalParams) {
-         return null;
+         var params = null;
+         if (originalParams.style)
+         {
+            params = {
+               style: originalParams.style
+            };
+         }
+         return params;
       },
 
       /**
