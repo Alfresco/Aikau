@@ -28,11 +28,12 @@
  * attribute (if applicable).
  * 
  * @module alfresco/lists/views/layouts/_MultiItemRendererMixin
- * @extends module:alfresco/core/Core
+ * @extends module:aikau/core/ChildProcessing
+ * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing",
+        "aikau/core/ChildProcessing",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/core/JsNode",
         "alfresco/documentlibrary/_AlfDocumentListTopicMixin",
@@ -43,10 +44,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/on",
         "dojo/_base/event"], 
-        function(declare, CoreWidgetProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
+        function(declare, ChildProcessing, ObjectTypeUtils, JsNode, _AlfDocumentListTopicMixin, 
                  RenderAppendixSentinel, domClass, array, lang, domStyle, on, event) {
    
-   return declare([CoreWidgetProcessing, _AlfDocumentListTopicMixin], {
+   return declare([ChildProcessing, _AlfDocumentListTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
