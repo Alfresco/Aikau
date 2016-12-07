@@ -25,7 +25,7 @@
  * @module alfresco/core/shims
  * @author Martin Doyle
  */
-define([], function() {
+define(["es6Promise"], function() {
 
    // Only apply the shims once!
    var _applied = false;
@@ -48,6 +48,7 @@ define([], function() {
          this._addObjectKeys();
          this._addRequestAnimationFrame();
          this._addTextContent();
+         this._addES6Promise();
          _applied = true;
       },
 
@@ -180,6 +181,20 @@ define([], function() {
                };
             }());
          }
+      },
+
+      /**
+       * Shim for <=IE9 to add ES6 Promises. Uses code from
+       * https://github.com/stefanpenner/es6-promise
+       * 
+       * @protected
+       * @instance
+       * @since 1.0.100
+       */
+      _addES6Promise: function alfresco_core_shim___addES6Promise() {
+         require(["es6Promise"], function(es6shim) { 
+            es6shim.polyfill();
+         });
       },
 
       /**

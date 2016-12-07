@@ -47,14 +47,14 @@ define(["module",
       "Test sort order toggles": function() {
          return this.remote.findById("PUBLISH_DATA_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-            .clearLog()
+         .clearLog()
 
          .findById("SORT_ASC_REQUEST_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -66,14 +66,14 @@ define(["module",
       "Test sort field selection doesn't change sort order": function() {
          return this.remote.findById("PUBLISH_DATA_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-            .clearLog()
+         .clearLog()
 
          .findById("SORT_FIELD_SELECTION_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -87,14 +87,14 @@ define(["module",
       "Test sort order toggle (to descending)": function() {
          return this.remote.findById("PUBLISH_DATA_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-            .clearLog()
+         .clearLog()
 
          .findById("SORT_DESC_REQUEST_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -108,14 +108,14 @@ define(["module",
       "Test hide folder toggle": function() {
          return this.remote.findById("PUBLISH_DATA_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-            .clearLog()
+         .clearLog()
 
          .findByCssSelector("#HIDE_FOLDERS_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -126,14 +126,14 @@ define(["module",
       "Test show folder toggle": function() {
          return this.remote.findById("PUBLISH_DATA_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-            .clearLog()
+         .clearLog()
 
          .findByCssSelector("#SHOW_FOLDERS_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -144,14 +144,14 @@ define(["module",
       "Test set page number": function() {
          return this.remote.findById("PUBLISH_DATA_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOCLIST_REQUEST_FINISHED", "Fake data not provided")
-            .clearLog()
+         .clearLog()
 
          .findByCssSelector("#SET_PAGE_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_RETRIEVE_DOCUMENTS_REQUEST")
             .then(function(payload) {
@@ -162,8 +162,9 @@ define(["module",
       "Test data update renders current view": function() {
          return this.remote.findByCssSelector("#PUBLISH_DATA_label")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(2)")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "'VIEW1' was not displayed");
             });
@@ -179,8 +180,9 @@ define(["module",
       "Test changing view renders current data": function() {
          return this.remote.findByCssSelector("#CHANGE_VIEW_label")
             .click()
-            .end()
-            .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
+         .end()
+         
+         .findAllByCssSelector(".alfresco-lists-views-AlfListView .alfresco-lists-views-layouts-Cell span.alfresco-renderers-Property:nth-child(3)")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "'VIEW2' was not displayed");
             });
@@ -192,14 +194,14 @@ define(["module",
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Couldn't find select controls in PublishingDropDownMenu widgets");
             })
-            .end()
+         .end()
 
          .waitForDeletedByCssSelector(".alfresco-lists-AlfList--loading")
-            .end()
+         .end()
 
          .findDisplayedById("PDM_ITEM_0_SELECT_CONTROL")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(".dijitPopup tr")
             .then(function(elements) {

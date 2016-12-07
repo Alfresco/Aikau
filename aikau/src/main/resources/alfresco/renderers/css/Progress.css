@@ -5,7 +5,6 @@
 
     .alfProgressBarContainer {
 
-        width: 100%;
         overflow: hidden;
         border: @standard-border;
         margin-top: (@standard-line-height / 2);

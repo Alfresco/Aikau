@@ -21,29 +21,25 @@
  * Use this widget to render a row of [cells]{@link module:alfresco/lists/views/layouts/Cell}
  * 
  * @module alfresco/lists/views/layouts/Row
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
- * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Row.html",
+        "aikau/core/BaseWidget",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
-        "alfresco/core/Core",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
         "dojo/dom-class",
-        "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin,
-                 _LayoutMixin, _AlfDndDocumentUploadMixin, domClass, event) {
+        "dojo/_base/event",
+        "dojo/_base/lang"], 
+        function(declare, BaseWidget, _MultiItemRendererMixin, _PublishPayloadMixin, _LayoutMixin, 
+                 _AlfDndDocumentUploadMixin, domClass, event, lang) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
+   return declare([BaseWidget, _MultiItemRendererMixin, _PublishPayloadMixin, _LayoutMixin, _AlfDndDocumentUploadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -53,14 +49,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Row.css"}]
        */
       cssRequirements: [{cssFile:"./css/Row.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -114,6 +102,20 @@ define(["dojo/_base/declare",
        * @default
        */
       zebraStriping: false,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.100
+       */
+      createWidgetDom: function alfresco_renderers_Row__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("tr");
+         this.domNode.classList.add("alfresco-lists-views-layouts-Row");
+         this.domNode.setAttribute("tabindex", "0");
+         this._attach(this.domNode, "onclick", lang.hitch(this, this.onFocusClick));
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}

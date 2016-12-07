@@ -24,21 +24,16 @@
  * of different configuration options that control how the property is ultimately displayed.
  *
  * @module alfresco/renderers/Property
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
  * @mixes module:alfresco/core/ValueDisplayMapMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin", 
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_JsNodeMixin", 
         "alfresco/core/ValueDisplayMapMixin", 
-        "alfresco/core/Core", 
-        "dojo/text!./templates/Property.html", 
         "alfresco/core/ObjectTypeUtils", 
         "alfresco/core/UrlUtilsMixin", 
         "alfresco/core/TemporalUtils", 
@@ -47,10 +42,10 @@ define(["dojo/_base/declare",
         "dojo/dom-style", 
         "dijit/Tooltip", 
         "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, ValueDisplayMapMixin, AlfCore, template, 
-            ObjectTypeUtils, UrlUtilsMixin, TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
+        function(declare, BaseWidget, _JsNodeMixin, ValueDisplayMapMixin, ObjectTypeUtils, UrlUtilsMixin, 
+                 TemporalUtils, lang, domClass, domStyle, Tooltip, on) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
+   return declare([BaseWidget, _JsNodeMixin, ValueDisplayMapMixin, TemporalUtils, UrlUtilsMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -73,13 +68,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{
          cssFile: "./css/Property.css"
       }],
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
 
       /**
        * This is the object that the property to be rendered will be retrieved from.
@@ -303,6 +291,36 @@ define(["dojo/_base/declare",
       _tooltipPositions: ["below-centered", "above-centered"],
 
       /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.100
+       */
+      createWidgetDom: function alfresco_renderers_Property__createWidgetDom() {
+         this.renderedValueNode = this.domNode = document.createElement("span");
+         this.renderedValueClassArray.forEach(function(className) {
+            this.domNode.classList.add(className);
+         }, this);
+         this.domNode.setAttribute("tabindex", "0");
+
+         var innerSpan = document.createElement("span");
+         innerSpan.classList.add("inner");
+
+         var labelSpan = document.createElement("span");
+         labelSpan.classList.add("label");
+         labelSpan.textContent = this.label;
+
+         var valueSpan = document.createElement("span");
+         valueSpan.classList.add("value");
+         valueSpan.innerHTML = this.renderedValue;
+
+         innerSpan.appendChild(labelSpan);
+         innerSpan.appendChild(valueSpan);
+         this.domNode.appendChild(innerSpan);
+      },
+
+      /**
        * Updates CSS classes based on the current state of the renderer. Currently this only
        * addressed warning message states.
        * 
@@ -436,12 +454,20 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
+         // Need to set both renderedValueClassArray (for widgets without a template) and
+         // renderedValueClass (for those that do)...
+         var renderedValueClass = this.renderedValueClass;
+         this.renderedValueClassArray = ["alfresco-renderers-Property", renderedValueClass, this.renderSize];
          this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
-         if (this.renderOnNewLine === true) {
+         if (this.renderOnNewLine === true) 
+         {
             this.renderedValueClass = this.renderedValueClass + " block";
+            this.renderedValueClassArray.push("block");
          }
-         if (this.deemphasized === true) {
+         if (this.deemphasized === true) 
+         {
             this.renderedValueClass = this.renderedValueClass + " deemphasized";
+            this.renderedValueClassArray.push("deemphasize");
          }
       },
 

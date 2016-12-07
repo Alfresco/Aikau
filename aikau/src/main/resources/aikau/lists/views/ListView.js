@@ -30,9 +30,12 @@
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",
+        "aikau/lists/views/ListRenderer",
+        "alfresco/lists/views/RenderAppendixSentinel",
         "dojo/dom-class",
+        "dojo/dom-construct",
         "dojo/_base/lang"], 
-        function(declare, AlfListView, domClass, lang) {
+        function(declare, AlfListView, ListRenderer, RenderAppendixSentinel, domClass, domConstruct, lang) {
 
    return declare([AlfListView], {
 
@@ -55,6 +58,120 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, "aikau-lists-views-ListView");
          domClass.add(this.tableNode, "mdl-data-table mdl-js-data-table mdl-shadow--2dp");
          this.inherited(arguments);
+      },
+
+      /**
+       * 
+       * @instance
+       * @returns {object} A new [ListRenderer]{@link module:aikau/lists/views/ListRenderer}
+       */
+      createListRenderer: function aikau_lists_views_ListView__createListRenderer() {
+         var dlr = new ListRenderer({
+            id: this.id + "_ITEMS",
+            widgets: this.widgets,
+            currentData: this.currentData,
+            pubSubScope: this.pubSubScope,
+            parentPubSubScope: this.parentPubSubScope,
+            widgetsForAppendix: this.widgetsForAppendix
+         });
+         return dlr;
+      },
+
+      /**
+       * 
+       * @instance
+       * @param {boolean} preserveCurrentData This should be set to true when you don't want to clear the old data, the
+       * most common example of this is when infinite scroll is being used.
+       * @return {Promise} The promise of the view having been rendered
+       * @since 1.0.100
+       */
+      renderView: function aikau_lists_views_ListView__renderView(preserveCurrentData) {
+         var promisedView = new Promise(lang.hitch(this, function(resolve, reject) {
+            if (this.currentData && this.currentData.items)
+            {
+               if (this.widgetsForAppendix && this.currentData.items)
+               {
+                  var containsSentinel = this.currentData.items.some(function(item) {
+                     return item === RenderAppendixSentinel;
+                  });
+                  !containsSentinel && this.currentData.items.push(RenderAppendixSentinel);
+               }
+
+               if (this.currentData.items.length > 0)
+               {
+                  try
+                  {
+                     if (this.messageNode)
+                     {
+                        domConstruct.destroy(this.messageNode);
+                     }
+
+                     // If we don't want to preserve the current data (e.g. if infinite scroll isn't being used)
+                     // then we should destroy the previous renderer...
+                     if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.listRenderer)
+                     {
+                        this.destroyRenderer();
+                     }
+
+                     // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
+                     // when rendering additional infinite scroll data...
+                     if (!this.listRenderer)
+                     {
+                        this.listRenderer = this.createListRenderer();
+                        this.listRenderer.placeAt(this.tableNode, "last");
+                     }
+
+                     // Ensure that the renderer has has the same itemKey value as configured on the view. This is
+                     // so that comparisons can be made for selection and items can be brought into view as necessary
+                     this.listRenderer.itemKey = this.itemKey;
+                     
+                     // Finally, render the current data (when using infinite scroll the data should have been augmented)
+                     var promisedData = this.listRenderer.renderData();
+                     if (promisedData)
+                     {
+                        promisedData.then(lang.hitch(this, function(renderedItems) {
+
+                           if (renderedItems.length)
+                           {
+                              resolve(renderedItems);
+                           }
+                           else
+                           {
+                              this.renderNoDataDisplay();
+                              resolve();
+                           }
+                        }));
+                     }
+                     else
+                     {
+                        // TODO: Better error handling when the renderer doesn't return a promise
+                        this.alfLog("warn", "The view renderer does not return a promise when rendering data", this);
+                        reject();
+                     }
+                  }
+                  catch(e)
+                  {
+                     // TODO: This should return a promise itself...
+                     this.alfLog("error", "The following error occurred rendering the data", e, this);
+                     this.renderErrorDisplay();
+                     reject();
+                  }
+               }
+               else
+               {
+                  // TODO: This should return a promise itself...
+                  this.renderNoDataDisplay();
+                  resolve();
+               }
+            }
+            else
+            {
+               // TODO: This should return a promise itself...
+               this.renderNoDataDisplay();
+               resolve();
+            }
+         }));
+         return promisedView;
       },
 
       /**

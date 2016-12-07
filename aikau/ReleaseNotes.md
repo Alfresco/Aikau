@@ -1,4 +1,4 @@
-Aikau 1.0.99 Release Notes
+Aikau 1.0.100 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,19 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.100:
+* [AKU-878](https://issues.alfresco.com/jira/browse/AKU-878)         - Performance test page added
+* [AKU-1138](https://issues.alfresco.com/jira/browse/AKU-1138)       - Prevent PDF.js preview horizontal scrollbar clipping
+* [AKU-1139](https://issues.alfresco.com/jira/browse/AKU-1139)       - Prevent horizontal scrollar showing on downlad as zip dialog
+* [AKU-1140](https://issues.alfresco.com/jira/browse/AKU-1140)       - Scoped Toggle renderer fix
+* [AKU-1141](https://issues.alfresco.com/jira/browse/AKU-1141)       - Ensure all search thumbnails have correct tooltip
+* [AKU-1143](https://issues.alfresco.com/jira/browse/AKU-1143)       - Add caching to temporalUtils
+* [AKU-1145](https://issues.alfresco.com/jira/browse/AKU-1145)       - Added BaseWidget for reducing applyAttributes overhead
+* [AKU-1146](https://issues.alfresco.com/jira/browse/AKU-1146)       - Add debug mode check within alfLog
+* [AKU-1147](https://issues.alfresco.com/jira/browse/AKU-1147)       - Define pattern for avoiding TemplatedMixin overhead
+* [AKU-1149](https://issues.alfresco.com/jira/browse/AKU-1149)       - Improvements to ChildProcessing module
+* [AKU-1150](https://issues.alfresco.com/jira/browse/AKU-1150)       - Improve legacy edit site resource loading
+
 1.0.99:
 * [AKU-1133](https://issues.alfresco.com/jira/browse/AKU-1133)       - Improve rendering of Create Site dialog opening
 * [AKU-1134](https://issues.alfresco.com/jira/browse/AKU-1134)       - Copyright year update

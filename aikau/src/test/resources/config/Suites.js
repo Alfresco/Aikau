@@ -31,7 +31,7 @@ define(function() {
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/navigation/PathTreeTest"
+      "alfresco/renderers/ToggleTest"
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",
@@ -272,6 +272,7 @@ define(function() {
       "alfresco/renderers/ThumbnailTest",
       "alfresco/renderers/ThumbnailAspectAndSizeTest",
       "alfresco/renderers/ToggleStateActionsTest",
+      "alfresco/renderers/ToggleTest",
       "alfresco/renderers/UserTest",
       "alfresco/renderers/XhrActionsTest",
 

@@ -39,7 +39,7 @@ define(["module",
             .then(function(elements) {
                numRowsBeforeResize = elements.length;
             })
-            .end()
+         .end()
 
          .findByCssSelector("#INFINITE_SCROLL_LIST_1 tr:nth-child(1) .alfresco-renderers-Property")
             .click()
@@ -51,10 +51,10 @@ define(["module",
             .pressKeys(keys.ARROW_DOWN)
             .pressKeys(keys.ARROW_DOWN)
             .pressKeys(keys.ARROW_DOWN)
-            .end()
+         .end()
 
          .getLastPublish("BELOW_ALF_EVENTS_SCROLL", "List scroll event not registered")
-            .end()
+         .end()
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
             .then(function(elements) {
@@ -67,31 +67,24 @@ define(["module",
          return this.remote.findByCssSelector("#INFINITE_SCROLL_LIST_2 tr:nth-child(1) .alfresco-renderers-Property")
             .clearLog()
             .click()
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .pressKeys(keys.ARROW_DOWN)
-            .end()
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+            .pressKeys(keys.PAGE_DOWN)
+         .end()
 
          .getLastPublish("ABOVE_ALF_EVENTS_SCROLL", "List scroll event not registered")
 
-         .getLastPublish("ABOVE_ALF_DOCLIST_REQUEST_FINISHED", "More data not loaded")
+         .getLastPublish("ABOVE_ALF_DOCLIST_REQUEST_FINISHED", "More data not loaded", 5000)
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_2 tr")
             .then(function(elements) {
-               assert.lengthOf(elements, 40, "Additional rows were not loaded when the bottom of the list was reached");
+               assert.isAbove(elements.length, 20, "Additional rows were not loaded when the bottom of the list was reached");
             });
       },
 
@@ -104,14 +97,14 @@ define(["module",
             .then(function(elements) {
                numRowsBeforeResize = elements.length;
             })
-            .end()
+         .end()
 
          .findByCssSelector("#BELOW_DASHLET .alfresco-dashlets-Dashlet__resize-bar__icon")
             .moveMouseTo(0, 0)
             .pressMouseButton()
             .moveMouseTo(0, 50)
             .releaseMouseButton()
-            .end()
+         .end()
 
          .findAllByCssSelector("#INFINITE_SCROLL_LIST_1 tr")
             .then(function(elements) {

@@ -260,13 +260,6 @@ define(["dojo/_base/declare",
          this.alfSubscribe(topics.ENABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.enableSiteActivityFeed));
          this.alfSubscribe(topics.DISABLE_SITE_ACTIVITY_FEED, lang.hitch(this, this.disableSiteActivityFeed));
          this.alfSubscribe(topics.VALIDATE_SITE_IDENTIFIER, lang.hitch(this, this.validateSiteIdentifier));
-
-         // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
-         // editing. At some stage this will not be needed when a new edit site dialog is provided.
-         var _this = this;
-         require([AlfConstants.URL_RESCONTEXT + "modules/edit-site.js"], function() {
-            _this.alfLog("log", "Edit Site JavaScript resource loaded");
-         });
       },
 
       /**
@@ -1127,7 +1120,15 @@ define(["dojo/_base/declare",
             }
             else
             {
-               this.alfLog("error", "Could not find the 'Alfresco.module.getEditSiteInstance' function - has 'edit-site.js' been included in the page?");
+               // Make sure that the edit-site.js file is loaded. This is required for as it handles legacy site
+               // editing. At some stage this will not be needed when a new edit site dialog is provided.
+               var legacyEditSiteResource = AlfConstants.URL_RESCONTEXT + "modules/edit-site" + (AlfConstants.DEBUG ? ".js" : "-min.js");
+               require([legacyEditSiteResource], lang.hitch(this, function() {
+                  this.alfLog("log", "Edit Site JavaScript resource loaded");
+                  Alfresco.module.getEditSiteInstance().show({
+                     shortName: config.site
+                  });
+               }));
             }
          }
          else

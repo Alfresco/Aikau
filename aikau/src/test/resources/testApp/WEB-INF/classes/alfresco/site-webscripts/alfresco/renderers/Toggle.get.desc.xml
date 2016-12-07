@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Toggle Renderer</shortname>
+  <description>Test page for the Toggle renderer</description>
+  <description></description>
+  <family>aikau-unit-tests</family>
+  <url>/Toggle</url>
+</webscript>

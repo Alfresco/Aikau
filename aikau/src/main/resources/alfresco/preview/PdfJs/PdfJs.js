@@ -597,7 +597,7 @@ define(["dojo/_base/declare",
          computedStyle = domStyle.getComputedStyle(this.controls);
          var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
          var controlHeight = !this.fullscreen ? controlRegion.h : 0;
-         var newHeight = previewRegion.h - controlHeight -1; // Allow for bottom border
+         var newHeight = previewRegion.h - controlHeight - 6; // Allow for bottom border
          
          if (newHeight === 0)
          {

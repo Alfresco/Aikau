@@ -21,24 +21,19 @@
  * Use this widget to render a single cell within a [Row]{@link module:alfresco/lists/views/layouts/Row}
  * 
  * @module alfresco/lists/views/layouts/Cell
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Cell.html",
-        "alfresco/core/Core",
+        "aikau/core/BaseWidget",
         "alfresco/lists/views/layouts/_LayoutMixin",
         "dojo/dom-class",
         "dojo/dom-style",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _LayoutMixin, domClass, domStyle, domAttr) {
+        function(declare, BaseWidget, _LayoutMixin, domClass, domStyle, domAttr) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
+   return declare([BaseWidget, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -48,14 +43,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Cell.css"}]
        */
       cssRequirements: [{cssFile:"./css/Cell.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * Any additional CSS classes that should be applied to the rendered DOM element.
@@ -84,6 +71,18 @@ define(["dojo/_base/declare",
        * @default
        */
       width: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.100
+       */
+      createWidgetDom: function alfresco_renderers_Cell__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("td");
+         this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}

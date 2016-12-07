@@ -49,26 +49,26 @@ define(["module",
          // configuration to check that the appropriate publications occur...
          return this.remote.setFindTimeout(5000).findById("SINGLE_DOWNLOAD_VIA_ACTION_SERVICE_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ARCHIVING_DIALOG.dialogDisplayed")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Archiving dialog not displayed");
             })
-            .end()
+         .end()
 
          .getLastPublish("ALF_SINGLE_DOCUMENT_ACTION_REQUEST", 5000, "Single document action request not made")
-            .getLastPublish("ALF_DOWNLOAD_AS_ZIP", 5000, "Single document action not passed to document service")
-            .getLastPublish("ALF_ARCHIVE_REQUEST", 5000, "A request was not made to initiate the archive generation")
+         .getLastPublish("ALF_DOWNLOAD_AS_ZIP", 5000, "Single document action not passed to document service")
+         .getLastPublish("ALF_ARCHIVE_REQUEST", 5000, "A request was not made to initiate the archive generation")
 
          .findAllByCssSelector("#ARCHIVING_DIALOG.dialogHidden")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Archiving dialog not hidden");
             })
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOWNLOAD_FILE", 5000, "Generated archive not downloaded")
-            .clearLog();
+         .clearLog();
       },
 
       "Test multiple item download": function() {
@@ -76,35 +76,37 @@ define(["module",
          // based on the legacy Share document library action configuration...
          return this.remote.setFindTimeout(5000).findById("MULTIPLE_DOWNLOAD_VIA_ACTION_SERVICE_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ARCHIVING_DIALOG.dialogDisplayed")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Archiving dialog not displayed");
             })
-            .end()
+         .end()
 
          .getLastPublish("ALF_MULTIPLE_DOCUMENT_ACTION_REQUEST", 5000, "Multiple document action request not made")
-            .getLastPublish("ALF_DOWNLOAD_AS_ZIP", 5000, "Multiple document action not passed to document service")
+         .getLastPublish("ALF_DOWNLOAD_AS_ZIP", 5000, "Multiple document action not passed to document service")
             .then(function(payload) {
                assert.lengthOf(payload.documents, 2, "Incorrect number of nodes requested to be archived");
             })
-            .getLastPublish("ALF_ARCHIVE_REQUEST", 5000, "A request was not made to initiate the archive generation")
+         .end()
+         
+         .getLastPublish("ALF_ARCHIVE_REQUEST", 5000, "A request was not made to initiate the archive generation")
 
          .findAllByCssSelector("#ARCHIVING_DIALOG.dialogHidden")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Archiving dialog not hidden");
             })
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOWNLOAD_FILE", 5000, "Generated archive not downloaded")
-            .clearLog();
+         .clearLog();
       },
 
       "Test that action does NOT appear for document": function() {
          return this.remote.findByCssSelector(selectors.downloadDocument.label)
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ACTIONS_ITEM_0_DOWNLOAD_AS_ZIP")
             .then(function(elements) {
@@ -115,7 +117,7 @@ define(["module",
       "Test that action does appear for folder": function() {
          return this.remote.findByCssSelector(selectors.downloadFolder.label)
             .click()
-            .end()
+         .end()
 
          .findDisplayedById("ACTIONS_ITEM_1_DOWNLOAD_AS_ZIP");
       },
@@ -123,37 +125,37 @@ define(["module",
       "Test non-legacy action version": function() {
          return this.remote.findAllByCssSelector("#ACTIONS_ITEM_1_DOWNLOAD_AS_ZIP")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ARCHIVING_DIALOG.dialogDisplayed")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Archiving dialog not displayed");
             })
-            .end()
+         .end()
 
          .getLastPublish("ALF_ARCHIVE_REQUEST", 5000, "A request was not made to initiate the archive generation")
             .findAllByCssSelector("#ARCHIVING_DIALOG.dialogHidden")
             .then(function(elements) {
                assert.lengthOf(elements, 1, "Archiving dialog not hidden");
             })
-            .end()
+         .end()
 
          .getLastPublish("ALF_DOWNLOAD_FILE", 5000, "Generated archive not downloaded")
-            .clearLog();
+         .clearLog();
       },
 
       "Cancel will prevent the download occurring": function() {
          return this.remote.findById("MULTIPLE_DOWNLOAD_VIA_ACTION_SERVICE")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ARCHIVING_DIALOG.dialogDisplayed .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ARCHIVING_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getAllPublishes("ALF_DOWNLOAD_FILE")
             .then(function(publishes) {

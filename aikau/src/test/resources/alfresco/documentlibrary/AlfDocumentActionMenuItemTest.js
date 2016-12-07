@@ -51,7 +51,7 @@ define(["module",
             });
       },
 
-      "Select document (with folder still selectd) and start workflow actio is still hidden": function() {
+      "Select document (with folder still selected) and start workflow action is still hidden": function() {
          return this.remote.findDisplayedByCssSelector("#SELECTOR_ITEM_1")
             .click()
          .end()
