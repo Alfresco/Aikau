@@ -27,11 +27,14 @@ define(function() {
 
    // Whether to run all tests or just a few
    var runAllTests = true;
-   // runAllTests = false; // Comment/uncomment this line to toggle
+   runAllTests = false; // Comment/uncomment this line to toggle
 
    // This is the collection to change when only some tests are required
    var someTests = [
-      "alfresco/renderers/ToggleTest"
+      // "alfresco/layout/FixedHeaderFooterTest",
+      // "alfresco/lists/AlfSortablePaginatedListTest",
+      "alfresco/renderers/PropertyTest"
+
 
       // THESE TESTS REGULARLY, BUT INTERMITTENTLY, FAIL WHEN RUNNING FULL SUITES - INVESTIGATE
       // "alfresco/preview/PdfJsPreviewFaultsTest",

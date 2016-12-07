@@ -22,23 +22,19 @@
  * instantiate the defined widgets. 
  * 
  * @module alfresco/core/ProcessWidgets
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @extends module:aikau/core/BaseWidget
+ * @mixes module:aikau/core/ChildProcessing
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing",
-        "dojo/text!./templates/ProcessWidgets.html",
+        "aikau/core/BaseWidget",
+        "aikau/core/ChildProcessing",
+        "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class"], 
-        function(declare, _Widget, _Templated, AlfCore, CoreWidgetProcessing, template, domConstruct, domClass) {
+        function(declare, BaseWidget, ChildProcessing, lang, domConstruct, domClass) {
    
-   return declare([_Widget, _Templated, AlfCore, CoreWidgetProcessing], {
+   return declare([BaseWidget, ChildProcessing], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -49,13 +45,6 @@ define(["dojo/_base/declare",
        */
       cssRequirements: [{cssFile:"./css/ProcessWidgets.css"}],
 
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
-      
       /**
        * @instance
        * @type {Object}
@@ -79,6 +68,18 @@ define(["dojo/_base/declare",
       baseClass: "widgets",
       
       /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.100
+       */
+      createWidgetDom: function alfresco_core_ProcessWidgets__createWidgetDom() {
+         this.domNode = this.containerNode = document.createElement("div");
+         this.domNode.className = "alfresco-core-ProcessWidgets " + this.baseClass || "";
+      },
+
+      /**
        * Implements the Dojo widget lifecycle function to call [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * @instance postCreate
        */
@@ -86,7 +87,12 @@ define(["dojo/_base/declare",
          domClass.add(this.domNode, this.additionalCssClasses || "");
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            }).then(lang.hitch(this, function(widgets) {
+               this.allWidgetsProcessed(widgets);
+            }));
          }
       }
    });

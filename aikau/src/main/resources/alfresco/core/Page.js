@@ -130,7 +130,12 @@ define(["alfresco/core/ProcessWidgets",
             {
                // Make sure to process widgets if there are no services...
                // Otherwise they will be processed once all the services are instantiated...
-               this.processWidgets(this.widgets, this.containerNode);
+               this.createChildren({
+                  widgets: this.widgets,
+                  targetNode: this.containerNode
+               }).then(lang.hitch(this, function(widgets) {
+                  this.allWidgetsProcessed(widgets);
+               }));
             }
          }
          catch (e)
@@ -330,7 +335,12 @@ define(["alfresco/core/ProcessWidgets",
          {
             // Make sure to process widgets if there are no services...
             // Otherwise they will be processed once all the services are instantiated...
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            }).then(lang.hitch(this, function(widgets) {
+               this.allWidgetsProcessed(widgets);
+            }));
          }
          else
          {
