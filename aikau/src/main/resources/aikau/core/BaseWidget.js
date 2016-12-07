@@ -67,7 +67,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      _applyAttributes: function alfresco_core_BaseWidget___applyAttributes() {
+      _applyAttributes: function aikau_core_BaseWidget___applyAttributes() {
          var originalParams = this.params;
          this.params = this.getParametersToApply(originalParams);
          this.inherited(arguments);
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
        * @param {object} originalParams The original parameters provided to the widget.
        * @return {object} An object of key/value pair parameters to be applied. 
        */
-      getParametersToApply: function alfresco_core_BaseWidget__getParametersToApply(/*jshint unused:false*/ originalParams) {
+      getParametersToApply: function aikau_core_BaseWidget__getParametersToApply(/*jshint unused:false*/ originalParams) {
          var params = null;
          if (originalParams.style)
          {
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      buildRendering: function alfresco_core_BaseWidget__buildRendering() {
+      buildRendering: function aikau_core_BaseWidget__buildRendering() {
          if (this.templateString)
          {
             this.inherited(arguments);
@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
        * @instance
        * @overridable
        */
-      createWidgetDom: function alfresco_core_BaseWidget__createWidgetDom() {
+      createWidgetDom: function aikau_core_BaseWidget__createWidgetDom() {
          this.alfLog("warn", "The 'createWidgetDom' function has not been implemented", this);
       }
    });

@@ -84,7 +84,23 @@ define(["dojo/_base/declare",
                   widgets: input.widgets
                });
 
-               filteredChildren.widgets.forEach( function( widget , index) {
+               // Some widgets require post processing that can only occur AFTER they have been
+               // added to the live document (typically when checking the dimensions into which
+               // they have been assigned). Therefore we need to notify all widgets when they
+               // are added to the document. If the supplied targetNode is already in the live
+               // document then we can create an array to capture all the widgets that will be
+               // created. Once everything has completed the widgets can be notified that they
+               // are in the document. 
+               // 
+               // NOTE: It is essential that this array is cascaded to all child widgets so that 
+               //       they can add their own children to it!
+               var targetNodeInDocument = document.body.contains(input.targetNode);
+               if (targetNodeInDocument) 
+               {
+                  this.addedToDocumentNotificationList = [];
+               }
+               
+               filteredChildren.widgets.forEach(function(widget, index) {
 
                   // Make a request to create the child, the response will be an object that will
                   // contain an attribute that is the promised...
@@ -131,10 +147,21 @@ define(["dojo/_base/declare",
                      }
                   }, this);
 
-                  // Resove the promise with the created children...
-                  resolve(createdChildren);
+                  // If this widget is already in the live document then we can notify all the 
+                  // widgets created that they are now in the document...
+                  if (targetNodeInDocument)
+                  {
+                     this.addedToDocumentNotificationList.forEach(function(widget) {
+                        if (typeof widget.startup === "function")
+                        {
+                           widget.startup();
+                        }
+                     });
+                  }
 
+                  // Resove the promise with the created children...
                   this.alfPublish(topics.WIDGET_PROCESSING_COMPLETE, null, true);
+                  resolve(createdChildren);
                }));
 
                // TODO: Keep track of widgets to be destroyed?
@@ -177,6 +204,9 @@ define(["dojo/_base/declare",
        */
       createChild: function aikau_core_ChildProcessing__createChild(input) {
          var initArgs = this.processWidgetConfig(input.widget);
+         
+         initArgs.addedToDocumentNotificationList = this.addedToDocumentNotificationList;
+
          var promisedWidget = new Promise(lang.hitch(this, function(resolve) {
             var widget = input.widget;
             var requires = [widget.name];
@@ -227,9 +257,9 @@ define(["dojo/_base/declare",
                   instantiatedWidget._alfPreferredWidgetId = preferredDomNodeId;
                }
 
-               if (typeof instantiatedWidget.startup === "function")
+               if (this.addedToDocumentNotificationList)
                {
-                  instantiatedWidget.startup();
+                  this.addedToDocumentNotificationList.push(instantiatedWidget);
                }
 
                var assignToScope = input.widget.assignToScope || this;
