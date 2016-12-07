@@ -289,7 +289,12 @@ define(["alfresco/core/ProcessWidgets",
                node = widgetInfo.node;
             if (widgets && widgets.length) 
             {
-               this.processWidgets(widgets, node);
+               this.createChildren({
+                  widgets: widgets,
+                  targetNode: node
+               }).then(lang.hitch(this, function(createdWidgets) {
+                  this.allWidgetsProcessed(createdWidgets);
+               }));
             } 
             else 
             {

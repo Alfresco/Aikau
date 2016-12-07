@@ -113,18 +113,17 @@ define(["alfresco/core/ProcessWidgets",
           * @param {string} rootClassName A string containing one or more space separated CSS classes to set on the DOM node
           */
          createWidgetDomNode: function alfresco_core_CoreWidgetProcessing__createWidgetDomNode(widgetConfig, rootNode, /*jshint unused:false*/ rootClassName) {
-
             // Create the stripe node and a new node for the widget
             var stripeNode = domConstruct.create("div", {
-                  className: this.baseClass + "__stripe",
-                  style: widgetConfig.stripeStyle || ""
-               }, rootNode),
-               contentNode = domConstruct.create("div", {
-                  className: this.baseClass + "__stripe__content",
-                  style: {
-                     maxWidth: this.contentWidth
-                  }
-               }, stripeNode);
+               className: this.baseClass + "__stripe",
+               style: widgetConfig.stripeStyle || ""
+            }, rootNode);
+            var contentNode = domConstruct.create("div", {
+               className: this.baseClass + "__stripe__content",
+               style: {
+                  maxWidth: this.contentWidth
+               }
+            }, stripeNode);
 
             // Add custom CSS
             if (widgetConfig.stripeClass) {

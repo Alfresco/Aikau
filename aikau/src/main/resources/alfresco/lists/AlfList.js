@@ -610,6 +610,8 @@ define(["dojo/_base/declare",
             this.alfSubscribe(this.scrollNearBottom, lang.hitch(this, this.onScrollNearBottom));
          }
          this.createSelectedItemSubscriptions();
+
+         this.alfSubscribe("ALF_VIEW_SHOWN", lang.hitch(this, this.onViewShown));
       },
 
       /**
@@ -1275,6 +1277,22 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * Called whenever a view reports that it has finished rendering.
+       * 
+       * @instance
+       * @param {object} payload
+       * @param {object} payload.view The view that has been shown
+       * @since 1.0.100
+       */
+      onViewShown: function alfresco_lists_AlfList__onViewShown(payload) {
+         // Attempt to focus a specific item if requested...
+         if (this._focusItemKey && payload.view)
+         {
+            payload.view.focusOnItem(this._focusItemKey);
+         }
+      },
+
+      /**
        * Handles requests to reload the current list data by clearing all the previous data and then calling
        * [loadData]{@link module:alfresco/lists/AlfList#loadData}.
        *
@@ -1479,12 +1497,6 @@ define(["dojo/_base/declare",
                this.currentData = view.getData();
                view.renderView(this.useInfiniteScroll);
                this.showView(view);
-
-               // Attempt to focus a specific item if requested...
-               if (this._focusItemKey)
-               {
-                  view.focusOnItem(this._focusItemKey);
-               }
             }
             else
             {

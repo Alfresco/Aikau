@@ -507,6 +507,10 @@ define(["dojo/_base/declare",
          {
             this.renderNoDataDisplay();
          }
+
+         this.alfPublish("ALF_VIEW_SHOWN", {
+            view: this
+         });
       },
 
       /**

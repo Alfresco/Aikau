@@ -23,12 +23,9 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!expect",
         "intern/chai!assert",
-        "require",
-        "alfresco/TestCommon",
         "intern/dojo/node!leadfoot/keys"],
-        function(module, defineSuite, expect, assert, require, TestCommon, keys) {
+        function(module, defineSuite, assert, keys) {
 
    defineSuite(module, {
       name: "Property Tests",
@@ -89,7 +86,7 @@ define(["module",
             .then(element => {
                this.remote.moveMouseTo(element);
             })
-            .end()
+         .end()
 
          .findByCssSelector("#HOVER_ITEM_0 .inner")
             .isDisplayed()
@@ -103,7 +100,7 @@ define(["module",
             .then(element => {
                this.remote.moveMouseTo(element);
             })
-            .end()
+         .end()
 
          .findByCssSelector("#HOVER_ITEM_0 .value")
             .isDisplayed()
@@ -129,7 +126,7 @@ define(["module",
             .then(function(truncated) {
                assert.isTrue(truncated, "Long property not truncated properly");
             })
-            .end()
+         .end()
 
          .findById("MAX_LENGTH_ITEM_0")
             .then(function(elem) {
@@ -138,7 +135,7 @@ define(["module",
             .then(function(size) {
                assert.equal(size.width, 300, "Long property width incorrect");
             })
-            .end()
+         .end()
 
          .screenie(); // For visual verification of ellipsis if required
       },
@@ -174,7 +171,7 @@ define(["module",
       "Truncated property displays full text on mouseover": function() {
          return this.remote.findById("MAX_LENGTH_ITEM_0")
             .moveMouseTo()
-            .end()
+         .end()
 
          .findByCssSelector(".dijitTooltip")
             .isDisplayed()
