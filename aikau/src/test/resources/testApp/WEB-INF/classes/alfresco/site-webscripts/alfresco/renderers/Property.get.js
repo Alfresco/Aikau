@@ -159,7 +159,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
-                                    id: "MAX_LENGTH",
+                                    id: "HIGHLIGHT",
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "name",
