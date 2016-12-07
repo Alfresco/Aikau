@@ -454,13 +454,19 @@ define(["dojo/_base/declare",
        * @instance
        */
       updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
-         this.renderedValueClassArray = ["alfresco-renderers-Property", this.renderedValueClass,this.renderSize];
+         // Need to set both renderedValueClassArray (for widgets without a template) and
+         // renderedValueClass (for those that do)...
+         var renderedValueClass = this.renderedValueClass;
+         this.renderedValueClassArray = ["alfresco-renderers-Property", renderedValueClass, this.renderSize];
+         this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
          if (this.renderOnNewLine === true) 
          {
+            this.renderedValueClass = this.renderedValueClass + " block";
             this.renderedValueClassArray.push("block");
          }
          if (this.deemphasized === true) 
          {
+            this.renderedValueClass = this.renderedValueClass + " deemphasized";
             this.renderedValueClassArray.push("deemphasize");
          }
       },
