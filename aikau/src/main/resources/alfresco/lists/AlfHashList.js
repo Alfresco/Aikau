@@ -353,15 +353,17 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#onDataLoadSuccess} to check
+       * Extends the [inherited function]{@link module:alfresco/lists/AlfList#showView} to check
        * whether or not a URL hash parameter is set to indicate a particular item to bring into view.
        * This URL hash parameter checked is the "currentItem" and if this is found it will publish the
        * value on the "ALF_BRING_ITEM_INTO_VIEW" topic.
-       * 
+       *
+       * @instance
        * @param  {object} payload The payload containing the loaded data.
        * @fires module:alfresco/lists/views/ListRenderer~event:ALF_BRING_ITEM_INTO_VIEW
+       * @since 1.0.101
        */
-      onDataLoadSuccess: function alfresco_lists_AlfHashList__onDataLoadSuccess(/*jshint unused:false*/ payload) {
+      showView: function alfresco_lists_AlfHashList__showView(/*jshint unused:false*/ view) {
          this.inherited(arguments);
          var currHash = hashUtils.getHash();
          if (currHash.currentItem)

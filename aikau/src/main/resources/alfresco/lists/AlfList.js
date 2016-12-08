@@ -795,10 +795,10 @@ define(["dojo/_base/declare",
                }
 
                // Remove the old aspect handle for re-selecting items and apply the aspect to the new view...
-               var oldAspect = this.viewAspectHandles[this._currentlySelectedView];
-               oldAspect && oldAspect.remove();
-               var newAspect = aspect.after(newView, "renderView", lang.hitch(this, this.publishSelectedItems));
-               this.viewAspectHandles[this._currentlySelectedView] = newAspect;
+               // var oldAspect = this.viewAspectHandles[this._currentlySelectedView];
+               // oldAspect && oldAspect.remove();
+               // var newAspect = aspect.after(newView, "renderView", lang.hitch(this, this.publishSelectedItems));
+               // this.viewAspectHandles[this._currentlySelectedView] = newAspect;
 
                this.copyViewData(oldView, newView);
                
@@ -836,6 +836,8 @@ define(["dojo/_base/declare",
          // Show the view...
          this.viewMap[this._currentlySelectedView] = newView;
          this.showView(newView);
+
+         this.publishSelectedItems();
 
          return renderedItems;
       },
@@ -1010,8 +1012,8 @@ define(["dojo/_base/declare",
          // that where views re-render themselves (e.g. resizing a gallery view)
          // that selection will be maintained even if the underlying renderer is destroyed
          // and recreated...
-         var aspectHandle = aspect.after(view, "renderView", lang.hitch(this, this.publishSelectedItems));
-         this.viewAspectHandles[viewName] = aspectHandle;
+         // var aspectHandle = aspect.after(view, "renderView", lang.hitch(this, this.publishSelectedItems));
+         // this.viewAspectHandles[viewName] = aspectHandle;
 
          // Publish the additional controls...
          this.publishAdditionalControls(viewName, view);
@@ -1315,6 +1317,12 @@ define(["dojo/_base/declare",
             view.focusOnItem(this._focusItemKey);
          }
 
+         // After a view has been rendered publish the selected items to ensure
+         // that selection consistency has been maintained. This approach also ensures
+         // that where views re-render themselves (e.g. resizing a gallery view)
+         // that selection will be maintained even if the underlying renderer is destroyed
+         // and recreated...
+         this.publishSelectedItems();
          return renderedItems;
       },
 
