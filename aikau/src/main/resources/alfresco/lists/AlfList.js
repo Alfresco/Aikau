@@ -801,23 +801,43 @@ define(["dojo/_base/declare",
                this.viewAspectHandles[this._currentlySelectedView] = newAspect;
 
                this.copyViewData(oldView, newView);
-               newView.renderView(this.useInfiniteScroll);
-
-               // Clear up the old view...
-               oldView.clearOldView();
-               oldView.destroy();
-
-               // Show the view...
-               this.viewMap[this._currentlySelectedView] = newView;
-               this.showView(newView);
-
-               // Attempt to focus a specific item if requested...
-               if (this._focusItemKey)
+               
+               // As part of the performance improvements (see AKU-1142) there is a switch
+               // to using native Promises in view rendering. The AlfListView renderView 
+               // function has been adapted to return a promise but for backwards compatibility
+               // we need to retain the previous code path (which should be followed when 
+               // rendering a view does not return a promise)...
+               var renderedView = newView.renderView(this.useInfiniteScroll);
+               if (renderedView && typeof renderedView.then === "function")
                {
-                  newView.focusOnItem(this._focusItemKey);
+                  renderedView.then(lang.hitch(this, this.onNewViewRendered, oldView, newView));
+               }
+               else
+               {
+                  this.onNewViewRendered(oldView, newView);
                }
             }
         }
+      },
+
+      /**
+       *
+       * @param {object}   oldView The previous view that is being replaced
+       * @param {object}   newView The view that has now been rendered
+       * @param {object[]} renderedItems The items rendered (this should be returned)
+       * @return {Promise|object[]} The promise of the items rendered in the view
+       * @since 1.0.101
+       */
+      onNewViewRendered: function alfresco_lists_AlfList__onViewRendered(oldView, newView, renderedItems) {
+         // Clear up the old view...
+         oldView.clearOldView();
+         oldView.destroy();
+
+         // Show the view...
+         this.viewMap[this._currentlySelectedView] = newView;
+         this.showView(newView);
+
+         return renderedItems;
       },
 
       /**
@@ -1120,8 +1140,22 @@ define(["dojo/_base/declare",
                setTimeout(lang.hitch(this, function() {
                   newView.setData(this.currentData);
                   newView.currentData.previousItemCount = 0;
-                  newView.renderView(false);
-                  this.showView(newView);
+                  
+                  // As part of the performance improvements (see AKU-1142) there is a switch
+                  // to using native Promises in view rendering. The AlfListView renderView 
+                  // function has been adapted to return a promise but for backwards compatibility
+                  // we need to retain the previous code path (which should be followed when 
+                  // rendering a view does not return a promise)...
+                  var renderedView = newView.renderView(false);
+                  if (renderedView && typeof renderedView.then === "function")
+                  {
+                     renderedView.then(lang.hitch(this, this.showView, newView));
+                  }
+                  else
+                  {
+                     this.showView(newView);
+                  }
+                  
                }), delay);
             }
             else
@@ -1258,8 +1292,10 @@ define(["dojo/_base/declare",
       /**
        * @instance
        * @param {object} view The view to show
+       * @param {object[]} renderedItems The items rendered (this should be returned)
+       * @return {Promise|object[]} The promise of the items rendered in the view
        */
-      showView: function alfresco_lists_AlfList__showView(view) {
+      showView: function alfresco_lists_AlfList__showView(view, renderedItems) {
          this.hideChildren(this.domNode);
          if (this.viewsNode.children.length > 0)
          {
@@ -1272,6 +1308,14 @@ define(["dojo/_base/declare",
 
          // Tell the view that it's now on display...
          view.onViewShown();
+
+         // Attempt to focus a specific item if requested...
+         if (this._focusItemKey)
+         {
+            view.focusOnItem(this._focusItemKey);
+         }
+
+         return renderedItems;
       },
 
       /**
@@ -1477,13 +1521,14 @@ define(["dojo/_base/declare",
             {
                view.augmentData(this.currentData);
                this.currentData = view.getData();
-               view.renderView(this.useInfiniteScroll);
-               this.showView(view);
-
-               // Attempt to focus a specific item if requested...
-               if (this._focusItemKey)
+               var renderedView = view.renderView(this.useInfiniteScroll);
+               if (renderedView && typeof renderedView.then === "function")
                {
-                  view.focusOnItem(this._focusItemKey);
+                  renderedView.then(lang.hitch(this, this.showView, view));
+               }
+               else
+               {
+                  this.showView(view);
                }
             }
             else

@@ -26,8 +26,9 @@
 define(["dojo/_base/declare",
         "alfresco/documentlibrary/AlfDocumentList", 
         "alfresco/core/PathUtils",
-        "dojo/_base/array"], 
-        function(declare, AlfDocumentList, PathUtils, array) {
+        "dojo/_base/array",
+        "dojo/_base/lang"], 
+        function(declare, AlfDocumentList, PathUtils, array, lang) {
    
    return declare([AlfDocumentList], {
       
@@ -142,10 +143,24 @@ define(["dojo/_base/declare",
             this.showRenderingMessage();
             view.setData(this._currentData);
             view.renderView();
-            this.showView(view);
             
-            // Force a resize of the sidebar container to take the new height of the view into account...
-            this.alfPublish("ALF_RESIZE_SIDEBAR", {});
+            // As part of the performance improvements (see AKU-1142) there is a switch
+            // to using native Promises in view rendering. The AlfListView renderView 
+            // function has been adapted to return a promise but for backwards compatibility
+            // we need to retain the previous code path (which should be followed when 
+            // rendering a view does not return a promise)...
+            var renderedView = view.renderView(this.useInfiniteScroll);
+            if (renderedView && typeof renderedView.then === "function")
+            {
+               renderedView.then(lang.hitch(this, this.showView, view)).then(lang.hitch(this, function() {
+                  this.alfPublish("ALF_RESIZE_SIDEBAR", {});
+               }));
+            }
+            else
+            {
+               this.showView(view);
+               this.alfPublish("ALF_RESIZE_SIDEBAR", {});
+            }
          }
       }
    });
