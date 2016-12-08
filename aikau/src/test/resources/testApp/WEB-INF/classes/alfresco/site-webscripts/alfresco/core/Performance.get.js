@@ -60,7 +60,7 @@ model.jsonModel = {
             },
             widgets: [
                {
-                  name: "alfresco/lists/views/AlfListView",
+                  name: "aikau/lists/views/ListView",
                   config: {
                      widgets: [
                         {
