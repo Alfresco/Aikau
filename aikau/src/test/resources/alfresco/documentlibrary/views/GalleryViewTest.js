@@ -239,8 +239,9 @@ define(["module",
       "Resize and check the selections": function() {
          return this.remote.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
-            .end()
-            .getLastPublish("HAS_ITEMS_ALF_SELECTED_FILES_CHANGED")
+         .end()
+            
+         .getLastPublish("HAS_ITEMS_ALF_SELECTED_FILES_CHANGED")
             .then(function(payload) {
                var nodeRefs = [];
                payload.selectedItems.forEach(function(item) {

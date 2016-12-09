@@ -107,6 +107,7 @@ define(["dojo/_base/declare",
         "alfresco/core/DynamicWidgetProcessingTopics",
         "alfresco/lists/views/AlfListView",
         "alfresco/menus/AlfCheckableMenuItem",
+        "dojo/aspect",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
@@ -114,7 +115,7 @@ define(["dojo/_base/declare",
         "dojo/io-query",
         "dojo/sniff"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, CoreWidgetProcessing, topics, WidgetsCreator, SelectedItemStateMixin,
-                 DynamicWidgetProcessingTopics, AlfListView, AlfCheckableMenuItem, array, lang, domConstruct,
+                 DynamicWidgetProcessingTopics, AlfListView, AlfCheckableMenuItem, aspect, array, lang, domConstruct,
                  domClass, ioQuery, sniff) {
 
    return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, SelectedItemStateMixin, DynamicWidgetProcessingTopics], {
@@ -793,6 +794,12 @@ define(["dojo/_base/declare",
                   newView.useInfiniteScroll = true;
                }
 
+               // Remove the old aspect handle for re-selecting items and apply the aspect to the new view...
+               var oldAspect = this.viewAspectHandles[this._currentlySelectedView];
+               oldAspect && oldAspect.remove();
+               var newAspect = aspect.after(newView, "renderView", lang.hitch(this, this.publishSelectedItems));
+               this.viewAspectHandles[this._currentlySelectedView] = newAspect;
+
                this.copyViewData(oldView, newView);
                
                // As part of the performance improvements (see AKU-1142) there is a switch
@@ -829,9 +836,6 @@ define(["dojo/_base/declare",
          // Show the view...
          this.viewMap[this._currentlySelectedView] = newView;
          this.showView(newView);
-
-         this.publishSelectedItems();
-
          return renderedItems;
       },
 
@@ -913,6 +917,7 @@ define(["dojo/_base/declare",
       registerViews: function alfresco_lists_AlfList__registerViews(widgets) {
          this.viewMap = {};
          this.viewDefinitionMap = {};
+         this.viewAspectHandles = {};
          array.forEach(widgets, lang.hitch(this, this.registerView));
 
          // If no default view has been provided, then just use the first...
@@ -998,6 +1003,14 @@ define(["dojo/_base/declare",
 
          // Attempt to get a localized version of the label...
          viewSelectionConfig.label = this.message(viewSelectionConfig.label);
+
+         // After a view has been rendered publish the selected items to ensure
+         // that selection consistency has been maintained. This approach also ensures
+         // that where views re-render themselves (e.g. resizing a gallery view)
+         // that selection will be maintained even if the underlying renderer is destroyed
+         // and recreated...
+         var aspectHandle = aspect.after(view, "renderView", lang.hitch(this, this.publishSelectedItems));
+         this.viewAspectHandles[viewName] = aspectHandle;
 
          // Publish the additional controls...
          this.publishAdditionalControls(viewName, view);
