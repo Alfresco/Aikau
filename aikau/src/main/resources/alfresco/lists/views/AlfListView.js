@@ -489,18 +489,24 @@ define(["dojo/_base/declare",
                      var promisedData = this.docListRenderer.renderData();
                      if (promisedData)
                      {
-                        promisedData.then(lang.hitch(this, function(renderedItems) {
-
-                           if (renderedItems.length)
-                           {
-                              resolve(renderedItems);
-                           }
-                           else
-                           {
-                              this.renderNoDataDisplay();
-                              resolve();
-                           }
-                        }));
+                        promisedData.then(
+                           lang.hitch(this, function(renderedItems) {
+                              if (renderedItems.length)
+                              {
+                                 resolve(renderedItems);
+                              }
+                              else
+                              {
+                                 this.renderNoDataDisplay();
+                                 resolve();
+                              }
+                           }),
+                           lang.hitch(this, function(reason) {
+                              this.alfLog("error", "The following error occurred rendering the data:", reason, this);
+                                 this.renderErrorDisplay();
+                                 resolve();
+                              })
+                        );
                      }
                      else if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
                      {

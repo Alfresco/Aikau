@@ -38,7 +38,7 @@ define(["dojo/_base/declare",
    return declare([_MultiItemRendererMixin], {
 
       renderData: function aikau_lists_views_layout_MultiItemRendererMixin__renderData() {
-         var promisedData = new Promise(lang.hitch(this, function(resolve) {
+         var promisedData = new Promise(lang.hitch(this, function(resolve, reject) {
             
             this._renderedItemWidgets = [];
 
@@ -80,11 +80,15 @@ define(["dojo/_base/declare",
                   promisedItem && promisedItems.push(promisedItem);
                }, this);
                
-               return Promise.all(promisedItems).then(lang.hitch(this, function(renderedItems) {
-                  this._renderedItemWidgets = renderedItems;
-                  this.allItemsRendered();
-                  resolve(renderedItems);
-               }));
+               return Promise.all(promisedItems).then(
+                  lang.hitch(this, function(renderedItems) {
+                     this._renderedItemWidgets = renderedItems;
+                     this.allItemsRendered();
+                     resolve(renderedItems);
+                  }),
+                  lang.hitch(this, function(reason) {
+                     reject(reason);
+                  }));
             }
             else
             {
@@ -105,11 +109,17 @@ define(["dojo/_base/declare",
       renderNextItem: function aikau_lists_views_layout_MultiItemRendererMixin__renderNextItem(itemToRender, index) {
          this.currentItem = itemToRender;
          this.currentIndex = index;
-         if (typeof this.currentItem.index === "undefined")
+         if (this.currentItem && typeof this.currentItem.index === "undefined")
          {
             this.currentItem.index = index;
          }
-         if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
+         if (!itemToRender)
+         {
+            return new Promise(function(resolve, reject) {
+               reject("Null item to be rendered");
+            });
+         }
+         else if (itemToRender === RenderAppendixSentinel && this.widgetsForAppendix)
          {
             // The current item is a marker to render an "appendix". This is a non-data entry into the list
             // of items to be rendered, the original use case is for some kind of "Add" style control that

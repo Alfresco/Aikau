@@ -31,15 +31,15 @@ define(["module",
       testPage: "/AlfListView",
 
       "Can find data-load failure message": function() {
-         return this.remote.findByCssSelector("#DATA_LOAD_FAILURE .alfresco-lists-AlfList > .data-failure");
+         return this.remote.findDisplayedByCssSelector("#DATA_LOAD_FAILURE .alfresco-lists-AlfList > .data-failure");
       },
 
       "Can find no-data message": function() {
-         return this.remote.findByCssSelector("#NO_DATA .alfresco-lists-views-AlfListView__no-data");
+         return this.remote.findDisplayedByCssSelector("#NO_DATA .alfresco-lists-views-AlfListView__no-data");
       },
 
       "Can find render-error message": function() {
-         return this.remote.findByCssSelector("#ERROR .alfresco-lists-views-AlfListView__render-error");
+         return this.remote.findDisplayedByCssSelector("#ERROR .alfresco-lists-views-AlfListView__render-error");
       },
 
       "Can find successfully loaded list": function() {
@@ -51,7 +51,7 @@ define(["module",
 
       // See AKU-933
       "List modifiers work": function() {
-         return this.remote.findByCssSelector("#PROPERTY_ITEM_0 span.value")
+         return this.remote.findDisplayedByCssSelector("#PROPERTY_ITEM_0 span.value")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Tinky Winky");
