@@ -2005,6 +2005,21 @@ define([],function() {
       VALIDATE_SITE_IDENTIFIER: "ALF_VALIDATE_SITE_IDENTIFIER",
 
       /**
+       * This topic is published by an [AlfList]{@link module:alfresco/lists/AlfList#showView}
+       * when a view has completed rendering. It is used by the 
+       * [InfiniteScrollArea]{@link module:alfresco/layout/InfiniteScrollArea} as a trigger to
+       * check whether or not more data needs to be loaded to fill the area.
+       * 
+       * @instance
+       * @type {string}
+       * @default 
+       * @since 1.0.101
+       *
+       * @event
+       */
+      VIEW_RENDERING_COMPLETE: "VIEW_RENDERING_COMPLETE",
+
+      /**
        * This topic is published to indicate that widget processing has been completed. It is typically
        * fired by widgets that dynamically render widget models.
        *

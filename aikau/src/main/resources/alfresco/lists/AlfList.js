@@ -1296,6 +1296,7 @@ define(["dojo/_base/declare",
        * @param {object} view The view to show
        * @param {object[]} renderedItems The items rendered (this should be returned)
        * @return {Promise|object[]} The promise of the items rendered in the view
+       * @fires module:alfresco/core/topics#VIEW_RENDERING_COMPLETE
        */
       showView: function alfresco_lists_AlfList__showView(view, renderedItems) {
          this.hideChildren(this.domNode);
@@ -1323,6 +1324,9 @@ define(["dojo/_base/declare",
          // that selection will be maintained even if the underlying renderer is destroyed
          // and recreated...
          this.publishSelectedItems();
+
+         this.alfPublish(topics.VIEW_RENDERING_COMPLETE);
+
          return renderedItems;
       },
 
