@@ -2017,7 +2017,7 @@ define([],function() {
        *
        * @event
        */
-      VIEW_RENDERING_COMPLETE: "VIEW_RENDERING_COMPLETE",
+      VIEW_RENDERING_COMPLETE: "ALF_VIEW_RENDERING_COMPLETE",
 
       /**
        * This topic is published to indicate that widget processing has been completed. It is typically

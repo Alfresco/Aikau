@@ -1322,8 +1322,8 @@ define(["dojo/_base/declare",
          // and recreated...
          this.publishSelectedItems();
 
-         this.alfPublish(topics.VIEW_RENDERING_COMPLETE);
-
+         // Wait for rendering to complete before publishing that it has completed...
+         window.requestAnimationFrame(lang.hitch(this, this.alfPublish, topics.VIEW_RENDERING_COMPLETE));
          return renderedItems;
       },
 
