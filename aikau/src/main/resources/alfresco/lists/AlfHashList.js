@@ -368,9 +368,11 @@ define(["dojo/_base/declare",
          var currHash = hashUtils.getHash();
          if (currHash.currentItem)
          {
-            this.alfPublish("ALF_BRING_ITEM_INTO_VIEW", {
-               item: currHash.currentItem
-            });
+            window.requestAnimationFrame(lang.hitch(this, function() {
+               this.alfPublish("ALF_BRING_ITEM_INTO_VIEW", {
+                  item: currHash.currentItem
+               });
+            }));
          }
       },
 
