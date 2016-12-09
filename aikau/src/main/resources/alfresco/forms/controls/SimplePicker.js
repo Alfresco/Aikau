@@ -18,16 +18,16 @@
  */
 
 /**
- * PLEASE NOTE: This is a BETA quality widget, not intended for production use.
+ * 
  * 
  * @module alfresco/forms/controls/SimplePicker
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:aikau/core/ChildProcessing
  * @author Dave Draper
  */
 define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
+        "aikau/core/ChildProcessing",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/ObjectTypeUtils",
@@ -36,9 +36,9 @@ define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/pickers/Picker",
         "alfresco/pickers/PropertyPicker",
         "alfresco/pickers/PickedItems"], 
-        function(BaseFormControl, declare, CoreWidgetProcessing, ObjectProcessingMixin, lang, array, ObjectTypeUtils) {
+        function(BaseFormControl, declare, ChildProcessing, lang, array, ObjectTypeUtils) {
    
-   return declare([BaseFormControl, CoreWidgetProcessing, ObjectProcessingMixin], {
+   return declare([BaseFormControl, ChildProcessing], {
       
       /**
        * @instance
@@ -121,7 +121,19 @@ define(["alfresco/forms/controls/BaseFormControl",
             widgetsForControl = lang.clone(this.widgetsForControl);
             this.processObject(["processInstanceTokens"], widgetsForControl);
          }
-         return this.processWidgets(widgetsForControl, this._controlNode);
+         return this.createChildren({
+            widgets: widgetsForControl,
+            targetNode: this._controlNode
+         }).then(lang.hitch(this, function(widgets) {
+            var value = this.getValue();
+            if (ObjectTypeUtils.isArray(value))
+            {
+               array.forEach(value, function(item) {
+                  this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
+               }, this);
+            }
+            return widgets;
+         }));
       },
 
       /**
@@ -131,16 +143,16 @@ define(["alfresco/forms/controls/BaseFormControl",
        * 
        * @instance
        */
-      completeWidgetSetup: function alfresco_forms_controls_SimplePicker__completeWidgetSetup() {
-         this.inherited(arguments);
-         var value = this.getValue();
-         if (ObjectTypeUtils.isArray(value))
-         {
-            array.forEach(value, function(item) {
-               this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
-            }, this);
-         }
-      },
+      // completeWidgetSetup: function alfresco_forms_controls_SimplePicker__completeWidgetSetup() {
+      //    this.inherited(arguments);
+      //    var value = this.getValue();
+      //    if (ObjectTypeUtils.isArray(value))
+      //    {
+      //       array.forEach(value, function(item) {
+      //          this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
+      //       }, this);
+      //    }
+      // },
 
       /**
        * The picker widgets. Setting this to any value will effectively override the 

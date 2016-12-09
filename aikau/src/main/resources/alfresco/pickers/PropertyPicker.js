@@ -159,7 +159,7 @@ define(["dojo/_base/declare",
        *
        * @instance
        */
-      postCreate: function alfresco_lists_AlfList__postCreate() {
+      postCreate: function alfresco_pickers_PropertyPicker__postCreate() {
          if (this.widgets)
          {
             var widgets = lang.clone(this.widgets);
