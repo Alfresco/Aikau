@@ -137,24 +137,6 @@ define(["alfresco/forms/controls/BaseFormControl",
       },
 
       /**
-       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#completeWidgetSetup}
-       * to publish the selected items. This has the effect of hiding the initialised selected items values
-       * from the available values list.
-       * 
-       * @instance
-       */
-      // completeWidgetSetup: function alfresco_forms_controls_SimplePicker__completeWidgetSetup() {
-      //    this.inherited(arguments);
-      //    var value = this.getValue();
-      //    if (ObjectTypeUtils.isArray(value))
-      //    {
-      //       array.forEach(value, function(item) {
-      //          this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
-      //       }, this);
-      //    }
-      // },
-
-      /**
        * The picker widgets. Setting this to any value will effectively override the 
        * [widgetsForAvailableItemsView]{@link module:alfresco/forms/controls/SimplePicker#widgetsForAvailableItemsView}
        * and [widgetsForPickedItemsView]{@link module:alfresco/forms/controls/SimplePicker#widgetsForPickedItemsView}
