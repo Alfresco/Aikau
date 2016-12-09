@@ -185,7 +185,7 @@ define(["dojo/_base/declare",
        * @param {object[]} input.widgets The widgets to filter
        * @return {object} The output object
        */
-      filterChildren: function alfresco_core_ChildProcessing__filterChildren(input) {
+      filterChildren: function aikau_core_ChildProcessing__filterChildren(input) {
          var output = {};
          if (input.widgets)
          {
