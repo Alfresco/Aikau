@@ -109,13 +109,16 @@ define(["module",
          var actionSelector = TestCommon.getTestSelector(actionsSelectors, "label", ["SR_ACTIONS"]);
          return this.remote.findByCssSelector(actionSelector)
             .moveMouseTo(1, 1)
+         .end()
+
+         .findDisplayedByCssSelector(actionSelector)
             .click()
          .end()
 
-         .findById("SR_ACTIONS_CUSTOM3")
-            .end()
+         .findDisplayedById("SR_ACTIONS_CUSTOM3")
+         .end()
 
-         .findById("SR_ACTIONS_MANAGE_ASPECTS");
+         .findDisplayedById("SR_ACTIONS_MANAGE_ASPECTS");
       },
 
       // See AKU-769 - Need to check left mouse clicks and left mouse clicks with control key depressed...

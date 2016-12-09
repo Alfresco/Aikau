@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
         "dojo/text!./templates/AlfListView.html",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/documentlibrary/_AlfDndDocumentUploadMixin",
-        "alfresco/lists/views/ListRenderer",
+        "aikau/lists/views/ListRenderer",
         "alfresco/lists/views/RenderAppendixSentinel",
         "alfresco/core/Core",
         "alfresco/core/JsNode",
@@ -445,68 +445,104 @@ define(["dojo/_base/declare",
        * most common example of this is when infinite scroll is being used.
        */
       renderView: function alfresco_lists_views_AlfListView__renderView(preserveCurrentData) {
-         if (this.currentData && this.currentData.items)
-         {
-            if (this.widgetsForAppendix)
+         var promisedView = new Promise(lang.hitch(this, function(resolve, /*jshint unused:false*/ reject) {
+            // jshint maxcomplexity:false
+            if (this.currentData && this.currentData.items)
             {
-               var containsSentinel = array.some(this.currentData.items, function(item) {
-                  return item === RenderAppendixSentinel;
-               });
-               !containsSentinel && this.currentData.items.push(RenderAppendixSentinel);
-            }
-
-            if (this.currentData.items.length > 0)
-            {
-               try
+               if (this.widgetsForAppendix && this.currentData.items)
                {
-                  if (this.messageNode)
+                  var containsSentinel = this.currentData.items.some(function(item) {
+                     return item === RenderAppendixSentinel;
+                  });
+                  !containsSentinel && this.currentData.items.push(RenderAppendixSentinel);
+               }
+
+               if (this.currentData.items.length > 0)
+               {
+                  try
                   {
-                     domConstruct.destroy(this.messageNode);
+                     if (this.messageNode)
+                     {
+                        domConstruct.destroy(this.messageNode);
+                     }
+
+                     // If we don't want to preserve the current data (e.g. if infinite scroll isn't being used)
+                     // then we should destroy the previous renderer...
+                     if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.docListRenderer)
+                     {
+                        this.destroyRenderer();
+                     }
+
+                     // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
+                     // when rendering additional infinite scroll data...
+                     if (!this.docListRenderer)
+                     {
+                        this.docListRenderer = this.createListRenderer();
+                        this.docListRenderer.placeAt(this.tableNode, "last");
+                     }
+
+                     // Ensure that the renderer has has the same itemKey value as configured on the view. This is
+                     // so that comparisons can be made for selection and items can be brought into view as necessary
+                     this.docListRenderer.itemKey = this.itemKey;
+                     
+                     // Finally, render the current data (when using infinite scroll the data should have been augmented)
+                     var promisedData = this.docListRenderer.renderData();
+                     if (promisedData)
+                     {
+                        promisedData.then(
+                           lang.hitch(this, function(renderedItems) {
+                              if (renderedItems.length)
+                              {
+                                 resolve(renderedItems);
+                              }
+                              else
+                              {
+                                 this.renderNoDataDisplay();
+                                 resolve();
+                              }
+                           }),
+                           lang.hitch(this, function(reason) {
+                              this.alfLog("error", "The following error occurred rendering the data:", reason, this);
+                                 this.renderErrorDisplay();
+                                 resolve();
+                              })
+                        );
+                     }
+                     else if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
+                     {
+                        this.renderNoDataDisplay();
+                        resolve();
+                     }
+                     else
+                     {
+                        // TODO: Better error handling when the renderer doesn't return a promise
+                        this.alfLog("warn", "The view renderer does not return a promise when rendering data", this);
+                        resolve();
+                     }
                   }
-
-                  // If we don't want to preserve the current data (e.g. if infinite scroll isn't being used)
-                  // then we should destroy the previous renderer...
-                  if ((preserveCurrentData === false || preserveCurrentData === undefined) && this.docListRenderer)
+                  catch(e)
                   {
-                     this.destroyRenderer();
-                  }
-
-                  // If the renderer is null we need to create one (this typically wouldn't be expected to happen)
-                  // when rendering additional infinite scroll data...
-                  if (!this.docListRenderer)
-                  {
-                     this.docListRenderer = this.createListRenderer();
-                     this.docListRenderer.placeAt(this.tableNode, "last");
-                  }
-
-                  // Ensure that the renderer has has the same itemKey value as configured on the view. This is
-                  // so that comparisons can be made for selection and items can be brought into view as necessary
-                  this.docListRenderer.itemKey = this.itemKey;
-                  
-                  // Finally, render the current data (when using infinite scroll the data should have been augmented)
-                  this.docListRenderer.renderData();
-
-                  // Check to see if any rows were rendered (allows for renderFilters on widgets. If they weren't, render no Data Display.
-                  if (query(this.renderFilterSelectorQuery, this.tableNode).length === 0)
-                  {
-                     this.renderNoDataDisplay();
+                     // TODO: This should return a promise itself...
+                     this.alfLog("error", "The following error occurred rendering the data", e, this);
+                     this.renderErrorDisplay();
+                     resolve();
                   }
                }
-               catch(e)
+               else
                {
-                  this.alfLog("error", "The following error occurred rendering the data", e, this);
-                  this.renderErrorDisplay();
+                  // TODO: This should return a promise itself...
+                  this.renderNoDataDisplay();
+                  resolve();
                }
             }
             else
             {
+               // TODO: This should return a promise itself...
                this.renderNoDataDisplay();
+               resolve();
             }
-         }
-         else
-         {
-            this.renderNoDataDisplay();
-         }
+         }));
+         return promisedView;
       },
 
       /**

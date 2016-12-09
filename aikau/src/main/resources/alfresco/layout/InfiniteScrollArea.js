@@ -57,10 +57,11 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dojo/_base/lang",
         "alfresco/core/ProcessWidgets",
-        "alfresco/services/InfiniteScrollService"], 
-        function(declare, lang, ProcessWidgets, InfiniteScrollService) {
+        "alfresco/services/InfiniteScrollService",
+        "alfresco/core/topics",
+        "dojo/_base/lang"], 
+        function(declare, ProcessWidgets, InfiniteScrollService, topics, lang) {
    
    return declare([ProcessWidgets, InfiniteScrollService], {
       
@@ -123,6 +124,7 @@ define(["dojo/_base/declare",
        * to detect scroll position on
        *
        * @instance
+       * @listens module:alfresco/core/topics#VIEW_RENDERING_COMPLETE
        */
       postCreate: function alfresco_layout_InfiniteScrollArea__postCreate() {
          this.inherited(arguments);
@@ -131,7 +133,7 @@ define(["dojo/_base/declare",
 
          if (this.fillAvailableHeight)
          {
-            this.alfSubscribe(this.requestFinishedTopic, lang.hitch(this, this.onDataLoaded));
+            this.alfSubscribe(topics.VIEW_RENDERING_COMPLETE, lang.hitch(this, this.onDataLoaded));
          }
       },
 

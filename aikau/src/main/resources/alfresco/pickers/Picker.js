@@ -28,7 +28,8 @@
  * @mixes external:dojo/_TemplatedMixin
  * @mixes module:alfresco/core/Core
  * @mixes module:alfresco/core/CoreWidgetProcessing
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase",
@@ -149,7 +150,6 @@ define(["dojo/_base/declare",
        * @instance
        */
       postCreate: function alfresco_pickers_Picker__postCreate() {
-         // this.pubSubScope = this.generateUuid() + "_";
          this.currentPickers = [];
          this.alfSubscribe("ALF_ADD_PICKER", lang.hitch(this, this.addPicker));
 

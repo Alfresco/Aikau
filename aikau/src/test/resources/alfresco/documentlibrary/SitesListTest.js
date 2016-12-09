@@ -22,9 +22,8 @@
  */
 define(["module",
         "alfresco/defineSuite",
-        "intern/chai!expect",
         "intern/chai!assert"],
-        function(module, defineSuite, expect, assert) {
+        function(module, defineSuite, assert) {
 
    defineSuite(module, {
       name: "Sites List Test",
@@ -45,12 +44,12 @@ define(["module",
       "Test Page Size Chage": function() {
          return this.remote.findByCssSelector("#SITES_LIST_PAGINATION_MENU_RESULTS_PER_PAGE_SELECTOR_text")
             .click()
-            .end()
+         .end()
 
          // Select 100 results per page...
          .findByCssSelector("#SITES_LIST_PAGINATION_MENU_RESULTS_PER_PAGE_SELECTOR_dropdown .alf-dropdown-menu tr:nth-child(4)")
             .click()
-            .end()
+         .end()
 
          // Check that there are now 2 results (note that the MockXhr service has been fixed so that a page size of
          // 25 returns 1 result and a page size of 100 returns 2 results)...
