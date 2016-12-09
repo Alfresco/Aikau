@@ -201,6 +201,7 @@ define(["dojo/_base/declare",
                      currentData: {
                         items: this.availableAspects
                      },
+                     hideValidation: true,
                      aspectsToDisplay: this.aspectsToDisplay,
                      addableAspects: this.addableAspects,
                      removableAspects: this.removableAspects,
