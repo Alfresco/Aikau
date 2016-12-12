@@ -41,7 +41,6 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/KeyboardNavigationSuppressionMixin",
-        "dojo/text!./templates/InlineEditProperty.html",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/Deferred",
@@ -56,7 +55,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 template, lang, array, Deferred, domClass, html, domAttr, keys, event, query) {
+                 lang, array, Deferred, domClass, html, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
