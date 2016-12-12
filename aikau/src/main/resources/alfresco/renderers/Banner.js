@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
        * @since 1.0.101
        */
       createWidgetDom: function alfresco_renderers_Banner__createWidgetDom() {
-         this.domNode = document.createElement("span");
+         this.bannerNode = this.domNode = document.createElement("span");
          this.domNode.classList.add("alfresco-renderers-Banner");
          this.domNode.classList.add("hidden");
          this.domNode.textContent = this.bannerMessage;

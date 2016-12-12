@@ -518,10 +518,10 @@ define(["dojo/_base/declare",
 
          this.imgNode = document.createElement("img");
          this.imgNode.classList.add("alfresco-renderers-Thumbnail__image");
-         this.imgNode.setAtttribute("id", this.imgId);
-         this.imgNode.setAtttribute("src", this.thumbnailUrl);
-         this.imgNode.setAtttribute("alt", this.imgAltText);
-         this.imgNode.setAtttribute("title", this.imgTitle);
+         this.imgNode.setAttribute("id", this.imgId);
+         this.imgNode.setAttribute("src", this.thumbnailUrl);
+         this.imgNode.setAttribute("alt", this.imgAltText);
+         this.imgNode.setAttribute("title", this.imgTitle);
          this._attach(this.imgNode, "onload", lang.hitch(this, this.getNaturalImageSize));
 
          this.frameNode.appendChild(this.imgNode);
