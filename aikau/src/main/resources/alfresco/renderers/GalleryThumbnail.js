@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
          this.titleNode.classList.add("share-hidden");
          
          this.selectBarNode = document.createElement("div");
-         this.titleBarNode.appendChild(this.selectBarNode);
+         this.titleNode.appendChild(this.selectBarNode);
          
          this.displayNameNode = document.createElement("div");
          this.displayNameNode.classList.add("displayName");
