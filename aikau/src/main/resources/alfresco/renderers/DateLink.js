@@ -29,19 +29,11 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/navigation/LinkClickMixin",
-        "dojo/text!./templates/DateLink.html",
         "dojo/_base/event",
         "dojo/_base/lang"], 
-        function(declare, Date, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin, template, event, lang) {
+        function(declare, Date, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin, event, lang) {
 
    return declare([Date, _OnDijitClickMixin, _PublishPayloadMixin, LinkClickMixin], {
-
-      /**
-       * Overriddes the default HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
 
       /**
        * If this is set to true then the current item will be published when the link is clicked. If set to
@@ -52,6 +44,35 @@ define(["dojo/_base/declare",
        * @default
        */
       useCurrentItemAsPayload: true,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_DateLink__createWidgetDom() {
+         this.renderedValueNode = this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-DateLink");
+
+         var innerNode = document.createElement("span");
+         innerNode.classList.add("inner");
+         innerNode.setAttribute("tabindex", "0");
+         this._attach(innerNode, "ondijitclick", lang.hitch(this, this.onLinkClick));
+
+         var label = document.createElement("span");
+         label.classList.add("label");
+         label.textContent = this.label;
+
+         var value = document.createElement("span");
+         value.classList.add("value");
+         value.innerHTML = this.renderedValue;
+
+         innerNode.appendChild(label);
+         innerNode.appendChild(value);
+         this.domNode.appendChild(innerNode);
+      },
 
       /**
        * Handles the date being clicked. This stops the click event from propogating
