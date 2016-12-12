@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
 
          var icon = document.createElement("span");
          icon.classList.add("icon");
-         icon.textContent = "&nbsp;";
+         icon.innerHTML = "&nbsp;";
          this.domNode.appendChild(icon);
       },
 

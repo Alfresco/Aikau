@@ -151,7 +151,7 @@ define(["dojo/_base/declare",
          this.domNode.setAttribute("tabindex", "0");
          this.domNode.setAttribute("alt", this.alfText);
          this.domNode.setAttribute("title", this.title);
-         this.domNode.textContent = "&nbsp;";
+         this.domNode.innerHTML = "&nbsp;";
          this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onMoreInfo));
       },
 
