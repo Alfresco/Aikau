@@ -456,8 +456,11 @@ define(["dojo/_base/declare",
       updateRenderedValueClass: function alfresco_renderers_Property__updateRenderedValueClass() {
          // Need to set both renderedValueClassArray (for widgets without a template) and
          // renderedValueClass (for those that do)...
-         var renderedValueClass = this.renderedValueClass;
-         this.renderedValueClassArray = ["alfresco-renderers-Property", renderedValueClass, this.renderSize];
+         var renderedValueClass = this.renderedValueClass || "";
+         
+         // See AKU-1152 - handle spaces in arrays...
+         this.renderedValueClassArray = renderedValueClass.replace(/\s+/g, " ").trim().split(" ");
+         this.renderedValueClassArray = this.renderedValueClassArray.concat(["alfresco-renderers-Property", this.renderSize]);
          this.renderedValueClass = this.renderedValueClass + " " + this.renderSize;
          if (this.renderOnNewLine === true) 
          {
