@@ -25,21 +25,18 @@
  * <p>The [requestProgressTopic]{@link module:alfresco/renderers/Progress#requestProgressTopic} should be configured
  * as the topic to publish to begin requesting progress information to be generated.</p>
  *
- * @module alfresco/renderers/Progress
- * @extends external:dijit/_WidgetBase
+ * @module alfresco/renderers/ProgressActions
+ * @extends module:aikau/core/BaseWidget
  * @author David Webster
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
-        "alfresco/core/Core",
-        "dojo/text!./templates/Progress.html",
+        "aikau/core/BaseWidget",
         "dojo/_base/lang",
         "dojo/dom-style"],
-        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, template, lang, domStyle) {
+        function(declare, BaseWidget, lang, domStyle) {
 
-   return declare([_WidgetBase, AlfCore, _TemplatedMixin], {
+   return declare([BaseWidget], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -58,14 +55,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Progress.css"}]
        */
       cssRequirements: [{cssFile:"./css/Progress.css"}],
-
-      /**
-       * The HTML template to use for the widget.
-       *
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
 
       /**
        * renderProgressUI
@@ -125,6 +114,31 @@ define(["dojo/_base/declare",
        * @default
        */
       completedMessage: "renderer.progress.complete",
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Progress__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-Progress");
+
+         this.labelNode = document.createElement("p");
+         this.labelNode.classList.add("alfProgressBarLabel");
+
+         var progressContainer = document.createElement("div");
+         progressContainer.classList.add("alfProgressBarContainer");
+
+         this.progressNode = document.createElement("div");
+         this.progressNode.classList.add("alfProgressBarProgress");
+
+         progressContainer.appendChild(this.progressNode);
+         this.domNode.appendChild(this.labelNode);
+         this.domNode.appendChild(progressContainer);
+      },
 
       /**
        * Sets up the form specific configuration for the dialog.

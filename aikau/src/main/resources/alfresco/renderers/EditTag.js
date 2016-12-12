@@ -22,25 +22,21 @@
  * added tag that can be removed by either giving the tag focus and clicking "SPACE" or "ENTER" or by clicking the "X" icon.
  * 
  * @module alfresco/renderers/EditTag
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes external:dojo/_OnDijitClickMixin
  * @mixes external:dojo/_FocusMixin
- * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "dijit/_FocusMixin",
-        "dojo/text!./templates/EditTag.html",
-        "alfresco/core/Core",
+        "dojo/_base/lang",
         "dojo/on",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _FocusMixin, template, AlfCore, on, domClass) {
+        function(declare, BaseWidget, _OnDijitClickMixin, _FocusMixin, lang, on, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _FocusMixin, AlfCore], {
+   return declare([BaseWidget, _OnDijitClickMixin, _FocusMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -50,13 +46,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/EditTag.css"}]
        */
       cssRequirements: [{cssFile:"./css/EditTag.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * The display name for the tag.
@@ -76,6 +65,31 @@ define(["dojo/_base/declare",
        */
       tagValue: null,
       
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_EditTag__createWidgetDom() {
+         this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-EditTag");
+         this.domNode.setAttribute("tabindex", "0");
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onRemoveTag));
+         
+         this.tagNameNode = document.createElement("span");
+         this.tagNameNode.classList.add("tagName");
+         this.tagNameNode.textContent = this.tagName;
+
+         this.tagDeleteNode = document.createElement("span");
+         this.tagDeleteNode.classList.add("tagDelete");
+         this.tagDeleteNode.innerHTML = "&nbsp;";
+
+         this.domNode.appendChild(this.tagNameNode);
+         this.domNode.appendChild(this.tagDeleteNode);
+      },
+
       /**
        * Set up the attributes to be used when rendering the template.
        * 

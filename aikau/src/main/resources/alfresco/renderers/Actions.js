@@ -168,7 +168,7 @@ define(["dojo/_base/declare",
        * @since 1.0.101
        */
       createWidgetDom: function alfresco_renderers_Actions__createWidgetDom() {
-         this.bannerNode = this.domNode = document.createElement("div");
+         this.domNode = document.createElement("div");
          this.domNode.classList.add("alfresco-renderers-Actions");
       },
 

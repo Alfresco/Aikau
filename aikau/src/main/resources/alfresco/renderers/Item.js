@@ -59,33 +59,23 @@
  * }
  * 
  * @module alfresco/renderers/Item
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @author Dave Draper
  * @since 1.0.86
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "alfresco/lists/views/layouts/_MultiItemRendererMixin",
         "alfresco/renderers/_PublishPayloadMixin",
-        "dojo/text!./templates/Item.html",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dijit/registry",
         "dojo/dom-construct"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, _PublishPayloadMixin, template, lang, array, registry, domConstruct) {
+        function(declare, BaseWidget, _MultiItemRendererMixin, _PublishPayloadMixin, lang, array, registry, domConstruct) {
    
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, _PublishPayloadMixin], {
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
+   return declare([BaseWidget, _MultiItemRendererMixin, _PublishPayloadMixin], {
       
       /**
        * This is a dot-notation property that can be set to look up a specific location in the 
@@ -191,6 +181,21 @@ define(["dojo/_base/declare",
        * @default
        */
       widgets: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Item__createWidgetDom() {
+         this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-Item");
+
+         this.containerNode = document.createElement("div");
+         this.domNode.appendChild(this.containerNode);
+      },
 
       /**
        * Subscribes to the document load topic
