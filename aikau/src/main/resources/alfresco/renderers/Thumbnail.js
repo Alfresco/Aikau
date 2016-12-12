@@ -85,8 +85,7 @@
  * }
  * 
  * @module alfresco/renderers/Thumbnail
- * @extends external:dijit/_WidgetBase
- * @mixes external:dijit/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/node/DraggableNodeMixin
@@ -96,8 +95,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_JsNodeMixin",
         "alfresco/node/DraggableNodeMixin",
         "alfresco/node/NodeDropTargetMixin",
@@ -105,8 +103,6 @@ define(["dojo/_base/declare",
         "dijit/_OnDijitClickMixin",
         "alfresco/lists/ItemSelectionMixin",
         "alfresco/navigation/LinkClickMixin",
-        "dojo/text!./templates/Thumbnail.html",
-        "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
         "service/constants/Default",
         "alfresco/core/topics",
@@ -119,12 +115,12 @@ define(["dojo/_base/declare",
         "dojo/window",
         "dojo/Deferred",
         "dojo/when"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, template, AlfCore, _ItemLinkMixin,
+        function(declare, BaseWidget, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
+                 _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, _ItemLinkMixin,
                  AlfConstants, topics, array, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
-                   AlfCore, _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
+   return declare([BaseWidget, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
+                   _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -143,14 +139,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Thumbnail.css"}]
        */
       cssRequirements: [{cssFile:"./css/Thumbnail.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * Some APIs provide very little information other than the nodeRef, however if we really
@@ -513,6 +501,34 @@ define(["dojo/_base/declare",
       width: null,
 
       /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Thumbnail__createWidgetDom() {
+         this.thumbnailNode = this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Thumbnail");
+         domClass.add(this.domNode, this.customClasses);
+
+         this.frameNode = document.createElement("span");
+         this.frameNode.classList.add("alfresco-renderers-Thumbnail__frame");
+         this._attach(this.frameNode, "ondijitclick", lang.hitch(this, this.onLinkClick));
+
+         this.imgNode = document.createElement("img");
+         this.imgNode.classList.add("alfresco-renderers-Thumbnail__image");
+         this.imgNode.setAtttribute("id", this.imgId);
+         this.imgNode.setAtttribute("src", this.thumbnailUrl);
+         this.imgNode.setAtttribute("alt", this.imgAltText);
+         this.imgNode.setAtttribute("title", this.imgTitle);
+         this._attach(this.imgNode, "onload", lang.hitch(this, this.getNaturalImageSize));
+
+         this.frameNode.appendChild(this.imgNode);
+         this.domNode.appendChild(this.frameNode);
+      },
+
+      /**
        * Overrides the [inherited function]{@link module:alfresco/lists/ItemSelectionMixin#getSelectionPublishGlobal}
        * to return [selectionPublishGlobal]{@link module:alfresco/renderers/Thumbnail#selectionPublishGlobal} to
        * avoid conflicts with scope configuration for other events (such as linking and showing previews).
@@ -521,7 +537,7 @@ define(["dojo/_base/declare",
        * @overridable
        * @return {boolean} A boolean indicating whether or not to publish and subscribe to selection topics globally.
        */
-      getSelectionPublishGlobal: function alfresco_lists_ItemSelectionMixin__getSelectionPublishGlobal() {
+      getSelectionPublishGlobal: function alfresco_lists_Thumbnail__getSelectionPublishGlobal() {
          return this.selectionPublishGlobal;
       },
 
@@ -534,7 +550,7 @@ define(["dojo/_base/declare",
        * @overridable
        * @return {boolean}  A boolean indicating whether or not to publish and subscribe to selection topics to the parent scope.
        */
-      getSelectionPublishToParent: function alfresco_lists_ItemSelectionMixin__getSelectionPublishToParent() {
+      getSelectionPublishToParent: function alfresco_lists_Thumbnail__getSelectionPublishToParent() {
          return this.selectionPublishToParent;
       },
 
