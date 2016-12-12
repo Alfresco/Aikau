@@ -332,6 +332,7 @@ define(["dojo/_base/declare",
          this.onNode.classList.add("on");
          this.onNode.classList.add(this.toggleClass);
          this.onNode.classList.add("hidden");
+         this.onNode.classList.add("enabled");
          this.onNode.setAttribute("title", this.onTooltip);
          this.onNode.setAttribute("alt", this.onTooltip);
          this.onNode.setAttribute("tabindex", "0");

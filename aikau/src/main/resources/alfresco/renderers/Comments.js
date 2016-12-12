@@ -125,7 +125,7 @@ define(["dojo/_base/declare",
          this.countNode = document.createElement("span");
          this.countNode.classList.add("count");
          this.countNode.classList.add("hidden");
-         this.coundNode.textContent = this.commentCount;
+         this.countNode.textContent = this.commentCount;
 
          this.domNode.appendChild(linkNode);
          this.domNode.appendChild(this.countNode);
