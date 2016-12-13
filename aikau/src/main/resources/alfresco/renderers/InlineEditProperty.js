@@ -45,7 +45,6 @@ define(["dojo/_base/declare",
         "dojo/_base/array",
         "dojo/Deferred",
         "dojo/dom-class",
-        "dojo/html",
         "dojo/dom-attr",
         "dojo/keys",
         "dojo/_base/event",
@@ -55,7 +54,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 lang, array, Deferred, domClass, html, domAttr, keys, event, query) {
+                 lang, array, Deferred, domClass, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
@@ -671,7 +670,7 @@ define(["dojo/_base/declare",
        */
       reRenderProperty: function alfresco_renderers_InlineEditProperty__reRenderProperty() {
          this.renderedValue = this.generateRendering(this.renderedValue);
-         html.set(this.renderedValueNode, this.renderedValue);
+         this.renderedValueNode.textContent = this.renderedValue;
          domClass.remove(this.renderedValueNode, "hidden");
          domClass.add(this.editNode, "hidden");
          this.updateCssClasses();
