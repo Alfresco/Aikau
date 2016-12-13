@@ -45,7 +45,6 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/Deferred",
-        "dojo/on",
         "dojo/dom-class",
         "dojo/html",
         "dojo/dom-attr",
@@ -57,7 +56,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 template, lang, array, on, Deferred, domClass, html, domAttr, keys, event, query) {
+                 template, lang, array, Deferred, domClass, html, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
@@ -527,7 +526,18 @@ define(["dojo/_base/declare",
             this.suppressContainerKeyboardNavigation(true);
             var formWidget = this.getFormWidget();
             var o = {};
-            lang.setObject(this.postParam, this.decodeHTML(this.originalRenderedValue), o);
+            var formValue = this.originalRenderedValue;
+            if (formValue !== null && 
+                typeof formValue !== "undefined" && 
+                typeof formValue.toString === "function")
+            {
+               formValue = this.decodeHTML(formValue.toString());
+            }
+            else
+            {
+               formValue = "";
+            }
+            lang.setObject(this.postParam, formValue, o);
             formWidget.setValue(o);
             domClass.toggle(this.renderedValueNode, "hidden");
             domClass.toggle(this.editNode, "hidden");
@@ -574,8 +584,20 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
 
          this.alfLog("log", "Property '" + this.propertyToRender + "' successfully updated for node: ", this.currentItem);
-         this.originalRenderedValue = this.encodeHTML(this.getFormWidget().getValue()[this.postParam]);
-         this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
+         
+         var formValue = this.getFormWidget().getValue()[this.postParam];
+         if (formValue !== null && 
+             typeof formValue !== "undefined" && 
+             typeof formValue.toString === "function")
+         {
+            this.originalRenderedValue = this.encodeHTML(formValue.toString());
+         }
+         else
+         {
+            this.originalRenderedValue = "";
+         }
+         
+         this.renderedValue = this.mapValueToDisplayValue(formValue);
 
          // If requested, update the currentItem with the updated value. This is done in the
          // case where the currentItem might be subsequently used elsewhere (e.g. in a 

@@ -9,8 +9,7 @@ model.jsonModel = {
             }
          }
       },
-      "aikauTesting/mockservices/MockCrudService",
-      "alfresco/services/ErrorReporter"
+      "aikauTesting/mockservices/MockCrudService"
    ],
    widgets:[
       {
@@ -29,7 +28,8 @@ model.jsonModel = {
                               Write: true
                            }
                         }
-                     }
+                     },
+                     isEnabled: true
                   },
                   {
                      name: "Test 2",
@@ -41,7 +41,8 @@ model.jsonModel = {
                               Write: false
                            }
                         }
-                     }
+                     },
+                     isEnabled: false
                   }
                ]
             },
@@ -153,6 +154,46 @@ model.jsonModel = {
                                        renderedValueSuffix: ")",
                                        warnIfNotAvailable: true,
                                        warnIfNotAvailableMessage: "No property set"
+                                    }
+                                 },
+                                 {
+                                    id: "INLINE_SELECT_WITH_BOOLEAN_VALUES",
+                                    name: "alfresco/renderers/InlineEditSelect",
+                                    config: {
+                                       propertyToRender: "isEnabled",
+                                       refreshCurrentItem: true,
+                                       publishTopic: "ALF_CRUD_UPDATE",
+                                       publishPayloadType: "PROCESS",
+                                       publishPayloadModifiers: ["processCurrentItemTokens"],
+                                       publishPayloadItemMixin: false,
+                                       publishPayload: {
+                                          filterID: "{filterID}",
+                                          url: "api/facet/facet-config/{filterID}",
+                                          noRefresh: true,
+                                          successMessage: "Hurrah, it worked"
+                                       },
+                                       optionsConfig: {
+                                          fixed: [
+                                             {
+                                                label: "Yes",
+                                                value: "true"
+                                             },
+                                             {
+                                                label: "No",
+                                                value: "false"
+                                             }
+                                          ]
+                                       },
+                                       valueDisplayMap: [
+                                          {
+                                             label: "Yes",
+                                             value: true
+                                          },
+                                          {
+                                             label: "No",
+                                             value: false
+                                          }
+                                       ]
                                     }
                                  }
                               ]
