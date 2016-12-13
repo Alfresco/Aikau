@@ -21,22 +21,18 @@
  * Use this widget to render a column. Every widget rendered within it will be "stacked" vertically.
  * 
  * @module alfresco/lists/views/layouts/Column
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Column.html",
-        "alfresco/core/Core",
+        "aikau/core/BaseWidget",
         "alfresco/lists/views/layouts/_LayoutMixin",
+        "dojo/_base/lang",
         "dojo/dom-construct"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _LayoutMixin, domConstruct) {
+        function(declare, BaseWidget, _LayoutMixin, lang, domConstruct) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _LayoutMixin], {
+   return declare([BaseWidget, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -48,13 +44,19 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Column.css"}],
       
       /**
-       * The HTML template to use for the widget.
-       * 
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
        * @instance
-       * @type {String}
+       * @since 1.0.101
        */
-      templateString: template,
-      
+      createWidgetDom: function alfresco_lists_views_layouts_CellContainer__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("table");
+         this.domNode.classList.add("alfresco-lists-views-layouts-Column");
+         this.domNode.setAttribute("cellspacing", "0");
+         this.domNode.setAttribute("cellpadding", "0");
+      },
+
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
