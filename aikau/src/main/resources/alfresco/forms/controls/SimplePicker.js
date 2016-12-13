@@ -18,16 +18,16 @@
  */
 
 /**
- * PLEASE NOTE: This is a BETA quality widget, not intended for production use.
+ * 
  * 
  * @module alfresco/forms/controls/SimplePicker
  * @extends module:alfresco/forms/controls/BaseFormControl
+ * @mixes module:aikau/core/ChildProcessing
  * @author Dave Draper
  */
 define(["alfresco/forms/controls/BaseFormControl",
         "dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing",
-        "alfresco/core/ObjectProcessingMixin",
+        "aikau/core/ChildProcessing",
         "dojo/_base/lang",
         "dojo/_base/array",
         "alfresco/core/ObjectTypeUtils",
@@ -36,9 +36,9 @@ define(["alfresco/forms/controls/BaseFormControl",
         "alfresco/pickers/Picker",
         "alfresco/pickers/PropertyPicker",
         "alfresco/pickers/PickedItems"], 
-        function(BaseFormControl, declare, CoreWidgetProcessing, ObjectProcessingMixin, lang, array, ObjectTypeUtils) {
+        function(BaseFormControl, declare, ChildProcessing, lang, array, ObjectTypeUtils) {
    
-   return declare([BaseFormControl, CoreWidgetProcessing, ObjectProcessingMixin], {
+   return declare([BaseFormControl, ChildProcessing], {
       
       /**
        * @instance
@@ -121,25 +121,19 @@ define(["alfresco/forms/controls/BaseFormControl",
             widgetsForControl = lang.clone(this.widgetsForControl);
             this.processObject(["processInstanceTokens"], widgetsForControl);
          }
-         return this.processWidgets(widgetsForControl, this._controlNode);
-      },
-
-      /**
-       * Extends the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#completeWidgetSetup}
-       * to publish the selected items. This has the effect of hiding the initialised selected items values
-       * from the available values list.
-       * 
-       * @instance
-       */
-      completeWidgetSetup: function alfresco_forms_controls_SimplePicker__completeWidgetSetup() {
-         this.inherited(arguments);
-         var value = this.getValue();
-         if (ObjectTypeUtils.isArray(value))
-         {
-            array.forEach(value, function(item) {
-               this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
-            }, this);
-         }
+         return this.createChildren({
+            widgets: widgetsForControl,
+            targetNode: this._controlNode
+         }).then(lang.hitch(this, function(widgets) {
+            var value = this.getValue();
+            if (ObjectTypeUtils.isArray(value))
+            {
+               array.forEach(value, function(item) {
+                  this.alfPublish(this.itemSelectionPubSubScope+"ALF_ITEM_SELECTED", item, true);
+               }, this);
+            }
+            return widgets;
+         }));
       },
 
       /**

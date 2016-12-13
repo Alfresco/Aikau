@@ -26,28 +26,22 @@
  * [CommentsList renderer]{@link module:alfresco/renderers/CommentsList}.
  *
  * @module alfresco/renderers/EditableComment
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "alfresco/core/Core",
+        "aikau/core/BaseWidget",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/renderers/_PublishPayloadMixin",
-        "dojo/text!./templates/EditableComment.html",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin, template, 
-                 array, lang, domConstruct, domClass) {
+        function(declare, BaseWidget, CoreWidgetProcessing, _PublishPayloadMixin, array, lang, domConstruct, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, CoreWidgetProcessing, _PublishPayloadMixin], {
+   return declare([BaseWidget, CoreWidgetProcessing, _PublishPayloadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -66,13 +60,6 @@ define(["dojo/_base/declare",
        * @default [{i18nFile: "./i18n/EditableComment.properties"}]
        */
       i18nRequirements: [{i18nFile: "./i18n/EditableComment.properties"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * This will be instantiated as a map of the controls used by the widget. It has been added in order
@@ -181,6 +168,31 @@ define(["dojo/_base/declare",
        * @default
        */
       subscriptionTopic: "ALF_EDIT_COMMENT",
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_EditableComment__createWidgetDom() {
+         this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-EditableComment");
+         this.domNode.classList.add(this._mode);
+
+         this.readNode = document.createElement("div");
+         this.readNode.classList.add("read");
+
+         this.editNode = document.createElement("div");
+         this.editNode.classList.add("edit");
+
+         this.formNode = document.createElement("div");
+
+         this.editNode.appendChild(this.formNode);
+         this.domNode.appendChild(this.readNode);
+         this.domNode.appendChild(this.editNode);
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.

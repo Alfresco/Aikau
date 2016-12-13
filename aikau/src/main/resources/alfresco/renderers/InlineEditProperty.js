@@ -41,13 +41,10 @@ define(["dojo/_base/declare",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/KeyboardNavigationSuppressionMixin",
-        "dojo/text!./templates/InlineEditProperty.html",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/Deferred",
-        "dojo/on",
         "dojo/dom-class",
-        "dojo/html",
         "dojo/dom-attr",
         "dojo/keys",
         "dojo/_base/event",
@@ -57,7 +54,7 @@ define(["dojo/_base/declare",
         "alfresco/forms/controls/DojoValidationTextBox",
         "alfresco/forms/controls/HiddenValue"], 
         function(declare, Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin,
-                 template, lang, array, on, Deferred, domClass, html, domAttr, keys, event, query) {
+                 lang, array, Deferred, domClass, domAttr, keys, event, query) {
 
    return declare([Property, _OnDijitClickMixin, CoreWidgetProcessing, _PublishPayloadMixin, KeyboardNavigationSuppressionMixin], {
       
@@ -78,13 +75,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/InlineEditProperty.css"}]
        */
       cssRequirements: [{cssFile:"./css/InlineEditProperty.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * This is the message or message key that will be used for the cancel link text.
@@ -260,6 +250,63 @@ define(["dojo/_base/declare",
        * @since 1.0.83
        */
       updateInProgressItemLabelProperty: "displayName",
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.100
+       */
+      createWidgetDom: function alfresco_renderers_InlineEditProperty__createWidgetDom() {
+         // jshint maxstatements:false
+         this.domNode = document.createElement("span");
+         this.renderedValueClassArray.forEach(function(className) {
+            this.domNode.classList.add(className);
+         }, this);
+
+         this.domNode.classList.add("alfresco-renderers-InlineEditProperty");
+         
+         var labelSpan = document.createElement("span");
+         labelSpan.classList.add("label");
+         labelSpan.textContent = this.label;
+         this.domNode.appendChild(labelSpan);
+
+         this.renderedValueNode = document.createElement("span");
+         this.renderedValueNode.classList.add("inlineEditValue");
+         this.renderedValueClassArray.forEach(function(className) {
+            this.renderedValueNode.classList.add(className);
+         }, this);
+         this.renderedValueNode.setAttribute("tabindex", "0");
+         this.renderedValueNode.innerHTML = this.renderedValue;
+         this._attach(this.renderedValueNode, "onkeypress", lang.hitch(this, this.onKeyPress));
+         this._attach(this.renderedValueNode, "ondijitclick", lang.hitch(this, this.onClickRenderedValue));
+         this.domNode.appendChild(this.renderedValueNode);
+
+         this.editNode = document.createElement("span");
+         this.editNode.classList.add("editor");
+         this.editNode.classList.add("hidden");
+         this._attach(this.editNode, "onkeypress", lang.hitch(this, this.onValueEntryKeyPress));
+         this._attach(this.editNode, "onclick", lang.hitch(this, this.suppressFocusRequest));
+
+         this.formWidgetNode = document.createElement("span");
+         this.editNode.appendChild(this.formWidgetNode);
+         this.domNode.appendChild(this.editNode);
+
+         this.editIconNode = document.createElement("img");
+         this.editIconNode.classList.add("editIcon");
+         this.editIconNode.setAttribute("src", this.editIconImageSrc);
+         this.editIconNode.setAttribute("alt", this.editAltText);
+         this.editIconNode.setAttribute("title", this.editAltText);
+         this._attach(this.editIconNode, "ondijitclick", lang.hitch(this, this.onEditClick));
+         this.domNode.appendChild(this.editIconNode);
+
+         var progressNode = document.createElement("img");
+         progressNode.classList.add("alfresco-renderers-InlineEditProperty__progress");
+         progressNode.setAttribute("src", this.updateInProgressImgSrc);
+         progressNode.setAttribute("alt", this.updateInProgressAltText);
+         this.domNode.appendChild(progressNode);
+      },
 
       /**
        * The topic to publish when a property edit should be persisted. For convenience it is assumed that document
@@ -527,7 +574,18 @@ define(["dojo/_base/declare",
             this.suppressContainerKeyboardNavigation(true);
             var formWidget = this.getFormWidget();
             var o = {};
-            lang.setObject(this.postParam, this.decodeHTML(this.originalRenderedValue), o);
+            var formValue = this.originalRenderedValue;
+            if (formValue !== null && 
+                typeof formValue !== "undefined" && 
+                typeof formValue.toString === "function")
+            {
+               formValue = this.decodeHTML(formValue.toString());
+            }
+            else
+            {
+               formValue = "";
+            }
+            lang.setObject(this.postParam, formValue, o);
             formWidget.setValue(o);
             domClass.toggle(this.renderedValueNode, "hidden");
             domClass.toggle(this.editNode, "hidden");
@@ -574,8 +632,20 @@ define(["dojo/_base/declare",
          this.alfUnsubscribeSaveHandles([this._saveSuccessHandle, this._saveFailureHandle]);
 
          this.alfLog("log", "Property '" + this.propertyToRender + "' successfully updated for node: ", this.currentItem);
-         this.originalRenderedValue = this.encodeHTML(this.getFormWidget().getValue()[this.postParam]);
-         this.renderedValue = this.mapValueToDisplayValue(this.originalRenderedValue);
+         
+         var formValue = this.getFormWidget().getValue()[this.postParam];
+         if (formValue !== null && 
+             typeof formValue !== "undefined" && 
+             typeof formValue.toString === "function")
+         {
+            this.originalRenderedValue = this.encodeHTML(formValue.toString());
+         }
+         else
+         {
+            this.originalRenderedValue = "";
+         }
+         
+         this.renderedValue = this.mapValueToDisplayValue(formValue);
 
          // If requested, update the currentItem with the updated value. This is done in the
          // case where the currentItem might be subsequently used elsewhere (e.g. in a 
@@ -600,7 +670,7 @@ define(["dojo/_base/declare",
        */
       reRenderProperty: function alfresco_renderers_InlineEditProperty__reRenderProperty() {
          this.renderedValue = this.generateRendering(this.renderedValue);
-         html.set(this.renderedValueNode, this.renderedValue);
+         this.renderedValueNode.textContent = this.renderedValue;
          domClass.remove(this.renderedValueNode, "hidden");
          domClass.add(this.editNode, "hidden");
          this.updateCssClasses();

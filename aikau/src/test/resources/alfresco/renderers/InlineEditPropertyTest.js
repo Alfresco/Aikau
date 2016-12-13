@@ -68,6 +68,30 @@ define(["module",
             editOptions: {
                second: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.nth.option.label", ["INLINE_SELECT_ITEM_0", "2"])
             }
+         },
+         firstBoolean: {
+            label: TestCommon.getTestSelector(inlineEditSelectSelectors, "label", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            readValue: TestCommon.getTestSelector(inlineEditSelectSelectors, "readonly.value", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.form", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.icon", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.save", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.cancel", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            editOpenMenuIcon: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.open.menu.icon", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0"]),
+            editOptions: {
+               second: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.nth.option.label", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_0", "2"])
+            }
+         },
+         secondBoolean: {
+            label: TestCommon.getTestSelector(inlineEditSelectSelectors, "label", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            readValue: TestCommon.getTestSelector(inlineEditSelectSelectors, "readonly.value", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            editForm: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.form", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            editIcon: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.icon", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            editSave: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.save", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            editCancel: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.cancel", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            editOpenMenuIcon: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.open.menu.icon", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1"]),
+            editOptions: {
+               second: TestCommon.getTestSelector(inlineEditSelectSelectors, "edit.nth.option.label", ["INLINE_SELECT_WITH_BOOLEAN_VALUES_ITEM_1", "2"])
+            }
          }
       },
 
@@ -100,7 +124,7 @@ define(["module",
          return this.remote.findByCssSelector(".alfresco_logging_DebugLog__header")
             .moveMouseTo()
             .click() // Make sure the mouse isn't over the row!
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .isDisplayed()
@@ -116,13 +140,13 @@ define(["module",
             .then(function(p) {
                valueX = p.x;
             })
-            .end()
-            .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
+         .end()
+         
+         .findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .getPosition()
             .then(function(p) {
                assert.notEqual(valueX, p.x, "The value and icon should NOT be starting at the same X co-ordinate");
-            })
-            .end();
+            });
       },
 
       "Icon appears on focus": function() {
@@ -152,7 +176,7 @@ define(["module",
       "Icon appears on mouseover": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .moveMouseTo()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editIcon);
       },
@@ -173,7 +197,7 @@ define(["module",
       "Edit widgets are created on edit": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .then(null, function() {
@@ -191,7 +215,7 @@ define(["module",
 
       "Save and cancel buttons are displayed when editing": function() {
          return this.remote.findDisplayedByCssSelector(selectors.inlineEditProperties.first.editSave)
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editCancel);
       },
@@ -199,7 +223,7 @@ define(["module",
       "Escape key cancels editing": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .pressKeys([keys.ESCAPE])
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
       },
@@ -207,7 +231,7 @@ define(["module",
       "Clicking on read-only value starts editing": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .click()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editInput);
       },
@@ -215,7 +239,7 @@ define(["module",
       "Clicking on cancel button stops editing": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editCancel)
             .click()
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.readValue);
       },
@@ -224,7 +248,7 @@ define(["module",
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.readValue)
             .pressKeys([keys.CONTROL, "e"])
             .pressKeys(keys.NULL)
-            .end()
+         .end()
 
          .findDisplayedByCssSelector(selectors.inlineEditProperties.first.editInput);
       },
@@ -233,11 +257,11 @@ define(["module",
          return this.remote.findByCssSelector(selectors.inlineEditProperties.first.editInput)
             .clearValue()
             .type("New")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.first.editSave)
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_CRUD_UPDATE")
             .then(function(payload) {
@@ -262,19 +286,19 @@ define(["module",
                      return this.remote.end()
                         .findByCssSelector(selectors.inlineEditSelects.first.editIcon)
                         .click()
-                        .end()
+                     .end()
 
                      .findByCssSelector(selectors.inlineEditSelects.first.editOpenMenuIcon)
                         .click()
-                        .end()
+                     .end()
 
                      .findDisplayedByCssSelector(selectors.inlineEditSelects.first.editOptions.second)
                         .click()
-                        .end()
+                     .end()
 
                      .findByCssSelector(selectors.inlineEditSelects.first.editSave)
                         .click()
-                        .end()
+                     .end()
 
                      .findDisplayedByCssSelector(selectors.inlineEditSelects.first.readValue)
                         .getVisibleText()
@@ -296,8 +320,9 @@ define(["module",
       "Check edit disabled when user has no write permissions": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.third.readValue)
             .moveMouseTo()
-            .end()
-            .findByCssSelector(selectors.inlineEditProperties.third.editIcon)
+         .end()
+         
+         .findByCssSelector(selectors.inlineEditProperties.third.editIcon)
             .isDisplayed()
             .then(function(displayed) {
                assert.isFalse(displayed, "The edit icon should not be displayed for items without write permission");
@@ -330,16 +355,16 @@ define(["module",
       "Edit and save item check rendered value has prefix/suffix": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.fourth.editIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.fourth.editInput)
             .clearValue()
             .type("Updated")
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.fourth.editSave)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.fourth.readValue)
             .getVisibleText()
@@ -358,15 +383,15 @@ define(["module",
       "Edit and save item to remove value to check warning returns": function() {
          return this.remote.findByCssSelector(selectors.inlineEditProperties.fourth.editIcon)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.fourth.editInput)
             .clearValue()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.fourth.editSave)
             .click()
-            .end()
+         .end()
 
          .findByCssSelector(selectors.inlineEditProperties.fourth.readValue)
             .getVisibleText()
@@ -392,6 +417,49 @@ define(["module",
             .then(function(displayed) {
                assert.isTrue(displayed, "Edit field not displayed");
             });
-      }
+      },
+
+      "Boolean values are mapped": function() {
+         return this.remote.findByCssSelector(selectors.inlineEditSelects.firstBoolean.readValue)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "Yes");
+            })
+         .end()
+
+         .findByCssSelector(selectors.inlineEditSelects.secondBoolean.readValue)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "No");
+            });
+      },
+
+      "Edit boolean value": function() {
+         return this.remote.findByCssSelector(selectors.inlineEditSelects.firstBoolean.readValue)
+            .moveMouseTo()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.inlineEditSelects.firstBoolean.editIcon)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.inlineEditSelects.firstBoolean.editOpenMenuIcon)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.inlineEditSelects.firstBoolean.editOptions.second)
+            .click()
+         .end()
+
+         .findByCssSelector(selectors.inlineEditSelects.firstBoolean.editSave)
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector(selectors.inlineEditSelects.firstBoolean.readValue)
+            .getVisibleText()
+            .then(function(text) {
+               assert.equal(text, "No");
+            });
+      },
    });
 });

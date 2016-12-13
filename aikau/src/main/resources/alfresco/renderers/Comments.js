@@ -26,29 +26,27 @@
  * standard Document Library [Detailed View]{@link module:alfresco/documentlibrary/views/AlfDetailedView}
  * uses the [VerticalReveal]{@link module:alfresco/layout/VerticalReveal} approach to allow inline commenting.
  * 
- * @module alfresco/renderers/Comments
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @module aikau/core/BaseWidget
+ * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/core/UrlUtilsMixin
+ * @mixes module:alfresco/renderers/_JsNodeMixin
+ * @mixes module:alfresco/navigation/_HtmlAnchorMixin
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_JsNodeMixin",
         "alfresco/navigation/_HtmlAnchorMixin",
         "alfresco/renderers/_PublishPayloadMixin",
-        "dojo/text!./templates/Comments.html",
-        "alfresco/core/Core",
-        "dojo/_base/lang",
         "alfresco/core/UrlUtilsMixin",
+        "dojo/_base/lang",
         "dojo/dom-class"],
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin,
-                 _HtmlAnchorMixin, _PublishPayloadMixin, template, AlfCore, lang, UrlUtilsMixin, domClass) {
+        function(declare, BaseWidget, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, 
+                 _PublishPayloadMixin, UrlUtilsMixin, lang, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, AlfCore, UrlUtilsMixin, _PublishPayloadMixin], {
+   return declare([BaseWidget, _OnDijitClickMixin, _JsNodeMixin, _HtmlAnchorMixin, UrlUtilsMixin, _PublishPayloadMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -67,13 +65,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Comments.css"}]
        */
       cssRequirements: [{cssFile:"./css/Comments.css"}],
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
 
       /**
        * The dot-notation property to use for the count of comments. Can be overridden.
@@ -112,6 +103,33 @@ define(["dojo/_base/declare",
        * @default
        */
       subscriptionTopic: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Comments__createWidgetDom() {
+         this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Comments");
+
+         var linkNode = document.createElement("span");
+         linkNode.classList.add("comment-link");
+         linkNode.setAttribute("tabindex", "0");
+         linkNode.setAttribute("title", this.title);
+         linkNode.textContent = this.commentLabel;
+         this._attach(linkNode, "ondijitclick", lang.hitch(this, this.onCommentClick));
+
+         this.countNode = document.createElement("span");
+         this.countNode.classList.add("count");
+         this.countNode.classList.add("hidden");
+         this.countNode.textContent = this.commentCount;
+
+         this.domNode.appendChild(linkNode);
+         this.domNode.appendChild(this.countNode);
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.

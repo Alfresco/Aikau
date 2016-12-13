@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.100
        */
-      createWidgetDom: function alfresco_renderers_Cell__createWidgetDom() {
+      createWidgetDom: function alfresco_lists_views_layouts_Cell__createWidgetDom() {
          this.containerNode = this.domNode = document.createElement("td");
          this.domNode.classList.add("alfresco-lists-views-layouts-Cell");
       },
@@ -104,7 +104,10 @@ define(["dojo/_base/declare",
          }
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
       }
    });

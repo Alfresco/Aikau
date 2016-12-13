@@ -20,25 +20,20 @@
 /**
  * 
  * @module alfresco/lists/views/layouts/HeaderCell
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/HeaderCell.html",
-        "alfresco/core/Core",
+        "aikau/core/BaseWidget",
         "alfresco/core/topics",
         "alfresco/util/hashUtils",
         "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/query",
         "dojo/dom-attr"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, topics, hashUtils, lang, domClass, query, domAttr) {
+        function(declare, BaseWidget, topics, hashUtils, lang, domClass, query, domAttr) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([BaseWidget], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -58,14 +53,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/HeaderCell.css"}]
        */
       cssRequirements: [{cssFile:"./css/HeaderCell.css"}],
-
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
 
       /**
        * Optional accessibility scope.
@@ -163,6 +150,35 @@ define(["dojo/_base/declare",
        * @since 1.0.56
        */
       useHash: false,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_lists_views_layouts_Row__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("th");
+         this.domNode.classList.add("alfresco-lists-views-layouts-HeaderCell");
+         this.domNode.setAttribute("tabindex", "0");
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onSortClick));
+
+         this.labelNode = document.createElement("span");
+         this.labelNode.classList.add("label");
+         this.labelNode.textContent = this.label;
+         this.domNode.appendChild(this.labelNode);
+
+         this.ascendingSortNode = document.createElement("img");
+         this.ascendingSortNode.classList.add("ascendingSort");
+         this.ascendingSortNode.setAttribute("src", this.transparentImageUrl);
+         this.domNode.appendChild(this.ascendingSortNode);
+
+         this.descendingSortNode = document.createElement("img");
+         this.descendingSortNode.classList.add("descendingSort");
+         this.descendingSortNode.setAttribute("src", this.transparentImageUrl);
+         this.domNode.appendChild(this.descendingSortNode);
+      },
 
       /**
        * @instance

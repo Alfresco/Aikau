@@ -19,28 +19,25 @@
 
 /**
  * @module alfresco/renderers/Toggle
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
+ * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes external:dojo/_OnDijitClickMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_JsNodeMixin",
-        "dojo/text!./templates/Toggle.html",
-        "alfresco/core/Core",
         "alfresco/renderers/_ItemLinkMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "dijit/_OnDijitClickMixin",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, template, AlfCore, _ItemLinkMixin, _PublishPayloadMixin,
+        function(declare, BaseWidget, _JsNodeMixin, _ItemLinkMixin, _PublishPayloadMixin,
                  _OnDijitClickMixin, lang, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _JsNodeMixin, AlfCore, _ItemLinkMixin, _PublishPayloadMixin, _OnDijitClickMixin], {
+   return declare([BaseWidget, _JsNodeMixin, _ItemLinkMixin, _PublishPayloadMixin, _OnDijitClickMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -59,13 +56,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Toggle.css"}]
        */
       cssRequirements: [{cssFile:"./css/Toggle.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * The label to show when the toggle is on
@@ -319,6 +309,54 @@ define(["dojo/_base/declare",
        * @since 1.0.86
        */
       toggleOffPublishPayloadItemMixin: false,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Toggle__createWidgetDom() {
+         // jshint maxstatements:false
+         this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Toggle");
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onClick));
+
+         this.processingNode = document.createElement("span");
+         this.processingNode.classList.add("processing");
+         this.processingNode.classList.add(this.toggleClass);
+         this.processingNode.classList.add("hidden");
+
+         this.onNode = document.createElement("a");
+         this.onNode.classList.add("on");
+         this.onNode.classList.add(this.toggleClass);
+         this.onNode.classList.add("hidden");
+         this.onNode.classList.add("enabled");
+         this.onNode.setAttribute("title", this.onTooltip);
+         this.onNode.setAttribute("alt", this.onTooltip);
+         this.onNode.setAttribute("tabindex", "0");
+         this.onNode.textContent = this.onLabel;
+
+         this.offNode = document.createElement("a");
+         this.offNode.classList.add("off");
+         this.offNode.classList.add(this.toggleClass);
+         this.offNode.classList.add("hidden");
+         this.offNode.setAttribute("title", this.offTooltip);
+         this.offNode.setAttribute("alt", this.offTooltip);
+         this.offNode.setAttribute("tabindex", "0");
+         this.offNode.textContent = this.offLabel;
+
+         this.warningNode = document.createElement("span");
+         this.warningNode.classList.add("warning");
+         this.warningNode.classList.add(this.toggleClass);
+         this.warningNode.classList.add("hidden");
+
+         this.domNode.appendChild(this.processingNode);
+         this.domNode.appendChild(this.onNode);
+         this.domNode.appendChild(this.offNode);
+         this.domNode.appendChild(this.warningNode);
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.

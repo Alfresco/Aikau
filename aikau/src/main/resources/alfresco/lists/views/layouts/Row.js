@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.100
        */
-      createWidgetDom: function alfresco_renderers_Row__createWidgetDom() {
+      createWidgetDom: function alfresco_lists_views_layouts_Row__createWidgetDom() {
          this.containerNode = this.domNode = document.createElement("tr");
          this.domNode.classList.add("alfresco-lists-views-layouts-Row");
          this.domNode.setAttribute("tabindex", "0");
@@ -130,7 +130,10 @@ define(["dojo/_base/declare",
             {
                this.processObject(this.widgetModelModifiers, this.widgets);
             }
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
 
          if (this.hasUploadPermissions() === true)

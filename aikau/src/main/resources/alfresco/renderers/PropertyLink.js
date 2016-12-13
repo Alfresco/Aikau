@@ -67,6 +67,19 @@ define(["dojo/_base/declare",
       useCurrentItemAsPayload: true,
 
       /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.100
+       */
+      createWidgetDom: function alfresco_renderers_PropertyLink__createWidgetDom() {
+         this.inherited(arguments);
+         this.domNode.classList.add("alfresco-renderers-PropertyLink");
+         this._attach(this.innerSpan, "ondijitclick", lang.hitch(this, this.onLinkClick));
+      },
+
+      /**
        * Handles the property being clicked. This stops the click event from propogating
        * further through the DOM (to prevent any wrapping anchor elements from triggering
        * browser navigation) and then publishes the configured topic and payload.

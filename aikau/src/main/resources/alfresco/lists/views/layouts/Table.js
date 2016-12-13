@@ -21,23 +21,16 @@
  * Use this widget to render a table of [rows]{@link module:alfresco/lists/views/layouts/Row}
  *
  * @module alfresco/lists/views/layouts/Table
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/lists/views/layouts/_MultiItemRendererMixin
- * @mixes module:alfresco/core/Core
- * @mixes module:alfresco/core/CoreWidgetProcessing
+ * @extends module:aikau/core/BaseWidget
+ * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Table.html",
-        "alfresco/lists/views/layouts/_MultiItemRendererMixin",
-        "alfresco/core/Core",
-        "alfresco/core/CoreWidgetProcessing"],
-        function(declare, _WidgetBase, _TemplatedMixin, template, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing) {
+        "aikau/core/BaseWidget",
+        "alfresco/lists/views/layouts/_LayoutMixin"],
+        function(declare, BaseWidget, _LayoutMixin) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _MultiItemRendererMixin, AlfCore, CoreWidgetProcessing], {
+   return declare([BaseWidget, _LayoutMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -49,12 +42,16 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Table.css"}],
 
       /**
-       * The HTML template to use for the widget.
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
        *
        * @instance
-       * @type {String}
+       * @since 1.0.101
        */
-      templateString: template,
+      createWidgetDom: function alfresco_lists_views_layouts_Table__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("table");
+         this.domNode.classList.add("alfresco-lists-views-layouts-Table");
+      },
 
       /**
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
@@ -64,7 +61,10 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_lists_views_layouts_Table__postCreate() {
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.containerNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.containerNode
+            });
          }
       }
    });

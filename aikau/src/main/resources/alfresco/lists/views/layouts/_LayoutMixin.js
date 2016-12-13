@@ -27,14 +27,14 @@
  * to prevent duplications.
  * 
  * @module alfresco/lists/views/layouts/_LayoutMixin
- * @extends module:alfresco/core/CoreWidgetProcessing
+ * @extends module:aikau/core/ChildProcessing
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "alfresco/core/CoreWidgetProcessing"], 
-        function(declare, CoreWidgetProcessing) {
+        "aikau/core/ChildProcessing"], 
+        function(declare, ChildProcessing) {
    
-   return declare([CoreWidgetProcessing], {
+   return declare([ChildProcessing], {
 
       /**
        * Extends the [inherited function]{@link module:alfresco/core/CoreWidgetProcessing#processWidgetConfig}

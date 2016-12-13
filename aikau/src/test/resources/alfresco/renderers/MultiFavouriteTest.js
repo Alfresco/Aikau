@@ -30,7 +30,9 @@ define(["module",
       testPage: "/MultiFavourite",
 
       "Check that nothing is shown as a favourite on page load": function() {
-         return this.remote.findAllByCssSelector(".alfresco-renderers-Toggle .favourite.on.hidden")
+         return this.remote.getLastPublish("ALF_VIEW_RENDERING_COMPLETE")
+
+         .findAllByCssSelector(".alfresco-renderers-Toggle .favourite.on.hidden")
             .then(function(elements) {
                assert.lengthOf(elements, 6, "Unexpected number of unfavorited items");
             });

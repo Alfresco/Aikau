@@ -35,7 +35,7 @@ define(["module",
          // Check that dialog opens when the button simulating the action request is clicked...
          return this.remote.findByCssSelector("#MANAGE_ASPECTS1_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG");
       },
@@ -91,8 +91,9 @@ define(["module",
       "Test adding an aspect": function() {
          return this.remote.findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .sub-pickers .alfresco-lists-views-AlfListView tr:nth-child(2) .alfresco-renderers-PublishAction > img")
             .click()
-            .end()
-            .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .picked-items .alfresco-lists-views-AlfListView tr")
+         .end()
+      
+         .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .picked-items .alfresco-lists-views-AlfListView tr")
             .then(function(elements) {
                assert.lengthOf(elements, 3, "Aspect wasn't added");
             });
@@ -102,8 +103,9 @@ define(["module",
          // Clicking on the cm:classifiable item should allow it to be removed and display it in the available list
          return this.remote.findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .picked-items .alfresco-lists-views-AlfListView tr:nth-child(1) .alfresco-renderers-PublishAction > img")
             .click()
-            .end()
-            .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .sub-pickers  .alfresco-lists-views-AlfListView tr:nth-child(1)")
+         .end()
+         
+         .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .sub-pickers  .alfresco-lists-views-AlfListView tr:nth-child(1)")
             .isDisplayed()
             .then(function(displayed) {
                assert.isTrue(displayed, "Aspect wasn't removed");
@@ -114,8 +116,9 @@ define(["module",
          // Clicking on the confirmation button in the dialog should post the correct added and remove payload...
          return this.remote.findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .confirmationButton > span")
             .click()
-            .end()
-            .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/aspects/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e")
+         .end()
+         
+         .getLastXhr("aikau/proxy/alfresco/slingshot/doclib/action/aspects/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e")
             .then(function(xhr) {
                assert.lengthOf(xhr.request.body.added, 1, "Wrong number of aspects added");
                assert.lengthOf(xhr.request.body.removed, 1, "Wrong number of aspects removed");
@@ -127,11 +130,11 @@ define(["module",
       "Test managing aspects when aspects can't be retrieved": function() {
          // By using a node that the mock service doesn't cater for we can rely on a 404 producing an error...
          return this.remote.findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .findByCssSelector("#MANAGE_ASPECTS3_label")
             .click()
-            .end()
+         .end()
 
          .getLastPublish("ALF_DISPLAY_PROMPT")
             .then(function(payload) {
@@ -143,17 +146,17 @@ define(["module",
          // By using a node that the mock service doesn't cater for we can rely on a 404 producing an error...
          return this.remote.findByCssSelector("#MANAGE_ASPECTS4_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogDisplayed")
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG .confirmationButton > span")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_MANAGE_ASPECTS_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_DISPLAY_PROMPT")
             .then(function(payload) {

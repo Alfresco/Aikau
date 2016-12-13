@@ -37,7 +37,8 @@ model.jsonModel = {
                                     id: "BASIC",
                                     name: "alfresco/renderers/Property",
                                     config: {
-                                       propertyToRender: "name"
+                                       propertyToRender: "name",
+                                       renderedValueClass: "one two"
                                     }
                                  },
                                  {

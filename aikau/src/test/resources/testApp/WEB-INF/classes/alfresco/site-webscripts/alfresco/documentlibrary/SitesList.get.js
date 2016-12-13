@@ -11,7 +11,6 @@ model.jsonModel = {
             }
          }
       },
-      "alfresco/services/ErrorReporter",
       "alfresco/services/SiteService"
    ],
    widgets: [
@@ -69,7 +68,7 @@ model.jsonModel = {
          name: "aikauTesting/mockservices/SitesPaginationMockXhr"
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

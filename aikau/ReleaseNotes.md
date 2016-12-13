@@ -1,4 +1,4 @@
-Aikau 1.0.100 Release Notes
+Aikau 1.0.101 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,14 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.101:
+* [AKU-1148](https://issues.alfresco.com/jira/browse/AKU-1148)         - Converted renderers and layout modules to create DOM natively
+* [AKU-1151](https://issues.alfresco.com/jira/browse/AKU-1151)         - Improve performance enhanced view rendering completion
+* [AKU-1152](https://issues.alfresco.com/jira/browse/AKU-1152)         - Support multiple classes assigned to renderedValueClass
+* [AKU-1153](https://issues.alfresco.com/jira/browse/AKU-1153)         - Include details of 3rd party libs in readme
+* [AKU-1154](https://issues.alfresco.com/jira/browse/AKU-1154)         - Update site creation failure error message
+* [AKU-1155](https://issues.alfresco.com/jira/browse/AKU-1155)         - Fix InlineEditProperty re-rendering bug
+
 1.0.100:
 * [AKU-878](https://issues.alfresco.com/jira/browse/AKU-878)         - Performance test page added
 * [AKU-1138](https://issues.alfresco.com/jira/browse/AKU-1138)       - Prevent PDF.js preview horizontal scrollbar clipping

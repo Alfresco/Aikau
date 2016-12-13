@@ -19,22 +19,17 @@
 
 /**
  * @module alfresco/renderers/Banner
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/renderers/_ItemLinkMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Banner.html",
-        "alfresco/core/Core",
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_ItemLinkMixin",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, _ItemLinkMixin, domClass) {
+        function(declare, BaseWidget, _ItemLinkMixin, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore, _ItemLinkMixin], {
+   return declare([BaseWidget, _ItemLinkMixin], {
       
       
       /**
@@ -64,13 +59,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Banner.css"}],
       
       /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
-      
-      /**
        * The message to display in the banner
        * @instance
        * @type {string} 
@@ -78,6 +66,20 @@ define(["dojo/_base/declare",
        */
       bannerMessage: "",
       
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Banner__createWidgetDom() {
+         this.bannerNode = this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Banner");
+         this.domNode.classList.add("hidden");
+         this.domNode.textContent = this.bannerMessage;
+      },
+
       /**
        * Removes the "hidden" class if there is a message to render
        * 

@@ -58,10 +58,11 @@ define(["module",
          return this.remote.findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
             .clearLog()
             .click()
-            .end()
-            .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
-            .end()
-            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
+         .end()
+         
+         .getLastPublish("ALF_PREFERENCE_SET", "Preference not set")
+         
+         .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 4, "The number of items per row was not decreased");
             });
@@ -71,9 +72,11 @@ define(["module",
          // Decrement the view size and check the number of items per row increases...
          return this.remote.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
-            .end()
-            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
+         .end()
+         
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
+         
+         .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 7, "The number of items per row was not increased");
             });
@@ -82,9 +85,11 @@ define(["module",
       "Test slider change increases items per row (show 10)": function() {
          return this.remote.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
-            .end()
-            .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
-            .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
+         .end()
+         
+         .getLastPublish("HAS_ITEMS_ALF_DOCLIST_SET_GALLERY_COLUMNS")
+         
+         .findAllByCssSelector("#DOCLIST .alfresco-lists-views-layouts-Grid > tr:first-child > td")
             .then(function(elements) {
                assert.lengthOf(elements, 10, "The number of items per row was not increased");
             });
@@ -114,7 +119,7 @@ define(["module",
             .then(function(size) {
                normalNameHeight = size.height;
             })
-            .end()
+         .end()
 
          .findByCssSelector("#DOCLIST tr:nth-child(1) td:nth-child(6) .displayName")
             .getVisibleText()
@@ -137,8 +142,7 @@ define(["module",
          return TestCommon.loadTestWebScript(this.remote, "/GalleryView", "Gallery View Tests (Keyboard Navigation)")
             // Using the slider ensures everything is setup for keyboard navigation
             .findByCssSelector("#TOOLBAR .dijitSliderIncrementIconH")
-            .click()
-            .end();
+               .click();
       },
 
       "Test selecting first item (Folder 1)": function() {
@@ -148,9 +152,9 @@ define(["module",
             })
             .pressKeys(keys.SPACE)
             .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
-            });
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
+               });
       },
 
       "Check selector click doesn't navigate": function() {
@@ -183,9 +187,9 @@ define(["module",
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
             .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Wiki Page", "The wrong document was selected");
-            });
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Wiki Page", "The wrong document was selected");
+               });
       },
 
       "Test left cursor moves to last item on first row (Calendar Event)": function() {
@@ -195,10 +199,11 @@ define(["module",
             .pressKeys(keys.TAB)
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
+            
             .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Calendar Event", "The wrong document was selected");
-            });
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Calendar Event", "The wrong document was selected");
+               });
       },
 
       "Test up cursor loops to bottom (Folder 4)": function() {
@@ -208,10 +213,11 @@ define(["module",
             .pressKeys(keys.TAB)
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
+            
             .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_SELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Folder 4", "The wrong document was selected");
-            });
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Folder 4", "The wrong document was selected");
+               });
       },
 
       "Test right cursor on last item loops to first item (Folder 1)": function() {
@@ -222,18 +228,20 @@ define(["module",
             .sleep(alfPause)
             .pressKeys(keys.SPACE)
             .sleep(alfPause)
+            
             .getLastPublish("HAS_ITEMS_ALF_DOCLIST_DOCUMENT_DESELECTED")
-            .then(function(payload) {
-               assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
-            })
-            .clearLog();
+               .then(function(payload) {
+                  assert.deepPropertyVal(payload, "value.displayName", "Folder 1", "The wrong document was selected");
+               })
+               .clearLog();
       },
 
       "Resize and check the selections": function() {
          return this.remote.findByCssSelector("#TOOLBAR .dijitSliderDecrementIconH")
             .click()
-            .end()
-            .getLastPublish("HAS_ITEMS_ALF_SELECTED_FILES_CHANGED")
+         .end()
+            
+         .getLastPublish("HAS_ITEMS_ALF_SELECTED_FILES_CHANGED")
             .then(function(payload) {
                var nodeRefs = [];
                payload.selectedItems.forEach(function(item) {

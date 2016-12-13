@@ -8,8 +8,7 @@ model.jsonModel = {
                all: true
             }
          }
-      },
-      "alfresco/services/ErrorReporter"
+      }
    ],
    widgets:[
       {
@@ -80,10 +79,7 @@ model.jsonModel = {
          }
       },
       {
-         name: "alfresco/logging/SubscriptionLog"
-      },
-      {
-         name: "aikauTesting/TestCoverageResults"
+         name: "alfresco/logging/DebugLog"
       }
    ]
 };

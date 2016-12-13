@@ -26,7 +26,8 @@
  *
  * @module alfresco/pickers/PickedItems
  * @extends module:alfresco/lists/views/AlfListView
- * @author Dave Draper & David Webster
+ * @author Dave Draper
+ * @author David Webster
  */
 define(["dojo/_base/declare",
         "alfresco/lists/views/AlfListView",

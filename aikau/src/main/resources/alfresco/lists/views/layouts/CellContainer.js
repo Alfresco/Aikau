@@ -24,28 +24,25 @@
  * [AlfGalleryView]{@link module:alfresco/documentlibrary/AlfGalleryView}.
  * 
  * @module alfresco/lists/views/layouts/CellContainer
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
+ * @mixes external:dijit/_OnDijitClickMixin
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @mixes module:alfresco/lists/views/layouts/_LayoutMixin
- * @mixes module:alfresco/core/Core
  * @author Dave Draper
  * @since 1.0.44
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_PublishPayloadMixin",
         "alfresco/lists/views/layouts/_LayoutMixin",
-        "alfresco/core/Core",
-        "dojo/text!./templates/CellContainer.html",
         "dojo/_base/event",
         "dojo/_base/lang",
         "dojo/dom-style"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PublishPayloadMixin, _LayoutMixin, Core, 
-                 template, event, lang, domStyle) {
+        function(declare, BaseWidget, _OnDijitClickMixin, _PublishPayloadMixin, _LayoutMixin, 
+                 event, lang, domStyle) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PublishPayloadMixin, _LayoutMixin, Core], {
+   return declare([BaseWidget, _OnDijitClickMixin, _PublishPayloadMixin, _LayoutMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -55,14 +52,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/CellContainer.css"}]
        */
       cssRequirements: [{cssFile:"./css/CellContainer.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {String}
-       */
-      templateString: template,
       
       /**
        * The minimum height for each container in pixels.
@@ -81,6 +70,24 @@ define(["dojo/_base/declare",
        * @default
        */
       widgets: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_lists_views_layouts_CellContainer__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("tr");
+         this.domNode.classList.add("alfresco-lists-views-layouts-CellContainer");
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onClick));
+
+         this.widgetsNode = document.createElement("div");
+         this.widgetsNode.classList.add("alfresco-lists-views-layouts-CellContainer__widgets");
+
+         this.domNode.appendChild(this.widgetsNode);
+      },
 
       /**
        * 
@@ -113,7 +120,10 @@ define(["dojo/_base/declare",
          domStyle.set(this.domNode, "minHeight", this.minHeight + "px");
          if (this.widgets)
          {
-            this.processWidgets(this.widgets, this.widgetsNode);
+            this.createChildren({
+               widgets: this.widgets,
+               targetNode: this.widgetsNode
+            });
          }
       }
    });
