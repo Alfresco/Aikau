@@ -24,25 +24,26 @@
  * selected and unselected.</p>
  *
  * @module alfresco/renderers/PublishAction
- * @extends module:alfresco/renderers/Property
+ * @extends module:aikau/core/BaseWidget
+ * @mixes external:dijit/_OnDijitClickMixin
+ * @mixes module:alfresco/renderers/_JsNodeMixin
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_JsNodeMixin",
         "alfresco/renderers/_PublishPayloadMixin",
-        "dojo/text!./templates/PublishAction.html",
         "alfresco/enums/urlTypes", 
         "alfresco/util/urlUtils",
-        "alfresco/core/Core",
+        "dojo/_base/lang",
         "dojo/dom-class",
         "dojo/_base/event"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, 
-                 template, urlTypes, urlUtils, AlfCore, domClass, event) {
+        function(declare, BaseWidget, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, 
+                 urlTypes, urlUtils, lang, domClass, event) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin, AlfCore], {
+   return declare([BaseWidget, _OnDijitClickMixin, _JsNodeMixin, _PublishPayloadMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -54,13 +55,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/PublishAction.css"}],
 
       /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
-
-       /**
        * The alt-text for the action.
        *
        * @instance
@@ -134,6 +128,33 @@ define(["dojo/_base/declare",
        * @since 1.0.68
        */
       srcType: urlTypes.REQUIRE_PATH,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_PublishAction__createWidgetDom() {
+         this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-PublishAction");
+         this.domNode.setAttribute("tabindex", "0");
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onClick));
+
+         var imageNode = document.createElement("img");
+         imageNode.classList.add("alfresco-renderers-PublishAction__image");
+         imageNode.setAttribute("src", this.imageSrc);
+         imageNode.setAttribute("alt", this.altText);
+         imageNode.setAttribute("title", this.altText);
+
+         var labelNode = document.createElement("span");
+         labelNode.classList.add("alfresco-renderers-PublishAction__label");
+         labelNode.textContent = this.label;
+
+         this.domNode.appendChild(imageNode);
+         this.domNode.appendChild(labelNode);
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.

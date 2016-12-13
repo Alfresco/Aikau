@@ -87,15 +87,14 @@
  * }
  * 
  * @module alfresco/renderers/Actions
- * @extends module:alfresco/menus/AlfMenuBar
+ * @extends module:aikau/core/BaseWidget
+ * @mixes dijit/_HasDropDown
  * @mixes module:alfresco/renderers/_ActionsMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_HasDropDown",
-        "dojo/text!./templates/Actions.html",
         "alfresco/renderers/_ActionsMixin",
         "alfresco/buttons/AlfButton",
         "alfresco/menus/AlfMenuGroups",
@@ -105,10 +104,10 @@ define(["dojo/_base/declare",
         "dojo/_base/event",
         "dojo/_base/lang",
         "dojo/keys"],
-        function(declare, _WidgetBase, _TemplatedMixin, _HasDropDown, template, _ActionsMixin, AlfButton, 
+        function(declare, BaseWidget, _HasDropDown, _ActionsMixin, AlfButton, 
                  AlfMenuGroups, AlfMenuGroup, Menu, domClass, Event, lang, keys) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _HasDropDown, _ActionsMixin], {
+   return declare([BaseWidget, _HasDropDown, _ActionsMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -128,15 +127,6 @@ define(["dojo/_base/declare",
        */
       i18nRequirements: [{i18nFile: "./i18n/Actions.properties"}],
 
-      /**
-       * The HTML template to use for the widget.
-       * 
-       * @instance
-       * @type {string}
-       * @since 1.0.46
-       */
-      templateString: template,
-      
       /**
        * Indicates that this should only be displayed when the item (note: NOT the renderer) is
        * hovered over.
@@ -169,6 +159,18 @@ define(["dojo/_base/declare",
        * @since 1.0.62
        */
       _button: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Actions__createWidgetDom() {
+         this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-Actions");
+      },
 
       /**
        * Ensures that the [menu]{@link module:alfresco/renderers/Actions#_menu} is destroyed.

@@ -22,27 +22,23 @@
  * widget that when changed will publish information about the change in value for the current rendered item.
  *
  * @module alfresco/renderers/PublishingDropDownMenu
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
+ * @mixes external:dijit/_OnDijitClickMixin
  * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "alfresco/renderers/_PublishPayloadMixin",
-        "dojo/text!./templates/PublishingDropDownMenu.html",
-        "alfresco/core/Core",
         "alfresco/core/ObjectTypeUtils",
         "alfresco/forms/controls/Select",
         "dojo/_base/lang",
         "dojo/dom-class"],
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, _PublishPayloadMixin, template, AlfCore, ObjectTypeUtils, 
+        function(declare, BaseWidget, _OnDijitClickMixin, _PublishPayloadMixin, ObjectTypeUtils, 
                  Select, lang, domClass) {
 
-   return declare([_WidgetBase, _OnDijitClickMixin, _TemplatedMixin, AlfCore, _PublishPayloadMixin], {
+   return declare([BaseWidget, _OnDijitClickMixin, _PublishPayloadMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
@@ -60,13 +56,6 @@ define(["dojo/_base/declare",
        * @type {Array}
        */
       i18nRequirements: [{i18nFile: "./i18n/PublishingDropDownMenu.properties"}],
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
 
       /**
        * Optional override for the title text to be displayed when hovering over the cancel "button"
@@ -117,6 +106,43 @@ define(["dojo/_base/declare",
        * @since 1.0.35
        */
       disablementProperty: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_PublishingDropDownMenu__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-PublishingDropDownMenu");
+
+         this.processingNode = document.createElement("div");
+         this.processingNode.classList.add("indicator");
+         this.processingNode.classList.add("processing");
+         this.processingNode.classList.add("hidden");
+         this.processingNode.setAttribute("tabindex", "0");
+         this.processingNode.setAttribute("title", this.cancelPublishLabel);
+         this._attach(this.processingNode, "ondijitclick", lang.hitch(this, this.onChangeCancel));
+         
+         this.warningNode = document.createElement("div");
+         this.warningNode.classList.add("indicator");
+         this.warningNode.classList.add("warning");
+         this.warningNode.classList.add("hidden");
+         
+         this.successNode = document.createElement("div");
+         this.successNode.classList.add("indicator");
+         this.successNode.classList.add("success");
+         this.successNode.classList.add("hidden");
+
+         this.dropDownNode = document.createElement("div");
+
+         this.domNode.appendChild(this.processingNode);
+         this.domNode.appendChild(this.warningNode);
+         this.domNode.appendChild(this.successNode);
+         this.domNode.appendChild(this.dropDownNode);
+      },
 
       /**
        *

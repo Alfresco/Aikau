@@ -28,6 +28,8 @@
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
  * @mixes module:alfresco/core/ValueDisplayMapMixin
+ * @mixes module:alfresco/core/UrlUtilsMixin
+ * @mixes module:alfresco/core/TemporalUtils
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
@@ -304,8 +306,8 @@ define(["dojo/_base/declare",
          }, this);
          this.domNode.setAttribute("tabindex", "0");
 
-         var innerSpan = document.createElement("span");
-         innerSpan.classList.add("inner");
+         this.innerSpan = document.createElement("span");
+         this.innerSpan.classList.add("inner");
 
          var labelSpan = document.createElement("span");
          labelSpan.classList.add("label");
@@ -315,9 +317,9 @@ define(["dojo/_base/declare",
          valueSpan.classList.add("value");
          valueSpan.innerHTML = this.renderedValue;
 
-         innerSpan.appendChild(labelSpan);
-         innerSpan.appendChild(valueSpan);
-         this.domNode.appendChild(innerSpan);
+         this.innerSpan.appendChild(labelSpan);
+         this.innerSpan.appendChild(valueSpan);
+         this.domNode.appendChild(this.innerSpan);
       },
 
       /**

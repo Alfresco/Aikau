@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
        * @instance
        * @since 1.0.100
        */
-      createWidgetDom: function alfresco_renderers_Row__createWidgetDom() {
+      createWidgetDom: function alfresco_lists_views_layouts_Row__createWidgetDom() {
          this.containerNode = this.domNode = document.createElement("tr");
          this.domNode.classList.add("alfresco-lists-views-layouts-Row");
          this.domNode.setAttribute("tabindex", "0");

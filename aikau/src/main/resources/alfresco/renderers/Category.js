@@ -62,6 +62,24 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Category.css"}],
       
       /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Category__createWidgetDom() {
+         this.categoryNode = this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-Property");
+         this.domNode.classList.add("alfresco-renderers-Category");
+
+         var icon = document.createElement("span");
+         icon.classList.add("icon");
+         icon.innerHTML = "&nbsp;";
+         this.domNode.appendChild(icon);
+      },
+
+      /**
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Category__postMixInProperties() {

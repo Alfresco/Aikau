@@ -28,7 +28,6 @@
  */
 define(["dojo/_base/declare",
         "alfresco/renderers/Thumbnail",
-        "dojo/text!./templates/GalleryThumbnail.html",
         "dojo/_base/lang",
         "dojo/dom-style",
         "dojo/dom-class",
@@ -37,7 +36,7 @@ define(["dojo/_base/declare",
         // These items required for building only
         "alfresco/renderers/Selector",
         "alfresco/renderers/MoreInfo"], 
-        function(declare, Thumbnail, template, lang, domStyle, domClass, LeftAndRight) {
+        function(declare, Thumbnail, lang, domStyle, domClass, LeftAndRight) {
 
    return declare([Thumbnail], {
       
@@ -49,13 +48,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/GalleryThumbnail.css"}]
        */
       cssRequirements: [{cssFile:"./css/GalleryThumbnail.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * Overrides the [inherited default]{@link module:alfresco/renderers/Thumbnail#cropToFit} to
@@ -95,6 +87,54 @@ define(["dojo/_base/declare",
        * @since 1.0.40
        */
       updateOnSelection: true,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_GalleryThumbnail__createWidgetDom() {
+         this.thumbnailNode = this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Thumbnail");
+         domClass.add(this.domNode, this.customClasses);
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onLinkClick));
+
+         this.titleNode = document.createElement("div");
+         this.titleNode.classList.add("selectBar");
+         this.titleNode.classList.add("share-hidden");
+         
+         this.selectBarNode = document.createElement("div");
+         this.titleNode.appendChild(this.selectBarNode);
+         
+         this.displayNameNode = document.createElement("div");
+         this.displayNameNode.classList.add("displayName");
+
+         var displayNameContent = document.createElement("div");
+         displayNameContent.classList.add("displayName__content");
+         displayNameContent.setAttribute("title", this.imgTitle);
+         displayNameContent.textContent = this.imgTitle;
+
+         this.displayNameNode.appendChild(displayNameContent);
+         
+         this.frameNode = document.createElement("span");
+         this.frameNode.classList.add("alfresco-renderers-Thumbnail__frame");
+
+         this.imgNode = document.createElement("img");
+         this.imgNode.classList.add("alfresco-renderers-Thumbnail__image");
+         this.imgNode.setAttribute("id", this.imgId);
+         this.imgNode.setAttribute("src", this.thumbnailUrl);
+         this.imgNode.setAttribute("alt", this.imgAltText);
+         this.imgNode.setAttribute("title", this.imgTitle);
+         this._attach(this.imgNode, "onload", lang.hitch(this, this.getNaturalImageSize));
+
+         this.frameNode.appendChild(this.imgNode);
+
+         this.domNode.appendChild(this.titleNode);
+         this.domNode.appendChild(this.displayNameNode);
+         this.domNode.appendChild(this.frameNode);
+      },
 
       /**
        * @instance

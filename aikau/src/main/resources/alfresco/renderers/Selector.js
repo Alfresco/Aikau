@@ -24,25 +24,21 @@
  * [ItemSelectionMixin]{@link module:alfresco/lists/ItemSelectionMixin} module.
  * 
  * @module alfresco/renderers/Selector
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes external:dojo/_OnDijitClickMixin
  * @mixes module:alfresco/lists/ItemSelectionMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "dijit/_OnDijitClickMixin",
         "alfresco/lists/ItemSelectionMixin",
-        "dojo/text!./templates/Selector.html",
         "dojo/_base/array",
         "dojo/_base/lang",
         "dojo/dom-class"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ItemSelectionMixin, template, 
-                 array, lang, domClass) {
+        function(declare,BaseWidget, _OnDijitClickMixin, ItemSelectionMixin, array, lang, domClass) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _OnDijitClickMixin, ItemSelectionMixin], {
+   return declare([BaseWidget, _OnDijitClickMixin, ItemSelectionMixin], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -52,13 +48,6 @@ define(["dojo/_base/declare",
        * @default [{cssFile:"./css/Selector.css"}]
        */
       cssRequirements: [{cssFile:"./css/Selector.css"}],
-      
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
       
       /**
        * The dot-notation property to use in the 
@@ -84,6 +73,20 @@ define(["dojo/_base/declare",
        * @since 1.0.70
        */
       disabledOnValues: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Actions__createWidgetDom() {
+         this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Selector");
+         this.domNode.setAttribute("tabindex", "0");
+         this._attach(this.domNode, "ondijitclick", lang.hitch(this, this.onSelectionClick));
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.

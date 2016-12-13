@@ -22,23 +22,18 @@
  * representation of a previously added tag.
  *  
  * @module alfresco/renderers/ReadOnlyTag
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/services/_NavigationServiceTopicMixin
- * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "alfresco/services/_NavigationServiceTopicMixin",
-        "dojo/text!./templates/ReadOnlyTag.html",
-        "alfresco/core/Core",
         "alfresco/enums/urlTypes",
         "alfresco/navigation/Link"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _NavigationServiceTopicMixin, template, AlfCore, urlTypes, Link) {
+        function(declare, BaseWidget, _NavigationServiceTopicMixin, urlTypes, Link) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _NavigationServiceTopicMixin, AlfCore], {
+   return declare([BaseWidget, _NavigationServiceTopicMixin], {
       
       /**
        * An array of the i18n files to use with this widget.
@@ -59,13 +54,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/ReadOnlyTag.css"}],
       
       /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
-      
-      /**
        * The display name for the tag.
        * 
        * @instance
@@ -83,6 +71,18 @@ define(["dojo/_base/declare",
        */
       tagValue: null,
       
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_ReadOnlyTag__createWidgetDom() {
+         this.tagNode = this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-ReadOnlyTag");
+      },
+
       /**
        * Determines whether or not the property should only be displayed when the item is hovered over.
        * 

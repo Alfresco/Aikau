@@ -21,28 +21,17 @@
  * This renders an image that represents the type of file that the assigned node represents.
  *
  * @module alfresco/renderers/FileType
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
+ * @extends module:aikau/core/BaseWidget
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase",
-        "dijit/_TemplatedMixin",
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_JsNodeMixin",
-        "dojo/text!./templates/FileType.html",
-        "alfresco/core/Core",
         "dojo/_base/lang"],
-        function(declare, _WidgetBase, _TemplatedMixin, _JsNodeMixin, template, AlfCore, lang) {
+        function(declare, BaseWidget, _JsNodeMixin, lang) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _JsNodeMixin, AlfCore], {
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
+   return declare([BaseWidget, _JsNodeMixin], {
 
       /**
        * The size of the image. By default this will be "large" but can be set to "small" or "medium". The default widget has 3 image
@@ -72,6 +61,24 @@ define(["dojo/_base/declare",
        * @default require.toUrl("alfresco/renderers/css/images/filetypes/{prefix}-{type}-{size}.png")
        */
       imageUrl: "alfresco/renderers/css/images/filetypes/{prefix}-{type}-{size}.png",
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_FileType__createWidgetDom() {
+         this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-FileType");
+
+         this.imgNode = document.createElement("img");
+         this.imgNode.setAttribute("src", this.img);
+         this.imgNode.setAttribute("alt", this.altText);
+
+         this.domNode.appendChild(this.imgNode);
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.

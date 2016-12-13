@@ -19,19 +19,14 @@
 
 /**
  * @module alfresco/renderers/Separator
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "dojo/text!./templates/Separator.html",
-        "alfresco/core/Core"], 
-        function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore) {
+        "aikau/core/BaseWidget"], 
+        function(declare, BaseWidget) {
 
-   return declare([_WidgetBase, _TemplatedMixin, AlfCore], {
+   return declare([BaseWidget], {
       
       /**
        * An array of the CSS files to use with this widget.
@@ -43,10 +38,15 @@ define(["dojo/_base/declare",
       cssRequirements: [{cssFile:"./css/Separator.css"}],
       
       /**
-       * The HTML template to use for the widget.
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
        * @instance
-       * @type {String}
+       * @since 1.0.101
        */
-      templateString: template
+      createWidgetDom: function alfresco_renderers_Separator__createWidgetDom() {
+         this.domNode = document.createElement("span");
+         this.domNode.classList.add("alfresco-renderers-Separator");
+      }
    });
 });

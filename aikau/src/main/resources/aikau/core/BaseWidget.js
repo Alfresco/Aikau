@@ -86,7 +86,7 @@ define(["dojo/_base/declare",
        */
       getParametersToApply: function aikau_core_BaseWidget__getParametersToApply(/*jshint unused:false*/ originalParams) {
          var params = null;
-         if (originalParams.style)
+         if (originalParams && originalParams.style)
          {
             params = {
                style: originalParams.style

@@ -50,26 +50,22 @@
  * }
  *
  * @module alfresco/renderers/Indicators
- * @extends external:dijit/_WidgetBase
- * @mixes external:dojo/_TemplatedMixin
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/core/BaseWidget
+ * @mixes module:alfresco/renderers/_PublishPayloadMixin
  * @author Dave Draper
  * @author Martin Doyle
  */
 define(["dojo/_base/declare", 
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin", 
+        "aikau/core/BaseWidget",
         "alfresco/renderers/_PublishPayloadMixin", 
-        "dojo/text!./templates/Indicators.html", 
-        "alfresco/core/Core", 
         "service/constants/Default",
         "dojo/_base/array", 
         "dojo/_base/lang", 
         "dojo/dom-construct", 
         "dojo/on"], 
-        function(declare, _WidgetBase, _TemplatedMixin, _PublishPayloadMixin, template, AlfCore, AlfConstants, array, lang, domConstruct, on) {
+        function(declare, BaseWidget, _PublishPayloadMixin, AlfConstants, array, lang, domConstruct, on) {
 
-   return declare([_WidgetBase, _TemplatedMixin, _PublishPayloadMixin, AlfCore], {
+   return declare([BaseWidget, _PublishPayloadMixin], {
 
       /**
        * An array of the i18n files to use with this widget.
@@ -92,13 +88,6 @@ define(["dojo/_base/declare",
       cssRequirements: [{
          cssFile: "./css/Indicators.css"
       }],
-
-      /**
-       * The HTML template to use for the widget.
-       * @instance
-       * @type {string}
-       */
-      templateString: template,
 
       /**
        * An object that can map each icon attribute to a custom source file for the indicator image. All mappings
@@ -182,6 +171,18 @@ define(["dojo/_base/declare",
        * @type {object[]}
        */
       _currentIndicators: null,
+
+      /**
+       * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
+       * to construct the DOM for the widget using native browser capabilities.
+       *
+       * @instance
+       * @since 1.0.101
+       */
+      createWidgetDom: function alfresco_renderers_Indicators__createWidgetDom() {
+         this.containerNode = this.domNode = document.createElement("div");
+         this.domNode.classList.add("alfresco-renderers-Indicators");
+      },
 
       /**
        * Set up the attributes to be used when rendering the template.
