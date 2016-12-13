@@ -28,6 +28,8 @@
  * @mixes module:alfresco/renderers/_JsNodeMixin
  * @mixes module:alfresco/renderers/_ItemLinkMixin
  * @mixes module:alfresco/core/ValueDisplayMapMixin
+ * @mixes module:alfresco/core/UrlUtilsMixin
+ * @mixes module:alfresco/core/TemporalUtils
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
