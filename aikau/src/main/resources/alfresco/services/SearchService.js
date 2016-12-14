@@ -88,7 +88,7 @@ define(["dojo/_base/declare",
        * @default
        * @since 1.0.99
        */
-      highlightMaxAnalyzedChars: 500,
+      highlightMaxAnalyzedChars: null,
 
       /**
        * The number of characters to include in a highlight snippet.
