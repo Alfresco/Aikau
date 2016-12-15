@@ -2020,6 +2020,67 @@ define([],function() {
       VIEW_RENDERING_COMPLETE: "ALF_VIEW_RENDERING_COMPLETE",
 
       /**
+       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to add a new property to the view being built
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       *
+       * @event
+       * @property {string} viewId The ID of the view to add the property to
+       * @property {string} propName The name of the property to add
+       * @property {string} propLabel The label to use for the property (in the header for example)
+       */
+      VIEW_BUILDER_ADD_VIEW_PROP: "ALF_VIEW_BUILDER_ADD_VIEW_PROP",
+
+      /**
+       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to remove a new property from the view being built
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       *
+       * @event
+       * @property {string} viewId The ID of the view to add the property to
+       * @property {string} id The id of the property to remove
+       */
+      VIEW_BUILDER_DELETE_VIEW_PROP: "ALF_VIEW_BUILDER_DELETE_VIEW_PROP",
+
+      /**
+       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to retrieve the list of properties to be displayed in the view being built.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       *
+       * @event
+       * @property {string} viewId The ID of the view to get the properties for
+       */
+      VIEW_BUILDER_GET_VIEW_PROPS: "ALF_VIEW_BUILDER_GET_VIEW_PROPS",
+
+      /**
+       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to handle re-ordered of properties in the view
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       *
+       * @event
+       * @property {string} viewId The ID of the view to get the properties for
+       * @property {string} id The ID of the property to move
+       * @property {string} [direction="DOWN"] The direction to move the property in ("UP"/"DOWN")
+       */
+      VIEW_BUILDER_MOVE_PROP: "ALF_VIEW_BUILDER_MOVE_PROP",
+
+      /**
        * This topic is published to indicate that widget processing has been completed. It is typically
        * fired by widgets that dynamically render widget models.
        *

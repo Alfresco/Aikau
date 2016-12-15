@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>ViewBuilderService Test</shortname>
+  <description>The test page for the ViewBuilderService</description>
+  <family>aikau-unit-tests</family>
+  <url>/ViewBuilderService</url>
+</webscript>
