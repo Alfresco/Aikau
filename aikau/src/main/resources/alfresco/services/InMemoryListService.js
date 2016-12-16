@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
       listData: null,
 
       /**
-       * Sets up the subscriptions for the CommentService
+       * Sets up the subscriptions for the service
        * 
        * @instance
        * @listens module:alfresco/core/topics#IN_MEM_LIST_ADD_ITEM
