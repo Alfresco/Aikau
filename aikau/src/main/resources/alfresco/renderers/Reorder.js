@@ -121,7 +121,18 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      upPublishTopic: "ALF_REORDER_UP",
+      moveUpPublishTopic: "ALF_REORDER_UP",
+
+      /**
+       * Indicates whether or not the [upPublishTopic]{@link module:alfresco/renderers#upPublishTopic}
+       * will be published globally.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      moveUpPublishGlobal: false,
 
       /**
        * This defines the topic that will be published on when the up icon is clicked. The payload will be
@@ -131,7 +142,18 @@ define(["dojo/_base/declare",
        * @type {string}
        * @default
        */
-      downPublishTopic: "ALF_REORDER_DOWN",
+      moveDownPublishTopic: "ALF_REORDER_DOWN",
+
+      /**
+       * Indicates whether or not the [downPublishTopic]{@link module:alfresco/renderers#downPublishTopic}
+       * will be published globally.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      moveDownPublishGlobal: false,
 
       /**
        * This is the message or message key that will be used for the alt text attribute on the up arrow
@@ -225,7 +247,7 @@ define(["dojo/_base/declare",
             0: this.currentItem[this.propertyToRender]
          });
          payload.successMessage = message;
-         this.alfPublish(this.moveUpPublishTopic, payload);
+         this.alfPublish(this.moveUpPublishTopic, payload, this.moveUpPublishGlobal);
       },
 
       /**
@@ -249,7 +271,7 @@ define(["dojo/_base/declare",
             0: this.currentItem[this.propertyToRender]
          });
          payload.successMessage = message;
-         this.alfPublish(this.moveDownPublishTopic, payload);
+         this.alfPublish(this.moveDownPublishTopic, payload, this.moveDownPublishGlobal);
       }
    });
 });

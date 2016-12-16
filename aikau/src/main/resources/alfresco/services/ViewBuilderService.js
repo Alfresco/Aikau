@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
 
             this.alfPublish(payload.alfSuccessTopic, {
                response: viewData
-            }, false, false, payload.alfResponseScope);
+            }, true);
          }
          else
          {
