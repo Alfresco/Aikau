@@ -10,6 +10,9 @@ var addPropButton = {
          dialogTitle: "Add Property to View",
          formSubmissionTopic: "ALF_IN_MEM_LIST_ADD_ITEM",
          formSubmissionGlobal: true,
+         formSubmissionPayloadMixin: {
+            listId: "{generatedId}"
+         },
          widgets: [
             {
                id: "PROP_NAME",
@@ -45,7 +48,9 @@ var viewPropList = {
    config: {
       waitForPageWidgets: false,
       loadDataPublishTopic: "ALF_IN_MEM_LIST_GET_ITEMS",
-      loadDataPublishPayload: {},
+      loadDataPublishPayload: {
+         listId: "{generatedId}"
+      },
       itemsProperty: "items",
       noDataMessage: "No properties have been added to the view!",
       widgets: [
@@ -104,14 +109,14 @@ var viewPropList = {
                                           moveUpPublishPayloadItemMixin: true,
                                           moveUpPublishPayload: {
                                              direction: "UP",
-                                             viewId: "TEST"
+                                             listId: "{generatedId}"
                                           },
                                           moveUpPublishGlobal: true,
                                           moveDownPublishTopic: "ALF_IN_MEM_LIST_MOVE_ITEM",
                                           moveDownPublishPayloadItemMixin: true,
                                           moveDownPublishPayload: {
                                              direction: "DOWN",
-                                             viewId: "TEST"
+                                             listId: "{generatedId}"
                                           },
                                           moveDownPublishGlobal: true
                                        }
@@ -161,7 +166,7 @@ var viewPropList = {
                                           publishPayloadItemMixin: true,
                                           publishPayload: {
                                              requiresConfirmation: true,
-                                             viewId: "TEST"
+                                             listId: "{generatedId}"
                                           },
                                           publishGlobal: true
                                        }
@@ -184,7 +189,10 @@ var addViewButton = {
    name: "alfresco/buttons/AlfButton",
    config: {
       label: "Add View",
+      generateIdOnClick: true,
       publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
+      publishPayloadModifiers: ["processInstanceTokens"],
+      publishPayloadType: "PROCESS",
       publishPayload: {
          dialogId: "ADD_VIEW_DIALOG",
          dialogTitle: "Add View",

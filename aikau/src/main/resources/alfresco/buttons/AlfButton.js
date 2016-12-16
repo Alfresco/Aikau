@@ -85,6 +85,35 @@ define(["dojo/_base/declare",
       disableOnInvalidControls: false,
 
       /**
+       * This will be updated on each button click with a new value if
+       * [generateIdOnClick]{@link module:alfresco/buttons/AlfButton#generateIdOnClick} is configured
+       * to be true.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      generatedId: null,
+
+      /**
+       * Indicates whether a unique ID should be generated on each click. This ID will be assigned
+       * to the [generatedId]{@link module:alfresco/buttons/AlfButton#generatedId} attribute. The purpose
+       * of this capability is to allow an ID to be generated to be processed into the 
+       * [publishPayload]{@link module:alfresco/buttons/AlfButton#publishPayload} when using the
+       * [publishPayloadType]{@link module:alfresco/renderers/_PublishPayloadMixin#publishPayloadType} 
+       * is configured to be "PROCESS" with the
+       * [publishPayloadModifiers]{@link module:alfresco/renderers/_PublishPayloadMixin#publishPayloadModifiers}
+       * containing the "processInstanceTokens" modifier.
+       * 
+       * @instance
+       * @type {boolean}
+       * @default
+       * @since 1.0.102
+       */
+      generateIdOnClick: false,
+
+      /**
        * This will be instantiated as an array and used to keep track of any controls that report themselves as being
        * in an invalid state. The button should only be enabled when this list is empty.
        *
@@ -273,6 +302,11 @@ define(["dojo/_base/declare",
          var payload;
          if (this.publishTopic)
          {
+            if (this.generateIdOnClick)
+            {
+               this.generatedId = this.generateUuid();
+            }
+
             payload = this.generatePayload(this.publishPayload || {}, this.currentItem, null, this.publishPayloadType,
                     this.publishPayloadItemMixin, this.publishPayloadModifiers);
             this.alfPublish(this.publishTopic, 
