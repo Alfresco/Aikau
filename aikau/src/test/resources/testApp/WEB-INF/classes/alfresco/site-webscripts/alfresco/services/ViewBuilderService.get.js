@@ -6,19 +6,16 @@ var addPropButton = {
       publishTopic: "ALF_CREATE_FORM_DIALOG_REQUEST",
       publishGlobal: true,
       publishPayload: {
-         dialogId: "VIEW_BUILDER_ADD_PROPERTY_DIALOG",
+         dialogId: "IN_MEM_LIST_ADD_PROPERTY_DIALOG",
          dialogTitle: "Add Property to View",
-         formSubmissionTopic: "ALF_VIEW_BUILDER_ADD_VIEW_PROP",
+         formSubmissionTopic: "ALF_IN_MEM_LIST_ADD_ITEM",
          formSubmissionGlobal: true,
-         formSubmissionPayloadMixin: {
-            viewId: "TEST"
-         },
          widgets: [
             {
                id: "PROP_NAME",
                name: "alfresco/forms/controls/TextBox",
                config: {
-                  name: "propName",
+                  name: "item.propName",
                   label: "Property",
                   value: "",
                   requirementConfig: {
@@ -30,7 +27,7 @@ var addPropButton = {
                id: "PROP_LABEL",
                name: "alfresco/forms/controls/TextBox",
                config: {
-                  name: "propLabel",
+                  name: "item.propLabel",
                   label: "Label",
                   value: "",
                   requirementConfig: {
@@ -47,11 +44,9 @@ var viewPropList = {
    name: "alfresco/lists/AlfList",
    config: {
       waitForPageWidgets: false,
-      loadDataPublishTopic: "ALF_VIEW_BUILDER_GET_VIEW_PROPS",
-      loadDataPublishPayload: {
-         viewId: "TEST"
-      },
-      itemsProperty: "properties",
+      loadDataPublishTopic: "ALF_IN_MEM_LIST_GET_ITEMS",
+      loadDataPublishPayload: {},
+      itemsProperty: "items",
       noDataMessage: "No properties have been added to the view!",
       widgets: [
          {
@@ -104,15 +99,15 @@ var viewPropList = {
                                        id: "PROPERTY_REORDER",
                                        name: "alfresco/renderers/Reorder",
                                        config: {
-                                          propertyToRender: "propName",
-                                          moveUpPublishTopic: "ALF_VIEW_BUILDER_MOVE_PROP",
+                                          propertyToRender: "item.propName",
+                                          moveUpPublishTopic: "ALF_IN_MEM_LIST_MOVE_ITEM",
                                           moveUpPublishPayloadItemMixin: true,
                                           moveUpPublishPayload: {
                                              direction: "UP",
                                              viewId: "TEST"
                                           },
                                           moveUpPublishGlobal: true,
-                                          moveDownPublishTopic: "ALF_VIEW_BUILDER_MOVE_PROP",
+                                          moveDownPublishTopic: "ALF_IN_MEM_LIST_MOVE_ITEM",
                                           moveDownPublishPayloadItemMixin: true,
                                           moveDownPublishPayload: {
                                              direction: "DOWN",
@@ -162,7 +157,7 @@ var viewPropList = {
                                        config: {
                                           iconClass: "delete-16",
                                           propertyToRender: "propName",
-                                          publishTopic: "ALF_VIEW_BUILDER_DELETE_VIEW_PROP",
+                                          publishTopic: "ALF_IN_MEM_LIST_DELETE_ITEM",
                                           publishPayloadItemMixin: true,
                                           publishPayload: {
                                              requiresConfirmation: true,
@@ -242,14 +237,13 @@ model.jsonModel = {
       },
       "alfresco/services/CrudService",
       "alfresco/services/DialogService",
-      "alfresco/services/ViewBuilderService"
+      "alfresco/services/InMemoryListService"
    ],
    widgets:[
       addViewButton,
       {
          name: "alfresco/lists/AlfList",
          config: {
-            pubSubScope: "VIEWS_",
             loadDataPublishTopic: "ALF_CRUD_GET_ALL",
             loadDataPublishPayload: {
                url: "aikau/views"
@@ -266,7 +260,7 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
-                                    name: "alfresco/lists/views/Cell",
+                                    name: "alfresco/lists/views/layouts/Cell",
                                     config: {
                                        widgets: [
                                           {

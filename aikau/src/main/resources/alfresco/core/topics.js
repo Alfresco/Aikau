@@ -2020,8 +2020,8 @@ define([],function() {
       VIEW_RENDERING_COMPLETE: "ALF_VIEW_RENDERING_COMPLETE",
 
       /**
-       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
-       * to add a new property to the view being built
+       * This is subscribed to by the [InMemoryListService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to add a new item to the list being built
        * 
        * @instance
        * @type {string}
@@ -2029,15 +2029,14 @@ define([],function() {
        * @since 1.0.102
        *
        * @event
-       * @property {string} viewId The ID of the view to add the property to
-       * @property {string} propName The name of the property to add
-       * @property {string} propLabel The label to use for the property (in the header for example)
+       * @property {string} listId The ID of the view to add the property to
+       * @property {object} item The item to add
        */
-      VIEW_BUILDER_ADD_VIEW_PROP: "ALF_VIEW_BUILDER_ADD_VIEW_PROP",
+      IN_MEM_LIST_ADD_ITEM: "ALF_IN_MEM_LIST_ADD_ITEM",
 
       /**
-       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
-       * to remove a new property from the view being built
+       * This is subscribed to by the [InMemoryListService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to remove an item from the list being built
        * 
        * @instance
        * @type {string}
@@ -2045,14 +2044,14 @@ define([],function() {
        * @since 1.0.102
        *
        * @event
-       * @property {string} viewId The ID of the view to add the property to
-       * @property {string} id The id of the property to remove
+       * @property {string} listId The ID of the list to remove the property from
+       * @property {string} id The id of the item to remove
        */
-      VIEW_BUILDER_DELETE_VIEW_PROP: "ALF_VIEW_BUILDER_DELETE_VIEW_PROP",
+      IN_MEM_LIST_DELETE_ITEM: "ALF_IN_MEM_LIST_DELETE_ITEM",
 
       /**
-       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
-       * to retrieve the list of properties to be displayed in the view being built.
+       * This is subscribed to by the [InMemoryListService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to retrieve all the items in a list
        * 
        * @instance
        * @type {string}
@@ -2060,13 +2059,13 @@ define([],function() {
        * @since 1.0.102
        *
        * @event
-       * @property {string} viewId The ID of the view to get the properties for
+       * @property {string} listId The ID of the list to get the items for
        */
-      VIEW_BUILDER_GET_VIEW_PROPS: "ALF_VIEW_BUILDER_GET_VIEW_PROPS",
+      IN_MEM_LIST_GET_ITEMS: "ALF_IN_MEM_LIST_GET_ITEMS",
 
       /**
-       * This is subscribed to by the [ViewBuilderService]{@link module:alfresco/services/ViewBuilderSevice}
-       * to handle re-ordered of properties in the view
+       * This is subscribed to by the [InMemoryListService]{@link module:alfresco/services/ViewBuilderSevice}
+       * to handle re-ordering of items in the list
        * 
        * @instance
        * @type {string}
@@ -2074,11 +2073,11 @@ define([],function() {
        * @since 1.0.102
        *
        * @event
-       * @property {string} viewId The ID of the view to get the properties for
-       * @property {string} id The ID of the property to move
-       * @property {string} [direction="DOWN"] The direction to move the property in ("UP"/"DOWN")
+       * @property {string} listId The ID of the list to reorder items within
+       * @property {string} id The ID of the item to move
+       * @property {string} [direction="DOWN"] The direction to move the item in ("UP"/"DOWN")
        */
-      VIEW_BUILDER_MOVE_PROP: "ALF_VIEW_BUILDER_MOVE_PROP",
+      IN_MEM_LIST_MOVE_ITEM: "ALF_IN_MEM_LIST_MOVE_ITEM",
 
       /**
        * This topic is published to indicate that widget processing has been completed. It is typically
