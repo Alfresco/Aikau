@@ -216,6 +216,7 @@ define(["dojo/_base/declare",
          }
 
          this.applyWidgetOverrides(this.widgetsForCreateSiteDialog, this.widgetsForCreateSiteDialogOverrides);
+         this.applyWidgetOverrides(this.widgetsForEditSiteDialog, this.widgetsForEditSiteDialogOverrides);
       },
 
       /**
