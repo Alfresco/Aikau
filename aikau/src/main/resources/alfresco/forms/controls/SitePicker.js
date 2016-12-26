@@ -77,122 +77,114 @@ define(["alfresco/forms/controls/Picker",
        */
       singleItemMode: true,
 
-      /**
-       * After config has been mixed in, setup the widget model
-       *
-       * @instance
-       */
-      postMixInProperties: function(){
-         this.widgetsForControl = [
-            {
-               name: "alfresco/layout/VerticalWidgets",
-               assignTo: "verticalWidgets",
-               config: {
-                  widgets: [
-                     {
-                        name: "alfresco/pickers/PickedItems",
-                        assignTo: "pickedItemsWidget",
-                        config: {
-                           pubSubScope: "{itemSelectionPubSubScope}",
-                           itemKey: "shortName",
-                           widgets: [
-                              {
-                                 name: "alfresco/lists/views/layouts/Row",
-                                 config: {
-                                    widgets: [
-                                       {
-                                          name: "alfresco/lists/views/layouts/Cell",
-                                          config: {
-                                             widgets: [
-                                                {
-                                                   name: "alfresco/renderers/Property",
-                                                   config: {
-                                                      propertyToRender: "title",
-                                                      renderAsLink: false
-                                                   }
+      widgetsForControl : [
+         {
+            name: "alfresco/layout/VerticalWidgets",
+            assignTo: "verticalWidgets",
+            config: {
+               widgets: [
+                  {
+                     name: "alfresco/pickers/PickedItems",
+                     assignTo: "pickedItemsWidget",
+                     config: {
+                        pubSubScope: "{itemSelectionPubSubScope}",
+                        itemKey: "{itemKey}",
+                        widgets: [
+                           {
+                              name: "alfresco/lists/views/layouts/Row",
+                              config: {
+                                 widgets: [
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/Property",
+                                                config: {
+                                                   propertyToRender: "title",
+                                                   renderAsLink: false
                                                 }
-                                             ]
-                                          }
-                                       },
-                                       {
-                                          name: "alfresco/lists/views/layouts/Cell",
-                                          config: {
-                                             width: "20px",
-                                             widgets: [
-                                                {
-                                                   name: "alfresco/renderers/PublishAction",
-                                                   config: {
-                                                      iconClass: "delete-16",
-                                                      publishTopic: "ALF_ITEM_REMOVED",
-                                                      publishPayloadType: "CURRENT_ITEM"
-                                                   }
-                                                }
-                                             ]
-                                          }
+                                             }
+                                          ]
                                        }
-                                    ]
+                                    },
+                                    {
+                                       name: "alfresco/lists/views/layouts/Cell",
+                                       config: {
+                                          width: "20px",
+                                          widgets: [
+                                             {
+                                                name: "alfresco/renderers/PublishAction",
+                                                config: {
+                                                   iconClass: "delete-16",
+                                                   publishTopic: "ALF_ITEM_REMOVED",
+                                                   publishPayloadType: "CURRENT_ITEM"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     assignTo: "formDialogButton",
+                     config: {
+                        additionalCssClasses: "alfresco-forms-controls-Picker__add-button",
+                        label: this.singleItemMode ? "sitePicker.launchPicker.single" : "sitePicker.launchPicker.multi",
+                        publishTopic: "ALF_CREATE_DIALOG_REQUEST",
+                        publishPayload: {
+                           dialogTitle: this.singleItemMode ? "sitePicker.pickerTitle.single" : "sitePicker.pickerTitle.multi",
+                           handleOverflow: false,
+                           widgetsContent: [
+                              {
+                                 name: "alfresco/pickers/SitePicker",
+                                 config: {
+                                    singleItemMode: this.singleItemMode
+                                 }
+                              }
+                           ],
+                           widgetsButtons: [
+                              {
+                                 name: "alfresco/buttons/AlfButton",
+                                 config: {
+                                    label: "picker.ok.label",
+                                    publishTopic: "ALF_ITEMS_SELECTED",
+                                    pubSubScope: "{itemSelectionPubSubScope}",
+                                    additionalCssClasses: "call-to-action"
+                                 }
+                              },
+                              {
+                                 name: "alfresco/buttons/AlfButton",
+                                 config: {
+                                    label: "picker.cancel.label",
+                                    publishTopic: "NO_OP"
                                  }
                               }
                            ]
-                        }
-                     },
-                     {
-                        name: "alfresco/buttons/AlfButton",
-                        assignTo: "formDialogButton",
-                        config: {
-                           additionalCssClasses: "alfresco-forms-controls-Picker__add-button",
-                           label: this.singleItemMode ? "sitePicker.launchPicker.single" : "sitePicker.launchPicker.multi",
-                           publishTopic: "ALF_CREATE_DIALOG_REQUEST",
-                           publishPayload: {
-                              dialogTitle: this.singleItemMode ? "sitePicker.pickerTitle.single" : "sitePicker.pickerTitle.multi",
-                              handleOverflow: false,
-                              widgetsContent: [
-                                 {
-                                    name: "alfresco/pickers/SitePicker",
-                                    config: {
-                                       singleItemMode: this.singleItemMode
-                                    }
-                                 }
-                              ],
-                              widgetsButtons: [
-                                 {
-                                    name: "alfresco/buttons/AlfButton",
-                                    config: {
-                                       label: "picker.ok.label",
-                                       publishTopic: "ALF_ITEMS_SELECTED",
-                                       pubSubScope: "{itemSelectionPubSubScope}",
-                                       additionalCssClasses: "call-to-action"
-                                    }
-                                 },
-                                 {
-                                    name: "alfresco/buttons/AlfButton",
-                                    config: {
-                                       label: "picker.cancel.label",
-                                       publishTopic: "NO_OP"
-                                    }
-                                 }
-                              ]
-                           },
-                           publishGlobal: true
-                        }
-                     },
-                     {
-                        name: "alfresco/buttons/AlfButton",
-                        config: {
-                           label: this.singleItemMode ? "sitePicker.removeAll.single" : "sitePicker.removeAll.multi",
-                           additionalCssClasses: "cancelButton alfresco-forms-controls-Picker__remove-button",
-                           publishTopic: "ALF_ITEMS_SELECTED",
-                           publishPayload: {
-                              pickedItems: []
-                           },
-                           pubSubScope: "{itemSelectionPubSubScope}"
-                        }
+                        },
+                        publishGlobal: true
                      }
-                  ]
-               }
+                  },
+                  {
+                     name: "alfresco/buttons/AlfButton",
+                     config: {
+                        label: this.singleItemMode ? "sitePicker.removeAll.single" : "sitePicker.removeAll.multi",
+                        additionalCssClasses: "cancelButton alfresco-forms-controls-Picker__remove-button",
+                        publishTopic: "ALF_ITEMS_SELECTED",
+                        publishPayload: {
+                           pickedItems: []
+                        },
+                        pubSubScope: "{itemSelectionPubSubScope}"
+                     }
+                  }
+               ]
             }
-         ];
-         this.inherited(arguments);
-      }
+         }
+      ]
    });
 });
