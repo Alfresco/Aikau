@@ -77,6 +77,14 @@ define(["alfresco/forms/controls/Picker",
        */
       singleItemMode: true,
 
+      /**
+       * Overridden widgets model for this control.
+       * 
+       * @instance
+       * @type {object}
+       * @default
+       * @since 1.0.102
+       */
       widgetsForControl : [
          {
             name: "alfresco/layout/VerticalWidgets",
@@ -135,16 +143,16 @@ define(["alfresco/forms/controls/Picker",
                      assignTo: "formDialogButton",
                      config: {
                         additionalCssClasses: "alfresco-forms-controls-Picker__add-button",
-                        label: this.singleItemMode ? "sitePicker.launchPicker.single" : "sitePicker.launchPicker.multi",
+                        label: "{selectButtonLabel}",
                         publishTopic: "ALF_CREATE_DIALOG_REQUEST",
                         publishPayload: {
-                           dialogTitle: this.singleItemMode ? "sitePicker.pickerTitle.single" : "sitePicker.pickerTitle.multi",
+                           dialogTitle: "{selectDialogTitle}",
                            handleOverflow: false,
                            widgetsContent: [
                               {
                                  name: "alfresco/pickers/SitePicker",
                                  config: {
-                                    singleItemMode: this.singleItemMode
+                                    singleItemMode: "{singleItemMode}"
                                  }
                               }
                            ],
@@ -173,7 +181,7 @@ define(["alfresco/forms/controls/Picker",
                   {
                      name: "alfresco/buttons/AlfButton",
                      config: {
-                        label: this.singleItemMode ? "sitePicker.removeAll.single" : "sitePicker.removeAll.multi",
+                        label: "{removeButtonLabel}",
                         additionalCssClasses: "cancelButton alfresco-forms-controls-Picker__remove-button",
                         publishTopic: "ALF_ITEMS_SELECTED",
                         publishPayload: {
@@ -185,6 +193,50 @@ define(["alfresco/forms/controls/Picker",
                ]
             }
          }
-      ]
+      ],
+      
+      /**
+       * The label for the select button of this control.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      selectButtonLabel : null,
+      
+      /**
+       * The title for the pop-up selection dialog of this control.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      selectDialogTitle : null,
+      
+      /**
+       * The label for the remove button of this control.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      removeButtonLabel : null,
+      
+      /**
+       * Processes the singleItemMode and defaults various UI labels in case they have not been configured externally.
+       * 
+       * @instance
+       */
+      postMixInProperties : function alfresco_forms_controls_SitePicker__postMixInProperties()
+      {
+          this.inherited(arguments);
+          
+          this.selectButtonLabel = this.selectButtonLabel || (this.singleItemMode ? "sitePicker.launchPicker.single" : "sitePicker.launchPicker.multi");
+          this.selectDialogTitle = this.selectDialogTitle || (this.singleItemMode ? "sitePicker.pickerTitle.single" : "sitePicker.pickerTitle.multi");
+          this.removeButtonLabel = this.removeButtonLabel || (this.singleItemMode ? "sitePicker.removeAll.single" : "sitePicker.removeAll.multi");
+      }
    });
 });
