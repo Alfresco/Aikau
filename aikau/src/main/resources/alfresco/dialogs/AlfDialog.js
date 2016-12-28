@@ -575,6 +575,17 @@ define(["dojo/_base/declare",
          }
          else
          {
+            // See AKU-1162
+            // This addresses a Chrome specific issue that causes a render error with where the footer
+            // bar gets placed...
+            if (this.buttonsNode)
+            {
+               domStyle.set(this.buttonsNode, "display", "none");
+               window.requestAnimationFrame(lang.hitch(this, function() {
+                  domStyle.set(this.buttonsNode, "display", "block");
+               }));
+            }
+
             this.inherited(arguments);
          }
       },
