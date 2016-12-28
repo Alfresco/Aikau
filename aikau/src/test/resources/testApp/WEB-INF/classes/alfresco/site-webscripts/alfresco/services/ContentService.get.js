@@ -61,6 +61,146 @@ model.jsonModel = {
          }
       },
       {
+         id: "DELETE_CONTENT_3",
+         name: "alfresco/buttons/AlfButton",
+         config: {
+            label: "Delete Content (lots of nodes)",
+            publishTopic: "ALF_DELETE_CONTENT_REQUEST",
+            publishPayload: {
+               documents: [
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  },
+                  {
+                     node: {
+                        nodeRef: "workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e",
+                        properties: {
+                           "cm:name": "Some Node"
+                        }
+                     }
+                  }
+               ]
+            }
+         }
+      },
+      {
          id: "EDIT_BASIC_METADATA",
          name: "alfresco/buttons/AlfButton",
          config: {

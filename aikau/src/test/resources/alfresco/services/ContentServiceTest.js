@@ -33,7 +33,7 @@ define(["module",
       "Delete node (basic data)": function() {
          return this.remote.findByCssSelector("#DELETE_CONTENT_1_label")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed .dijitDialogTitle")
             .isDisplayed()
@@ -64,10 +64,10 @@ define(["module",
       "Confirm delete (basic data)": function() {
          return this.remote.findByCssSelector("#ALF_DELETE_CONTENT_DIALOG .dijitButton:first-child .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_DISPLAY_NOTIFICATION")
             .then(function(payload) {
@@ -78,14 +78,14 @@ define(["module",
 
       "Delete node (doclib data)": function() {
          return this.remote.findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .findByCssSelector("#DELETE_CONTENT_2_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
-            .end()
+         .end()
 
          .findByCssSelector(".dialog-body .alfresco-renderers-Property .value")
             .getVisibleText()
@@ -97,10 +97,10 @@ define(["module",
       "Confirm delete (doclib data)": function() {
          return this.remote.findByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed .dijitButton:first-child .dijitButtonNode")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .getLastPublish("ALF_DISPLAY_NOTIFICATION")
             .then(function(payload) {
@@ -111,24 +111,24 @@ define(["module",
       "Edit basic metadata": function() {
          return this.remote.findByCssSelector("#EDIT_BASIC_METADATA_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogDisplayed") // Wait for dialog
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-forms-controls-TextBox:nth-child(2) .dijitInputContainer input")
             .getProperty("value")
             .then(function(text) {
                assert.equal(text, "Some Node", "The node name was not set correctly");
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-forms-controls-TextBox:nth-child(3) .dijitInputContainer input")
             .getProperty("value")
             .then(function(text) {
                assert.equal(text, "With this title", "The node title was not set correctly");
             })
-            .end()
+         .end()
 
          .findByCssSelector(".alfresco-forms-controls-TextArea:nth-child(4) .dijitTextArea")
             .getProperty("value")
@@ -140,7 +140,7 @@ define(["module",
       "Save basic metadata": function() {
          return this.remote.findByCssSelector("#ALF_BASIC_METADATA_DIALOG .confirmationButton > span")
             .click()
-            .end()
+         .end()
 
          .getLastXhr("aikau/proxy/alfresco/api/node/workspace/SpacesStore/1a0b110f-1e09-4ca2-b367-fe25e4964a4e/formprocessor")
             .then(function(xhr) {
@@ -152,14 +152,14 @@ define(["module",
 
       "Edit basic metadata (nodeRef only)": function() {
          return this.remote.findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogHidden")
-            .end()
+         .end()
 
          .findByCssSelector("#EDIT_BASIC_METADATA_NODEREF_ONLY_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogDisplayed") // Wait for dialog
-            .end()
+         .end()
 
          .getLastPublish("ALF_BASIC_METADATA_SUCCESS", "Did not publish basic metadata success");
       },
@@ -170,18 +170,18 @@ define(["module",
             .then(function(text) {
                assert.equal(text, "PDF.pdf", "The node name was not set correctly");
             })
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_BASIC_METADATA_DIALOG .dijitDialogTitle")
             .getVisibleText()
             .then(function(text) {
                assert.equal(text, "Edit Properties: PDF.pdf", "The dialog title was not set correctly");
             })
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_BASIC_METADATA_DIALOG .cancellationButton > span")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_BASIC_METADATA_DIALOG.dialogHidden");
       },
@@ -190,19 +190,19 @@ define(["module",
          // See AKU-666
          return this.remote.findById("UPLOAD_NEW_FILE_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_UPLOAD_DIALOG.dialogDisplayed") // Wait for dialog
-            .end()
+         .end()
 
          // This line is essentially the test now, make sure the confirmation button is disabled
          // because no files are selected...
          .findByCssSelector("#ALF_UPLOAD_DIALOG .confirmationButton.dijitDisabled")
-            .end()
+         .end()
 
          .findById("ALF_UPLOAD_DIALOG_CANCEL_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector("#ALF_UPLOAD_DIALOG.dialogHidden"); // Wait for dialog to close
       },
@@ -211,17 +211,17 @@ define(["module",
          // See AKU-666
          return this.remote.findById("UPDATE_FILE_label")
             .click()
-            .end()
+         .end()
 
          .findAllByCssSelector(".alfresco-dialog-AlfDialog.dialogDisplayed") // Wait for dialog
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_UPLOAD_DIALOG .confirmationButton.dijitDisabled")
-            .end()
+         .end()
 
          .findById("ALF_UPLOAD_DIALOG_CANCEL")
             .click()
-            .end()
+         .end()
 
          .findByCssSelector("#ALF_UPLOAD_DIALOG.dialogHidden");
       },
@@ -229,7 +229,7 @@ define(["module",
       "Create new content strips framework attributes from POST body": function() {
          return this.remote.findById("CREATE_CONTENT_label")
             .click()
-            .end()
+         .end()
 
          .getLastXhr("cm:folder/formprocessor")
             .then(function(xhrEntry) {
@@ -244,9 +244,32 @@ define(["module",
          return this.remote.findById("CREATE_CONTENT_SCOPED_label")
             .clearLog()
             .click()
-            .end()
+         .end()
 
          .getLastPublish("SCOPED_ALF_DOCLIST_RELOAD_DATA", true);
+      },
+
+      // See AKU-1162
+      "Check footer position when deleting lots of content": function() {
+         var footerVPos;
+         return this.remote.findByCssSelector("#DELETE_CONTENT_3_label")
+            .click()
+         .end()
+
+         .findDisplayedByCssSelector("#ALF_DELETE_CONTENT_DIALOG.dialogDisplayed")
+            
+            .findDisplayedByCssSelector(".footer")
+               .getPosition()
+               .then(function(footerPosition) {
+                  footerVPos = footerPosition.y;
+               })
+            .end()
+
+            .findDisplayedByCssSelector("tr.alfresco-lists-views-layouts-Row:nth-child(6)")
+               .getPosition()
+                  .then(function(rowPosition) {
+                     assert.isAbove(footerVPos, rowPosition.y);
+                  });
       }
    });
 });
