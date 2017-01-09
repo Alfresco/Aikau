@@ -79,6 +79,14 @@ define(["module",
 
          .findDisplayedByCssSelector("#SELECTED_ITEMS_MENU_dropdown #onActionAssignWorkflow")
             .click();
+      },
+
+      "Cell width is correct": function() {
+         return this.remote.findDisplayedByCssSelector("#SELECTOR_CELL_ITEM_0")
+            .getSize()
+            .then(function(size) {
+               assert.equal(size.width, 35); // 20 + margin
+            });
       }
    });
 });

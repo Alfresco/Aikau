@@ -158,9 +158,10 @@ model.jsonModel = {
                            config: {
                               widgets: [
                                  {
+                                    id: "SELECTOR_CELL",
                                     name: "alfresco/lists/views/layouts/Cell",
                                     config: {
-                                       width: "20px",
+                                       width: 20,
                                        widgets: [
                                           {
                                              id: "SELECTOR",

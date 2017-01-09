@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
          }
          if (this.width)
          {
-            domStyle.set(this.domNode, "width", this.width);
+            domStyle.set(this.domNode, "width", parseInt(this.width, 10) + "px");
          }
          if(this.additionalCssClasses)
          {
