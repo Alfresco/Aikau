@@ -823,7 +823,17 @@ define(["dojo/_base/declare",
             }
 
             // Calcuate the image dimensions...
-            var borderThickness = parseInt(domStyle.get(this.imgNode, "borderWidth"), 10);
+            var borderThickness = 0;
+            try 
+            {
+               // See AKU-1164 - need to defensively code around this call...
+               borderThickness = parseInt(domStyle.get(this.imgNode, "borderWidth"), 10);
+            }
+            catch (e)
+            {
+               // No action required, leave as default...
+            }
+
             this.imageNodeHeight = thumbnailHeight - ((margin * 2) + borderThickness);
             this.imageNodeWidth = thumbnailWidth - ((margin * 2) + borderThickness);
             
