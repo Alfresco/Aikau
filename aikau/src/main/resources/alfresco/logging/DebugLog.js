@@ -46,9 +46,11 @@ define(["alfresco/core/ObjectTypeUtils",
       "dojo/dom-class",
       "dojo/dom-construct",
       "dojo/on",
-      "dojo/text!./templates/DebugLog.html"
+      "dojo/text!./templates/DebugLog.html",
+      "dijit/_WidgetBase",
+      "alfresco/services/BaseService"
    ],
-   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template) {
+   function(ObjectTypeUtils, SubscriptionLog, array, declare, lang, dateLocale, domClass, domConstruct, on, template, _WidgetBase, BaseService) {
       /*jshint devel:true*/
 
       return declare([SubscriptionLog], {
@@ -410,6 +412,11 @@ define(["alfresco/core/ObjectTypeUtils",
                      return makeSafe(unsafeChild, ancestors);
                   }));
 
+               } else if (unsafe === window) {
+
+                   // Ignore the global window object
+                   safeValue = "[window]";
+
                } else if (unsafe.nodeType === Node.ELEMENT_NODE) {
 
                   // Display information about which element this is
@@ -431,11 +438,18 @@ define(["alfresco/core/ObjectTypeUtils",
                   // Un-handled node type
                   safeValue = "[" + unsafe.nodeName + "]";
 
-               } else if (unsafe._attachPoints) {
+               } else if (typeof unsafe.isInstanceOf === 'function' && unsafe.isInstanceOf(_WidgetBase)) {
 
                   // Ignore widgets
-                  safeValue = "[widget]";
+                  safeValue = "[widget";
+                  safeValue += unsafe.id ? " id=" + unsafe.id + "]" : "]";
+                  
+               } else if (typeof unsafe.isInstanceOf === 'function' && unsafe.isInstanceOf(BaseService)) {
 
+                   // Ignore services
+                   safeValue = "[service";
+                   safeValue += unsafe.alfServiceName ? " alfServiceName=" + unsafe.alfServiceName + "]" : "]";
+                  
                } else if (ancestors.indexOf(unsafe) !== -1) {
 
                   // Recursion avoidance!
