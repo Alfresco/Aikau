@@ -31,6 +31,11 @@ define(["module",
       name: "Property Tests",
       testPage: "/Property",
 
+      // See AKU-1166
+      "Title attribute is added": function() {
+         return this.remote.findByCssSelector("#BASIC_ITEM_0[title]");
+      },
+
       "Check standard property is rendered correctly": function() {
          return this.remote
             .findByCssSelector("#BASIC_ITEM_0 .value")

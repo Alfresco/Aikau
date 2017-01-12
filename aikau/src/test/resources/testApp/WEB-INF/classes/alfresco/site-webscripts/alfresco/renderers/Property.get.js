@@ -38,7 +38,8 @@ model.jsonModel = {
                                     name: "alfresco/renderers/Property",
                                     config: {
                                        propertyToRender: "name",
-                                       renderedValueClass: "one two"
+                                       renderedValueClass: "one two",
+                                       title: "Seen on hover"
                                     }
                                  },
                                  {
