@@ -235,6 +235,17 @@ define(["dojo/_base/declare",
       renderSize: "medium",
 
       /**
+       * A title attribute to apply to the property to set an HTML title attribute on the outer
+       * element of the widget. The value will be displayed in a tooltip when hovered over.
+       * 
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.102
+       */
+      title: null,
+
+      /**
        * Indicates whether or not string values should be trimmed.
        *
        * @instance
@@ -320,6 +331,12 @@ define(["dojo/_base/declare",
          this.innerSpan.appendChild(labelSpan);
          this.innerSpan.appendChild(valueSpan);
          this.domNode.appendChild(this.innerSpan);
+
+         // See AKU-1166
+         if (this.title)
+         {
+            this.domNode.setAttribute("title", this.title);
+         }
       },
 
       /**
