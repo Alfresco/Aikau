@@ -438,13 +438,13 @@ define(["alfresco/core/ObjectTypeUtils",
                   // Un-handled node type
                   safeValue = "[" + unsafe.nodeName + "]";
 
-               } else if (typeof unsafe.isInstanceOf === 'function' && unsafe.isInstanceOf(_WidgetBase)) {
+               } else if (typeof unsafe.isInstanceOf === "function" && unsafe.isInstanceOf(_WidgetBase)) {
 
                   // Ignore widgets
                   safeValue = "[widget";
                   safeValue += unsafe.id ? " id=" + unsafe.id + "]" : "]";
                   
-               } else if (typeof unsafe.isInstanceOf === 'function' && unsafe.isInstanceOf(BaseService)) {
+               } else if (typeof unsafe.isInstanceOf === "function" && unsafe.isInstanceOf(BaseService)) {
 
                    // Ignore services
                    safeValue = "[service";
