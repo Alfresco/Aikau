@@ -28,16 +28,45 @@ define(["dojo/_base/declare",
    
    return declare([Base], {
 
+      getComponent: function aikau_vue_Test1__getComponent() {
+         return {
+            mounted: function() {
+               console.info("Handling from 1");
+               this.$on("vueEvent", function () {
+                 console.info("Test 1");
+               });
+
+               this.$el.addEventListener("navigate", function() {
+                  console.info("Gone native");
+               });
+            },
+
+            methods: {
+               onVueEvent: function(evt) {
+                  console.info("Test 1 received event");
+               }
+            }
+         };
+      },
+
       getComponentElement: function() {
          return "test";
       },
 
-      getComponentProps: function aikau_vue_Test3__getComponentProps() {
-         return [];
-      },
+      // getComponentProps: function aikau_vue_Test1__getComponentProps() {
+      //    return [];
+      // },
 
-      getComponentTemplate: function aikau_vue_Test3__getComponentTemplate() {
-         return "<div><span>Test1</span>${widgets_slot}</div>";
+      // getComponentMethods: function aikau_vue_Test1_getComponentMethods() {
+      //    return {
+      //       onVueEvent: function(evt) {
+      //          console.info("Test 1 received event");
+      //       }
+      //    };
+      // },
+
+      getComponentTemplate: function aikau_vue_Test1__getComponentTemplate() {
+         return "<div @vueEvent='onVueEvent'><span>Test1</span>${widgets_slot}</div>";
       }
    });
 });

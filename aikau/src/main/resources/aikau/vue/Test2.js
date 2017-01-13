@@ -31,25 +31,51 @@ define(["dojo/_base/declare",
    
    return declare([Base], {
 
+      getComponent: function aikau_vue_Test1__getComponent() {
+         return {
+            data: function() {
+               return {
+                  parentMsg: ""
+               };
+            },
+
+            created: function() {
+               console.info("Handling from 2");
+               this.$on("vueEvent", function () {
+                 console.info("Test 2");
+               });
+            },
+
+            methods: {
+               onVueEvent: function(evt) {
+                  console.info("Test 3 received event");
+               }
+            }
+         };
+      },
+
       getComponentElement: function aikau_vue_Test2__getComponentElement() {
          return "test2";
       },
 
-      getComponentProps: function aikau_vue_Test2__getComponentProps() {
-         return [];
-      },
+      // getComponentProps: function aikau_vue_Test2__getComponentProps() {
+      //    return [];
+      // },
 
-      getComponentData: function aikau_vue_Test2__getComponentData() {
-         return function() {
-            return {
-               parentMsg: "",
-               bob: ""
-            };
-         };
-      },
+      // getComponentMethods: function aikau_vue_Test2_getComponentMethods() {
+      //    return {
+      //       onVueEvent: function(evt) {
+      //          console.info("Test 2 received event");
+      //       }
+      //    };
+      // },
+
+      // getComponentData: function aikau_vue_Test2__getComponentData() {
+      //    return 
+      // },
 
       getComponentTemplate: function aikau_vue_Test2__getComponentTemplate() {
-         return "<div><span>Hello</span><input v-model='parentMsg'><span>{{ parentMsg }}</span>${widgets_slot}</div>";
+         return "<div @vueEvent='onVueEvent'><span>Hello</span><input v-model='parentMsg'><span>{{ parentMsg }}</span>${widgets_slot}</div>";
       }
    });
 });

@@ -30,6 +30,10 @@ define(["dojo/_base/declare",
 
    return declare([Stateful, Core], {
       
+      getComponent: function aikau_vue_Base__getComponent() {
+         return {};
+      },
+
       getComponentElement: function aikau_vue_Base__getComponentElement() {
          this.alfLog("warn", "The 'getComponentElement' function has not been overridden", this);
          return "";
@@ -51,18 +55,27 @@ define(["dojo/_base/declare",
          return {};
       },
 
+      getComponentMethods: function aikau_vue_Base_getComponentMethods() {
+         return {};
+      },
+
       registerComponent: function aikau_vue_Base__registerComponent(input) {
          // This is a fixed template into which Vue components should be added...
          var output = this.createChildComponents({
             template: input.template
          });
 
-         this.registeredComponent = {
-            template: output.template,
-            components: output.components,
-            data: this.getComponentData(),
-            props: this.getComponentProps()
-         };
+         this.registeredComponent = this.getComponent();
+         this.registeredComponent.template = output.template;
+         this.registeredComponent.components = output.components;
+
+         // this.registeredComponent = {
+         //    template: output.template,
+         //    components: output.components,
+         //    data: this.getComponentData(),
+         //    props: this.getComponentProps(),
+         //    methods: this.getComponentMethods()
+         // };
 
          return this.registeredComponent;
       },

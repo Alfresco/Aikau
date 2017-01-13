@@ -23,8 +23,9 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "aikau/vue/Base"], 
-        function(declare, Base) {
+        "aikau/vue/Base",
+        "dojo/text!./templates/Test3.html"], 
+        function(declare, Base, template) {
    
    return declare([Base], {
 
@@ -32,12 +33,49 @@ define(["dojo/_base/declare",
          return "test3";
       },
 
-      getComponentProps: function aikau_vue_Test3__getComponentProps() {
-         return ["message","dynamic"];
+      getComponent: function aikau_vue_Test1__getComponent() {
+         return {
+            props: ["message","dynamic"],
+
+            created: function() {
+               console.info("Handling from 3");
+               this.$on("vueEvent", function () {
+                 console.info("Test 3");
+               });
+            },
+
+            methods: {
+               onClick: function(evt) {
+                  var changeEvent = new CustomEvent("vueEvent", {
+                     detail: evt,
+                     bubbles: true
+                  });
+                  this.$el.dispatchEvent(changeEvent);
+                  this.$emit("vueEvent");
+               }
+            }
+         };
       },
 
+      // getComponentProps: function aikau_vue_Test3__getComponentProps() {
+      //    return ["message","dynamic"];
+      // },
+
+      // getComponentMethods: function aikau_vue_Test3_getComponentMethods() {
+      //    return {
+      //       onClick: function(evt) {
+      //          // var changeEvent = new CustomEvent("buttonClicked", {
+      //          //    detail: evt,
+      //          //    bubbles: true
+      //          // });
+      //          // this.element.dispatchEvent(changeEvent);
+      //          this.$emit("vueEvent");
+      //       }
+      //    };
+      // },
+
       getComponentTemplate: function aikau_vue_Test3__getComponentTemplate() {
-         return "<div><span>Static: {{ message }}</span><span> Dynamic: {{ dynamic }}</div>";
+         return template;
       }
    });
 });
