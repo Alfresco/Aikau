@@ -18,53 +18,26 @@
  */
 
 /**
- * 
- * 
- * @module aikau/vue/Test
- * @extends external:dijit/_WidgetBase
- * @mixes module:alfresco/core/Core
+ * @module aikau/vue/Test3
+ * @extends module:aikau/vue/Base
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dojo/text!./templates/Test3.html",
-        "alfresco/core/Core",
-        "vue"], 
-        function(declare, _WidgetBase, template, Core, Vue) {
+        "aikau/vue/Base"], 
+        function(declare, Base) {
    
+   return declare([Base], {
 
-
-   // Only declare this once...
-   Vue.component("aikau-vue-test3", {
-      template: template
-   });
-
-   return declare([_WidgetBase, Core], {
-
-      /**
-       * @instance
-       */
-      postMixInProperties: function aikau_vue_Test__postMixInProperties() {
-         
+      getComponentElement: function() {
+         return "test3";
       },
 
-      buildRendering: function aikau_vue_Test__buildRendering() {
-         this.domNode = document.createElement("aikau-vue-test3");
-
-         
-
-
+      getComponentProps: function aikau_vue_Test3__getComponentProps() {
+         return ["message","dynamic"];
       },
 
-      postCreate: function aikau_vue_Test__postCreate() {
-
-         // this.widgets && this.widgets.forEach(function(widget) {
-
-         //    var widgetEl = document.createElement(widget.name.replace("/", "-").toLowerCase());
-         //    this.domNode.appendChild(widgetEl);
-
-         // }, this);
-
+      getComponentTemplate: function aikau_vue_Test3__getComponentTemplate() {
+         return "<div><span>Static: {{ message }}</span><span> Dynamic: {{ dynamic }}</div>";
       }
    });
 });

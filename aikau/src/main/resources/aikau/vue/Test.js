@@ -18,83 +18,26 @@
  */
 
 /**
- * 
- * 
  * @module aikau/vue/Test
- * @extends external:dijit/_WidgetBase
- * @mixes module:alfresco/core/Core
+ * @extends module:aikau/vue/Base
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dojo/text!./templates/Test.html",
-        "alfresco/core/Core",
-        "aikau/core/ChildProcessing",
-        "dojo/_base/lang",
-        "vue"], 
-        function(declare, _WidgetBase, template, Core, ChildProcessing, lang, Vue) {
+        "aikau/vue/Base"], 
+        function(declare, Base) {
    
+   return declare([Base], {
 
-
-   // Only declare this once...
-   Vue.component("aikau-vue-test", {
-      template: template,
-      data: function() {
-         return {
-            items: [
-               {
-                  value: "1"
-               },
-               {
-                  value: "2"
-               }
-            ],
-            message: "Hello",
-            messageIn: "Bob"
-         };
-      }
-   });
-
-   return declare([_WidgetBase, Core, ChildProcessing], {
-
-      /**
-       * @instance
-       */
-      postMixInProperties: function aikau_vue_Test__postMixInProperties() {
-         
+      getComponentElement: function() {
+         return "test";
       },
 
-      buildRendering: function aikau_vue_Test__buildRendering() {
-         this.domNode = document.createElement("aikau-vue-test");
-
-         
-
-
+      getComponentProps: function aikau_vue_Test3__getComponentProps() {
+         return [];
       },
 
-      postCreate: function aikau_vue_Test__postCreate() {
-
-         if (this.widgets) {
-
-            this.createChildren({
-               widgets: this.widgets,
-               targetNode: this._targetNode || this.domNode
-            }).then(lang.hitch(this, function(widgets) {
-               this.childWidgets = widgets;
-
-               new Vue({
-                  el: "#" + this.id
-               });
-            }));
-
-            // var elName = widget.name.replace(/\//g, "-");
-            // var widgetEl = document.createElement(elName);
-            // this.domNode.appendChild(widgetEl);
-
-         };
-
-
-         
+      getComponentTemplate: function aikau_vue_Test3__getComponentTemplate() {
+         return "<div><span>Test1</span>${widgets_slot}</div>";
       }
    });
 });

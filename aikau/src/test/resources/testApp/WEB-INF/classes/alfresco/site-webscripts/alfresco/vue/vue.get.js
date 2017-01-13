@@ -12,11 +12,22 @@ model.jsonModel = {
    ],
    widgets: [
       {
-         name: "aikau/vue/Test",
+         name: "aikau/vue/Bootstrap",
          config: {
             widgets: [
                {
-                  name: "aikau/vue/Test2"
+                  name: "aikau/vue/Test",
+                  config: {
+                     widgets: [
+                        {
+                           name: "aikau/vue/Test3"
+                        }
+                     ]
+                     // message: "Passed",
+                     // props: {
+                     //    dynamic: "parentMsg"
+                     // }
+                  }
                }
             ]
          }
