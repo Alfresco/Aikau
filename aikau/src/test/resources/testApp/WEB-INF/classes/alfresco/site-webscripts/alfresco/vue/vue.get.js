@@ -20,13 +20,22 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           name: "aikau/vue/Test3"
+                           name: "aikau/vue/Test2",
+                           config: {
+                              widgets: [
+                                 {
+                                    name: "aikau/vue/Test3",
+                                    config: {
+                                       message: "Passed",
+                                       props: {
+                                          dynamic: "parentMsg"
+                                       }
+                                    }
+                                 }
+                              ]
+                           }
                         }
                      ]
-                     // message: "Passed",
-                     // props: {
-                     //    dynamic: "parentMsg"
-                     // }
                   }
                }
             ]

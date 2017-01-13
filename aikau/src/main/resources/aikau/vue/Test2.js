@@ -20,158 +20,36 @@
 /**
  * 
  * 
- * @module aikau/vue/Test
+ * @module aikau/vue/Test2
  * @extends external:dijit/_WidgetBase
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin",
-        "alfresco/core/Core",
-        "dojo/text!./templates/Test2.html",
-        "dojo/_base/lang",
-        "dojo/string",
-        "vue"], 
-        function(declare, _WidgetBase, _TemplatedMixin, Core, template, lang, string, Vue) {
+        "aikau/vue/Base"], 
+        function(declare, Base) {
    
-   return declare([_WidgetBase, _TemplatedMixin, Core], {
+   return declare([Base], {
 
-      templateString: template,
-
-      postCreate: function aikau_vue_Test__postCreate() {
-         var registeredComponent = this.registerComponent({});
-
-         Vue.component("aikau-root-vue", {
-            template: registeredComponent.template,
-            components: registeredComponent.components,
-            data: function() {
-               return {
-                  parentMsg: "",
-                  bob: ""
-               };
-            }
-         });
-
-         // jshint nonew:false
-         new Vue({
-            el: "#" + this.id
-         });
-
-      },
-
-      widgets: [
-         {
-            name: "aikau/vue/Test3"
-         }
-      ],
-
-      getElementName: function() {
+      getComponentElement: function aikau_vue_Test2__getComponentElement() {
          return "test2";
       },
 
-      getRegisteredComponent: function() {
-         return this.registeredComponent;
+      getComponentProps: function aikau_vue_Test2__getComponentProps() {
+         return [];
       },
 
-      registerComponent: function aikau_vue_Test2__registerComponent(input) {
-
-         var t = "<div><span>Hello</span><input v-model='parentMsg'><span>{{ parentMsg }}</span>${widgetsSlot}</div>";
-
-         var output = this.createChildComponents({
-            template: t
-         });
-
-         this.registeredComponent = {
-            template: output.template,
-            components: output.components
+      getComponentData: function aikau_vue_Test2__getComponentData() {
+         return function() {
+            return {
+               parentMsg: "",
+               bob: ""
+            };
          };
-
-         return this.registeredComponent;
       },
 
-      createChildComponents: function aikau_vue_Test2__createChildComponents(input) {
-         // Create a string to hold the template of the component that will be registered...
-         var output = {
-            template: input.template,
-            components: {},
-            props: []
-         };
-         
-         if (this.widgets && typeof this.widgets.forEach === "function")
-         {
-            this.widgets.forEach(function(widget) {
-               if (widget.name)
-               {
-                  require([widget.name], lang.hitch(this, function(ChildWidget) {
-
-                     if (typeof ChildWidget === "function")
-                     {
-                        var child = new ChildWidget(widget.config || {});
-                        if (child)
-                        {
-                           var elementName;
-                           if (typeof child.getElementName === "function")
-                           {
-                              elementName = child.getElementName();
-                           }
-                           else
-                           {
-                              console.error ("Child doesn't have a 'getElementName' function", child);
-                           }
-                           
-                           var registeredComponent;
-                           if (typeof child.registerComponent === "function")
-                           {
-                              registeredComponent = child.registerComponent();
-                           }
-                           else
-                           {
-                              console.error ("Child doesn't have a 'getRegisteredComponent' function", child);
-                           }
-                           
-                           if (elementName && registeredComponent)
-                           {
-                              var insert = "<" + elementName;
-                              for (var key in widget.config)
-                              {
-                                 if (key === "props")
-                                 {
-                                    // TODO: Dynamic binding required
-                                    for (var prop in widget.config.props)
-                                    {
-                                       if (widget.config.props.hasOwnProperty(prop))
-                                       {
-                                          insert += " :" + prop + "='" + widget.config.props[prop] + "'";
-                                       }
-                                    }
-                                 }
-                                 else if (widget.config.hasOwnProperty(key) && widget.config[key])
-                                 {
-                                    insert += " " + key + "='" + widget.config[key] + "'"; 
-
-                                    // output.props.push(key);
-                                 }
-                              }
-
-                              insert += "></" + elementName + ">";
-
-                              output.template = string.substitute(output.template, {
-                                 widgetsSlot: insert
-                              });
-                              
-
-                              // Need to add registered component...
-                              output.components[elementName] = registeredComponent;
-                           }
-                        }
-                     }
-                  }));
-               }
-            }, this);
-         }
-
-         return output;
+      getComponentTemplate: function aikau_vue_Test2__getComponentTemplate() {
+         return "<div><span>Hello</span><input v-model='parentMsg'><span>{{ parentMsg }}</span>${widgets_slot}</div>";
       }
    });
 });

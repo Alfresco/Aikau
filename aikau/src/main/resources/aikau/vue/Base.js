@@ -43,8 +43,12 @@ define(["dojo/_base/declare",
          return this.registeredComponent;
       },
 
-      getComponentTemplate: function aikau_vue_Base_getComponentTemplate() {
+      getComponentTemplate: function aikau_vue_Base__getComponentTemplate() {
          return "<span>Not overridden!</span>";
+      },
+
+      getComponentData: function aikau_vue_Base__getComponentData() {
+         return {};
       },
 
       registerComponent: function aikau_vue_Base__registerComponent(input) {
@@ -56,6 +60,7 @@ define(["dojo/_base/declare",
          this.registeredComponent = {
             template: output.template,
             components: output.components,
+            data: this.getComponentData(),
             props: this.getComponentProps()
          };
 
