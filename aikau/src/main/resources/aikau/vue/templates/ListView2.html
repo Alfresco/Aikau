@@ -1,0 +1,5 @@
+<ul>
+   <li v-for="item in list.entries">
+      <span @click="navigate(item, $event)">{{item.entry.name}} (created by {{item.entry.createdByUser.displayName}})</span>
+   </li>
+</ul>

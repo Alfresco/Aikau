@@ -103,7 +103,7 @@ define(["dojo/_base/declare",
 
          return registeredComponent;
       },
-
+      
       /**
        * [createChildComponent description]
        * @param  {[type]} widget      [description]
@@ -151,19 +151,9 @@ define(["dojo/_base/declare",
                   var insert = "<" + elementName;
                   for (var key in widget.config)
                   {
-                     if (key.indexOf("widgets") > 0)
+                     if (key.indexOf("widgets") > -1)
                      {
                         // Don't handle widgets...
-                     }
-                     else if (key === "props")
-                     {
-                        for (var prop in widget.config.props)
-                        {
-                           if (widget.config.props.hasOwnProperty(prop))
-                           {
-                              insert += " :" + prop + "='" + widget.config.props[prop] + "'";
-                           }
-                        }
                      }
                      else if (widget.config.hasOwnProperty(key) && widget.config[key])
                      {
@@ -173,9 +163,7 @@ define(["dojo/_base/declare",
 
                   insert += "></" + elementName + ">";
 
-                  output.template = string.substitute(output.template, {
-                     widgets_slot: insert
-                  });
+                  output.inserts += insert;
 
                   // Need to add registered component...
                   output.components[elementName] = registeredComponent;
@@ -194,7 +182,8 @@ define(["dojo/_base/declare",
          var output = {
             template: input.template,
             components: {},
-            props: []
+            props: [],
+            inserts: ""
          };
          
          if (this.widgets && typeof this.widgets.forEach === "function")
@@ -205,6 +194,10 @@ define(["dojo/_base/declare",
                   require([widget.name], lang.hitch(this, this.createChildComponent, widget, output));
                }
             }, this);
+
+            output.template = string.substitute(output.template, {
+               widgets_slot: output.inserts
+            });
          }
 
          return output;

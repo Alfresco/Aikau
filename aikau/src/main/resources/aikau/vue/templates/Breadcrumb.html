@@ -1,0 +1,8 @@
+<nav class='components-lists-Breadcrumb' role='navigation'>
+    <p id='breadcrumblabel'>You are here: {{relativePath}}</p>
+    <ol id='breadcrumb' aria-labelledby='breadcrumblabel'>
+        <li role='link' 
+            v-for='breadcrumb in breadcrumbs' 
+            @click='navigate(breadcrumb, $event)'>{{breadcrumb.label}}</li>
+    </ol>
+</nav>
