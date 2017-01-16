@@ -30,16 +30,8 @@ define(["dojo/_base/declare",
 
       getComponent: function aikau_vue_Test1__getComponent() {
          return {
-            mounted: function() {
-               console.info("Handling from 1");
-               this.$on("vueEvent", function () {
-                 console.info("Test 1");
-               });
 
-               this.$el.addEventListener("navigate", function() {
-                  console.info("Gone native");
-               });
-            },
+            template: "<div @vueEvent='onVueEvent'><span>Test1</span>${widgets_slot}</div>",
 
             methods: {
                onVueEvent: function(evt) {
@@ -51,22 +43,6 @@ define(["dojo/_base/declare",
 
       getComponentElement: function() {
          return "test";
-      },
-
-      // getComponentProps: function aikau_vue_Test1__getComponentProps() {
-      //    return [];
-      // },
-
-      // getComponentMethods: function aikau_vue_Test1_getComponentMethods() {
-      //    return {
-      //       onVueEvent: function(evt) {
-      //          console.info("Test 1 received event");
-      //       }
-      //    };
-      // },
-
-      getComponentTemplate: function aikau_vue_Test1__getComponentTemplate() {
-         return "<div @vueEvent='onVueEvent'><span>Test1</span>${widgets_slot}</div>";
       }
    });
 });

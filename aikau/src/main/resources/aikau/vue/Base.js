@@ -20,6 +20,7 @@
 /**
  * @module aikau/vue/Base
  * @author Dave Draper
+ * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
         "dojo/Stateful",
@@ -30,56 +31,86 @@ define(["dojo/_base/declare",
 
    return declare([Stateful, Core], {
       
+      /**
+       * This should be implemented to return a Vue.js component definition object.
+       * 
+       * @instance
+       * @return {object} A Vue.js component definition object.
+       */
       getComponent: function aikau_vue_Base__getComponent() {
          return {};
       },
 
+      /**
+       * This must be overridden by extending widgets to return the preferred element name
+       * for the locally registered compoent. This can be any string value but should be 
+       * meaningful to aid debugging.
+       *
+       * @instance
+       * @return {string} The element name for the locally registered component
+       */
       getComponentElement: function aikau_vue_Base__getComponentElement() {
          this.alfLog("warn", "The 'getComponentElement' function has not been overridden", this);
          return "";
       },
-
-      getComponentProps: function aikau_vue_Base__getComponentProps() {
-         return [];
+      
+      /**
+       * Retrieves the template for the supplied child component.
+       *
+       * @instance
+       * @param  {object} input
+       * @param  {object} input.child The child component to retrieve the template from
+       * @return {string} The template for the child component.
+       */
+      getChildComponentTemplate: function aikau_vue_Base__getChildComponentTemplate(input) {
+         var template;
+         if (input &&  input.child && typeof input.child.getComponent === "function")
+         {
+            var component = input.child.getComponent();
+            if (component && component.template)
+            {
+               template = component.template;
+            }
+            else
+            {
+               this.alfLog("error", "No child component template provided", input, component, this);
+            }
+         }
+         else
+         {
+            this.alfLog("error", "No child component provided", input, this);
+         }
+         return template;
       },
 
-      getRegisteredComponent: function aikau_vue_Base__getRegisteredComponent() {
-         return this.registeredComponent;
-      },
-
-      getComponentTemplate: function aikau_vue_Base__getComponentTemplate() {
-         return "<span>Not overridden!</span>";
-      },
-
-      getComponentData: function aikau_vue_Base__getComponentData() {
-         return {};
-      },
-
-      getComponentMethods: function aikau_vue_Base_getComponentMethods() {
-         return {};
-      },
-
+      /**
+       * This is called from [createChildComponent]{@link module:aikau/vue/Base#createChildComponent}
+       * to register a local component within the current component.
+       *
+       * @instance
+       * @param  {object} input
+       * @param  {string} input.template The template for the component to register
+       * @return {object} A locally registered Vue.js component
+       */
       registerComponent: function aikau_vue_Base__registerComponent(input) {
-         // This is a fixed template into which Vue components should be added...
          var output = this.createChildComponents({
             template: input.template
          });
 
-         this.registeredComponent = this.getComponent();
-         this.registeredComponent.template = output.template;
-         this.registeredComponent.components = output.components;
+         var registeredComponent = this.getComponent();
+         registeredComponent.template = output.template;
+         registeredComponent.components = output.components;
 
-         // this.registeredComponent = {
-         //    template: output.template,
-         //    components: output.components,
-         //    data: this.getComponentData(),
-         //    props: this.getComponentProps(),
-         //    methods: this.getComponentMethods()
-         // };
-
-         return this.registeredComponent;
+         return registeredComponent;
       },
 
+      /**
+       * [createChildComponent description]
+       * @param  {[type]} widget      [description]
+       * @param  {[type]} output      [description]
+       * @param  {[type]} ChildWidget [description]
+       * @return {[type]}             [description]
+       */
       createChildComponent: function aikau_vue_Base__createChildComponent(widget, output, ChildWidget) {
          // jshint maxcomplexity:false
          if (typeof ChildWidget === "function")
@@ -100,13 +131,19 @@ define(["dojo/_base/declare",
                var registeredComponent;
                if (typeof child.registerComponent === "function")
                {
-                  registeredComponent = child.registerComponent({
-                     template: child.getComponentTemplate()
+                  var template = this.getChildComponentTemplate({
+                     child: child
                   });
+                  if (template)
+                  {
+                     registeredComponent = child.registerComponent({
+                        template: template
+                     });
+                  }
                }
                else
                {
-                  this.alfLog("error", "Child doesn't have a 'getRegisteredComponent' function", child);
+                  this.alfLog("error", "Child doesn't have a 'registerComponent' function", child);
                }
                
                if (elementName && registeredComponent)
@@ -147,6 +184,11 @@ define(["dojo/_base/declare",
          }
       },
 
+      /**
+       * [createChildComponents description]
+       * @param  {[type]} input [description]
+       * @return {[type]}       [description]
+       */
       createChildComponents: function aikau_vue_Base__createChildComponents(input) {
          // Create a string to hold the template of the component that will be registered...
          var output = {

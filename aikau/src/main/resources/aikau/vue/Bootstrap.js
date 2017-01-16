@@ -23,6 +23,7 @@
  * @extends external:dijit/_WidgetBase
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
+ * @since 1.0.NEXT
  */
 define(["dojo/_base/declare",
         "dijit/_WidgetBase",
@@ -34,12 +35,32 @@ define(["dojo/_base/declare",
    
    return declare([_WidgetBase, Base], {
 
+      /**
+       * The name of the element used for the bootstrap component that all child components
+       * will be locally registered within.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       */
       bootstrapElement: "aikau-vue-bootstrap",
 
+      /**
+       * Creates the [bootstrapElement]{@link module:aikau/vue/Boostrap#bootstrapElement} into 
+       * which all child components will be created.
+       *
+       * @instance
+       */
       buildRendering: function aikau_vue_Bootstrap() {
          this.domNode = document.createElement(this.bootstrapElement);
       },
 
+      /**
+       * Registers a new Vue component for bootstrapping into which all child components are registered
+       * and then creates a new Vue of that component.
+       *
+       * @instance
+       */
       postCreate: function aikau_vue_Bootstrap__postCreate() {
          var registeredComponent = this.registerComponent({
             template: "<div>${widgets_slot}</div>"

@@ -35,14 +35,10 @@ define(["dojo/_base/declare",
 
       getComponent: function aikau_vue_Test1__getComponent() {
          return {
-            props: ["message","dynamic"],
 
-            created: function() {
-               console.info("Handling from 3");
-               this.$on("vueEvent", function () {
-                 console.info("Test 3");
-               });
-            },
+            template: template,
+
+            props: ["message","dynamic"],
 
             methods: {
                onClick: function(evt) {
@@ -51,31 +47,9 @@ define(["dojo/_base/declare",
                      bubbles: true
                   });
                   this.$el.dispatchEvent(changeEvent);
-                  this.$emit("vueEvent");
                }
             }
          };
-      },
-
-      // getComponentProps: function aikau_vue_Test3__getComponentProps() {
-      //    return ["message","dynamic"];
-      // },
-
-      // getComponentMethods: function aikau_vue_Test3_getComponentMethods() {
-      //    return {
-      //       onClick: function(evt) {
-      //          // var changeEvent = new CustomEvent("buttonClicked", {
-      //          //    detail: evt,
-      //          //    bubbles: true
-      //          // });
-      //          // this.element.dispatchEvent(changeEvent);
-      //          this.$emit("vueEvent");
-      //       }
-      //    };
-      // },
-
-      getComponentTemplate: function aikau_vue_Test3__getComponentTemplate() {
-         return template;
       }
    });
 });
