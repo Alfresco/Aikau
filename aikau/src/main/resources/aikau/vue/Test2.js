@@ -34,11 +34,12 @@ define(["dojo/_base/declare",
       getComponent: function aikau_vue_Test1__getComponent() {
          return {
 
-            template: "<div><span>Hello</span><input v-model='parentMsg'><span>{{ parentMsg }}</span>${widgets_slot}</div>",
+            template: "<div><div>Input One: <input v-model='parentMsg'/></div><div>Input 2: <input v-model='p2'/></div>${widgets_slot}</div>",
 
             data: function() {
                return {
-                  parentMsg: ""
+                  parentMsg: "",
+                  p2: ""
                };
             }
          };

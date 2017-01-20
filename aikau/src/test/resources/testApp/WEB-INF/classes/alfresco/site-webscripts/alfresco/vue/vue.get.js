@@ -20,13 +20,6 @@ model.jsonModel = {
                   config: {
                      widgets: [
                         {
-                           name: "aikau/vue/Test3",
-                           config: {
-                              message: "Passed",
-                              "v-bind:dynamic": "parentMsg"
-                           }
-                        },
-                        {
                            name: "aikau/vue/Test2",
                            config: {
                               widgets: [
@@ -45,9 +38,6 @@ model.jsonModel = {
                }
             ]
          }
-      },
-      {
-         name: "alfresco/logging/DebugLog"
       }
    ]
 };
