@@ -73,6 +73,24 @@ define(["dojo/_base/declare",
       sortable: false,
 
       /**
+       * @event sortRequestTopic
+       * @instance
+       * @type {string}
+       * @default [SORT_LIST]{@link module:alfresco/core/topics#SORT_LIST}
+       * @since 1.0.102
+       */
+      sortRequestTopic: topics.SORT_LIST,
+
+      /**
+       * @event sortFieldSelectionTopic
+       * @instance
+       * @type {string}
+       * @default [UPDATE_LIST_SORT_FIELD]{@link module:alfresco/core/topics#UPDATE_LIST_SORT_FIELD}
+       * @since 1.0.102
+       */
+      sortFieldSelectionTopic: topics.UPDATE_LIST_SORT_FIELD,
+
+      /**
        * Optional alt text for the sort ascending icon. An optional {0} token can be provided to
        * insert the [label]{@link module:alfresco/lists/views/layouts/HeaderCell#label}
        *
@@ -208,8 +226,8 @@ define(["dojo/_base/declare",
        * Calls [processWidgets]{@link module:alfresco/core/Core#processWidgets}
        * 
        * @instance postCreate
-       * @listens module:alfresco/core/topics#SORT_LIST
-       * @listens module:alfresco/core/topics#UPDATE_LIST_SORT_FIELD
+       * @listens module:alfresco/lists/views/layouts/HeaderCell#sortRequestTopic
+       * @listens module:alfresco/lists/views/layouts/HeaderCell#sortFieldSelectionTopic
        */
       postCreate: function alfresco_lists_views_layouts_HeaderCell__postCreate() {
          if (this.useHash && this.sortable)
@@ -222,8 +240,8 @@ define(["dojo/_base/declare",
             }
          }
 
-         this.alfSubscribe(topics.SORT_LIST, lang.hitch(this, this.onExternalSortRequest));
-         this.alfSubscribe(topics.UPDATE_LIST_SORT_FIELD, lang.hitch(this, this.onExternalSortRequest));
+         this.alfSubscribe(this.sortRequestTopic, lang.hitch(this, this.onExternalSortRequest));
+         this.alfSubscribe(this.sortFieldSelectionTopic, lang.hitch(this, this.onExternalSortRequest));
 
          domAttr.set(this.ascendingSortNode, "alt", this.sortAscAlt ? this.sortAscAlt : "");
          domAttr.set(this.descendingSortNode, "alt", this.sortDescAlt ? this.sortDescAlt : "");
@@ -298,10 +316,10 @@ define(["dojo/_base/declare",
 
       /**
        * @instance
-       * @fires module:alfresco/core/topics#SORT_LIST
+       * @fires module:alfresco/lists/views/layouts/HeaderCell#sortRequestTopic
        */
       publishSortRequest: function alfresco_lists_views_layouts_HeaderCell__publishSortRequest() {
-         this.alfPublish(topics.SORT_LIST, {
+         this.alfPublish(this.sortRequestTopic, {
             direction: (this.sortedAscending) ? "ascending" : "descending",
             value: this.sortValue,
             requester: this,
