@@ -156,6 +156,7 @@
  * @property {object} [customFormConfig=null] Any additional configuration that can be applied to a [Form]{@link module:alfresco/forms/Form} (please note that the following form configuration
  * attributes will always be overridden by specific form dialog configuration: "additionalCssClasses", "displayButtons", "widgets", "value", "warnings" and "warningsPosition")
  * @property {boolean} [noMinWidth=false] Indicates whether the minimum width restriction should be lifted
+ * @property {boolean} [destroyOnHide=false] Indicates the dialog should be completely torn down and its widgets destroyed immediately after being hidden.
  */
 
 /**
@@ -177,6 +178,7 @@
  * @property {boolean} [fullScreenMode=false] Whether or not to create the dialog the size of the screen
  * @property {boolean} [fullScreenPadding=10] The padding to leave around the dialog when in full screen mode
  * @property {boolean} [noMinWidth=false] Indicates whether the minimum width restriction should be lifted
+ * @property {boolean} [destroyOnHide=false] Indicates the dialog should be completely torn down and its widgets destroyed immediately after being hidden.
  */
 
 define(["dojo/_base/declare",
@@ -955,9 +957,14 @@ define(["dojo/_base/declare",
             });
 
             // If there are no dialogs "left" then set the dialogs-showing CSS state to "false"
-            if(this._activeDialogs.length === 0) {
+            if (this._activeDialogs.length === 0) {
                domClass.remove(document.documentElement, "alfresco-dialog-AlfDialog--dialogs-visible");
                domStyle.set(document.body, "margin-right", "0");
+            }
+
+            // If the request payload specified destroyOnHide do the cleanup early
+            if (payload.destroyOnHide) {
+               this.cleanUpAnyPreviousDialog(payload);
             }
          }));
       },
