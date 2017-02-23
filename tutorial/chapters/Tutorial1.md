@@ -14,7 +14,7 @@ The only thing required to complete the tutorial is an installed and operational
 From the command line of your operating system, create (or navigate to) a folder in which you wish to create your new client project and then run the following command:
 
 ```
-mvn archetype:generate -DarchetypeCatalog=https://artifacts.alfresco.com/nexus/content/groups/public/archetype-catalog.xml -DarchetypeGroupId=org.alfresco -DarchetypeArtifactId=aikau-sample-archetype -DarchetypeVersion=RELEASE
+mvn org.apache.maven.plugins:maven-archetype-plugin:2.4:generate -DarchetypeCatalog=https://artifacts.alfresco.com/nexus/content/groups/public/archetype-catalog.xml -DarchetypeGroupId=org.alfresco -DarchetypeArtifactId=aikau-sample-archetype -DarchetypeVersion=RELEASE
 ```
 
 You will be prompted to enter the following parameters for your project:
