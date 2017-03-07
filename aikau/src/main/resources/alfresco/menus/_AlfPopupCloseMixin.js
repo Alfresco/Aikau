@@ -77,9 +77,15 @@ define(["dojo/_base/declare",
          {
             // Focus the main node again (this is require for keyboard accessibility)
             var tmp = this.getParent().focusedChild;
-            if (typeof this.getParent()._closeChild === "function" && tmp != null)
+            var parent = this.getParent();
+            if (parent &&
+                parent.currentPopupItem &&
+                typeof parent.currentPopupItem._closePopup === "function" && 
+                typeof parent._closeChild === "function" && 
+                tmp != null)
             {
-               this.getParent()._closeChild(tmp);
+
+               parent._closeChild(tmp);
             }
             else if (typeof this.getParent()._onChildDeselect === "function" && tmp != null)
             {
