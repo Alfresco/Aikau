@@ -1,6 +1,6 @@
 /*globals Alfresco*/
 /**
- * Copyright (C) 2005-2016 Alfresco Software Limited.
+ * Copyright (C) 2005-2017 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *

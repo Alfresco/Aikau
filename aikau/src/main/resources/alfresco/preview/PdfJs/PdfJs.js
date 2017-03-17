@@ -2,7 +2,7 @@
 /*jshint esnext:false,es3:false,esversion:6*/
 // TODO Strip these external dependencies
 /**
- * Copyright (C) 2005-2016 Alfresco Software Limited.
+ * Copyright (C) 2005-2017 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
