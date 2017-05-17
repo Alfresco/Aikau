@@ -109,6 +109,10 @@
       <to>/page/system/$1</to>
     </rule>
     <rule>
+      <from>^/noauth/(.*)</from>
+      <to>/page/$1</to>
+    </rule>
+    <rule>
       <from>/(.*)</from>
       <to>/page/$1</to>
    </rule>

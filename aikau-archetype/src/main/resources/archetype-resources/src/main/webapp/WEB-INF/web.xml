@@ -60,6 +60,11 @@
       <url-pattern>/system/*</url-pattern>
     </filter-mapping>
 
+    <filter-mapping>
+      <filter-name>UrlRewriteFilter</filter-name>
+      <url-pattern>/noauth/*</url-pattern>
+   </filter-mapping>
+
     <!-- This defines the Spring MVC servlet that is used to root requests to Surf. It identifies
     the main Spring application context file (which effectively bootstraps Surf. Surf defines
     a number of different ViewResolvers that process all requests made to the "/page/*"
