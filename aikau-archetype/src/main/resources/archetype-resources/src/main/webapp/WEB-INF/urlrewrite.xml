@@ -27,6 +27,11 @@
       <to>/page/system/${symbol_dollar}1</to>
     </rule>
     <rule>
+      <from>^/noauth/(.*)</from>
+      <to>/page/${symbol_dollar}1</to>
+    </rule>
+    
+    <rule>
       <from>/(.*)</from>
       <to>/page/${symbol_dollar}1</to>
    </rule>
