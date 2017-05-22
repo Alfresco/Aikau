@@ -134,7 +134,7 @@ define(["dojo/_base/declare",
                src: (this.iconSrc ? this.iconSrc : require.toUrl("alfresco/menus/css/images/transparent-20.png")),
                title: this.message(this.iconAltText),
                alt: this.message(this.iconAltText),
-               role: "presentation"
+               role: "button"
             }, this.focusNode, "first");
             if (this.label)
             {
