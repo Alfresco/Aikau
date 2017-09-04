@@ -20,7 +20,7 @@
 /**
  * <p>Renders a thumbnail rendition of a node. This widget was originally written to support the
  * Alfresco Share Document Library but has been expanded to be the base module for all thumbnail
- * widgets. It attempts to make it possible to render thumbnails renditions or action them 
+ * widgets. It attempts to make it possible to render thumbnails renditions or action them
  * even when all that is available is the nodeRef of the node.</p>
  * <p>As well as providing basic actions for navigating a Document Library (e.g. clicking a folder
  * requests to display the content of that folder and clicking on a document links to the details
@@ -31,8 +31,8 @@
  * <p>A thumbnail can also be configured to perform selection/de-selection action when clicked through
  * the configuration of the [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
  * and [onlySelectOnClick]{@link module:alfresco/renderers/Thumbnail#onlySelectOnClick} attributes.</p>
- * <p>It is possible to configure thumbnails so that images are 
- * [cropped to fit]{@link module:alfresco/renderers/Thumbnail#cropToFit} or 
+ * <p>It is possible to configure thumbnails so that images are
+ * [cropped to fit]{@link module:alfresco/renderers/Thumbnail#cropToFit} or
  * [stretched to fit]{@link module:alfresco/renderers/Thumbnail#stretchToFit} so that no white space
  * is shown within the thumbnail. When images are not cropped or stretched the position of the image
  * can be controlled by configuring the [horizontal]{@link module:alfresco/renderers/Thumbnail#horizontalAlignment}
@@ -70,7 +70,7 @@
  *       onlySelectOnClick: true
  *    }
  * }
- * 
+ *
  * @example <caption>Example configuring full dimensions with a cropped image:</caption>
  * {
  *    name: "alfresco/renderers/Thumbnail",
@@ -83,7 +83,7 @@
  *       cropToFit: true
  *    }
  * }
- * 
+ *
  * @module alfresco/renderers/Thumbnail
  * @extends module:aikau/core/BaseWidget
  * @mixes external:dijit/_OnDijitClickMixin
@@ -114,17 +114,17 @@ define(["dojo/_base/declare",
         "alfresco/core/NodeUtils",
         "dojo/window",
         "dojo/Deferred",
-        "dojo/when"], 
-        function(declare, BaseWidget, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
+        "dojo/when"],
+        function(declare, BaseWidget, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin,
                  _PublishPayloadMixin, _OnDijitClickMixin, ItemSelectionMixin, LinkClickMixin, _ItemLinkMixin,
                  AlfConstants, topics, array, lang, event, domClass, domStyle, NodeUtils, win, Deferred, when) {
 
-   return declare([BaseWidget, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin, 
+   return declare([BaseWidget, _OnDijitClickMixin, _JsNodeMixin, DraggableNodeMixin, NodeDropTargetMixin,
                    _ItemLinkMixin, _PublishPayloadMixin, ItemSelectionMixin, LinkClickMixin], {
-      
+
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/Thumbnail.properties"}]
@@ -133,13 +133,13 @@ define(["dojo/_base/declare",
 
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/Thumbnail.css"}]
        */
       cssRequirements: [{cssFile:"./css/Thumbnail.css"}],
-      
+
       /**
        * Some APIs provide very little information other than the nodeRef, however if we really
        * believe that the thumbnails are only going to be of something that has a rendition then
@@ -167,17 +167,17 @@ define(["dojo/_base/declare",
 
       /**
        * Additional CSS classes to apply to the main DOM node defined in the template
-       * 
+       *
        * @instance
        * @type {string}
        * @default
        */
       customClasses: "",
-      
+
       /**
        * The Dimensions object that defines the dimension attributes of the thumbnail. This will override
        * the default CSS styling.
-       * 
+       *
        * @typedef {Dimensions}
        * @property {string} [w] The width of the thumbnail
        * @property {string} [h] The height of the thumbnail
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
       /**
        * This should be set to an object containing the starting dimensions of the thumbnail as well as optional
        * information on padding and whether the aspect ratio of the image should be maintained.
-       *  
+       *
        * @instance
        * @type {Dimensions}
        * @default
@@ -198,7 +198,7 @@ define(["dojo/_base/declare",
       /**
        * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadHighLightImage}
        * to use the smaller image.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -209,7 +209,7 @@ define(["dojo/_base/declare",
       /**
        * Overrides the [mixed in default]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadText}
        * to hide the upload message.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -219,7 +219,7 @@ define(["dojo/_base/declare",
 
       /**
        * The name of the folder image to use. Valid options are: "folder-32.png", "folder-48.png", "folder-64.png"
-       * and "folder-256.png". 
+       * and "folder-256.png".
        *
        * @instance
        * @type {string}
@@ -228,10 +228,10 @@ define(["dojo/_base/declare",
       folderImage: "folder-64.png",
 
       /**
-       * This is a mapping of aspects to folder images. It was added to support custom folder images for 
+       * This is a mapping of aspects to folder images. It was added to support custom folder images for
        * Smart Folders but can be reconfigured as necessary. If no configuration is provided then a default
        * set of mappings will be assigned.
-       * 
+       *
        * @instance
        * @type {object}
        * @default
@@ -240,12 +240,12 @@ define(["dojo/_base/declare",
       folderImageAspectMappings: null,
 
       /**
-       * This is a suffix to append to folder images matched according to the 
+       * This is a suffix to append to folder images matched according to the
        * [folderImageAspectMappings]{@link module:alfresco/renderers/Thumbnails#folderImageAspectMappings}.
        * Folder image sizes are typically "32", "48", "64" and "256". For backwards compatibility reasons, this
-       * will only be used when a folder is matched to an entry in the 
+       * will only be used when a folder is matched to an entry in the
        * [folderImageAspectMappings]{@link module:alfresco/renderers/Thumbnails#folderImageAspectMappings}.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -266,7 +266,7 @@ define(["dojo/_base/declare",
       /**
        * Indicates how the thumbnail image should be aligned horizontally, the options are "LEFT",
        * "MIDDLE" and "RIGHT".
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -276,7 +276,7 @@ define(["dojo/_base/declare",
 
       /**
        * The property to use for the image id.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -357,10 +357,10 @@ define(["dojo/_base/declare",
 
       /**
        * If this is configured to be true then this will ensure that click actions only perform a
-       * selection action. However, this also requires that the 
-       * [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick} attribute also 
-       * be configured to be true. 
-       * 
+       * selection action. However, this also requires that the
+       * [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick} attribute also
+       * be configured to be true.
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -370,17 +370,17 @@ define(["dojo/_base/declare",
 
       /**
        * The type of rendition to use for the thumbnail.
-       * 
+       *
        * @instance
-       * @type {string} 
+       * @type {string}
        * @default
        */
       renditionName: "doclib",
-      
+
       /**
-       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#selectOnClick} to 
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#selectOnClick} to
        * disable selection on click by default.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -393,7 +393,7 @@ define(["dojo/_base/declare",
        * This is only used when either [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
        * or [updateOnSelection]{@link module:alfresco/renderers/Thumbnail#updateOnSelection} are configured
        * to be true.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -406,7 +406,7 @@ define(["dojo/_base/declare",
        * This is only used when either [selectOnClick]{@link module:alfresco/renderers/Thumbnail#selectOnClick}
        * or [updateOnSelection]{@link module:alfresco/renderers/Thumbnail#updateOnSelection} are configured
        * to be true.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -428,7 +428,7 @@ define(["dojo/_base/declare",
 
       /**
        * This indicates whether or not the aspect ratio of the thumbnail will be retained. This means that
-       * for images will be stretched to ensure that there is no white-space visible. However unlike 
+       * for images will be stretched to ensure that there is no white-space visible. However unlike
        * [cropToFit]{@link module:alfresco/renderers/Thumbnail#cropToFit} the entire image will be visible
        * although possible distorted. If no [dimensions]{@link module:alfresco/renderers/Thumbnail#dimensions}
        * are provided then the aspect ratio will always be maintained and the image will not be stretched.
@@ -442,11 +442,11 @@ define(["dojo/_base/declare",
 
       /**
        * This allows a tokenized template to be defined where the tokens will be populated from
-       * values in the "currentItem" attribute using the 
+       * values in the "currentItem" attribute using the
        * [processCurrentItemTokens function]{@link module:alfresco/core/ObjectProcessingMixin#processCurrentItemTokens}
        * from the [ObjectProcessingMixin]{@link module:alfresco/core/ObjectProcessingMixin} module. Note that the
        * thumbnail URL template is expected to be appended to the PROXY_URI for accessing an Alfresco Repository.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -454,10 +454,10 @@ define(["dojo/_base/declare",
       thumbnailUrlTemplate: null,
 
       /**
-       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#updateOnSelection} to 
+       * Overrides the [mixed in default]{@link module:alfresco/lists/ItemSelectionMixin#updateOnSelection} to
        * not set up the item selection listeners. If this is configured to be true then the thumbnail will be
        * highlighted when the item it represents is selected.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -469,7 +469,7 @@ define(["dojo/_base/declare",
        * It is recommended that [NodePreviewService]{@link module:alfresco/services/NodePreviewService} is used
        * for displaying previews. For backwards compatibility reasons this is not the default configuration but
        * it is expected to become the default in the next major release.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -480,7 +480,7 @@ define(["dojo/_base/declare",
       /**
        * Indicates how the thumbnail image should be aligned vertically, the options are "TOP",
        * "MIDDLE" and "BOTTOM".
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -491,7 +491,7 @@ define(["dojo/_base/declare",
       /**
        * The width to render the thumbnail. Units of measurement need to be provided, e.g.
        * "100px" for 100 pixels. The default is null, and if left as this the thumbnail will
-       * be rendered at the original image size. This is shorthand configuration when not 
+       * be rendered at the original image size. This is shorthand configuration when not
        * providing full [dimensions]{@link module:alfresco/renderers/Thumbnail#dimensions}.
        *
        * @instance
@@ -556,7 +556,7 @@ define(["dojo/_base/declare",
 
       /**
        * Set up the attributes to be used when rendering the template.
-       * 
+       *
        * @instance
        */
       postMixInProperties: function alfresco_renderers_Thumbnail__postMixInProperties() {
@@ -591,12 +591,16 @@ define(["dojo/_base/declare",
                this.currentItem.displayName = jsNode.properties["cm:name"];
             }
          }
-         else if (this.currentItem && lang.getObject(this.itemKey || "nodeRef", false, this.currentItem))
+         else if (this.currentItem && (lang.getObject(this.itemKey, false, this.currentItem) || lang.getObject("nodeRef", false, this.currentItem)))
          {
-            var nodeRefData = lang.getObject(this.itemKey || "node.nodeRef", false, this.currentItem);
-            this.imageIdProperty = this.itemKey || "node.nodeRef";
+            var nodeRefData = lang.getObject(this.itemKey, false, this.currentItem);
+            if (!nodeRefData)
+            {
+               nodeRefData = lang.getObject("nodeRef", false, this.currentItem);
+            }
+            this.imageIdProperty = this.itemKey || "nodeRef";
 
-            // Fallback to just having a nodeRef available... this has been added to handle rendering of 
+            // Fallback to just having a nodeRef available... this has been added to handle rendering of
             // thumbnails in search results where full node information may not be available...
             var nodeRef = NodeUtils.processNodeRef(nodeRefData);
             if (this.currentItem.type === "folder")
@@ -657,10 +661,10 @@ define(["dojo/_base/declare",
       generateFallbackThumbnailUrl: function alfresco_renderers_Thumbnail__generateFallbackThumbnailUrl() {
          return require.toUrl("alfresco/renderers") + "/css/images/filetypes/generic-file-48.png";
       },
-      
+
       /**
        * Returns a URL to the image to use when rendering a folder
-       * 
+       *
        * @instance
        */
       getFolderImage: function alfresco_renderers_Thumbnail__getDefaultFolderImage() {
@@ -669,14 +673,14 @@ define(["dojo/_base/declare",
          {
             array.some(jsNode.aspects, function(aspect) {
                var mappedImage = this.folderImageAspectMappings[aspect];
-               if(mappedImage) 
+               if(mappedImage)
                {
                   var image = mappedImage + "-" + this.folderImageSize + ".png";
                   url = require.toUrl(image);
                }
                return !!mappedImage;
             }, this);
-            
+
          }
          if (!url)
          {
@@ -684,10 +688,10 @@ define(["dojo/_base/declare",
          }
          return url;
       },
-      
+
       /**
        * Generates the URL to use as the source of the thumbnail.
-       * 
+       *
        * @instance
        * @param renditionName
        * @returns {string}
@@ -717,7 +721,7 @@ define(["dojo/_base/declare",
          }
          return url;
       },
-      
+
       /**
        * Attempts to retrieve a thumbnail URL for a specific rendition. It ensures that the rendition has been
        * generated by inspecting that there is a timestamp for the [renditionName]{@link module:alfresco/renderers/Thumbnail#renditionName}
@@ -745,7 +749,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        */
       postCreate: function alfresco_renderers_Thumbnail__postCreate() {
@@ -798,7 +802,7 @@ define(["dojo/_base/declare",
        * This sizes the thumbnail based on the dimensions that have been provided. It is
        * entirely possible to size the thumbnail with just a width (dimensions.w) however
        * a height (dimensions.h) and margin (dimensions.margin) can also be provided.
-       * 
+       *
        * @instance
        * @param {Dimensions} dimensions
        * @since 1.0.40
@@ -824,7 +828,7 @@ define(["dojo/_base/declare",
 
             // Calcuate the image dimensions...
             var borderThickness = 0;
-            try 
+            try
             {
                // See AKU-1164 - need to defensively code around this call...
                borderThickness = parseInt(domStyle.get(this.imgNode, "borderWidth"), 10);
@@ -836,7 +840,7 @@ define(["dojo/_base/declare",
 
             this.imageNodeHeight = thumbnailHeight - ((margin * 2) + borderThickness);
             this.imageNodeWidth = thumbnailWidth - ((margin * 2) + borderThickness);
-            
+
             // Update the thumbnail nodes...
             domStyle.set(this.thumbnailNode, {
                "width": thumbnailWidth + "px",
@@ -880,8 +884,8 @@ define(["dojo/_base/declare",
 
       /**
        * This function is used to configure the thumbnail DOM model so that the image is cropped and
-       * centered within the thumbnail. It relies on 
-       * [getNaturalImageSize]{@link module:alfresco/renderers/Thumbnail#getNaturalImageSize} 
+       * centered within the thumbnail. It relies on
+       * [getNaturalImageSize]{@link module:alfresco/renderers/Thumbnail#getNaturalImageSize}
        * having been called to establish the orientation of the image. Therefore it is important that
        * this is only called when the natural image dimensions have been established.
        *
@@ -929,11 +933,11 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called when the thumbnail image has been loaded and is used to store the 
+       * This function is called when the thumbnail image has been loaded and is used to store the
        * natural height and width of the image. This allows us to work out whether or not the image
        * is in portrait or landscape and allows [cropImage]{@link module:alfresco/renderers/Thumbnail#cropImage}
        * to determine the position and size of the image.
-       * 
+       *
        * @instance
        * @since 1.0.40
        */
@@ -961,7 +965,7 @@ define(["dojo/_base/declare",
          // Delegate to the ItemSelectionMixin - this will check if select on click is supported...
          this.onSelectionClick();
 
-         // Check whether or not the thumbnail should ONLY support selection on click (because in 
+         // Check whether or not the thumbnail should ONLY support selection on click (because in
          // some circumstances, e.g. film strip view carousel we might want to select AND perform
          // an additinal action)...
          if (!this.onlySelectOnClick)
@@ -1017,7 +1021,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Handles non-preview related actions. Non-preview actions are encapsulated in their own function 
+       * Handles non-preview related actions. Non-preview actions are encapsulated in their own function
        * as requests for a preview might need to fallback to use them when an XHR request to obtain the
        * full node data reveals that a preview cannot be supported.
        *
@@ -1108,14 +1112,14 @@ define(["dojo/_base/declare",
 
       /**
        * Handles the loading of the complete node data.
-       * 
+       *
        * @instance
-       * @param {object} payload 
+       * @param {object} payload
        * @deprecated Since 1.0.59 - Use [usePreviewService]{@link module:alfresco/renderers/Thumbnail#usePreviewService} instead
        */
       onNodeLoaded: function alfresco_renderers_Thumbnail__onNodeLoaded(payload) {
          this.alfUnsubscribe(payload.requestConfig.subscriptionHandle);
-         if (lang.exists("response.item", payload)) 
+         if (lang.exists("response.item", payload))
          {
             if (this.nodePromise && typeof this.nodePromise.resolve === "function")
             {
@@ -1160,7 +1164,7 @@ define(["dojo/_base/declare",
          }
          else
          {
-            // Because the content of the previewer will load asynchronously it's important that 
+            // Because the content of the previewer will load asynchronously it's important that
             // we set some dimensions for the dialog body, otherwise it will appear off-center
             var vs = win.getBox();
             this.publishTopic = "ALF_CREATE_DIALOG_REQUEST";

@@ -71,23 +71,26 @@ define(["dojo/_base/declare",
        * 
        * @instance
        */
-      closePopupMenu: function alfresco_menus__AlfPopupCloseMixin__closePopupMenu() {
+      closePopupMenu: function alfresco_menus__AlfPopupCloseMixin__closePopupMenu(event) {
          /*jshint eqnull:true*/
-         if (this.popup)
+         if (event.type && event.type.indexOf("attrmodified-") === 0)
+         {
+            // Do nothing in this case, see https://issues.alfresco.com/jira/browse/AKU-1167
+            // This works around issues related to touch behaviour in Edge.
+         }
+         else if (this.popup)
          {
             // Focus the main node again (this is require for keyboard accessibility)
             var tmp = this.getParent().focusedChild;
-            var parent = this.getParent();
-            if (parent &&
-                parent.currentPopupItem &&
-                typeof parent.currentPopupItem._closePopup === "function" && 
-                typeof parent._closeChild === "function" && 
-                tmp != null)
+            if (typeof this.getParent()._closeChild === "function" && tmp)
             {
-
-               parent._closeChild(tmp);
+               if (this.getParent().currentPopupItem &&
+                   typeof this.getParent().currentPopupItem._closePopup === "function")
+               {
+                  this.getParent()._closeChild(tmp);
+               }
             }
-            else if (typeof this.getParent()._onChildDeselect === "function" && tmp != null)
+            else if (typeof this.getParent()._onChildDeselect === "function" && tmp)
             {
                this.getParent()._onChildDeselect(tmp);
             }
