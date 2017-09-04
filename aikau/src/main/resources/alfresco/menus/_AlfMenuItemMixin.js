@@ -230,7 +230,7 @@ define(["dojo/_base/declare",
             var iconNodeParent = this.iconNode.parentNode;
             domConstruct.destroy(this.iconNode);
             this.iconNode = domConstruct.create("img", {
-               role:"presentation",
+               role:"button",
                className: "dijitInline dijitIcon dijitMenuItemIcon alfresco-menus-_AlfMenuItemMixin__icon alfresco-menus-AlfMenuItemIconMixin " + this.iconClass,
                src: require.toUrl("alfresco/menus/css/images/transparent-20.png"),
                title: this.iconAltText,
