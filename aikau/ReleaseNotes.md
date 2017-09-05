@@ -1,4 +1,4 @@
-Aikau 1.0.101 Release Notes
+Aikau 1.0.102 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,23 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.102:
+* [AKU-1171](https://issues.alfresco.com/jira/browse/AKU-1171)       - Generated thumbnails in advanced search are not shown 
+* [AKU-1170](https://issues.alfresco.com/jira/browse/AKU-1170)       - Change popup menu item image role from "presentation" to "button".
+* [AKU-1169](https://issues.alfresco.com/jira/browse/AKU-1169)       - Switch WebScripts path to use noauth instead of service
+* [AKU-1168](https://issues.alfresco.com/jira/browse/AKU-1168)       - Change role of menu item icons from "presentation" to "button"
+* [AKU-1166](https://issues.alfresco.com/jira/browse/AKU-1166)       - Add support for title on Property
+* [AKU-1165](https://issues.alfresco.com/jira/browse/AKU-1165)       - Cell width handling (non-strings with units)
+* [AKU-1164](https://issues.alfresco.com/jira/browse/AKU-1164)       - Defensive code around border thickness calculation
+* [AKU-1162](https://issues.alfresco.com/jira/browse/AKU-1162)       - Chrome rendering issue on dialog footer placement
+* [AKU-1156](https://issues.alfresco.com/jira/browse/AKU-1156)       - Remove default for STH max analyzed chars
+* [SHA-2000](https://issues.alfresco.com/jira/browse/SHA-2000)       - UA update for Live Search in Site. Update labels.
+* [#1350](https://github.com/Alfresco/Aikau/issues/1350)             - From [AFaust](https://github.com/AFaust): Added missing maps for ES6 Promise shim
+* [#1353](https://github.com/Alfresco/Aikau/pull/1353)               - From [AFaust](https://github.com/AFaust): Improve DebugLog data sanitation
+* [#1351](https://github.com/Alfresco/Aikau/pull/1351)               - ALL LANG: Localisation bundles updated
+* [#1346](https://github.com/Alfresco/Aikau/pull/1346)               - From [AFaust](https://github.com/AFaust): Allow widgetsForControl configuration in SitePicker
+* [#1345](https://github.com/Alfresco/Aikau/pull/1345)               - From [AFaust](https://github.com/AFaust): Add value delimiter handling to Picker
+
 1.0.101:
 * [AKU-1148](https://issues.alfresco.com/jira/browse/AKU-1148)         - Converted renderers and layout modules to create DOM natively
 * [AKU-1151](https://issues.alfresco.com/jira/browse/AKU-1151)         - Improve performance enhanced view rendering completion
