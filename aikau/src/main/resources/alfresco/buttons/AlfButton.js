@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
        * @instance
        */
       postMixInProperties: function alfresco_buttons_AlfButton__postMixInProperties() {
-         this.label = this.message(this.label);
+         this.label = this.encodeHTML(this.message(this.label));
          this.inherited(arguments);
          if (!this.publishPayload)
          {
