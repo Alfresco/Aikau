@@ -90,9 +90,9 @@ define(["dojo/_base/declare",
 
       /**
        * This is the property of each item in the list that uniquely identifies that item. This
-       * should be configured correctly in order for items to be
+       * should be configured correctly in order for items to be 
        * [brought into view]{@link module alfresco/lists/views/ListRenderer#bringItemIntoView} as required.
-       *
+       * 
        * @instance
        * @type {string}
        * @default
@@ -121,7 +121,7 @@ define(["dojo/_base/declare",
 
       /**
        * This can be set to be a custom message that is displayed when there are no items to
-       * be displayed in the current view. This will not be used if
+       * be displayed in the current view. This will not be used if 
        * [widgetsForNoDataDisplay]{@link module alfresco/lists/views/ListRenderer#widgetsForNoDataDisplay}
        * is configured.
        *
@@ -155,22 +155,22 @@ define(["dojo/_base/declare",
       subscribeToDocRequests: false,
 
       /**
-       * Overrides the
+       * Overrides the 
        * [inherited default configuration]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#suppressDndUploading}
        * to suppress the drag-and-drop upload highlighting.
-       *
+       * 
        * @instance
        * @type {boolean}
        * @default
        * @since 1.0.39
        */
       suppressDndUploading: true,
-
+      
       /**
        * This will be automatically set when the view is used in an [AlfHashList]{@link module:alfresco/lists/AlfHashList}.
        * It indicates whether or not the list is being driven by data set on the browser URL hash and it can be useful
        * for views to have access to this information.
-       *
+       * 
        * @instance
        * @type {boolean}
        * @default
@@ -187,7 +187,7 @@ define(["dojo/_base/declare",
        * @since 1.0.32
        */
       useInfiniteScroll: false,
-
+      
       /**
        * The configuration for view selection menu items. This needs to be either configured or defined in an
        * extending module. If this isn't specified then the view will not be selectable in the document list.
@@ -214,10 +214,10 @@ define(["dojo/_base/declare",
        * An optional widget model to be rendered as an appendix to the actual data. If this is
        * defined then it will never be possible for the
        * [widgetsForNoDataDisplay]{@link module:alfresco/lists/views/AlfListView#widgetsForNoDataDisplay}
-       * model to be rendered because it results in a special
+       * model to be rendered because it results in a special 
        * [marker]{@link module:alfresco/lists/views/RenderAppendixSentinel}
        * being added to the data set to be rendered.
-       *
+       * 
        * @instance
        * @type {object[]}
        * @default
@@ -238,7 +238,7 @@ define(["dojo/_base/declare",
        * This can be called to focus on a specific item in the view. The itemKey provided must match
        * the value of the [itemKey property]{@link module:alfresco/lists/views/AlfListView#itemKey}
        * of an item in the rendered data.
-       *
+       * 
        * @instance
        * @param {string} itemKey The key of the item to focus on.
        * @since 1.0.77
@@ -249,8 +249,8 @@ define(["dojo/_base/declare",
             array.some(this.docListRenderer._renderedItemWidgets, function(widgets) {
                return array.some(widgets, function(widget) {
                   var found = false;
-                  if (widget &&
-                      widget.currentItem &&
+                  if (widget && 
+                      widget.currentItem && 
                       (widget.currentItem[this.itemKey] || widget.currentItem[this.itemKey] === 0) &&
                       widget.currentItem[this.itemKey].toString() === itemKey)
                   {
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
                }, this);
             }, this);
          }
-
+         
 
       },
 
@@ -326,14 +326,14 @@ define(["dojo/_base/declare",
        * @param {object} payload A payload containing a view value and a promise to resolve.
        */
       onViewNameRequest: function alfresco_lists_views_AlfListView__onViewNameRequest(payload) {
-         if (payload &&
-             payload.value === this.getViewName() &&
-             payload.promise &&
+         if (payload && 
+             payload.value === this.getViewName() && 
+             payload.promise && 
              typeof payload.promise.resolve === "function")
          {
             payload.promise.resolve({
                value: this.getViewName(),
-               label: this.viewSelectionConfig.label
+               label: this.viewSelectionConfig.label 
             });
          }
       },
@@ -484,7 +484,7 @@ define(["dojo/_base/declare",
                      // Ensure that the renderer has has the same itemKey value as configured on the view. This is
                      // so that comparisons can be made for selection and items can be brought into view as necessary
                      this.docListRenderer.itemKey = this.itemKey;
-
+                     
                      // Finally, render the current data (when using infinite scroll the data should have been augmented)
                      var promisedData = this.docListRenderer.renderData();
                      if (promisedData)
@@ -583,8 +583,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This should be called when the renderers need to be removed.
-       *
+       * This should be called when the renderers need to be removed. 
+       * 
        * @instance
        * @extendable
        * @since 1.0.32
@@ -701,7 +701,7 @@ define(["dojo/_base/declare",
          {
             // Create a caption node
             var caption = domConstruct.create("caption", {
-               innerHTML: this.encodeHTML(this.a11yCaption)
+               innerHTML: this.a11yCaption
             }, this.tableNode, "first");
 
             // Apply a class to the caption
