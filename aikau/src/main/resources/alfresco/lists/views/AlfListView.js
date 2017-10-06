@@ -701,7 +701,7 @@ define(["dojo/_base/declare",
          {
             // Create a caption node
             var caption = domConstruct.create("caption", {
-               innerHTML: this.a11yCaption
+               innerHTML: this.encodeHtml(this.a11yCaption)
             }, this.tableNode, "first");
 
             // Apply a class to the caption
