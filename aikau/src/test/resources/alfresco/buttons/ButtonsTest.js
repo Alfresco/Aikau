@@ -54,6 +54,21 @@ define(["module",
             .then(function(payload) {
                assert.propertyVal(payload, "data", "prefix:mixinValue4:postfix");
             });
+      },
+
+      "Check button labels are encoded to avoid xss attacks": function() {
+         return this.remote.findByCssSelector("#XSS_LABEL_TEST_BUTTON_1_label")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "<script>alert('XSS');</script>", "First XSS button is wrong: " + text);
+            })
+            .end()
+
+            .findByCssSelector("#XSS_LABEL_TEST_BUTTON_2_label")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "<div style='width: expression(alert('XSS'));'>", "Second XSS button is wrong: " + text);
+            });
       }
    });
 });
