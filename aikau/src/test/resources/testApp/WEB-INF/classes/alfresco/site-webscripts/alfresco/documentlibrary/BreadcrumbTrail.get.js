@@ -146,6 +146,23 @@ model.jsonModel = {
          }
       },
       {
+         id: "ESCAPED_BREADCRUMBS",
+         name: "alfresco/documentlibrary/AlfBreadcrumbTrail",
+         config: {
+            breadcrumbs: [
+               {
+                  label: "These breadcrumbs contain XSS attacks"
+               },
+               {
+                  label: "<script>alert('XSS');</script>"
+               },
+               {
+                  label: "<div style='width: expression(alert(\'XSS\'));'>"
+               }
+            ]
+         }
+      },
+      {
          id: "CHANGE_NODEREF",
          name: "alfresco/buttons/AlfButton",
          config: {
