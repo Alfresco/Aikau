@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
       postCreate: function alfresco_documentlibrary_AlfBreadcrumb__postCreate() {
          if (this.label)
          {
-            this.breadcrumbNode.innerHTML = this.message(this.label);
+            this.breadcrumbNode.innerHTML = this.encodeHTML(this.message(this.label));
          }
       },
       

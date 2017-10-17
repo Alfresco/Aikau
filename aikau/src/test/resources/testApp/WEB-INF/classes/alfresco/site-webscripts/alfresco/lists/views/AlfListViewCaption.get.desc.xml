@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>AlfListViewCaption</shortname>
+  <description>This is an example of an AlfList using the AlfListView with a caption</description>
+  <family>aikau-unit-tests</family>
+  <url>/AlfListViewCaption</url>
+</webscript>

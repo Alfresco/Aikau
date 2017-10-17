@@ -1,9 +1,9 @@
-Aikau 1.0.102 Release Notes
+Aikau 1.0.103 Release Notes
 ===
 
 IMPORTANT
 ---
-From version 1.0.96 onwards there is a new `aikau` package provided. The code in this package is intended to form the basis of a 1.1 version of Aikau (which will be the first release to contain breaking changes). The contents of this package at **not** subject to the same backwards compatibility rules as the `alfresco` package. Instead this will be a collaboration space where code can be changed with breaking changes up until the point where 1.1 is released. You should not use anything from the `aikau` package in production until 1.1 is released. There is no date yet determined for the 1.1 release, 1.0.x releases will continue as always as we prepare for it.
+From version 1.0.96 onwards there is a new `aikau` package provided. The code in this package is intended to form the basis of a 1.1 version of Aikau (which will be the first release to contain breaking changes). The contents of this package are **not** subject to the same backwards compatibility rules as the `alfresco` package. Instead this will be a collaboration space where code can be changed with breaking changes up until the point where 1.1 is released. You should not use anything from the `aikau` package in production until 1.1 is released. There is no date yet determined for the 1.1 release, 1.0.x releases will continue as always as we prepare for it.
 
 Current deprecations:
 ---
@@ -52,6 +52,12 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.103:
+* [RM-5774](https://issues.alfresco.com/jira/browse/RM-5774)         - Add unit tests for various changes using encodeHTML - mirrored by [#1388](https://github.com/Alfresco/Aikau/issues/1388)
+* [#1387](https://github.com/Alfresco/Aikau/issues/1387)             - Add HTML encoding to the label of AlfBreadcrumb
+* [#1389](https://github.com/Alfresco/Aikau/issues/1389)             - Add HTML encoding to the label of AlfButton
+* [#1390](https://github.com/Alfresco/Aikau/issues/1390)             - Add HTML encoding to the caption of AlfListView
+
 1.0.102:
 * [AKU-1171](https://issues.alfresco.com/jira/browse/AKU-1171)       - Generated thumbnails in advanced search are not shown 
 * [AKU-1170](https://issues.alfresco.com/jira/browse/AKU-1170)       - Change popup menu item image role from "presentation" to "button".
