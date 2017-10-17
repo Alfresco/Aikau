@@ -202,6 +202,7 @@ define(function() {
       "alfresco/lists/SortControlsTest",
       "alfresco/lists/views/AddableViewTest",
       "alfresco/lists/views/AlfListViewTest",
+      "alfresco/lists/views/AlfListViewCaptionTest",
       "alfresco/lists/views/ExpandableGalleryTest",
       "alfresco/lists/views/GalleryViewFocusTest",
       "alfresco/lists/views/GalleryViewInfiniteScrollTest",

@@ -131,6 +131,28 @@ define(["module",
             });
       },
 
+      "Check breadcrumb labels are encoded to avoid xss attacks": function() {
+         return this.remote.findByCssSelector("#ESCAPED_BREADCRUMBS ul li:first-of-type a")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "These breadcrumbs contain XSS attacks", "XSS crumbs first item is wrong: " + text);
+            })
+            .end()
+
+            .findByCssSelector("#ESCAPED_BREADCRUMBS ul li:nth-of-type(2) a")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "<script>alert('XSS');</script>", "XSS crumbs 2nd item is wrong: " + text);
+            })
+            .end()
+
+            .findByCssSelector("#ESCAPED_BREADCRUMBS ul li:last-of-type a")
+            .getVisibleText()
+            .then(function(text) {
+               assert(text === "<div style='width: expression(alert('XSS'));'>", "XSS crumbs last item is wrong: " + text);
+            });
+      },
+
       "Check that filter mode is displayed": function() {
          return this.remote.findByCssSelector("#FILTER_SELECTION_label")
             .click()

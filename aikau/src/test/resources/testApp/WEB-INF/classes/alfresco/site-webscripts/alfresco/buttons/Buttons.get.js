@@ -197,6 +197,27 @@ model.jsonModel = {
                      textFieldName: "search",
                      textBoxIconClass: "alf-search-icon"
                   }
+               },
+               {
+                  name: "alfresco/layout/HorizontalWidgets",
+                  config: {
+                     widgets: [
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           id: "XSS_LABEL_TEST_BUTTON_1",
+                           config: {
+                              label: "<script>alert('XSS');</script>"
+                           }
+                        },
+                        {
+                           name: "alfresco/buttons/AlfButton",
+                           id: "XSS_LABEL_TEST_BUTTON_2",
+                           config: {
+                              label: "<div style='width: expression(alert(\'XSS\'));'>"
+                           }
+                        }
+                     ]
+                  }
                }
             ]
          }
