@@ -10,7 +10,7 @@
     "grunt-contrib-jshint": "1.0.0",
     "grunt-contrib-watch": "1.0.0",
     "grunt-http": "2.0.1",
-    "grunt-jsdoc": "2.0.0",
+    "grunt-jsdoc": "2.2.1",
     "grunt-notify": "0.4.5",
     "grunt-prompt": "1.3.3",
     "grunt-shell-spawn": "0.3.10",
