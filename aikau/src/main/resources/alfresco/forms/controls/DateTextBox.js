@@ -43,9 +43,11 @@ define(["dojo/_base/declare",
         "dojo/date/stamp",
         "dijit/form/DateTextBox",
         "dojo/dom-class",
-        "alfresco/core/ObjectTypeUtils"],
-        function(declare, BaseFormControl, TextBoxValueChangeMixin, lang, stamp, DateTextBox, domClass, ObjectTypeUtils) {
-   return declare([BaseFormControl, TextBoxValueChangeMixin], {
+        "alfresco/core/ObjectTypeUtils",
+        "alfresco/core/TemporalUtils"],
+        function(declare, BaseFormControl, TextBoxValueChangeMixin, lang, stamp, DateTextBox, domClass, ObjectTypeUtils,
+                 TemporalUtils) {
+   return declare([BaseFormControl, TextBoxValueChangeMixin, TemporalUtils], {
 
       /**
        * The value to return when no date has been selected. By default this will return null, however some
@@ -175,6 +177,14 @@ define(["dojo/_base/declare",
        */
       createFormControl: function alfresco_forms_controls_DateTextBox__createFormControl(config) {
          domClass.add(this.domNode, "alfresco-forms-controls-DateTextBox");
+
+         // Explicitly set datePattern to ensure dates rendered here match dates rendered elsewhere in Alfresco
+         // Use the Unicode compatible date pattern as they differ slightly to Alfresco's dateFormat masks
+         var datePattern = this.getUnicodeDateMask(this.dateFormats.masks.shortDate);
+         config.constraints = {
+            datePattern: datePattern
+         };
+
          var dateTextBox = new DateTextBox(config);
          dateTextBox.validate = lang.hitch(this, function(){
             setTimeout(lang.hitch(this, this.validate), 0);
