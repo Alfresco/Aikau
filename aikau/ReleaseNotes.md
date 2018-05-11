@@ -1,4 +1,4 @@
-Aikau 1.0.103 Release Notes
+Aikau 1.0.104 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,11 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.104:
+* [RM-6273](https://issues.alfresco.com/jira/browse/RM-6273)        - Make DateTextBox use date format specified in properties files
+* [MNT-19095](https://issues.alfresco.com/jira/browse/MNT-19095)    - Update copyright year in footers to 2018
+* [#1396](https://github.com/Alfresco/Aikau/pull/1396)              - JSDoc Dependency upgrade from 2.0.0 to 2.2.1 
+
 1.0.103:
 * [RM-5774](https://issues.alfresco.com/jira/browse/RM-5774)         - Add unit tests for various changes using encodeHTML - mirrored by [#1388](https://github.com/Alfresco/Aikau/issues/1388)
 * [#1387](https://github.com/Alfresco/Aikau/issues/1387)             - Add HTML encoding to the label of AlfBreadcrumb

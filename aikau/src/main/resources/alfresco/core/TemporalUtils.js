@@ -19,7 +19,7 @@
 
 /**
  * This is a mixin that provides time and date related utility functions.
- * 
+ *
  * @module alfresco/core/TemporalUtils
  * @mixes module:alfresco/core/Core
  * @author Richard Smith
@@ -28,16 +28,16 @@ define(["dojo/_base/declare",
         "dojo/_base/lang",
         "alfresco/core/Core",
         "dojo/date/stamp",
-        "dojo/query"], 
+        "dojo/query"],
         function(declare, lang, AlfCore, stamp, query) {
-    
+
    var cachedDateFormatsByI18nScope = {};
 
    return declare([AlfCore], {
 
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/TemporalUtils.properties"}]
@@ -46,13 +46,13 @@ define(["dojo/_base/declare",
 
       /**
        * Constructor
-       * 
+       *
        * @param {object} config Config to mixin
        */
       constructor: function alfresco_core_TemporalUtils__constructor(config) {
 
          lang.mixin(this, config);
-         
+
          // check already resolved dateFormats before doing
          var lookupKey = this.i18nScope || "default";
          if (cachedDateFormatsByI18nScope.hasOwnProperty(lookupKey))
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
                 dayNames: this.dateFormats.DAY_NAMES,
                 monthNames: this.dateFormats.MONTH_NAMES
              };
-             
+
              // cache
              cachedDateFormatsByI18nScope[lookupKey] = JSON.stringify(this.dateFormats);
          }
@@ -95,7 +95,8 @@ define(["dojo/_base/declare",
        *
        * @instance
        * @param {Date|String} from JavaScript Date object or ISO8601-formatted date string
-       * @param {Date|String} [to] JavaScript Date object or ISO8601-formatted date string, defaults to now if not supplied
+       * @param {Date|String} [to] JavaScript Date object or ISO8601-formatted date string, defaults to now if not
+       *    supplied
        * @return {String} Relative time description
        */
       getRelativeTime: function alfresco_core_TemporalUtils__getRelativeTime(from, to) {
@@ -256,7 +257,7 @@ define(["dojo/_base/declare",
        *    With code by Scott Trenda (Z and o flags, and enhanced brevity)
        *
        * http://blog.stevenlevithan.com/archives/date-time-format
-       * 
+       *
        * @instance
        * @return {String}
        */
@@ -271,7 +272,7 @@ define(["dojo/_base/declare",
           */
          var _this = this,
              dateFormat = (function() {
-            
+
             var token        = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloZ]|"[^"]*"|'[^']*'/g,
                 timezone     = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
                 timezoneClip = /[^-+\dA-Z]/g,
@@ -420,7 +421,28 @@ define(["dojo/_base/declare",
          query("span.relativeTime", id).forEach(function(node){
             node.innerHTML = this.getRelativeTime(node.innerHTML);
          });
-      }
+      },
 
+      /**
+       * Return the Unicode compatible date formatting mask
+       *
+       * Converts from the mask format Alfresco uses (see this.formatDate3rd) to the Unicode compatible one Dojo uses
+       * see http://cldr.unicode.org/translation/date-time-patterns
+       *
+       * Limitations: only does dates. Time format conversion is harder as handling of AM/PM & timezones differ.
+       */
+      getUnicodeDateMask: function alfresco_core_TemporalUtils__getUnicodeDateMask(mask) {
+         var unicodeMask = mask;
+         // minutes and months have swapped.
+         unicodeMask = unicodeMask.replace("m", "M");
+         // Full day of the week name
+         unicodeMask = unicodeMask.replace("dddd", "EEEE");
+         // Three letter day of the week abbreviation
+         unicodeMask = unicodeMask.replace("ddd", "EEE");
+
+         this.alfLog("info", "TemporalUtils.getUnicodeDateMask converted from: " + mask + " to: " + unicodeMask);
+
+         return unicodeMask;
+      }
    });
 });
