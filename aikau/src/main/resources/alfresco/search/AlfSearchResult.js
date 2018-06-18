@@ -77,8 +77,8 @@ define(["dojo/_base/declare",
       templateString: template,
 
       /**
-       * This allows additional action filters to be added (as opposed to defining a new array of 
-       * action filters in the 
+       * This allows additional action filters to be added (as opposed to defining a new array of
+       * action filters in the
        * [documentAndFolderActions]{@link module:alfresco/search/AlfSearchResult#documentAndFolderActions}
        * attribute.) Any actions defined in this attribute will be added to the original filtered list.
        *
@@ -89,8 +89,8 @@ define(["dojo/_base/declare",
       additionalDocumentAndFolderActions: null,
 
       /**
-       * This allows additional action filters to be added (as opposed to defining a new array of 
-       * action filters in the 
+       * This allows additional action filters to be added (as opposed to defining a new array of
+       * action filters in the
        * [documentAndFolderActions]{@link module:alfresco/search/AlfSearchResult#otherNodeActions}
        * attribute.) Any actions defined in this attribute will be added to the original filtered list.
        *
@@ -112,7 +112,7 @@ define(["dojo/_base/declare",
       customActions: null,
 
       /**
-       * This can be configured to override the default filter for the actions that are applicable to 
+       * This can be configured to override the default filter for the actions that are applicable to
        * folder and document nodes. Actions need to be filtered as Aikau does not currently support all
        * of the actions that can be configured in Alfresco Share. However, if custom actions are provided
        * by an extension or further filtering is required then they can be configured using this attribute.
@@ -134,22 +134,22 @@ define(["dojo/_base/declare",
 
       /**
        * The prefix string that indicates the start of text to highlight.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
        * @since 1.0.92
        */
-      highlightPrefix: "\u0000",
+      highlightPrefix: "\u0002",
 
       /**
        * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
-       * that should be used to identify the content with in the 
+       * that should be used to identify the content with in the
        * [renderedValue]{@link module:alfresco/renderers/Property#renderedValue} to highlight.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default 
+       * @default
        * @since 1.0.92
        */
       highlightPostfix: "\u0003",
@@ -157,10 +157,10 @@ define(["dojo/_base/declare",
       /**
        * This is the property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty}
        * that should be used to identify the content with.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default 
+       * @default
        * @since 1.0.87
        * @deprecated Since 1.0.92 - use [highlightPrefix]{@link module:alfresco/search/AlfSearchResult#highlightPrefix}
        * and [highlightPostfix]{@link module:alfresco/search/AlfSearchResult#highlightPostfix}
@@ -170,12 +170,12 @@ define(["dojo/_base/declare",
       /**
        * This is initialised to the [highlightProperty]{@link module:alfresco/search/AlfSearchResult#highlightProperty}
        * property within the [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#highlightProperty} when the
-       * [showSearchTermHighlights]{@link module:alfresco/search/AlfSearchResult#showSearchTermHighlights} is 
+       * [showSearchTermHighlights]{@link module:alfresco/search/AlfSearchResult#showSearchTermHighlights} is
        * configured to be true.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default 
+       * @default
        * @since 1.0.87
        * @deprecated Since 1.0.92 - use [highlightPrefix]{@link module:alfresco/search/AlfSearchResult#highlightPrefix}
        * and [highlightPostfix]{@link module:alfresco/search/AlfSearchResult#highlightPostfix}
@@ -185,7 +185,7 @@ define(["dojo/_base/declare",
       /**
        * Indicates whether or not the standard actions (e.g. those derived from Document Library XML configuration)
        * should be merged with any [customActions]{@link module:alfresco/renderers/_ActionsMixin#customActions} and
-       * [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions}. This is applied to 
+       * [widgetsForActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions}. This is applied to
        * the configuration of the enclosed [XhrActions]{@link module:alfresco/renderers/XhrActions} widget.
        *
        * @instance
@@ -198,7 +198,7 @@ define(["dojo/_base/declare",
       /**
        * The navigation target for links. By default this will result in links being opened in the current window/tab
        * but this can be configured to be "NEW" so that links are opened in a new window/tab.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -208,9 +208,9 @@ define(["dojo/_base/declare",
 
       /**
        * Indicates whether or not a middle-button mouse click (or left click with the control key depressed)
-       * on the link should result in links being opened in a new browser tab. If this is configured to be true 
+       * on the link should result in links being opened in a new browser tab. If this is configured to be true
        * then the a "target" attribute of "NEW" will be configured on the payload.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -219,10 +219,10 @@ define(["dojo/_base/declare",
       newTabOnMiddleOrCtrlClick: true,
 
       /**
-       * This can be configured to override the default filter for the actions that are applicable to 
-       * all nodes that are neither folders nor documents. Actions need to be filtered as Aikau does not 
-       * currently support all of the actions that can be configured in Alfresco Share. However, if custom 
-       * actions are provided by an extension or further filtering is required then they can be configured 
+       * This can be configured to override the default filter for the actions that are applicable to
+       * all nodes that are neither folders nor documents. Actions need to be filtered as Aikau does not
+       * currently support all of the actions that can be configured in Alfresco Share. However, if custom
+       * actions are provided by an extension or further filtering is required then they can be configured
        * using this attribute.
        *
        * @instance
@@ -252,7 +252,7 @@ define(["dojo/_base/declare",
       showMoreInfo: true,
 
       /**
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -265,7 +265,7 @@ define(["dojo/_base/declare",
        * be rendered with the search result.
        * @instance
        * @type {boolean}
-       * @default 
+       * @default
        * @since 1.0.33
        */
       showSelector: false,
@@ -293,7 +293,7 @@ define(["dojo/_base/declare",
       /**
        * The [customActions]{@link module:alfresco/renderers/_ActionsMixin#widgetsForActions} to apply to the
        * configuration of the enclosed [XhrActions]{@link module:alfresco/renderers/XhrActions} widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default
@@ -333,9 +333,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called to create an [XhrActions widget]{@link module:alfresco/renderers/XhrActions}. 
+       * This function is called to create an [XhrActions widget]{@link module:alfresco/renderers/XhrActions}.
        * It can be overridden to replace the default widget with a reconfigured version.
-       * 
+       *
        * @instance
        */
       createActionsRenderer: function alfresco_search_AlfSearchResult__createActionsRenderer() {
@@ -354,7 +354,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        * @instance
        * @since 1.0.92
        */
@@ -383,10 +383,10 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called to create an [XhrContextActions widget]{@link module:alfresco/renderers/XhrContextActions}. 
+       * This function is called to create an [XhrContextActions widget]{@link module:alfresco/renderers/XhrContextActions}.
        * It can be overridden to replace the default widget with a reconfigured version. This function is only called when
        * [enableContextMenu]{@link module:alfresco/search/AlfSearchResult#enableContextMenu} is configured to be true.
-       * 
+       *
        * @instance
        */
       createContextActionsWidget: function alfresco_search_AlfSearchResult__createContextActionsWidget() {
@@ -412,9 +412,9 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [Property widget]{@link module:alfresco/renderers/Property}
-       * to render the description of the result. It can be overridden to replace the default widget 
-       * with a reconfigured version. 
-       * 
+       * to render the description of the result. It can be overridden to replace the default widget
+       * with a reconfigured version.
+       *
        * @instance
        */
       createDescriptionRenderer: function alfresco_search_AlfSearchResult__createDescriptionRenderer() {
@@ -441,9 +441,9 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [DateLink widget]{@link module:alfresco/renderers/DateLink}
-       * to render the date that the result was created or last modified. It can be overridden to 
-       * replace the default widget with a reconfigured version. 
-       * 
+       * to render the date that the result was created or last modified. It can be overridden to
+       * replace the default widget with a reconfigured version.
+       *
        * @instance
        */
       createDateRenderer: function alfresco_search_AlfSearchResult__createDateRenderer() {
@@ -472,11 +472,11 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called to create a 
+       * This function is called to create a
        * [SearchResultPropertyLink]{@link module:alfresco/renderers/SearchResultPropertyLink} widget
-       * to render the displayName of the result. It can be overridden to replace the default widget 
-       * with a reconfigured version. 
-       * 
+       * to render the displayName of the result. It can be overridden to replace the default widget
+       * with a reconfigured version.
+       *
        * @instance
        */
       createDisplayNameRenderer: function alfresco_search_AlfSearchResult__createDisplayNameRenderer() {
@@ -502,11 +502,11 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [MoreInfo widget]{@link module:alfresco/renderers/MoreInfo}
-       * that can be used to retrieve the full metadata for the result and display it in a dialog. 
+       * that can be used to retrieve the full metadata for the result and display it in a dialog.
        * It can be overridden to replace the default widget with a reconfigured version. It will only
-       * be rendered if [showMoreInfo]{@link module:alfresco/search/AlfSearchResult#showMoreInfo} is 
+       * be rendered if [showMoreInfo]{@link module:alfresco/search/AlfSearchResult#showMoreInfo} is
        * configured to be true.
-       * 
+       *
        * @instance
        */
       createMoreInfoRenderer: function alfresco_search_AlfSearchResult__createMoreInfoRenderer() {
@@ -538,9 +538,9 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [PropertyLink widget]{@link module:alfresco/renderers/PropertyLink}
-       * to render the path to the result. It can be overridden to replace the default widget with a reconfigured 
-       * version. 
-       * 
+       * to render the path to the result. It can be overridden to replace the default widget with a reconfigured
+       * version.
+       *
        * @instance
        */
       createPathRenderer: function alfresco_search_AlfSearchResult__createPathRenderer() {
@@ -590,9 +590,9 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [Selector widget]{@link module:alfresco/renderers/Selector}.
-       * It will only be rendered if [showSelector]{@link module:alfresco/search/AlfSearchResult#showSelector} is 
+       * It will only be rendered if [showSelector]{@link module:alfresco/search/AlfSearchResult#showSelector} is
        * configured to be true.
-       * 
+       *
        * @instance
        * @since 1.0.33
        */
@@ -615,9 +615,9 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [PropertyLink widget]{@link module:alfresco/renderers/PropertyLink}
-       * to render the name of the site in which the result can be found (if applicable). It can be overridden to 
-       * replace the default widget with a reconfigured version. 
-       * 
+       * to render the name of the site in which the result can be found (if applicable). It can be overridden to
+       * replace the default widget with a reconfigured version.
+       *
        * @instance
        */
       createSiteRenderer: function alfresco_search_AlfSearchResult__createSiteRenderer() {
@@ -661,9 +661,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called to create a [Size widget]{@link module:alfresco/renderers/Size}. 
-       * It can be overridden to replace the default widget with a reconfigured version. 
-       * 
+       * This function is called to create a [Size widget]{@link module:alfresco/renderers/Size}.
+       * It can be overridden to replace the default widget with a reconfigured version.
+       *
        * @instance
        */
       createSizeRenderer: function alfresco_search_AlfSearchResult__createSizeRenderer() {
@@ -689,9 +689,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called to create a [SearchThumbnail widget]{@link module:alfresco/renderers/SearchThumbnail}. 
-       * It can be overridden to replace the default widget with a reconfigured version. 
-       * 
+       * This function is called to create a [SearchThumbnail widget]{@link module:alfresco/renderers/SearchThumbnail}.
+       * It can be overridden to replace the default widget with a reconfigured version.
+       *
        * @instance
        */
       createThumbnailRenderer: function alfresco_search_AlfSearchResult__createThumbnailRenderer() {
@@ -749,9 +749,9 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called to create a [Property widget]{@link module:alfresco/renderers/Property}
-       * to render the title of the result (if it has one). It can be overridden to replace the default 
-       * widget with a reconfigured version. 
-       * 
+       * to render the title of the result (if it has one). It can be overridden to replace the default
+       * widget with a reconfigured version.
+       *
        * @instance
        */
       createTitleRenderer: function alfresco_search_AlfSearchResult__createTitleRenderer() {
@@ -780,7 +780,7 @@ define(["dojo/_base/declare",
       /**
        * This function is used to generate the action filters that are used for filtering the actions to
        * show for documents and folders and for any other type of node.
-       * 
+       *
        * @instance
        */
       generateActionFilters: function alfresco_search_AlfSearchResult__generateActionFilters() {
@@ -821,7 +821,7 @@ define(["dojo/_base/declare",
    //            TODO: Not implemented yet.
    //            "document-upload-new-version",
    //            "folder-view-details"
-   //            
+   //
    //            "document-cloud-sync"
    //            "document-cloud-unsync"
    //            "document-view-in-cloud"

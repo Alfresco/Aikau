@@ -41,7 +41,7 @@ define(["dojo/_base/declare",
 
       /**
        * Sets up the subscriptions for the SearchService.
-       * 
+       *
        * @instance
        * @since 1.0.32
        */
@@ -62,17 +62,17 @@ define(["dojo/_base/declare",
 
       /**
        * A comma-delimited string of the properties to apply search term highlighting to.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
        * @since 1.0.99
        */
       highlightFields: "cm:name,cm:description,cm:title,content,ia:descriptionEvent,ia:whatEvent,lnk:title",
-      
+
       /**
        * The number of characters to include in a highlight fragment of the content
-       * 
+       *
        * @instance
        * @type {number}
        * @default
@@ -82,7 +82,7 @@ define(["dojo/_base/declare",
 
       /**
        * The number of characters to search into the content for the search term.
-       * 
+       *
        * @instance
        * @type {number}
        * @default
@@ -92,18 +92,18 @@ define(["dojo/_base/declare",
 
       /**
        * The number of characters to include in a highlight snippet.
-       * 
+       *
        * @instance
        * @type {number}
        * @default
        * @since 1.0.99
        */
       highlightSnippetCount: 100,
-      
+
       /**
-       * Whether to use SpanScorer to highlight phrase terms only when they appear within the query phrase in 
+       * Whether to use SpanScorer to highlight phrase terms only when they appear within the query phrase in
        * the document.
-       * 
+       *
        * @instance
        * @type {number}
        * @default
@@ -112,9 +112,9 @@ define(["dojo/_base/declare",
       highlightUsePhraseHighlighter: true,
 
       /**
-       * Collapse contiguous fragments into a single fragment. If the value is true it indicates that contiguous 
+       * Collapse contiguous fragments into a single fragment. If the value is true it indicates that contiguous
        * fragments will be collapsed into single fragment.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -310,7 +310,7 @@ define(["dojo/_base/declare",
                maxResults: payload.maxResults || 0,
                noCache: new Date().getTime(),
                spellcheck: payload.spellcheck || false,
-               highlightPrefix: "\u0000",
+               highlightPrefix: "\u0002",
                highlightPostfix: "\u0003",
                highlightFields: this.highlightFields,
                highlightFragmentSize: this.highlightFragmentSize,
