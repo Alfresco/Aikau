@@ -892,32 +892,17 @@ define(["dojo/_base/declare",
                });
 
                var items = evt.dataTransfer.items || [], firstEntry;
-               if (items[0] && items[0].webkitGetAsEntry && (firstEntry = items[0].webkitGetAsEntry()))
+               // webkitGetAsEntry is a marker for determining FileSystem API support.
+               // SHA-2164 - Firefox claims support, but different impl. rather than code around differences, fallback.
+               if (items[0] && items[0].webkitGetAsEntry && !has("ff") && (firstEntry = items[0].webkitGetAsEntry()))
                {
-                  var list = [];
-                  if (has("ff"))
-                  {
-                     Object.keys(items).forEach(function(key)
-                     {
-                        list.push(items[key].webkitGetAsEntry().filesystem.root);
-                     }, this);
-                  }
-                  else
-                  {
-                     list.push(firstEntry.filesystem.root);
-                  }
-
-                  // way of uploading entire folders (only supported by Chrome >= 21)
-                  list.forEach(function(item){
-
-                     walkFileSystem(item, function(files) {
-                           addSelectedFiles(files);
-                        }, function() {
-                           // fallback to standard way if error happens
-                           addSelectedFiles(evt.dataTransfer.files);
-                        }
-                     );
-                  },this);
+                  walkFileSystem(firstEntry.filesystem.root, function(files) {
+                        addSelectedFiles(files);
+                     }, function() {
+                        // fallback to standard way if error happens
+                        addSelectedFiles(evt.dataTransfer.files);
+                     }
+                  );
                }
                else
                {
