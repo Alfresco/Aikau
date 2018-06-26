@@ -19,11 +19,11 @@
 
 /**
  * <p>This mixin provides functions that allow files to be uploaded by dragging and dropping them
- * onto the widget. It also provides functions that control highlighting the widget when 
+ * onto the widget. It also provides functions that control highlighting the widget when
  * files are dragged over the widget.</p>
  * <p><b>NOTE: Highlighting of items provided by this module is not supported for any version of Internet
  * Explorer prior to version 10</b></p>
- * 
+ *
  * @module alfresco/documentlibrary/_AlfDndDocumentUploadMixin
  * @extends module:alfresco/core/Core
  * @mixes module:alfresco/documentlibrary/_AlfDocumentListTopicMixin
@@ -46,16 +46,18 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom",
         "dojo/_base/window",
+        "dojo/has",
+        "dojo/_base/sniff",
         "jquery",
-        "jqueryui"], 
-        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, topics, lang, array, mouse, on, registry, domClass, 
-                 domConstruct, domGeom, domStyle, dom, win, $) {
-   
+        "jqueryui"],
+        function(declare, AlfCore, _AlfDocumentListTopicMixin, PathUtils, topics, lang, array, mouse, on, registry, domClass,
+                 domConstruct, domGeom, domStyle, dom, win, has, $) {
+
    return declare([AlfCore, _AlfDocumentListTopicMixin, PathUtils], {
 
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/_AlfDndDocumentUploadMixin.properties"}]
@@ -65,43 +67,43 @@ define(["dojo/_base/declare",
 
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance cssRequirements {Array}
        * @type {object[]}
        * @default [{cssFile:"./css/_AlfDndDocumentUploadMixin.css"}]
        * @since 1.0.41
        */
       cssRequirements: [{cssFile:"./css/_AlfDndDocumentUploadMixin.css"}],
-      
+
       /**
-       * Indicates whether drag and drop is enabled. 
-       * 
+       * Indicates whether drag and drop is enabled.
+       *
        * @instance
-       * @type {boolean} 
+       * @type {boolean}
        * @default
        */
       dndUploadEnabled: false,
-      
+
       /**
        * Indicates whether or not the browser is capable of drag and drop file upload. This is set in the constructor.
-       * 
+       *
        * @instance
-       * @type {boolean} 
+       * @type {boolean}
        * @default
        */
-      dndUploadCapable: false, 
+      dndUploadCapable: false,
 
       /**
        * Keeps track of the DOM node that the drag-and-drop events are listened on.
-       * 
+       *
        * @instance
        * @type {object}
        * @default
        */
       dragAndDropNode: null,
-      
+
       /**
-       * 
+       *
        * @instance
        * @type {element}
        * @default
@@ -115,10 +117,10 @@ define(["dojo/_base/declare",
        * @default
        */
       dndUploadEventHandlers: null,
-      
+
       /**
-       * This is the length of time (in milliseconds) that the highlight will be displayed on the screen without the mouse 
-       * moving over any element within the element on which the highlight can be applied. This exists so 
+       * This is the length of time (in milliseconds) that the highlight will be displayed on the screen without the mouse
+       * moving over any element within the element on which the highlight can be applied. This exists so
        * that if the drag moves out of the browser without leaving the element (i.e. if it is moved onto
        * an overlapping window) the highlight will not remain displayed forever.
        *
@@ -132,7 +134,7 @@ define(["dojo/_base/declare",
       /**
        * The image to use for the upload highlighting. Currently the only other option apart from the default is
        * "elipse-cross.png"
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -143,7 +145,7 @@ define(["dojo/_base/declare",
       /**
        * The text to display for upload highlighting. If configured or overridden to be null or the
        * empty string then no text will be displayed.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -154,20 +156,20 @@ define(["dojo/_base/declare",
       /**
        * This is used as a reference for a timeout handle that will remove the highlight if the mouse
        * does not move over an element within the element that the upload highlight can be applied to.
-       * 
+       *
        * @instance
        * @type {number}
        * @default
        * @since 1.0.42
        */
       dndUploadHighlightTimeout: null,
-      
+
       /**
        * Maximum number of files to allow to be published from a single drag operation. As for some user-agents
        * drag and drop of potentialy large nested folder structures may be supported - this limit will halt the
        * publish of the file list if it is larger than the supplied value and throw an error. Specify zero to
        * indicate no limit - which is the default setting to maintain backward compatibility.
-       * 
+       *
        * @instance
        * @type {integer}
        * @default
@@ -176,22 +178,22 @@ define(["dojo/_base/declare",
       dndMaxFileLimit: 0,
 
       /**
-       * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities. 
+       * Indicates whether or not the mixing module should take advantage of the drag-and-drop uploading capabilities.
        * This makes it possible to "opt-out" through configuration or extension.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
        * @since 1.0.39
        */
       suppressDndUploading: false,
-    
+
       /**
-       * This is a custom event that is emitted when the drag-and-drop upload highlight is 
+       * This is a custom event that is emitted when the drag-and-drop upload highlight is
        * [applied]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#addDndHighlight} to the node
        * and results in any outer elements removing any previously applied highlight. This ensures that only
        * one highlight is displayed at a time.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -201,13 +203,13 @@ define(["dojo/_base/declare",
 
       /**
        * Determines whether or not the browser supports drag and drop file upload.
-       * 
+       *
        * @instance
        */
       constructor: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__constructor() {
          this.dndUploadCapable = ("draggable" in document.createElement("span"));
       },
-      
+
       /**
        * Removes HTML5 drag and drop listeners from the supplied DOM node
        *
@@ -216,7 +218,7 @@ define(["dojo/_base/declare",
        */
       removeUploadDragAndDrop: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__removeUploadDragAndDrop(/*jshint unused:false*/ domNode) {
          this.alfLog("log", "Removing drag and drop upload handlers");
-         
+
          // Clean up any previously created event handlers...
          if (this.dndUploadEventHandlers)
          {
@@ -226,9 +228,9 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Adds subscriptions to topics providing information on the changes to the current node being represented. This 
+       * Adds subscriptions to topics providing information on the changes to the current node being represented. This
        * has been primarily added to support widgets that change the displayed view.
-       * 
+       *
        * @instance
        */
       subscribeToCurrentNodeChanges: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__subscribeToCurrentNodeChanges(domNode) {
@@ -245,7 +247,7 @@ define(["dojo/_base/declare",
       /**
        * Handles changes to the current node that is represented by the widget that mixes in this module. For example
        * when the path that a view is displaying changes.
-       * 
+       *
        * @instance
        * @param {object} payload The published payload
        */
@@ -275,7 +277,7 @@ define(["dojo/_base/declare",
 
       /**
        * Handles changes the current filter. If the filter isn't path based then drag and drop uploading is disabled.
-       * 
+       *
        * @instance
        * @param {object} payload The published payload
        */
@@ -347,8 +349,8 @@ define(["dojo/_base/declare",
        * Sets up the handlers for the drag and drop events. These handlers are all added to the
        * [dndUploadEventHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadEventHandlers}
        * array so that they can be easily cleaned up by
-       * [removeDndUploadHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#removeDndUploadHandlers} 
-       * 
+       * [removeDndUploadHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#removeDndUploadHandlers}
+       *
        * @instance
        * @since 1.0.41
        */
@@ -363,7 +365,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
+       *
        *
        * @instance
        * @param {object} e HTML5 drag and drop event
@@ -398,16 +400,16 @@ define(["dojo/_base/declare",
 
       /**
        * This function is used to check that the event to be handled relates directly to the current widget. This check is needed
-       * because it is possible that a widget that handles drag and drop could be a child of another widget that handles drag and 
+       * because it is possible that a widget that handles drag and drop could be a child of another widget that handles drag and
        * drop.
-       * 
+       *
        * It returns true if the supplied DOM node belongs to the current widget (e.g. "this") and that the widget has the same
-       * function. This isn't a perfect solution as there is a possibility that another widget could have an identical function 
+       * function. This isn't a perfect solution as there is a possibility that another widget could have an identical function
        * name but this should be unlikely. It would have been preferable to use the "isInstanceOf" function, but that would require
        * a reference to the class that this function is being declared as part of!
-       * 
+       *
        * As long as the function stops the event then this should not be necessary.
-       * 
+       *
        * @instance
        * @param {object} domNode The DOM node that the event has occurred on
        * @param {string} currentFunctionName The name of the function being processed
@@ -422,7 +424,7 @@ define(["dojo/_base/declare",
             // called a widget must have DnD capabilities added!
             this.alfLog("log", "No widget found - unexpected behaviour: ", this);
          }
-         else if (widget !== this && 
+         else if (widget !== this &&
                   typeof widget[currentFunctionName] === "function" &&
                   widget.dndUploadEnabled === true)
          {
@@ -439,10 +441,10 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * Clean up any previously created event handlers stored in the 
+       * Clean up any previously created event handlers stored in the
        * [dndUploadEventHandlers]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dndUploadEventHandlers}
        * array.
-       * 
+       *
        * @instance
        * @since 1.0.41
        */
@@ -456,7 +458,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * It's important that the drag over event is handled and that "preventDefault" is called on it. If this is 
+       * It's important that the drag over event is handled and that "preventDefault" is called on it. If this is
        * not done then the "drop" event will not be processed.
        *
        * @instance
@@ -466,9 +468,9 @@ define(["dojo/_base/declare",
          e.stopPropagation();
          e.preventDefault();
       },
-      
+
       /**
-       * Fired when an object starts getting dragged. The event is swallowed because we only want to 
+       * Fired when an object starts getting dragged. The event is swallowed because we only want to
        * allow drag and drop events that begin outside the browser window (e.g. for files). This prevents
        * users attempting to drag and drop the document and folder images as if they could re-arrange
        * the document lib structure.
@@ -479,15 +481,15 @@ define(["dojo/_base/declare",
       swallowDragStart: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__swallowDragStart(e) {
          e.stopPropagation();
          e.preventDefault();
-      },  
-      
+      },
+
       /**
        * Fired when an object is dragged onto any node in the document body (unless the node has
        * been explicitly overridden to invoke another function). Swallows the event.
        *
        * @instance
        * @param {object} e HTML5 drag and drop event
-       * 
+       *
        */
       swallowDragEnter: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__swallowDragEnter(e) {
          e.stopPropagation();
@@ -524,7 +526,7 @@ define(["dojo/_base/declare",
 
       /**
        * This should be overridden to add highlighting when an item is dragged over the target.
-       * 
+       *
        * @instance
        */
       addDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
@@ -557,7 +559,7 @@ define(["dojo/_base/declare",
                   src: require.toUrl("alfresco/documentlibrary/css/images/" + this.dndUploadHighlightImage)
                }, pNode);
             }
-            
+
             this.setDndHighlightDimensions(this.dragAndDropNode);
             domClass.add(this.dragAndDropNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin--dnd-highlight");
             domClass.add(this.dragAndDropOverlayNode, "alfresco-documentlibrary-_AlfDndDocumentUploadMixin__overlay--display");
@@ -573,18 +575,18 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This sets the position and dimensions of the 
+       * This sets the position and dimensions of the
        * [dragAndDropOverlayNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropOverlayNode}
-       * 
+       *
        * @instance
-       * @param {object} [targetNode] An optional node to use instead of the 
+       * @param {object} [targetNode] An optional node to use instead of the
        * [dragAndDropNode]{@link module:alfresco/documentlibrary/_AlfDndDocumentUploadMixin#dragAndDropNode}
        * @overridable
        * @since 1.0.42
        */
       setDndHighlightDimensions: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__setDndHighlightDimensions(targetNode) {
          // jshint maxstatements:false, maxcomplexity:false
-         
+
          // Backwards compatibility setup, as of 1.0.60, an argument wasn't passed and this.dragAndDropNode was always used,
          // this ensures that this behaviour is retained...
          if (!targetNode)
@@ -622,7 +624,7 @@ define(["dojo/_base/declare",
                   var overlayOffset = howFarScrolled - whereDoesDndNodeStart;
                   if (overlayOffset + clientHeight > heightOfDndNode)
                   {
-                     // Using full client height would go beyond the height 
+                     // Using full client height would go beyond the height
                      height = heightOfDndNode - overlayOffset;
                   }
                   else
@@ -701,7 +703,7 @@ define(["dojo/_base/declare",
                   height = dndNodeBoundingRect.bottom - scrollAreaBoundingRect.top;
                }
             }
-            
+
          }
 
          domStyle.set(this.dragAndDropOverlayNode, {
@@ -715,7 +717,7 @@ define(["dojo/_base/declare",
       /**
        * This function recursively searches out through the DOM to find the first parent of the supplied element that
        * is capable of scrolling vertically and has scrollbars displayed.
-       * 
+       *
        * @instance
        * @returns {element} The DOM element that is the scroll parent with scroll bars displayed
        * @since 1.0.60
@@ -742,10 +744,10 @@ define(["dojo/_base/declare",
          }
          return scrollParent;
       },
-      
+
       /**
        * This should be overridden to remove highlighting when an item is dragged out of the target
-       * 
+       *
        * @instance
        */
       removeDndHighlight: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__addDragEnterHighlight() {
@@ -758,7 +760,7 @@ define(["dojo/_base/declare",
             }
          }
       },
-      
+
       /**
        * Fired when an object is dropped onto the DocumentList DOM element.
        * Checks that files are present for upload, determines the target (either the current document list or
@@ -791,33 +793,33 @@ define(["dojo/_base/declare",
                   username: null
                };
                var updatedConfig = lang.mixin(defaultConfig, config);
-               
+
                var walkFileSystem = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem(directory, callback, error) {
-                  
+
                   callback.limit = this.dndMaxFileLimit;
                   callback.pending = callback.pending || 0;
                   callback.files = callback.files || [];
-                  
+
                   // get a dir reader and cleanup file path
                   var reader = directory.createReader(),
                       relativePath = directory.fullPath.replace(/^\//, "");
-                 
+
                   var repeatReader = function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem__repeatReader() {
-                     
+
                      // about to start an async callback function
                      callback.pending++;
-                     
+
                      reader.readEntries(function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__walkFileSystem__repeatReader__readEntries(entries) {
-                        
+
                         // processing an async callback function
                         callback.pending--;
-                        
+
                         array.forEach(entries, function(entry) {
                            if (entry.isFile)
                            {
                               // about to start an async callback function
                               callback.pending++;
-                              
+
                               entry.file(function(File) {
                                  // add the relativePath property to each file - this can be used to rebuild the contents of
                                  // a nested tree folder structure if an appropriate API is available to do so
@@ -827,7 +829,7 @@ define(["dojo/_base/declare",
                                  {
                                     throw new Error("Maximum dnd file limit reached: " + callback.limit);
                                  }
-                                 
+
                                  // processing an async callback function
                                  if (--callback.pending === 0)
                                  {
@@ -841,7 +843,7 @@ define(["dojo/_base/declare",
                               walkFileSystem(entry, callback, error);
                            }
                         });
-                        
+
                         // the reader API is a little esoteric,from the MDN docs:
                         // "Continue calling readEntries() until an empty array is returned.
                         //  You have to do this because the API might not return all entries in a single call."
@@ -849,7 +851,7 @@ define(["dojo/_base/declare",
                         {
                            repeatReader();
                         }
-                        
+
                         // fall out here if last item processed is a dir entry e.g. empty dir
                         if (callback.pending === 0)
                         {
@@ -859,14 +861,14 @@ define(["dojo/_base/declare",
                   };
                   repeatReader();
                });
-               
+
                var addSelectedFiles = lang.hitch(this, function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onDndUploadDrop__addSelectedFiles(files) {
-                  
+
                   if (this.dndMaxFileLimit && files.length > this.dndMaxFileLimit)
                   {
                      throw new Error("Maximum dnd file limit reached: " + this.dndMaxFileLimit);
                   }
-                  
+
                   // Check to see whether or not the generated upload configuration indicates
                   // that an existing node will be created or not. If node is being updated then
                   // we need to generate an intermediary step to capture version and comments...
@@ -875,7 +877,7 @@ define(["dojo/_base/declare",
                      // Set up a response topic for receiving notifications that the upload has completed...
                      var responseTopic = this.generateUuid();
                      this._uploadSubHandle = this.alfSubscribe(responseTopic, lang.hitch(this, this.onFileUploadComplete), true);
-                     
+
                      this.alfPublish(topics.UPLOAD_REQUEST, {
                         alfResponseTopic: responseTopic,
                         files: files,
@@ -888,11 +890,12 @@ define(["dojo/_base/declare",
                      this.publishUpdateRequest(updatedConfig, files);
                   }
                });
-               
+
                var items = evt.dataTransfer.items || [], firstEntry;
-               if (items[0] && items[0].webkitGetAsEntry && (firstEntry = items[0].webkitGetAsEntry()))
+               // webkitGetAsEntry is a marker for determining FileSystem API support.
+               // SHA-2164 - Firefox claims support, but different impl. rather than code around differences, fallback.
+               if (items[0] && items[0].webkitGetAsEntry && !has("ff") && (firstEntry = items[0].webkitGetAsEntry()))
                {
-                  // way of uploading entire folders (only supported by Chrome >= 21)
                   walkFileSystem(firstEntry.filesystem.root, function(files) {
                         addSelectedFiles(files);
                      }, function() {
@@ -966,7 +969,7 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This defines the form controls to include in an update version dialog that 
+       * This defines the form controls to include in an update version dialog that
        * is displayed whenever a user attempts to drag and drop a new version onto
        * an existing node.
        *
@@ -997,11 +1000,11 @@ define(["dojo/_base/declare",
             }
          }
       ],
-      
+
       /**
        * This function makes a best guess at constructing upload configuration, but it can be overridden if required or if the attempt
-       * at configuration construction is not appropriate. 
-       * 
+       * at configuration construction is not appropriate.
+       *
        * When overriding the function should return an object with the following
        * attributes:
        * - uploadDirectoryName
@@ -1009,8 +1012,8 @@ define(["dojo/_base/declare",
        * - siteId (optional - required if destination is not provide)
        * - containerId (optional - required if destination is not provide)
        * - uploadDirectory (optional - required if destination is not provide)
-       * 
-       * 
+       *
+       *
        * @instance
        * @returns {object}
        */
@@ -1066,15 +1069,15 @@ define(["dojo/_base/declare",
             {
                this.alfLog("warn", "Failed to generate upload configuration", e);
             }
-            
+
          }
          return config;
       },
-      
+
       /**
        * This function is called once the document upload is complete. It publishes a request to reload the
        * current document list data.
-       * 
+       *
        * @instance
        */
       onFileUploadComplete: function alfresco_documentlibrary__AlfDndDocumentUploadMixin__onFileUploadComplete() {
@@ -1083,7 +1086,7 @@ define(["dojo/_base/declare",
 
          // Intentionally pass publishGlobal as false, global publication will still occur if publishToParent
          // is true (and parentPubSubScope is global) or publishToParent is false and pubSubScope is global.
-         // This has been added as a work around specifically to address the issue of Thumbnail uploads that 
+         // This has been added as a work around specifically to address the issue of Thumbnail uploads that
          // need to generate payloads and set scopes *before* clicks occur to maintain "open in new tab" support
          this.alfPublish(this.reloadDataTopic, {}, false, this.publishToParent);
       }
