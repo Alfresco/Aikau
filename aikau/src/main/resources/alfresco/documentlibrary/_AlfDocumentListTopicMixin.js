@@ -225,7 +225,7 @@ define(["dojo/_base/declare",
       sortRequestTopic: topics.SORT_LIST,
       
       /**
-       * @event
+       * @event sortFieldSelectionTopic
        * @instance
        * @type {string} 
        * @default [UPDATE_LIST_SORT_FIELD]{@link module:alfresco/core/topics#UPDATE_LIST_SORT_FIELD}

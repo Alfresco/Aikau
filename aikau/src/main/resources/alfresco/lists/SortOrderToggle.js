@@ -78,36 +78,41 @@ define(["dojo/_base/declare",
        * @default
        */
       subscriptionTopic: topics.SORT_LIST,
-      
+
       /**
-       * Overrides and explicitly sets the [onConfig]{@link module:alfresco/menus/AlfMenuBarToggle#onConfig}
-       * for sorting.
-       * 
+       * Extends the [inherited function]{@link module:alfresco/menus/AlfMenuBarToggle#postMixInProperties}
+       * to set the proper default [onConfig]{@link module:alfresco/menus/AlfMenuBarToggle#onConfig} and
+       * [offConfig]{@link module:alfresco/menus/AlfMenuBarToggle#offConfig} values unless externally configured.
+       *
        * @instance
-       * @type {object}
-       * @default
+       * @since 1.0.102
        */
-      onConfig: {
-         iconClass: "alf-sort-ascending-icon",
-         publishTopic: topics.SORT_LIST,
-         publishPayload: {
-            direction: "ascending"
+      postMixInProperties : function alfresco_lists_SortOrderToggle__postMixInProperties() {
+         this.inherited(arguments);
+
+         // update default value (if not overridden via configuration) to our defaults
+         // must be done in postMixInProperties instead of overriding property due to
+         // dependency on subscriptionTopic which may have been configured
+         if (this.onConfig === null || this.onConfig.label === "default.on.label")
+         {
+            this.onConfig = {
+               iconClass: "alf-sort-ascending-icon",
+               publishTopic: this.subscriptionTopic,
+               publishPayload: {
+                  direction: "ascending"
+               }
+            };
          }
-      },
-      
-      /**
-       * Overrides and explicitly sets the [offConfig]{@link module:alfresco/menus/AlfMenuBarToggle#offConfig}
-       * for sorting.
-       * 
-       * @instance
-       * @type {object}
-       * @default
-       */
-      offConfig: {
-         iconClass: "alf-sort-descending-icon",
-         publishTopic: topics.SORT_LIST,
-         publishPayload: {
-            direction: "descending"
+         
+         if (this.offConfig === null || this.offConfig.label === "default.off.label")
+         {
+            this.offConfig = {
+               iconClass: "alf-sort-descending-icon",
+               publishTopic: this.subscriptionTopic,
+               publishPayload: {
+                  direction: "descending"
+               }
+            };
          }
       }
    });

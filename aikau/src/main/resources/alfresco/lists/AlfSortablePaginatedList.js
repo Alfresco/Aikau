@@ -53,7 +53,7 @@
  * [sortAscending]{@link module:alfresco/lists/AlfSortablePaginatedList#sortAscending} to true
  * or false as appropriate. The sort field and direction can be changed by 
  * widgets (such as menus or buttons) publishing on the
- * ["ALF_DOCLIST_SORT"]{@link module:alfresco/core/topics~SORT_LIST} topic.</p>
+ * [sortRequestTopic]{@link module:alfresco/lists/AlfSortablePaginatedList#sortRequestTopic} topic.</p>
  *
  * @example <caption>AlfSortablePaginatedList with associated sort and pagination widgets</caption>
  * {
@@ -185,6 +185,15 @@ define(["dojo/_base/declare",
        * @since 1.0.73
        */
       sortFieldLabel: "",
+      
+      /**
+       * @event sortRequestTopic
+       * @instance
+       * @type {string}
+       * @default [SORT_LIST]{@link module:alfresco/core/topics#SORT_LIST}
+       * @since 1.0.102
+       */
+      sortRequestTopic: topics.SORT_LIST,
 
       /**
        * Extends the [inherited function]{@link module:alfresco/lists/AlfList#showView} to set the sort data for
@@ -193,14 +202,14 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @since 1.0.59
-       * @fires module:alfresco/core/topics#SORT_LIST
+       * @fires module:alfresco/lists//AlfSortablePaginatedList#sortRequestTopic
        */
       showView: function alfresco_lists_AlfSortablePaginatedList__showView() {
          this.inherited(arguments);
          if (!this.useHash)
          {
             this.alfLog("info", "Really should publish sort data");
-            this.alfPublish(topics.SORT_LIST, {
+            this.alfPublish(this.sortRequestTopic, {
                direction: (this.sortAscending) ? "ascending" : "descending",
                value: this.sortField,
                label: this.sortFieldLabel,

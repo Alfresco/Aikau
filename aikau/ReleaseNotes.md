@@ -1,4 +1,4 @@
-Aikau 1.0.104 Release Notes
+Aikau 1.0.105 Release Notes
 ===
 
 IMPORTANT
@@ -52,6 +52,13 @@ Current deprecations:
 
 Resolved issues:
 ---
+1.0.105:
+* [SHA-2164](https://issues.alfresco.com/jira/browse/SHA-2164)      - Salesforce Connector: DnD multiple files in Firefox
+* [SHA-2177](https://issues.alfresco.com/jira/browse/SHA-2177)      - Update localisation of short date format
+* [#1361](https://github.com/Alfresco/Aikau/pull/1361)              - Make hard-coded topics for sort requests / field selection configurable 
+* [#1362](https://github.com/Alfresco/Aikau/pull/1362)              - Add destroyOnHide for DialogService pubSub payloads 
+
+
 1.0.104:
 * [RM-6273](https://issues.alfresco.com/jira/browse/RM-6273)        - Make DateTextBox use date format specified in properties files
 * [MNT-19095](https://issues.alfresco.com/jira/browse/MNT-19095)    - Update copyright year in footers to 2018

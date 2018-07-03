@@ -101,7 +101,7 @@ define(["dojo/_base/declare",
                      label: label,
                      value: option.value,
                      group: "ALF_SORT_FIELD_SELECTION_GROUP",
-                     publishTopic: topics.UPDATE_LIST_SORT_FIELD,
+                     publishTopic: this.selectionTopic,
                      checked: option.selected || false,
                      publishPayload: {
                         label: label,
