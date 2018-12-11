@@ -353,7 +353,7 @@ define(["dojo/_base/declare",
          this.treeModel = new ObjectStoreModel({
             root: {
                id: this.id + "_ROOT",
-               name: this.encodeHTML(this.message(this.rootLabel)),
+               name: this.message(this.rootLabel),
                value: this.rootValue,
                path: this.rootValue + "/"
             },
