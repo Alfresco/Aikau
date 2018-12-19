@@ -70,6 +70,24 @@ define(["dojo/_base/declare",
       }],
 
       /**
+       * Removes the hidden menu bar items from the widgetForRootPicker
+       *
+       * @private
+       */
+      _removeHiddenViewModes: function alfresco_pickers_ContainerPicker__filterViewModes() {
+         var hiddenViewModes = Alfresco.constants.HIDDEN_PICKER_VIEW_MODES || [];
+         var menuBarItemWidgets = this.widgetsForRootPicker[0].config.widgets;
+
+         if (hiddenViewModes.length > 0) {
+            menuBarItemWidgets = menuBarItemWidgets.filter(function (menuBarItemWidget) {
+               return hiddenViewModes.indexOf(menuBarItemWidget.viewMode) === -1;
+            });
+         }
+
+         this.widgetsForRootPicker[0].config.widgets = menuBarItemWidgets;
+      },
+
+      /**
        *
        * @instance
        */
@@ -142,6 +160,10 @@ define(["dojo/_base/declare",
                ]
             }
          }];
+
+         // Remove the menu bar items that should be hidden from the widgetsForRootPicker
+         this._removeHiddenViewModes();
+
          this.inherited(arguments);
       },
       
@@ -159,6 +181,7 @@ define(["dojo/_base/declare",
                widgets: [
                   {
                      name: "alfresco/menus/AlfMenuBarItem",
+                     viewMode: "VIEW_MODE_RECENT_SITES",
                      config: {
                         label: "picker.recentSites.label",
                         publishTopic: "ALF_ADD_PICKER",
@@ -167,6 +190,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      name: "alfresco/menus/AlfMenuBarItem",
+                     viewMode: "VIEW_MODE_FAVOURITE_SITES",
                      config: {
                         label: "picker.favouriteSites.label",
                         publishTopic: "ALF_ADD_PICKER",
@@ -198,6 +222,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      name: "alfresco/menus/AlfMenuBarItem",
+                     viewMode: "VIEW_MODE_SITE",
                      config: {
                         label: "picker.allSites.label",
                         publishTopic: "ALF_ADD_PICKER",
@@ -229,6 +254,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      name: "alfresco/menus/AlfMenuBarItem",
+                     viewMode: "VIEW_MODE_SHARED",
                      config: {
                         label: "picker.sharedFiles.label",
                         publishTopic: "ALF_ADD_PICKER",
@@ -251,6 +277,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      name: "alfresco/menus/AlfMenuBarItem",
+                     viewMode: "VIEW_MODE_REPOSITORY",
                      config: {
                         label: "picker.repository.label",
                         publishTopic: "ALF_ADD_PICKER",
@@ -273,6 +300,7 @@ define(["dojo/_base/declare",
                   },
                   {
                      name: "alfresco/menus/AlfMenuBarItem",
+                     viewMode:"VIEW_MODE_USERHOME",
                      config: {
                         label: "picker.myFiles.label",
                         publishTopic: "ALF_ADD_PICKER",
