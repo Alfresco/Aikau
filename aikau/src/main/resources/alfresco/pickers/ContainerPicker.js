@@ -75,8 +75,15 @@ define(["dojo/_base/declare",
        * @private
        */
       _removeHiddenViewModes: function alfresco_pickers_ContainerPicker__filterViewModes() {
-         var hiddenViewModes = Alfresco.constants.HIDDEN_PICKER_VIEW_MODES || [];
-         var menuBarItemWidgets = this.widgetsForRootPicker[0].config.widgets;
+         var hiddenViewModes,
+            menuBarItemWidgets = this.widgetsForRootPicker[0].config.widgets;
+
+         /* global Alfresco */
+         if (Alfresco && Alfresco.constants && Alfresco.constants.HIDDEN_PICKER_VIEW_MODES) {
+            hiddenViewModes = Alfresco.constants.HIDDEN_PICKER_VIEW_MODES;
+         } else {
+            hiddenViewModes = [];
+         }
 
          if (hiddenViewModes.length > 0) {
             menuBarItemWidgets = menuBarItemWidgets.filter(function (menuBarItemWidget) {
