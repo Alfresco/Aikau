@@ -94,7 +94,7 @@ define(["alfresco/core/TemporalUtils",
                var title = lang.getObject("name", false, this.currentItem);
                if (site)
                {
-                  payload.url = "site/" + site + "/wiki-page?title=" + title;
+                  payload.url = "site/" + site + "/wiki-page?title=" + encodeURIComponent(title);
                }
                break;
 
