@@ -11,6 +11,7 @@ cache:
 branches:
   only:
     - develop
+    - fix/APPS-228
     - /support\/.*/
 
 install: travis_retry mvn install -DskipTests=true -B -V
