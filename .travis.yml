@@ -11,7 +11,7 @@ cache:
 branches:
   only:
     - develop
-    - ^APPS\/.*
+    - APPS*
     - /support\/.*/
     
 before_install:
@@ -29,7 +29,7 @@ jobs:
     - name: "WhiteSource scan"
       stage: build
       # only on SP branches or master and if it is not a PR
-      if: fork = false AND (branch = develop OR branch =~ /support\/SP\/.*/ OR branch =~ ^APPS\/.*) AND type != pull_request
+      if: fork = false AND (branch = develop OR branch =~ /support\/SP\/.*/ OR branch =~ APPS*) AND type != pull_request
       script:
         # Download the latest version of WhiteSource Unified Agent
         - curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
