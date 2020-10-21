@@ -219,10 +219,10 @@ define(["dojo/_base/declare",
             if (!page.canvas)
             {
                var pregion = page.container.getBoundingClientRect(),
-                   top = pregion.top + scrollY - vtop,
+                   top = pregion.top - vtop,
                    bottom = top + pregion.height,
                    vicinity = 1.5;
-               
+
                // WA - improve algorithm for selecting which pages to render, based on the following criteria
                // Page top is above the viewer top edge, bottom below the bottom edge OR
                // Bottom is within half the viewer height of the top edge OR
