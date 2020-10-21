@@ -208,8 +208,8 @@ define(["dojo/_base/declare",
          var computedStyle = domStyle.getComputedStyle(this.viewer);
          this.viewerRegion = domGeom.getContentBox(this.viewer, computedStyle);
          // this.viewerRegion = Dom.getRegion(this.viewer);
-         
-         var vheight = this.viewerRegion.h, vtop = this.viewerRegion.t, scrollY = $(document).scrollTop();
+
+         var vheight = this.viewerRegion.h, vtop = this.viewerRegion.t;
          this.alfLog("log", "Render " + this.name + " visible pages: viewer height " + this.viewerRegion.h + "px");
 
          // Render visible pages
