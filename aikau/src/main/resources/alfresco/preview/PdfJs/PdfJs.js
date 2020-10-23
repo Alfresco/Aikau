@@ -22,15 +22,15 @@
 
 /**
  * <p>This is a plugin for the [AlfDocumentPreview]{@link module:alfresco/preview/AlfDocumentPreview}
- * widget that provides the ability to render PDF documents using the Mozilla pdf.js project 
+ * widget that provides the ability to render PDF documents using the Mozilla pdf.js project
  * (https://github.com/mozilla/pdf.js).</p>
  * <p>The code was adapted from a YUI2 based code that was originally a Share Extras (http://share-extras.github.io/)
  * project and was then integrated into Alfresco Share for version 5.0. It has since be updated to
  * remove the YUI2 dependencies and work independently of Alfresco Share.</p>
- * 
+ *
  * @module alfresco/preview/PdfJs/PdfJs
  * @extends module:alfresco/preview/AlfDocumentPreviewPlugin
- * @mixes module:alfresco/core/ResizeMixin 
+ * @mixes module:alfresco/core/ResizeMixin
  * @mixes module:alfresco/core/FileSizeMixin
  * @mixes module:alfresco/core/CoreWidgetProcessing
  * @mixes module:alfresco/core/ObjectProcessingMixin
@@ -41,7 +41,7 @@
  * @author Kevin Roast
  */
 define(["dojo/_base/declare",
-        "alfresco/preview/AlfDocumentPreviewPlugin", 
+        "alfresco/preview/AlfDocumentPreviewPlugin",
         "alfresco/core/FileSizeMixin",
         "alfresco/core/CoreWidgetProcessing",
         "alfresco/core/ObjectProcessingMixin",
@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
         "alfresco/core/WidgetsCreator",
         "alfresco/layout/AlfTabContainer",
         "dojo/_base/lang",
-        "dojo/dom-geometry", 
+        "dojo/dom-geometry",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
@@ -65,11 +65,11 @@ define(["dojo/_base/declare",
         "dojo/io-query",
         "dojo/window",
         "dojo/on",
-        "jquery"], 
-        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, topics, urlTypes, urlUtils, AlfConstants, 
-                 PdfJsConstants, DocumentView, PDFFindController, WidgetsCreator, AlfTabContainer, lang, domGeom, 
+        "jquery"],
+        function(declare, AlfDocumentPreviewPlugin, FileSizeMixin, CoreWidgetProcessing, ObjectProcessingMixin, AlfCore, topics, urlTypes, urlUtils, AlfConstants,
+                 PdfJsConstants, DocumentView, PDFFindController, WidgetsCreator, AlfTabContainer, lang, domGeom,
                  domConstruct, domClass, domStyle, html, has, ioQuery, win, on, $) {
-   
+
    return declare([AlfDocumentPreviewPlugin, CoreWidgetProcessing, ObjectProcessingMixin, FileSizeMixin, AlfCore], {
 
       /**
@@ -84,7 +84,7 @@ define(["dojo/_base/declare",
 
       /**
        * Declares the dependencies on PdfJs dependencies.
-       * 
+       *
        * @instance
        * @type {String[]}
        */
@@ -95,7 +95,7 @@ define(["dojo/_base/declare",
 
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/PdfJs.css"}]
@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
 
       /**
        * Configuration attributes
-       * 
+       *
        * @property attributes
        * @type object
        */
@@ -115,7 +115,7 @@ define(["dojo/_base/declare",
           * displayed. Leave it as it is if the node's content shall be used. Set
           * to a custom thumbnail definition name if the node's thumbnail contains
           * the PdfJs to display.
-          * 
+          *
           * @instance
           * @type {String}
           * @default
@@ -123,10 +123,10 @@ define(["dojo/_base/declare",
          src : null,
 
          /**
-          * Maximum file size in bytes which should be displayed. Note that this refers to 
-          * the size of the original file and not the PDF rendition, which may be larger or 
+          * Maximum file size in bytes which should be displayed. Note that this refers to
+          * the size of the original file and not the PDF rendition, which may be larger or
           * smaller than this value. Empty or non-numeric string means no limit.
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -136,7 +136,7 @@ define(["dojo/_base/declare",
          /**
           * Skipbrowser test, mostly for developer to force test loading. Valid
           * options "true" "false" as String.
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -145,7 +145,7 @@ define(["dojo/_base/declare",
 
          /**
           * Default zoom level for new documents
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -154,7 +154,7 @@ define(["dojo/_base/declare",
 
          /**
           * Multipler for zooming in/out
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -163,7 +163,7 @@ define(["dojo/_base/declare",
 
          /**
           * Minimum scale level to use when auto-scaling a document
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -173,7 +173,7 @@ define(["dojo/_base/declare",
 
          /**
           * Maximum scale level to use when auto-scaling a document
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
 
          /**
           * Layout to use to display pages, "single" (one page per row) or "multi" (multiple pages per row)
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -192,7 +192,7 @@ define(["dojo/_base/declare",
          /**
           * Whether text overlays on pages should be disabled. Overlays allow users to select text
           * content in their browser but reduce rendering performance.
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -201,7 +201,7 @@ define(["dojo/_base/declare",
 
          /**
           * Whether to use HTML5 browser storage to persist the page number and zoom level of previously-viewed documents
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -210,7 +210,7 @@ define(["dojo/_base/declare",
 
          /**
           * If the user came from the search page, should the search feature be automatically triggered?
-          * 
+          *
           * @instance
           * @type String
           * @default
@@ -239,7 +239,7 @@ define(["dojo/_base/declare",
 
       /**
        * Cached PDF document, once loaded from the server
-       * 
+       *
        * @instance
        * @type {object}
        * @default
@@ -248,7 +248,7 @@ define(["dojo/_base/declare",
 
       /**
        * Current page number
-       * 
+       *
        * @instance
        * @type int
        * @default
@@ -257,7 +257,7 @@ define(["dojo/_base/declare",
 
       /**
        * Cached pages from the PDF doc
-       * 
+       *
        * @instance
        * @type {array}
        * @default []
@@ -266,7 +266,7 @@ define(["dojo/_base/declare",
 
       /**
        * Cached page text from the document, for searching purposes
-       * 
+       *
        * @instance
        * @type {array}
        * @default []
@@ -275,7 +275,7 @@ define(["dojo/_base/declare",
 
       /**
        * Total number of pages in the current document
-       * 
+       *
        * @instance
        * @type int
        * @default
@@ -283,8 +283,8 @@ define(["dojo/_base/declare",
       numPages : 0,
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @type object
        * @default {}
@@ -293,7 +293,7 @@ define(["dojo/_base/declare",
 
       /**
        * Whether the page view is maximised within the client
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -302,7 +302,7 @@ define(["dojo/_base/declare",
 
       /**
        * Stored configuration for this particular document, including page number and zoom level. Persisted to local browser storage.
-       * 
+       *
        * @instance
        * @type {object}
        * @default {}
@@ -311,7 +311,7 @@ define(["dojo/_base/declare",
 
       /**
        * Whether the previewer is embedded in a dashlet
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -326,10 +326,10 @@ define(["dojo/_base/declare",
        * @default empty string
        */
       workerSrc : "",
-      
+
       /**
        * Current scale selection from the drop-down scale menu
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -338,7 +338,7 @@ define(["dojo/_base/declare",
 
       /**
        * Tests if the plugin can be used in the users browser.
-       * 
+       *
        * @instance
        * @return {String} Returns nothing if the plugin may be used, otherwise
        *         returns a message containing the reason it cant be used as a
@@ -395,9 +395,9 @@ define(["dojo/_base/declare",
 
       /**
        * Sniff test to determine if the browser supports the canvas element
-       * 
+       *
        * <p>Based on http://stackoverflow.com/questions/2745432/best-way-to-detect-that-html5-canvas-is-not-supported</p>
-       * 
+       *
        * @instance
        */
       _isCanvasSupported: function alfresco_preview_PdfJs_PdfJs___isCanvasSupported() {
@@ -407,7 +407,7 @@ define(["dojo/_base/declare",
 
       /**
        * Display the node.
-       * 
+       *
        * @instance
        */
       display: function alfresco_preview_PdfJs_PdfJs__display() {
@@ -456,7 +456,7 @@ define(["dojo/_base/declare",
 
       /**
        * Handler for successful load of the viewer markup webscript
-       * 
+       *
        * @instance
        */
       onViewerLoaded: function alfresco_preview_PdfJs_PdfJs__onViewerLoaded(p_obj) {
@@ -472,12 +472,12 @@ define(["dojo/_base/declare",
             domClass.add(this.viewer, "multiPage");
          }
          domClass.add(this.previewManager.getPreviewerElement(), "alfresco-preview-PdfJs");
-         
+
          // Clone the widgets for controls model and then process any instance tokens, primarily this is done
          // to ensure that sensible IDs are given to each of the components, e.g. IDs that are prefixed by the
          // ID of this widget...
          var clonedWidgets = lang.clone(this.widgetsForControls);
-         this.processObject(["processInstanceTokens"], clonedWidgets); 
+         this.processObject(["processInstanceTokens"], clonedWidgets);
          this.processWidgets(lang.clone(clonedWidgets), this.controls);
 
          this.alfSubscribe(PdfJsConstants.SHOW_SIDEBAR_TOPIC, lang.hitch(this, this.onSidebarToggle));
@@ -532,7 +532,7 @@ define(["dojo/_base/declare",
          //          this.onFullScreen(e);
          //       }
          //    }
-            
+
          //    new YAHOO.util.KeyListener(document, { keys: 37 }, { // left arrow
          //       fn : this.onPagePrevious,
          //       scope : this,
@@ -553,7 +553,7 @@ define(["dojo/_base/declare",
          //       scope : this,
          //       correctScope : true
          //    }).enable();
-            
+
          //    if (YAHOO.env.ua.os == "macintosh")
          //    {
          //       new YAHOO.util.KeyListener(document, { keys: 13 }, { // Cmd+Enter
@@ -567,7 +567,7 @@ define(["dojo/_base/declare",
          //          correctScope : true
          //       }).enable();
          //    }
-            
+
          //    Event.addListener(window, "fullscreenchange", this.onFullScreenChange, this, true);
          //    Event.addListener(window, "mozfullscreenchange", this.onFullScreenChange, this, true);
          //    Event.addListener(window, "webkitfullscreenchange", this.onFullScreenChange, this, true);
@@ -587,7 +587,7 @@ define(["dojo/_base/declare",
       /**
        * Set the height of the viewer area where content is displayed, so that it occupies the height of the parent previewer element
        * minus the menu bar.
-       * 
+       *
        * @instance
        */
       setHeight: function alfresco_preview_PdfJs_PdfJs__setHeight(/*jshint unused:false*/ domNode) {
@@ -598,7 +598,7 @@ define(["dojo/_base/declare",
          var controlRegion = domGeom.getContentBox(this.controls, computedStyle);
          var controlHeight = !this.fullscreen ? controlRegion.h : 0;
          var newHeight = previewRegion.h - controlHeight - 6; // Allow for bottom border
-         
+
          if (newHeight === 0)
          {
             if (!this.maximized)
@@ -617,7 +617,7 @@ define(["dojo/_base/declare",
                newHeight = $(window).height() - controlHeight - 1;
             }
          }
-         
+
          if (!this.fullscreen)
          {
             this.alfLog("log","Setting viewer height to " + newHeight + "px (toolbar " + controlHeight + "px, container " + previewRegion.h + "px");
@@ -634,7 +634,7 @@ define(["dojo/_base/declare",
       /**
        * Removes the Spinner indicating that the PDF document is being loaded. Also removes the
        * subscription created to listen for the PDF loading event (as this should only occur once).
-       * 
+       *
        * @instance
        */
       removeSpinner: function alfresco_preview_PdfJs_PdfJs__removeSpinner() {
@@ -644,14 +644,14 @@ define(["dojo/_base/declare",
 
       /**
        * Fetch the PDF content and display it
-       * 
+       *
        * @instance
        */
       _loadPdf: function alfresco_preview_PdfJs_PdfJs___loadPdf(params) {
          // Workaround for ALF-17458
          this.previewManager.name = this.previewManager.name.replace(/[^\w_\-\. ]/g, "");
          var fileurl = this.attributes.src ? this.previewManager.getThumbnailUrl(this.attributes.src) : this.previewManager.getContentUrl();
-         
+
          // Add the full protocol + host as pdf.js require this
          if (fileurl.substr(0, 4).toLowerCase() !== "http")
          {
@@ -716,10 +716,10 @@ define(["dojo/_base/declare",
             lang.hitch(this, this._onGetDocumentFailure)
          );
       },
-      
+
       /**
        * PDF document retieved successfully
-       * 
+       *
        * @instance
        */
       _onGetDocumentSuccess: function alfresco_preview_PdfJs_PdfJs___onGetDocumentSuccess(pdf) {
@@ -734,7 +734,7 @@ define(["dojo/_base/declare",
       /**
        * TODO: Need to handle failures (e.g. replace YUI/Share code calls)
        * Error encountered retrieving PDF document
-       * 
+       *
        * @instance
        * @fires module:alfresco/core/topics#DISPLAY_NOTIFICATION
        */
@@ -748,7 +748,7 @@ define(["dojo/_base/declare",
 
          if(exception)
          {
-            
+
             this.alfLog("warn","Could not load PDF due to error " + exception.name + " (code " + exception.code + ")");
 
             // We have a password exception
@@ -814,7 +814,7 @@ define(["dojo/_base/declare",
 
       /**
        * Function to reload the pdf with a password supplied
-       * 
+       *
        * @instance
        * @param  {string} password
        */
@@ -836,7 +836,7 @@ define(["dojo/_base/declare",
 
       /**
        * Function to toggle interface elements
-       * 
+       *
        * @instance
        */
       onInterfaceToggle: function alfresco_preview_PdfJs_PdfJs__onInterfaceToggle() {
@@ -848,7 +848,7 @@ define(["dojo/_base/declare",
 
       /**
        * Function to display and or toggle a notification element
-       * 
+       *
        * @instance
        * @param {object} payload
        */
@@ -868,7 +868,7 @@ define(["dojo/_base/declare",
 
       /**
        * Display the PDF content in the container
-       * 
+       *
        * @instance
        */
       _renderPdf : function alfresco_preview_PdfJs_PdfJs___renderPdf() {
@@ -895,8 +895,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @param {object} pagesRefMap
        * @param {array} promisedPages
@@ -945,7 +945,7 @@ define(["dojo/_base/declare",
 
          // Update toolbar
          this._updateZoomControls();
-         
+
          // NOTE: This section has been removed, we may or may not want to re-instate it at a later date...
          // If the user clicked through to the document details from the search page, open
          // the search dialog and perform a search for that term
@@ -959,14 +959,14 @@ define(["dojo/_base/declare",
          //       this.onFindChange("find");
          //    }
          // }
-         
+
          this.alfPublish(PdfJsConstants.PDF_PAGES_RENDERED);
       },
 
       /**
        * Handles publications from the associated [DocumentView]{@link module:alfresco/preview/PdfJs/DocumentView}
        * indicating that the viewer has been scrolled so that the page number and active page can be updated.
-       * 
+       *
        * @instance
        * @param {object} payload This is expected to be an empty object.
        */
@@ -983,10 +983,10 @@ define(["dojo/_base/declare",
 
       /**
        * Updates the paging controls shown in the toolbar by publishing the page number information
-       * so that the "set page" menu item label can be updated (e.g. to show "1 / 20", etc) and 
-       * publishing on topics to enable or disable the previous and next page menu items depending 
+       * so that the "set page" menu item label can be updated (e.g. to show "1 / 20", etc) and
+       * publishing on topics to enable or disable the previous and next page menu items depending
        * upon whether or not the first or last page of the PDF is being viewed.
-       * 
+       *
        * @instance
        */
       _updatePageControls: function alfresco_preview_PdfJs_PdfJs___updatePageControls() {
@@ -1006,7 +1006,7 @@ define(["dojo/_base/declare",
        * and disable the zoom in an out menu items as the limits of zoom scale are reached
        * as well as publishing on a topic to update the label of "set zoom level" menu item
        * to show the current scale (as a percentage).
-       * 
+       *
        * @instance
        */
       _updateZoomControls: function alfresco_preview_PdfJs_PdfJs___updateZoomControls() {
@@ -1027,7 +1027,7 @@ define(["dojo/_base/declare",
 
       /**
        * Scrolls the displayed PDF to the specified page.
-       * 
+       *
        * @instance
        * @param {int} n Number of the page to scroll to, must be 1 or greater.
        */
@@ -1059,7 +1059,7 @@ define(["dojo/_base/declare",
 
       /**
        * Navigate the viewer to the specified document outline item
-       * 
+       *
        * @instance
        * @param {object} dest outline object item, from the document outline
        */
@@ -1087,7 +1087,7 @@ define(["dojo/_base/declare",
 
       /**
        * Load configuration for the current document
-       * 
+       *
        * @instance
        */
       _loadDocumentConfig: function alfresco_preview_PdfJs_PdfJs___loadDocumentConfig() {
@@ -1111,7 +1111,7 @@ define(["dojo/_base/declare",
 
       /**
        * Check if the web browser supports local storage
-       * 
+       *
        * @instance
        * @returns {boolean} true if local storage is available, false otherwise
        */
@@ -1128,7 +1128,7 @@ define(["dojo/_base/declare",
 
       /**
        * Toggle sidebar button click handler
-       * 
+       *
        * @method onSidebarToggle
        */
       onSidebarToggle: function alfresco_preview_PdfJs_PdfJs__onSidebarToggle(payload) {
@@ -1231,7 +1231,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function is called when the user clicks on the set page menu item. It will display a dialog
-       * containing a form control that allows the page number to be set. Only valid page numbers can be 
+       * containing a form control that allows the page number to be set. Only valid page numbers can be
        * entered.
        *
        * @instance
@@ -1287,7 +1287,7 @@ define(["dojo/_base/declare",
 
       /**
        * Previous page button or key clicked
-       * 
+       *
        * @instance
        */
       onPagePrevious: function alfresco_preview_PdfJs_PdfJs__onPagePrevious(e_obj) {
@@ -1302,7 +1302,7 @@ define(["dojo/_base/declare",
 
       /**
        * Next button or key clicked
-       * 
+       *
        * @instance
        */
       onPageNext : function alfresco_preview_PdfJs_PdfJs__onPageNext(e_obj) {
@@ -1329,7 +1329,7 @@ define(["dojo/_base/declare",
        * Handles requests to show and hide the search tools bar. The first time this is called requesting that
        * the search tools be displayed, [_findController]{@link module:alfresco/preview/PdfJs/PdfJs#_findController}
        * will be instantiated with a new [PDFFindController]{@link module:alfresco/preview/PdfJs/PDFFindController}.
-       * 
+       *
        * @instance
        */
       onToggleSearchBar: function alfresco_preview_PdfJs_PdfJs__onToggleSearchBar(payload) {
@@ -1355,7 +1355,7 @@ define(["dojo/_base/declare",
 
       /**
        * This function resets the highlights by searching for nothing
-       * 
+       *
        * @instance
        */
       _searchReset: function alfresco_preview_PdfJs_PdfJs___searchReset() {
@@ -1364,7 +1364,7 @@ define(["dojo/_base/declare",
 
       /**
        * The query to use for searching within the PDF text.
-       * 
+       *
        * @instance
        * @type {string}
        * @default
@@ -1372,8 +1372,8 @@ define(["dojo/_base/declare",
       _query: null,
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @param {object} payload The payload indicating whether or not to match case on search
        */
@@ -1392,7 +1392,7 @@ define(["dojo/_base/declare",
       /**
        * Indicates whether or not to search backwards through the PDF when finding the next hit
        * that matches the current query.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -1400,8 +1400,8 @@ define(["dojo/_base/declare",
       _findPrevious: false,
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @param {object} payload
        */
@@ -1412,8 +1412,8 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @param {object} payload
        */
@@ -1425,7 +1425,7 @@ define(["dojo/_base/declare",
 
       /**
        * Indicates whether or not case should be matched when searching the PDF.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -1433,8 +1433,8 @@ define(["dojo/_base/declare",
       _matchCase: false,
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @param {object} payload The payload indicating whether or not to match case on search
        */
@@ -1445,7 +1445,7 @@ define(["dojo/_base/declare",
 
       /**
        * Indicates whether or not all search hits should be highlighted when searching.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -1453,8 +1453,8 @@ define(["dojo/_base/declare",
       _highlightAll: false,
 
       /**
-       * 
-       * 
+       *
+       *
        * @instance
        * @param {object} payload The payload indicating whether or not to highlight all search hits
        */
@@ -1465,7 +1465,7 @@ define(["dojo/_base/declare",
 
       /**
        * Text value changed in Find text input field
-       * 
+       *
        * @instance
        */
       onFindChange: function alfresco_preview_PdfJs_PdfJs__onFindChange(eventid) {
@@ -1485,7 +1485,7 @@ define(["dojo/_base/declare",
       /**
        * Zoom out menu item clicked. This will calculate a new zoom scale which will then be
        * applied to the [DocumentView]{@link module:alfresco/preview/PdfJs/DocumentView}.
-       * 
+       *
        * @instance
        * @param {object} payload The payload from the zoom out menu item
        */
@@ -1500,7 +1500,7 @@ define(["dojo/_base/declare",
       /**
        * Zoom in menu item clicked. This will calculate a new zoom scale which will then be
        * applied to the [DocumentView]{@link module:alfresco/preview/PdfJs/DocumentView}.
-       * 
+       *
        * @instance
        * @param {object} payload The payload from the zoom in menu item
        */
@@ -1514,7 +1514,7 @@ define(["dojo/_base/declare",
 
       /**
        * Zoom level changed via the zoom menu button
-       * 
+       *
        * @instance
        * @param {object} payload The payload containing the details of the new zoom level
        */
@@ -1530,7 +1530,7 @@ define(["dojo/_base/declare",
 
       /**
        * Download Original document menu link click handler
-       * 
+       *
        * @instance
        */
       onDownloadClick : function alfresco_preview_PdfJs_PdfJs__onDownloadClick(p_obj) {
@@ -1542,7 +1542,7 @@ define(["dojo/_base/declare",
 
       /**
        * Download PDF click handler (for thumbnailed content only)
-       * 
+       *
        * @instance
        */
       onDownloadPDFClick : function alfresco_preview_PdfJs_PdfJs__onDownloadPDFClick(p_obj) {
@@ -1558,7 +1558,7 @@ define(["dojo/_base/declare",
        * main [AlfDocumentPreview]{@link module:alfresco/preview/AlfDocumentPreview} widget into
        * a [FullScreenWidgets]{@link module:alfresco/layout/FullScreenWidgets} widget). Instead this
        * simply handles the associated document resizing for the new container.
-       * 
+       *
        * @instance
        * @param {object} payload Indicates whether or not maximize has been enabled or disabled.
        */
@@ -1576,12 +1576,12 @@ define(["dojo/_base/declare",
       },
 
       /**
-       * This function is called whenever the link control bar is displayed or hidden and calls 
+       * This function is called whenever the link control bar is displayed or hidden and calls
        * [onRecalculatePreviewLayout]{@link module:alfresco/preview/PdfJs/PdfJs#onRecalculatePreviewLayout}
        * to re-render the main PDF display and then calls [onLinkUpdateRequest]
        * {@link module:alfresco/preview/PdfJs/PdfJs#onLinkUpdateRequest} to ensure that the displayed link
        * reflects the currently selected page.
-       * 
+       *
        * @instance
        * @param {object} payload The payload from the show/hide link controls toggle.
        */
@@ -1599,7 +1599,7 @@ define(["dojo/_base/declare",
        */
       onLinkUpdateRequest: function alfresco_preview_PdfJs_PdfJs__onLinkUpdateRequest(payload) {
          // jshint unused:false
-         var link = window.location.href.replace(window.location.hash, "") + "#page=" + this.pageNum;
+         var link = this.previewManager.getContentUrl();
          this.alfPublish(PdfJsConstants.SET_LINK_URL_TOPIC, {
             value: link
          });
@@ -1607,7 +1607,7 @@ define(["dojo/_base/declare",
 
       /**
        * Handler for window resize event
-       * 
+       *
        * @instance
        */
       onRecalculatePreviewLayout: function alfresco_preview_PdfJs_PdfJs__onRecalculatePreviewLayout() {
@@ -1629,9 +1629,9 @@ define(["dojo/_base/declare",
 
       /**
        * Handler for window hashchange event
-       * 
+       *
        * See http://caniuse.com/#search=hash
-       * 
+       *
        * @instance
        */
       onWindowHashChange: function alfresco_preview_PdfJs_PdfJs__onWindowHashChange(p_obj) {
@@ -1641,7 +1641,7 @@ define(["dojo/_base/declare",
             // Ignore page hash change
          }
          else
-         {    
+         {
             // Set page number
             var urlParams = Alfresco.util.getQueryStringParameters(window.location.hash.replace("#", ""));
             var pn = urlParams.page;
@@ -1664,7 +1664,7 @@ define(["dojo/_base/declare",
 
       /**
        * Window unload event handler to save document configuration to local storage
-       * 
+       *
        * @instance
        */
       onWindowUnload: function alfresco_preview_PdfJs_PdfJs__onWindowUnload() {
