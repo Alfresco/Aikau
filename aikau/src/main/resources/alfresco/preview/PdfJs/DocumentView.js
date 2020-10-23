@@ -208,8 +208,8 @@ define(["dojo/_base/declare",
          var computedStyle = domStyle.getComputedStyle(this.viewer);
          this.viewerRegion = domGeom.getContentBox(this.viewer, computedStyle);
          // this.viewerRegion = Dom.getRegion(this.viewer);
-         
-         var vheight = this.viewerRegion.h, vtop = this.viewerRegion.t, scrollY = $(document).scrollTop();
+
+         var vheight = this.viewerRegion.h, vtop = this.viewerRegion.t;
          this.alfLog("log", "Render " + this.name + " visible pages: viewer height " + this.viewerRegion.h + "px");
 
          // Render visible pages
@@ -219,10 +219,10 @@ define(["dojo/_base/declare",
             if (!page.canvas)
             {
                var pregion = page.container.getBoundingClientRect(),
-                   top = pregion.top + scrollY - vtop,
+                   top = pregion.top - vtop,
                    bottom = top + pregion.height,
                    vicinity = 1.5;
-               
+
                // WA - improve algorithm for selecting which pages to render, based on the following criteria
                // Page top is above the viewer top edge, bottom below the bottom edge OR
                // Bottom is within half the viewer height of the top edge OR
