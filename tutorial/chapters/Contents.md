@@ -1,6 +1,6 @@
 ## Tutorial Contents
 
-0. [About] (./About.md)
+0. [About](./About.md)
 1. [Getting Started](./Tutorial1.md)
 2. [How to Create a new Widget](./Tutorial2.md)
 3. [Create a Composite Widget](./Tutorial3.md)
