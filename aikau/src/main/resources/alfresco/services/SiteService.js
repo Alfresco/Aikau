@@ -313,11 +313,52 @@ define(["dojo/_base/declare",
       },
 
       /**
+       * This returns all sites that the user has the permission to see. Eg. all public sites.
        *
        * @instance
        * @param {object} payload The details of the request
        */
       getSites: function alfresco_services_SiteService__getSites(payload) {
+        var url = AlfConstants.PROXY_URI + "api/sites";
+        var hasArguments = false;
+        //Add name filter if supplied
+        if (payload.nameFilter) {
+          if (hasArguments) {
+            url += "&";
+          } else {
+            url += "?";
+          }
+          url += "nf=" + payload.nameFilter;
+          hasArguments = true;
+        }
+        //Add site preset filter if supplied
+        if (payload.sitePreset) {
+          if (hasArguments) {
+            url += "&";
+          } else {
+            url += "?";
+          }
+          url += "spf=" + payload.sitePreset;
+          hasArguments = true;
+        }
+        //Add page size filter if supplied
+        if (payload.pageSize){
+          if (hasArguments) {
+            url += "&";
+          } else {
+            url += "?";
+          }
+          url += "size=" + payload.pageSize;
+        }
+        //Add roles filter if supplied
+        if (payload.roles){
+          if (hasArguments) {
+            url += "&";
+          } else {
+            url += "?";
+          }
+          url += "roles=" + payload.roles;
+        }
          // TODO: Clean this up. Choose on or other as the Aikau standard.
          var alfResponseTopic = payload.alfResponseTopic || payload.responseTopic;
          var config = {
