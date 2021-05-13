@@ -15,7 +15,7 @@
 
    <properties>
       <dependency.surf.version>6.3</dependency.surf.version>
-      <dependency.dojo.version>1.10.4</dependency.dojo.version>
+      <dependency.dojo.version>1.11.1</dependency.dojo.version>
       <dependency.jquery.version>1.11.1</dependency.jquery.version>
       <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>
    </properties>
