@@ -82,18 +82,6 @@ define(["dojo/_base/declare",
        * @instance
        * @type {object[]}
        * @default
-       * @since 1.0.107
-       */
-      selectProperty: null,
-
-      /**
-       * The dot-notation property to use in the
-       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} to use to
-       * indicate when the selector is selected.
-       *
-       * @instance
-       * @type {object[]}
-       * @default
        * @since 1.0.109
        */
       selectProperty: null,
