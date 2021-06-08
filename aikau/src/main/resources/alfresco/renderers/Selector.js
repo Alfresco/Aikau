@@ -87,6 +87,18 @@ define(["dojo/_base/declare",
       selectProperty: null,
 
       /**
+       * The dot-notation property to use in the
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} to use to
+       * indicate when the selector is selected.
+       *
+       * @instance
+       * @type {object[]}
+       * @default
+       * @since 1.0.109
+       */
+      selectProperty: null,
+
+      /**
        * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
        * to construct the DOM for the widget using native browser capabilities.
        *
@@ -159,7 +171,7 @@ define(["dojo/_base/declare",
        * Checks the selected state of the current item.
        *
        * @instance
-       * @since 1.0.107
+       * @since 1.0.109
        */
       isSelected: function alfresco_renderers_Selector__isSelected() {
          var selected = false;
