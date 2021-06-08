@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
        * indicate when the selector is selected.
        *
        * @instance
-       * @type {object[]}
+       * @type {string}
        * @default
        * @since 1.0.109
        */
