@@ -447,6 +447,7 @@ define(["dojo/_base/declare",
                display: display
             });
          }
+         this.validate();
       },
 
       /**
@@ -1933,30 +1934,39 @@ define(["dojo/_base/declare",
          if (this.deferValueAssigment)
          {
             // Do nothing until final value has been assigned
-         }
-         else if (this.validationConfig && ObjectTypeUtils.isArray(this.validationConfig))
-         {
-            this.startValidation();
-         }
-         else
-         {
-            var isValid = this.processValidationRules();
-            if (isValid)
-            {
+         } else {
+            if ((this._visible || this.validateWhenHidden) && !this._disabled)  {
+               if (this.validationConfig && ObjectTypeUtils.isArray(this.validationConfig))
+               {
+                  this.startValidation();
+               }
+               else
+               {
+                  var isValid = this.processValidationRules();
+                  if (isValid)
+                  {
+                     this.alfPublish("ALF_VALID_CONTROL", {
+                        name: this.name,
+                        fieldId: this.fieldId
+                     });
+                     this.hideValidationFailure();
+                  }
+                  else
+                  {
+                     this.alfPublish("ALF_INVALID_CONTROL", {
+                        name: this.name,
+                        fieldId: this.fieldId
+                     });
+
+                     this.showValidationFailure();
+                  }
+               }
+            } else {
                this.alfPublish("ALF_VALID_CONTROL", {
                   name: this.name,
                   fieldId: this.fieldId
                });
                this.hideValidationFailure();
-            }
-            else
-            {
-               this.alfPublish("ALF_INVALID_CONTROL", {
-                  name: this.name,
-                  fieldId: this.fieldId
-               });
-
-               this.showValidationFailure();
             }
          }
       },
