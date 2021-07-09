@@ -75,6 +75,18 @@ define(["dojo/_base/declare",
       disabledOnValues: null,
 
       /**
+       * The dot-notation property to use in the
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} to use to
+       * indicate when the selector is selected.
+       *
+       * @instance
+       * @type {string}
+       * @default
+       * @since 1.0.109
+       */
+      selectProperty: null,
+
+      /**
        * Overrides [the inherited function]{@link module:aikau/core/BaseWidget#createWidgetDom}
        * to construct the DOM for the widget using native browser capabilities.
        *
@@ -107,16 +119,21 @@ define(["dojo/_base/declare",
        * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem} against the 
        * [array of values]{@link module:alfresco/renderers/Selector#disableProperty} that will cause the
        * selector to be disabled.
-       * 
+       * Also, checks the [selectProperty]{@link module:alfresco/renderers/Selector#selectProperty} of the
+       * [currentItem]{@link module:alfresco/core/CoreWidgetProcessing#currentItem}
+       *
        * @instance
        * @since 1.0.70
        */
       postCreate: function alfresco_renderers_Selector__postCreate() {
          this.inherited(arguments);
-         if(this.isDisabled())
+         if (this.isDisabled())
          {
             this.selectOnClick = false;
             domClass.add(this.domNode, "alfresco-lists-ItemSelectionMixin--disabled");
+         }
+         if (this.isSelected()) {
+            this.select();
          }
       },
 
@@ -136,6 +153,20 @@ define(["dojo/_base/declare",
             });
          }
          return disabled;
+      },
+
+      /**
+       * Checks the selected state of the current item.
+       *
+       * @instance
+       * @since 1.0.109
+       */
+      isSelected: function alfresco_renderers_Selector__isSelected() {
+         var selected = false;
+         if (this.selectProperty) {
+            selected = lang.getObject(this.selectProperty, false, this.currentItem);
+         }
+         return selected;
       }
    });
 });
