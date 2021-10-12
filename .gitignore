@@ -1,3 +1,6 @@
-/.settings/
-/.project
+**/.settings
+**/.project
+/.vscode/*.*
+**/.classpath
+
 alfresco.log
