@@ -22,7 +22,7 @@
  * can be placed. Each widget in the <b>widgets</b> array can given an optional <b>align</b> attribute that if set to
  * <b>"sidebar"</b> will result in that widget being placed into the sidebar (widgets without an <b>align</b> attribute
  * or with the <b>align</b> attribute set to any other value will be placed into the main panel).</p>
- * <p>If you don't want the sidebar to be resizeable then you can set the 
+ * <p>If you don't want the sidebar to be resizeable then you can set the
  * [isResizable]{@link module:alfresco/layout/AlfSideBarContainer#isResizable} to be false. This will result in a simple
  * border separating the sidebar and main areas.</p>
  *
@@ -71,7 +71,7 @@
  *       ]
  *    }
  * }
- * 
+ *
  * @module alfresco/layout/AlfSideBarContainer
  * @extends external:dijit/_WidgetBase
  * @mixes external:dojo/_TemplatedMixin
@@ -80,7 +80,7 @@
  * @author Dave Draper
  */
 define(["dojo/_base/declare",
-        "dijit/_WidgetBase", 
+        "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "alfresco/core/ResizeMixin",
         "alfresco/services/_PreferenceServiceTopicMixin",
@@ -96,76 +96,76 @@ define(["dojo/_base/declare",
         "dojo/dom-geometry",
         "dojo/window",
         "jquery",
-        "jqueryui"], 
-        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _PreferenceServiceTopicMixin, template, AlfCore, 
+        "jqueryui"],
+        function(declare, _WidgetBase, _TemplatedMixin, ResizeMixin, _PreferenceServiceTopicMixin, template, AlfCore,
                  CoreWidgetProcessing, BorderContainer, lang, array, domStyle, domClass, on, domGeom, win, $) {
-   
+
    return declare([_WidgetBase, _TemplatedMixin, ResizeMixin, _PreferenceServiceTopicMixin, AlfCore, CoreWidgetProcessing], {
-      
+
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/AlfSideBarContainer.css"}]
        */
-      cssRequirements: [{cssFile:"/js/lib/jquery-ui-1.11.1/jquery-ui.css"},
+      cssRequirements: [{cssFile:"/js/lib/jquery-ui-1.12.1/jquery-ui.css"},
                         {cssFile:"./css/AlfSideBarContainer.css"}],
-      
+
       /**
        * The HTML template to use for the widget.
        * @instance
        * @type {string}
        */
       templateString: template,
-      
+
       /**
        * It is possible to optionally provide an array of events that the widget should
        * subscribe to that trigger resize events. This has initially been added to address the problem that occurred when the
        * alfresco/wrapped/DocumentList widget would resize itself after the initial sizing causing the sidebar to render incorrectly.
        * By allowing custom events to be subscribed to it is possible to work around issues such as these.
-       * 
+       *
        * @instance
-       * @type {array} 
+       * @type {array}
        * @default
        */
       customResizeTopics: null,
-      
+
       /**
        * This property allows the height of the sidebar to accommodate a "sticky" footer. The height is otherwise calculated as
        * the height of the view port minus the top position of the side bar (unless either side bar or main content are larger).
-       * By setting this property it is possible to also deduct the height of a sticky footer. 
-       * 
+       * By setting this property it is possible to also deduct the height of a sticky footer.
+       *
        * @instance
-       * @type {integer} 
+       * @type {integer}
        * @default
        */
       footerHeight: 0,
-      
+
       /**
        * @instance
        * @type {integer}
        */
       hiddenSidebarWidth: null,
-      
+
       /**
        * The initial width (in pixels) of the sidebar
        * @instance
-       * @type {number} 
+       * @type {number}
        * @default
        */
       initialSidebarWidth: 350,
 
       /**
        * Indicates whether or not the sidebar should be resizable or not.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
        * @since 1.0.40
        */
       isResizable: true,
-      
+
       /**
        * The last registered width (in pixels) of the sidebar (needed for window resize events)
        * @instance
@@ -173,54 +173,54 @@ define(["dojo/_base/declare",
        * @default
        */
       lastSidebarWidth: null,
-      
+
       /**
        * The minimum width (in pixels) for the sidebar
        * @instance
-       * @type {number} 
+       * @type {number}
        * @default
        */
       minSidebarWidth: 150,
-      
+
       /**
        * This will be set to the resize drag handle
-       * 
+       *
        * @instance
        * @type {element}
        * @default
        */
       resizeHandlerNode: null,
-      
+
       /**
        * Indicates whether or not to show the sidebar when initially rendered.
        * @instance
-       * @type {boolean} 
+       * @type {boolean}
        */
       showSidebar: true,
-      
+
       /**
        * This is the dot-notation property to use in the user preferences object to retrieve and persist
        * the preferred width of the sidebar.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default 
+       * @default
        */
       showSidebarPreferenceId: "org.alfresco.share.documentList.showSidebar",
-      
+
       /**
        * This is the dot-notation property to use in the user preferences object to retrieve and persist
        * the preferred width of the sidebar.
-       * 
+       *
        * @instance
        * @type {string}
-       * @default 
+       * @default
        */
       sidebarWidthPreferenceId: "org.alfresco.share.sideBarWidth",
 
       /**
        * Makes a request to get the users sidebar width preference.
-       * 
+       *
        * @instance
        */
       postMixInProperties: function alfresco_layout_AlfSideBarContainer__postMixInProperties() {
@@ -230,10 +230,10 @@ define(["dojo/_base/declare",
             callbackScope: this
          });
       },
-      
+
       /**
        * Sets the initial sidebar width from the users saved preferences.
-       * 
+       *
        * @instance
        * @param {number} value The saved width preference
        */
@@ -243,11 +243,11 @@ define(["dojo/_base/declare",
             this.initialSidebarWidth = value;
          }
       },
-      
+
       /**
        * Adds widgets to the sidebar and main container node and sets up the event handlers for
        * resize events.
-       * 
+       *
        * @instance
        */
       postCreate: function alfresco_layout_AlfSideBarContainer__postCreate() {
@@ -255,7 +255,7 @@ define(["dojo/_base/declare",
          {
             array.forEach(this.widgets, lang.hitch(this, this.addWidget));
          }
-         
+
          // Set up the resizer that allows the sidebar to be dynamically made larger or smaller...
          var size = parseInt(domStyle.get(this.domNode, "width"), 10);
          var max = (size - this.minSidebarWidth);
@@ -263,7 +263,7 @@ define(["dojo/_base/declare",
          {
             max = null;
          }
-         
+
          if (this.isResizable)
          {
             $(this.sidebarNode).resizable({
@@ -282,7 +282,7 @@ define(["dojo/_base/declare",
          {
             domClass.add(this.domNode, "alfresco-layout-AlfSideBarContainer--resize-disabled");
          }
-         
+
          // We need to subscribe after the resize widget has been created...
          this.alfSubscribe("ALF_DOCLIST_SHOW_SIDEBAR", lang.hitch(this, this.showEventListener));
 
@@ -293,20 +293,20 @@ define(["dojo/_base/declare",
                this.alfSubscribe(topic, lang.hitch(this, this.resizeHandler));
             }, this);
          }
-         
+
          // Keep track of the overall browser window changing in size...
          this.alfSetupResizeSubscriptions(this.resizeHandler, this);
-         this.addResizeListener(this.mainWidgets, this.domNode.parentNode);         
-         this.addResizeListener(this.sidebarWidgets, this.domNode.parentNode);         
-         
+         this.addResizeListener(this.mainWidgets, this.domNode.parentNode);
+         this.addResizeListener(this.sidebarWidgets, this.domNode.parentNode);
+
          // Perform the initial rendering...
          this.lastSidebarWidth = this.initialSidebarWidth;
          this.resizeHandler({width: this.lastSidebarWidth});
          this.render(this.showSidebar);
       },
-      
+
       /**
-       * 
+       *
        * @instance
        * @param {object} widget The widget to add
        * @param {integer} index The index of the widget
@@ -323,9 +323,9 @@ define(["dojo/_base/declare",
          }
          this.createWidget(widget, domNode);
       },
-      
+
       /**
-       * 
+       *
        * @instance
        * @param {object} evt The resize event object
        * @param {object} ui The data about the resize
@@ -357,16 +357,16 @@ define(["dojo/_base/declare",
          array.forEach(nodes, function(node) {
             domStyle.set(node, "minHeight", newHeight + "px");
          });
-         
+
          // Fire a custom event to let contained objects know that the node has been resized.
          this.alfPublishResizeEvent(this.mainNode);
          this.alfPublishResizeEvent(this.sidebarNode);
       },
-      
+
       /**
        * Calls [resizeHandler]{@link module:alfresco/layout/AlfSideBarContainer#resizeHandler} and then
        * saves the new width as a user preference.
-       * 
+       *
        * @instance
        * @param {object} evt The resize event
        */
@@ -378,9 +378,9 @@ define(["dojo/_base/declare",
          }, true);
          this.hiddenSidebarWidth = this.lastSidebarWidth;
       },
-      
+
       /**
-       * 
+       *
        * @instance
        * @param {object} payload The payload published on the subscribed topic
        */
@@ -395,10 +395,10 @@ define(["dojo/_base/declare",
             }, true);
          }
       },
-      
+
       /**
        * Handles a user explicitly clicking on the resize handle node to toggle the sidebar being shown
-       * 
+       *
        * @instance
        * @param {object} evt The click event
        */
@@ -413,10 +413,10 @@ define(["dojo/_base/declare",
             });
          }
       },
-      
+
       /**
        * Renders the sidebar container (basically controls whether or not the side bar is displayed or not).
-       * 
+       *
        * @instance
        * @param {boolean} show Indicates whether or not to show the sidebar
        */
@@ -431,13 +431,13 @@ define(["dojo/_base/declare",
                   domClass.remove(this.sidebarNode.children[i], "share-hidden");
                }
             }
-            
+
             // Show the sidebar...
             if (this.isResizable)
             {
                $(this.sidebarNode).resizable("enable"); // Unlock the resizer when the sidebar is not shown...
             }
-            
+
             var width = (this.hiddenSidebarWidth) ? this.hiddenSidebarWidth : this.initialSidebarWidth;
             domStyle.set(this.sidebarNode, "width", width + "px");
 

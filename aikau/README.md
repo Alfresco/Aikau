@@ -15,8 +15,8 @@ Aikau incorporates code libraries not provided by Alfresco. All licenses are inc
 | Dojo 1.10.4 | https://dojotoolkit.org/ | BSD (https://dojotoolkit.org/license.html) | No |
 | Enum | https://github.com/adrai/enum | MIT (https://github.com/adrai/enum/blob/master/licence) | No |
 | ES6 Promise | https://github.com/stefanpenner/es6-promise | MIT (https://github.com/stefanpenner/es6-promise/blob/master/LICENSE) | Yes |
-| JQuery 1.11.1 | https://jquery.com/ | Apache 2.0 (https://js.foundation/pdf/ip-policy.pdf) | No |
-| JQuery UI 1.11.1 | https://jqueryui.com/ | Apache 2.0 (https://js.foundation/pdf/ip-policy.pdf) | No |
+| JQuery 1.12.4 | https://jquery.com/ | Apache 2.0 (https://js.foundation/pdf/ip-policy.pdf) | No |
+| JQuery UI 1.12.1 | https://jqueryui.com/ | Apache 2.0 (https://js.foundation/pdf/ip-policy.pdf) | No |
 | lightbox2 | https://github.com/lokesh/lightbox2 | MIT (https://github.com/lokesh/lightbox2/blob/master/LICENSE) | Yes |
 | PDF.js | https://github.com/mozilla/pdf.js | Apache 2.0 (https://github.com/mozilla/pdf.js/blob/master/LICENSE) | Yes |
 | Showdown | https://github.com/showdownjs/showdown | BSD (https://github.com/showdownjs/showdown/blob/master/license.txt) | No |
