@@ -109,7 +109,7 @@ define(["dojo/_base/declare",
        * @type {object[]}
        * @default [{cssFile:"./css/AlfSideBarContainer.css"}]
        */
-      cssRequirements: [{cssFile:"/js/lib/jquery-ui-1.11.1/jquery-ui.css"},
+      cssRequirements: [{cssFile:"/js/lib/jquery-ui-1.12.1/jquery-ui.css"},
                         {cssFile:"./css/AlfSideBarContainer.css"}],
       
       /**
