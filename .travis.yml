@@ -14,6 +14,7 @@ branches:
     - APPS*
     - /support\/.*/
     - /release\/.*/
+    - /fix\/.*/
     
 before_install:
   - "cp _ci/.travis.settings.xml $HOME/.m2/settings.xml"
