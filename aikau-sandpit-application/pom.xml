@@ -77,6 +77,14 @@
             </configuration>
 
          </plugin>
+
+         <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+               <configuration>
+                  <sourcepath>${project.build.directory}/generated-sources/java-templates</sourcepath>
+                  <detectJavaApiLink>false</detectJavaApiLink>
+               </configuration>
+         </plugin>
       </plugins>
    </build>
 </project>
