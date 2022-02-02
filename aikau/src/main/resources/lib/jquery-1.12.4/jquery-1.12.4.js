@@ -12,7 +12,7 @@
  * Date: 2016-05-20T17:17Z
  * 
  * PATCH: Patched for CVE-2019-11358, CVE-2020-11022 and CVE-2020-11023
- */
+*/
 
 (function( global, factory ) {
 
@@ -212,12 +212,12 @@ jQuery.extend = jQuery.fn.extend = function() {
 				copy = options[ name ];
 
 				/*
-				PATCH: Prevent Object.prototype pollution
-				Before: 
-				if ( target === copy ) {
-				*/
+                PATCH: Prevent Object.prototype pollution
+                Before: 
+                if ( target === copy ) {
+                */
 				if ( name === "__proto__" || target === copy ) {
-					continue;
+                    continue;
 				}
 
 				// Recurse if we're merging plain objects or arrays
@@ -4498,14 +4498,14 @@ function createSafeFragment( document ) {
 	div.innerHTML = "<textarea>x</textarea>";
 	support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 
-	/*
-	PATCH: Support: IE <=9 only
-	IE <=9 replaces <option> tags with their contents when inserted outside of
-	the select element.
-	Added:
-	*/
-	div.innerHTML = "<option></option>";
-	support.option = !!div.lastChild;
+    /*
+    PATCH: Support: IE <=9 only
+    IE <=9 replaces <option> tags with their contents when inserted outside of
+    the select element.
+    Added:
+    */
+    div.innerHTML = "<option></option>";
+    support.option = !!div.lastChild;
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
 	fragment.appendChild( div );
@@ -4533,7 +4533,6 @@ function createSafeFragment( document ) {
 	div[ jQuery.expando ] = 1;
 	support.attributes = !div.getAttribute( jQuery.expando );
 } )();
-
 
 /*
 PATCH: Removed from wrapMap:
@@ -5900,7 +5899,7 @@ PATCH: Removed
 */
 var rinlinejQuery = / jQuery\d+="(?:null|\d+)"/g,
 	rnoshimcache = new RegExp( "<(?:" + nodeNames + ")[\\s/>]", "i" ),
-
+	
 	// Support: IE 10-11, Edge 10240+
 	// In IE/Edge using regex groups here causes severe slowdowns.
 	// See https://connect.microsoft.com/IE/feedback/details/1736512/
@@ -6155,10 +6154,10 @@ function remove( elem, selector, keepData ) {
 
 jQuery.extend( {
 	htmlPrefilter: function( html ) {
-		/*
-		PATCH: Removed
-		return html.replace( rxhtmlTag, "<$1></$2>" );
-		*/
+        /*
+        PATCH: Removed
+        return html.replace( rxhtmlTag, "<$1></$2>" );
+        */
 		return html;
 	},
 
