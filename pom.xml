@@ -16,8 +16,8 @@
    <properties>
       <dependency.surf.version>6.3</dependency.surf.version>
       <dependency.dojo.version>1.10.4</dependency.dojo.version>
-      <dependency.jquery.version>1.11.1</dependency.jquery.version>
-      <dependency.jquery-ui.version>1.11.1</dependency.jquery-ui.version>
+      <dependency.jquery.version>1.12.4</dependency.jquery.version>
+      <dependency.jquery-ui.version>1.12.1</dependency.jquery-ui.version>
    </properties>
 
    <distributionManagement>
