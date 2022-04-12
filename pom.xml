@@ -14,7 +14,7 @@
    <name>Aikau Project Aggregator</name>
 
    <properties>
-      <dependency.surf.version>6.3</dependency.surf.version>
+      <dependency.surf.version>8.19</dependency.surf.version>
       <dependency.dojo.version>1.10.4</dependency.dojo.version>
       <dependency.jquery.version>1.12.4</dependency.jquery.version>
       <dependency.jquery-ui.version>1.12.1</dependency.jquery-ui.version>
@@ -70,8 +70,8 @@
              <plugin>
                  <artifactId>maven-compiler-plugin</artifactId>
                  <configuration>
-                     <source>1.7</source>
-                     <target>1.7</target>
+                     <source>1.8</source>
+                     <target>1.8</target>
                  </configuration>
              </plugin>
              <plugin>
