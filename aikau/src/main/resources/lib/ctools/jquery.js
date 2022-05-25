@@ -10,8 +10,9 @@
  * http://jquery.org/license
  *
  * Date: 2016-05-20T17:17Z
- * 
+ *
  * PATCH: Patched for CVE-2019-11358, CVE-2020-11022 and CVE-2020-11023
+ * PATCH: Patched for CVE-2015-9251
  */
 
 (function( global, factory ) {
@@ -213,7 +214,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 				/*
 				PATCH: Prevent Object.prototype pollution
-				Before: 
+				Before:
 				if ( target === copy ) {
 				*/
 				if ( name === "__proto__" || target === copy ) {
@@ -10387,8 +10388,12 @@ function createActiveXHR() {
 	} catch ( e ) {}
 }
 
-
-
+// Prevent auto-execution of scripts when no explicit dataType was provided
+jQuery.ajaxPrefilter( function( s ) {
+   if ( s.crossDomain ) {
+      s.contents.script = false;
+   }
+} );
 
 // Install script dataType
 jQuery.ajaxSetup( {
