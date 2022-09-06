@@ -11,7 +11,7 @@
  *
  * Date: 2016-05-20T17:17Z
  * 
- * PATCH: Patched for CVE-2019-11358, CVE-2020-11022 and CVE-2020-11023
+ * PATCH: Patched for CVE-2019-11358, CVE-2020-11022, CVE-2020-11023 and CVE-2015-9251
 */
 
 (function( global, factory ) {
@@ -10386,8 +10386,12 @@ function createActiveXHR() {
 	} catch ( e ) {}
 }
 
-
-
+// PATCH: Prevent auto-execution of scripts when no explicit dataType was provided (See gh-2432)
+jQuery.ajaxPrefilter( function( s ) {
+    if ( s.crossDomain ) {
+        s.contents.script = false;
+    }
+} );
 
 // Install script dataType
 jQuery.ajaxSetup( {
