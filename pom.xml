@@ -46,8 +46,39 @@
          <artifactId>spring-surf-api</artifactId>
          <version>${dependency.surf.version}</version>
          <scope>runtime</scope>
+          <exclusions>
+              <exclusion>
+                  <groupId>com.google.code.gson</groupId>
+                  <artifactId>gson</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>commons-beanutils</groupId>
+                  <artifactId>commons-beanutils</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.google.protobuf</groupId>
+                  <artifactId>protobuf-java</artifactId>
+              </exclusion>
+          </exclusions>
       </dependency>
-
+       <dependency>
+           <groupId>com.google.code.gson</groupId>
+           <artifactId>gson</artifactId>
+           <version>2.8.9</version>
+           <scope>runtime</scope>
+       </dependency>
+       <dependency>
+           <groupId>commons-beanutils</groupId>
+           <artifactId>commons-beanutils</artifactId>
+           <version>1.9.4</version>
+           <scope>runtime</scope>
+       </dependency>
+       <dependency>
+           <groupId>com.google.protobuf</groupId>
+           <artifactId>protobuf-java</artifactId>
+           <version>3.16.1</version>
+           <scope>runtime</scope>
+       </dependency>
       <!-- Required for unit test application -->
       <dependency>
          <groupId>org.tuckey</groupId>
