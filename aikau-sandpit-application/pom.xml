@@ -85,6 +85,31 @@
                   <detectJavaApiLink>false</detectJavaApiLink>
                </configuration>
          </plugin>
+         <plugin>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.2</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                     <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  </manifest>
+                  <manifestEntries>
+                     <Implementation-Version>${project.version}</Implementation-Version>
+                     <Build-Date>${maven.build.timestamp}</Build-Date>
+                  </manifestEntries>
+               </archive>
+               <attachClasses>true</attachClasses>
+               <recompressZippedFiles>false</recompressZippedFiles>
+            </configuration>
+            <dependencies>
+               <dependency>
+                  <groupId>org.alfresco</groupId>
+                  <artifactId>alfresco-mmt</artifactId>
+                  <version>17.68</version>
+               </dependency>
+            </dependencies>
+         </plugin>
       </plugins>
    </build>
 </project>
