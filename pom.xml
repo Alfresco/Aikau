@@ -59,6 +59,10 @@
                   <groupId>com.google.protobuf</groupId>
                   <artifactId>protobuf-java</artifactId>
               </exclusion>
+              <exclusion>
+                  <groupId>org.codehaus.plexus</groupId>
+                  <artifactId>plexus-utils</artifactId>
+              </exclusion>
           </exclusions>
       </dependency>
        <dependency>
@@ -79,7 +83,13 @@
            <version>3.16.1</version>
            <scope>runtime</scope>
        </dependency>
-      <!-- Required for unit test application -->
+       <dependency>
+           <groupId>org.codehaus.plexus</groupId>
+           <artifactId>plexus-utils</artifactId>
+           <version>3.0.24</version>
+           <scope>runtime</scope>
+       </dependency>
+       <!-- Required for unit test application -->
       <dependency>
          <groupId>org.tuckey</groupId>
          <artifactId>urlrewritefilter</artifactId>
