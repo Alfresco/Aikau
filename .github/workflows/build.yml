@@ -61,6 +61,7 @@ jobs:
 
   Build_and_test:
     runs-on: ubuntu-latest
+    needs: Build
     steps:
       - uses: actions/checkout@v3
         with:
@@ -93,6 +94,7 @@ jobs:
         github.event_name != 'pull_request' && 
         github.event.repository.fork==false }}
     runs-on: ubuntu-latest
+    needs: Build_and_test
     steps:
       - uses: actions/checkout@v3
         with:
