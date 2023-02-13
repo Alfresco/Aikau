@@ -92,7 +92,7 @@ jobs:
           mvn test
 
   Push_To_Nexus:
-    if: ${{ ( startsWith(github.ref_name, 'support/') || ( startsWith(github.ref_name, 'release/')) &&
+    if: ${{ ( startsWith(github.ref_name, 'support/') ||  startsWith(github.ref_name, 'release/') ) &&
       github.event_name != 'pull_request' && inputs.commitMessage != '[no-release]' &&
       github.event.repository.fork==false }}
     runs-on: ubuntu-latest
