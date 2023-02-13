@@ -124,8 +124,14 @@ jobs:
         run: mvn install -DskipTests=true -B -V
       - name: Get branch name
         uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v1.23.0
+      - uses: Alfresco/alfresco-build-tools/.github/actions/configure-git-author@v1.30.0
+        with:
+          username: ${{ env.GIT_USERNAME }}
+          email: ${{ env.GIT_EMAIL }}
+          global: true
       - name: "Push to Nexus"
         run: |
           git checkout -B "${BRANCH_NAME}"
           git config user.email "${GIT_EMAIL}"
+          git config user.name "${GIT_USERNAME}"
           mvn --batch-mode -q -DscmCommentPrefix="[maven-release-plugin][skip ci] " -Dusername="${GIT_USERNAME}" -Dpassword="${GIT_PASSWORD}" -DskipTests -Darguments=-DskipTests release:clean release:prepare release:perform
