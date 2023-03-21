@@ -657,6 +657,9 @@ define(["alfresco/core/CoreXhr",
                formData.append("username", uploadData.username);
                formData.append("overwrite", uploadData.overwrite);
                formData.append("thumbnails", uploadData.thumbnails);
+               if (uploadData.uploaddirectory) {
+                  formData.append("createdirectory",true);
+               }
                if (uploadData.updateNodeRef) {
                   formData.append("updateNodeRef", uploadData.updateNodeRef);
                }
