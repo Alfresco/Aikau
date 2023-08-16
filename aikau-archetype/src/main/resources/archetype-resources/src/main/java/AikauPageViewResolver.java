@@ -21,7 +21,7 @@
  */
 package ${package};
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import ${package}.AikauAuthenticationFilter;
 import org.springframework.extensions.surf.RequestContextUtil;

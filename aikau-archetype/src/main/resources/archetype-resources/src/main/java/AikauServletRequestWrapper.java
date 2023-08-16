@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 /**
  * Request wrapper used an Accept-Langauge header was not present in original
@@ -59,7 +59,7 @@ public class AikauServletRequestWrapper extends HttpServletRequestWrapper
     }
 
     /**
-     * @see javax.servlet.http.HttpServletRequestWrapper${symbol_pound}getHeader(java.lang.String)
+     * @see jakarta.servlet.http.HttpServletRequestWrapper${symbol_pound}getHeader(java.lang.String)
      */
     @Override
     public String getHeader(String name)
@@ -76,7 +76,7 @@ public class AikauServletRequestWrapper extends HttpServletRequestWrapper
     }
 
     /**
-     * @see javax.servlet.http.HttpServletRequestWrapper${symbol_pound}getHeaders(java.lang.String)
+     * @see jakarta.servlet.http.HttpServletRequestWrapper${symbol_pound}getHeaders(java.lang.String)
      */
     @SuppressWarnings("rawtypes")
     @Override
@@ -96,7 +96,7 @@ public class AikauServletRequestWrapper extends HttpServletRequestWrapper
     }
 
     /**
-     * @see javax.servlet.http.HttpServletRequestWrapper${symbol_pound}getHeaderNames()
+     * @see jakarta.servlet.http.HttpServletRequestWrapper${symbol_pound}getHeaderNames()
      */
     @Override
     public Enumeration<String> getHeaderNames()
