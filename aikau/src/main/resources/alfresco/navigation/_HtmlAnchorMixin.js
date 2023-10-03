@@ -35,129 +35,122 @@
  * @author Martin Doyle
  */
 define(["dojo/_base/declare",
-        "alfresco/core/Core",
-        "alfresco/services/_NavigationServiceTopicMixin",
-        "alfresco/util/urlUtils",
-        "service/constants/Default",
-        "dojo/_base/lang",
-        "dojo/_base/array",
-        "dojo/dom-construct",
-        "dojo/query",
-        "dojo/NodeList",
-        "dojo/NodeList-manipulate"],
-        function(declare, AlfCore, _NavigationServiceTopicMixin, urlUtils, AlfConstants, lang, array, domConstruct, query /*, NodeList, NodeListManipulate*/) {
+      "alfresco/core/Core",
+      "alfresco/services/_NavigationServiceTopicMixin",
+      "alfresco/util/urlUtils",
+      "service/constants/Default",
+      "dojo/_base/lang",
+      "dojo/_base/array",
+      "dojo/dom-construct",
+      "dojo/query",
+      "dojo/NodeList",
+      "dojo/NodeList-manipulate"],
+   function(declare, AlfCore, _NavigationServiceTopicMixin, urlUtils, AlfConstants, lang, array, domConstruct, query /*, NodeList, NodeListManipulate*/) {
 
-        function decodeEntities(encodedString) {
-            var textArea = document.createElement('textarea');
-            textArea.setAttribute("type", "hidden");
-            textArea.innerHTML = encodedString;
-            return textArea.value;
-        }
+      return declare([AlfCore, _NavigationServiceTopicMixin], {
 
-            return declare([AlfCore, _NavigationServiceTopicMixin], {
+         /**
+          * An array of the CSS files to use with this widget.
+          *
+          * @instance
+          * @type {object[]}
+          * @default [{cssFile:"./css/_HtmlAnchorMixin.css"}]
+          */
+         cssRequirements: [{cssFile:"./css/_HtmlAnchorMixin.css"}],
 
-      /**
-       * An array of the CSS files to use with this widget.
-       *
-       * @instance
-       * @type {object[]}
-       * @default [{cssFile:"./css/_HtmlAnchorMixin.css"}]
-       */
-      cssRequirements: [{cssFile:"./css/_HtmlAnchorMixin.css"}],
+         /**
+          * When set to true, the resulting anchor(s) will be removed from the page tab-order by setting their tabindex to -1.
+          *
+          * @instance
+          * @type {boolean}
+          * @default
+          * @since 1.0.40
+          */
+         excludeFromTabOrder: true,
 
-      /**
-       * When set to true, the resulting anchor(s) will be removed from the page tab-order by setting their tabindex to -1.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.40
-       */
-      excludeFromTabOrder: true,
+         /**
+          * The title text to put on the generated link(s).
+          *
+          * @instance
+          * @type {string}
+          * @default
+          */
+         label: null,
 
-      /**
-       * The title text to put on the generated link(s).
-       *
-       * @instance
-       * @type {string}
-       * @default
-       */
-      label: null,
+         /**
+          * When set to true, all of the direct children of this widget's root node will be wrapped in a single anchor,
+          * when [makeAnchor()]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor} is called.
+          *
+          * @instance
+          * @type {boolean}
+          * @default
+          * @since 1.0.40
+          */
+         wrapAllChildren: false,
 
-      /**
-       * When set to true, all of the direct children of this widget's root node will be wrapped in a single anchor,
-       * when [makeAnchor()]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor} is called.
-       *
-       * @instance
-       * @type {boolean}
-       * @default
-       * @since 1.0.40
-       */
-      wrapAllChildren: false,
+         /**
+          * When a targetUrl is specified we want to wrap menu item labels in <a> elements to allow the browsers context menu
+          * to access the URL (most commonly used for opening a page in a new tab). However, we aren't going to allow the browser
+          * to process the link as we still want it to go via the NavigationService...
+          *
+          * @instance
+          * @param {string} url The URL configured
+          * @param {string} type The target configured
+          */
+         makeAnchor: function alfresco_navigation__HtmlAnchorMixin__makeAnchor(url, type) {
+            var anchorUrl = urlUtils.convertUrl(url, type);
+            anchorUrl && this._addAnchors(anchorUrl);
+         },
 
-      /**
-       * When a targetUrl is specified we want to wrap menu item labels in <a> elements to allow the browsers context menu
-       * to access the URL (most commonly used for opening a page in a new tab). However, we aren't going to allow the browser
-       * to process the link as we still want it to go via the NavigationService...
-       *
-       * @instance
-       * @param {string} url The URL configured
-       * @param {string} type The target configured
-       */
-      makeAnchor: function alfresco_navigation__HtmlAnchorMixin__makeAnchor(url, type) {
-         var anchorUrl = urlUtils.convertUrl(url, type);
-         anchorUrl && this._addAnchors(anchorUrl);
-      },
+         /**
+          * This function is called for any menu item with a targetUrl. By default it addresses the known menu items DOM structures
+          * of the AlfMenuItem and AlfMenuBarItem. However, it can be extended or updated to handle the DOM structure of additional
+          * menu widgets.
+          *
+          * @instance
+          * @param {string} url The URL to use for the anchor
+          */
+         _addAnchors: function alfresco_navigation__HtmlAnchorMixin__addAnchors(url) {
 
-      /**
-       * This function is called for any menu item with a targetUrl. By default it addresses the known menu items DOM structures
-       * of the AlfMenuItem and AlfMenuBarItem. However, it can be extended or updated to handle the DOM structure of additional
-       * menu widgets.
-       *
-       * @instance
-       * @param {string} url The URL to use for the anchor
-       */
-      _addAnchors: function alfresco_navigation__HtmlAnchorMixin__addAnchors(url) {
-
-         // Setup and create the anchor
-         var anchorAttrs = {
-            className: "alfresco-navigation-_HtmlAnchorMixin",
-            href: url
-         };
-         if (this.title)
-         {
-            anchorAttrs.title = decodeEntities(this.message(this.title));
-         }
-         else if (this.label) {
-            anchorAttrs.title = decodeEntities(this.message(this.label));
-         }
-         if (this.excludeFromTabOrder) {
-            anchorAttrs.tabIndex = "-1";
-         }
-         var anchor = domConstruct.create("A", anchorAttrs);
-
-         // Create anchor(s) based upon wrapAllChildren setting
-         if (this.wrapAllChildren) {
-            this.domNode.appendChild(anchor);
-            while (this.domNode.firstChild !== anchor) {
-               anchor.appendChild(this.domNode.firstChild);
+            // Setup and create the anchor
+            var anchorAttrs = {
+               className: "alfresco-navigation-_HtmlAnchorMixin",
+               href: url
+            };
+            if (this.title)
+            {
+               anchorAttrs.title = this.message(this.title);
             }
-         } else {
-            array.forEach(this.getAnchorTargetSelectors(), function(selector) {
-               query(selector, this.domNode).wrapInner(anchor);
-            }, this);
-         }
-      },
+            else if (this.label) {
+               anchorAttrs.title = this.message(this._originalLabel);
+            }
+            if (this.excludeFromTabOrder) {
+               anchorAttrs.tabIndex = "-1";
+            }
+            var anchor = domConstruct.create("A", anchorAttrs);
 
-      /**
-       * This function should be overridden to provide an array of the CSS selectors to use to identify
-       * the elements to wrap in an anchor. By default this will return an empty array.
-       *
-       * @instance
-       * @returns {array}
-       */
-      getAnchorTargetSelectors: function alfresco_navigation__HtmlAnchorMixin__getAnchorTargetSelectors() {
-         return [];
-      }
+            // Create anchor(s) based upon wrapAllChildren setting
+            if (this.wrapAllChildren) {
+               this.domNode.appendChild(anchor);
+               while (this.domNode.firstChild !== anchor) {
+                  anchor.appendChild(this.domNode.firstChild);
+               }
+            } else {
+               array.forEach(this.getAnchorTargetSelectors(), function(selector) {
+                  query(selector, this.domNode).wrapInner(anchor);
+               }, this);
+            }
+         },
+
+         /**
+          * This function should be overridden to provide an array of the CSS selectors to use to identify
+          * the elements to wrap in an anchor. By default this will return an empty array.
+          *
+          * @instance
+          * @returns {array}
+          */
+         getAnchorTargetSelectors: function alfresco_navigation__HtmlAnchorMixin__getAnchorTargetSelectors() {
+            return [];
+         }
+      });
    });
-});
