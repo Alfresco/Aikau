@@ -20,7 +20,7 @@
 /**
  * <p>This mixin can be used to wrap HTML elements in a widget with an anchor element that allows users
  * to use the browser context-menu to copy or open the link in a new tab or window. This works around
- * the fact that all Aikau navigation is achieved via publishing requests to be handled by the 
+ * the fact that all Aikau navigation is achieved via publishing requests to be handled by the
  * [Navigation Service]{@link module:alfresco/services/NavigationService}.</p>
  * <p>This should be mixed into a widget and then the [makeAnchor]{@link module:alfresco/navigation/_HtmlAnchorMixin#makeAnchor}
  * function should be called by the postCreate function (or any function called after the widgets DOM
@@ -44,14 +44,14 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/query",
         "dojo/NodeList",
-        "dojo/NodeList-manipulate"], 
+        "dojo/NodeList-manipulate"],
         function(declare, AlfCore, _NavigationServiceTopicMixin, urlUtils, AlfConstants, lang, array, domConstruct, query /*, NodeList, NodeListManipulate*/) {
-   
+
    return declare([AlfCore, _NavigationServiceTopicMixin], {
 
       /**
        * An array of the CSS files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{cssFile:"./css/_HtmlAnchorMixin.css"}]
@@ -106,7 +106,7 @@ define(["dojo/_base/declare",
        * This function is called for any menu item with a targetUrl. By default it addresses the known menu items DOM structures
        * of the AlfMenuItem and AlfMenuBarItem. However, it can be extended or updated to handle the DOM structure of additional
        * menu widgets.
-       * 
+       *
        * @instance
        * @param {string} url The URL to use for the anchor
        */
@@ -122,7 +122,7 @@ define(["dojo/_base/declare",
             anchorAttrs.title = this.message(this.title);
          }
          else if (this.label) {
-            anchorAttrs.title = this.message(this.label);
+            anchorAttrs.title = this.message(this._originalLabel);
          }
          if (this.excludeFromTabOrder) {
             anchorAttrs.tabIndex = "-1";
