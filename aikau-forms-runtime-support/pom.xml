@@ -26,7 +26,7 @@
       <dependency>
          <groupId>org.alfresco</groupId>
          <artifactId>alfresco-web-framework-commons</artifactId>
-         <version>23.1.0.11</version>
+         <version>23.1.0.242</version>
          <classifier>classes</classifier>
          <scope>compile</scope>
       </dependency>
