@@ -14,7 +14,7 @@
    <name>Aikau Project Aggregator</name>
 
    <properties>
-      <dependency.surf.version>8.32</dependency.surf.version>
+      <dependency.surf.version>9.0</dependency.surf.version>
       <dependency.dojo.version>1.10.4</dependency.dojo.version>
       <dependency.jquery.version>1.12.4</dependency.jquery.version>
       <dependency.jquery-ui.version>1.12.1</dependency.jquery-ui.version>
