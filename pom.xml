@@ -96,6 +96,11 @@
          <version>4.0.4-jakarta-3</version>
          <scope>runtime</scope>
       </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>32.0.1-jre</version>
+      </dependency>
       
    </dependencies>
 
