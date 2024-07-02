@@ -12,7 +12,7 @@ Aikau incorporates code libraries not provided by Alfresco. All licenses are inc
 | CodeMirror 5.20.2 | https://codemirror.net/ | MIT (https://codemirror.net/LICENSE) | No | 
 | Community Chart Components | https://github.com/webdetails/ccc | MPL 2.0 (https://github.com/webdetails/ccc/blob/master/LICENSE.txt) | No |
 | dialog-polyfill | https://github.com/GoogleChrome/dialog-polyfill | BSD (https://github.com/GoogleChrome/dialog-polyfill/blob/master/LICENSE) | Yes |
-| Dojo 1.10.4 | https://dojotoolkit.org/ | BSD (https://dojotoolkit.org/license.html) | No |
+| Dojo 1.17.3 | https://dojotoolkit.org/ | BSD (https://dojotoolkit.org/license.html) | No |
 | Enum | https://github.com/adrai/enum | MIT (https://github.com/adrai/enum/blob/master/licence) | No |
 | ES6 Promise | https://github.com/stefanpenner/es6-promise | MIT (https://github.com/stefanpenner/es6-promise/blob/master/LICENSE) | Yes |
 | JQuery 1.12.4 | https://jquery.com/ | Apache 2.0 (https://js.foundation/pdf/ip-policy.pdf) | No |
