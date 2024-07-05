@@ -141,7 +141,7 @@
                               <manifestSection>
                                   <name>Aikau Libraries</name>
                                   <manifestEntries>
-                                    <Surf>${dependency.surf.version}</Surf>
+                                    <!--<Surf>${dependency.surf.version}</Surf>-->
                                     <Dojo>${dependency.dojo.version}</Dojo>
                                     <Jquery>${dependency.jquery.version}</Jquery>
                                     <Jquery-ui>${dependency.jquery-ui.version}</Jquery-ui>
