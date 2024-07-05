@@ -41,7 +41,7 @@
    <dependencies>
 
       <!-- Surf is required for unit testing application -->
-      <dependency>
+      <!--<dependency>
          <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
          <version>${dependency.surf.version}</version>
@@ -88,9 +88,9 @@
            <artifactId>plexus-utils</artifactId>
            <version>3.0.24</version>
            <scope>runtime</scope>
-       </dependency>
+       </dependency>-->
        <!-- Required for unit test application -->
-      <dependency>
+      <!--<dependency>
          <groupId>org.tuckey</groupId>
          <artifactId>urlrewritefilter</artifactId>
          <version>4.0.4-jakarta-3</version>
@@ -100,7 +100,7 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>32.0.1-jre</version>
-      </dependency>
+      </dependency>-->
       
    </dependencies>
 
@@ -157,10 +157,10 @@
 
    <modules>
       <module>aikau</module>
-      <module>aikau-archetype</module>
+      <!--<module>aikau-archetype</module>
       <module>aikau-additional-languages</module>
       <module>aikau-sandpit-application</module>
-      <module>aikau-forms-runtime-support</module>
+      <module>aikau-forms-runtime-support</module>-->
    </modules>
 
 </project>
