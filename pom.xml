@@ -18,6 +18,8 @@
       <dependency.dojo.version>1.17.3</dependency.dojo.version>
       <dependency.jquery.version>1.12.4</dependency.jquery.version>
       <dependency.jquery-ui.version>1.12.1</dependency.jquery-ui.version>
+      <!-- Skip compilation of tests-->
+      <maven.test.skip>true</maven.test.skip>
    </properties>
 
    <distributionManagement>
