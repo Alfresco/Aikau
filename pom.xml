@@ -9,7 +9,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.131-SNAPSHOT</version>
+   <version>1.0.131</version>
    
    <name>Aikau Project Aggregator</name>
 
@@ -37,7 +37,7 @@
       <connection>scm:git:https://github.com/Alfresco/Aikau.git</connection>
       <developerConnection>scm:git:https://github.com/Alfresco/Aikau.git</developerConnection>
       <url>https://github.com/Alfresco/Aikau</url>
-    <tag>HEAD</tag>
+    <tag>release-1.0.131</tag>
   </scm>
 
    <dependencies>
