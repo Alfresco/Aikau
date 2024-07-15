@@ -3,7 +3,7 @@
    <script type="text/javascript">
       dojoConfig.map = {
          "*": {
-            "dojo/touch": "alfresco/patches/touch"
+            // Patch for Dojo Bootstrap to use the correct module path
          }
       };
    </script>
