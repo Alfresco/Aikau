@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>aikau-parent</artifactId>
-      <version>1.0.127</version>
+      <version>1.0.127.1-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
@@ -448,7 +448,6 @@
                <configFile>${basedir}/conf.json</configFile>
             </configuration>
          </plugin>
-         
       </plugins>
    </build>
 
