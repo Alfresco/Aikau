@@ -150,4 +150,49 @@
            <uri-template id="share-site-page">/site/{site}/{pageid}</uri-template>
         </uri-templates>
    </config>
+
+    <config evaluator="string-compare" condition="Social">
+        <!-- Alfresco QuickShare social widget - for creating public url that can be shared -->
+        <quickshare>
+            <!--
+               Will be available as Alfresco.constants.QUICKSHARE_URL using javascrip in the browser.
+               If changing this, make sure this url matches the quickshare rule in urlrewrite.xml
+            -->
+            <url>{context}/s/{sharedId}</url>
+        </quickshare>
+
+        <!-- Alfresco LinkShare social widget - share a link to social sites -->
+        <linkshare>
+            <!--
+               These actions will be available as Alfresco.constants.LINKSHARE_ACTIONS using javascript in the
+            browser.
+               Labels will be retrieved from msg key "linkshare.action.<id>.label" unless explicitly provided as
+            an
+               attribute to the action element.
+               Each param value accepts the following input: {shareUrl}, {displayName} or a msg key that will be
+            prefixed.
+               I.e. {body} for the email action's href param will be retrieved using
+            "linkshare.action.email.body".
+            -->
+            <action id="email" type="link" index="10">
+                <param name="href">mailto:?subject={subject}&amp;body={body}</param>
+                <param name="target">new</param>
+            </action>
+            <action id="facebook" type="link" index="20">
+                <param name="href">
+                    https://www.facebook.com/sharer/sharer.php?u={shareUrl}&amp;t={message}</param>
+                <param name="target">new</param>
+            </action>
+            <action id="twitter" type="link" index="30">
+                <param name="href">
+                    https://twitter.com/intent/tweet?text={message}&amp;url={shareUrl}</param>
+                <param name="target">new</param>
+            </action>
+            <action id="google-plus" type="link" index="40">
+                <param name="href">https://plus.google.com/share?url={shareUrl}</param>
+                <param name="target">new</param>
+            </action>
+        </linkshare>
+
+    </config>
 </alfresco-config>
