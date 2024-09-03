@@ -88,8 +88,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {String[]}
        */
-      nonAmdDependencies: ["/js/lib/pdfjs/compatibility.js",
-                           "/js/lib/pdfjs/pdf.js",
+      nonAmdDependencies: ["/js/lib/pdfjs/pdf.js",
                            "/js/lib/pdfjs/pdf.worker.js",
                            "/js/lib/3rd-party/spin.js"],
 
