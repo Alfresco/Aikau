@@ -31,20 +31,6 @@
          </list>
       </constructor-arg>
    </bean>
-
-   <!-- Maps requests to @Controllers based on @RequestMapping("path") annotation values
-       If no annotation-based path mapping is found, Spring MVC sends a 404 response and logs a pageNotFound warning. -->
-   <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-      <property name="order" value="1" />
-
-      <!-- SURF: required interceptors -->
-        <property name="interceptors">
-            <list>
-               <ref bean="requestContextInterceptor"/>
-               <ref bean="themeInterceptor"/>
-            </list>
-        </property>
-   </bean>
     
    <!-- This overrides the default configuration for the presets persister which determines the store to use when creating
         Surf objects from presets. By default Surf will attempt to use a remote store (which is not configured) so instead

@@ -63,7 +63,7 @@ define(["dojo/_base/declare",
        * @instance
        * @type {String[]}
        */
-      nonAmdDependencies: ["/js/lib/tinymce/tinymce.js"],
+      nonAmdDependencies: ["/js/lib/tinymce/tinymce.min.js"],
 
       /**
        * The HTML template to use for the widget.

@@ -32,7 +32,8 @@ env:
 
 jobs:
   Build:
-    if: ${{ ( startsWith(github.ref_name, 'support/') || github.ref_name == 'develop' || startsWith(github.ref_name, 'SP/') ||  contains(github.ref_name, 'APPS') || startsWith(github.ref_name, 'release/') || startsWith(github.ref_name, 'fix/')   ) &&
+    if: ${{ ( startsWith(github.ref_name, 'support/') || github.ref_name == 'develop' || startsWith(github.ref_name, 'SP/') ||
+      contains(github.ref_name, 'APPS')  || startsWith(github.ref_name, 'fix/') || startsWith(github.ref_name, 'release/')) &&
       github.event_name != 'pull_request' &&
       github.event.repository.fork==false }}
     runs-on: ubuntu-latest
