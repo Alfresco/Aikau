@@ -9,7 +9,7 @@
    <groupId>org.alfresco</groupId>
    <artifactId>aikau-parent</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.132-SNAPSHOT</version>
+   <version>1.1.1-SNAPSHOT</version>
    
    <name>Aikau Project Aggregator</name>
 
@@ -18,8 +18,6 @@
       <dependency.dojo.version>1.17.3</dependency.dojo.version>
       <dependency.jquery.version>1.12.4</dependency.jquery.version>
       <dependency.jquery-ui.version>1.12.1</dependency.jquery-ui.version>
-      <!-- Skip compilation of tests-->
-      <maven.test.skip>true</maven.test.skip>
    </properties>
 
    <distributionManagement>
@@ -41,10 +39,7 @@
   </scm>
 
    <dependencies>
-        <!-- Dependencies are disabled as they are needed for tests and modules we will not
-            be building until we have a better understanding of upgrading the build process -->
-      <!-- Surf is required for unit testing application -->
-      <!--<dependency>
+        <dependency>
          <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-api</artifactId>
          <version>${dependency.surf.version}</version>
@@ -91,9 +86,9 @@
            <artifactId>plexus-utils</artifactId>
            <version>3.0.24</version>
            <scope>runtime</scope>
-       </dependency> -->
+       </dependency>
        <!-- Required for unit test application -->
-      <!--<dependency>
+       <dependency>
          <groupId>org.tuckey</groupId>
          <artifactId>urlrewritefilter</artifactId>
          <version>4.0.4-jakarta-3</version>
@@ -103,22 +98,12 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>32.0.1-jre</version>
-      </dependency>-->
-      
+      </dependency>
    </dependencies>
 
    <build>
       <pluginManagement>
           <plugins>
-            <!-- Disable testing until builds can be be reworked -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                  <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
              <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
@@ -169,11 +154,10 @@
 
    <modules>
       <module>aikau</module>
-      <!-- Disabling modules until the build process can be reworked -->
-      <!--<module>aikau-archetype</module>
+      <module>aikau-archetype</module>
       <module>aikau-additional-languages</module>
       <module>aikau-sandpit-application</module>
-      <module>aikau-forms-runtime-support</module>-->
+      <module>aikau-forms-runtime-support</module>
    </modules>
 
 </project>
