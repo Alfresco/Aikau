@@ -721,10 +721,10 @@ define(["dojo/_base/declare",
        * 
        * @instance
        * @type {boolean}
-       * @default false
+       * @default true
        * @since 1.0.78
        */
-      siteContext: false,
+      siteContext: true,
 
       /**
        * This is the page to navigate to for site home links. It defaults to 
@@ -929,6 +929,11 @@ define(["dojo/_base/declare",
 
             this._LiveSearch.placeAt(this._searchLiveNode);
             
+            if (this.siteContext === true && this.site) {
+               domClass.add(this._LiveSearch.contextSiteNode, "alf-livesearch-context--active");
+               domClass.remove(this._LiveSearch.contextRepositoryNode, "alf-livesearch-context--active");
+            }
+
             // event handlers to change the search context
             on(this._LiveSearch.contextRepositoryNode, "click", lang.hitch(this, function(evt) {
                // change context to repository
