@@ -689,28 +689,28 @@ define(["dojo/_base/declare",
          }
 
          // Set the worker source
-         PDFJS.workerSrc = this.workerSrc;
+         pdfjsLib.GlobalWorkerOptions.workerSrc = this.workerSrc;
          // Set the char map source dir
-         PDFJS.cMapUrl = "/cmaps/";
-         PDFJS.cMapPacked = true;
+         params.cMapUrl = "/cmaps/";
+         params.cMapPacked = true;
 
          // PDFJS range request for progessive loading
          // We also test if it may already be set to true by compatibility.js tests, some browsers do not support it.
-         if (this.attributes.progressiveLoading === "true" && PDFJS.disableRange !== true)
+         if (this.attributes.progressiveLoading === "true" && params.disableRange !== true)
          {
-             PDFJS.disableRange = false;
+             params.disableRange = false;
              // disable autofetch - retrieve just the ranges needed to display
-             PDFJS.disableAutoFetch = false;
+             params.disableAutoFetch = false;
          }
          else
          {
-             PDFJS.disableRange = true;
+             params.disableRange = true;
          }
 
-         this.alfLog("log","Using PDFJS.disableRange=" + PDFJS.disableRange + " PDFJS.disableAutoFetch:" + PDFJS.disableAutoFetch);
+         this.alfLog("log", "Using params.disableRange=" + params.disableRange + " params.disableAutoFetch:" + params.disableAutoFetch);
          this.alfLog("log","Loading PDF file from " + fileurl);
 
-         PDFJS.getDocument(params).then(
+         pdfjsLib.getDocument(params).promise.then(
             lang.hitch(this, this._onGetDocumentSuccess),
             lang.hitch(this, this._onGetDocumentFailure)
          );
@@ -763,7 +763,7 @@ define(["dojo/_base/declare",
 
                // Password required - launch AlfDialog
                this.alfPublish("ALF_CREATE_FORM_DIALOG_REQUEST", {
-                  dialogTitle: exception.code === PDFJS.PasswordResponses.NEED_PASSWORD ? "pdfjs.password.dialog.title.required" : "pdfjs.password.dialog.title.incorrect",
+                  dialogTitle: exception.code === pdfjsLib.PasswordResponses.NEED_PASSWORD ? "pdfjs.password.dialog.title.required" : "pdfjs.password.dialog.title.incorrect",
                   dialogConfirmationButtonTitle: "pdfjs.password.dialog.confirmation",
                   dialogCancellationButtonTitle: "pdfjs.password.dialog.cancellation",
                   formSubmissionTopic: PdfJsConstants.PASSWORD_RELOAD,
