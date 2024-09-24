@@ -75,6 +75,34 @@ define(["dojo/_base/declare",
       renderOnScrollZero : 0,
 
       /**
+       * Default zoom level for new documents
+       * 
+       * @property defaultScale
+       * @type String
+       * @default "auto"
+      */
+      defaultScale: "auto",
+
+      /**
+       * Minimum scale level to use when auto-scaling a document
+       * 
+       * @property autoMinScale
+       * @type String
+       * @default "0.65"
+       */
+      autoMinScale: "0.65",
+      autoMinScaleMobile: "0.525",
+
+      /**
+       * Maximum scale level to use when auto-scaling a document
+       * 
+       * @property autoMaxScale
+       * @type String
+       * @default "1.25"
+      */
+      autoMaxScale: "1.25",
+
+      /**
        * 
        * @instance
        */
@@ -290,113 +318,111 @@ define(["dojo/_base/declare",
          this.alignRows();
       },
 
-      /**
-       * Calculate page zoom level based on the supplied value. Recognises numerical values and special string constants, e.g. 'page-fit'.
-       * Normally used in conjunction with setScale(), since this method does not set the current value.
-       * 
-       * @instance
-       * @return {float} Numerical scale value
-       */
-      parseScale : function alfresco_preview_PdfJs_DocumentView__parseScale(value) {
-         /*jshint maxcomplexity:false,maxstatements:false*/
-         var scale = parseFloat(value);
-         if (scale)
-         {
-            this.lastScale = value;
-            return scale;
-         }
+       /**
+         * Calculate page zoom level based on the supplied value. Recognises numerical values and special string constants, e.g. 'page-fit'.
+         * Normally used in conjunction with setScale(), since this method does not set the current value.
+         * 
+         * @method parseScale
+         * @private
+         * @return {float} Numerical scale value
+         */
+       parseScale: function alfresco_preview_PdfJs_DocumentView__setScale(value) {
+           var scale = parseFloat(value);
+           if (scale) {
+               this.lastScale = value;
+               return scale;
+           }
 
-         if (this.pages.length !== 0)
-         {
-            var currentPage = this.pages[0],
-                container = currentPage.container,
-                hmargin = parseInt(domStyle.get(container, "margin-left"), 10) + parseInt(domStyle.get(container, "margin-right"), 10),
-                vmargin = parseInt(domStyle.get(container, "margin-top"), 10),
-                contentWidth = parseInt(currentPage.content.pageInfo.view[2], 10),
-                contentHeight = parseInt(currentPage.content.pageInfo.view[3], 10),
-                rotation = currentPage.content.pageInfo.rotate,
-                clientWidth = this.fullscreen ? window.screen.width : this.viewer.clientWidth - 1, // allow an extra pixel in width otherwise 2-up view wraps
-                clientHeight = this.fullscreen ? window.screen.height : this.viewer.clientHeight;
-            
-            this.alfLog("log", "Client height: " + this.viewer.clientHeight);
-            if (rotation === 90 || rotation === 270)
-            {
-               var temp = contentWidth;
-               contentWidth = contentHeight;
-               contentHeight = temp;
-            }
+           if (this.pages.length !== 0) {
+               var currentPage = this.pages[0],
+                   container = currentPage.container,
+                   hmargin = parseInt(domStyle.get(container, "margin-left")) + parseInt(domStyle.get(container, "margin-right")),
+                   vmargin = parseInt(domStyle.get(container, "margin-top")),
+                   contentWidth = parseInt(currentPage.content.view[2]),
+                   contentHeight = parseInt(currentPage.content.view[3]),
+                   rotation = currentPage.content.rotate,
+                   clientWidth = this.fullscreen ? window.screen.width : this.viewer.clientWidth - 1, // allow an extra pixel in width otherwise 2-up view wraps
+                   clientHeight = this.fullscreen ? window.screen.height : this.viewer.clientHeight;
 
-            var pageWidthScale, pageHeightScale;
-            switch (value)
-            {
-               case PdfJsConstants.ZOOM_LEVEL_PAGE_WIDTH:
-                  pageWidthScale = (clientWidth - hmargin * 2) / contentWidth;
-                  scale = pageWidthScale;
-                  break;
-               case PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_WIDTH:
-                  pageWidthScale = (clientWidth - hmargin * 3) / contentWidth;
-                  scale = pageWidthScale / 2;
-                  break;
-               case PdfJsConstants.ZOOM_LEVEL_PAGE_HEIGHT:
-                  pageHeightScale = (clientHeight - vmargin * 2) / contentHeight;
-                  scale = pageHeightScale;
-                  break;
-               case PdfJsConstants.ZOOM_LEVEL_PAGE_FIT:
-                  pageWidthScale = (clientWidth - hmargin*2) / contentWidth;
-                  pageHeightScale = (clientHeight - vmargin*2) / contentHeight;
-                  scale = Math.min(pageWidthScale, pageHeightScale);
-                  break;
-               case PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_FIT:
-                  pageWidthScale = (clientWidth - hmargin*3) / contentWidth;
-                  pageHeightScale = (clientHeight - vmargin*2) / contentHeight;
-                  scale = Math.min(pageWidthScale / 2, pageHeightScale);
-                  break;
-               case PdfJsConstants.ZOOM_LEVEL_AUTO:
-                  var tpf = this.parseScale(PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_FIT),
-                      opf = this.parseScale(PdfJsConstants.ZOOM_LEVEL_PAGE_FIT),
-                      opw = this.parseScale(PdfJsConstants.ZOOM_LEVEL_PAGE_WIDTH),
-                      tpw = this.parseScale(PdfJsConstants.ZOOM_LEVEL_TWO_PAGE_WIDTH),
-                      minScale = this.autoMinScale,
-                      maxScale = this.autoMaxScale;
-                  if (tpf > minScale && this.numPages > 1)
-                  {
-                     scale = tpf;
-                  }
-                  else if (opf > minScale)
-                  {
-                     scale = opf;
-                  }
-                  else if (tpw > minScale && this.numPages > 1)
-                  {
-                     scale = tpw;
-                  }
-                  else if (opw > minScale)
-                  {
-                     scale = opw;
-                  }
-                  else
-                  {
-                     scale = minScale;
-                  }
-                  // Make sure that the page is not zoomed in *too* far. 
-                  // A limit of 125% max zoom is the default for the main view.
-                  if (maxScale)
-                  {
-                     scale = Math.min(scale, maxScale);
-                  }
-                  break;
-               default:
-                  throw "Unrecognised zoom level '" + value + "'";
-            }
-         }
-         else
-         {
-            throw "Unrecognised zoom level - no pages";
-         }
-         
-         this.lastScale = value;
-         return Math.abs(scale); // Make sure of positive value!
-      },
+               if (rotation === 90 || rotation === 270) {
+                   var temp = contentWidth;
+                   contentWidth = contentHeight;
+                   contentHeight = temp;
+               }
+
+               switch (value) {
+                   case 'page-width':
+                       {
+                           var pageWidthScale = (clientWidth - hmargin * 2) / contentWidth;
+                           scale = pageWidthScale;
+                           break;
+                       }
+                   case 'two-page-width':
+                       {
+                           var pageWidthScale = (clientWidth - hmargin * 3) / contentWidth;
+                           scale = pageWidthScale / 2;
+                           break;
+                       }
+                   case 'page-height':
+                       {
+                           var pageHeightScale = (clientHeight - vmargin * 2) / contentHeight;
+                           scale = pageHeightScale;
+                           break;
+                       }
+                   case 'page-fit':
+                       {
+                           var pageWidthScale = (clientWidth - hmargin * 2) / contentWidth,
+                               pageHeightScale = (clientHeight - vmargin * 2) / contentHeight;
+                           scale = Math.min(pageWidthScale, pageHeightScale);
+                           break;
+                       }
+                   case 'two-page-fit':
+                       {
+                           var pageWidthScale = (clientWidth - hmargin * 3) / contentWidth,
+                               pageHeightScale = (clientHeight - vmargin * 2) / contentHeight;
+                           scale = Math.min(pageWidthScale / 2, pageHeightScale);
+                           break;
+                       }
+                   case 'auto':
+                       {
+                           var tpf = this.parseScale("two-page-fit"),
+                               opf = this.parseScale("page-fit"),
+                               opw = this.parseScale("page-width"),
+                               tpw = this.parseScale("two-page-width"),
+                               minScale = this.autoMinScale,
+                               maxScale = this.autoMaxScale;
+                           if (tpf > minScale && this.numPages > 1) {
+                               scale = tpf;
+                           }
+                           else if (opf > minScale) {
+                               scale = opf;
+                           }
+                           else if (tpw > minScale && this.numPages > 1) {
+                               scale = tpw;
+                           }
+                           else {
+                               scale = opw;
+                           }
+                           // Make sure that the page is not zoomed in *too* far. 
+                           // A limit of 125% max zoom is the default for the main view.
+                           if (maxScale) {
+                               scale = Math.min(scale, maxScale);
+                           }
+                           break;
+                       }
+                   default:
+                       {
+                           throw "Unrecognised zoom level '" + value + "'";
+                       }
+               }
+           }
+           else {
+               throw "Unrecognised zoom level - no pages";
+           }
+
+           this.lastScale = value;
+           return scale;
+       },
 
       /**
        * Return the number of the page (1 or greater) that should be considered the 'current' page given the scroll position.

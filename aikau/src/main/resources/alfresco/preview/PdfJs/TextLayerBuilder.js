@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
             textDiv.dataset.isWhitespace = true;
             return;
           }
-          var tx = PDFJS.Util.transform(this.viewport.transform, geom.transform);
+          var tx = pdfjsLib.Util.transform(this.viewport.transform, geom.transform);
           var angle = Math.atan2(tx[1], tx[0]);
           if (style.vertical) {
             angle += Math.PI / 2;

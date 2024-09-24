@@ -112,7 +112,8 @@ define(["dojo/_base/declare",
        */
       renderContent: function alfresco_preview_PdfJs_DocumentPage__renderContent() {
          var region = this.getRegion(),
-             canvas = document.createElement("canvas");
+             canvas = document.createElement("canvas"),
+             scale = { scale: this.parent.currentScale };
          canvas.id = this.container.id.replace("-pageContainer-", "-canvas-");
          canvas.mozOpaque = true;
          this.container.appendChild(canvas);
@@ -126,7 +127,7 @@ define(["dojo/_base/declare",
          canvas.height = region.h;
 
          // Add text layer
-         var viewport = this.content.getViewport(this.parent.currentScale);
+         var viewport = this.content.getViewport(scale);
          var textLayerDiv = null;
          if (!this.parent.disableTextLayer)
          {
@@ -138,7 +139,7 @@ define(["dojo/_base/declare",
          this.textLayer = textLayerDiv ? new TextLayerBuilder(textLayerDiv, this.id - 1, this.pdfJsPlugin, viewport) : null;
 
          var content = this.content,
-             // view = content.view,
+             view = content.view,
              ctx = canvas.getContext("2d");
 
          // Render the content itself
@@ -180,7 +181,8 @@ define(["dojo/_base/declare",
        * @instance
        */
       _setPageSize: function alfresco_preview_PdfJs_DocumentPage___setPageSize() {
-         var viewPort = this.content.getViewport(this.parent.currentScale);
+          var scale = { scale: this.parent.currentScale },
+              viewPort = this.content.getViewport(scale);
          domStyle.set(this.container, "height", Math.floor(viewPort.height) + "px");
          domStyle.set(this.container, "width", Math.floor(viewPort.width) + "px");
       },
