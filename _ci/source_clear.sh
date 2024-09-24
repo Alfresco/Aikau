@@ -6,6 +6,7 @@ set +e -v -x
 pushd "$(dirname "${BASH_SOURCE[0]}")/../"
 
 mvn -B -q clean install \
+    -pl aikau \
     -DskipTests \
     -Dmaven.javadoc.skip=true \
     com.srcclr:srcclr-maven-plugin:scan \
