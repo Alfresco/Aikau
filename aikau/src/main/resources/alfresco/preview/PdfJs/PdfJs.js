@@ -327,6 +327,20 @@ define(["dojo/_base/declare",
       workerSrc : "",
 
       /**
+       * Stores the URL of the folder containing the pdf.js WebAssembly decoder files
+       * (openjpeg.wasm, openjpeg_nowasm_fallback.js and qcms_bg.wasm). Since pdf.js
+       * v5.0.375 this must be supplied to <code>getDocument</code> via the
+       * <code>wasmUrl</code> API parameter, otherwise PDFs containing JPEG 2000
+       * compressed images fail to render (blank page). Defaults to the context relative
+       * location of the bundled wasm assets and is set during {@link module:alfresco/preview/PdfJs/PdfJs#display}.
+       *
+       * @instance
+       * @type {string}
+       * @default empty string
+       */
+      wasmUrl : "",
+
+      /**
        * Current scale selection from the drop-down scale menu
        *
        * @instance
@@ -420,6 +434,9 @@ define(["dojo/_base/declare",
          this.previewManager.getPreviewerElement().innerHTML = "";
 
          this.workerSrc = urlUtils.convertUrl("res/js/lib/pdfjs/pdf.worker.js", urlTypes.CONTEXT_RELATIVE);
+         // Since pdf.js 5.0.375 the wasmUrl parameter is required to locate the WebAssembly decoders
+         // (JPEG 2000 / CMYK-ICC). Points at the bundled wasm assets folder alongside the worker.
+         this.wasmUrl = urlUtils.convertUrl("res/js/lib/pdfjs/wasm/", urlTypes.CONTEXT_RELATIVE);
          this._loadDocumentConfig();
 
          // Setup display options, page linking only works for specific pages
@@ -693,6 +710,13 @@ define(["dojo/_base/declare",
          // Set the char map source dir
          params.cMapUrl = "/cmaps/";
          params.cMapPacked = true;
+
+         // Set the WebAssembly decoder location (required since pdf.js 5.0.375 for JPEG 2000 /
+         // CMYK-ICC images). Guarded so that params is left unchanged if wasmUrl is empty/undefined.
+         if (this.wasmUrl)
+         {
+            params.wasmUrl = this.wasmUrl;
+         }
 
          // PDFJS range request for progessive loading
          // We also test if it may already be set to true by compatibility.js tests, some browsers do not support it.
