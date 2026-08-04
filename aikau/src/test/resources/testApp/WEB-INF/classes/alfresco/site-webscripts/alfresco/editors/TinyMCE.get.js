@@ -36,10 +36,10 @@ model.jsonModel = {
                      label: "Custom Editor",
                      name: "RichText2",
                      editorConfig: {
-                        toolbar: "spellchecker",
+                        toolbar: "visualchars",
                         browser_spellcheck: true,
                         additionalPlugins: [
-                           "spellchecker"
+                           "visualchars"
                         ]
                      },
                      widgetsForEditor: [

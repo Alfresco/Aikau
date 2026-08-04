@@ -53,7 +53,11 @@ define(["module",
       },
 
       "Custom toolbar and plugins can be configured": function() {
-         return this.remote.findByCssSelector("#TINY_MCE_2 .mce-i-spellchecker");
+         // NOTE: TinyMCE 8 no longer uses the v4 ".mce-i-*" icon classes. The custom editor
+         //       (TINY_MCE_2) is configured with a single "visualchars" toolbar button, which in
+         //       the v8 "oxide" skin is rendered as a ".tox-tbtn" with the "Show invisible
+         //       characters" aria-label.
+         return this.remote.findByCssSelector("#TINY_MCE_2 .tox-tbtn[aria-label=\"Show invisible characters\"]");
       },
 
       // See AKU-711...
