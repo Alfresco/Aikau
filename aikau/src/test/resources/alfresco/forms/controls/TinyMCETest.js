@@ -47,6 +47,57 @@ define(["module",
             }).clearLog();
       },
 
+      // Review point 2: "Is the formatting maintained?" - set content that mixes several formatting
+      // styles (bold/italic/underline plus a list) and confirm every tag survives the
+      // getContent()/save() round-trip in the published payload.
+      "Formatting is maintained when content is saved": function() {
+         var richContent = "<p><strong>bold</strong> <em>italic</em> <u>underline</u></p><ul><li>item</li></ul>";
+         return this.remote.findByCssSelector(".alfresco-editors-TinyMCE iframe")
+            .execute("tinymce.get(0).setContent('" + richContent + "');")
+            .execute("tinymce.get(0).save();")
+            .end()
+
+         .findByCssSelector(".confirmationButton .dijitButtonNode")
+            .click()
+            .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.include(payload.RichText, "<strong>bold</strong>", "Bold formatting was not maintained");
+               assert.include(payload.RichText, "<em>italic</em>", "Italic formatting was not maintained");
+               assert.include(payload.RichText, "<u>underline</u>", "Underline formatting was not maintained");
+               assert.include(payload.RichText, "<ul>", "List formatting was not maintained");
+            }).clearLog();
+      },
+
+      // Review point 3: "Are there any issues with existing comments, where you edit the comment?"
+      // The TINY_MCE_3 editor is pre-populated (see TinyMCE.get.js) to simulate an existing comment.
+      // First confirm the existing content is loaded into the editor for editing...
+      "Existing comment content is loaded for editing": function() {
+         return this.remote.execute("return tinymce.get('RichText3') && tinymce.get('RichText3').getContent();")
+            .then(function(content) {
+               assert.include(content, "<strong>Bold</strong>", "Existing comment content was not loaded for editing");
+               assert.include(content, "<ul>", "Existing comment list content was not loaded for editing");
+            });
+      },
+
+      // ...then confirm an edit to that existing content is saved correctly and keeps its formatting.
+      "Edited existing comment is saved correctly": function() {
+         return this.remote.execute("tinymce.get('RichText3').setContent('<p><strong>Bold</strong> edited</p>');")
+            .execute("tinymce.get('RichText3').save();")
+            .end()
+
+         .findByCssSelector(".confirmationButton .dijitButtonNode")
+            .click()
+            .end()
+
+         .getLastPublish("FORM_POST")
+            .then(function(payload) {
+               assert.include(payload.RichText3, "edited", "Edited comment content was not saved");
+               assert.include(payload.RichText3, "<strong>Bold</strong>", "Formatting of edited comment was not maintained");
+            }).clearLog();
+      },
+
       // See AKU-952
       "Custom editor can be used": function() {
          return this.remote.findByCssSelector(".custom-tiny-mce-editor");

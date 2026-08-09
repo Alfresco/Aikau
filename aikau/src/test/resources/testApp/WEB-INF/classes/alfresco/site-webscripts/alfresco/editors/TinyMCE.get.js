@@ -51,6 +51,19 @@ model.jsonModel = {
                         }
                      ]
                   }
+               },
+               {
+                  // Pre-populated editor used to verify that existing content (e.g. an existing
+                  // comment on a node) is loaded correctly for editing and can be edited/saved.
+                  // The value contains multiple formatting styles so that the "formatting is
+                  // maintained" scenario can also be asserted on the round-tripped content.
+                  id: "TINY_MCE_3",
+                  name: "alfresco/forms/controls/TinyMCE",
+                  config: {
+                     label: "Existing Comment",
+                     name: "RichText3",
+                     value: "<p><strong>Bold</strong> <em>italic</em> <u>underline</u></p><ul><li>one</li><li>two</li></ul>"
+                  }
                }
             ]
          }
