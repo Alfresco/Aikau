@@ -4,3 +4,10 @@
 **/.classpath
 
 alfresco.log
+
+
+.idea/
+aikau/build_only.log
+aikau/clean_check.log
+aikau/package-lock.json
+package-lock.json

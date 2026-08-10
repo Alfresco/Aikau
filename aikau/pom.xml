@@ -22,9 +22,34 @@
             <id>run</id>
             <build>
                 <plugins>
+                    <!-- Cargo's embedded Tomcat deploys the exploded testApp folder directly and
+                         does NOT merge in the project's Maven runtime classpath (unlike the Jetty
+                         plugin's classesDirectory behaviour). So any runtime-scoped dependencies
+                         needed by the test webapp (e.g. urlrewritefilter) must be physically
+                         copied into its WEB-INF/lib folder before Cargo starts. This execution is
+                         scoped to this profile ONLY so plain "jetty:run" invocations never see the
+                         extra duplicate jars on their classpath (which caused duplicate-class scan
+                         warnings/failures such as with closure-compiler). -->
                     <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-webapp-runtime-libs</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeScope>runtime</includeScope>
+                                    <outputDirectory>${project.build.testOutputDirectory}/testApp/WEB-INF/lib</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.10.20</version>
                         <executions>
                             <execution>
                                 <id>run-embedded-tomcat</id>
@@ -34,16 +59,30 @@
                                     <!-- Run will run the project as a dynamic webapp -->
                                     <goal>run</goal>
                                 </goals>
-                                <configuration>
-                                    <port>8089</port>
-                                    <ignorePackaging>true</ignorePackaging>
-                                    <warSourceDirectory>${basedir}/target/test-classes/testApp</warSourceDirectory>
-                                    <!-- The context file allows us to map static resources in a virtual webapp -->
-                                    <contextFile>${project.basedir}/tomcat/context.xml</contextFile>
-                                    <useTestClasspath>true</useTestClasspath>
-                                </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <container>
+                                <!-- Tomcat 10 is the first Jakarta EE (jakarta.servlet) Tomcat release -->
+                                <containerId>tomcat10x</containerId>
+                                <type>embedded</type>
+                            </container>
+                            <configuration>
+                                <properties>
+									<!-- Tomcat's port  -->
+                                    <cargo.servlet.port>8089</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                            <deployables>
+                                <deployable>
+                                    <location>${basedir}/target/test-classes/testApp</location>
+                                    <type>war</type>
+                                    <properties>
+                                        <context>/aikau</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -60,27 +99,38 @@
             <id>unitTestsBStack</id>
             <build>
                 <plugins>
+                    <!-- See comment in the "run" profile above: this copy is required for Cargo's
+                         embedded Tomcat webapp to find its runtime dependencies, and is scoped to
+                         this profile only so Jetty runs never see duplicate jars. -->
                     <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-webapp-runtime-libs</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeScope>runtime</includeScope>
+                                    <outputDirectory>${project.build.testOutputDirectory}/testApp/WEB-INF/lib</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.10.20</version>
                         <executions>
                             <execution>
                                 <id>run-embedded-tomcat</id>
                                 <!-- Bind to the pre-integration-test phase -->
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <!-- Run will run the project as a dynamic webapp -->
-                                    <goal>run</goal>
+                                    <!-- Start Tomcat in the background so the tests can run against it -->
+                                    <goal>start</goal>
                                 </goals>
-                                <configuration>
-                                    <fork>true</fork>
-                                    <port>8089</port>
-                                    <ignorePackaging>true</ignorePackaging>
-                                    <warSourceDirectory>${basedir}/target/test-classes/testApp</warSourceDirectory>
-                                    <!-- The context file allows us to map static resources in a virtual webapp -->
-                                    <contextFile>${project.basedir}/tomcat/context.xml</contextFile>
-                                    <useTestClasspath>true</useTestClasspath>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>shutdown-embedded-tomcat</id>
@@ -88,10 +138,31 @@
                                 <phase>post-integration-test</phase>
                                 <goals>
                                     <!-- Safely stop tomcat when integration-test phase is done -->
-                                    <goal>shutdown</goal>
+                                    <goal>stop</goal>
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <container>
+                                <containerId>tomcat10x</containerId>
+                                <type>embedded</type>
+                            </container>
+                            <configuration>
+                                <properties>
+									<!-- tomact's port-->
+                                    <cargo.servlet.port>8089</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                            <deployables>
+                                <deployable>
+                                    <location>${basedir}/target/test-classes/testApp</location>
+                                    <type>war</type>
+                                    <properties>
+                                        <context>/aikau</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
+                        </configuration>
                     </plugin>
                     <plugin>
                       <artifactId>maven-antrun-plugin</artifactId>
@@ -307,12 +378,17 @@
                </execution>
                <execution>
                   <id>copy-webscript-beans</id>
-                  <phase>process-test-classes</phase>
+                  <!-- Bound to test-compile (rather than process-test-classes) so this copy
+                       reliably runs when invoking "mvn ... test-compile jetty:run" directly.
+                       Directly-invoked goals (like jetty:run/cargo:run) don't trigger later
+                       lifecycle phases such as process-test-classes on their own. -->
+                  <phase>test-compile</phase>
                   <goals>
                      <goal>run</goal>
                   </goals>
                   <configuration>
                      <target>
+                        <mkdir dir="${project.build.testOutputDirectory}/testApp/WEB-INF/classes" />
                         <copy todir="${project.build.testOutputDirectory}/testApp/WEB-INF/classes">
                            <fileset dir="${project.build.testOutputDirectory}" includes="**/*.class" />
                         </copy>
@@ -330,6 +406,29 @@
                         <echo>Renaming folders</echo>
                         <move file="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/customizations/${webscript.version}" />
                         <move file="${project.build.outputDirectory}/alfresco/site-webscripts/aikau-patches/${project.version}" tofile="${project.build.outputDirectory}/alfresco/site-webscripts/aikau-patches/${webscript.version}" />
+                      </target>
+                  </configuration>
+                </execution>
+                <!-- Cargo's embedded Tomcat only deploys a single location (target/test-classes/testApp),
+                     unlike the Jetty plugin which is explicitly configured with TWO resourceBases
+                     (testApp AND target/classes/META-INF). All the built Aikau/Dojo/jQuery JS resources
+                     live under target/classes/META-INF, so without this copy Cargo's deployed webapp
+                     never has them and Surf's DependencyAggregator logs "Could not find compressed file"
+                     for every JS resource. Bound to "package" so it runs after the dojo/jquery
+                     unpack-dependencies executions (prepare-package) but before Cargo starts
+                     (integration-test). -->
+                <execution>
+                  <id>merge-classes-into-testapp</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <echo>Merging target/classes/META-INF into testApp webapp root for embedded Tomcat</echo>
+                        <copy todir="${project.build.testOutputDirectory}/testApp" overwrite="true">
+                           <fileset dir="${project.build.outputDirectory}/META-INF" />
+                        </copy>
                       </target>
                   </configuration>
                 </execution>
@@ -394,21 +493,21 @@
          </plugin>
 
          <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>9.2.5.v20141112</version>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-maven-plugin</artifactId>
+            <version>12.0.37</version>
             <configuration>
 
-               <!-- Sets the port when using mvn jetty:run-forked -->
-               <jvmArgs>-Djetty.port=8089</jvmArgs>
+               <!-- Aikau is packaged as a JAR (not a WAR). Jetty 12 only runs WAR modules by
+                    default, so we must explicitly allow the jar packaging for jetty:run to work. -->
+               <supportedPackagings>
+                  <supportedPackaging>jar</supportedPackaging>
+               </supportedPackagings>
 
-               <!-- Override the system properties to set a port that *should* be unused -->
+               <!-- Override the system properties to set a port that *should* be unused.
+                    Jetty 10+ changed systemProperties to a simple key/value map. -->
                <systemProperties>
-                  <force>true</force>
-                  <systemProperty>
-                     <name>jetty.port</name>
-                     <value>8089</value>
-                  </systemProperty>
+                  <jetty.port>8089</jetty.port>
                </systemProperties>
 
                <!--  The following 3 settings allow us to execute a mvn jetty:stop command to shutdown the test application -->
@@ -430,7 +529,6 @@
                <webAppSourceDirectory>target/test-classes/testApp</webAppSourceDirectory>
                <classesDirectory>target/classes</classesDirectory>
                <testClassesDirectory>target/test-classes/testApp/WEB-INF/classes</testClassesDirectory>
-               <baseAppFirst>false</baseAppFirst>
             </configuration>
          </plugin>
 

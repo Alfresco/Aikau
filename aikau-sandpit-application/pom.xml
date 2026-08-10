@@ -82,28 +82,44 @@
       
       <plugins>
          <plugin>
-            <groupId>org.apache.tomcat.maven</groupId>
-            <artifactId>tomcat7-maven-plugin</artifactId>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>1.10.20</version>
             <configuration>
-               <port>8091</port>
-               <path>/aikau-sandpit</path>
-               <warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
+               <container>
+                  <!-- Tomcat 10 is the first Jakarta EE (jakarta.servlet) Tomcat release -->
+                  <containerId>tomcat10x</containerId>
+                  <type>embedded</type>
+               </container>
+               <configuration>
+                  <properties>
+				  <!-- Tomcat's port -->
+                     <cargo.servlet.port>8089</cargo.servlet.port>
+                  </properties>
+               </configuration>
+               <deployables>
+                  <deployable>
+                     <groupId>${project.groupId}</groupId>
+                     <artifactId>${project.artifactId}</artifactId>
+                     <type>war</type>
+                     <properties>
+                        <context>/aikau-sandpit</context>
+                     </properties>
+                  </deployable>
+               </deployables>
             </configuration>
          </plugin>
 
          <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>9.2.5.v20141112</version>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-maven-plugin</artifactId>
+            <version>12.0.37</version>
             <configuration>
 
-               <!-- Override the system properties to set a port that *should* be unused -->
+               <!-- Override the system properties to set a port that *should* be unused.
+                    Jetty 10+ changed systemProperties to a simple key/value map. -->
                <systemProperties>
-                  <force>true</force>
-                  <systemProperty>
-                     <name>jetty.port</name>
-                     <value>8091</value>
-                  </systemProperty>
+                  <jetty.port>8091</jetty.port>
                </systemProperties>
 
                <webApp>
