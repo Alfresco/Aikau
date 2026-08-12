@@ -27,15 +27,15 @@
 define(["dojo/_base/declare",
         "alfresco/forms/controls/BaseFormControl",
         "alfresco/core/CoreWidgetProcessing",
-        "dojo/_base/lang"], 
+        "dojo/_base/lang"],
         function(declare, BaseFormControl, CoreWidgetProcessing, lang) {
-   
+
    return declare([BaseFormControl, CoreWidgetProcessing], {
-      
+
       /**
        * This indicates whether or not the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}
        * should automatically resize to consume the available space.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -61,10 +61,10 @@ define(["dojo/_base/declare",
             editorConfig: this.editorConfig
          };
       },
-      
+
       /**
        * Builds the configured [editor model]{@link module:alfresco/forms/controls/TinyMCE#widgetsForEditor}.
-       * 
+       *
        * @instance
        */
       createFormControl: function alfresco_forms_controls_TinyMCE__createFormControl(config) {
@@ -77,12 +77,12 @@ define(["dojo/_base/declare",
                }
             ];
          }
-      
+
          // Clone the default model and mixin in the configured configuration into the declared model...
          var editorWidgets = lang.clone(this.widgetsForEditor);
          var declaredConfig = lang.getObject("0.config", true, editorWidgets);
          lang.mixin(declaredConfig, config);
-         
+
          // Create the widget
          var editor = this.createWidget(editorWidgets[0]);
          return editor;
@@ -91,7 +91,7 @@ define(["dojo/_base/declare",
       /**
        * This is a custom validator for this specific form control. It is necessary in order to support
        * the ability to check for the TinyMCE editor being empty as text (rather than as HTML).
-       * 
+       *
        * @instance
        * @param {object} validationConfig The configuration for this validator
        * @since 1.0.70
@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
             //       a problem to the validation flow (as it will typically repeat) but can throw the
             //       whole validation management out of whack if the exception is not captured here.
          }
-         
+
          this.reportValidationResult(validationConfig, isValid);
       },
 
@@ -135,11 +135,14 @@ define(["dojo/_base/declare",
       /**
        * Overrides to prevent any action from occurring. Editor value change handlers are passed in
        * the configuration of the TinyMCE editor creation.
-       * 
+       *
        * @instance
        */
       setupChangeEvents: function alfresco_forms_controls_TinyMCE__setupChangeEvents() {
-         this.wrappedWidget.editor.on("keyup", lang.hitch(this, this.onEditorValueChange));
+         // NOTE: TinyMCE 5+ (through 8.x) initialises asynchronously, so the wrapped editor instance may not
+         //       yet be available here. Delegate to the editor's onKeyUp function which safely defers binding
+         //       until the editor has finished initialising.
+         this.wrappedWidget.onKeyUp(lang.hitch(this, this.onEditorValueChange));
       },
 
       /**
@@ -147,7 +150,7 @@ define(["dojo/_base/declare",
        * function and retrieves the current value of the [TinyMCE editor]{@link module:alfresco/editors/TinyMCE}
        * and calls the [onValueChangeEvent]{@link module:alfresco/forms/controls/BaseFormControl#onValueChangeEvent}
        * function with it.
-       * 
+       *
        * @instance
        */
       onEditorValueChange: function alfresco_forms_controls_TinyMCE__onEditorValueChange(/*jshint unused:false*/ evt) {
@@ -159,7 +162,7 @@ define(["dojo/_base/declare",
       /**
        * Overrides the [inherited function]{@link module:alfresco/forms/controls/BaseFormControl#alfDisabled}
        * to make the TinyMCE editor disabled.
-       * 
+       *
        * @instance
        * @param {boolean} status Indicates the current status
        */
@@ -173,10 +176,10 @@ define(["dojo/_base/declare",
 
       /**
        * This is the default model for creating the editor to be displayed. It provides a way in which
-       * the default editor can be extended and used within the standard form control. The main reason 
+       * the default editor can be extended and used within the standard form control. The main reason
        * for wanting to use a customized version of the [default TinyMCE editor]{@link module:alfresco/editors/TinyMCE} is
-       * to provide custom callbacks for plugins. 
-       * 
+       * to provide custom callbacks for plugins.
+       *
        * @instance
        * @type {object[]}
        * @since 1.0.66

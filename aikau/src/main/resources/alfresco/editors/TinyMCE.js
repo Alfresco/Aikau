@@ -19,10 +19,10 @@
 
 /*globals tinymce*/
 /**
- * This module can be used to create a TinyMCE editor it is primarily used by the 
+ * This module can be used to create a TinyMCE editor it is primarily used by the
  * [TinyMCE form control]{@link module:alfresco/forms/controls/TinyMCE} but can be used independently
  * if required. Without any additional configuration it will instantiate an editor using the Alfresco
- * preferred configuration, however this can be overridden by providing 
+ * preferred configuration, however this can be overridden by providing
  * [specific configuration]{@link module:alfresco/forms/controls/TinyMCE#editorConfig} that will
  * augment or override the [default configuration]{@link module:alfresco/forms/controls/TinyMCE#defaultEditorConfig}.
  *
@@ -32,17 +32,17 @@
  * @mixes module:alfresco/core/Core
  * @author Dave Draper
  */
-define(["dojo/_base/declare", 
-        "dijit/_WidgetBase", 
-        "dijit/_TemplatedMixin", 
-        "dojo/text!./templates/TinyMCE.html", 
-        "alfresco/core/Core", 
+define(["dojo/_base/declare",
+        "dijit/_WidgetBase",
+        "dijit/_TemplatedMixin",
+        "dojo/text!./templates/TinyMCE.html",
+        "alfresco/core/Core",
         "alfresco/core/ResizeMixin",
         "alfresco/core/topics",
-        "service/constants/Default", 
+        "service/constants/Default",
         "dojo/_base/lang",
         "jquery",
-        "jqueryui"], 
+        "jqueryui"],
         function(declare, _WidgetBase, _TemplatedMixin, template, AlfCore, ResizeMixin, topics, AlfConstants, lang, $) {
 
 
@@ -50,7 +50,7 @@ define(["dojo/_base/declare",
 
       /**
        * An array of the i18n files to use with this widget.
-       * 
+       *
        * @instance
        * @type {object[]}
        * @default [{i18nFile: "./i18n/TinyMCE.properties"}]
@@ -74,7 +74,7 @@ define(["dojo/_base/declare",
 
       /**
        * This indicates whether the size should be adjusted on resize events.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -164,7 +164,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the TinyMCE editor should be focused once it has been initialized. This will
        * be set to true by the [focus]{@link module:alfresco/editors/TinyMCE#focus} function if it is called before
        * the editor has been [initialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -176,7 +176,7 @@ define(["dojo/_base/declare",
        * Indicates whether or not the TinyMCE editor should be resized once it has been initialized. This will
        * be set to true by the [focus]{@link module:alfresco/editors/TinyMCE#onResize} function if it is called before
        * the editor has been [initialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}.
-       * 
+       *
        * @instance
        * @type {boolean}
        * @default
@@ -200,7 +200,13 @@ define(["dojo/_base/declare",
          toolbar: "bold italic underline | bullist numlist | forecolor backcolor | undo redo removeformat",
          language: AlfConstants.JS_LOCALE,
          statusbar: false,
-         theme_advanced_resize_horizontal: false
+         // TinyMCE 7+ (and 8.x) require the licence to be declared for self-hosted usage. Aikau ships the
+         // open-source (GPL) build of TinyMCE, so "gpl" is declared here. Without this the editor displays
+         // an evaluation/registration notification. Override via editorConfig if a commercial api_key is used.
+         license_key: "gpl",
+         // Removes the "Upgrade" promotion button added in TinyMCE 6+/7+/8 which is not applicable to the
+         // self-hosted open-source build.
+         promotion: false
       },
 
       /**
@@ -233,7 +239,7 @@ define(["dojo/_base/declare",
                   locale = config.language;
                   break;
                }
-               
+
                if (config.language.indexOf(locales[i]) === 0)
                {
                    if (bestGeneralizedLocale === undefined || locales[i].length > bestGeneralizedLocale.length)
@@ -242,11 +248,17 @@ define(["dojo/_base/declare",
                    }
                }
             }
-            
+
             config.language = locale || bestGeneralizedLocale || "en";
          }
 
          tinymce.baseURL = AlfConstants.URL_RESCONTEXT + "js/lib/tinymce";
+         // Aikau loads TinyMCE via "nonAmdDependencies" rather than a standard <script> tag, so TinyMCE
+         // cannot auto-detect that it was loaded from a minified build. Without this it requests the
+         // non-minified resources (theme.js, model.js, icons.js, plugin.js) which are intentionally not
+         // vendored (only the ".min.js" runtime assets are shipped), resulting in 404s that prevent the
+         // editor from initialising. Forcing the suffix to ".min" makes it load the vendored assets.
+         tinymce.suffix = ".min";
 
          if (this.immediateInit === true) {
             this.init(config);
@@ -265,7 +277,7 @@ define(["dojo/_base/declare",
        * respond to resize events by finding the first ancestor with height and width dimensions
        * and then increasing the size of the TinyMCE editor to fill the available space as best
        * it can.
-       * 
+       *
        * @instance
        * @since 1.0.47
        */
@@ -300,15 +312,15 @@ define(["dojo/_base/declare",
                      return false;
                   }
                });
-               
+
                // Update the dimensions of the main node (so that the TinyMCE editor
                // can grow into it - the auto resize plugin will automatically take
                // care of the width)...
                $(this.domNode).height(height - 10); // Deduct 10 to compensate for margin
 
-               // We need to handle the height manually, and it needs to be set on the
-               // .mce-edit-area node. We need to compensate for the toolbar when 
-               var editAreaNode = $(this.domNode).find(".mce-edit-area");
+                // We need to handle the height manually, and it needs to be set on the
+                // .tox-edit-area node (TinyMCE 5+ "oxide" skin, still used in 8.x). We need to compensate for the toolbar when
+               var editAreaNode = $(this.domNode).find(".tox-edit-area");
                $(editAreaNode).height(height - 42); // Deduct 42 to compenstate for toolbar and margin
                $(this.domNode).width(width - 2); // Deduct 2 to compensate for border
             }
@@ -326,15 +338,16 @@ define(["dojo/_base/declare",
        */
       init: function alfresco_editors_TinyMCE__init(config) {
          config = config || this._delayedInitConfig;
-         config.theme = "modern";
+         // NOTE: TinyMCE 5+ removed the "modern" theme (the default is now the built-in "silver" theme,
+         //       which is still the case in 8.x), so the theme is intentionally no longer set here.
          if (!config.toolbar) {
-            config.toolbar = "styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview fullscreen";
+            config.toolbar = "styles | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview fullscreen";
          }
          if (!config.menu) {
             config.menu = {
                file: {
                   title: this.message("TinyMCE.toolbar.file.title"),
-                  items: "newdocument | print"
+                  items: "newdocument"
                },
                edit: {
                   title: this.message("TinyMCE.toolbar.edit.title"),
@@ -342,7 +355,7 @@ define(["dojo/_base/declare",
                },
                insert: {
                   title: this.message("TinyMCE.toolbar.insert.title"),
-                  items: "link image | charmap hr anchor pagebreak inserttime nonbreaking"
+                  items: "link image | charmap hr anchor pagebreak insertdatetime nonbreaking"
                },
                view: {
                   title: this.message("TinyMCE.toolbar.view.title"),
@@ -360,37 +373,76 @@ define(["dojo/_base/declare",
          }
          if (!config.plugins)
          {
+            // NOTE: The "print", "hr", "contextmenu", "paste" and "textcolor" plugins were removed in
+            //       TinyMCE 5+/6+/7/8 - their functionality is now part of the core, so they must not be
+            //       listed here (an unknown plugin name would prevent the editor from initialising).
+            // NOTE: In TinyMCE 5+ each entry in the "plugins" array is treated as a single plugin name
+            //       (unlike TinyMCE 4 which space-split the entries). Each plugin must therefore be listed
+            //       as its own array element, otherwise TinyMCE tries to load a plugin whose name is the
+            //       whole space-separated string (e.g. "table visualblocks autoresize/plugin.min.js" -> 404).
             config.plugins = [
-               "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-               "searchreplace code fullscreen insertdatetime nonbreaking",
-               "table contextmenu paste textcolor visualblocks autoresize"
+               "advlist", "autolink", "link", "image", "lists", "charmap", "preview", "anchor", "pagebreak",
+               "searchreplace", "code", "fullscreen", "insertdatetime", "nonbreaking",
+               "table", "visualblocks", "autoresize"
             ];
          }
          if (config.additionalPlugins)
          {
             config.plugins = config.plugins.concat(config.additionalPlugins);
          }
-         
-         config.init_instance_callback = lang.hitch(this, this.editorInitialized);
 
-         this.updateEditorConfig(config);
-         this.editor = new tinymce.Editor(this.editorNode, config, tinymce.EditorManager);
-
-         // Allow back the "embed" tag as TinyMCE now removes it - this is allowed by our this.editors
-         // if the HTML stripping is disabled via the "allowUnfilteredHTML" config attribute
+         // Allow back the "embed" tag as TinyMCE now removes it - this is allowed by our editors
+         // if the HTML stripping is disabled via the "allowUnfilteredHTML" config attribute.
+         // NOTE: This must be applied BEFORE the editor is initialised so that it takes effect.
          var extValidElements = config.extended_valid_elements;
          extValidElements = (extValidElements && extValidElements + ",") || "";
          config.extended_valid_elements = extValidElements + "embed[src|type|width|height|flashvars|wmode]";
-         this.editor.render();
-         this.editor.save();
+
+         // Security hardening for CVE-2024-29881 - convert potentially unsafe embed/object elements
+         // into safe iframes/images. Only defaulted when not explicitly configured by a caller.
+         if (config.convert_unsafe_embeds === undefined)
+         {
+            config.convert_unsafe_embeds = true;
+         }
+
+         config.init_instance_callback = lang.hitch(this, this.editorInitialized);
+
+         // TinyMCE 5+ replaces the legacy "new tinymce.Editor()" constructor with the asynchronous,
+         //       promise-based "tinymce.init()" API (unchanged through 8.x). The "setup" callback fires early
+         //       during initialisation and is used here to capture the editor instance so that the
+         //       "this.editor" reference is established as soon as possible (preserving the previous
+         //       synchronous-style contract).
+         var callerSetup = config.setup;
+         var _this = this;
+         config.setup = function(editor) {
+            _this.editor = editor;
+            if (typeof callerSetup === "function")
+            {
+               callerSetup(editor);
+            }
+         };
+
+         // TinyMCE 5+ (through 8.x) takes the target node via the init configuration rather than a constructor argument.
+         config.target = this.editorNode;
+
+         // Ensure the minified runtime assets are loaded (see tinymce.suffix note above) - some code paths
+         // read the suffix from the init configuration rather than the global.
+         if (config.suffix === undefined)
+         {
+            config.suffix = ".min";
+         }
+
+         this.updateEditorConfig(config);
+
+         tinymce.init(config);
          return this;
       },
 
       /**
-       * This is an extension point function that provides the opportunity for extending widgets to 
+       * This is an extension point function that provides the opportunity for extending widgets to
        * make updates to the default configuration. This allows non-configurable options to be added
        * to the configuration such as specific callback overrides for configuration plugins.
-       * 
+       *
        * @instance
        * @param {object} config The configuration object to be updated
        * @since 1.0.66
@@ -409,11 +461,28 @@ define(["dojo/_base/declare",
        */
       editorInitialized: function alfresco_editors_TinyMCE__editorInitialized(editor) {
          this.alfLog("log", "TinyMCE Editor intialized!", editor);
+         this.editor = editor;
          if (this.contentChangeScope && this.contentChangeHandler) {
             editor.on("change", lang.hitch(this.contentChangeScope, this.contentChangeHandler));
          }
          editor.setContent(this.initialContent);
+
+         // Synchronise the editor content back to the underlying element (this was previously done
+         // via the synchronous "this.editor.save()" call in the init function).
+         editor.save();
+
          this._editorInitialized = true;
+
+         // Bind any keyup handlers that were requested before the editor finished its asynchronous
+         // initialisation (see onKeyUp).
+         if (this._deferredKeyUpHandlers)
+         {
+            for (var k = 0; k < this._deferredKeyUpHandlers.length; k++)
+            {
+               editor.on("keyup", this._deferredKeyUpHandlers[k]);
+            }
+            this._deferredKeyUpHandlers = null;
+         }
 
          if (this._focusWhenInitialized)
          {
@@ -430,7 +499,7 @@ define(["dojo/_base/declare",
 
       /**
        * Give focus to the TinyMCE editor
-       * 
+       *
        * @instance
        * @since 1.0.46
        * @fires module:alfresco/core/topics#TINYMCE_EDITOR_FOCUSED
@@ -444,6 +513,29 @@ define(["dojo/_base/declare",
          else
          {
             this._focusWhenInitialized = true;
+         }
+      },
+
+      /**
+       * Registers a "keyup" handler against the underlying TinyMCE editor. Because TinyMCE 5+ (through 8.x)
+       * initialises asynchronously the editor instance may not yet exist when a consumer (such as the
+       * [TinyMCE form control]{@link module:alfresco/forms/controls/TinyMCE}) wishes to bind. In that
+       * case the handler is deferred and bound once the editor has been
+       * [initialized]{@link module:alfresco/editors/TinyMCE#editorInitialized}.
+       *
+       * @instance
+       * @param {function} handler The keyup handler to bind
+       * @since 1.0.101
+       */
+      onKeyUp: function alfresco_editors_TinyMCE__onKeyUp(handler) {
+         if (this._editorInitialized && this.editor)
+         {
+            this.editor.on("keyup", handler);
+         }
+         else
+         {
+            this._deferredKeyUpHandlers = this._deferredKeyUpHandlers || [];
+            this._deferredKeyUpHandlers.push(handler);
          }
       },
 
