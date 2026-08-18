@@ -92,10 +92,12 @@
    
    <!-- Use an external Node driven LESS CSS theme handler -->
    <bean id="css.theme.handler" parent="css.theme.handler.abstract" class="org.springframework.extensions.surf.ExternalLessCssThemeHandler">
-      <!-- Node LESS compiler command - the hyphen "-" in the cmd value means 'read from stdin'
-           This default works well on Linux/Mac with NPM installed. On Windows, a full path will probably be required, for example:
-           "C:\Users\rsmith2\AppData\Roaming\npm\lessc.cmd -" -->
-      <property name="cmd"><value>${basedir}/node_modules/less/bin/lessc -</value></property>
+      <!-- Node LESS compiler command - the hyphen "-" in the cmd value means 'read from stdin'.
+           node_modules/less/bin/lessc is a Node shebang script, not a native executable, so on
+           Windows it must be invoked explicitly via "node" (running it directly causes
+           "CreateProcess error=193, %1 is not a valid Win32 application"). This "node ..." form
+           also still works fine on Linux/Mac. -->
+      <property name="cmd"><value>node ${basedir}/node_modules/less/bin/lessc -</value></property>
    </bean>
    
 </beans>
